@@ -21,10 +21,10 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 
 # Main Classes
-/src/main/java/me/outspending/biomesapi/Main.java
+/main/src/main/java/me/outspending/biomesapi/Main.java
 
 # Ignore resources
-/src/main/resources/
+/main/src/main/resources/
 
 *.war
 *.nar

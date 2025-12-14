@@ -2,7 +2,7 @@ plugins {
     java
     `maven-publish`
     id("com.gradleup.shadow") version "9.0.0-beta9"
-    id("io.papermc.paperweight.userdev") version "2.0.0-beta.14"
+    id("io.papermc.paperweight.userdev") version "2.0.0-beta.19"
     id("me.champeau.jmh") version "0.7.2"
 }
 
@@ -19,7 +19,7 @@ allprojects {
     }
 
     // The file for publication.
-    val reobfBuildFile = project.layout.buildDirectory.file("libs/${project.name}-${project.version}.jar")
+    val reobfBuildFile = project.layout.buildDirectory.file("libs/reobf/${project.name}-${project.version}.jar")
 
     // Check if a project has the reobfJar task.
     fun Project.usesReobfuscatedJar() : Boolean {
@@ -85,14 +85,19 @@ allprojects {
             name = "sonatype"
             url = uri("https://oss.sonatype.org/content/groups/public/")
         }
+        maven {
+            name = "codemc-releases"
+            url = uri("https://repo.codemc.io/repository/maven-releases/")
+        }
     }
 
 }
 
-val nmsVersions = listOf("1.19_R2", "1.19_R3", "1.20_R1", "1.20_R2", "1.20_R3", "1.21_R3")
+val nmsVersions = listOf("1.19_R2", "1.19_R3", "1.20_R1", "1.20_R2", "1.20_R3", "1.21_R3", "1.21_R7")
 dependencies {
     paperweight.paperDevBundle("1.21.4-R0.1-SNAPSHOT")
     implementation("com.google.guava:guava:11.0.2")
+    compileOnly("com.github.retrooper:packetevents-spigot:2.7.0")
 
     // NMS Implementations
     implementation(project(":NMS:Wrapper"))

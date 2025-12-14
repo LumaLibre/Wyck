@@ -1,0 +1,4 @@
+name: BiomesAPITest
+main: dev.jsinco.biomesapi.BiomesAPITest
+version: '0.0.3'
+api-version: 1.21

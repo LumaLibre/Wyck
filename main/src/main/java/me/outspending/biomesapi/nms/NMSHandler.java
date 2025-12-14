@@ -1,7 +1,10 @@
 package me.outspending.biomesapi.nms;
 
+import com.github.retrooper.packetevents.PacketEvents;
+import com.github.retrooper.packetevents.event.PacketListenerPriority;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.exceptions.UnknownNMSVersionException;
+import me.outspending.biomesapi.packetevents.PacketEventsListener;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
@@ -54,6 +57,8 @@ public class NMSHandler {
     @AsOf("0.0.1")
     static void init() {
         if (isNMSLoaded()) return;
+        PacketEvents.getAPI().getEventManager().registerListener(
+                new PacketEventsListener(), PacketListenerPriority.NORMAL);
 
         String version = Bukkit.getMinecraftVersion();
         switch (version) {

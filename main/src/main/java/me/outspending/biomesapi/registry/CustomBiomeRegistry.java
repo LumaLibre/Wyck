@@ -1,8 +1,6 @@
 package me.outspending.biomesapi.registry;
 
 import com.google.common.base.Preconditions;
-import io.papermc.paper.registry.RegistryAccess;
-import io.papermc.paper.registry.RegistryKey;
 import me.outspending.biomesapi.BiomeLock;
 import me.outspending.biomesapi.BiomeSettings;
 import me.outspending.biomesapi.annotations.AsOf;
