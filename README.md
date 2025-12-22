@@ -1,3 +1,11 @@
+> [!IMPORTANT]
+> This is a fork of Outspending's original BiomesAPI.
+> This fork is designed to add additional features and
+> support the project for **modern** Minecraft versions.
+> I am not interested in backporting this fork to older
+> Minecraft versions.
+
+
 <div align="center">
     <h1>BiomesAPI</h1>
     <p>Custom Biomes!</p>

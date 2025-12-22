@@ -1,9 +1,7 @@
-package dev.jsinco.biomesapi;
+package me.outspending.biomesapi;
 
-import me.outspending.biomesapi.BiomeSettings;
 import me.outspending.biomesapi.biome.BiomeHandler;
 import me.outspending.biomesapi.biome.CustomBiome;
-import me.outspending.biomesapi.packet.handlers.PacketEventsPacketHandler;
 import me.outspending.biomesapi.packet.PacketHandler;
 import me.outspending.biomesapi.packet.data.PhonyCustomBiome;
 import me.outspending.biomesapi.packet.data.BlockReplacement;

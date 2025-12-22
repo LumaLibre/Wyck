@@ -1,5 +1,5 @@
 name: BiomesAPITest
-main: dev.jsinco.biomesapi.BiomesAPITest
+main: me.outspending.biomesapi.BiomesAPITest
 version: '0.0.4'
 api-version: 1.21
 softdepend:
