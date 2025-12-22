@@ -1,12 +1,16 @@
 package me.outspending.biomesapi.biome;
 
+import io.papermc.paper.registry.RegistryAccess;
+import io.papermc.paper.registry.RegistryKey;
 import me.outspending.biomesapi.BiomeSettings;
 import me.outspending.biomesapi.annotations.AsOf;
+import me.outspending.biomesapi.packet.data.BlockReplacement;
 import me.outspending.biomesapi.registry.BiomeRegistry;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
 import me.outspending.biomesapi.renderer.ParticleRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.bukkit.NamespacedKey;
+import org.bukkit.block.Biome;
 import org.jetbrains.annotations.NotNull;
 
 @AsOf("0.0.2")
@@ -28,6 +32,7 @@ public final class CustomBiomeImpl implements CustomBiome {
 
     // Optional Settings
     private ParticleRenderer particleRenderer;
+    private BlockReplacement[] blockReplacements;
 
     @AsOf("0.0.2")
     public CustomBiomeImpl(
@@ -49,6 +54,7 @@ public final class CustomBiomeImpl implements CustomBiome {
         this.waterColor = waterColor;
         this.waterFogColor = waterFogColor;
         this.skyColor = skyColor;
+        this.blockReplacements = new BlockReplacement[0];
     }
 
     @AsOf("0.0.2")
@@ -68,12 +74,39 @@ public final class CustomBiomeImpl implements CustomBiome {
         this(resourceKey, settings, fogColor, waterColor, waterFogColor, skyColor, particleRenderer);
         this.foliageColor = foliageColor;
         this.grassColor = grassColor;
+        this.blockReplacements = new BlockReplacement[0];
+    }
+
+    @AsOf("0.0.4")
+    public CustomBiomeImpl(
+            @NotNull BiomeResourceKey resourceKey,
+            @NotNull BiomeSettings settings,
+
+            int fogColor,
+            int waterColor,
+            int waterFogColor,
+            int skyColor,
+            int foliageColor,
+            int grassColor,
+
+            @NotNull ParticleRenderer particleRenderer,
+            @NotNull BlockReplacement[] blockReplacements
+    ) {
+        this(resourceKey, settings, fogColor, waterColor, waterFogColor, skyColor, particleRenderer);
+        this.foliageColor = foliageColor;
+        this.grassColor = grassColor;
+        this.blockReplacements = blockReplacements;
     }
 
     @Override
     public @NotNull NamespacedKey toNamespacedKey() {
-        ResourceLocation resourceLocation = resourceKey.resourceLocation();
+        Identifier resourceLocation = resourceKey.resourceLocation();
         return new NamespacedKey(resourceLocation.getNamespace(), resourceLocation.getPath());
+    }
+
+
+    public @NotNull Biome toBukkitBiome() {
+        return RegistryAccess.registryAccess().getRegistry(RegistryKey.BIOME).getOrThrow(this.toNamespacedKey());
     }
 
     @Override
@@ -122,6 +155,11 @@ public final class CustomBiomeImpl implements CustomBiome {
     }
 
     @Override
+    public @NotNull BlockReplacement[] getBlockReplacements() {
+        return blockReplacements;
+    }
+
+    @Override
     public void setFogColor(int fogColor) {
         this.fogColor = fogColor;
     }
@@ -154,6 +192,11 @@ public final class CustomBiomeImpl implements CustomBiome {
     @Override
     public void setParticleRenderer(@NotNull ParticleRenderer particleRenderer) {
         this.particleRenderer = particleRenderer;
+    }
+
+    @Override
+    public void setBlockReplacements(@NotNull BlockReplacement[] blockReplacements) {
+        this.blockReplacements = blockReplacements;
     }
 
     @Override

@@ -3,10 +3,12 @@ package me.outspending.biomesapi.biome;
 import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.BiomeSettings;
 import me.outspending.biomesapi.annotations.AsOf;
+import me.outspending.biomesapi.packet.data.BlockReplacement;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
 import me.outspending.biomesapi.renderer.ParticleRenderer;
 import org.bukkit.Color;
 import org.bukkit.NamespacedKey;
+import org.bukkit.block.Biome;
 import org.jetbrains.annotations.NotNull;
 
 @AsOf("0.0.1")
@@ -31,6 +33,15 @@ public interface CustomBiome {
      */
     @AsOf("0.0.1")
     @NotNull NamespacedKey toNamespacedKey();
+
+    /**
+     * Returns the Bukkit Biome of the CustomBiome.
+     *
+     * @return the Bukkit Biome of the CustomBiome
+     * @since 0.0.4
+     */
+    @AsOf("0.0.4")
+    @NotNull Biome toBukkitBiome();
 
     /**
      * Returns the BiomeResourceKey of the CustomBiome.
@@ -114,6 +125,15 @@ public interface CustomBiome {
     ParticleRenderer getParticleRenderer();
 
     /**
+     * Returns the BlockReplacements of the CustomBiome.
+     *
+     * @return the BlockReplacements of the CustomBiome
+     * @since 0.0.4
+     */
+    @AsOf("0.0.4")
+    BlockReplacement[] getBlockReplacements();
+
+    /**
      * Sets the fog color of the CustomBiome.
      *
      * @param fogColor the fog color of the CustomBiome
@@ -177,6 +197,15 @@ public interface CustomBiome {
     void setParticleRenderer(@NotNull ParticleRenderer particleRenderer);
 
     /**
+     * Sets the BlockReplacements of the CustomBiome.
+     *
+     * @param blockReplacements the BlockReplacements of the CustomBiome
+     * @since 0.0.4
+     */
+    @AsOf("0.0.4")
+    void setBlockReplacements(@NotNull BlockReplacement... blockReplacements);
+
+    /**
      * Returns a new Builder instance with the properties of the CustomBiome.
      *
      * @return a new Builder instance with the properties of the CustomBiome
@@ -202,18 +231,19 @@ public interface CustomBiome {
     @AsOf("0.0.1")
     class Builder {
 
-        private BiomeResourceKey resourceKey;
-        private BiomeSettings settings;
+        private BiomeResourceKey resourceKey = null;
+        private BiomeSettings settings = null;
 
-        private int fogColor;
-        private int waterColor;
-        private int waterFogColor;
-        private int skyColor;
+        private int fogColor = 0;
+        private int waterColor = 0;
+        private int waterFogColor = 0;
+        private int skyColor = 0;
 
-        private int foliageColor;
-        private int grassColor;
+        private int foliageColor = 0;
+        private int grassColor = 0;
 
-        private ParticleRenderer particleRenderer;
+        private ParticleRenderer particleRenderer = null;
+        private BlockReplacement[] blockReplacements = new BlockReplacement[0];
 
         /**
          * Formats a hexadecimal color string by removing the leading '#' if present.
@@ -254,6 +284,7 @@ public interface CustomBiome {
             this.foliageColor = biome.getFoliageColor();
             this.grassColor = biome.getGrassColor();
             this.particleRenderer = biome.getParticleRenderer();
+            this.blockReplacements = biome.getBlockReplacements();
         }
 
         /**
@@ -452,6 +483,20 @@ public interface CustomBiome {
         }
 
         /**
+         * This method sets the block replacements property of the CustomBiome.
+         *
+         *
+         * @param blockReplacements The block replacements of the custom biome.
+         * @version 0.0.4
+         * @return The Builder object, for chaining method calls.
+         */
+        @AsOf("0.0.4")
+        public @NotNull Builder blockReplacements(@NotNull BlockReplacement... blockReplacements) {
+            this.blockReplacements = blockReplacements;
+            return this;
+        }
+
+        /**
          * This method creates a new CustomBiome object with the properties set in the Builder.
          *
          * @version 0.0.1
@@ -471,7 +516,8 @@ public interface CustomBiome {
                     skyColor,
                     foliageColor,
                     grassColor,
-                    particleRenderer
+                    particleRenderer,
+                    blockReplacements
             );
         }
 

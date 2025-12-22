@@ -12,7 +12,7 @@ allprojects {
     apply(plugin = "com.gradleup.shadow")
 
     group = "me.outspending.biomesapi"
-    version = "0.0.3"
+    version = "0.0.4"
 
     tasks.withType<JavaCompile> {
         options.encoding = "UTF-8"
@@ -23,12 +23,13 @@ allprojects {
 
     // Check if a project has the reobfJar task.
     fun Project.usesReobfuscatedJar() : Boolean {
-        return try {
-            tasks.named("reobfJar")
-            true
-        } catch (ignored: UnknownTaskException) {
-            false
-        }
+        return false
+//        return try {
+//            tasks.named("reobfJar")
+//            true
+//        } catch (ignored: UnknownTaskException) {
+//            false
+//        }
     }
 
     // needs to be in after evaluate, otherwise the project's reobfJar task (if it exists)
@@ -93,7 +94,7 @@ allprojects {
 
 }
 
-val nmsVersions = listOf("1.19_R2", "1.19_R3", "1.20_R1", "1.20_R2", "1.20_R3", "1.21_R3", "1.21_R7")
+val nmsVersions = listOf("1.19_R2", "1.19_R3", "1.20_R1", "1.20_R2", "1.20_R3", "1.21_R3", "1.21_R9")
 dependencies {
     paperweight.paperDevBundle("1.21.4-R0.1-SNAPSHOT")
     implementation("com.google.guava:guava:11.0.2")
@@ -102,12 +103,14 @@ dependencies {
     // NMS Implementations
     implementation(project(":NMS:Wrapper"))
     for (version in nmsVersions) {
-        implementation(project(path = ":NMS:${version}", configuration = "reobf"))
+        implementation(project(path = ":NMS:${version}"))
     }
 
     // JMH Implementations
     jmh("org.openjdk.jmh:jmh-core:0.9")
     jmh("org.openjdk.jmh:jmh-generator-annprocess:0.9")
+
+    compileOnly(files("local/RealisticSeasons-11.9.2.jar"))
 }
 
 java {

@@ -3,7 +3,7 @@ package me.outspending.biomesapi;
 import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.nms.NMS;
 import net.minecraft.core.Holder;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.biome.Biome;
 import org.bukkit.Chunk;
 
@@ -38,7 +38,7 @@ import java.util.function.Supplier;
  * This class provides the implementation for the NMS interface for version 1.21_R3.
  * It provides methods to interact with the game's chunks and biome registry.
  */
-public class NMS_v1_21_R7 implements NMS {
+public class NMS_v1_21_R9 implements NMS {
 
     /**
      * Retrieves the registry for a given key.
@@ -46,10 +46,9 @@ public class NMS_v1_21_R7 implements NMS {
      * @param key The key for the registry to retrieve.
      * @return The registry associated with the given key.
      */
-    private static <T> MappedRegistry<T> getRegistry(ResourceKey<Registry<T>> key) {
-
+    private static <T> MappedRegistry<T> getRegistry(ResourceKey<@NotNull Registry<@NotNull T>> key) {
         DedicatedServer server = ((CraftServer) Bukkit.getServer()).getServer();
-        return (MappedRegistry<T>) server.registryAccess().lookupOrThrow(key);
+        return (MappedRegistry<@NotNull T>) server.registryAccess().lookupOrThrow(key);
     }
 
     /**
@@ -78,20 +77,17 @@ public class NMS_v1_21_R7 implements NMS {
      * Locks or unlocks the biome registry.
      * It uses reflection to access the private boolean field in the registry class and sets its value.
      *
-     * @param isLocked true to lock the biome registry, false to unlock it.
+     * @param lock true to lock the biome registry, false to unlock it.
      */
     @Override
-    public void biomeRegistryLock(boolean isLocked) {
-        MappedRegistry<Biome> biomes = getRegistry(Registries.BIOME);
+    public void biomeRegistryLock(boolean lock) {
+        MappedRegistry<@NotNull Biome> biomes = getRegistry(Registries.BIOME);
         try {
-            Class<?> registryBiomeClass = Class.forName("net.minecraft.core.RegistryMaterials");
-            for (Field field : registryBiomeClass.getDeclaredFields()) {
-                if (field.getType() == boolean.class) {
-                    field.setAccessible(true);
-                    field.setBoolean(biomes, isLocked);
-                }
-            }
-        } catch (ClassNotFoundException | IllegalAccessException e) {
+            Class<?> registryClass = biomes.getClass();
+            Field field = registryClass.getDeclaredField("frozen");
+            field.setAccessible(true);
+            field.setBoolean(biomes, lock);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
     }
@@ -104,17 +100,12 @@ public class NMS_v1_21_R7 implements NMS {
      */
     @Override
     public void unlockRegistry(@NotNull Supplier<?> supplier) {
-        MappedRegistry<Biome> registry = getRegistry(Registries.BIOME);
-        //boolean wasFrozen = true;
+        MappedRegistry<@NotNull Biome> registry = getRegistry(Registries.BIOME);
         biomeRegistryLock(false);
         supplier.get();
 
-        // Yeah, there's a lot more going on here.
-        // I 'heard' there are some new custom biomes api in paper,
-        // but I've yet to find it.
-
         try {
-            // We're doing this whole reflection mess to properly re-freeze the registry.
+            // Use reflection to set the 'allTags' field to an unbound TagSet
             Class<?> registryClass = registry.getClass();
             Field field = registryClass.getDeclaredField("allTags");
             field.setAccessible(true);
@@ -154,12 +145,12 @@ public class NMS_v1_21_R7 implements NMS {
             String namespace = namespacedKey.getNamespace();
             String path = namespacedKey.getKey();
 
-            ResourceKey<Biome> biomeKey = ResourceKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(namespace, path));
-            Optional<Holder.Reference<Biome>> biomeOptional = getRegistry().get(biomeKey);
+            ResourceKey<@NotNull Biome> biomeKey = ResourceKey.create(Registries.BIOME, Identifier.fromNamespaceAndPath(namespace, path));
+            Optional<Holder.Reference<@NotNull Biome>> biomeOptional = getRegistry().get(biomeKey);
 
             Preconditions.checkArgument(biomeOptional.isPresent(), "Biome with namespace " + namespace + ":" + path + " does not exist");
 
-            Holder<Biome> biome = biomeOptional.orElseThrow();
+            Holder<@NotNull Biome> biome = biomeOptional.orElseThrow();
 
             for (int x = minLoc.getBlockX(); x <= maxLoc.getBlockX(); x++) {
                 for (int y = minLoc.getBlockY(); y <= maxLoc.getBlockY(); y++) {

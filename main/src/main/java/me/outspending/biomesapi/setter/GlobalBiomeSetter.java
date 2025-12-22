@@ -4,7 +4,11 @@ import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.BiomeUpdater;
 import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.misc.PointRange3D;
-import org.bukkit.*;
+import org.bukkit.Chunk;
+import org.bukkit.Location;
+import org.bukkit.RegionAccessor;
+import org.bukkit.World;
+import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
@@ -12,8 +16,6 @@ import org.jetbrains.annotations.NotNull;
 
 public class GlobalBiomeSetter implements BiomeSetter {
 
-    @SuppressWarnings("deprecation")
-    private static final UnsafeValues UNSAFE = Bukkit.getUnsafe();
     private static final BiomeUpdater BIOME_UPDATER = BiomeUpdater.of();
 
     @Override
@@ -29,9 +31,7 @@ public class GlobalBiomeSetter implements BiomeSetter {
         Location location = block.getLocation();
         RegionAccessor accessor = getRegionAccessor(location);
 
-//        Registry<@NotNull Biome> registry =  RegistryAccess.registryAccess().getRegistry(RegistryKey.BIOME);
-//        registry.
-        UNSAFE.setBiomeKey(accessor, location.getBlockX(), location.getBlockY(), location.getBlockZ(), customBiome.toNamespacedKey());
+        accessor.setBiome(location.getBlockX(), location.getBlockY(), location.getBlockZ(), customBiome.toBukkitBiome());
 
         if (updateBiome) {
             BIOME_UPDATER.updateChunk(location.getChunk());
@@ -59,7 +59,7 @@ public class GlobalBiomeSetter implements BiomeSetter {
         Preconditions.checkNotNull(customBiome, "customBiome cannot be null");
 
         RegionAccessor accessor = chunk.getWorld();
-        NamespacedKey key = customBiome.toNamespacedKey();
+        Biome biome = customBiome.toBukkitBiome();
 
         int minX = chunk.getX() << 4;
         int maxX = minX + 16;
@@ -71,7 +71,7 @@ public class GlobalBiomeSetter implements BiomeSetter {
             for (int y = minHeight; y < maxHeight; y++) {
                 for (int z = minZ; z < maxZ; z++) {
                     // Set the biome of each block to the custom biome
-                    UNSAFE.setBiomeKey(accessor, x, y, z, key);
+                    accessor.setBiome(x, y, z, biome);
                 }
             }
         }
@@ -126,13 +126,13 @@ public class GlobalBiomeSetter implements BiomeSetter {
         if (!from.getWorld().equals(to.getWorld())) {
             throw new RuntimeException("Locations must be in the same world!");
         } else {
-            NamespacedKey key = customBiome.toNamespacedKey();
+            Biome biome = customBiome.toBukkitBiome();
             PointRange3D range = PointRange3D.of(from, to);
 
             for (int x = range.minX(); x <= range.maxX(); x++) {
                 for (int y = range.minY(); y <= range.maxY(); y++) {
                     for (int z = range.minZ(); z <= range.maxZ(); z++) {
-                        UNSAFE.setBiomeKey(world, x, y, z, key);
+                        world.setBiome(x, y, z, biome);
                     }
                 }
             }

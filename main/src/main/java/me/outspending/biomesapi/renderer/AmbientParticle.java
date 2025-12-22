@@ -1,6 +1,7 @@
 package me.outspending.biomesapi.renderer;
 
 import me.outspending.biomesapi.annotations.AsOf;
+import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 
@@ -38,7 +39,7 @@ public enum AmbientParticle {
     ENCHANT(ParticleTypes.ENCHANT),
     ENCHANTED_HIT(ParticleTypes.ENCHANTED_HIT),
     END_ROD(ParticleTypes.END_ROD),
-    //ENTITY_EFFECT(ParticleTypes.ENTITY_EFFECT),
+    ENTITY_EFFECT(ParticleTypes.ENTITY_EFFECT),
     EXPLOSION(ParticleTypes.EXPLOSION),
     EXPLOSION_EMITTER(ParticleTypes.EXPLOSION_EMITTER),
     FALLING_DRIPSTONE_LAVA(ParticleTypes.FALLING_DRIPSTONE_LAVA),
@@ -88,7 +89,7 @@ public enum AmbientParticle {
     WHITE_ASH(ParticleTypes.WHITE_ASH),
     WITCH(ParticleTypes.WITCH);
 
-    private final SimpleParticleType particle;
+    private final ParticleType<?> particle;
 
     /**
      * Constructor for the AmbientParticle enum.
@@ -103,6 +104,10 @@ public enum AmbientParticle {
         this.particle = particle;
     }
 
+    AmbientParticle(ParticleType<?> particle) {
+        this.particle = particle;
+    }
+
     /**
      * This method returns the SimpleParticleType associated with the ambient particle.
      * The @AsOf annotation indicates the version when this method was introduced.
@@ -111,7 +116,7 @@ public enum AmbientParticle {
      * @version 0.0.1
      */
     @AsOf("0.0.1")
-    public SimpleParticleType getParticle() {
+    public ParticleType<?> getParticle() {
         return particle;
     }
 

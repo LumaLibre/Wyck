@@ -2,7 +2,7 @@ package me.outspending.biomesapi.registry;
 
 import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.annotations.AsOf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
  * @version 0.0.1
  */
 @AsOf("0.0.1")
-public record BiomeResourceKey(@NotNull ResourceLocation resourceLocation) {
+public record BiomeResourceKey(@NotNull Identifier resourceLocation) {
 
     /**
      * Creates a new BiomeResourceKey from the given key and path.
@@ -43,7 +43,7 @@ public record BiomeResourceKey(@NotNull ResourceLocation resourceLocation) {
      * @version 0.0.1
      */
     @AsOf("0.0.1")
-    public static @NotNull BiomeResourceKey of(@NotNull ResourceLocation resourceLocation) {
+    public static @NotNull BiomeResourceKey of(@NotNull Identifier resourceLocation) {
         Preconditions.checkNotNull(resourceLocation, "resourceLocation cannot be null");
 
         return new BiomeResourceKey(resourceLocation);
@@ -59,7 +59,7 @@ public record BiomeResourceKey(@NotNull ResourceLocation resourceLocation) {
      */
     @AsOf("0.0.1")
     public BiomeResourceKey(@NotNull String key, @NotNull String path) {
-        this(ResourceLocation.fromNamespaceAndPath(key.toLowerCase(), path.toLowerCase()));
+        this(Identifier.fromNamespaceAndPath(key.toLowerCase(), path.toLowerCase()));
     }
 
     /**
@@ -86,8 +86,7 @@ public record BiomeResourceKey(@NotNull ResourceLocation resourceLocation) {
     @Override
     @AsOf("0.0.1")
     public boolean equals(Object obj) {
-        if (obj instanceof BiomeResourceKey key) {
-            ResourceLocation location = key.resourceLocation();
+        if (obj instanceof BiomeResourceKey(Identifier location)) {
             String namespace = location.getNamespace();
             String path = location.getPath();
 

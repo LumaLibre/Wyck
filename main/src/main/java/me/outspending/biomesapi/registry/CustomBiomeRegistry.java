@@ -9,10 +9,12 @@ import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.nms.NMSHandler;
 import me.outspending.biomesapi.registry.handlers.SpecialEffectsHandler;
 import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.attribute.EnvironmentAttributes;
 import net.minecraft.world.level.biome.*;
 import org.jetbrains.annotations.NotNull;
 
+// TODO: should be moved down to NMS-level packages
 /**
  * This class implements the BiomeRegistry interface and provides a method to register a custom biome to a Minecraft server.
  * It uses the BiomeLock class to unlock the biome registry before registering the custom biome, and then freezes the registry again.
@@ -43,10 +45,10 @@ public class CustomBiomeRegistry implements BiomeRegistry {
 
             // Retrieve the biome registry from NMS
             NMSHandler.executeNMS(nms -> {
-                Registry<Biome> registry = (Registry<Biome>) nms.getRegistry();
+                Registry<@NotNull Biome> registry = (Registry<@NotNull Biome>) nms.getRegistry();
 
                 // Get the ResourceLocation and BiomeSettings from the CustomBiome object
-                ResourceLocation resourceLocation = biome.getResourceKey().resourceLocation();
+                Identifier resourceLocation = biome.getResourceKey().resourceLocation();
                 BiomeSettings settings = biome.getSettings();
 
                 // Build the Biome object
@@ -55,7 +57,12 @@ public class CustomBiomeRegistry implements BiomeRegistry {
                         .temperature(settings.temperature())
                         .temperatureAdjustment(settings.modifier().getModifier())
                         .mobSpawnSettings(MobSpawnSettings.EMPTY)
-                        .generationSettings(BiomeGenerationSettings.EMPTY);
+                        .generationSettings(BiomeGenerationSettings.EMPTY)
+                        .setAttribute(EnvironmentAttributes.FOG_COLOR, biome.getFogColor())
+                        .setAttribute(EnvironmentAttributes.SKY_COLOR, biome.getSkyColor())
+                        .setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, biome.getWaterColor())
+                        //.setAttribute(EnvironmentAttributes.)
+                        ;
 
                 // Create a new Biome object with the settings and colors from the CustomBiome object
                 BiomeSpecialEffects effects = effectsHandler.build(biome);

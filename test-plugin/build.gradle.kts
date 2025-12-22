@@ -1,5 +1,6 @@
 plugins {
     id("io.papermc.paperweight.userdev") version "2.0.0-beta.19"
+    id("xyz.jpenilla.run-paper") version "2.3.1"
 }
 
 dependencies {
@@ -22,8 +23,8 @@ tasks.build {
     dependsOn("shadowJar")
 }
 
-tasks.reobfJar {
-
+tasks.runServer {
+    minecraftVersion("1.21.11")
 }
 
 java {

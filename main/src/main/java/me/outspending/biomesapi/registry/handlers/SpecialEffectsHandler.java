@@ -21,11 +21,11 @@ public class SpecialEffectsHandler implements BuilderHandler<Biome.BiomeBuilder,
     @Override
     public BiomeSpecialEffects build(@NotNull CustomBiome biome) {
         BiomeSpecialEffects.Builder builder = new BiomeSpecialEffects.Builder()
-                .fogColor(biome.getFogColor())
+                //.fogColor(biome.getFogColor())
                 .foliageColorOverride(biome.getFoliageColor())
-                .skyColor(biome.getSkyColor())
+                //.skyColor(biome.getSkyColor())
                 .waterColor(biome.getWaterColor())
-                .waterFogColor(biome.getWaterFogColor())
+                //.waterFogColor(biome.getWaterFogColor())
                 .grassColorOverride(biome.getGrassColor());
 
         renderHandler.handle(biome.getParticleRenderer(), builder);

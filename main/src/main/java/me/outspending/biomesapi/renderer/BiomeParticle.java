@@ -11,12 +11,12 @@ public interface BiomeParticle {
     SimpleParticleType CLOUD = ParticleTypes.CLOUD;
     SimpleParticleType CRIT = ParticleTypes.CRIT;
     SimpleParticleType DAMAGE_INDICATOR = ParticleTypes.DAMAGE_INDICATOR;
-    SimpleParticleType DRAGON_BREATH = ParticleTypes.DRAGON_BREATH;
+    ParticleType<PowerParticleOption> DRAGON_BREATH = ParticleTypes.DRAGON_BREATH;
     SimpleParticleType DRIPPING_LAVA = ParticleTypes.DRIPPING_LAVA;
     SimpleParticleType DRIPPING_WATER = ParticleTypes.DRIPPING_WATER;
     ParticleType<DustParticleOptions> DUST = ParticleTypes.DUST;
     ParticleType<DustColorTransitionOptions> DUST_COLOR_TRANSITION = ParticleTypes.DUST_COLOR_TRANSITION;
-    SimpleParticleType EFFECT = ParticleTypes.EFFECT;
+    ParticleType<SpellParticleOption> EFFECT = ParticleTypes.EFFECT;
     SimpleParticleType ELDER_GUARDIAN = ParticleTypes.ELDER_GUARDIAN;
     SimpleParticleType ENCHANTED_HIT = ParticleTypes.ENCHANTED_HIT;
     SimpleParticleType ENCHANT = ParticleTypes.ENCHANT;
@@ -29,10 +29,10 @@ public interface BiomeParticle {
     SimpleParticleType FIREWORK = ParticleTypes.FIREWORK;
     SimpleParticleType FISHING = ParticleTypes.FISHING;
     SimpleParticleType FLAME = ParticleTypes.FLAME;
-    SimpleParticleType FLASH = ParticleTypes.FLASH;
+    ParticleType<ColorParticleOption> FLASH = ParticleTypes.FLASH;
     SimpleParticleType HAPPY_VILLAGER = ParticleTypes.HAPPY_VILLAGER;
     SimpleParticleType HEART = ParticleTypes.HEART;
-    SimpleParticleType INSTANT_EFFECT = ParticleTypes.INSTANT_EFFECT;
+    ParticleType<SpellParticleOption> INSTANT_EFFECT = ParticleTypes.INSTANT_EFFECT;
     ParticleType<ItemParticleOption> ITEM = ParticleTypes.ITEM;
     SimpleParticleType ITEM_SLIME = ParticleTypes.ITEM_SLIME;
     SimpleParticleType ITEM_SNOWBALL = ParticleTypes.ITEM_SNOWBALL;

@@ -2,8 +2,6 @@ plugins {
     id("java")
 }
 
-group = "me.outspending.biomesapi"
-version = "0.0.3"
 
 repositories {
     mavenCentral()
