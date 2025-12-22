@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
 @me.outspending.biomesapi.annotations.Experimental
 @ApiStatus.Experimental
 @ApiStatus.Internal
-@AsOf("0.0.4")
+@AsOf("0.0.6")
 public class PacketEventsPacketHandler implements PacketHandler {
 
     private final PhonyCustomBiomeCollector collector;

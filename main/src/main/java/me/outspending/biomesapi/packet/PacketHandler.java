@@ -19,12 +19,12 @@ import org.jetbrains.annotations.NotNull;
  * An external packet handling library (either ProtocolLib or PacketEvents) is required
  * for this interface.
  * </p>
- * @version 0.0.4
+ * @version 0.0.6
  * @author Jsinco
  */
 @me.outspending.biomesapi.annotations.Experimental
 @ApiStatus.Experimental
-@AsOf("0.0.4")
+@AsOf("0.0.6")
 public interface PacketHandler {
 
 
@@ -34,7 +34,7 @@ public interface PacketHandler {
      * @param provider The plugin providing this PacketHandler
      * @return A new PacketHandler instance
      */
-    @AsOf("0.0.4")
+    @AsOf("0.0.6")
     static @NotNull PacketHandler of(@NotNull Plugin provider) {
         return of(provider, Priority.NORMAL);
     }
@@ -45,7 +45,7 @@ public interface PacketHandler {
      * @param priority The priority of the packet listener
      * @return A new PacketHandler instance
      */
-    @AsOf("0.0.4")
+    @AsOf("0.0.6")
     static @NotNull PacketHandler of(@NotNull Plugin provider, @NotNull PacketHandler.Priority priority) {
         try {
             return new ProtocolLibPacketHandler(provider, priority);
@@ -59,14 +59,14 @@ public interface PacketHandler {
      * Calling this in your plugin's onLoad/onEnable is recommended
      * assuming your plugin soft-depends on PacketEvents and/or ProtocolLib.
      */
-    @AsOf("0.0.4")
+    @AsOf("0.0.6")
     void register();
 
     /**
      * Unregisters the packet listeners handling biome injection.
      * Calling this in your plugin's onDisable is recommended.
      */
-    @AsOf("0.0.4")
+    @AsOf("0.0.6")
     void unregister();
 
 
@@ -74,7 +74,7 @@ public interface PacketHandler {
      * Appends a custom biome to the packet handler's list of biomes to inject.
      * @param biome The phony custom biome to append
      */
-    @AsOf("0.0.4")
+    @AsOf("0.0.6")
     void appendBiome(@NotNull PhonyCustomBiome biome);
 
 
@@ -82,7 +82,7 @@ public interface PacketHandler {
      * Appends multiple custom biomes to the packet handler's list of biomes to inject.
      * @param biomes The phony custom biomes to append
      */
-    @AsOf("0.0.4")
+    @AsOf("0.0.6")
     default void appendBiome(@NotNull PhonyCustomBiome... biomes) {
         for (PhonyCustomBiome biome : biomes) {
             appendBiome(biome);
@@ -95,7 +95,7 @@ public interface PacketHandler {
      * @param biome The phony custom biome to remove
      * @return true if the biome was removed, false if it was not found
      */
-    @AsOf("0.0.4")
+    @AsOf("0.0.6")
     boolean removeBiome(@NotNull PhonyCustomBiome biome);
 
     /**
@@ -103,22 +103,22 @@ public interface PacketHandler {
      * @param biomeKey The NamespacedKey of the biome to remove
      * @return true if the biome was removed, false if it was not found
      */
-    @AsOf("0.0.4")
+    @AsOf("0.0.6")
     boolean removeBiome(@NotNull NamespacedKey biomeKey);
 
 
     /**
      * Clears all phony custom biomes from the packet handler's list of biomes to inject.
      */
-    @AsOf("0.0.4")
+    @AsOf("0.0.6")
     void clearBiomes();
 
 
     /**
      * The number of sections in each dimension.
-     * @version 0.0.4
+     * @version 0.0.6
      */
-    @AsOf("0.0.4")
+    @AsOf("0.0.6")
     enum DimensionSectionCount {
         /** from y=-64 to y=320 = 24, each section is 16 blocks high */
         OVERWORLD(24),
@@ -142,7 +142,7 @@ public interface PacketHandler {
          * @param environment The Bukkit World.Environment
          * @return The corresponding DimensionSectionCount
          */
-        @AsOf("0.0.4")
+        @AsOf("0.0.6")
         public static @NotNull DimensionSectionCount fromBukkitEnvironment(@NotNull World.Environment environment) {
             return switch (environment) {
                 case NORMAL, CUSTOM -> OVERWORLD;
@@ -159,9 +159,9 @@ public interface PacketHandler {
      * @see PacketHandler
      * @see ProtocolLibPacketHandler
      * @see me.outspending.biomesapi.packet.handlers.PacketEventsPacketHandler
-     * @version 0.0.4
+     * @version 0.0.6
      */
-    @AsOf("0.0.4")
+    @AsOf("0.0.6")
     enum Priority {
         LOWEST(0),
         LOW(1),

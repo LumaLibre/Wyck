@@ -27,7 +27,10 @@ public final class BiomesAPITest extends JavaPlugin implements Listener {
                 .waterColor("#F5F2EB") // #F5F2EB
                 .waterFogColor("#000000")
                 .grassColor("#F5F2EB")
-                .blockReplacements(new BlockReplacement(Material.BIRCH_LEAVES, Material.ACACIA_LEAVES))
+                .blockReplacements(
+                        new BlockReplacement(Material.BIRCH_LEAVES, Material.ACACIA_LEAVES),
+                        BlockReplacement.of(Material.GRASS_BLOCK, Material.AMETHYST_BLOCK)
+                )
                 .build();
 
         CustomBiome yellowBiome = CustomBiome.builder()
@@ -39,6 +42,7 @@ public final class BiomesAPITest extends JavaPlugin implements Listener {
                 .waterColor("#ffe606") // #F5F2EB
                 .waterFogColor("#ffe606")
                 .grassColor("#ffe606")
+                //.particleRenderer(ParticleRenderer.of(AmbientParticle.DRIPPING_HONEY, 1.0f))
                 .blockReplacements(new BlockReplacement(Material.OAK_LEAVES, Material.SPRUCE_LEAVES))
                 .build();
 
@@ -80,6 +84,9 @@ public final class BiomesAPITest extends JavaPlugin implements Listener {
         packetHandler.appendBiome(phonyCustomBiome);
         packetHandler.appendBiome(phonyYellowBiome);
         e.getPlayer().sendMessage("registered");
+
+        BiomeUpdater biomeUpdater = BiomeUpdater.of();
+        biomeUpdater.updateChunksForPlayer(e.getPlayer());
 
 //        World world = e.getBlock().getWorld();
 //        for (Chunk loadedChunk : world.getLoadedChunks()) {

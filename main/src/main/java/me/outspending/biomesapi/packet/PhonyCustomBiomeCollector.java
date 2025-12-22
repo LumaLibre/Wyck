@@ -16,13 +16,13 @@ import java.util.Set;
 /**
  * A collector for managing PhonyCustomBiome instances.
  *
- * @version 0.0.4
- * @since 0.0.4
+ * @version 0.0.6
+ * @since 0.0.6
  * @author Jsinco
  */
 @me.outspending.biomesapi.annotations.Experimental
 @ApiStatus.Experimental
-@AsOf("0.0.4")
+@AsOf("0.0.6")
 public class PhonyCustomBiomeCollector {
 
     private final Set<PhonyCustomBiome> backing = new HashSet<>();
@@ -32,7 +32,7 @@ public class PhonyCustomBiomeCollector {
      * Appends a phony custom biome to the collector.
      * @param biome the phony custom biome to append
      */
-    @AsOf("0.0.4")
+    @AsOf("0.0.6")
     public void appendBiome(@NotNull PhonyCustomBiome biome) {
         if (backing.contains(biome)) {
             throw new IllegalArgumentException("PhonyCustomBiome with key " + biome.customBiome().toNamespacedKey() + " is already registered.");
@@ -45,7 +45,7 @@ public class PhonyCustomBiomeCollector {
      * @param biome the phony custom biome to check
      * @return true if the collector has the biome, false otherwise
      */
-    @AsOf("0.0.4")
+    @AsOf("0.0.6")
     public boolean hasBiome(@NotNull PhonyCustomBiome biome) {
         return backing.contains(biome);
     }
@@ -55,7 +55,7 @@ public class PhonyCustomBiomeCollector {
      * @param biomeKey the NamespacedKey of the biome to check
      * @return true if the collector has the biome, false otherwise
      */
-    @AsOf("0.0.4")
+    @AsOf("0.0.6")
     public boolean hasBiome(@NotNull NamespacedKey biomeKey) {
         return backing.stream().anyMatch((PhonyCustomBiome biome) -> biome.customBiome().toNamespacedKey().equals(biomeKey));
     }
@@ -65,7 +65,7 @@ public class PhonyCustomBiomeCollector {
      * @param biome the phony custom biome to remove
      * @return true if the biome was removed, false if it was not found
      */
-    @AsOf("0.0.4")
+    @AsOf("0.0.6")
     public boolean removeBiome(@NotNull PhonyCustomBiome biome) {
         return backing.remove(biome);
     }
@@ -75,7 +75,7 @@ public class PhonyCustomBiomeCollector {
      * @param biomeKey the NamespacedKey of the biome to remove
      * @return true if the biome was removed, false if it was not found
      */
-    @AsOf("0.0.4")
+    @AsOf("0.0.6")
     public boolean removeBiome(@NotNull NamespacedKey biomeKey) {
         return backing.removeIf((PhonyCustomBiome biome) -> biome.customBiome().toNamespacedKey().equals(biomeKey));
     }
@@ -84,7 +84,7 @@ public class PhonyCustomBiomeCollector {
     /**
      * Clears all phony custom biomes from the collector.
      */
-    @AsOf("0.0.4")
+    @AsOf("0.0.6")
     public void clearBiomes() {
         backing.clear();
     }
@@ -95,7 +95,7 @@ public class PhonyCustomBiomeCollector {
      * @param chunkLocation the chunk location
      * @return the best phony custom biome, or null if none match
      */
-    @AsOf("0.0.4")
+    @AsOf("0.0.6")
     public @Nullable PhonyCustomBiome bestBiomeFor(@NotNull Player player, @NotNull ChunkLocation chunkLocation) {
         if (backing.isEmpty()) {
             return null;

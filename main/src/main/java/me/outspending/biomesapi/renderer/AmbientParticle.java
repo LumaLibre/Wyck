@@ -12,11 +12,11 @@ import org.jetbrains.annotations.NotNull;
  * This is an enumeration of all the possible ambient particles, each associated with a specific SimpleParticleType.
  * The @Getter annotation from the Lombok library is used to automatically generate a getter method for the 'particle' field.
  *
- * @version 0.0.4
+ * @version 0.0.6
  * @since 0.0.1
  * @author Outspending
  */
-@AsOf("0.0.4")
+@AsOf("0.0.6")
 public enum AmbientParticle {
     ASH(ParticleTypes.ASH),
     BUBBLE(ParticleTypes.BUBBLE),
@@ -128,7 +128,7 @@ public enum AmbientParticle {
      * Get the SimpleParticleType of this AmbientParticle.
      * @return The SimpleParticleType of this AmbientParticle.
      */
-    @AsOf("0.0.4")
+    @AsOf("0.0.6")
     public SimpleParticleType getSimpleParticle() {
         if (!(particle instanceof SimpleParticleType)) {
             throw new IllegalStateException("ParticleType is not a SimpleParticleType: " + particle);

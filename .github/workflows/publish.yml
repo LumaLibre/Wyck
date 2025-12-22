@@ -1,0 +1,16 @@
+name: Publish API to repo.jsinco.dev/releases
+
+on:
+  release:
+    branches: [main]
+    types: [published]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish API
+        run: "./gradlew publish"
+        env:
+          REPO_URL: "https://repo.jsinco.dev/releases"
+          REPO_USERNAME: ${{ secrets.REPO_USERNAME }}
+          REPO_SECRET: ${{ secrets.REPO_SECRET }}

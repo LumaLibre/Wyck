@@ -1,3 +1,4 @@
+// TODO: remove legacy versions & cleanup
 plugins {
     java
     `maven-publish`
@@ -12,7 +13,7 @@ allprojects {
     apply(plugin = "com.gradleup.shadow")
 
     group = "me.outspending.biomesapi"
-    version = "0.0.4"
+    version = "0.0.6"
 
     tasks.withType<JavaCompile> {
         options.encoding = "UTF-8"
@@ -98,7 +99,7 @@ val nmsVersions = listOf("1.19_R2", "1.19_R3", "1.20_R1", "1.20_R2", "1.20_R3", 
 dependencies {
     paperweight.paperDevBundle("1.21.4-R0.1-SNAPSHOT")
     implementation("com.google.guava:guava:11.0.2")
-    compileOnly("com.github.retrooper:packetevents-spigot:2.7.0")
+
 
     // NMS Implementations
     implementation(project(":NMS:Wrapper"))
@@ -110,14 +111,45 @@ dependencies {
     jmh("org.openjdk.jmh:jmh-core:0.9")
     jmh("org.openjdk.jmh:jmh-generator-annprocess:0.9")
 
-    compileOnly(files("local/RealisticSeasons-11.9.2.jar"))
 }
 
 java {
     toolchain.languageVersion = JavaLanguageVersion.of(21)
 }
 
-tasks.wrapper {
-    gradleVersion = "8.1.1"
-    distributionType = Wrapper.DistributionType.ALL
+publishing {
+    val repo: String? = System.getenv("REPO_URL")
+    val user: String? = System.getenv("REPO_USERNAME")
+    val pass: String? = System.getenv("REPO_PASSWORD")
+
+
+    repositories {
+        if (repo == null || user == null || pass == null) {
+            return@repositories
+        }
+        maven {
+            url = uri(repo)
+            credentials(PasswordCredentials::class) {
+                username = user
+                password = pass
+            }
+            authentication {
+                create<BasicAuthentication>("basic")
+            }
+        }
+    }
+
+    publications {
+        if (repo == null || user == null || pass == null) {
+            return@publications
+        }
+        create<MavenPublication>("maven") {
+            groupId = project.group.toString()
+            artifactId = project.name
+            version = project.version.toString()
+            artifact(tasks.shadowJar.get().archiveFile) {
+                builtBy(tasks.shadowJar)
+            }
+        }
+    }
 }

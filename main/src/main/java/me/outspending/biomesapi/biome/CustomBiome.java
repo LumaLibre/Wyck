@@ -15,11 +15,11 @@ import org.jetbrains.annotations.NotNull;
  * This interface represents a custom biome in the BiomesAPI.
  * It provides methods to retrieve and modify the properties of the custom biome.
  *
- * @version 0.0.4
+ * @version 0.0.6
  * @since 0.0.1
  * @author Outspending
  */
-@AsOf("0.0.4")
+@AsOf("0.0.6")
 public interface CustomBiome {
 
     /**
@@ -46,9 +46,9 @@ public interface CustomBiome {
      * Returns the Bukkit Biome of the CustomBiome.
      *
      * @return the Bukkit Biome of the CustomBiome
-     * @since 0.0.4
+     * @since 0.0.6
      */
-    @AsOf("0.0.4")
+    @AsOf("0.0.6")
     @NotNull Biome toBukkitBiome();
 
     /**
@@ -136,9 +136,9 @@ public interface CustomBiome {
      * Returns the BlockReplacements of the CustomBiome.
      *
      * @return the BlockReplacements of the CustomBiome
-     * @since 0.0.4
+     * @since 0.0.6
      */
-    @AsOf("0.0.4")
+    @AsOf("0.0.6")
     @NotNull BlockReplacement[] getBlockReplacements();
 
     /**
@@ -208,9 +208,9 @@ public interface CustomBiome {
      * Sets the BlockReplacements of the CustomBiome.
      *
      * @param blockReplacements the BlockReplacements of the CustomBiome
-     * @since 0.0.4
+     * @since 0.0.6
      */
-    @AsOf("0.0.4")
+    @AsOf("0.0.6")
     void setBlockReplacements(@NotNull BlockReplacement... blockReplacements);
 
     /**
@@ -495,10 +495,10 @@ public interface CustomBiome {
          *
          *
          * @param blockReplacements The block replacements of the custom biome.
-         * @version 0.0.4
+         * @version 0.0.6
          * @return The Builder object, for chaining method calls.
          */
-        @AsOf("0.0.4")
+        @AsOf("0.0.6")
         public @NotNull Builder blockReplacements(@NotNull BlockReplacement... blockReplacements) {
             this.blockReplacements = blockReplacements;
             return this;

@@ -26,11 +26,11 @@ import java.lang.reflect.Field;
 /**
  * Internal helper class for packet handling related to chunk data and biome modification.
  *
- * @version 0.0.4
- * @since 0.0.4
+ * @version 0.0.6
+ * @since 0.0.6
  * @author Jsinco
  */
-@AsOf("0.0.4")
+@AsOf("0.0.6")
 class PacketHandlerHelper {
 
     static PacketHandlerHelper INSTANCE = new PacketHandlerHelper();
@@ -38,7 +38,7 @@ class PacketHandlerHelper {
     static int CHUNK_SECTION_SIZE = 16; // Each chunk section is 16x16x16 blocks
     static int CHUNK_SECTIONS = 4; // Each chunk section has 4x4x4 = 64 biome entries
 
-    @AsOf("0.0.4")
+    @AsOf("0.0.6")
     LevelChunkSection[] extractChunkSections(ClientboundLevelChunkPacketData chunkData, int sectionCount) {
         LevelChunkSection[] sections = new LevelChunkSection[sectionCount];
         DedicatedServer server = ((CraftServer) Bukkit.getServer()).getServer();
@@ -60,7 +60,7 @@ class PacketHandlerHelper {
         return sections;
     }
 
-    @AsOf("0.0.4")
+    @AsOf("0.0.6")
     byte[] serializeChunkSections(LevelChunkSection[] sections) {
         // Calculate total size needed
         int totalSize = 0;
@@ -82,7 +82,7 @@ class PacketHandlerHelper {
         return data;
     }
 
-    @AsOf("0.0.4")
+    @AsOf("0.0.6")
     void modifyChunkBiomes(ClientboundLevelChunkPacketData chunkData, CustomBiome customBiome, PacketHandler.DimensionSectionCount dimensionSectionCount) {
 
         // Extract chunk sections safely

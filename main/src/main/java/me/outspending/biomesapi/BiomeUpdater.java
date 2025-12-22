@@ -5,6 +5,7 @@ import me.outspending.biomesapi.misc.PointRange2D;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -96,5 +97,24 @@ public interface BiomeUpdater {
      */
     @AsOf("0.0.1")
     void updateChunks(@NotNull List<Chunk> chunks);
+
+
+    @AsOf("0.0.6")
+    default void updateChunksForPlayer(@NotNull Player player) {
+        int viewDistance = player.getViewDistance();
+        Location playerLocation = player.getLocation();
+        World world = player.getWorld();
+
+        int playerChunkX = playerLocation.getBlockX() >> 4;
+        int playerChunkZ = playerLocation.getBlockZ() >> 4;
+        List<Chunk> chunksToUpdate = new ArrayList<>();
+        for (int x = playerChunkX - viewDistance; x <= playerChunkX + viewDistance; x++) {
+            for (int z = playerChunkZ - viewDistance; z <= playerChunkZ + viewDistance; z++) {
+                chunksToUpdate.add(world.getChunkAt(x, z));
+            }
+        }
+
+        updateChunks(chunksToUpdate);
+    }
 
 }

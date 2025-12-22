@@ -12,11 +12,11 @@ import org.jetbrains.annotations.NotNull;
  * It uses the @AsOf annotation to indicate the version since the class or its methods have been present or modified.
  * It is a final class, meaning it cannot be subclassed.
  *
- * @version 0.0.4
+ * @version 0.0.6
  * @since 0.0.1
  * @author Outspending
  */
-@AsOf("0.0.4")
+@AsOf("0.0.6")
 public record BiomeResourceKey(@NotNull Identifier resourceLocation) implements Keyed {
 
     /**
@@ -103,9 +103,9 @@ public record BiomeResourceKey(@NotNull Identifier resourceLocation) implements 
 
     /**
      * @return the Key representation of this BiomeResourceKey
-     * @version 0.0.4
+     * @version 0.0.6
      */
-    @AsOf("0.0.4")
+    @AsOf("0.0.6")
     @Override
     public @NotNull Key key() {
         return Key.key(resourceLocation.getNamespace(), resourceLocation.getPath());

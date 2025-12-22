@@ -14,10 +14,10 @@ import java.util.function.BiPredicate;
  * actually set to any chunks and only exist for packet sending purposes.
  *
  * @author Jsinco
- * @since 0.0.4
- * @version 0.0.4
+ * @since 0.0.6
+ * @version 0.0.6
  */
-@AsOf("0.0.4")
+@AsOf("0.0.6")
 public record PhonyCustomBiome(CustomBiome customBiome, BiPredicate<Player, ChunkLocation> conditional, PacketHandler.Priority priority) {
 
     @Override

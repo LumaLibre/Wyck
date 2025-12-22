@@ -17,10 +17,10 @@ import org.jetbrains.annotations.NotNull;
  * This class represents a custom biome implementation.
  *
  * @author Outspending
- * @version 0.0.4
+ * @version 0.0.6
  * @since 0.0.2
  */
-@AsOf("0.0.4")
+@AsOf("0.0.6")
 public final class CustomBiomeImpl implements CustomBiome {
 
     // Required Settings
@@ -84,7 +84,7 @@ public final class CustomBiomeImpl implements CustomBiome {
         this.blockReplacements = new BlockReplacement[0];
     }
 
-    @AsOf("0.0.4")
+    @AsOf("0.0.6")
     public CustomBiomeImpl(
             @NotNull BiomeResourceKey resourceKey,
             @NotNull BiomeSettings settings,

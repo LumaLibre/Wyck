@@ -25,18 +25,18 @@ import org.jetbrains.annotations.NotNull;
 /**
  * ProtocolLib-based implementation of the PacketHandler interface.
  *
- * @version 0.0.4
- * @since 0.0.4
+ * @version 0.0.6
+ * @since 0.0.6
  * @author Jsinco
  */
-@AsOf("0.0.4")
+@AsOf("0.0.6")
 public class ProtocolLibPacketHandler implements PacketHandler {
 
     private final PhonyCustomBiomeCollector collector;
     private final PacketAdapter[] protocolListeners;
 
 
-    @AsOf("0.0.4")
+    @AsOf("0.0.6")
     public ProtocolLibPacketHandler(@NotNull Plugin provider, Priority priority) throws ClassNotFoundException {
         this.collector = new PhonyCustomBiomeCollector();
         ListenerPriority protocolLibPrio = priority.getDelegatePriority(ListenerPriority.class);
@@ -86,7 +86,7 @@ public class ProtocolLibPacketHandler implements PacketHandler {
     }
 
 
-    @AsOf("0.0.4")
+    @AsOf("0.0.6")
     private static class MapChunkPacketListener extends PacketAdapter {
 
         private final ProtocolLibPacketHandler context;
@@ -119,7 +119,7 @@ public class ProtocolLibPacketHandler implements PacketHandler {
 
     // TODO: extract out common code between BlockChangePacketListener and MultiBlockChangePacketListener
 
-    @AsOf("0.0.4")
+    @AsOf("0.0.6")
     private static class BlockChangePacketListener extends PacketAdapter {
 
         private final ProtocolLibPacketHandler context;
@@ -161,7 +161,7 @@ public class ProtocolLibPacketHandler implements PacketHandler {
     }
 
 
-    @AsOf("0.0.4")
+    @AsOf("0.0.6")
     private static class MultiBlockChangePacketListener extends PacketAdapter {
 
         private final ProtocolLibPacketHandler context;
