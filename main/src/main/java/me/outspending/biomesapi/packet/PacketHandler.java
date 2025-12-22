@@ -1,15 +1,15 @@
 package me.outspending.biomesapi.packet;
 
-import com.comphenix.protocol.events.ListenerPriority;
-import com.github.retrooper.packetevents.event.PacketListenerPriority;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.biome.CustomBiome;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Predicate;
 
+@ApiStatus.Experimental
 @AsOf("0.0.4")
 public interface PacketHandler {
 
@@ -49,10 +49,18 @@ public interface PacketHandler {
     boolean unregisterBiomeOverride(@NotNull Player player);
 
 
+    /**
+     * The number of sections in each dimension.
+     * @version 0.0.4
+     */
+    @AsOf("0.0.4")
     enum DimensionSectionCount {
-        OVERWORLD(24), // from y=-64 to y=320, each section is 16 blocks high
-        NETHER(16), // from y=0 to y=256
-        END(16); // from y=0 to y=256
+        /** from y=-64 to y=320 = 24, each section is 16 blocks high */
+        OVERWORLD(24),
+        /** from y=0 to y=256 = 16 */
+        NETHER(16),
+        /** from y=0 to y=256 = 16 */
+        END(16);
 
         private final int sectionCount;
 
@@ -79,6 +87,12 @@ public interface PacketHandler {
         }
     }
 
+    /**
+     * The priority levels for packet handlers. These wrap around both ProtocolLib's ListenerPriority
+     * and PacketEvents' PacketListenerPriority.
+     * @version 0.0.4
+     */
+    @AsOf("0.0.4")
     enum PacketHandlerPriority {
         HIGHEST,
         HIGH,
@@ -87,7 +101,7 @@ public interface PacketHandler {
         LOWEST;
 
 
-        public <E extends Enum<E>> @NotNull E getDelegatePriority(@NotNull Class<E> enumClass) {
+        <E extends Enum<E>> @NotNull E getDelegatePriority(@NotNull Class<E> enumClass) {
             try {
                 return Enum.valueOf(enumClass, this.name());
             } catch (IllegalArgumentException e) {
