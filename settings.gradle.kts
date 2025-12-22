@@ -8,8 +8,6 @@ rootProject.name = "BiomesAPI"
 include("main")
 include("test-plugin")
 
-include("Kotlin")
-
 include("NMS:Wrapper")
 include("NMS:1.19_R2")
 include("NMS:1.19_R3")
