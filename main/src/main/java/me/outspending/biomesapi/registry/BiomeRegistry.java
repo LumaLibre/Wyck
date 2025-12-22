@@ -11,6 +11,8 @@ import org.jetbrains.annotations.NotNull;
  * It also includes a static method to create a new BiomeRegistry object, which returns an instance of CustomBiomeRegistry.
  *
  * @version 0.0.1
+ * @since 0.0.1
+ * @author Outspending
  */
 @AsOf("0.0.1")
 public interface BiomeRegistry {

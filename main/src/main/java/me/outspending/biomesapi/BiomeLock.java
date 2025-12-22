@@ -11,6 +11,8 @@ import java.util.function.Supplier;
  * This class uses the Bukkit API to interact with the Minecraft server and the Java Reflection API to manipulate the registry lock state.
  *
  * @version 0.0.1
+ * @since 0.0.1
+ * @author Outspending
  */
 @AsOf("0.0.1")
 public interface BiomeLock {

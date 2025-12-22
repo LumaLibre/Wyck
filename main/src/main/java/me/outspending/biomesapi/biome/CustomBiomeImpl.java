@@ -13,6 +13,13 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.block.Biome;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * This class represents a custom biome implementation.
+ *
+ * @author Outspending
+ * @version 0.0.4
+ * @since 0.0.2
+ */
 @AsOf("0.0.4")
 public final class CustomBiomeImpl implements CustomBiome {
 

@@ -17,6 +17,8 @@ import org.jetbrains.annotations.NotNull;
  * It is a final class, meaning it cannot be subclassed.
  *
  * @version 0.0.1
+ * @since 0.0.1
+ * @author Outspending
  */
 @AsOf("0.0.1")
 public interface BiomeSetter {

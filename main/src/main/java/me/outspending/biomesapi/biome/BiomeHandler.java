@@ -16,6 +16,8 @@ import java.util.List;
  * This class uses the Bukkit API to interact with the Minecraft server.
  *
  * @version 0.0.1
+ * @since 0.0.1
+ * @author Outspending
  */
 @AsOf("0.0.1")
 public class BiomeHandler {

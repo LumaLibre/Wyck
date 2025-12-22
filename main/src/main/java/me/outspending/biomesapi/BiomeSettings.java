@@ -10,6 +10,8 @@ import org.jetbrains.annotations.Range;
  * It also includes a nested Builder class for creating instances of BiomeSettings.
  *
  * @version 0.0.1
+ * @since 0.0.1
+ * @author Outspending
  */
 @AsOf("0.0.1")
 public record BiomeSettings(

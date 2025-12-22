@@ -9,6 +9,8 @@ import net.minecraft.world.level.biome.Biome;
  * Each enum value includes a TemperatureModifier object, which can be retrieved using the getModifier method.
  *
  * @version 0.0.1
+ * @since 0.0.1
+ * @author Outspending
  */
 @AsOf("0.0.1")
 public enum BiomeTempModifier {

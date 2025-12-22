@@ -17,6 +17,8 @@ import java.util.List;
  * It uses the UnsafeValues instance to perform unsafe operations.
  *
  * @version 0.0.1
+ * @since 0.0.1
+ * @author Outspending
  */
 @AsOf("0.0.1")
 public interface BiomeUpdater {

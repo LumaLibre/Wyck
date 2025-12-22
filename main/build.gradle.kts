@@ -10,7 +10,7 @@ dependencies {
     paperweight.paperDevBundle("1.21.11-R0.1-SNAPSHOT")
     implementation("com.google.guava:guava:11.0.2")
     compileOnly("net.dmulloy2:ProtocolLib:5.4.0")
-    compileOnly("com.github.retrooper:packetevents-spigot:2.7.0")
+    compileOnly("com.github.retrooper:packetevents-spigot:2.11.1")
     compileOnly(files("local/RealisticSeasons.jar")) // decompilation purposes only
 
     // NMS Implementations

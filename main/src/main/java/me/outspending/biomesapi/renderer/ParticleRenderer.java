@@ -3,12 +3,16 @@ package me.outspending.biomesapi.renderer;
 import me.outspending.biomesapi.annotations.AsOf;
 import org.jetbrains.annotations.NotNull;
 
+// TODO:
+//  MC 1.21.11+ supports multiple ambient particles via EnvironmentAttributes.AMBIENT_PARTICLES and api should reflect as such
 /**
  * Represents a particle renderer with a specific ambient particle and probability.
  * This is a record class introduced in Java 14 as a preview feature and made final in Java 16.
  * Records provide a compact syntax for declaring classes which are transparent holders for shallowly immutable data.
  *
  * @version 0.0.1
+ * @since 0.0.1
+ * @author Outspending
  */
 @AsOf("0.0.1")
 public record ParticleRenderer(@NotNull AmbientParticle ambientParticle, float probability) {

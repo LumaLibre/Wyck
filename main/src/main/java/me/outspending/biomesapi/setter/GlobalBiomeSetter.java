@@ -2,6 +2,7 @@ package me.outspending.biomesapi.setter;
 
 import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.BiomeUpdater;
+import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.misc.PointRange3D;
 import org.bukkit.Chunk;
@@ -14,6 +15,15 @@ import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * This class provides methods to set the biome of blocks, chunks, and regions in the game.
+ * It uses the @AsOf annotation to indicate the version since the class or its methods have been present or modified.
+ *
+ * @version 0.0.1
+ * @since 0.0.1
+ * @author Outspending
+ */
+@AsOf("0.0.1")
 public class GlobalBiomeSetter implements BiomeSetter {
 
     private static final BiomeUpdater BIOME_UPDATER = BiomeUpdater.of();

@@ -15,6 +15,8 @@ import java.util.function.Consumer;
  * It also generates a private no-args constructor, which throws an exception when invoked.
  *
  * @version 0.0.1
+ * @since 0.0.1
+ * @author Outspending
  */
 @AsOf("0.0.1")
 public class NMSHandler {

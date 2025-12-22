@@ -7,23 +7,28 @@ import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.biome.BiomeHandler;
 import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.nms.NMSHandler;
+import me.outspending.biomesapi.registry.handlers.ParticleRendererHandler;
 import me.outspending.biomesapi.registry.handlers.SpecialEffectsHandler;
+import me.outspending.biomesapi.renderer.ParticleRenderer;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.attribute.EnvironmentAttributes;
 import net.minecraft.world.level.biome.*;
 import org.jetbrains.annotations.NotNull;
 
-// TODO: should be moved down to NMS-level packages
+// TODO: should possibly be moved down to NMS-level packages
 /**
  * This class implements the BiomeRegistry interface and provides a method to register a custom biome to a Minecraft server.
  * It uses the BiomeLock class to unlock the biome registry before registering the custom biome, and then freezes the registry again.
  *
  * @version 0.0.1
+ * @since 0.0.1
+ * @author Outspending
  */
 @AsOf("0.0.1")
 public class CustomBiomeRegistry implements BiomeRegistry {
     private static final SpecialEffectsHandler effectsHandler = new SpecialEffectsHandler();
+    private static final ParticleRendererHandler renderHandler = new ParticleRendererHandler();
 
     /**
      * This method registers a custom biome to a Minecraft server.
@@ -61,11 +66,15 @@ public class CustomBiomeRegistry implements BiomeRegistry {
                         .setAttribute(EnvironmentAttributes.FOG_COLOR, biome.getFogColor())
                         .setAttribute(EnvironmentAttributes.SKY_COLOR, biome.getSkyColor())
                         .setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, biome.getWaterColor())
+                        // TODO: rest of the biome settings should be added to the api
                         ;
 
                 // Create a new Biome object with the settings and colors from the CustomBiome object
                 BiomeSpecialEffects effects = effectsHandler.build(biome);
                 effectsHandler.handle(effects, biomeBuilder);
+
+                ParticleRenderer particleRenderer = biome.getParticleRenderer();
+                renderHandler.handle(particleRenderer, biomeBuilder);
 
                 // Register the new Biome object to the biome registry
                 Biome createdBiome = biomeBuilder.build();

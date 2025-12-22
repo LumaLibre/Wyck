@@ -9,7 +9,6 @@ import org.jetbrains.annotations.NotNull;
 
 @AsOf("0.1.0")
 public class SpecialEffectsHandler implements BuilderHandler<Biome.BiomeBuilder, BiomeSpecialEffects> {
-    private static final ParticleRendererHandler renderHandler = new ParticleRendererHandler();
 
     @Override
     public void handle(BiomeSpecialEffects value, @NotNull Biome.BiomeBuilder builder) {
@@ -20,15 +19,12 @@ public class SpecialEffectsHandler implements BuilderHandler<Biome.BiomeBuilder,
 
     @Override
     public BiomeSpecialEffects build(@NotNull CustomBiome biome) {
+        // TODO: Expand this to include more special effects settings
         BiomeSpecialEffects.Builder builder = new BiomeSpecialEffects.Builder()
-                //.fogColor(biome.getFogColor())
                 .foliageColorOverride(biome.getFoliageColor())
-                //.skyColor(biome.getSkyColor())
                 .waterColor(biome.getWaterColor())
-                //.waterFogColor(biome.getWaterFogColor())
                 .grassColorOverride(biome.getGrassColor());
 
-        renderHandler.handle(biome.getParticleRenderer(), builder);
         return builder.build();
     }
 

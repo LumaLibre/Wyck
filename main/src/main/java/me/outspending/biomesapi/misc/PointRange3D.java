@@ -10,6 +10,8 @@ import org.jetbrains.annotations.NotNull;
  * This class is a record, which is an immutable data carrier.
  *
  * @version 0.0.1
+ * @since 0.0.1
+ * @author Outspending
  */
 @AsOf("0.0.1")
 public record PointRange3D(int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {

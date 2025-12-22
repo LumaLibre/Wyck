@@ -88,7 +88,7 @@ public class NMS_v1_21_R9 implements NMS {
             field.setAccessible(true);
             field.setBoolean(biomes, lock);
         } catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Failed to change biome registry lock state", e);
         }
     }
 
@@ -131,7 +131,7 @@ public class NMS_v1_21_R9 implements NMS {
      * @throws RuntimeException if the biome registry cannot be retrieved.
      */
     @Override
-    public @NotNull Registry<Biome> getRegistry() {
+    public @NotNull Registry<@NotNull Biome> getRegistry() {
         return ((CraftServer) Bukkit.getServer()).getServer()
                 .registryAccess()
                 .lookup(Registries.BIOME)

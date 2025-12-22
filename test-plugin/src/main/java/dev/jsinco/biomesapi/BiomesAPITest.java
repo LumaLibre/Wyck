@@ -3,21 +3,20 @@ package dev.jsinco.biomesapi;
 import me.outspending.biomesapi.BiomeSettings;
 import me.outspending.biomesapi.biome.BiomeHandler;
 import me.outspending.biomesapi.biome.CustomBiome;
+import me.outspending.biomesapi.packet.handlers.PacketEventsPacketHandler;
 import me.outspending.biomesapi.packet.PacketHandler;
-import me.outspending.biomesapi.packet.PhonyCustomBiome;
-import me.outspending.biomesapi.packet.ProtocolLibPacketHandler;
+import me.outspending.biomesapi.packet.data.PhonyCustomBiome;
 import me.outspending.biomesapi.packet.data.BlockReplacement;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class BiomesAPITest extends JavaPlugin implements Listener {
 
-    private ProtocolLibPacketHandler packetHandler;
+    private PacketHandler packetHandler;
 
     @Override
     public void onEnable() {
@@ -49,7 +48,7 @@ public final class BiomesAPITest extends JavaPlugin implements Listener {
         yellowBiome.register();
         getServer().getPluginManager().registerEvents(this, this);
 
-        packetHandler = new ProtocolLibPacketHandler(this, PacketHandler.Priority.NORMAL);
+        packetHandler = PacketHandler.of(this);
         packetHandler.register();
     }
 

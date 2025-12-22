@@ -10,6 +10,8 @@ import org.jetbrains.annotations.NotNull;
  * The range is defined by minimum and maximum X and Z coordinates.
  *
  * @version 0.0.1
+ * @since 0.0.1
+ * @author Outspending
  */
 @AsOf("0.0.1")
 public record PointRange2D(int minX, int maxX, int minZ, int maxZ) {

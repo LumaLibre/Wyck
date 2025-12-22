@@ -8,6 +8,8 @@ import me.outspending.biomesapi.annotations.AsOf;
  * This exception is used to indicate that the server version is not supported by the BiomesAPI.
  *
  * @version 0.0.1
+ * @since 0.0.1
+ * @author Outspending
  */
 @AsOf("0.0.1")
 public class UnknownNMSVersionException extends RuntimeException {

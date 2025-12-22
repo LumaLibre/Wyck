@@ -1,9 +1,9 @@
-package me.outspending.biomesapi.packet;
+package me.outspending.biomesapi.packet.data;
 
 import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.biome.CustomBiome;
-import me.outspending.biomesapi.packet.data.ChunkLocation;
+import me.outspending.biomesapi.packet.PacketHandler;
 import org.bukkit.entity.Player;
 
 import java.util.function.BiPredicate;
@@ -14,6 +14,7 @@ import java.util.function.BiPredicate;
  * actually set to any chunks and only exist for packet sending purposes.
  *
  * @author Jsinco
+ * @since 0.0.4
  * @version 0.0.4
  */
 @AsOf("0.0.4")

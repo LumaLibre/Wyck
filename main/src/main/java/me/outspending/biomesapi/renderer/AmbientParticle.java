@@ -1,18 +1,22 @@
 package me.outspending.biomesapi.renderer;
 
 import me.outspending.biomesapi.annotations.AsOf;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents the different types of ambient particles that can be used in the game.
  * This is an enumeration of all the possible ambient particles, each associated with a specific SimpleParticleType.
  * The @Getter annotation from the Lombok library is used to automatically generate a getter method for the 'particle' field.
  *
- * @version 0.0.1
+ * @version 0.0.4
+ * @since 0.0.1
+ * @author Outspending
  */
-@AsOf("0.0.1")
+@AsOf("0.0.4")
 public enum AmbientParticle {
     ASH(ParticleTypes.ASH),
     BUBBLE(ParticleTypes.BUBBLE),
@@ -104,7 +108,7 @@ public enum AmbientParticle {
         this.particle = particle;
     }
 
-    AmbientParticle(ParticleType<?> particle) {
+    <T extends ParticleOptions> AmbientParticle(ParticleType<@NotNull T> particle) {
         this.particle = particle;
     }
 
@@ -116,8 +120,20 @@ public enum AmbientParticle {
      * @version 0.0.1
      */
     @AsOf("0.0.1")
-    public ParticleType<?> getParticle() {
-        return particle;
+    public <T extends ParticleOptions> ParticleType<@NotNull T> getParticle() {
+        return (ParticleType<T>) particle;
+    }
+
+    /**
+     * Get the SimpleParticleType of this AmbientParticle.
+     * @return The SimpleParticleType of this AmbientParticle.
+     */
+    @AsOf("0.0.4")
+    public SimpleParticleType getSimpleParticle() {
+        if (!(particle instanceof SimpleParticleType)) {
+            throw new IllegalStateException("ParticleType is not a SimpleParticleType: " + particle);
+        }
+        return (SimpleParticleType) particle;
     }
 
 }

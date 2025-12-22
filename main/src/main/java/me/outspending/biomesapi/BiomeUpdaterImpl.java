@@ -1,5 +1,6 @@
 package me.outspending.biomesapi;
 
+import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.nms.NMSHandler;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -7,6 +8,14 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+/**
+ * Implementation of the BiomeUpdater interface.
+ *
+ * @version 0.0.1
+ * @since 0.0.1
+ * @author Outspending
+ */
+@AsOf("0.0.1")
 public class BiomeUpdaterImpl implements BiomeUpdater {
 
     @Override

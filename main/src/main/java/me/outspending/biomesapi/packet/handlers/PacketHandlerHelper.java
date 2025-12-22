@@ -1,8 +1,10 @@
-package me.outspending.biomesapi.packet;
+package me.outspending.biomesapi.packet.handlers;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.biome.CustomBiome;
+import me.outspending.biomesapi.packet.PacketHandler;
 import me.outspending.biomesapi.packet.data.BlockReplacement;
 import net.minecraft.core.Holder;
 import net.minecraft.network.FriendlyByteBuf;
@@ -21,6 +23,14 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 
+/**
+ * Internal helper class for packet handling related to chunk data and biome modification.
+ *
+ * @version 0.0.4
+ * @since 0.0.4
+ * @author Jsinco
+ */
+@AsOf("0.0.4")
 class PacketHandlerHelper {
 
     static PacketHandlerHelper INSTANCE = new PacketHandlerHelper();
@@ -28,6 +38,7 @@ class PacketHandlerHelper {
     static int CHUNK_SECTION_SIZE = 16; // Each chunk section is 16x16x16 blocks
     static int CHUNK_SECTIONS = 4; // Each chunk section has 4x4x4 = 64 biome entries
 
+    @AsOf("0.0.4")
     LevelChunkSection[] extractChunkSections(ClientboundLevelChunkPacketData chunkData, int sectionCount) {
         LevelChunkSection[] sections = new LevelChunkSection[sectionCount];
         DedicatedServer server = ((CraftServer) Bukkit.getServer()).getServer();
@@ -43,17 +54,13 @@ class PacketHandlerHelper {
 
         // Read section data from the serializer
         for (LevelChunkSection section : sections) {
-            try {
-                section.read(serializer);
-            } catch (Exception e) {
-                //provider.getLogger().warning("Exception reading section " + i + "/" + sectionCount);
-                e.printStackTrace();
-            }
+            section.read(serializer);
         }
 
         return sections;
     }
 
+    @AsOf("0.0.4")
     byte[] serializeChunkSections(LevelChunkSection[] sections) {
         // Calculate total size needed
         int totalSize = 0;
@@ -75,7 +82,7 @@ class PacketHandlerHelper {
         return data;
     }
 
-
+    @AsOf("0.0.4")
     void modifyChunkBiomes(ClientboundLevelChunkPacketData chunkData, CustomBiome customBiome, PacketHandler.DimensionSectionCount dimensionSectionCount) {
 
         // Extract chunk sections safely

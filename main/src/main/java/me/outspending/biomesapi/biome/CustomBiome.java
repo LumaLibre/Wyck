@@ -11,7 +11,15 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.block.Biome;
 import org.jetbrains.annotations.NotNull;
 
-@AsOf("0.0.1")
+/**
+ * This interface represents a custom biome in the BiomesAPI.
+ * It provides methods to retrieve and modify the properties of the custom biome.
+ *
+ * @version 0.0.4
+ * @since 0.0.1
+ * @author Outspending
+ */
+@AsOf("0.0.4")
 public interface CustomBiome {
 
     /**

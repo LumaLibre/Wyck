@@ -1,8 +1,12 @@
 package me.outspending.biomesapi.packet;
 
 import me.outspending.biomesapi.annotations.AsOf;
+import me.outspending.biomesapi.exceptions.MissingPacketLibraryException;
+import me.outspending.biomesapi.packet.data.PhonyCustomBiome;
+import me.outspending.biomesapi.packet.handlers.ProtocolLibPacketHandler;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
+import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,10 +22,37 @@ import org.jetbrains.annotations.NotNull;
  * @version 0.0.4
  * @author Jsinco
  */
+@me.outspending.biomesapi.annotations.Experimental
 @ApiStatus.Experimental
 @AsOf("0.0.4")
 public interface PacketHandler {
 
+
+    /**
+     * Creates a PacketHandler using ProtocolLib as the underlying packet manipulation library.
+     * The packet listener priority defaults to NORMAL.
+     * @param provider The plugin providing this PacketHandler
+     * @return A new PacketHandler instance
+     */
+    @AsOf("0.0.4")
+    static @NotNull PacketHandler of(@NotNull Plugin provider) {
+        return of(provider, Priority.NORMAL);
+    }
+
+    /**
+     * Creates a PacketHandler using ProtocolLib as the underlying packet manipulation library.
+     * @param provider The plugin providing this PacketHandler
+     * @param priority The priority of the packet listener
+     * @return A new PacketHandler instance
+     */
+    @AsOf("0.0.4")
+    static @NotNull PacketHandler of(@NotNull Plugin provider, @NotNull PacketHandler.Priority priority) {
+        try {
+            return new ProtocolLibPacketHandler(provider, priority);
+        } catch (ClassNotFoundException e) {
+            throw new MissingPacketLibraryException("Could not find ProtocolLib classes. Please ensure ProtocolLib is installed.", e);
+        }
+    }
 
     /**
      * Registers the necessary packet listeners to handle biome injection.
@@ -45,6 +76,18 @@ public interface PacketHandler {
      */
     @AsOf("0.0.4")
     void appendBiome(@NotNull PhonyCustomBiome biome);
+
+
+    /**
+     * Appends multiple custom biomes to the packet handler's list of biomes to inject.
+     * @param biomes The phony custom biomes to append
+     */
+    @AsOf("0.0.4")
+    default void appendBiome(@NotNull PhonyCustomBiome... biomes) {
+        for (PhonyCustomBiome biome : biomes) {
+            appendBiome(biome);
+        }
+    }
 
 
     /**
@@ -109,7 +152,15 @@ public interface PacketHandler {
         }
     }
 
-    // TODO: javadocs
+    /**
+     * Enum constant for priority levels related to BiomesAPI packet handling.
+     *
+     * @see PhonyCustomBiome
+     * @see PacketHandler
+     * @see ProtocolLibPacketHandler
+     * @see me.outspending.biomesapi.packet.handlers.PacketEventsPacketHandler
+     * @version 0.0.4
+     */
     @AsOf("0.0.4")
     enum Priority {
         LOWEST(0),
@@ -128,7 +179,15 @@ public interface PacketHandler {
             return level;
         }
 
-        <E extends Enum<E>> @NotNull E getDelegatePriority(@NotNull Class<E> enumClass) {
+        /**
+         * Maps this PacketHandler.Priority to another enum class with the same names.
+         * @param enumClass The enum class to map to
+         * @return The mapped enum constant
+         * @param <E> The enum type
+         * @throws IllegalArgumentException if the enum class does not have a constant with the same
+         */
+        @ApiStatus.Internal
+        public <E extends Enum<E>> @NotNull E getDelegatePriority(@NotNull Class<E> enumClass) {
             try {
                 return Enum.valueOf(enumClass, this.name());
             } catch (IllegalArgumentException e) {

@@ -1,4 +1,4 @@
-package me.outspending.biomesapi.packet;
+package me.outspending.biomesapi.packet.handlers;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
@@ -10,26 +10,35 @@ import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.reflect.StructureModifier;
 import com.comphenix.protocol.wrappers.BlockPosition;
 import com.comphenix.protocol.wrappers.WrappedBlockData;
+import me.outspending.biomesapi.annotations.AsOf;
+import me.outspending.biomesapi.packet.PacketHandler;
+import me.outspending.biomesapi.packet.PhonyCustomBiomeCollector;
 import me.outspending.biomesapi.packet.data.BlockReplacement;
 import me.outspending.biomesapi.packet.data.ChunkLocation;
+import me.outspending.biomesapi.packet.data.PhonyCustomBiome;
 import net.minecraft.network.protocol.game.ClientboundLevelChunkPacketData;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Set;
-
+/**
+ * ProtocolLib-based implementation of the PacketHandler interface.
+ *
+ * @version 0.0.4
+ * @since 0.0.4
+ * @author Jsinco
+ */
+@AsOf("0.0.4")
 public class ProtocolLibPacketHandler implements PacketHandler {
 
-    private final Set<PhonyCustomBiome> backing = new HashSet<>();
+    private final PhonyCustomBiomeCollector collector;
     private final PacketAdapter[] protocolListeners;
 
 
-    public ProtocolLibPacketHandler(@NotNull JavaPlugin provider, Priority priority) {
+    @AsOf("0.0.4")
+    public ProtocolLibPacketHandler(@NotNull Plugin provider, Priority priority) throws ClassNotFoundException {
+        this.collector = new PhonyCustomBiomeCollector();
         ListenerPriority protocolLibPrio = priority.getDelegatePriority(ListenerPriority.class);
         this.protocolListeners = new PacketAdapter[] {
                 new MapChunkPacketListener(provider, protocolLibPrio, this),
@@ -58,51 +67,31 @@ public class ProtocolLibPacketHandler implements PacketHandler {
 
     @Override
     public void appendBiome(@NotNull PhonyCustomBiome biome) {
-        if (backing.contains(biome)) {
-            throw new IllegalArgumentException("PhonyCustomBiome with key " + biome.customBiome().toNamespacedKey() + " is already registered.");
-        }
-        backing.add(biome);
+        collector.appendBiome(biome);
     }
 
     @Override
     public boolean removeBiome(@NotNull PhonyCustomBiome biome) {
-        return backing.remove(biome);
+        return collector.removeBiome(biome);
     }
 
     @Override
     public boolean removeBiome(@NotNull NamespacedKey biomeKey) {
-        return backing.removeIf((PhonyCustomBiome biome) -> biome.customBiome().toNamespacedKey().equals(biomeKey));
+        return collector.removeBiome(biomeKey);
     }
 
     @Override
     public void clearBiomes() {
-        backing.clear();
+        collector.clearBiomes();
     }
 
 
-    /**
-     * Picks the 'best' phony custom biome for the given player and chunk location.
-     * @param player the player
-     * @param chunkLocation the chunk location
-     * @return the best phony custom biome, or null if none match
-     */
-    private @Nullable PhonyCustomBiome bestBiomeFor(@NotNull Player player, @NotNull ChunkLocation chunkLocation) {
-        if (backing.isEmpty()) {
-            return null;
-        }
-
-        return backing.stream()
-                .filter((PhonyCustomBiome phony) -> phony.conditional().test(player, chunkLocation))
-                .max(Comparator.comparingInt((PhonyCustomBiome phony) -> phony.priority().getLevel()))
-                .orElse(null);
-    }
-
-
+    @AsOf("0.0.4")
     private static class MapChunkPacketListener extends PacketAdapter {
 
         private final ProtocolLibPacketHandler context;
 
-        public MapChunkPacketListener(JavaPlugin provider, ListenerPriority priority, ProtocolLibPacketHandler context) {
+        public MapChunkPacketListener(Plugin provider, ListenerPriority priority, ProtocolLibPacketHandler context) {
             super(provider, priority, PacketType.Play.Server.MAP_CHUNK);
             this.context = context;
         }
@@ -116,30 +105,26 @@ public class ProtocolLibPacketHandler implements PacketHandler {
             StructureModifier<Integer> ints = packet.getIntegers();
             ChunkLocation chunkLocation = ChunkLocation.of(ints.read(0), ints.read(1));
 
-            PhonyCustomBiome override = context.bestBiomeFor(player, chunkLocation);
+            PhonyCustomBiome override = context.collector.bestBiomeFor(player, chunkLocation);
             if (override == null) {
                 return;
             }
 
-            try {
-                DimensionSectionCount dimensionSectionCount = DimensionSectionCount.fromBukkitEnvironment(player.getWorld().getEnvironment());
-                ClientboundLevelChunkPacketData chunkData = packet.getSpecificModifier(ClientboundLevelChunkPacketData.class).read(0);
+            DimensionSectionCount dimensionSectionCount = DimensionSectionCount.fromBukkitEnvironment(player.getWorld().getEnvironment());
+            ClientboundLevelChunkPacketData chunkData = packet.getSpecificModifier(ClientboundLevelChunkPacketData.class).read(0);
 
-                PacketHandlerHelper.INSTANCE.modifyChunkBiomes(chunkData, override.customBiome(), dimensionSectionCount);
-            } catch (Exception e) {
-                //provider.getLogger().warning("Failed to modify chunk biomes for player " + player.getName());
-                e.printStackTrace();
-            }
+            PacketHandlerHelper.INSTANCE.modifyChunkBiomes(chunkData, override.customBiome(), dimensionSectionCount);
         }
     }
 
     // TODO: extract out common code between BlockChangePacketListener and MultiBlockChangePacketListener
 
+    @AsOf("0.0.4")
     private static class BlockChangePacketListener extends PacketAdapter {
 
         private final ProtocolLibPacketHandler context;
 
-        public BlockChangePacketListener(JavaPlugin provider, ListenerPriority priority, ProtocolLibPacketHandler context) {
+        public BlockChangePacketListener(Plugin provider, ListenerPriority priority, ProtocolLibPacketHandler context) {
             super(provider, priority, PacketType.Play.Server.BLOCK_CHANGE);
             this.context = context;
         }
@@ -152,7 +137,7 @@ public class ProtocolLibPacketHandler implements PacketHandler {
             BlockPosition blockPosition = packet.getBlockPositionModifier().read(0);
 
             ChunkLocation chunkLocation = ChunkLocation.fromBlockCoords(blockPosition.getX(), blockPosition.getZ());
-            PhonyCustomBiome override = context.bestBiomeFor(player, chunkLocation);
+            PhonyCustomBiome override = context.collector.bestBiomeFor(player, chunkLocation);
             if (override == null) {
                 return;
             }
@@ -176,11 +161,12 @@ public class ProtocolLibPacketHandler implements PacketHandler {
     }
 
 
+    @AsOf("0.0.4")
     private static class MultiBlockChangePacketListener extends PacketAdapter {
 
         private final ProtocolLibPacketHandler context;
 
-        public MultiBlockChangePacketListener(JavaPlugin provider, ListenerPriority priority, ProtocolLibPacketHandler context) {
+        public MultiBlockChangePacketListener(Plugin provider, ListenerPriority priority, ProtocolLibPacketHandler context) {
             super(provider, priority, PacketType.Play.Server.MULTI_BLOCK_CHANGE);
             this.context = context;
         }
@@ -194,7 +180,7 @@ public class ProtocolLibPacketHandler implements PacketHandler {
             BlockPosition blockPosition = packet.getSectionPositions().read(0);
             ChunkLocation chunkLocation = ChunkLocation.fromBlockCoords(blockPosition.getX(), blockPosition.getZ());
 
-            PhonyCustomBiome override = context.bestBiomeFor(player, chunkLocation);
+            PhonyCustomBiome override = context.collector.bestBiomeFor(player, chunkLocation);
             if (override == null) {
                 return;
             }

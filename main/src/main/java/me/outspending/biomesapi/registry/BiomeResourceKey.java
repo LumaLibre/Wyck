@@ -2,6 +2,8 @@ package me.outspending.biomesapi.registry;
 
 import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.annotations.AsOf;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.Keyed;
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,10 +12,12 @@ import org.jetbrains.annotations.NotNull;
  * It uses the @AsOf annotation to indicate the version since the class or its methods have been present or modified.
  * It is a final class, meaning it cannot be subclassed.
  *
- * @version 0.0.1
+ * @version 0.0.4
+ * @since 0.0.1
+ * @author Outspending
  */
-@AsOf("0.0.1")
-public record BiomeResourceKey(@NotNull Identifier resourceLocation) {
+@AsOf("0.0.4")
+public record BiomeResourceKey(@NotNull Identifier resourceLocation) implements Keyed {
 
     /**
      * Creates a new BiomeResourceKey from the given key and path.
@@ -96,4 +100,14 @@ public record BiomeResourceKey(@NotNull Identifier resourceLocation) {
         return false;
     }
 
+
+    /**
+     * @return the Key representation of this BiomeResourceKey
+     * @version 0.0.4
+     */
+    @AsOf("0.0.4")
+    @Override
+    public @NotNull Key key() {
+        return Key.key(resourceLocation.getNamespace(), resourceLocation.getPath());
+    }
 }
