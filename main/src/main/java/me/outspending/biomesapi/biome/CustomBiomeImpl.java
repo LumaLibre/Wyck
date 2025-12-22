@@ -13,7 +13,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.block.Biome;
 import org.jetbrains.annotations.NotNull;
 
-@AsOf("0.0.2")
+@AsOf("0.0.4")
 public final class CustomBiomeImpl implements CustomBiome {
 
     // Required Settings

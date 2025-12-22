@@ -61,7 +61,6 @@ public class CustomBiomeRegistry implements BiomeRegistry {
                         .setAttribute(EnvironmentAttributes.FOG_COLOR, biome.getFogColor())
                         .setAttribute(EnvironmentAttributes.SKY_COLOR, biome.getSkyColor())
                         .setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, biome.getWaterColor())
-                        //.setAttribute(EnvironmentAttributes.)
                         ;
 
                 // Create a new Biome object with the settings and colors from the CustomBiome object

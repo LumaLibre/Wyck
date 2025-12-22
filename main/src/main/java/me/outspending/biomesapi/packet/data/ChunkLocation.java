@@ -9,6 +9,10 @@ public record ChunkLocation(int x, int z) {
         return new ChunkLocation(blockX >> 4, blockZ >> 4);
     }
 
+    public static ChunkLocation of(int chunkX, int chunkZ) {
+        return new ChunkLocation(chunkX, chunkZ);
+    }
+
     public boolean isChunk(Chunk bukkitChunk) {
         return this.x == bukkitChunk.getX() && this.z == bukkitChunk.getZ();
     }

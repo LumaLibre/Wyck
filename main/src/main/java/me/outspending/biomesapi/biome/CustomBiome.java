@@ -131,7 +131,7 @@ public interface CustomBiome {
      * @since 0.0.4
      */
     @AsOf("0.0.4")
-    BlockReplacement[] getBlockReplacements();
+    @NotNull BlockReplacement[] getBlockReplacements();
 
     /**
      * Sets the fog color of the CustomBiome.

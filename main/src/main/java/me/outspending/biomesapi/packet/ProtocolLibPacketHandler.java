@@ -5,33 +5,36 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
+import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
+import com.comphenix.protocol.reflect.StructureModifier;
+import com.comphenix.protocol.wrappers.BlockPosition;
 import com.comphenix.protocol.wrappers.WrappedBlockData;
-import me.outspending.biomesapi.biome.CustomBiome;
-import me.outspending.biomesapi.packet.data.BiomeOverride;
 import me.outspending.biomesapi.packet.data.BlockReplacement;
+import me.outspending.biomesapi.packet.data.ChunkLocation;
 import net.minecraft.network.protocol.game.ClientboundLevelChunkPacketData;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.WeakHashMap;
-import java.util.function.Predicate;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ProtocolLibPacketHandler implements PacketHandler {
 
-    // TODO: Should this be static?
-    private static final WeakHashMap<Player, BiomeOverride> playerBiomeOverrides = new WeakHashMap<>();
+    private final Set<PhonyCustomBiome> backing = new HashSet<>();
     private final PacketAdapter[] protocolListeners;
 
 
-    public ProtocolLibPacketHandler(@NotNull JavaPlugin provider, PacketHandlerPriority priority) {
-        ListenerPriority prio = priority.getDelegatePriority(ListenerPriority.class);
+    public ProtocolLibPacketHandler(@NotNull JavaPlugin provider, Priority priority) {
+        ListenerPriority protocolLibPrio = priority.getDelegatePriority(ListenerPriority.class);
         this.protocolListeners = new PacketAdapter[] {
-                new MapChunkPacketListener(provider, prio),
-                new BlockChangePacketListener(provider, prio),
-                new MultiBlockChangePacketListener(provider, prio)
+                new MapChunkPacketListener(provider, protocolLibPrio, this),
+                new BlockChangePacketListener(provider, protocolLibPrio, this),
+                new MultiBlockChangePacketListener(provider, protocolLibPrio, this)
         };
     }
 
@@ -54,46 +57,73 @@ public class ProtocolLibPacketHandler implements PacketHandler {
     }
 
     @Override
-    public void registerBiomeOverride(@NotNull Player player, @NotNull CustomBiome biome, @NotNull Predicate<Player> condition) {
-        playerBiomeOverrides.put(player, new BiomeOverride(biome, condition));
+    public void appendBiome(@NotNull PhonyCustomBiome biome) {
+        if (backing.contains(biome)) {
+            throw new IllegalArgumentException("PhonyCustomBiome with key " + biome.customBiome().toNamespacedKey() + " is already registered.");
+        }
+        backing.add(biome);
     }
 
     @Override
-    public boolean unregisterBiomeOverride(@NotNull Player player) {
-        return playerBiomeOverrides.remove(player) != null;
+    public boolean removeBiome(@NotNull PhonyCustomBiome biome) {
+        return backing.remove(biome);
+    }
+
+    @Override
+    public boolean removeBiome(@NotNull NamespacedKey biomeKey) {
+        return backing.removeIf((PhonyCustomBiome biome) -> biome.customBiome().toNamespacedKey().equals(biomeKey));
+    }
+
+    @Override
+    public void clearBiomes() {
+        backing.clear();
     }
 
 
-
-    @Nullable
-    private static BlockReplacement[] getBlockReplacementsForPlayer(@NotNull Player player) {
-        BiomeOverride override = playerBiomeOverrides.get(player);
-        if (override == null) {
+    /**
+     * Picks the 'best' phony custom biome for the given player and chunk location.
+     * @param player the player
+     * @param chunkLocation the chunk location
+     * @return the best phony custom biome, or null if none match
+     */
+    private @Nullable PhonyCustomBiome bestBiomeFor(@NotNull Player player, @NotNull ChunkLocation chunkLocation) {
+        if (backing.isEmpty()) {
             return null;
         }
-        return override.customBiome().getBlockReplacements();
+
+        return backing.stream()
+                .filter((PhonyCustomBiome phony) -> phony.conditional().test(player, chunkLocation))
+                .max(Comparator.comparingInt((PhonyCustomBiome phony) -> phony.priority().getLevel()))
+                .orElse(null);
     }
 
 
     private static class MapChunkPacketListener extends PacketAdapter {
 
-        public MapChunkPacketListener(JavaPlugin provider, ListenerPriority priority) {
+        private final ProtocolLibPacketHandler context;
+
+        public MapChunkPacketListener(JavaPlugin provider, ListenerPriority priority, ProtocolLibPacketHandler context) {
             super(provider, priority, PacketType.Play.Server.MAP_CHUNK);
+            this.context = context;
         }
 
         @Override
         public void onPacketSending(PacketEvent event) {
-            Player player = event.getPlayer();
-            BiomeOverride override = playerBiomeOverrides.get(player);
+            // ClientboundLevelChunkWithLightPacket
 
-            if (override == null || !override.condition().test(player)) {
+            PacketContainer packet = event.getPacket();
+            Player player = event.getPlayer();
+            StructureModifier<Integer> ints = packet.getIntegers();
+            ChunkLocation chunkLocation = ChunkLocation.of(ints.read(0), ints.read(1));
+
+            PhonyCustomBiome override = context.bestBiomeFor(player, chunkLocation);
+            if (override == null) {
                 return;
             }
 
             try {
                 DimensionSectionCount dimensionSectionCount = DimensionSectionCount.fromBukkitEnvironment(player.getWorld().getEnvironment());
-
-                ClientboundLevelChunkPacketData chunkData = event.getPacket().getSpecificModifier(ClientboundLevelChunkPacketData.class).read(0);
+                ClientboundLevelChunkPacketData chunkData = packet.getSpecificModifier(ClientboundLevelChunkPacketData.class).read(0);
 
                 PacketHandlerHelper.INSTANCE.modifyChunkBiomes(chunkData, override.customBiome(), dimensionSectionCount);
             } catch (Exception e) {
@@ -103,28 +133,42 @@ public class ProtocolLibPacketHandler implements PacketHandler {
         }
     }
 
+    // TODO: extract out common code between BlockChangePacketListener and MultiBlockChangePacketListener
 
     private static class BlockChangePacketListener extends PacketAdapter {
 
-        public BlockChangePacketListener(JavaPlugin provider, ListenerPriority priority) {
+        private final ProtocolLibPacketHandler context;
+
+        public BlockChangePacketListener(JavaPlugin provider, ListenerPriority priority, ProtocolLibPacketHandler context) {
             super(provider, priority, PacketType.Play.Server.BLOCK_CHANGE);
+            this.context = context;
         }
 
         @Override
         public void onPacketSending(PacketEvent event) {
+            // ClientboundBlockUpdatePacket
+            PacketContainer packet = event.getPacket();
             Player player = event.getPlayer();
+            BlockPosition blockPosition = packet.getBlockPositionModifier().read(0);
 
-            BlockReplacement[] blockReplacements = getBlockReplacementsForPlayer(player);
+            ChunkLocation chunkLocation = ChunkLocation.fromBlockCoords(blockPosition.getX(), blockPosition.getZ());
+            PhonyCustomBiome override = context.bestBiomeFor(player, chunkLocation);
+            if (override == null) {
+                return;
+            }
+
+
+            BlockReplacement[] blockReplacements = override.customBiome().getBlockReplacements();
             if (blockReplacements == null || blockReplacements.length == 0) {
                 return;
             }
 
 
-            WrappedBlockData wrappedBlockData = event.getPacket().getBlockData().read(0);
+            WrappedBlockData wrappedBlockData = packet.getBlockData().read(0);
             for (BlockReplacement replacement : blockReplacements) {
                 if (wrappedBlockData.getType() == replacement.originalBlock()) {
                     wrappedBlockData.setType(replacement.replacementBlock());
-                    event.getPacket().getBlockData().write(0, wrappedBlockData);
+                    packet.getBlockData().write(0, wrappedBlockData);
                     break;
                 }
             }
@@ -134,20 +178,33 @@ public class ProtocolLibPacketHandler implements PacketHandler {
 
     private static class MultiBlockChangePacketListener extends PacketAdapter {
 
-        public MultiBlockChangePacketListener(JavaPlugin provider, ListenerPriority priority) {
+        private final ProtocolLibPacketHandler context;
+
+        public MultiBlockChangePacketListener(JavaPlugin provider, ListenerPriority priority, ProtocolLibPacketHandler context) {
             super(provider, priority, PacketType.Play.Server.MULTI_BLOCK_CHANGE);
+            this.context = context;
         }
 
         @Override
         public void onPacketSending(PacketEvent event) {
+            // ClientboundSectionBlocksUpdatePacket
             Player player = event.getPlayer();
+            PacketContainer packet = event.getPacket();
 
-            BlockReplacement[] blockReplacements = getBlockReplacementsForPlayer(player);
+            BlockPosition blockPosition = packet.getSectionPositions().read(0);
+            ChunkLocation chunkLocation = ChunkLocation.fromBlockCoords(blockPosition.getX(), blockPosition.getZ());
+
+            PhonyCustomBiome override = context.bestBiomeFor(player, chunkLocation);
+            if (override == null) {
+                return;
+            }
+
+            BlockReplacement[] blockReplacements = override.customBiome().getBlockReplacements();
             if (blockReplacements == null || blockReplacements.length == 0) {
                 return;
             }
 
-            WrappedBlockData[] wrappedBlockDatas = event.getPacket().getBlockDataArrays().read(0);
+            WrappedBlockData[] wrappedBlockDatas = packet.getBlockDataArrays().read(0);
             boolean modified = false;
             for (int i = 0; i < wrappedBlockDatas.length; i++) {
                 WrappedBlockData wrappedBlockData = wrappedBlockDatas[i];
@@ -162,7 +219,7 @@ public class ProtocolLibPacketHandler implements PacketHandler {
             }
 
             if (modified) {
-                event.getPacket().getBlockDataArrays().write(0, wrappedBlockDatas);
+                packet.getBlockDataArrays().write(0, wrappedBlockDatas);
             }
         }
     }

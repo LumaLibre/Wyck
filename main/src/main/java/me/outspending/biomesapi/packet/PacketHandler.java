@@ -1,14 +1,23 @@
 package me.outspending.biomesapi.packet;
 
 import me.outspending.biomesapi.annotations.AsOf;
-import me.outspending.biomesapi.biome.CustomBiome;
+import org.bukkit.NamespacedKey;
 import org.bukkit.World;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.function.Predicate;
-
+/**
+ * An interface for handling packet manipulation related to biome injection.
+ * It is recommended to use the {@link me.outspending.biomesapi.BiomeUpdater} for updating
+ * chunks after appending a biome for immediate changes to a player.
+ *
+ * <p>
+ * An external packet handling library (either ProtocolLib or PacketEvents) is required
+ * for this interface.
+ * </p>
+ * @version 0.0.4
+ * @author Jsinco
+ */
 @ApiStatus.Experimental
 @AsOf("0.0.4")
 public interface PacketHandler {
@@ -16,37 +25,50 @@ public interface PacketHandler {
 
     /**
      * Registers the necessary packet listeners to handle biome injection.
+     * Calling this in your plugin's onLoad/onEnable is recommended
+     * assuming your plugin soft-depends on PacketEvents and/or ProtocolLib.
      */
     @AsOf("0.0.4")
     void register();
 
     /**
      * Unregisters the packet listeners handling biome injection.
+     * Calling this in your plugin's onDisable is recommended.
      */
     @AsOf("0.0.4")
     void unregister();
 
+
     /**
-     * Have this packet handler always send the given biome to the given player when they receive chunk
-     * with light level packets. The packet handler will inject the biome data into the chunk data before sending it
-     * to the player.
-     *
-     * @param player The player to always send the biome to
-     * @param biome The custom biome to always send
-     * @param condition The condition to check before sending the biome
+     * Appends a custom biome to the packet handler's list of biomes to inject.
+     * @param biome The phony custom biome to append
      */
     @AsOf("0.0.4")
-    void registerBiomeOverride(@NotNull Player player, @NotNull CustomBiome biome, @NotNull Predicate<Player> condition);
+    void appendBiome(@NotNull PhonyCustomBiome biome);
 
 
     /**
-     * Unregisters any biome override for the given player.
-     *
-     * @param player The player to unregister the biome override for
-     * @return true if a biome override was unregistered, false otherwise
+     * Removes a custom biome from the packet handler's list of biomes to inject.
+     * @param biome The phony custom biome to remove
+     * @return true if the biome was removed, false if it was not found
      */
     @AsOf("0.0.4")
-    boolean unregisterBiomeOverride(@NotNull Player player);
+    boolean removeBiome(@NotNull PhonyCustomBiome biome);
+
+    /**
+     * Removes a custom biome from the packet handler's list of biomes to inject by its NamespacedKey.
+     * @param biomeKey The NamespacedKey of the biome to remove
+     * @return true if the biome was removed, false if it was not found
+     */
+    @AsOf("0.0.4")
+    boolean removeBiome(@NotNull NamespacedKey biomeKey);
+
+
+    /**
+     * Clears all phony custom biomes from the packet handler's list of biomes to inject.
+     */
+    @AsOf("0.0.4")
+    void clearBiomes();
 
 
     /**
@@ -87,19 +109,24 @@ public interface PacketHandler {
         }
     }
 
-    /**
-     * The priority levels for packet handlers. These wrap around both ProtocolLib's ListenerPriority
-     * and PacketEvents' PacketListenerPriority.
-     * @version 0.0.4
-     */
+    // TODO: javadocs
     @AsOf("0.0.4")
-    enum PacketHandlerPriority {
-        HIGHEST,
-        HIGH,
-        NORMAL,
-        LOW,
-        LOWEST;
+    enum Priority {
+        LOWEST(0),
+        LOW(1),
+        NORMAL(2),
+        HIGH(3),
+        HIGHEST(4);
 
+        private final int level;
+
+        Priority(int level) {
+            this.level = level;
+        }
+
+        public int getLevel() {
+            return level;
+        }
 
         <E extends Enum<E>> @NotNull E getDelegatePriority(@NotNull Class<E> enumClass) {
             try {
@@ -108,6 +135,7 @@ public interface PacketHandler {
                 throw new IllegalArgumentException("Cannot map PacketHandlerPriority " + this.name() + " to " + enumClass.getName(), e);
             }
         }
+
     }
 
 }
