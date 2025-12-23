@@ -6,7 +6,8 @@ import me.outspending.biomesapi.packet.PacketHandler;
 import me.outspending.biomesapi.packet.data.PhonyCustomBiome;
 import me.outspending.biomesapi.packet.data.BlockReplacement;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
-import me.outspending.biomesapi.setter.BiomeSetter;
+import me.outspending.biomesapi.renderer.AmbientParticle;
+import me.outspending.biomesapi.renderer.ParticleRenderer;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -43,7 +44,7 @@ public final class BiomesAPITest extends JavaPlugin implements Listener {
                 .waterColor("#ffe606") // #F5F2EB
                 .waterFogColor("#ffe606")
                 .grassColor("#ffe606")
-                //.particleRenderer(ParticleRenderer.of(AmbientParticle.DRIPPING_HONEY, 1.0f))
+                .particleRenderer(ParticleRenderer.of(AmbientParticle.DRIPPING_HONEY, 1.0f))
                 .blockReplacements(new BlockReplacement(Material.OAK_LEAVES, Material.SPRUCE_LEAVES))
                 .build();
 

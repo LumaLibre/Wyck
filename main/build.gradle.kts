@@ -27,17 +27,6 @@ java {
     toolchain.languageVersion = JavaLanguageVersion.of(21)
 }
 
-tasks {
-    jar {
-        archiveBaseName.set("BiomesAPI")
-        enabled = false
-    }
-    shadowJar {
-        archiveBaseName.set("BiomesAPI")
-        archiveClassifier.set("")
-    }
-}
-
 publishing {
     val repo: String? = System.getenv("REPO_URL")
     val user: String? = System.getenv("REPO_USERNAME")
