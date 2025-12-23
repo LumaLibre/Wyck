@@ -1,0 +1,135 @@
+---
+title: Sending Biomes with Packets
+description: A guide for using ProtocolLib to send custom biomes to clients.
+sidebar:
+  order: 2
+---
+
+# Pre-requisites
+
+In order to have BiomesAPI send biomes through packets, you must have [ProtocolLib](https://github.com/dmulloy2/ProtocolLib) installed on the
+Paper server. In your `plugin.yml` you should either `softdepend` or `depend` on ProtocolLib.
+
+Now that you've got ProtocolLib installed on your server, you're ready to start injecting your custom biome into packets!
+
+
+# PacketHandler vs BiomeSetter
+
+Unlike the BiomeSetter, the PacketHandler interface does **not** change biomes on the server.
+This means that no properties of your biome will linger on the server and you don't have to worry about
+the potential issues that may occur if your plugin is removed from the server.
+
+You may want to use the PacketHandler over the BiomeSetter for a variety of reasons. Some of them could be:
+
+- Sending specific biomes to individual players. With the BiomeSetter, everyone always sees the same biome. The PacketHandler allows you to change this behavior based on the `Player` and `ChunkLocation`!
+- Block replacements! BlockReplacements are an extra feature of BiomesAPI that allow you to change specific blocks based on the biome. Normally BiomesAPI does not support this, but the PacketHandler allows you to do so!
+
+
+# Using the PacketHandler
+
+Using the PacketHandler can be a little complicated, but it allows for a lot of flexibility!
+
+
+First, setup your PacketHandler instance. You should try to keep only one instance of the PacketHandler per plugin.
+
+```java
+
+PacketHandler packetHandler;
+
+
+@Override
+public void onEnable() {
+    this.packetHandler = = PacketHandler.of(this); // 'this' is your plugin instance
+
+    // Register your PacketHandler's listeners!
+    this.packetHandler.register();
+}
+
+
+@Override
+public void onDisable() {
+    // Unregister your PacketHandler's listeners!
+    this.packetHandler.unregister();
+}
+
+```
+
+
+Then, somewhere else in your code, tell the PacketHandler what/how to send your biomes.
+
+```java
+
+CustomBiome customBiome = BiomeHandler.getBiome(BiomeResourceKey.of("test", "custombiome"));
+
+if (customBiome == null) {
+    throw new RuntimeException("Biome is null!");
+}
+
+
+PhonyCustomBiome phonyCustomBiome = PhonyCustomBiome.builder()
+        .setCustomBiome(customBiome)
+        .setConditional(((player, chunkLocation) -> {
+            // Only send your custom biome to even chunks in the world, "world"
+            // and chunks that are even in both x and z
+            World world = player.getWorld();
+            if (world.getName().equals("world") && chunkLocation.x() % 2 == 0 && chunkLocation.z() % 2 == 0) {
+                return true;
+            }
+            return false;
+        }))
+        .build();
+
+
+// Lastly, append your custom biome to the PacketHandler!
+packetHandler.appendBiome(phonyCustomBiome);
+
+```
+
+
+
+# Using Block Replacements with the PacketHandler
+
+
+Block Replacements are a special feature of BiomesAPI that allow you to change specific blocks based on the biome.
+Block replacements will **not** change the actual blocks on the server, but will change how they appear to the client!
+
+```java
+// Create a new custom biome with block replacements
+
+CustomBiome yellowBiome = CustomBiome.builder()
+        .resourceKey(BiomeResourceKey.of("test", "yellow"))
+        .settings(BiomeSettings.defaultSettings())
+        .fogColor("#ffe606")
+        .foliageColor("#ffe606")
+        .skyColor("#ffe606")
+        .waterColor("#ffe606")
+        .waterFogColor("#ffe606")
+        .grassColor("#ffe606")
+        .particleRenderer(ParticleRenderer.of(AmbientParticle.DRIPPING_HONEY, 1.0f)) // Environmental particles!
+        .blockReplacements(BlockReplacement.of(Material.SPRUCE_LEAVES, Material.OAK_LEAVES)) // Change all spruce leaves to oak leaves on a packet level 
+        .build();
+
+
+yellowBiome.register();
+
+// Create a PhonyCustomBiome to send with the PacketHandler
+
+PhonyCustomBiome phonyYellowBiome = PhonyCustomBiome.builder()
+        .setCustomBiome(yellowBiome)
+        .setConditional(((player, chunkLocation) -> true)) // Always send this biome
+        .setPriority(PacketHandler.Priority.LOW) // Set the priority to low so other biomes in the PacketHandler can override it
+        .build();
+
+// Append the PhonyCustomBiome to the PacketHandler
+
+packetHandler.appendBiome(phonyYellowBiome);
+
+// Optional: Immediately update all players' chunks to see the new biome with block replacements
+BiomeUpdater biomeUpdater = BiomeUpdater.of();
+
+for (Player player : Bukkit.getOnlinePlayers()) {
+    // Update all chunks that the player can see
+    biomeUpdater.updateChunksForPlayer(player);
+}
+
+```

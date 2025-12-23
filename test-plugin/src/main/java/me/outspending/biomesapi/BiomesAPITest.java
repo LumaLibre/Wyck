@@ -9,7 +9,9 @@ import me.outspending.biomesapi.registry.BiomeRegistry;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
 import me.outspending.biomesapi.renderer.AmbientParticle;
 import me.outspending.biomesapi.renderer.ParticleRenderer;
+import me.outspending.biomesapi.setter.BiomeSetter;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -44,6 +46,16 @@ public final class BiomesAPITest extends JavaPlugin implements Listener {
 
         PhonyCustomBiome phonyCustomBiome = PhonyCustomBiome.builder()
                 .setCustomBiome(biome)
+                .setConditional(((player, chunkLocation) -> {
+                    // Only send your custom biome to even chunks in the world, "world"
+                    // and chunks that are even in both x and z
+                    World world = player.getWorld();
+                    if (world.getName().equals("world") && chunkLocation.x() % 2 == 0 && chunkLocation.z() % 2 == 0) {
+                        return true;
+                    }
+                    return false;
+                }))
+                .setPriority(PacketHandler.Priority.LOW)
                 .build();
 
         packetHandler.appendBiome(phonyCustomBiome);
