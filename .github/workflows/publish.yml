@@ -22,6 +22,6 @@ jobs:
       - name: Publish API
         run: "./gradlew publish"
         env:
-          REPO_URL: "https://repo.jsinco.dev/releases"
+          REPO_URL: ${{ secrets.REPO_URL }}
           REPO_USERNAME: ${{ secrets.REPO_USERNAME }}
-          REPO_SECRET: ${{ secrets.REPO_SECRET }}
+          REPO_PASSWORD: ${{ secrets.REPO_PASSWORD }}

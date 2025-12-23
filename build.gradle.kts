@@ -44,17 +44,17 @@ allprojects {
         //
         // not optimal because this leads to more network calls when downloading
         // the api for the first time. ideally we only publish the main api.
-        publishing {
-            publications {
-                create<MavenPublication>("maven") {
-                    groupId = "me.outspending.biomesapi"
-                    artifactId = project.name
-
-                    if (usesReobfuscatedJar()) artifact(reobfBuildFile)
-                    from(components["java"])
-                }
-            }
-        }
+//        publishing {
+//            publications {
+//                create<MavenPublication>("maven") {
+//                    groupId = "me.outspending.biomesapi"
+//                    artifactId = project.name
+//
+//                    if (usesReobfuscatedJar()) artifact(reobfBuildFile)
+//                    from(components["java"])
+//                }
+//            }
+//        }
 
         // Throws an error if we don"t explicitly say we're using the output
         // of reobfJar in the final build.
@@ -125,6 +125,8 @@ publishing {
 
     repositories {
         if (repo == null || user == null || pass == null) {
+            println("$repo, $user, $pass")
+            println("Skipping publication configuration, REPO_URL, REPO_USERNAME or REPO_PASSWORD is not set.")
             return@repositories
         }
         maven {
