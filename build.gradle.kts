@@ -58,23 +58,23 @@ allprojects {
 
         // Throws an error if we don"t explicitly say we're using the output
         // of reobfJar in the final build.
-        tasks.named("publishMavenPublicationToMavenLocal") {
-            if (usesReobfuscatedJar()) {
-                dependsOn(tasks.reobfJar)
-            }
-        }
+//        tasks.named("publishMavenPublicationToMavenLocal") {
+//            if (usesReobfuscatedJar()) {
+//                dependsOn(tasks.reobfJar)
+//            }
+//        }
 
         // Don't use the task if it doesn't exist on this project
-        if (usesReobfuscatedJar()) {
-            tasks.reobfJar {
-                outputJar.set(reobfBuildFile)
-            }
-        }
+//        if (usesReobfuscatedJar()) {
+//            tasks.reobfJar {
+//                outputJar.set(reobfBuildFile)
+//            }
+//        }
 
         // Run reobfJar on applicable projects
-        tasks.assemble {
-            if (usesReobfuscatedJar()) dependsOn(tasks.reobfJar)
-        }
+//        tasks.assemble {
+//            if (usesReobfuscatedJar()) dependsOn(tasks.reobfJar)
+//        }
     }
 
     repositories {
