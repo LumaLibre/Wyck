@@ -19,6 +19,8 @@ import org.jetbrains.annotations.NotNull;
 @AsOf("0.0.6")
 public record BiomeResourceKey(@NotNull Identifier resourceLocation) implements Keyed {
 
+    private static final String BIOMESAPI_NAMESPACE = "biomesapi";
+
     /**
      * Creates a new BiomeResourceKey from the given key and path.
      * This is a static factory method that provides a convenient way to create a new BiomeResourceKey instance.
@@ -51,6 +53,18 @@ public record BiomeResourceKey(@NotNull Identifier resourceLocation) implements 
         Preconditions.checkNotNull(resourceLocation, "resourceLocation cannot be null");
 
         return new BiomeResourceKey(resourceLocation);
+    }
+
+    /**
+     * Creates a new BiomeResourceKey in the "biomesapi" namespace with the given path.
+     * This is a static factory method that provides a convenient way to create a new BiomeResourceKey instance.
+     * The "biomesapi" namespace is used along with the provided path to create a new ResourceLocation.
+     * @param path the path for the resource location
+     * @return a new BiomeResourceKey with the "biomesapi" namespace and the given path
+     */
+    @AsOf("0.0.8")
+    public static @NotNull BiomeResourceKey biomesapi(@NotNull String path) {
+        return of(BIOMESAPI_NAMESPACE, path);
     }
 
     /**

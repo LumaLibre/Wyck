@@ -6,6 +6,7 @@ import me.outspending.biomesapi.packet.PacketHandler;
 import me.outspending.biomesapi.packet.data.PhonyCustomBiome;
 import me.outspending.biomesapi.packet.data.BlockReplacement;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
+import me.outspending.biomesapi.setter.BiomeSetter;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

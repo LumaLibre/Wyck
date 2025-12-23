@@ -13,7 +13,7 @@ allprojects {
     apply(plugin = "com.gradleup.shadow")
 
     group = "me.outspending.biomesapi"
-    version = "0.0.7"
+    version = "0.0.8"
 
     tasks.withType<JavaCompile> {
         options.encoding = "UTF-8"
