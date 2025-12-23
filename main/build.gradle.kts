@@ -26,3 +26,51 @@ dependencies {
 java {
     toolchain.languageVersion = JavaLanguageVersion.of(21)
 }
+
+tasks {
+    jar {
+        archiveBaseName.set("BiomesAPI")
+        enabled = false
+    }
+    shadowJar {
+        archiveBaseName.set("BiomesAPI")
+        archiveClassifier.set("")
+    }
+}
+
+publishing {
+    val repo: String? = System.getenv("REPO_URL")
+    val user: String? = System.getenv("REPO_USERNAME")
+    val pass: String? = System.getenv("REPO_PASSWORD")
+
+
+    repositories {
+        if (repo == null || user == null || pass == null) {
+            return@repositories
+        }
+        maven {
+            url = uri(repo)
+            credentials(PasswordCredentials::class) {
+                username = user
+                password = pass
+            }
+            authentication {
+                create<BasicAuthentication>("basic")
+            }
+        }
+    }
+
+    publications {
+        if (repo == null || user == null || pass == null) {
+            return@publications
+        }
+        create<MavenPublication>("maven") {
+            groupId = project.group.toString()
+            artifactId = "BiomesAPI"
+            version = project.version.toString()
+            artifact(tasks.shadowJar.get().archiveFile) {
+                builtBy(tasks.shadowJar)
+            }
+        }
+    }
+}

@@ -13,7 +13,7 @@ allprojects {
     apply(plugin = "com.gradleup.shadow")
 
     group = "me.outspending.biomesapi"
-    version = "0.0.6"
+    version = "0.0.7"
 
     tasks.withType<JavaCompile> {
         options.encoding = "UTF-8"
@@ -117,41 +117,6 @@ java {
     toolchain.languageVersion = JavaLanguageVersion.of(21)
 }
 
-publishing {
-    val repo: String? = System.getenv("REPO_URL")
-    val user: String? = System.getenv("REPO_USERNAME")
-    val pass: String? = System.getenv("REPO_PASSWORD")
-
-
-    repositories {
-        if (repo == null || user == null || pass == null) {
-            println("$repo, $user, $pass")
-            println("Skipping publication configuration, REPO_URL, REPO_USERNAME or REPO_PASSWORD is not set.")
-            return@repositories
-        }
-        maven {
-            url = uri(repo)
-            credentials(PasswordCredentials::class) {
-                username = user
-                password = pass
-            }
-            authentication {
-                create<BasicAuthentication>("basic")
-            }
-        }
-    }
-
-    publications {
-        if (repo == null || user == null || pass == null) {
-            return@publications
-        }
-        create<MavenPublication>("maven") {
-            groupId = project.group.toString()
-            artifactId = project.name
-            version = project.version.toString()
-            artifact(tasks.shadowJar.get().archiveFile) {
-                builtBy(tasks.shadowJar)
-            }
-        }
-    }
+tasks.jar {
+    archiveBaseName.set("BiomesAPI-Parent")
 }
