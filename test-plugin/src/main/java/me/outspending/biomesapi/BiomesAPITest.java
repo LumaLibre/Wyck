@@ -5,6 +5,7 @@ import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.packet.PacketHandler;
 import me.outspending.biomesapi.packet.data.PhonyCustomBiome;
 import me.outspending.biomesapi.packet.data.BlockReplacement;
+import me.outspending.biomesapi.registry.BiomeRegistry;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
 import me.outspending.biomesapi.renderer.AmbientParticle;
 import me.outspending.biomesapi.renderer.ParticleRenderer;
@@ -35,8 +36,38 @@ public final class BiomesAPITest extends JavaPlugin implements Listener {
                 )
                 .build();
 
+        biome.register();
+        getServer().getPluginManager().registerEvents(this, this);
+
+        packetHandler = PacketHandler.of(this);
+        packetHandler.register();
+
+        PhonyCustomBiome phonyCustomBiome = PhonyCustomBiome.builder()
+                .setCustomBiome(biome)
+                .build();
+
+        packetHandler.appendBiome(phonyCustomBiome);
+    }
+
+    @Override
+    public void onDisable() {
+        packetHandler.unregister();
+    }
+
+    @EventHandler
+    public void onBlockBreak(BlockBreakEvent e) {
+        CustomBiome biome = BiomeHandler.getBiome(BiomeResourceKey.of("test", "custombiome"));
+        if (biome == null) {
+            e.getPlayer().sendMessage("biome is null");
+            return;
+        }
+
+
+
+
+
         CustomBiome yellowBiome = CustomBiome.builder()
-                .resourceKey(BiomeResourceKey.of("test", "yellow"))
+                .resourceKey(BiomeResourceKey.of("test", "custombiome"))
                 .settings(BiomeSettings.defaultSettings())
                 .fogColor("#ffe606") // #db4929
                 .foliageColor("#ffe606")
@@ -48,43 +79,9 @@ public final class BiomesAPITest extends JavaPlugin implements Listener {
                 .blockReplacements(new BlockReplacement(Material.OAK_LEAVES, Material.SPRUCE_LEAVES))
                 .build();
 
-        biome.register();
-        yellowBiome.register();
-        getServer().getPluginManager().registerEvents(this, this);
 
-        packetHandler = PacketHandler.of(this);
-        packetHandler.register();
-    }
+        BiomeRegistry.newRegistry().modify(yellowBiome);
 
-    @Override
-    public void onDisable() {
-        packetHandler.unregister();
-    }
-
-    @EventHandler
-    public void onBlockBreak(BlockBreakEvent e) {
-        CustomBiome biome = BiomeHandler.getBiome(BiomeResourceKey.of("test", "custombiome"));
-        CustomBiome yellowBiome = BiomeHandler.getBiome(BiomeResourceKey.of("test", "yellow"));
-        if (biome == null || yellowBiome == null) {
-            e.getPlayer().sendMessage("biome is null");
-            return;
-        }
-
-        PhonyCustomBiome phonyCustomBiome = PhonyCustomBiome.builder()
-                .setCustomBiome(biome)
-                .setConditional((player, chunkLocation) -> {
-                    return chunkLocation.x() % 2 == 0 && chunkLocation.z() % 2 == 0;
-                })
-                .build();
-        PhonyCustomBiome phonyYellowBiome = PhonyCustomBiome.builder()
-                .setCustomBiome(yellowBiome)
-                .setConditional((player, chunkLocation) -> {
-                    return chunkLocation.x() % 2 != 0 || chunkLocation.z() % 2 != 0;
-                })
-                .build();
-
-        packetHandler.appendBiome(phonyCustomBiome);
-        packetHandler.appendBiome(phonyYellowBiome);
         e.getPlayer().sendMessage("registered");
 
         BiomeUpdater biomeUpdater = BiomeUpdater.of();

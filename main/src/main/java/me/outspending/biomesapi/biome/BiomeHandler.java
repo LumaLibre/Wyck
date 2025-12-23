@@ -22,7 +22,8 @@ import java.util.List;
 @AsOf("0.0.1")
 public class BiomeHandler {
 
-    private static final List<CustomBiome> registeredBiomes = new ArrayList<>();
+    // TODO: this should be a set
+    private static final List<CustomBiome> REGISTERED_BIOMES = new ArrayList<>();
 
     public BiomeHandler() {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated.");
@@ -36,7 +37,7 @@ public class BiomeHandler {
      */
     @AsOf("0.0.1")
     public static List<CustomBiome> getRegisteredBiomes() {
-        return registeredBiomes;
+        return REGISTERED_BIOMES;
     }
 
     /**
@@ -55,7 +56,7 @@ public class BiomeHandler {
     public static @Nullable CustomBiome getBiome(@NotNull BiomeResourceKey resourceKey) {
         Preconditions.checkNotNull(resourceKey, "resourceKey cannot be null");
 
-        return registeredBiomes.stream()
+        return REGISTERED_BIOMES.stream()
                 .filter(b -> resourceKey.equals(b.getResourceKey()))
                 .findFirst()
                 .orElseThrow(() -> new UnknownBiomeException("Unknown biome: " + resourceKey));
@@ -78,4 +79,25 @@ public class BiomeHandler {
         return getBiome(resourceKey) != null;
     }
 
+    /**
+     * Replaces an existing {@link CustomBiome} in the registered biomes list with a new one.
+     * @param resourceKey The resource key of the biome to be replaced.
+     * @param newBiome The new {@link CustomBiome} to replace the existing one.
+     * @return true if the biome was successfully replaced, false if no matching biome was found.
+     * @version 0.0.8
+     */
+    @AsOf("0.0.8")
+    public static boolean replaceBiome(@NotNull BiomeResourceKey resourceKey, @NotNull CustomBiome newBiome) {
+        Preconditions.checkNotNull(resourceKey, "resourceKey cannot be null");
+        Preconditions.checkNotNull(newBiome, "newBiome cannot be null");
+
+        for (int i = 0; i < REGISTERED_BIOMES.size(); i++) {
+            CustomBiome biome = REGISTERED_BIOMES.get(i);
+            if (resourceKey.equals(biome.getResourceKey())) {
+                REGISTERED_BIOMES.set(i, newBiome);
+                return true;
+            }
+        }
+        return false;
+    }
 }

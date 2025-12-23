@@ -15,9 +15,9 @@ import me.outspending.biomesapi.packet.PacketHandler;
 import me.outspending.biomesapi.packet.PhonyCustomBiomeCollector;
 import me.outspending.biomesapi.packet.data.ChunkLocation;
 import me.outspending.biomesapi.packet.data.PhonyCustomBiome;
+import me.outspending.biomesapi.registry.BiomeResourceKey;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
-import org.bukkit.NamespacedKey;
 import org.bukkit.craftbukkit.block.CraftBiome;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
@@ -67,7 +67,7 @@ public class PacketEventsPacketHandler implements PacketHandler {
     }
 
     @Override
-    public boolean removeBiome(@NotNull NamespacedKey biomeKey) {
+    public boolean removeBiome(@NotNull BiomeResourceKey biomeKey) {
         return collector.removeBiome(biomeKey);
     }
 

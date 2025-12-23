@@ -3,19 +3,46 @@ package me.outspending.biomesapi.renderer;
 import me.outspending.biomesapi.annotations.AsOf;
 import org.jetbrains.annotations.NotNull;
 
-// TODO:
-//  MC 1.21.11+ supports multiple ambient particles via EnvironmentAttributes.AMBIENT_PARTICLES and api should reflect as such
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+
 /**
  * Represents a particle renderer with a specific ambient particle and probability.
  * This is a record class introduced in Java 14 as a preview feature and made final in Java 16.
  * Records provide a compact syntax for declaring classes which are transparent holders for shallowly immutable data.
  *
- * @version 0.0.1
+ * @version 0.0.8
  * @since 0.0.1
  * @author Outspending
  */
-@AsOf("0.0.1")
-public record ParticleRenderer(@NotNull AmbientParticle ambientParticle, float probability) {
+@AsOf("0.0.8")
+public record ParticleRenderer(@NotNull Map<@NotNull AmbientParticle, @NotNull Float> ambientParticles) {
+
+
+    /**
+     * Creates a new ParticleRenderer with the given ambient particles and their corresponding probabilities.
+     * This is a static factory method that provides a convenient way to create a new ParticleRenderer instance.
+     *
+     * @param ambientParticles the list of ambient particles for the particle renderer
+     * @param probabilities    the list of probabilities for the particle renderer
+     * @return a new ParticleRenderer with the given ambient particles and probabilities
+     * @version 0.0.8
+     */
+    @AsOf("0.0.8")
+    public static @NotNull ParticleRenderer of(@NotNull List<@NotNull AmbientParticle> ambientParticles, @NotNull List<@NotNull Float> probabilities) {
+        if (ambientParticles.size() != probabilities.size()) {
+            throw new IllegalArgumentException("The size of ambientParticles and probabilities must be the same.");
+        }
+
+        Map<AmbientParticle, Float> particleMap = new HashMap<>();
+        for (int i = 0; i < ambientParticles.size(); i++) {
+            particleMap.put(ambientParticles.get(i), probabilities.get(i));
+        }
+
+        return new ParticleRenderer(particleMap);
+    }
 
     /**
      * Creates a new ParticleRenderer with the given ambient particle and probability.
@@ -28,7 +55,7 @@ public record ParticleRenderer(@NotNull AmbientParticle ambientParticle, float p
      */
     @AsOf("0.0.1")
     public static @NotNull ParticleRenderer of(@NotNull AmbientParticle ambientParticle, float probability) {
-        return new ParticleRenderer(ambientParticle, probability);
+        return new ParticleRenderer(Map.of(ambientParticle, probability));
     }
 
     /**
@@ -39,8 +66,38 @@ public record ParticleRenderer(@NotNull AmbientParticle ambientParticle, float p
      * @version 0.0.1
      */
     @AsOf("0.0.1")
-    public static ParticleRenderer defaultSettings() {
-        return new ParticleRenderer(AmbientParticle.CLOUD, 0.008F);
+    public static @NotNull ParticleRenderer defaultSettings() {
+        return new ParticleRenderer(Map.of(AmbientParticle.CLOUD, 0.008F));
     }
 
+
+    /**
+     * Builder class for constructing ParticleRenderer instances.
+     *
+     * @version 0.0.8
+     * @since 0.0.8
+     * @author Jsinco
+     */
+    @AsOf("0.0.8")
+    public static class Builder {
+        private final Map<AmbientParticle, Float> ambientParticles = new HashMap<>();
+
+        /**
+         * Adds an ambient particle with the specified probability to the ParticleRenderer being built.
+         *
+         * @param ambientParticle the ambient particle to add
+         * @param probability     the probability of the ambient particle
+         * @return the Builder instance for method chaining
+         */
+        @AsOf("0.0.8")
+        public Builder addAmbientParticle(@NotNull AmbientParticle ambientParticle, float probability) {
+            ambientParticles.put(ambientParticle, probability);
+            return this;
+        }
+
+        @AsOf("0.0.8")
+        public ParticleRenderer build() {
+            return new ParticleRenderer(ambientParticles);
+        }
+    }
 }

@@ -2,10 +2,14 @@ package me.outspending.biomesapi.packet.data;
 
 import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.annotations.AsOf;
+import me.outspending.biomesapi.biome.BiomeHandler;
 import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.packet.PacketHandler;
+import me.outspending.biomesapi.registry.BiomeResourceKey;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
 import java.util.function.BiPredicate;
 
 /**
@@ -18,19 +22,27 @@ import java.util.function.BiPredicate;
  * @version 0.0.6
  */
 @AsOf("0.0.6")
-public record PhonyCustomBiome(CustomBiome customBiome, BiPredicate<Player, ChunkLocation> conditional, PacketHandler.Priority priority) {
+public record PhonyCustomBiome(BiomeResourceKey biomeResourceKey, BiPredicate<Player, ChunkLocation> conditional, PacketHandler.Priority priority) {
 
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         PhonyCustomBiome that = (PhonyCustomBiome) obj;
-        return customBiome.toNamespacedKey().equals(that.customBiome.toNamespacedKey());
+        return Objects.equals(biomeResourceKey, that.biomeResourceKey);
     }
 
     @Override
     public int hashCode() {
-        return customBiome.toNamespacedKey().hashCode();
+        return Objects.hash(biomeResourceKey);
+    }
+
+    public @NotNull CustomBiome toCustomBiome() {
+        return Preconditions.checkNotNull(BiomeHandler.getBiome(biomeResourceKey), "CustomBiome with key " + biomeResourceKey + " is not registered.");
+    }
+
+    public @NotNull CustomBiome customBiome() {
+        return toCustomBiome();
     }
 
     public static Builder builder() {
@@ -38,12 +50,12 @@ public record PhonyCustomBiome(CustomBiome customBiome, BiPredicate<Player, Chun
     }
 
     public static class Builder {
-        private CustomBiome customBiome;
+        private BiomeResourceKey biomeResourceKey;
         private BiPredicate<Player, ChunkLocation> conditional = (player, chunkLocation) -> true;
         private PacketHandler.Priority priority = PacketHandler.Priority.NORMAL;
 
         public Builder setCustomBiome(CustomBiome customBiome) {
-            this.customBiome = customBiome;
+            this.biomeResourceKey = customBiome.getResourceKey();
             return this;
         }
 
@@ -58,8 +70,8 @@ public record PhonyCustomBiome(CustomBiome customBiome, BiPredicate<Player, Chun
         }
 
         public PhonyCustomBiome build() {
-            Preconditions.checkNotNull(customBiome, "customBiome cannot be null");
-            return new PhonyCustomBiome(customBiome, conditional, priority);
+            Preconditions.checkNotNull(biomeResourceKey, "customBiome cannot be null");
+            return new PhonyCustomBiome(biomeResourceKey, conditional, priority);
         }
     }
 }

@@ -17,7 +17,6 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * This class provides methods to set the biome of blocks, chunks, and regions in the game.
- * It uses the @AsOf annotation to indicate the version since the class or its methods have been present or modified.
  *
  * @version 0.0.1
  * @since 0.0.1
@@ -133,23 +132,21 @@ public class GlobalBiomeSetter implements BiomeSetter {
         Preconditions.checkNotNull(to, "to cannot be null");
         Preconditions.checkNotNull(customBiome, "customBiome cannot be null");
 
-        if (!from.getWorld().equals(to.getWorld())) {
-            throw new RuntimeException("Locations must be in the same world!");
-        } else {
-            Biome biome = customBiome.toBukkitBiome();
-            PointRange3D range = PointRange3D.of(from, to);
+        Preconditions.checkArgument(!from.getWorld().equals(to.getWorld()), "Locations must be in the same world!");
 
-            for (int x = range.minX(); x <= range.maxX(); x++) {
-                for (int y = range.minY(); y <= range.maxY(); y++) {
-                    for (int z = range.minZ(); z <= range.maxZ(); z++) {
-                        world.setBiome(x, y, z, biome);
-                    }
+        Biome biome = customBiome.toBukkitBiome();
+        PointRange3D range = PointRange3D.of(from, to);
+
+        for (int x = range.minX(); x <= range.maxX(); x++) {
+            for (int y = range.minY(); y <= range.maxY(); y++) {
+                for (int z = range.minZ(); z <= range.maxZ(); z++) {
+                    world.setBiome(x, y, z, biome);
                 }
             }
+        }
 
-            if (updateBiome) {
-                BIOME_UPDATER.updateChunks(from, to);
-            }
+        if (updateBiome) {
+            BIOME_UPDATER.updateChunks(from, to);
         }
     }
 

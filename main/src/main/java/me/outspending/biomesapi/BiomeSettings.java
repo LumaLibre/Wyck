@@ -9,17 +9,18 @@ import org.jetbrains.annotations.Range;
  * It includes properties such as depth, scale, temperature, downfall, and a temperature modifier.
  * It also includes a nested Builder class for creating instances of BiomeSettings.
  *
- * @version 0.0.1
+ * @version 0.0.8
  * @since 0.0.1
  * @author Outspending
  */
-@AsOf("0.0.1")
+@AsOf("0.0.8")
 public record BiomeSettings(
         @Range(from = 0, to = 25) float depth,
         @Range(from = 0, to = 25) float scale,
         @Range(from = 0, to = 25) float temperature,
         @Range(from = 0, to = 25) float downfall,
-        @NotNull BiomeTempModifier modifier
+        @NotNull BiomeTempModifier modifier,
+        boolean hasPrecipitation
 ) {
 
     /**
@@ -42,7 +43,7 @@ public record BiomeSettings(
      */
     @AsOf("0.0.1")
     public static @NotNull BiomeSettings defaultSettings() {
-        return new BiomeSettings(0.1F, 0.2F, 0.5F, 0.5F, BiomeTempModifier.NONE);
+        return new BiomeSettings(0.1F, 0.2F, 0.5F, 0.5F, BiomeTempModifier.NONE, true);
     }
 
     /**
@@ -60,6 +61,7 @@ public record BiomeSettings(
         private float temperature = 0.5F;
         private float downfall = 0.5F;
         private BiomeTempModifier modifier = BiomeTempModifier.NONE;
+        private boolean hasPrecipitation = true;
 
         /**
          * This method sets the depth property of the BiomeSettings.
@@ -127,6 +129,19 @@ public record BiomeSettings(
         }
 
         /**
+         * This method sets whether the biome has precipitation.
+         *
+         * @param hasPrecipitation Whether the biome has precipitation.
+         * @version 0.0.8
+         * @return The Builder object, for chaining method calls.
+         */
+        @AsOf("0.0.8")
+        public @NotNull Builder hasPrecipitation(boolean hasPrecipitation) {
+            this.hasPrecipitation = hasPrecipitation;
+            return this;
+        }
+
+        /**
          * This method creates a new BiomeSettings object with the properties set in the Builder.
          *
          * @version 0.0.1
@@ -134,7 +149,7 @@ public record BiomeSettings(
          */
         @AsOf("0.0.1")
         public @NotNull BiomeSettings build() {
-            return new BiomeSettings(depth, scale, temperature, downfall, modifier);
+            return new BiomeSettings(depth, scale, temperature, downfall, modifier, hasPrecipitation);
         }
 
     }

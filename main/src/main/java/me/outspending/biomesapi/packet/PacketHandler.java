@@ -4,7 +4,7 @@ import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.exceptions.MissingPacketLibraryException;
 import me.outspending.biomesapi.packet.data.PhonyCustomBiome;
 import me.outspending.biomesapi.packet.handlers.ProtocolLibPacketHandler;
-import org.bukkit.NamespacedKey;
+import me.outspending.biomesapi.registry.BiomeResourceKey;
 import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.ApiStatus;
@@ -99,12 +99,12 @@ public interface PacketHandler {
     boolean removeBiome(@NotNull PhonyCustomBiome biome);
 
     /**
-     * Removes a custom biome from the packet handler's list of biomes to inject by its NamespacedKey.
-     * @param biomeKey The NamespacedKey of the biome to remove
+     * Removes a custom biome from the packet handler's list of biomes to inject by its BiomeResourceKey.
+     * @param biomeKey The BiomeResourceKey of the biome to remove
      * @return true if the biome was removed, false if it was not found
      */
     @AsOf("0.0.6")
-    boolean removeBiome(@NotNull NamespacedKey biomeKey);
+    boolean removeBiome(@NotNull BiomeResourceKey biomeKey);
 
 
     /**
