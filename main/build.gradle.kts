@@ -25,6 +25,8 @@ dependencies {
 
 java {
     toolchain.languageVersion = JavaLanguageVersion.of(21)
+    withSourcesJar()
+    withJavadocJar()
 }
 
 publishing {
@@ -34,9 +36,8 @@ publishing {
 
 
     repositories {
-        if (repo == null || user == null || pass == null) {
-            return@repositories
-        }
+        if (repo == null || user == null || pass == null) return@repositories
+
         maven {
             url = uri(repo)
             credentials(PasswordCredentials::class) {
@@ -50,16 +51,19 @@ publishing {
     }
 
     publications {
-        if (repo == null || user == null || pass == null) {
-            return@publications
-        }
+        if (repo == null || user == null || pass == null) return@publications
+
         create<MavenPublication>("maven") {
             groupId = project.group.toString()
             artifactId = "BiomesAPI"
             version = project.version.toString()
+
             artifact(tasks.shadowJar.get().archiveFile) {
                 builtBy(tasks.shadowJar)
             }
+
+            artifact(tasks.named("sourcesJar").get())
+            //artifact(tasks.named("javadocJar").get())
         }
     }
 }
