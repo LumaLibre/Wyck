@@ -49,26 +49,43 @@ public record PhonyCustomBiome(BiomeResourceKey biomeResourceKey, BiPredicate<Pl
         return new Builder();
     }
 
+    /**
+     * A builder for creating PhonyCustomBiome instances.
+     * @version 0.0.10
+     * @since 0.0.6
+     * @author Jsinco
+     */
+    @AsOf("0.0.10")
     public static class Builder {
         private BiomeResourceKey biomeResourceKey;
         private BiPredicate<Player, ChunkLocation> conditional = (player, chunkLocation) -> true;
         private PacketHandler.Priority priority = PacketHandler.Priority.NORMAL;
 
+        @AsOf("0.0.6")
         public Builder setCustomBiome(CustomBiome customBiome) {
             this.biomeResourceKey = customBiome.getResourceKey();
             return this;
         }
 
+        @AsOf("0.0.10")
+        public Builder setCustomBiome(BiomeResourceKey biomeResourceKey) {
+            this.biomeResourceKey = biomeResourceKey;
+            return this;
+        }
+
+        @AsOf("0.0.6")
         public Builder setConditional(BiPredicate<Player, ChunkLocation> conditional) {
             this.conditional = conditional;
             return this;
         }
 
+        @AsOf("0.0.6")
         public Builder setPriority(PacketHandler.Priority priority) {
             this.priority = priority;
             return this;
         }
 
+        @AsOf("0.0.6")
         public PhonyCustomBiome build() {
             Preconditions.checkNotNull(biomeResourceKey, "customBiome cannot be null");
             return new PhonyCustomBiome(biomeResourceKey, conditional, priority);

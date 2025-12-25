@@ -72,6 +72,16 @@ public class PacketEventsPacketHandler implements PacketHandler {
     }
 
     @Override
+    public boolean hasBiome(@NotNull PhonyCustomBiome biome) {
+        return collector.hasBiome(biome);
+    }
+
+    @Override
+    public boolean hasBiome(@NotNull BiomeResourceKey biomeKey) {
+        return collector.hasBiome(biomeKey);
+    }
+
+    @Override
     public void clearBiomes() {
         collector.clearBiomes();
     }

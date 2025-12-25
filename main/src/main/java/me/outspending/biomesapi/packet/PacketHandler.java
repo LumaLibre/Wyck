@@ -19,12 +19,13 @@ import org.jetbrains.annotations.NotNull;
  * An external packet handling library (either ProtocolLib or PacketEvents) is required
  * for this interface.
  * </p>
- * @version 0.0.6
+ * @version 0.0.10
+ * @since 0.0.6
  * @author Jsinco
  */
 @me.outspending.biomesapi.annotations.Experimental
 @ApiStatus.Experimental
-@AsOf("0.0.6")
+@AsOf("0.0.10")
 public interface PacketHandler {
 
 
@@ -105,6 +106,22 @@ public interface PacketHandler {
      */
     @AsOf("0.0.6")
     boolean removeBiome(@NotNull BiomeResourceKey biomeKey);
+
+    /**
+     * Checks if a custom biome is in the packet handler's list of biomes to inject.
+     * @param biome The phony custom biome to check
+     * @return true if the biome is present, false otherwise
+     */
+    @AsOf("0.0.10")
+    boolean hasBiome(@NotNull PhonyCustomBiome biome);
+
+    /**
+     * Checks if a custom biome is in the packet handler's list of biomes to inject by its BiomeResourceKey.
+     * @param biomeKey The BiomeResourceKey of the biome to check
+     * @return true if the biome is present, false otherwise
+     */
+    @AsOf("0.0.10")
+    boolean hasBiome(@NotNull BiomeResourceKey biomeKey);
 
 
     /**
