@@ -3,16 +3,17 @@ package me.outspending.biomesapi.packet.data;
 import me.outspending.biomesapi.annotations.AsOf;
 import net.minecraft.world.level.chunk.LevelChunk;
 import org.bukkit.Chunk;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A data class representing a chunk location.
  * @param x the chunk x coordinate
  * @param z the chunk z coordinate
- * @version 0.0.6
+ * @version 0.0.11
  * @since 0.0.6
  * @author Jsinco
  */
-@AsOf("0.0.6")
+@AsOf("0.0.11")
 public record ChunkLocation(int x, int z) {
 
     /**
@@ -66,5 +67,68 @@ public record ChunkLocation(int x, int z) {
     @AsOf("0.0.6")
     public boolean isChunk(int chunkX, int chunkZ) {
         return this.x == chunkX && this.z == chunkZ;
+    }
+
+
+    /**
+     * Checks if this ChunkLocation is within a certain radius of another ChunkLocation.
+     * @param other the other ChunkLocation to compare
+     * @param radius the radius to check within
+     * @return true if this ChunkLocation is within the radius of the other, false otherwise
+     */
+    @AsOf("0.0.11")
+    public boolean isWithinRadius(ChunkLocation other, int radius) {
+        int deltaX = this.x - other.x;
+        int deltaZ = this.z - other.z;
+        return (deltaX * deltaX + deltaZ * deltaZ) <= (radius * radius);
+    }
+
+    /**
+     * Offsets this ChunkLocation by the given x and z offsets.
+     * @param offsetX the x offset
+     * @param offsetZ the z offset
+     * @return a new ChunkLocation with the offset applied
+     */
+    @AsOf("0.0.11")
+    public @NotNull ChunkLocation offset(int offsetX, int offsetZ) {
+        return new ChunkLocation(this.x + offsetX, this.z + offsetZ);
+    }
+
+    /**
+     * Offsets this ChunkLocation by another ChunkLocation.
+     * @param offset the ChunkLocation to offset by
+     * @return a new ChunkLocation with the offset applied
+     */
+    @AsOf("0.0.11")
+    public @NotNull ChunkLocation offset(@NotNull ChunkLocation offset) {
+        return new ChunkLocation(this.x + offset.x, this.z + offset.z);
+    }
+
+    /**
+     * Negates the chunk coordinates.
+     * @return a new ChunkLocation with negated x and z coordinates
+     */
+    @AsOf("0.0.11")
+    public @NotNull ChunkLocation negate() {
+        return new ChunkLocation(-this.x, -this.z);
+    }
+
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        ChunkLocation that = (ChunkLocation) obj;
+        return x == that.x && z == that.z;
+    }
+
+    @Override
+    public int hashCode() {
+        return 31 * x + z;
+    }
+
+    public @NotNull String toString() {
+        return "ChunkLocation{x=" + x + ", z=" + z + "}";
     }
 }

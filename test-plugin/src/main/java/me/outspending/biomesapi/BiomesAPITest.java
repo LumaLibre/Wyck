@@ -5,14 +5,10 @@ import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.packet.PacketHandler;
 import me.outspending.biomesapi.packet.data.PhonyCustomBiome;
 import me.outspending.biomesapi.packet.data.BlockReplacement;
-import me.outspending.biomesapi.registry.BiomeRegistry;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
 import me.outspending.biomesapi.renderer.AmbientParticle;
 import me.outspending.biomesapi.renderer.ParticleRenderer;
-import me.outspending.biomesapi.setter.BiomeSetter;
-import org.bukkit.Chunk;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -51,7 +47,8 @@ public final class BiomesAPITest extends JavaPlugin implements Listener {
                 .grassColor("#9D00FF")
                 .particleRenderer(ParticleRenderer.of(AmbientParticle.WITCH, 0.01f))
                 .blockReplacements(
-                        BlockReplacement.of(Material.GRASS_BLOCK, Material.PURPLE_CONCRETE_POWDER)
+                        BlockReplacement.of(Material.GRASS_BLOCK, Material.WATER),
+                        BlockReplacement.of(Material.STONE, Material.DIAMOND_BLOCK)
                 )
                 .build();
 

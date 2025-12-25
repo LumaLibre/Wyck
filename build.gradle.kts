@@ -13,14 +13,14 @@ allprojects {
     apply(plugin = "com.gradleup.shadow")
 
     group = "me.outspending.biomesapi"
-    version = "0.0.10"
+    version = "0.0.11"
 
     tasks.withType<JavaCompile> {
         options.encoding = "UTF-8"
     }
 
     // The file for publication.
-    val reobfBuildFile = project.layout.buildDirectory.file("libs/reobf/${project.name}-${project.version}.jar")
+    //val reobfBuildFile = project.layout.buildDirectory.file("libs/reobf/${project.name}-${project.version}.jar")
 
     // Check if a project has the reobfJar task.
     fun Project.usesReobfuscatedJar() : Boolean {
