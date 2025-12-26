@@ -15,11 +15,11 @@ import org.jetbrains.annotations.NotNull;
  * This interface represents a custom biome in the BiomesAPI.
  * It provides methods to retrieve and modify the properties of the custom biome.
  *
- * @version 0.0.6
+ * @version 0.0.17
  * @since 0.0.1
  * @author Outspending
  */
-@AsOf("0.0.6")
+@AsOf("0.0.17")
 public interface CustomBiome {
 
     /**
@@ -229,6 +229,30 @@ public interface CustomBiome {
      */
     @AsOf("0.0.2")
     void register();
+
+
+    /**
+     * Modifies the existing biome in the biome registry with the properties of this CustomBiome.
+     *
+     * @throws IllegalArgumentException if the biome does not already exist in the registry.
+     * @apiNote This method can only change the properties of an existing biome on the <b>server</b>.
+     * Clients which have already received the biome will not see any changes until they enter the reconfiguration phase
+     * (e.g., by rejoining the server.)
+     * @since 0.0.17
+     */
+    @AsOf("0.0.17")
+    void modify();
+
+    /**
+     * Compares this CustomBiome to another CustomBiome to determine if they are similar.
+     * Two CustomBiomes are considered similar if they have the same properties.
+     *
+     * @param otherBiome The other CustomBiome to compare to.
+     * @return true if the CustomBiomes are similar, false otherwise.
+     * @since 0.0.17
+     */
+    @AsOf("0.0.17")
+    boolean isSimilar(@NotNull CustomBiome otherBiome);
 
     /**
      * This class is used to create a new CustomBiome object.

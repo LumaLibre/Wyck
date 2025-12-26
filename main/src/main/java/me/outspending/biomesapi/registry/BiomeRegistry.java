@@ -45,6 +45,7 @@ public interface BiomeRegistry {
      * Another biome must already exist with the same ResourceKey.
      * It takes a CustomBiome object as an argument.
      *
+     * @throws IllegalArgumentException if the biome does not already exist in the registry.
      * @apiNote This method can only change the properties of an existing biome on the <b>server</b>.
      * Clients which have already received the biome will not see any changes until they enter the reconfiguration phase
      * (e.g., by rejoining the server.)

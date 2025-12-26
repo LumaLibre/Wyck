@@ -216,4 +216,29 @@ public final class CustomBiomeImpl implements CustomBiome {
         BiomeRegistry.newRegistry().register(this);
     }
 
+    @Override
+    public void modify() {
+        BiomeRegistry.newRegistry().modify(this);
+    }
+
+    @Override
+    public boolean isSimilar(@NotNull CustomBiome otherBiome) {
+        if (this == otherBiome) return true;
+        if (!this.resourceKey.equals(otherBiome.getResourceKey())) return false;
+        if (!this.settings.equals(otherBiome.getSettings())) return false;
+        if (this.fogColor != otherBiome.getFogColor()) return false;
+        if (this.waterColor != otherBiome.getWaterColor()) return false;
+        if (this.waterFogColor != otherBiome.getWaterFogColor()) return false;
+        if (this.skyColor != otherBiome.getSkyColor()) return false;
+        if (this.foliageColor != otherBiome.getFoliageColor()) return false;
+        if (this.grassColor != otherBiome.getGrassColor()) return false;
+        if (!this.particleRenderer.equals(otherBiome.getParticleRenderer())) return false;
+        if (this.blockReplacements.length != otherBiome.getBlockReplacements().length) return false;
+        for (int i = 0; i < this.blockReplacements.length; i++) {
+            if (!this.blockReplacements[i].equals(otherBiome.getBlockReplacements()[i])) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

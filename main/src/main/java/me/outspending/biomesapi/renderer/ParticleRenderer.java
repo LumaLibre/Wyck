@@ -71,6 +71,19 @@ public record ParticleRenderer(@NotNull Map<@NotNull AmbientParticle, @NotNull F
     }
 
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        ParticleRenderer that = (ParticleRenderer) obj;
+        return ambientParticles.equals(that.ambientParticles);
+    }
+
+    @Override
+    public int hashCode() {
+        return ambientParticles.hashCode();
+    }
+
     /**
      * Builder class for constructing ParticleRenderer instances.
      *
