@@ -108,7 +108,12 @@ public enum AmbientParticle {
         this.particle = particle;
     }
 
-    <T extends ParticleOptions> AmbientParticle(ParticleType<@NotNull T> particle) {
+    /**
+     * Constructor for the AmbientParticle enum.
+     * @param particle the ParticleType associated with the ambient particle.
+     */
+    @AsOf("0.0.12")
+    AmbientParticle(ParticleType<?> particle) {
         this.particle = particle;
     }
 
