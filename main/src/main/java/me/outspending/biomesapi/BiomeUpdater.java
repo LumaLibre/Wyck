@@ -17,11 +17,11 @@ import java.util.List;
  * This class provides methods for updating the biomes of chunks and regions in a Minecraft world.
  * It uses the UnsafeValues instance to perform unsafe operations.
  *
- * @version 0.0.1
+ * @version 0.0.15
  * @since 0.0.1
  * @author Outspending
  */
-@AsOf("0.0.1")
+@AsOf("0.0.15")
 public interface BiomeUpdater {
 
     /**
@@ -99,22 +99,23 @@ public interface BiomeUpdater {
     void updateChunks(@NotNull List<Chunk> chunks);
 
 
-    @AsOf("0.0.6")
-    default void updateChunksForPlayer(@NotNull Player player) {
-        int viewDistance = player.getViewDistance();
-        Location playerLocation = player.getLocation();
-        World world = player.getWorld();
+    /**
+     * Updates the biomes of all chunks within a certain radius of a given chunk.
+     * This method calculates all chunks within the specified radius and sends an update packet to them.
+     *
+     * @param chunk The center chunk.
+     * @param radius The radius around the chunk to update.
+     */
+    @AsOf("0.0.15")
+    void updateChunkRadius(@NotNull Chunk chunk, int radius);
 
-        int playerChunkX = playerLocation.getBlockX() >> 4;
-        int playerChunkZ = playerLocation.getBlockZ() >> 4;
-        List<Chunk> chunksToUpdate = new ArrayList<>();
-        for (int x = playerChunkX - viewDistance; x <= playerChunkX + viewDistance; x++) {
-            for (int z = playerChunkZ - viewDistance; z <= playerChunkZ + viewDistance; z++) {
-                chunksToUpdate.add(world.getChunkAt(x, z));
-            }
-        }
 
-        updateChunks(chunksToUpdate);
-    }
+    /**
+     * Updates the biomes of all chunks within the player's view distance.
+     * This method calculates all chunks within the player's view distance and sends an update packet to them.
+     * @param player the player for whom to update the chunks
+     */
+    @AsOf("0.0.15")
+    void updateChunksForPlayer(@NotNull Player player);
 
 }
