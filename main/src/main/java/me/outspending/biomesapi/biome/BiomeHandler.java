@@ -50,9 +50,9 @@ public class BiomeHandler {
      * @return Biome object corresponding to the provided BiomeResourceKey, or null if the biome does not exist.
      *
      * @throws UnknownBiomeException if the biome does not exist in the registry.
-     * @version 0.0.1
+     * @since 0.0.1
      */
-    @AsOf("0.0.1")
+    @AsOf("0.0.18")
     public static @Nullable CustomBiome getBiome(@NotNull BiomeResourceKey resourceKey) {
         Preconditions.checkNotNull(resourceKey, "resourceKey cannot be null");
 
@@ -70,13 +70,14 @@ public class BiomeHandler {
      * @param resourceKey The BiomeResourceKey for the biome that needs to be checked.
      * @return true if the biome exists in the registry, false otherwise.
      *
-     * @version 0.0.1
+     * @since 0.0.1
      */
-    @AsOf("0.0.1")
+    @AsOf("0.0.18")
     public static boolean isBiome(@NotNull BiomeResourceKey resourceKey) {
         Preconditions.checkNotNull(resourceKey, "resourceKey cannot be null");
 
-        return getBiome(resourceKey) != null;
+        return REGISTERED_BIOMES.stream()
+                .anyMatch(b -> resourceKey.equals(b.getResourceKey()));
     }
 
     /**
