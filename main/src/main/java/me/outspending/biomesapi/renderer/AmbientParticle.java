@@ -31,19 +31,19 @@ public enum AmbientParticle {
     CURRENT_DOWN(ParticleTypes.CURRENT_DOWN),
     DAMAGE_INDICATOR(ParticleTypes.DAMAGE_INDICATOR),
     DOLPHIN(ParticleTypes.DOLPHIN),
-    DRAGON_BREATH(ParticleTypes.DRAGON_BREATH),
+    //DRAGON_BREATH(ParticleTypes.DRAGON_BREATH),
     DRIPPING_DRIPSTONE_LAVA(ParticleTypes.DRIPPING_DRIPSTONE_LAVA),
     DRIPPING_DRIPSTONE_WATER(ParticleTypes.DRIPPING_DRIPSTONE_WATER),
     DRIPPING_HONEY(ParticleTypes.DRIPPING_HONEY),
     DRIPPING_OBSIDIAN_TEAR(ParticleTypes.DRIPPING_OBSIDIAN_TEAR),
     DRIPPING_WATER(ParticleTypes.DRIPPING_WATER),
-    EFFECT(ParticleTypes.EFFECT),
+    //EFFECT(ParticleTypes.EFFECT),
     ELDER_GUARDIAN(ParticleTypes.ELDER_GUARDIAN),
     ELECTRIC_SPARK(ParticleTypes.ELECTRIC_SPARK),
     ENCHANT(ParticleTypes.ENCHANT),
     ENCHANTED_HIT(ParticleTypes.ENCHANTED_HIT),
     END_ROD(ParticleTypes.END_ROD),
-    ENTITY_EFFECT(ParticleTypes.ENTITY_EFFECT),
+    //ENTITY_EFFECT(ParticleTypes.ENTITY_EFFECT),
     EXPLOSION(ParticleTypes.EXPLOSION),
     EXPLOSION_EMITTER(ParticleTypes.EXPLOSION_EMITTER),
     FALLING_DRIPSTONE_LAVA(ParticleTypes.FALLING_DRIPSTONE_LAVA),
@@ -56,12 +56,12 @@ public enum AmbientParticle {
     FIREWORK(ParticleTypes.FIREWORK),
     FISHING(ParticleTypes.FISHING),
     FLAME(ParticleTypes.FLAME),
-    FLASH(ParticleTypes.FLASH),
+    //FLASH(ParticleTypes.FLASH),
     GLOW(ParticleTypes.GLOW),
     GLOW_SQUID_INK(ParticleTypes.GLOW_SQUID_INK),
     HAPPY_VILLAGER(ParticleTypes.HAPPY_VILLAGER),
     HEART(ParticleTypes.HEART),
-    INSTANT_EFFECT(ParticleTypes.INSTANT_EFFECT),
+    //INSTANT_EFFECT(ParticleTypes.INSTANT_EFFECT),
     ITEM_SLIME(ParticleTypes.ITEM_SLIME),
     ITEM_SNOWBALL(ParticleTypes.ITEM_SNOWBALL),
     LANDING_HONEY(ParticleTypes.LANDING_HONEY),
@@ -108,14 +108,6 @@ public enum AmbientParticle {
         this.particle = particle;
     }
 
-    /**
-     * Constructor for the AmbientParticle enum.
-     * @param particle the ParticleType associated with the ambient particle.
-     */
-    @AsOf("0.0.12")
-    AmbientParticle(ParticleType<?> particle) {
-        this.particle = particle;
-    }
 
     /**
      * This method returns the SimpleParticleType associated with the ambient particle.
