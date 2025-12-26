@@ -1,4 +1,3 @@
-// TODO: remove legacy versions & cleanup
 plugins {
     java
     `maven-publish`
@@ -13,68 +12,10 @@ allprojects {
     apply(plugin = "com.gradleup.shadow")
 
     group = "me.outspending.biomesapi"
-    version = "0.0.13"
+    version = "0.0.15"
 
     tasks.withType<JavaCompile> {
         options.encoding = "UTF-8"
-    }
-
-    // The file for publication.
-    //val reobfBuildFile = project.layout.buildDirectory.file("libs/reobf/${project.name}-${project.version}.jar")
-
-    // Check if a project has the reobfJar task.
-    fun Project.usesReobfuscatedJar() : Boolean {
-        return false
-//        return try {
-//            tasks.named("reobfJar")
-//            true
-//        } catch (ignored: UnknownTaskException) {
-//            false
-//        }
-    }
-
-    // needs to be in after evaluate, otherwise the project's reobfJar task (if it exists)
-    // won't be there.
-    afterEvaluate {
-
-        // publish NMS apis, and the main project API
-        // this is required because consumers require getting the POM
-        // files from this project's dependencies, even if they"re completely
-        // shaded and included in this file.
-        //
-        // not optimal because this leads to more network calls when downloading
-        // the api for the first time. ideally we only publish the main api.
-//        publishing {
-//            publications {
-//                create<MavenPublication>("maven") {
-//                    groupId = "me.outspending.biomesapi"
-//                    artifactId = project.name
-//
-//                    if (usesReobfuscatedJar()) artifact(reobfBuildFile)
-//                    from(components["java"])
-//                }
-//            }
-//        }
-
-        // Throws an error if we don"t explicitly say we're using the output
-        // of reobfJar in the final build.
-//        tasks.named("publishMavenPublicationToMavenLocal") {
-//            if (usesReobfuscatedJar()) {
-//                dependsOn(tasks.reobfJar)
-//            }
-//        }
-
-        // Don't use the task if it doesn't exist on this project
-//        if (usesReobfuscatedJar()) {
-//            tasks.reobfJar {
-//                outputJar.set(reobfBuildFile)
-//            }
-//        }
-
-        // Run reobfJar on applicable projects
-//        tasks.assemble {
-//            if (usesReobfuscatedJar()) dependsOn(tasks.reobfJar)
-//        }
     }
 
     repositories {
@@ -97,7 +38,7 @@ allprojects {
 
 val nmsVersions = listOf("1.19_R2", "1.19_R3", "1.20_R1", "1.20_R2", "1.20_R3", "1.21_R3", "1.21_R9")
 dependencies {
-    paperweight.paperDevBundle("1.21.4-R0.1-SNAPSHOT")
+    paperweight.paperDevBundle("1.21.11-R0.1-SNAPSHOT")
     implementation("com.google.guava:guava:11.0.2")
 
 

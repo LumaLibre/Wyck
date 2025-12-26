@@ -12,14 +12,15 @@ import org.jetbrains.annotations.NotNull;
  * It uses the @AsOf annotation to indicate the version since the class or its methods have been present or modified.
  * It is a final class, meaning it cannot be subclassed.
  *
- * @version 0.0.6
+ * @version 0.0.15
  * @since 0.0.1
  * @author Outspending
  */
-@AsOf("0.0.6")
+@AsOf("0.0.15")
 public record BiomeResourceKey(@NotNull Identifier resourceLocation) implements Keyed {
 
-    private static final String BIOMESAPI_NAMESPACE = "biomesapi";
+    public static final String BIOMESAPI_NAMESPACE = "biomesapi";
+    public static final char NAMESPACE_SEPARATOR = ':';
 
     /**
      * Creates a new BiomeResourceKey from the given key and path.
@@ -65,6 +66,22 @@ public record BiomeResourceKey(@NotNull Identifier resourceLocation) implements 
     @AsOf("0.0.8")
     public static @NotNull BiomeResourceKey biomesapi(@NotNull String path) {
         return of(BIOMESAPI_NAMESPACE, path);
+    }
+
+    /**
+     * Creates a new BiomeResourceKey from the given string representation.
+     * The string should be in the format "namespace:path".
+     *
+     * @param keyString the string representation of the BiomeResourceKey
+     * @return a new BiomeResourceKey with the given string representation
+     * @version 0.0.15
+     */
+    @AsOf("0.0.15")
+    public static @NotNull BiomeResourceKey fromString(@NotNull String keyString) {
+        Preconditions.checkArgument(!keyString.isEmpty(), "keyString cannot be empty");
+        String[] parts = keyString.split(String.valueOf(NAMESPACE_SEPARATOR), 2);
+        Preconditions.checkArgument(parts.length == 2, "keyString must be in the format 'namespace:path'");
+        return of(parts[0], parts[1]);
     }
 
     /**

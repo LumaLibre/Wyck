@@ -1,10 +1,8 @@
 package me.outspending.biomesapi.registry;
 
-import com.github.retrooper.packetevents.resources.ResourceLocation;
 import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.BiomeLock;
 import me.outspending.biomesapi.BiomeSettings;
-import me.outspending.biomesapi.BiomeUpdater;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.biome.BiomeHandler;
 import me.outspending.biomesapi.biome.CustomBiome;
@@ -13,12 +11,14 @@ import me.outspending.biomesapi.nms.NMSHandler;
 import me.outspending.biomesapi.registry.handlers.ParticleRendererHandler;
 import me.outspending.biomesapi.registry.handlers.SpecialEffectsHandler;
 import me.outspending.biomesapi.renderer.ParticleRenderer;
-import me.outspending.biomesapi.setter.GlobalBiomeSetter;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.attribute.EnvironmentAttributeMap;
 import net.minecraft.world.attribute.EnvironmentAttributes;
-import net.minecraft.world.level.biome.*;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.BiomeGenerationSettings;
+import net.minecraft.world.level.biome.BiomeSpecialEffects;
+import net.minecraft.world.level.biome.MobSpawnSettings;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
@@ -32,7 +32,7 @@ import java.lang.reflect.Field;
  * @since 0.0.1
  * @author Outspending
  */
-@AsOf("0.0.1")
+@AsOf("0.0.15")
 public class CustomBiomeRegistry implements BiomeRegistry {
 
     private static final SpecialEffectsHandler SPECIAL_EFFECTS_HANDLER = new SpecialEffectsHandler();

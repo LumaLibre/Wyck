@@ -48,7 +48,7 @@ public class NMS_v1_21_R9 implements NMS {
      */
     private static <T> MappedRegistry<T> getRegistry(ResourceKey<@NotNull Registry<@NotNull T>> key) {
         DedicatedServer server = ((CraftServer) Bukkit.getServer()).getServer();
-        return (MappedRegistry<@NotNull T>) server.registryAccess().lookupOrThrow(key);
+        return (MappedRegistry<@NotNull T>) server.registryAccess().lookup(key).orElseThrow();
     }
 
     /**
@@ -132,6 +132,7 @@ public class NMS_v1_21_R9 implements NMS {
      */
     @Override
     public @NotNull Registry<@NotNull Biome> getRegistry() {
+
         return ((CraftServer) Bukkit.getServer()).getServer()
                 .registryAccess()
                 .lookup(Registries.BIOME)
