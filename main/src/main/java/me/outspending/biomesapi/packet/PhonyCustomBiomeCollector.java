@@ -21,7 +21,6 @@ import java.util.Set;
  * @since 0.0.6
  * @author Jsinco
  */
-@me.outspending.biomesapi.annotations.Experimental
 @ApiStatus.Experimental
 @AsOf("0.0.6")
 public class PhonyCustomBiomeCollector {

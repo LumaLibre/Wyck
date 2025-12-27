@@ -22,6 +22,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
+// Credits to: kapstock/RealisticSeasons
 /**
  * ProtocolLib-based implementation of the PacketHandler interface.
  *
@@ -37,7 +38,7 @@ public class ProtocolLibPacketHandler implements PacketHandler {
 
 
     @AsOf("0.0.6")
-    public ProtocolLibPacketHandler(@NotNull Plugin provider, Priority priority) throws ClassNotFoundException {
+    public ProtocolLibPacketHandler(@NotNull Plugin provider, Priority priority) {
         this.collector = new PhonyCustomBiomeCollector();
         ListenerPriority protocolLibPrio = priority.getDelegatePriority(ListenerPriority.class);
         this.protocolListeners = new PacketAdapter[] {
@@ -123,7 +124,7 @@ public class ProtocolLibPacketHandler implements PacketHandler {
             DimensionSectionCount dimensionSectionCount = DimensionSectionCount.fromBukkitEnvironment(player.getWorld().getEnvironment());
             ClientboundLevelChunkPacketData chunkData = packet.getSpecificModifier(ClientboundLevelChunkPacketData.class).read(0);
 
-            PacketHandlerHelper.INSTANCE.modifyChunkBiomes(chunkData, override.customBiome(), dimensionSectionCount);
+            NativeMinecraftPacketHandlerHelper.INSTANCE.modifyChunkBiomes(chunkData, override.customBiome(), dimensionSectionCount);
         }
     }
 

@@ -1,5 +1,7 @@
 package me.outspending.biomesapi.annotations;
 
+import org.jetbrains.annotations.ApiStatus;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -21,6 +23,7 @@ import java.lang.annotation.Target;
  *
  * In the above example, the {@code someApiMethod} method has been present or modified since version 1.0.
  */
+@ApiStatus.Internal
 @Retention(RetentionPolicy.RUNTIME)
 @Target({
         ElementType.METHOD,

@@ -19,6 +19,7 @@ import org.bukkit.block.Biome;
 import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.craftbukkit.block.CraftBiome;
 import org.bukkit.craftbukkit.util.CraftMagicNumbers;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
@@ -26,14 +27,15 @@ import java.lang.reflect.Field;
 /**
  * Internal helper class for packet handling related to chunk data and biome modification.
  *
- * @version 0.0.6
+ * @version 0.0.19
  * @since 0.0.6
  * @author Jsinco
  */
-@AsOf("0.0.6")
-class PacketHandlerHelper {
+@AsOf("0.0.19")
+@ApiStatus.Internal
+class NativeMinecraftPacketHandlerHelper {
 
-    static PacketHandlerHelper INSTANCE = new PacketHandlerHelper();
+    static NativeMinecraftPacketHandlerHelper INSTANCE = new NativeMinecraftPacketHandlerHelper();
 
     static int CHUNK_SECTION_SIZE = 16; // Each chunk section is 16x16x16 blocks
     static int CHUNK_SECTIONS = 4; // Each chunk section has 4x4x4 = 64 biome entries

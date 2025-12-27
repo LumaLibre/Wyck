@@ -1,8 +1,9 @@
 package me.outspending.biomesapi.packet;
 
 import me.outspending.biomesapi.annotations.AsOf;
-import me.outspending.biomesapi.exceptions.MissingPacketLibraryException;
+import me.outspending.biomesapi.exceptions.MissingPacketManipulatorLibraryException;
 import me.outspending.biomesapi.packet.data.PhonyCustomBiome;
+import me.outspending.biomesapi.packet.handlers.PacketEventsPacketHandler;
 import me.outspending.biomesapi.packet.handlers.ProtocolLibPacketHandler;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
 import org.bukkit.World;
@@ -19,13 +20,12 @@ import org.jetbrains.annotations.NotNull;
  * An external packet handling library (either ProtocolLib or PacketEvents) is required
  * for this interface.
  * </p>
- * @version 0.0.10
+ * @version 0.0.19
  * @since 0.0.6
  * @author Jsinco
  */
-@me.outspending.biomesapi.annotations.Experimental
 @ApiStatus.Experimental
-@AsOf("0.0.10")
+@AsOf("0.0.19")
 public interface PacketHandler {
 
 
@@ -34,10 +34,27 @@ public interface PacketHandler {
      * The packet listener priority defaults to NORMAL.
      * @param provider The plugin providing this PacketHandler
      * @return A new PacketHandler instance
+     * @since 0.0.6
+     * @throws MissingPacketManipulatorLibraryException if ProtocolLib is not installed
+     * @deprecated use {@link #of(Plugin, Manipulator)} or {@link #of(Plugin, Manipulator, Priority)} instead
      */
+    @Deprecated(since = "0.0.19")
     @AsOf("0.0.6")
     static @NotNull PacketHandler of(@NotNull Plugin provider) {
-        return of(provider, Priority.NORMAL);
+        return of(provider, Manipulator.PROTOCOLLIB, Priority.NORMAL);
+    }
+
+    /**
+     * Creates a PacketHandler using ProtocolLib as the underlying packet manipulation library.
+     * The packet listener priority defaults to NORMAL.
+     * @param provider The plugin providing this PacketHandler
+     * @return A new PacketHandler instance
+     * @since 0.0.19
+     * @throws MissingPacketManipulatorLibraryException if the specified manipulator library is not installed
+     */
+    @AsOf("0.0.19")
+    static @NotNull PacketHandler of(@NotNull Plugin provider, @NotNull Manipulator manipulator) {
+        return of(provider, manipulator, Priority.NORMAL);
     }
 
     /**
@@ -45,14 +62,12 @@ public interface PacketHandler {
      * @param provider The plugin providing this PacketHandler
      * @param priority The priority of the packet listener
      * @return A new PacketHandler instance
+     * @since 0.0.6
+     * @throws MissingPacketManipulatorLibraryException if the specified manipulator library is not installed
      */
-    @AsOf("0.0.6")
-    static @NotNull PacketHandler of(@NotNull Plugin provider, @NotNull PacketHandler.Priority priority) {
-        try {
-            return new ProtocolLibPacketHandler(provider, priority);
-        } catch (ClassNotFoundException e) {
-            throw new MissingPacketLibraryException("Could not find ProtocolLib classes. Please ensure ProtocolLib is installed.", e);
-        }
+    @AsOf("0.0.19")
+    static @NotNull PacketHandler of(@NotNull Plugin provider, @NotNull Manipulator manipulator, @NotNull PacketHandler.Priority priority) {
+        return manipulator.create(provider, priority);
     }
 
     /**
@@ -214,4 +229,61 @@ public interface PacketHandler {
 
     }
 
+    /**
+     * Enum constant for supported packet manipulation libraries.
+     * @version 0.0.19
+     * @since 0.0.19
+     */
+    @AsOf("0.0.19")
+    enum Manipulator {
+        PROTOCOLLIB(
+                "ProtocolLib",
+                "com.comphenix.protocol.ProtocolLibrary",
+                (provider, priority) -> new ProtocolLibPacketHandler(provider, priority)
+        ),
+        PACKETEVENTS(
+                "PacketEvents",
+                "com.github.retrooper.packetevents.PacketEvents",
+                (provider, priority) -> new PacketEventsPacketHandler(priority)
+        );
+
+        private final String name;
+        private final String owningClass;
+        private final PacketHandlerFactory factory;
+
+        Manipulator(String name, String owningClass, PacketHandlerFactory factory) {
+            this.name = name;
+            this.owningClass = owningClass;
+            this.factory = factory;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getOwningClass() {
+            return owningClass;
+        }
+
+        public boolean isAvailable() {
+            try {
+                Class.forName(owningClass);
+                return true;
+            } catch (ClassNotFoundException e) {
+                return false;
+            }
+        }
+
+        public PacketHandler create(@NotNull Plugin provider, @NotNull PacketHandler.Priority priority) throws MissingPacketManipulatorLibraryException {
+            if (!isAvailable()) {
+                throw new MissingPacketManipulatorLibraryException("Could not find required classes for " + name + ". Please ensure " + name + " is installed.");
+            }
+            return factory.create(provider, priority);
+        }
+
+        @FunctionalInterface
+        private interface PacketHandlerFactory {
+            @NotNull PacketHandler create(@NotNull Plugin provider, @NotNull PacketHandler.Priority priority);
+        }
+    }
 }

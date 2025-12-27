@@ -1,6 +1,7 @@
 name: BiomesAPITest
 main: me.outspending.biomesapi.BiomesAPITest
-version: '0.0.4'
+version: '0.0.19'
 api-version: 1.21
 softdepend:
   - ProtocolLib
+  - PacketEvents

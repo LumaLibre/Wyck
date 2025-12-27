@@ -1,6 +1,7 @@
 package me.outspending.biomesapi;
 
-import me.outspending.biomesapi.biome.BiomeHandler;
+import io.papermc.paper.connection.PlayerConfigurationConnection;
+import io.papermc.paper.event.connection.configuration.PlayerConnectionReconfigureEvent;
 import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.packet.PacketHandler;
 import me.outspending.biomesapi.packet.data.PhonyCustomBiome;
@@ -8,11 +9,18 @@ import me.outspending.biomesapi.packet.data.BlockReplacement;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
 import me.outspending.biomesapi.renderer.AmbientParticle;
 import me.outspending.biomesapi.renderer.ParticleRenderer;
+import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 public final class BiomesAPITest extends JavaPlugin implements Listener {
 
@@ -31,11 +39,14 @@ public final class BiomesAPITest extends JavaPlugin implements Listener {
 
 
 
-
+    private final List<UUID> reconfiguring = new ArrayList<>();
     private PacketHandler packetHandler;
 
     @Override
     public void onEnable() {
+
+        getServer().getPluginManager().registerEvents(this, this);
+
         CustomBiome biome = CustomBiome.builder()
                 .resourceKey(BiomeResourceKey.of("test", "custombiome"))
                 .settings(BiomeSettings.defaultSettings())
@@ -53,10 +64,11 @@ public final class BiomesAPITest extends JavaPlugin implements Listener {
                 .build();
 
         biome.register();
-        getServer().getPluginManager().registerEvents(this, this);
 
-        packetHandler = PacketHandler.of(this);
+
+        packetHandler = PacketHandler.of(this, PacketHandler.Manipulator.PACKETEVENTS);
         packetHandler.register();
+
 
         PhonyCustomBiome phonyCustomBiome = PhonyCustomBiome.builder()
                 .setCustomBiome(biome)
@@ -72,30 +84,26 @@ public final class BiomesAPITest extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent e) {
-        CustomBiome biome = BiomeHandler.getBiome(BiomeResourceKey.of("test", "custombiome"));
-        if (biome == null) {
-            e.getPlayer().sendMessage("biome is null");
-            return;
+        Bukkit.getScheduler().runTaskLater(this, () -> {
+            Player player = e.getPlayer();
+
+            player.getConnection().reenterConfiguration();
+            reconfiguring.add(player.getUniqueId());
+        }, 20);
+
+
+    }
+
+
+    @EventHandler
+    public void onPlayerPlayerConnectionReconfigure(PlayerConnectionReconfigureEvent event) {
+        PlayerConfigurationConnection connection = event.getConnection();
+        connection.completeReconfiguration();
+
+        UUID uuid = connection.getProfile().getId();
+        if (reconfiguring.contains(uuid)) {
+            connection.getAudience().sendMessage(Component.text("Reconfigured connection for biome changes!"));
+            reconfiguring.remove(uuid);
         }
-
-
-
-
-
-        //BiomeRegistry.newRegistry().modify(yellowBiome);
-
-        e.getPlayer().sendMessage("registered");
-
-//        BiomeUpdater biomeUpdater = BiomeUpdater.of();
-//        biomeUpdater.updateChunksForPlayer(e.getPlayer());
-
-//        World world = e.getBlock().getWorld();
-//        for (Chunk loadedChunk : world.getLoadedChunks()) {
-//            BiomeSetter.of().setChunkBiome(loadedChunk, biome, true);
-//        }
-
-
-        //BiomeSetter.of().setChunkBiome(e.getBlock().getChunk(), biome, true);
-        //BiomeSetter.of().setBlockBiome(e.getBlock(), biome, true);
     }
 }
