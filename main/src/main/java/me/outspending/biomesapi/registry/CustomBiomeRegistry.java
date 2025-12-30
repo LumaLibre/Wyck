@@ -134,6 +134,9 @@ public class CustomBiomeRegistry implements BiomeRegistry {
                 .build();
         BiomeSpecialEffects specialEffects = SPECIAL_EFFECTS_HANDLER.build(customBiome);
 
+        ParticleRenderer particleRenderer = customBiome.getParticleRenderer();
+        RENDERER_HANDLER.handle(particleRenderer, environmentAttributeMap);
+
 
         // Time to reflect
         try {
