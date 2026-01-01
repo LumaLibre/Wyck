@@ -94,10 +94,9 @@ public class CustomBiomeRegistry implements BiomeRegistry {
                 // Add the custom biome to the list of registered biomes
                 BiomeHandler.getRegisteredBiomes().add(biome);
 
-                if (registry.containsKey(resourceLocation)) {
-                    throw new IllegalArgumentException("Biome " + resourceLocation + " is already registered");
+                if (!registry.containsKey(resourceLocation)) {
+                    Registry.register(registry, resourceLocation, createdBiome);
                 }
-                Registry.register(registry, resourceLocation, createdBiome);
             });
 
             return null;
