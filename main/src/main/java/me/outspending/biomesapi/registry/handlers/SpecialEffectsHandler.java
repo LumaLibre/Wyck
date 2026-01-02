@@ -24,7 +24,9 @@ public class SpecialEffectsHandler implements BuilderHandler<Biome.BiomeBuilder,
                 .foliageColorOverride(biome.getFoliageColor())
                 .waterColor(biome.getWaterColor())
                 .grassColorOverride(biome.getGrassColor())
-                .grassColorModifier(biome.getGrassColorModifier().getDelegateModifier());
+                .grassColorModifier(biome.getGrassColorModifier().getDelegateModifier())
+                .dryFoliageColorOverride(biome.getFoliageColor())
+                ;
 
         return builder.build();
     }
