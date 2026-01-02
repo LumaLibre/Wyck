@@ -7,7 +7,7 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeSpecialEffects;
 import org.jetbrains.annotations.NotNull;
 
-@AsOf("0.0.24")
+@AsOf("0.0.25")
 public class SpecialEffectsHandler implements BuilderHandler<Biome.BiomeBuilder, BiomeSpecialEffects> {
 
     @Override
