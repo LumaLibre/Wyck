@@ -2,6 +2,7 @@ package me.outspending.biomesapi.biome;
 
 import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.BiomeSettings;
+import me.outspending.biomesapi.GrassColorModifier;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.packet.data.BlockReplacement;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
@@ -15,11 +16,11 @@ import org.jetbrains.annotations.NotNull;
  * This interface represents a custom biome in the BiomesAPI.
  * It provides methods to retrieve and modify the properties of the custom biome.
  *
- * @version 0.0.17
+ * @version 0.0.24
  * @since 0.0.1
  * @author Outspending
  */
-@AsOf("0.0.17")
+@AsOf("0.0.24")
 public interface CustomBiome {
 
     /**
@@ -124,6 +125,15 @@ public interface CustomBiome {
     int getGrassColor();
 
     /**
+     * Returns the GrassColorModifier of the CustomBiome.
+     *
+     * @return the GrassColorModifier of the CustomBiome
+     * @since 0.0.24
+     */
+    @AsOf("0.0.24")
+    GrassColorModifier getGrassColorModifier();
+
+    /**
      * Returns the ParticleRenderer of the CustomBiome.
      *
      * @return the ParticleRenderer of the CustomBiome
@@ -194,6 +204,15 @@ public interface CustomBiome {
      */
     @AsOf("0.0.5")
     void setGrassColor(int grassColor);
+
+    /**
+     * Sets the GrassColorModifier of the CustomBiome.
+     *
+     * @param grassColorModifier the GrassColorModifier of the CustomBiome
+     * @since 0.0.24
+     */
+    @AsOf("0.0.24")
+    void setGrassColorModifier(@NotNull GrassColorModifier grassColorModifier);
 
     /**
      * Sets the ParticleRenderer of the CustomBiome.
@@ -274,6 +293,7 @@ public interface CustomBiome {
         private int foliageColor = 0;
         private int grassColor = 0;
 
+        private GrassColorModifier grassColorModifier = GrassColorModifier.NONE;
         private ParticleRenderer particleRenderer = null;
         private BlockReplacement[] blockReplacements = new BlockReplacement[0];
 
@@ -317,6 +337,7 @@ public interface CustomBiome {
             this.grassColor = biome.getGrassColor();
             this.particleRenderer = biome.getParticleRenderer();
             this.blockReplacements = biome.getBlockReplacements();
+            this.grassColorModifier = biome.getGrassColorModifier();
         }
 
         /**
@@ -502,6 +523,19 @@ public interface CustomBiome {
         }
 
         /**
+         * This method sets the grass color modifier property of the CustomBiome.
+         *
+         * @param grassColorModifier The grass color modifier of the custom biome.
+         * @version 0.0.24
+         * @return The Builder object, for chaining method calls.
+         */
+        @AsOf("0.0.24")
+        public @NotNull Builder grassColorModifier(@NotNull GrassColorModifier grassColorModifier) {
+            this.grassColorModifier = grassColorModifier;
+            return this;
+        }
+
+        /**
          * This method sets the particle renderer property of the CustomBiome.
          *
          * @param particleRenderer The particle renderer of the custom biome.
@@ -548,6 +582,7 @@ public interface CustomBiome {
                     skyColor,
                     foliageColor,
                     grassColor,
+                    grassColorModifier,
                     particleRenderer,
                     blockReplacements
             );

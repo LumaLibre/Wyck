@@ -7,7 +7,7 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeSpecialEffects;
 import org.jetbrains.annotations.NotNull;
 
-@AsOf("0.1.0")
+@AsOf("0.0.24")
 public class SpecialEffectsHandler implements BuilderHandler<Biome.BiomeBuilder, BiomeSpecialEffects> {
 
     @Override
@@ -23,7 +23,8 @@ public class SpecialEffectsHandler implements BuilderHandler<Biome.BiomeBuilder,
         BiomeSpecialEffects.Builder builder = new BiomeSpecialEffects.Builder()
                 .foliageColorOverride(biome.getFoliageColor())
                 .waterColor(biome.getWaterColor())
-                .grassColorOverride(biome.getGrassColor());
+                .grassColorOverride(biome.getGrassColor())
+                .grassColorModifier(biome.getGrassColorModifier().getDelegateModifier());
 
         return builder.build();
     }

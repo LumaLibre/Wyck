@@ -3,6 +3,7 @@ package me.outspending.biomesapi.biome;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
 import me.outspending.biomesapi.BiomeSettings;
+import me.outspending.biomesapi.GrassColorModifier;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.packet.data.BlockReplacement;
 import me.outspending.biomesapi.registry.BiomeRegistry;
@@ -17,10 +18,10 @@ import org.jetbrains.annotations.NotNull;
  * This class represents a custom biome implementation.
  *
  * @author Outspending
- * @version 0.0.6
+ * @version 0.0.24
  * @since 0.0.2
  */
-@AsOf("0.0.6")
+@AsOf("0.0.24")
 public final class CustomBiomeImpl implements CustomBiome {
 
     // Required Settings
@@ -38,6 +39,7 @@ public final class CustomBiomeImpl implements CustomBiome {
     private int grassColor = 0;
 
     // Optional Settings
+    private GrassColorModifier grassColorModifier = GrassColorModifier.NONE;
     private ParticleRenderer particleRenderer;
     private BlockReplacement[] blockReplacements;
 
@@ -84,7 +86,7 @@ public final class CustomBiomeImpl implements CustomBiome {
         this.blockReplacements = new BlockReplacement[0];
     }
 
-    @AsOf("0.0.6")
+    @AsOf("0.0.24")
     public CustomBiomeImpl(
             @NotNull BiomeResourceKey resourceKey,
             @NotNull BiomeSettings settings,
@@ -96,12 +98,14 @@ public final class CustomBiomeImpl implements CustomBiome {
             int foliageColor,
             int grassColor,
 
+            @NotNull GrassColorModifier grassColorModifier,
             @NotNull ParticleRenderer particleRenderer,
             @NotNull BlockReplacement[] blockReplacements
     ) {
         this(resourceKey, settings, fogColor, waterColor, waterFogColor, skyColor, particleRenderer);
         this.foliageColor = foliageColor;
         this.grassColor = grassColor;
+        this.grassColorModifier = grassColorModifier;
         this.blockReplacements = blockReplacements;
     }
 
@@ -157,6 +161,11 @@ public final class CustomBiomeImpl implements CustomBiome {
     }
 
     @Override
+    public GrassColorModifier getGrassColorModifier() {
+        return grassColorModifier;
+    }
+
+    @Override
     public @NotNull ParticleRenderer getParticleRenderer() {
         return particleRenderer;
     }
@@ -194,6 +203,11 @@ public final class CustomBiomeImpl implements CustomBiome {
     @Override
     public void setGrassColor(int grassColor) {
         this.grassColor = grassColor;
+    }
+
+    @Override
+    public void setGrassColorModifier(@NotNull GrassColorModifier grassColorModifier) {
+        this.grassColorModifier = grassColorModifier;
     }
 
     @Override
