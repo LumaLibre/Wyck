@@ -22,6 +22,7 @@ import net.minecraft.world.level.biome.MobSpawnSettings;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
+import java.util.List;
 
 // TODO: should possibly be moved down to NMS-level packages
 /**
@@ -91,12 +92,12 @@ public class CustomBiomeRegistry implements BiomeRegistry {
                 // Register the new Biome object to the biome registry
                 Biome createdBiome = biomeBuilder.build();
 
-                // Add the custom biome to the list of registered biomes
-                BiomeHandler.getRegisteredBiomes().add(biome);
-
                 if (!registry.containsKey(resourceLocation)) {
                     Registry.register(registry, resourceLocation, createdBiome);
                 }
+
+                // Add the custom biome to the list of registered biomes
+                BiomeHandler.getRegisteredBiomes().add(biome);
             });
 
             return null;
@@ -130,16 +131,18 @@ public class CustomBiomeRegistry implements BiomeRegistry {
 
         // Rebuild biome components
         Biome.ClimateSettings climateSettings = new Biome.ClimateSettings(settings.hasPrecipitation(), settings.temperature(), settings.modifier().getModifier(), settings.downfall());
+        ParticleRenderer particleRenderer = customBiome.getParticleRenderer();
+        List<net.minecraft.world.attribute.AmbientParticle> particles = RENDERER_HANDLER.create(particleRenderer);
+
+
         EnvironmentAttributeMap environmentAttributeMap = EnvironmentAttributeMap.builder()
                 .set(EnvironmentAttributes.FOG_COLOR, customBiome.getFogColor())
                 .set(EnvironmentAttributes.SKY_COLOR, customBiome.getSkyColor())
                 .set(EnvironmentAttributes.WATER_FOG_COLOR, customBiome.getWaterColor())
+                .set(EnvironmentAttributes.AMBIENT_PARTICLES, particles)
                 .build();
+
         BiomeSpecialEffects specialEffects = SPECIAL_EFFECTS_HANDLER.build(customBiome);
-
-        ParticleRenderer particleRenderer = customBiome.getParticleRenderer();
-        RENDERER_HANDLER.handle(particleRenderer, environmentAttributeMap);
-
 
         // Time to reflect
         try {
