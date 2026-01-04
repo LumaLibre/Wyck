@@ -45,9 +45,10 @@ allprojects {
 }
 
 gradle.taskGraph.whenReady {
-    // :)
     if (isSnapshot) {
         println("📦 Building SNAPSHOT version: $version")
+    } else {
+        println("📦 Building STABLE version: $version")
     }
 }
 

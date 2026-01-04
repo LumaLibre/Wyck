@@ -46,7 +46,7 @@ public class NMS_v1_21_R7 implements NMS {
      * @param key The key for the registry to retrieve.
      * @return The registry associated with the given key.
      */
-    private static <T> MappedRegistry<T> getRegistry(ResourceKey<@NotNull Registry<@NotNull T>> key) {
+    private static <T> MappedRegistry<@NotNull T> getRegistry(ResourceKey<@NotNull Registry<@NotNull T>> key) {
         DedicatedServer server = ((CraftServer) Bukkit.getServer()).getServer();
         return (MappedRegistry<@NotNull T>) server.registryAccess().lookup(key).orElseThrow();
     }
