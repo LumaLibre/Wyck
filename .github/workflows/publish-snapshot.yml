@@ -1,4 +1,4 @@
-name: publish-snapshot.yml
+name: Publish Snapshot API
 on:
   push:
     branches: [main]
