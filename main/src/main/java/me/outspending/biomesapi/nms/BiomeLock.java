@@ -1,7 +1,6 @@
-package me.outspending.biomesapi;
+package me.outspending.biomesapi.nms;
 
 import me.outspending.biomesapi.annotations.AsOf;
-import me.outspending.biomesapi.nms.NMSHandler;
 
 import java.util.function.Supplier;
 

@@ -16,15 +16,18 @@ import org.jetbrains.annotations.NotNull;
  * It uses the @AsOf annotation to indicate the version since the class or its methods have been present or modified.
  * It is a final class, meaning it cannot be subclassed.
  *
- * @version 0.0.1
+ * @version 1.0.1
  * @since 0.0.1
  * @author Outspending
  */
-@AsOf("0.0.1")
+@AsOf("1.0.1")
 public interface BiomeSetter {
 
-    int MIN_HEIGHT = -64;
-    int MAX_HEIGHT = 320;
+    int OVERWORLD_MIN_HEIGHT = -64;
+    int OVERWORLD_MAX_HEIGHT = 320;
+
+    int NETHER_END_MIN_HEIGHT = 0;
+    int NETHER_END_MAX_HEIGHT = 128;
 
     /**
      * Returns a new instance of the BiomeSetter interface.

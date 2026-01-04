@@ -1,0 +1,117 @@
+---
+title: The CustomBiome
+description: Custom biomes
+---
+
+import { Tabs, TabItem } from "@astrojs/starlight/components";
+
+The `CustomBiome` object is your gateway into creating custom biomes with **BiomesAPI**.
+Currently most attributes for `CustomBiomes` are visual, but we'll be adding gameplay changes and exposing more of internal biome attributes as time goes on!
+
+### When to create biomes
+
+Biomes can be created at any point during your plugin's lifecycle and there is no limit to how many biomes you create or register.
+Although, you should be aware of some of the [caveats](/guides/components/biome-registry/#registry-de-sync) with registering biomes too.
+
+If you *know* how many custom biomes you're going to create, then we recommend creating them in your `JavaPlugin#onEnable()` method.
+An example of this could be a seasons plugin. You only have **4** seasons, so you should create those **4** biomes early on to avoid any client de-sync issues.
+
+
+### Using created biomes
+
+Creating and registering your custom biome is not enough. You'll need to actually **render** your biome somewhere if you want players to be able to see it.
+BiomesAPI has **two** methods of doing this.
+
+**See the guides below for doing that:**
+- [BiomeSetter](/guides/interfaces/biome-setter/)
+- [PacketHandler](/guides/interfaces/packet-handler/)
+
+
+### Referencing custom biomes elsewhere
+
+You may safely pass around references to your custom biomes as you see fit. 
+**BiomesAPI** also includes a built-in `BiomeHandler` which will allow you to get a reference to your `CustomBiome` just from a `BiomeResourceKey`.
+
+### Certain elements are specific to some renderers
+
+Some biome attributes are specific to a renderer.
+
+- The `PacketHandler` renderer cannot change gameplay elements such as spawn rates, mob spawn types, etc.
+- The `BiomeSetter` renderer cannot use block replacements since these are designed to be fake blocks changed through packets.
+
+## Examples
+
+You should create `CustomBiome`s using the provided **builder**. Any attribute can be omitted except for the `BiomeResourceKey`.
+
+
+<Tabs syncKey="language">
+    <TabItem label="Java">
+```java
+public final class ExamplePlugin extends JavaPlugin {
+
+    @Override
+    public void onEnable() {
+        // Create a basic biome. Your namespace and key should be unique.
+        CustomBiome biome = CustomBiome.builder()
+                .resourceKey(BiomeResourceKey.of("test", "custombiome"))
+                .settings(BiomeSettings.defaultSettings())
+                .fogColor("#FFFFFF")
+                .foliageColor("#F5F2EB")
+                .skyColor("#000000")
+                .waterColor("#F5F2EB")
+                .waterFogColor("#000000")
+                .grassColor("#9D00FF")
+                .particleRenderer(ParticleRenderer.of(AmbientParticle.WITCH, 0.01f))
+                // Remember that block replacements can only be seen with the PacketHandler as your biome renderer!
+                .blockReplacements(
+                        BlockReplacement.of(Material.BIRCH_LEAVES, Material.ACACIA_LEAVES),
+                )
+                .build();
+
+        // Register your biome to finalize it and send it to Minecraft's internal registry.
+        biome.register();
+
+
+        // Change your mind later? No problem! Let's modify something:
+        int red = 0xFF0000;
+        biome.foliageColor(red);
+        biome.modify(); // Connected players must re-log to see changes!
+    }
+
+}
+```
+    </TabItem>
+        <TabItem label="Kotlin">
+```kotlin
+class ExamplePlugin : JavaPlugin() {
+
+    override fun onEnable() {
+        // Create a basic biome. Your namespace and key should be unique.
+        val biome = CustomBiome.builder()
+            .resourceKey(BiomeResourceKey.of("test", "custombiome"))
+            .settings(BiomeSettings.defaultSettings())
+            .fogColor("#FFFFFF")
+            .foliageColor("#F5F2EB")
+            .skyColor("#000000")
+            .waterColor("#F5F2EB")
+            .waterFogColor("#000000")
+            .grassColor("#9D00FF")
+            .particleRenderer(ParticleRenderer.of(AmbientParticle.WITCH, 0.01f))
+            // Remember that block replacements can only be seen with the PacketHandler as your biome renderer!
+            .blockReplacements(
+                BlockReplacement.of(Material.BIRCH_LEAVES, Material.ACACIA_LEAVES),
+            )
+            .build()
+
+        // Register your biome to finalize it and send it to Minecraft's internal registry.
+        biome.register()
+
+        // Change your mind later? No problem! Let's modify something:
+        val red = 0xFF0000
+        biome.foliageColor(red)
+        biome.modify() // Connected players must re-log to see changes!
+    }
+}
+```
+    </TabItem>
+</Tabs>

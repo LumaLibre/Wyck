@@ -1,4 +1,4 @@
-package me.outspending.biomesapi.renderer;
+package me.outspending.biomesapi.wrapper;
 
 import me.outspending.biomesapi.annotations.AsOf;
 import net.minecraft.core.particles.ParticleOptions;
@@ -12,12 +12,13 @@ import org.jetbrains.annotations.NotNull;
  * This is an enumeration of all the possible ambient particles, each associated with a specific SimpleParticleType.
  * The @Getter annotation from the Lombok library is used to automatically generate a getter method for the 'particle' field.
  *
- * @version 0.0.6
+ * @version 1.0.1
  * @since 0.0.1
  * @author Outspending
  */
-@AsOf("0.0.6")
+@AsOf("1.0.1")
 public enum AmbientParticle {
+
     ASH(ParticleTypes.ASH),
     BUBBLE(ParticleTypes.BUBBLE),
     BUBBLE_COLUMN_UP(ParticleTypes.BUBBLE_COLUMN_UP),
@@ -31,19 +32,16 @@ public enum AmbientParticle {
     CURRENT_DOWN(ParticleTypes.CURRENT_DOWN),
     DAMAGE_INDICATOR(ParticleTypes.DAMAGE_INDICATOR),
     DOLPHIN(ParticleTypes.DOLPHIN),
-    //DRAGON_BREATH(ParticleTypes.DRAGON_BREATH),
     DRIPPING_DRIPSTONE_LAVA(ParticleTypes.DRIPPING_DRIPSTONE_LAVA),
     DRIPPING_DRIPSTONE_WATER(ParticleTypes.DRIPPING_DRIPSTONE_WATER),
     DRIPPING_HONEY(ParticleTypes.DRIPPING_HONEY),
     DRIPPING_OBSIDIAN_TEAR(ParticleTypes.DRIPPING_OBSIDIAN_TEAR),
     DRIPPING_WATER(ParticleTypes.DRIPPING_WATER),
-    //EFFECT(ParticleTypes.EFFECT),
     ELDER_GUARDIAN(ParticleTypes.ELDER_GUARDIAN),
     ELECTRIC_SPARK(ParticleTypes.ELECTRIC_SPARK),
     ENCHANT(ParticleTypes.ENCHANT),
     ENCHANTED_HIT(ParticleTypes.ENCHANTED_HIT),
     END_ROD(ParticleTypes.END_ROD),
-    //ENTITY_EFFECT(ParticleTypes.ENTITY_EFFECT),
     EXPLOSION(ParticleTypes.EXPLOSION),
     EXPLOSION_EMITTER(ParticleTypes.EXPLOSION_EMITTER),
     FALLING_DRIPSTONE_LAVA(ParticleTypes.FALLING_DRIPSTONE_LAVA),
@@ -56,12 +54,10 @@ public enum AmbientParticle {
     FIREWORK(ParticleTypes.FIREWORK),
     FISHING(ParticleTypes.FISHING),
     FLAME(ParticleTypes.FLAME),
-    //FLASH(ParticleTypes.FLASH),
     GLOW(ParticleTypes.GLOW),
     GLOW_SQUID_INK(ParticleTypes.GLOW_SQUID_INK),
     HAPPY_VILLAGER(ParticleTypes.HAPPY_VILLAGER),
     HEART(ParticleTypes.HEART),
-    //INSTANT_EFFECT(ParticleTypes.INSTANT_EFFECT),
     ITEM_SLIME(ParticleTypes.ITEM_SLIME),
     ITEM_SNOWBALL(ParticleTypes.ITEM_SNOWBALL),
     LANDING_HONEY(ParticleTypes.LANDING_HONEY),

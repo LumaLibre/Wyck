@@ -1,6 +1,7 @@
 package me.outspending.biomesapi.renderer;
 
 import me.outspending.biomesapi.annotations.AsOf;
+import me.outspending.biomesapi.wrapper.AmbientParticle;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;

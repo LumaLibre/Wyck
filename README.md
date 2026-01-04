@@ -27,10 +27,10 @@ Please be aware that BiomesAPI is in active development, and some features may n
 
 ## Getting Started ⭐
 
-BiomesAPI is built using Gradle and is hosted on my repository (rep.jsinco.dev). To get started with BiomesAPI,
+BiomesAPI is built using Gradle and is hosted on my repository (repo.jsinco.dev). To get started with BiomesAPI,
 follow the instructions below to add BiomesAPI to your project.
 
-1. Find the latest version of BiomesAPI [HERE](https://repo.jsinco.dev/#/releases/me/outspending/biomesapi/BiomesAPI). Versions with a git commit has at the end are snapshot builds and may be unstable.
+1. Find the latest version of BiomesAPI [HERE](https://repo.jsinco.dev/#/releases/me/outspending/biomesapi/BiomesAPI). Versions with a git commit hash at the end are snapshot builds and may be unstable.
 2. Add the repository to your `build.gradle.kts`, `build.gradle`, or `pom.xml` file.
 
 And example for Gradle Kotlin DSL is provided below:

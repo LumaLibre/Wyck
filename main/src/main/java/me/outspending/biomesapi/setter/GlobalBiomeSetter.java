@@ -18,11 +18,11 @@ import org.jetbrains.annotations.NotNull;
 /**
  * This class provides methods to set the biome of blocks, chunks, and regions in the game.
  *
- * @version 0.0.1
+ * @version 1.0.1
  * @since 0.0.1
  * @author Outspending
  */
-@AsOf("0.0.1")
+@AsOf("1.0.1")
 public class GlobalBiomeSetter implements BiomeSetter {
 
     private static final BiomeUpdater BIOME_UPDATER = BiomeUpdater.of();
@@ -49,12 +49,18 @@ public class GlobalBiomeSetter implements BiomeSetter {
 
     @Override
     public void setChunkBiome(@NotNull Chunk chunk, @NotNull CustomBiome customBiome) {
-        setChunkBiome(chunk, MIN_HEIGHT, MAX_HEIGHT, customBiome);
+        World.Environment env = chunk.getWorld().getEnvironment();
+        int minHeight = getMinHeight(env);
+        int maxHeight = getMaxHeight(env);
+        setChunkBiome(chunk, minHeight, maxHeight, customBiome);
     }
 
     @Override
     public void setChunkBiome(@NotNull Chunk chunk, @NotNull CustomBiome customBiome, boolean updateBiome) {
-        setChunkBiome(chunk, MIN_HEIGHT, MAX_HEIGHT, customBiome, updateBiome);
+        World.Environment env = chunk.getWorld().getEnvironment();
+        int minHeight = getMinHeight(env);
+        int maxHeight = getMaxHeight(env);
+        setChunkBiome(chunk, minHeight, maxHeight, customBiome, updateBiome);
     }
 
     @Override
@@ -148,6 +154,21 @@ public class GlobalBiomeSetter implements BiomeSetter {
         if (updateBiome) {
             BIOME_UPDATER.updateChunks(from, to);
         }
+    }
+
+
+    private int getMinHeight(@NotNull World.Environment environment) {
+        return switch (environment) {
+            case NORMAL, CUSTOM -> OVERWORLD_MIN_HEIGHT;
+            case NETHER, THE_END -> NETHER_END_MIN_HEIGHT;
+        };
+    }
+
+    private int getMaxHeight(@NotNull World.Environment environment) {
+        return switch (environment) {
+            case NORMAL, CUSTOM -> OVERWORLD_MAX_HEIGHT;
+            case NETHER, THE_END -> NETHER_END_MAX_HEIGHT;
+        };
     }
 
 }

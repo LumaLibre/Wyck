@@ -1,0 +1,43 @@
+---
+title: BiomeResourceKey
+description: NamespacedKeys for custom biomes
+---
+
+import { Tabs, TabItem } from "@astrojs/starlight/components";
+
+The `BiomeResourceKey` is a common component in BiomesAPI that is used to identify biomes.
+It is used extensively throughout the interfaces in BiomesAPI and is functionally identical to Namespaced keys along with beind a wrapper around Minecraft's internal **Identifier** (or **ResourceLocation** in older versions).
+
+
+## Usage
+
+<Tabs syncKey="language">
+    <TabItem label="Java">
+```java
+public class ExampleClass {
+    public boolean exampleUsage() {
+        BiomeResourceKey resourceKey1 = BiomeResourceKey.of("example", "fancybiome");
+        String resourceKey1AsString = resourceKey1.toString();
+
+        BiomeResourceKey resouceKey2 = BiomeResourceKey.fromString(resourceKey1AsString);
+
+        return resourceKey1.equals(resouceKey2);
+    }
+}
+```
+    </TabItem>
+        <TabItem label="Kotlin">
+```kotlin
+class ExampleClass {
+    fun exampleUsage(): Boolean {
+        val resourceKey1 = BiomeResourceKey.of("example", "fancybiome")
+        val resourceKey1AsString = resourceKey1.toString()
+
+        val resourceKey2 = BiomeResourceKey.fromString(resourceKey1AsString)
+
+        return resourceKey1 == resourceKey2
+    }
+}
+```
+    </TabItem>
+</Tabs>

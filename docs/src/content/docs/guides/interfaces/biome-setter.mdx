@@ -1,0 +1,65 @@
+---
+title: The BiomeSetter
+description: All about BiomesAPI's BiomeSetter
+---
+
+import { Tabs, TabItem } from "@astrojs/starlight/components";
+
+The `BiomeSetter` is an interface of BiomesAPI which allows a developer to physically change the biome of a specific chunk or chunk region.
+
+The `BiomeSetter` is an alternative to the `PacketHandler` and is one of the two ways for players to see your `CustomBiome`s.
+
+
+**When to use the BiomeSetter:**
+- When you want to change the biome of an area and 'forget' about it.
+- When you want to change gameplay elements using `CustomBiome`s.
+- When you want chunks to persist your biome to the disk as NBT.
+
+
+## Examples
+
+Using the `BiomeSetter` is incredibly straightforward.
+
+<Tabs syncKey="language">
+    <TabItem label="Java">
+```java
+public class ExampleClass {
+
+    // Calling of() creates a new instance of the BiomeSetter.
+    private static final BiomeSetter BIOME_SETTER = BiomeSetter.of();
+
+    public void setBiomeInChunk(@NotNull CustomBiome customBiome, @NotNull Chunk chunk)) {
+        // Sets the biome of a chunk to a CustomBiome and forcefully updates the chunks for nearby players.
+        BIOME_SETTER.setChunkBiome(chunk, customBiome, true);
+    }
+
+
+    public void setBiomeInChunkRegion(@NotNull CustomBiome customBiome, @NotNull Block block) {
+        // Sets the biome of a chunk region or block to a CustomBiome. Players will need to reload their chunks to see changes. 
+        BIOME_SETTER.setBlockBiome(block, customBiome);
+    }
+}
+```
+    </TabItem>
+        <TabItem label="Kotlin">
+```kotlin
+class ExampleClass {
+
+    companion object {
+        // Calling of() creates a new instance of the BiomeSetter.
+        private val BIOME_SETTER: BiomeSetter = BiomeSetter.of()
+    }
+
+    fun setBiomeInChunk(customBiome: CustomBiome, chunk: Chunk) {
+        // Sets the biome of a chunk to a CustomBiome and forcefully updates the chunks for nearby players.
+        BIOME_SETTER.setChunkBiome(chunk, customBiome, true)
+    }
+
+    fun setBiomeInChunkRegion(customBiome: CustomBiome, block: Block) {
+        // Sets the biome of a chunk region or block to a CustomBiome. Players will need to reload their chunks to see changes.
+        BIOME_SETTER.setBlockBiome(block, customBiome)
+    }
+}
+```
+    </TabItem>
+</Tabs>

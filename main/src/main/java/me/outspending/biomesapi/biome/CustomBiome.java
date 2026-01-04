@@ -1,8 +1,8 @@
 package me.outspending.biomesapi.biome;
 
 import com.google.common.base.Preconditions;
-import me.outspending.biomesapi.BiomeSettings;
-import me.outspending.biomesapi.GrassColorModifier;
+import me.outspending.biomesapi.wrapper.BiomeSettings;
+import me.outspending.biomesapi.wrapper.GrassColorModifier;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.packet.data.BlockReplacement;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
@@ -226,6 +226,7 @@ public interface CustomBiome {
     /**
      * Sets the BlockReplacements of the CustomBiome.
      *
+     * @apiNote Block replacements are only supported when rendering custom biomes to clients via the {@link me.outspending.biomesapi.packet.PacketHandler}.
      * @param blockReplacements the BlockReplacements of the CustomBiome
      * @since 0.0.6
      */
@@ -283,7 +284,7 @@ public interface CustomBiome {
     class Builder {
 
         private BiomeResourceKey resourceKey = null;
-        private BiomeSettings settings = null;
+        private BiomeSettings settings = BiomeSettings.defaultSettings();
 
         private int fogColor = 0;
         private int waterColor = 0;
@@ -551,9 +552,9 @@ public interface CustomBiome {
         /**
          * This method sets the block replacements property of the CustomBiome.
          *
-         *
+         * @apiNote Block replacements are only supported when rendering custom biomes to clients via the {@link me.outspending.biomesapi.packet.PacketHandler}.
          * @param blockReplacements The block replacements of the custom biome.
-         * @version 0.0.6
+         * @since  0.0.6
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("0.0.6")

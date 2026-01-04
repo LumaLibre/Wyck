@@ -1,8 +1,8 @@
 package me.outspending.biomesapi.registry;
 
 import com.google.common.base.Preconditions;
-import me.outspending.biomesapi.BiomeLock;
-import me.outspending.biomesapi.BiomeSettings;
+import me.outspending.biomesapi.nms.BiomeLock;
+import me.outspending.biomesapi.wrapper.BiomeSettings;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.biome.BiomeHandler;
 import me.outspending.biomesapi.biome.CustomBiome;

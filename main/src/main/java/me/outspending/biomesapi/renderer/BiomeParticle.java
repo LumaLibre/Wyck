@@ -1,16 +1,19 @@
 package me.outspending.biomesapi.renderer;
 
 import me.outspending.biomesapi.annotations.AsOf;
+import me.outspending.biomesapi.wrapper.AmbientParticle;
 import net.minecraft.core.particles.*;
 
 /**
  * An interface containing constants for various biome particle types.
  *
+ * @deprecated Use {@link AmbientParticle} instead.
  * @version 0.0.1
  * @since 0.0.1
  * @author Outspending
  */
 @AsOf("0.0.1")
+@Deprecated(since = "1.0.1", forRemoval = true)
 public interface BiomeParticle {
     ParticleType<ColorParticleOption> AMBIENT_ENTITY_EFFECT = ParticleTypes.ENTITY_EFFECT;
     SimpleParticleType ANGRY_VILLAGER = ParticleTypes.ANGRY_VILLAGER;

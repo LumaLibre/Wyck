@@ -2,8 +2,8 @@ package me.outspending.biomesapi.biome;
 
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
-import me.outspending.biomesapi.BiomeSettings;
-import me.outspending.biomesapi.GrassColorModifier;
+import me.outspending.biomesapi.wrapper.BiomeSettings;
+import me.outspending.biomesapi.wrapper.GrassColorModifier;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.packet.data.BlockReplacement;
 import me.outspending.biomesapi.registry.BiomeRegistry;
