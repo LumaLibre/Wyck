@@ -15,7 +15,7 @@
 
 ## About 📃
 
-BiomesAPI is a Custom Biome API for PaperMC Servers. This API is a fork of Outspending's original BiomesAPI and
+BiomesAPI is a custom biome API for PaperMC Servers. This API is a fork of Outspending's original BiomesAPI and
 has been updated to support the **modern** Minecraft versions. Currently, we support Minecraft **1.21.11**
 but version support will expand with time.
 
