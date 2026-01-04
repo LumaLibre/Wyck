@@ -1,6 +1,6 @@
 package me.outspending.biomesapi.nms;
 
-import me.outspending.biomesapi.NMS_v1_21_R9;
+import me.outspending.biomesapi.NMS_v1_21_R7;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.exceptions.UnknownNMSVersionException;
 import org.bukkit.Bukkit;
@@ -14,11 +14,11 @@ import java.util.function.Consumer;
  * This class is annotated with @UtilityClass from the Lombok library, which indicates that this is a utility class and hence, cannot be instantiated.
  * It also generates a private no-args constructor, which throws an exception when invoked.
  *
- * @version 0.0.1
+ * @version 1.0.0
  * @since 0.0.1
  * @author Outspending
  */
-@AsOf("0.0.1")
+@AsOf("1.0.0")
 public class NMSHandler {
 
     /**
@@ -51,22 +51,16 @@ public class NMSHandler {
      * The version is then used in a switch statement to instantiate the appropriate NMS version.
      * If the server's version is not supported, a RuntimeException is thrown.
      *
-     * @throws RuntimeException if the server's version is not supported
-     * @version 0.0.1
+     * @throws UnknownNMSVersionException if the server's version is not supported
+     * @since 0.0.1
      */
-    @AsOf("0.0.1")
+    @AsOf("1.0.0")
     static void init() {
         if (isNMSLoaded()) return;
 
         String version = Bukkit.getMinecraftVersion();
         switch (version) {
-            case "1.19.3" -> NMS_VERSION = new NMS_v1_19_R2();
-            case "1.19.4" -> NMS_VERSION = new NMS_v1_19_R3();
-            case "1.20", "1.20.1" -> NMS_VERSION = new NMS_v1_20_R1();
-            case "1.20.2" -> NMS_VERSION = new NMS_v1_20_R2();
-            case "1.20.3", "1.20.4" -> NMS_VERSION = new NMS_v1_20_R3();
-            case "1.21.3", "1.21.4" -> NMS_VERSION = new NMS_v1_21_R3();
-            case "1.21.11", "1.21.10" -> NMS_VERSION = new NMS_v1_21_R9();
+            case "1.21.11", "1.21.10" -> NMS_VERSION = new NMS_v1_21_R7();
             default -> throw new UnknownNMSVersionException("The version " + version + " is not supported by BiomesAPI. Make sure you are up-to-date with the latest version of BiomesAPI.");
         }
     }

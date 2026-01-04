@@ -1,0 +1,21 @@
+[versions]
+paperweight-userdev = "2.0.0-beta.19"
+gradleup-shadow = "9.0.0-beta9"
+kyori-adventure = "4.17.0"
+protocollib = "5.4.0"
+packetevents = "2.11.1"
+google-guava = "33.5.0-jre"
+minecraft-v1-m21-r7 = "1.21.11-R0.1-SNAPSHOT"
+run-paper = "2.3.1"
+
+[plugins]
+paperweight-userdev = { id = "io.papermc.paperweight.userdev", version.ref = "paperweight-userdev" }
+gradleup-shadow = { id = "com.gradleup.shadow", version.ref = "gradleup-shadow" }
+run-paper = { id = "xyz.jpenilla.run-paper", version.ref = "run-paper" }
+
+[libraries]
+kyori-adventure = { group = "net.kyori", name = "adventure-api", version.ref = "kyori-adventure" }
+kyori-minimessage = { group = "net.kyori", name = "adventure-text-minimessage", version.ref = "kyori-adventure" }
+protocollib = { group = "net.dmulloy2", name = "ProtocolLib", version.ref = "protocollib" }
+packetevents = { group = "com.github.retrooper", name = "packetevents-spigot", version.ref = "packetevents" }
+google-guava = { group = "com.google.guava", name = "guava", version.ref = "google-guava" }
