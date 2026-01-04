@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.run.paper)
+    alias(libs.plugins.plugin.yml.bukkit)
 }
 
 dependencies {
@@ -24,7 +25,16 @@ tasks {
     runServer {
         minecraftVersion("1.21.11")
         downloadPlugins {
-            url("https://github.com/retrooper/packetevents/releases/download/v2.11.1/packetevents-spigot-2.11.1.jar")
+            modrinth("packetevents", "2.11.1+spigot")
+            // ProtocolLib has no direct downloads, maybe figure out how to unzip then add locally?
         }
     }
+}
+
+bukkit {
+    name = "BiomesAPITest"
+    main = "me.outspending.biomesapi.BiomesAPITest"
+    version = project.version.toString()
+    apiVersion = "1.21"
+    softDepend = listOf("ProtocolLib", "PacketEvents")
 }

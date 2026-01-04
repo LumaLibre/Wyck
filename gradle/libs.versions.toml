@@ -7,11 +7,13 @@ packetevents = "2.11.1"
 google-guava = "33.5.0-jre"
 minecraft-v1-m21-r7 = "1.21.11-R0.1-SNAPSHOT"
 run-paper = "2.3.1"
+plugin-yml-bukkit = "0.7.1"
 
 [plugins]
 paperweight-userdev = { id = "io.papermc.paperweight.userdev", version.ref = "paperweight-userdev" }
 gradleup-shadow = { id = "com.gradleup.shadow", version.ref = "gradleup-shadow" }
 run-paper = { id = "xyz.jpenilla.run-paper", version.ref = "run-paper" }
+plugin-yml-bukkit = { id = "de.eldoria.plugin-yml.bukkit", version.ref = "plugin-yml-bukkit" }
 
 [libraries]
 kyori-adventure = { group = "net.kyori", name = "adventure-api", version.ref = "kyori-adventure" }
