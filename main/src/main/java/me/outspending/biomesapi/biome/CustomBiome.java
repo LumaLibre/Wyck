@@ -16,11 +16,11 @@ import org.jetbrains.annotations.NotNull;
  * This interface represents a custom biome in the BiomesAPI.
  * It provides methods to retrieve and modify the properties of the custom biome.
  *
- * @version 0.0.24
+ * @version 1.0.2
  * @since 0.0.1
  * @author Outspending
  */
-@AsOf("0.0.24")
+@AsOf("1.0.2")
 public interface CustomBiome {
 
     /**
@@ -125,6 +125,15 @@ public interface CustomBiome {
     int getGrassColor();
 
     /**
+     * Returns the dry foliage color of the CustomBiome.
+     *
+     * @return the dry foliage color of the CustomBiome
+     * @since 1.0.2
+     */
+    @AsOf("1.0.2")
+    int getDryFoliageColor();
+
+    /**
      * Returns the GrassColorModifier of the CustomBiome.
      *
      * @return the GrassColorModifier of the CustomBiome
@@ -204,6 +213,15 @@ public interface CustomBiome {
      */
     @AsOf("0.0.5")
     void setGrassColor(int grassColor);
+
+    /**
+     * Sets the dry foliage color of the CustomBiome.
+     *
+     * @param dryFoliageColor the dry foliage color of the CustomBiome
+     * @since 1.0.2
+     */
+    @AsOf("1.0.2")
+    void setDryFoliageColor(int dryFoliageColor);
 
     /**
      * Sets the GrassColorModifier of the CustomBiome.
@@ -293,6 +311,7 @@ public interface CustomBiome {
 
         private int foliageColor = 0;
         private int grassColor = 0;
+        private int dryFoliageColor = 0;
 
         private GrassColorModifier grassColorModifier = GrassColorModifier.NONE;
         private ParticleRenderer particleRenderer = null;
@@ -336,9 +355,10 @@ public interface CustomBiome {
             this.skyColor = biome.getSkyColor();
             this.foliageColor = biome.getFoliageColor();
             this.grassColor = biome.getGrassColor();
+            this.dryFoliageColor = biome.getDryFoliageColor();
+            this.grassColorModifier = biome.getGrassColorModifier();
             this.particleRenderer = biome.getParticleRenderer();
             this.blockReplacements = biome.getBlockReplacements();
-            this.grassColorModifier = biome.getGrassColorModifier();
         }
 
         /**
@@ -523,6 +543,20 @@ public interface CustomBiome {
             return this;
         }
 
+
+        /**
+         * This method sets the dry foliage color property of the CustomBiome.
+         *
+         * @param dryFoliageColor The dry foliage color of the custom biome.
+         * @since 1.0.2
+         * @return The Builder object, for chaining method calls.
+         */
+        @AsOf("1.0.2")
+        public @NotNull Builder dryFoliageColor(@NotNull String dryFoliageColor) {
+            this.dryFoliageColor = Integer.parseInt(formatHex(dryFoliageColor), 16);
+            return this;
+        }
+
         /**
          * This method sets the grass color modifier property of the CustomBiome.
          *
@@ -566,10 +600,10 @@ public interface CustomBiome {
         /**
          * This method creates a new CustomBiome object with the properties set in the Builder.
          *
-         * @version 0.0.1
+         * @since 0.0.1
          * @return a new CustomBiome object.
          */
-        @AsOf("0.0.1")
+        @AsOf("1.0.2")
         public @NotNull CustomBiome build() {
             Preconditions.checkArgument(resourceKey != null, "Resource key must be set");
             Preconditions.checkArgument(settings != null, "Settings must be set");
@@ -583,6 +617,7 @@ public interface CustomBiome {
                     skyColor,
                     foliageColor,
                     grassColor,
+                    dryFoliageColor,
                     grassColorModifier,
                     particleRenderer,
                     blockReplacements

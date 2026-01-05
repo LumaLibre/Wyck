@@ -37,6 +37,7 @@ public final class CustomBiomeImpl implements CustomBiome {
     // Optional Colors
     private int foliageColor = 0;
     private int grassColor = 0;
+    private int dryFoliageColor = 0;
 
     // Optional Settings
     private GrassColorModifier grassColorModifier = GrassColorModifier.NONE;
@@ -86,7 +87,7 @@ public final class CustomBiomeImpl implements CustomBiome {
         this.blockReplacements = new BlockReplacement[0];
     }
 
-    @AsOf("0.0.24")
+    @AsOf("1.0.2")
     public CustomBiomeImpl(
             @NotNull BiomeResourceKey resourceKey,
             @NotNull BiomeSettings settings,
@@ -97,6 +98,7 @@ public final class CustomBiomeImpl implements CustomBiome {
             int skyColor,
             int foliageColor,
             int grassColor,
+            int dryFoliageColor,
 
             @NotNull GrassColorModifier grassColorModifier,
             @NotNull ParticleRenderer particleRenderer,
@@ -105,6 +107,7 @@ public final class CustomBiomeImpl implements CustomBiome {
         this(resourceKey, settings, fogColor, waterColor, waterFogColor, skyColor, particleRenderer);
         this.foliageColor = foliageColor;
         this.grassColor = grassColor;
+        this.dryFoliageColor = dryFoliageColor;
         this.grassColorModifier = grassColorModifier;
         this.blockReplacements = blockReplacements;
     }
@@ -160,6 +163,10 @@ public final class CustomBiomeImpl implements CustomBiome {
         return grassColor;
     }
 
+    public int getDryFoliageColor() {
+        return dryFoliageColor;
+    }
+
     @Override
     public GrassColorModifier getGrassColorModifier() {
         return grassColorModifier;
@@ -205,6 +212,10 @@ public final class CustomBiomeImpl implements CustomBiome {
         this.grassColor = grassColor;
     }
 
+    public void setDryFoliageColor(int dryFoliageColor) {
+        this.dryFoliageColor = dryFoliageColor;
+    }
+
     @Override
     public void setGrassColorModifier(@NotNull GrassColorModifier grassColorModifier) {
         this.grassColorModifier = grassColorModifier;
@@ -246,6 +257,8 @@ public final class CustomBiomeImpl implements CustomBiome {
         if (this.skyColor != otherBiome.getSkyColor()) return false;
         if (this.foliageColor != otherBiome.getFoliageColor()) return false;
         if (this.grassColor != otherBiome.getGrassColor()) return false;
+        if (this.dryFoliageColor != otherBiome.getDryFoliageColor()) return false;
+        if (!this.grassColorModifier.equals(otherBiome.getGrassColorModifier())) return false;
         if (!this.particleRenderer.equals(otherBiome.getParticleRenderer())) return false;
         if (this.blockReplacements.length != otherBiome.getBlockReplacements().length) return false;
         for (int i = 0; i < this.blockReplacements.length; i++) {

@@ -10,7 +10,7 @@ import net.minecraft.world.level.biome.BiomeSpecialEffects;
  *
  * @version 0.0.24
  * @since 0.0.24
- * @author Outspending
+ * @author Jsinco
  */
 @AsOf("0.0.24")
 public enum GrassColorModifier {
