@@ -313,6 +313,19 @@ public interface CustomBiome {
         }
 
         /**
+         * Parses a hexadecimal color string into an integer.
+         *
+         * @param color the color string to parse
+         * @return the integer representation of the color
+         * @since 0.0.1
+         */
+        @AsOf("1.0.2")
+        private int parseHex(@NotNull String color) {
+            if (color.isEmpty()) return 0;
+            return Integer.parseInt(formatHex(color), 16);
+        }
+
+        /**
          * This method creates a new Builder object.
          *
          * @version 0.0.1
@@ -376,7 +389,7 @@ public interface CustomBiome {
          */
         @AsOf("0.0.1")
         public @NotNull Builder fogColor(@NotNull String fogColor) {
-            this.fogColor = Integer.parseInt(formatHex(fogColor), 16);
+            this.fogColor = parseHex(fogColor);
             return this;
         }
 
@@ -402,7 +415,7 @@ public interface CustomBiome {
          */
         @AsOf("0.0.1")
         public @NotNull Builder waterColor(@NotNull String waterColor) {
-            this.waterColor = Integer.parseInt(formatHex(waterColor), 16);
+            this.waterColor = parseHex(waterColor);
             return this;
         }
 
@@ -428,7 +441,7 @@ public interface CustomBiome {
          */
         @AsOf("0.0.1")
         public @NotNull Builder waterFogColor(@NotNull String waterFogColor) {
-            this.waterFogColor = Integer.parseInt(formatHex(waterFogColor), 16);
+            this.waterFogColor = parseHex(waterFogColor);
             return this;
         }
 
@@ -454,7 +467,7 @@ public interface CustomBiome {
          */
         @AsOf("0.0.1")
         public @NotNull Builder skyColor(@NotNull String skyColor) {
-            this.skyColor = Integer.parseInt(formatHex(skyColor), 16);
+            this.skyColor = parseHex(skyColor);
             return this;
         }
 
@@ -480,7 +493,7 @@ public interface CustomBiome {
          */
         @AsOf("0.0.1")
         public @NotNull Builder foliageColor(@NotNull String foliageColor) {
-            this.foliageColor = Integer.parseInt(formatHex(foliageColor), 16);
+            this.foliageColor = parseHex(foliageColor);
             return this;
         }
 
@@ -506,7 +519,7 @@ public interface CustomBiome {
          */
         @AsOf("0.0.1")
         public @NotNull Builder grassColor(@NotNull String grassColor) {
-            this.grassColor = Integer.parseInt(formatHex(grassColor), 16);
+            this.grassColor = parseHex(grassColor);
             return this;
         }
 
