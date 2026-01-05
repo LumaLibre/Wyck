@@ -11,8 +11,6 @@ import java.util.Map;
 
 /**
  * Represents a particle renderer with a specific ambient particle and probability.
- * This is a record class introduced in Java 14 as a preview feature and made final in Java 16.
- * Records provide a compact syntax for declaring classes which are transparent holders for shallowly immutable data.
  *
  * @version 0.0.8
  * @since 0.0.1

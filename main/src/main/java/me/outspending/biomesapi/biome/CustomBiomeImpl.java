@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
  * @since 0.0.2
  */
 @AsOf("0.0.24")
-public final class CustomBiomeImpl implements CustomBiome {
+public class CustomBiomeImpl implements CustomBiome {
 
     // Required Settings
     private final BiomeResourceKey resourceKey;
