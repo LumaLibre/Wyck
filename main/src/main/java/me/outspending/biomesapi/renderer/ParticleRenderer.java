@@ -71,6 +71,15 @@ public record ParticleRenderer(@NotNull Map<@NotNull AmbientParticle, @NotNull F
         return new ParticleRenderer(Map.of(AmbientParticle.CLOUD, 0.008F));
     }
 
+    public List<net.minecraft.world.attribute.AmbientParticle> getDelegateParticles() {
+        return ambientParticles.entrySet().stream()
+                .map(entry -> new net.minecraft.world.attribute.AmbientParticle(
+                        entry.getKey().getSimpleParticle(),
+                        entry.getValue()
+                ))
+                .toList();
+    }
+
 
     @Override
     public boolean equals(Object obj) {
