@@ -2,6 +2,7 @@ package me.outspending.biomesapi.registry;
 
 import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.nms.BiomeLock;
+import me.outspending.biomesapi.registry.handlers.AttributeMapHandler;
 import me.outspending.biomesapi.wrapper.BiomeSettings;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.biome.BiomeHandler;
@@ -11,6 +12,7 @@ import me.outspending.biomesapi.nms.NMSHandler;
 import me.outspending.biomesapi.registry.handlers.ParticleRendererHandler;
 import me.outspending.biomesapi.registry.handlers.SpecialEffectsHandler;
 import me.outspending.biomesapi.renderer.ParticleRenderer;
+import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttributeMap;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.attribute.EnvironmentAttributeMap;
@@ -38,6 +40,7 @@ public class CustomBiomeRegistry implements BiomeRegistry {
 
     private static final SpecialEffectsHandler SPECIAL_EFFECTS_HANDLER = new SpecialEffectsHandler();
     private static final ParticleRendererHandler RENDERER_HANDLER = new ParticleRendererHandler();
+    private static final AttributeMapHandler ATTRIBUTE_MAP_HANDLER = new AttributeMapHandler();
 
     //private static final String MINECRAFT_NAMESPACE = "minecraft";
 
@@ -78,9 +81,7 @@ public class CustomBiomeRegistry implements BiomeRegistry {
                         .generationSettings(BiomeGenerationSettings.EMPTY)
                         .setAttribute(EnvironmentAttributes.FOG_COLOR, biome.getFogColor())
                         .setAttribute(EnvironmentAttributes.SKY_COLOR, biome.getSkyColor())
-                        .setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, biome.getWaterColor())
-                        // TODO: rest of the biome settings should be added to the api
-                        ;
+                        .setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, biome.getWaterColor());
 
                 // Create a new Biome object with the settings and colors from the CustomBiome object
                 BiomeSpecialEffects effects = SPECIAL_EFFECTS_HANDLER.build(biome);
@@ -89,12 +90,17 @@ public class CustomBiomeRegistry implements BiomeRegistry {
                 ParticleRenderer particleRenderer = biome.getParticleRenderer();
                 RENDERER_HANDLER.handle(particleRenderer, biomeBuilder);
 
+                WrappedEnvironmentAttributeMap wrappedAttributeMap = biome.getEnvironmentAttributeMap();
+                ATTRIBUTE_MAP_HANDLER.handle(wrappedAttributeMap, biomeBuilder);
+
                 // Register the new Biome object to the biome registry
                 Biome createdBiome = biomeBuilder.build();
 
                 if (!registry.containsKey(resourceLocation)) {
                     Registry.register(registry, resourceLocation, createdBiome);
                 }
+
+                System.out.println(createdBiome.getAttributes());
 
                 // Add the custom biome to the list of registered biomes
                 BiomeHandler.getRegisteredBiomes().add(biome);
@@ -143,6 +149,9 @@ public class CustomBiomeRegistry implements BiomeRegistry {
                 .build();
 
         BiomeSpecialEffects specialEffects = SPECIAL_EFFECTS_HANDLER.build(customBiome);
+
+        WrappedEnvironmentAttributeMap wrappedAttributeMap = customBiome.getEnvironmentAttributeMap();
+        ATTRIBUTE_MAP_HANDLER.apply(wrappedAttributeMap, environmentAttributeMap);
 
         // Time to reflect
         try {

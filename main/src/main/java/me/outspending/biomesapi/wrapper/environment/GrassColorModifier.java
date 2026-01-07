@@ -1,4 +1,4 @@
-package me.outspending.biomesapi.wrapper;
+package me.outspending.biomesapi.wrapper.environment;
 
 import me.outspending.biomesapi.annotations.AsOf;
 import net.minecraft.world.level.biome.BiomeSpecialEffects;
@@ -22,11 +22,16 @@ public enum GrassColorModifier {
 
     private final BiomeSpecialEffects.GrassColorModifier delegateModifier;
 
+    @AsOf("0.0.24")
     GrassColorModifier(BiomeSpecialEffects.GrassColorModifier delegateModifier) {
         this.delegateModifier = delegateModifier;
     }
 
-
+    /**
+     * This method returns the GrassColorModifier that corresponds to the enum value.
+     * @return The GrassColorModifier that corresponds to the enum value.
+     */
+    @AsOf("0.0.24")
     public BiomeSpecialEffects.GrassColorModifier getDelegateModifier() {
         return delegateModifier;
     }

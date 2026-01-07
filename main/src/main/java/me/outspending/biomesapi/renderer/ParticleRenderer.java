@@ -1,7 +1,7 @@
 package me.outspending.biomesapi.renderer;
 
 import me.outspending.biomesapi.annotations.AsOf;
-import me.outspending.biomesapi.wrapper.AmbientParticle;
+import me.outspending.biomesapi.wrapper.environment.AmbientParticle;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -21,6 +21,7 @@ import java.util.Map;
 @AsOf("0.0.8")
 public record ParticleRenderer(@NotNull Map<@NotNull AmbientParticle, @NotNull Float> ambientParticles) {
 
+    public static final ParticleRenderer EMPTY = new ParticleRenderer(Map.of());
 
     /**
      * Creates a new ParticleRenderer with the given ambient particles and their corresponding probabilities.

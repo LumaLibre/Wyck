@@ -7,6 +7,7 @@ import net.minecraft.world.attribute.EnvironmentAttributes;
 import net.minecraft.world.level.biome.Biome;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +39,7 @@ public class ParticleRendererHandler implements BuilderHandler<Biome.BiomeBuilde
     }
 
     @Override
-    public ParticleRenderer build(@NotNull CustomBiome biome) {
+    public @Nullable ParticleRenderer build(@NotNull CustomBiome biome) {
         return null;
     }
 }

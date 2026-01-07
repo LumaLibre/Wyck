@@ -3,12 +3,13 @@ package me.outspending.biomesapi.biome;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
 import me.outspending.biomesapi.wrapper.BiomeSettings;
-import me.outspending.biomesapi.wrapper.GrassColorModifier;
+import me.outspending.biomesapi.wrapper.environment.GrassColorModifier;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.packet.data.BlockReplacement;
 import me.outspending.biomesapi.registry.BiomeRegistry;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
 import me.outspending.biomesapi.renderer.ParticleRenderer;
+import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttributeMap;
 import net.minecraft.resources.Identifier;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Biome;
@@ -18,10 +19,10 @@ import org.jetbrains.annotations.NotNull;
  * This class represents a custom biome implementation.
  *
  * @author Outspending
- * @version 0.0.24
+ * @version 1.1.0
  * @since 0.0.2
  */
-@AsOf("0.0.24")
+@AsOf("1.1.0")
 public final class CustomBiomeImpl implements CustomBiome {
 
     // Required Settings
@@ -43,6 +44,8 @@ public final class CustomBiomeImpl implements CustomBiome {
     private GrassColorModifier grassColorModifier = GrassColorModifier.NONE;
     private ParticleRenderer particleRenderer;
     private BlockReplacement[] blockReplacements;
+
+    private WrappedEnvironmentAttributeMap environmentAttributeMap;
 
     @AsOf("0.0.2")
     public CustomBiomeImpl(
@@ -102,7 +105,8 @@ public final class CustomBiomeImpl implements CustomBiome {
 
             @NotNull GrassColorModifier grassColorModifier,
             @NotNull ParticleRenderer particleRenderer,
-            @NotNull BlockReplacement[] blockReplacements
+            @NotNull BlockReplacement[] blockReplacements,
+            @NotNull WrappedEnvironmentAttributeMap environmentAttributeMap
     ) {
         this(resourceKey, settings, fogColor, waterColor, waterFogColor, skyColor, particleRenderer);
         this.foliageColor = foliageColor;
@@ -110,6 +114,7 @@ public final class CustomBiomeImpl implements CustomBiome {
         this.dryFoliageColor = dryFoliageColor;
         this.grassColorModifier = grassColorModifier;
         this.blockReplacements = blockReplacements;
+        this.environmentAttributeMap = environmentAttributeMap;
     }
 
     @Override
@@ -183,6 +188,11 @@ public final class CustomBiomeImpl implements CustomBiome {
     }
 
     @Override
+    public @NotNull WrappedEnvironmentAttributeMap getEnvironmentAttributeMap() {
+        return environmentAttributeMap;
+    }
+
+    @Override
     public void setFogColor(int fogColor) {
         this.fogColor = fogColor;
     }
@@ -232,6 +242,11 @@ public final class CustomBiomeImpl implements CustomBiome {
     }
 
     @Override
+    public void setEnvironmentAttributeMap(@NotNull WrappedEnvironmentAttributeMap environmentAttributeMap) {
+        this.environmentAttributeMap = environmentAttributeMap;
+    }
+
+    @Override
     public Builder toBuilder() {
         return new Builder(this);
     }
@@ -266,6 +281,7 @@ public final class CustomBiomeImpl implements CustomBiome {
                 return false;
             }
         }
+        if (!this.environmentAttributeMap.equals(otherBiome.getEnvironmentAttributeMap())) return false;
         return true;
     }
 }

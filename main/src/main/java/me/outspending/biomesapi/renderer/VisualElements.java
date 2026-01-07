@@ -1,8 +1,8 @@
 package me.outspending.biomesapi.renderer;
 
-import me.outspending.biomesapi.wrapper.AmbientParticle;
-import me.outspending.biomesapi.wrapper.MoonPhase;
-import me.outspending.biomesapi.wrapper.WrappedEnvironmentAttribute;
+import me.outspending.biomesapi.wrapper.environment.AmbientParticle;
+import me.outspending.biomesapi.wrapper.environment.MoonPhase;
+import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttribute;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.world.attribute.EnvironmentAttributeMap;
 import net.minecraft.world.attribute.EnvironmentAttributes;

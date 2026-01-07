@@ -2,11 +2,12 @@ package me.outspending.biomesapi.biome;
 
 import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.wrapper.BiomeSettings;
-import me.outspending.biomesapi.wrapper.GrassColorModifier;
+import me.outspending.biomesapi.wrapper.environment.GrassColorModifier;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.packet.data.BlockReplacement;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
 import me.outspending.biomesapi.renderer.ParticleRenderer;
+import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttributeMap;
 import org.bukkit.Color;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Biome;
@@ -16,11 +17,11 @@ import org.jetbrains.annotations.NotNull;
  * This interface represents a custom biome in the BiomesAPI.
  * It provides methods to retrieve and modify the properties of the custom biome.
  *
- * @version 1.0.2
+ * @version 1.1.0
  * @since 0.0.1
  * @author Outspending
  */
-@AsOf("1.0.2")
+@AsOf("1.1.0")
 public interface CustomBiome {
 
     /**
@@ -160,6 +161,16 @@ public interface CustomBiome {
     @AsOf("0.0.6")
     @NotNull BlockReplacement[] getBlockReplacements();
 
+
+    /**
+     * Returns the WrappedEnvironmentAttributeMap of the CustomBiome.
+     *
+     * @return the WrappedEnvironmentAttributeMap of the CustomBiome
+     * @since 1.1.0
+     */
+    @AsOf("1.1.0")
+    @NotNull WrappedEnvironmentAttributeMap getEnvironmentAttributeMap();
+
     /**
      * Sets the fog color of the CustomBiome.
      *
@@ -251,6 +262,16 @@ public interface CustomBiome {
     @AsOf("0.0.6")
     void setBlockReplacements(@NotNull BlockReplacement... blockReplacements);
 
+
+    /**
+     * Sets the WrappedEnvironmentAttributeMap of the CustomBiome.
+     *
+     * @param environmentAttributeMap the WrappedEnvironmentAttributeMap of the CustomBiome
+     * @since 1.1.0
+     */
+    @AsOf("1.1.0")
+    void setEnvironmentAttributeMap(@NotNull WrappedEnvironmentAttributeMap environmentAttributeMap);
+
     /**
      * Returns a new Builder instance with the properties of the CustomBiome.
      *
@@ -314,8 +335,10 @@ public interface CustomBiome {
         private int dryFoliageColor = 0;
 
         private GrassColorModifier grassColorModifier = GrassColorModifier.NONE;
-        private ParticleRenderer particleRenderer = null;
+        private ParticleRenderer particleRenderer = ParticleRenderer.EMPTY;
         private BlockReplacement[] blockReplacements = new BlockReplacement[0];
+        private WrappedEnvironmentAttributeMap environmentAttributeMap = WrappedEnvironmentAttributeMap.EMPTY;
+
 
         /**
          * Formats a hexadecimal color string by removing the leading '#' if present.
@@ -359,6 +382,7 @@ public interface CustomBiome {
             this.grassColorModifier = biome.getGrassColorModifier();
             this.particleRenderer = biome.getParticleRenderer();
             this.blockReplacements = biome.getBlockReplacements();
+            this.environmentAttributeMap = biome.getEnvironmentAttributeMap();
         }
 
         /**
@@ -597,13 +621,27 @@ public interface CustomBiome {
             return this;
         }
 
+
+        /**
+         * This method sets the environment attribute map property of the CustomBiome.
+         *
+         * @param environmentAttributeMap The environment attribute map of the custom biome.
+         * @since 1.1.0
+         * @return The Builder object, for chaining method calls.
+         */
+        @AsOf("1.1.0")
+        public @NotNull Builder environmentAttributeMap(@NotNull WrappedEnvironmentAttributeMap environmentAttributeMap) {
+            this.environmentAttributeMap = environmentAttributeMap;
+            return this;
+        }
+
         /**
          * This method creates a new CustomBiome object with the properties set in the Builder.
          *
          * @since 0.0.1
          * @return a new CustomBiome object.
          */
-        @AsOf("1.0.2")
+        @AsOf("1.1.0")
         public @NotNull CustomBiome build() {
             Preconditions.checkArgument(resourceKey != null, "Resource key must be set");
             Preconditions.checkArgument(settings != null, "Settings must be set");
@@ -620,7 +658,8 @@ public interface CustomBiome {
                     dryFoliageColor,
                     grassColorModifier,
                     particleRenderer,
-                    blockReplacements
+                    blockReplacements,
+                    environmentAttributeMap
             );
         }
 
