@@ -20,15 +20,15 @@ public class SpecialEffectsHandler implements BuilderHandler<Biome.BiomeBuilder,
     @Override
     public BiomeSpecialEffects build(@NotNull CustomBiome biome) {
         BiomeSpecialEffects.Builder builder = new BiomeSpecialEffects.Builder();
-        if (biome.getFoliageColor() != -1) {
+        if (biome.getFoliageColor() != null) {
             builder.foliageColorOverride(biome.getFoliageColor());
         }
 
-        if (biome.getGrassColor() != -1) {
+        if (biome.getGrassColor() != null) {
             builder.grassColorOverride(biome.getGrassColor());
         }
 
-        if (biome.getDryFoliageColor() != -1) {
+        if (biome.getDryFoliageColor() != null) {
             builder.dryFoliageColorOverride(biome.getDryFoliageColor());
         }
 

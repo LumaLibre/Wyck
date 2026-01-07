@@ -12,6 +12,7 @@ import org.bukkit.Color;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Biome;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * This interface represents a custom biome in the BiomesAPI.
@@ -78,7 +79,7 @@ public interface CustomBiome {
      * @since 0.0.1
      */
     @AsOf("0.0.1")
-    int getFogColor();
+    @Nullable Integer getFogColor();
 
     /**
      * Returns the water color of the CustomBiome.
@@ -96,7 +97,7 @@ public interface CustomBiome {
      * @since 0.0.1
      */
     @AsOf("0.0.1")
-    int getWaterFogColor();
+    @Nullable Integer getWaterFogColor();
 
     /**
      * Returns the sky color of the CustomBiome.
@@ -105,7 +106,7 @@ public interface CustomBiome {
      * @since 0.0.1
      */
     @AsOf("0.0.1")
-    int getSkyColor();
+    @Nullable Integer getSkyColor();
 
     /**
      * Returns the foliage color of the CustomBiome.
@@ -114,7 +115,7 @@ public interface CustomBiome {
      * @since 0.0.1
      */
     @AsOf("0.0.1")
-    int getFoliageColor();
+    @Nullable Integer getFoliageColor();
 
     /**
      * Returns the grass color of the CustomBiome.
@@ -123,7 +124,7 @@ public interface CustomBiome {
      * @since 0.0.1
      */
     @AsOf("0.0.1")
-    int getGrassColor();
+    @Nullable Integer getGrassColor();
 
     /**
      * Returns the dry foliage color of the CustomBiome.
@@ -132,7 +133,7 @@ public interface CustomBiome {
      * @since 1.0.2
      */
     @AsOf("1.0.2")
-    int getDryFoliageColor();
+    @Nullable Integer getDryFoliageColor();
 
     /**
      * Returns the GrassColorModifier of the CustomBiome.
@@ -177,8 +178,8 @@ public interface CustomBiome {
      * @param fogColor the fog color of the CustomBiome
      * @since 0.0.5
      */
-    @AsOf("0.0.5")
-    void setFogColor(int fogColor);
+    @AsOf("1.1.0")
+    void setFogColor(@Nullable Integer fogColor);
 
     /**
      * Sets the water color of the CustomBiome.
@@ -195,8 +196,8 @@ public interface CustomBiome {
      * @param waterFogColor the water fog color of the CustomBiome
      * @since 0.0.5
      */
-    @AsOf("0.0.5")
-    void setWaterFogColor(int waterFogColor);
+    @AsOf("1.1.0")
+    void setWaterFogColor(@Nullable Integer waterFogColor);
 
     /**
      * Sets the sky color of the CustomBiome.
@@ -204,8 +205,8 @@ public interface CustomBiome {
      * @param skyColor the sky color of the CustomBiome
      * @since 0.0.5
      */
-    @AsOf("0.0.5")
-    void setSkyColor(int skyColor);
+    @AsOf("1.1.0")
+    void setSkyColor(@Nullable Integer skyColor);
 
     /**
      * Sets the foliage color of the CustomBiome.
@@ -213,8 +214,8 @@ public interface CustomBiome {
      * @param foliageColor the foliage color of the CustomBiome
      * @since 0.0.5
      */
-    @AsOf("0.0.5")
-    void setFoliageColor(int foliageColor);
+    @AsOf("1.1.0")
+    void setFoliageColor(@Nullable Integer foliageColor);
 
     /**
      * Sets the grass color of the CustomBiome.
@@ -222,8 +223,8 @@ public interface CustomBiome {
      * @param grassColor the grass color of the CustomBiome
      * @since 0.0.5
      */
-    @AsOf("0.0.5")
-    void setGrassColor(int grassColor);
+    @AsOf("1.1.0")
+    void setGrassColor(@Nullable Integer grassColor);
 
     /**
      * Sets the dry foliage color of the CustomBiome.
@@ -231,8 +232,8 @@ public interface CustomBiome {
      * @param dryFoliageColor the dry foliage color of the CustomBiome
      * @since 1.0.2
      */
-    @AsOf("1.0.2")
-    void setDryFoliageColor(int dryFoliageColor);
+    @AsOf("1.1.0")
+    void setDryFoliageColor(@Nullable Integer dryFoliageColor);
 
     /**
      * Sets the GrassColorModifier of the CustomBiome.
@@ -327,12 +328,12 @@ public interface CustomBiome {
 
         private int waterColor = 0xF54927; // Meadow biome default water color
 
-        private int fogColor = -1;
-        private int waterFogColor = -1;
-        private int skyColor = -1;
-        private int foliageColor = -1;
-        private int grassColor = -1;
-        private int dryFoliageColor = -1;
+        private @Nullable Integer fogColor = -1;
+        private @Nullable Integer waterFogColor = -1;
+        private @Nullable Integer skyColor = -1;
+        private @Nullable Integer foliageColor = -1;
+        private @Nullable Integer grassColor = -1;
+        private @Nullable Integer dryFoliageColor = -1;
 
         private GrassColorModifier grassColorModifier = GrassColorModifier.NONE;
         private ParticleRenderer particleRenderer = ParticleRenderer.EMPTY;
@@ -362,8 +363,8 @@ public interface CustomBiome {
          * @since 0.0.1
          */
         @AsOf("1.0.2")
-        private int parseHex(@NotNull String color) {
-            if (color.isEmpty()) return 0;
+        private @Nullable Integer parseHex(@NotNull String color) {
+            if (color.isEmpty()) return null;
             return Integer.parseInt(formatHex(color), 16);
         }
 

@@ -81,13 +81,13 @@ public class CustomBiomeRegistry implements BiomeRegistry {
                         .generationSettings(BiomeGenerationSettings.EMPTY);
 
                 // TODO: Replace with WrappedEnvironmentAttributeMap in the future
-                if (biome.getFogColor() != -1) {
+                if (biome.getFogColor() != null) {
                     biomeBuilder.setAttribute(EnvironmentAttributes.FOG_COLOR, biome.getFogColor());
                 }
-                if (biome.getSkyColor() != -1) {
+                if (biome.getSkyColor() != null) {
                     biomeBuilder.setAttribute(EnvironmentAttributes.SKY_COLOR, biome.getWaterColor());
                 }
-                if (biome.getWaterFogColor() != -1) {
+                if (biome.getWaterFogColor() != null) {
                     biomeBuilder.setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, biome.getWaterFogColor());
                 }
 
@@ -151,13 +151,13 @@ public class CustomBiomeRegistry implements BiomeRegistry {
                 .set(EnvironmentAttributes.AMBIENT_PARTICLES, particles);
 
         // TODO: Replace with WrappedEnvironmentAttributeMap in the future
-        if (customBiome.getFogColor() != -1) {
+        if (customBiome.getFogColor() != null) {
             environmentAttributeMapBuilder.set(EnvironmentAttributes.FOG_COLOR, customBiome.getFogColor());
         }
-        if (customBiome.getSkyColor() != -1) {
+        if (customBiome.getSkyColor() != null) {
             environmentAttributeMapBuilder.set(EnvironmentAttributes.SKY_COLOR, customBiome.getSkyColor());
         }
-        if (customBiome.getWaterFogColor() != -1) {
+        if (customBiome.getWaterFogColor() != null) {
             environmentAttributeMapBuilder.set(EnvironmentAttributes.WATER_FOG_COLOR, customBiome.getWaterFogColor());
         }
         WrappedEnvironmentAttributeMap wrappedAttributeMap = customBiome.getEnvironmentAttributeMap();

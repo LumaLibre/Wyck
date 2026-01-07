@@ -14,6 +14,7 @@ import net.minecraft.resources.Identifier;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Biome;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * This class represents a custom biome implementation.
@@ -33,12 +34,12 @@ public final class CustomBiomeImpl implements CustomBiome {
     private int waterColor = 0xF54927;
 
     // Optional Colors
-    private int fogColor = -1;
-    private int waterFogColor = -1;
-    private int skyColor = -1;
-    private int foliageColor = -1;
-    private int grassColor = -1;
-    private int dryFoliageColor = -1;
+    private Integer fogColor;
+    private Integer waterFogColor;
+    private Integer skyColor;
+    private Integer foliageColor;
+    private Integer grassColor;
+    private Integer dryFoliageColor;
 
     // Optional Settings
     private GrassColorModifier grassColorModifier = GrassColorModifier.NONE;
@@ -47,15 +48,15 @@ public final class CustomBiomeImpl implements CustomBiome {
 
     private WrappedEnvironmentAttributeMap environmentAttributeMap = WrappedEnvironmentAttributeMap.EMPTY;
 
-    @AsOf("0.0.2")
+    @AsOf("1.1.0")
     public CustomBiomeImpl(
             @NotNull BiomeResourceKey resourceKey,
             @NotNull BiomeSettings settings,
 
-            int fogColor,
+            @Nullable Integer fogColor,
             int waterColor,
-            int waterFogColor,
-            int skyColor,
+            @Nullable Integer waterFogColor,
+            @Nullable Integer skyColor,
 
             @NotNull ParticleRenderer particleRenderer
     ) {
@@ -70,17 +71,17 @@ public final class CustomBiomeImpl implements CustomBiome {
         this.blockReplacements = new BlockReplacement[0];
     }
 
-    @AsOf("0.0.2")
+    @AsOf("1.1.0")
     public CustomBiomeImpl(
             @NotNull BiomeResourceKey resourceKey,
             @NotNull BiomeSettings settings,
 
-            int fogColor,
+            @Nullable Integer fogColor,
             int waterColor,
-            int waterFogColor,
-            int skyColor,
-            int foliageColor,
-            int grassColor,
+            @Nullable Integer waterFogColor,
+            @Nullable Integer skyColor,
+            @Nullable Integer foliageColor,
+            @Nullable Integer grassColor,
 
             @NotNull ParticleRenderer particleRenderer
     ) {
@@ -90,18 +91,18 @@ public final class CustomBiomeImpl implements CustomBiome {
         this.blockReplacements = new BlockReplacement[0];
     }
 
-    @AsOf("1.0.2")
+    @AsOf("1.1.0")
     public CustomBiomeImpl(
             @NotNull BiomeResourceKey resourceKey,
             @NotNull BiomeSettings settings,
 
-            int fogColor,
+            @Nullable Integer fogColor,
             int waterColor,
-            int waterFogColor,
-            int skyColor,
-            int foliageColor,
-            int grassColor,
-            int dryFoliageColor,
+            @Nullable Integer waterFogColor,
+            @Nullable Integer skyColor,
+            @Nullable Integer foliageColor,
+            @Nullable Integer grassColor,
+            @Nullable Integer dryFoliageColor,
 
             @NotNull GrassColorModifier grassColorModifier,
             @NotNull ParticleRenderer particleRenderer,
@@ -139,7 +140,7 @@ public final class CustomBiomeImpl implements CustomBiome {
     }
 
     @Override
-    public int getFogColor() {
+    public Integer getFogColor() {
         return fogColor;
     }
 
@@ -149,26 +150,26 @@ public final class CustomBiomeImpl implements CustomBiome {
     }
 
     @Override
-    public int getWaterFogColor() {
+    public Integer getWaterFogColor() {
         return waterFogColor;
     }
 
     @Override
-    public int getSkyColor() {
+    public Integer getSkyColor() {
         return skyColor;
     }
 
     @Override
-    public int getFoliageColor() {
+    public Integer getFoliageColor() {
         return foliageColor;
     }
 
     @Override
-    public int getGrassColor() {
+    public Integer getGrassColor() {
         return grassColor;
     }
 
-    public int getDryFoliageColor() {
+    public Integer getDryFoliageColor() {
         return dryFoliageColor;
     }
 
@@ -193,7 +194,7 @@ public final class CustomBiomeImpl implements CustomBiome {
     }
 
     @Override
-    public void setFogColor(int fogColor) {
+    public void setFogColor(@Nullable Integer fogColor) {
         this.fogColor = fogColor;
     }
 
@@ -203,26 +204,26 @@ public final class CustomBiomeImpl implements CustomBiome {
     }
 
     @Override
-    public void setWaterFogColor(int waterFogColor) {
+    public void setWaterFogColor(@Nullable Integer waterFogColor) {
         this.waterFogColor = waterFogColor;
     }
 
     @Override
-    public void setSkyColor(int skyColor) {
+    public void setSkyColor(@Nullable Integer skyColor) {
         this.skyColor = skyColor;
     }
 
     @Override
-    public void setFoliageColor(int foliageColor) {
+    public void setFoliageColor(@Nullable Integer foliageColor) {
         this.foliageColor = foliageColor;
     }
 
     @Override
-    public void setGrassColor(int grassColor) {
+    public void setGrassColor(@Nullable Integer grassColor) {
         this.grassColor = grassColor;
     }
 
-    public void setDryFoliageColor(int dryFoliageColor) {
+    public void setDryFoliageColor(@Nullable Integer dryFoliageColor) {
         this.dryFoliageColor = dryFoliageColor;
     }
 
