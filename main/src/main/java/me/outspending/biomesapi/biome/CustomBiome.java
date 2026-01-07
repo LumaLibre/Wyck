@@ -325,14 +325,14 @@ public interface CustomBiome {
         private BiomeResourceKey resourceKey = null;
         private BiomeSettings settings = BiomeSettings.defaultSettings();
 
-        private int fogColor = 0;
-        private int waterColor = 0;
-        private int waterFogColor = 0;
-        private int skyColor = 0;
+        private int fogColor = -1;
+        private int waterColor = -1;
+        private int waterFogColor = -1;
+        private int skyColor = -1;
 
-        private int foliageColor = 0;
-        private int grassColor = 0;
-        private int dryFoliageColor = 0;
+        private int foliageColor = -1;
+        private int grassColor = -1;
+        private int dryFoliageColor = -1;
 
         private GrassColorModifier grassColorModifier = GrassColorModifier.NONE;
         private ParticleRenderer particleRenderer = ParticleRenderer.EMPTY;

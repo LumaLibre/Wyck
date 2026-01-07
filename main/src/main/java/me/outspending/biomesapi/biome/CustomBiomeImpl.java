@@ -30,22 +30,22 @@ public final class CustomBiomeImpl implements CustomBiome {
     private final BiomeSettings settings;
 
     // Required Colors
-    private int fogColor;
-    private int waterColor;
-    private int waterFogColor;
-    private int skyColor;
+    private int fogColor = -1;
+    private int waterColor = -1;
+    private int waterFogColor = -1;
+    private int skyColor = -1;
 
     // Optional Colors
-    private int foliageColor = 0;
-    private int grassColor = 0;
-    private int dryFoliageColor = 0;
+    private int foliageColor = -1;
+    private int grassColor = -1;
+    private int dryFoliageColor = -1;
 
     // Optional Settings
     private GrassColorModifier grassColorModifier = GrassColorModifier.NONE;
-    private ParticleRenderer particleRenderer;
-    private BlockReplacement[] blockReplacements;
+    private ParticleRenderer particleRenderer = ParticleRenderer.EMPTY;
+    private BlockReplacement[] blockReplacements = new BlockReplacement[0];
 
-    private WrappedEnvironmentAttributeMap environmentAttributeMap;
+    private WrappedEnvironmentAttributeMap environmentAttributeMap = WrappedEnvironmentAttributeMap.EMPTY;
 
     @AsOf("0.0.2")
     public CustomBiomeImpl(

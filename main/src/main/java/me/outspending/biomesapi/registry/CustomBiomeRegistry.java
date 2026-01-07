@@ -78,10 +78,18 @@ public class CustomBiomeRegistry implements BiomeRegistry {
                         .temperatureAdjustment(settings.modifier().getModifier())
                         .hasPrecipitation(settings.hasPrecipitation())
                         .mobSpawnSettings(MobSpawnSettings.EMPTY)
-                        .generationSettings(BiomeGenerationSettings.EMPTY)
-                        .setAttribute(EnvironmentAttributes.FOG_COLOR, biome.getFogColor())
-                        .setAttribute(EnvironmentAttributes.SKY_COLOR, biome.getSkyColor())
-                        .setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, biome.getWaterColor());
+                        .generationSettings(BiomeGenerationSettings.EMPTY);
+
+                // TODO: Replace with WrappedEnvironmentAttributeMap in the future
+                if (biome.getFogColor() != -1) {
+                    biomeBuilder.setAttribute(EnvironmentAttributes.FOG_COLOR, biome.getFogColor());
+                }
+                if (biome.getSkyColor() != -1) {
+                    biomeBuilder.setAttribute(EnvironmentAttributes.SKY_COLOR, biome.getWaterColor());
+                }
+                if (biome.getWaterFogColor() != -1) {
+                    biomeBuilder.setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, biome.getWaterFogColor());
+                }
 
                 // Create a new Biome object with the settings and colors from the CustomBiome object
                 BiomeSpecialEffects effects = SPECIAL_EFFECTS_HANDLER.build(biome);
@@ -99,8 +107,6 @@ public class CustomBiomeRegistry implements BiomeRegistry {
                 if (!registry.containsKey(resourceLocation)) {
                     Registry.register(registry, resourceLocation, createdBiome);
                 }
-
-                System.out.println(createdBiome.getAttributes());
 
                 // Add the custom biome to the list of registered biomes
                 BiomeHandler.getRegisteredBiomes().add(biome);
@@ -141,12 +147,21 @@ public class CustomBiomeRegistry implements BiomeRegistry {
         List<net.minecraft.world.attribute.AmbientParticle> particles = RENDERER_HANDLER.create(particleRenderer);
 
 
-        EnvironmentAttributeMap environmentAttributeMap = EnvironmentAttributeMap.builder()
-                .set(EnvironmentAttributes.FOG_COLOR, customBiome.getFogColor())
-                .set(EnvironmentAttributes.SKY_COLOR, customBiome.getSkyColor())
-                .set(EnvironmentAttributes.WATER_FOG_COLOR, customBiome.getWaterColor())
-                .set(EnvironmentAttributes.AMBIENT_PARTICLES, particles)
-                .build();
+        EnvironmentAttributeMap.Builder environmentAttributeMapBuilder = EnvironmentAttributeMap.builder()
+                .set(EnvironmentAttributes.AMBIENT_PARTICLES, particles);
+
+        // TODO: Replace with WrappedEnvironmentAttributeMap in the future
+        if (customBiome.getFogColor() != -1) {
+            environmentAttributeMapBuilder.set(EnvironmentAttributes.FOG_COLOR, customBiome.getFogColor());
+        }
+        if (customBiome.getSkyColor() != -1) {
+            environmentAttributeMapBuilder.set(EnvironmentAttributes.SKY_COLOR, customBiome.getSkyColor());
+        }
+        if (customBiome.getWaterFogColor() != -1) {
+            environmentAttributeMapBuilder.set(EnvironmentAttributes.WATER_FOG_COLOR, customBiome.getWaterFogColor());
+        }
+
+        EnvironmentAttributeMap environmentAttributeMap = environmentAttributeMapBuilder.build();
 
         BiomeSpecialEffects specialEffects = SPECIAL_EFFECTS_HANDLER.build(customBiome);
 
