@@ -50,6 +50,12 @@ public record WrappedEnvironmentAttributeMap(List<WrappedEnvironmentAttribute<?,
         }
     }
 
+    public void applyToMapBuilder(EnvironmentAttributeMap.Builder mapBuilder) {
+        for (WrappedEnvironmentAttribute<?, ?> wrappedAttribute : attributes) {
+            addToBuilder(mapBuilder, wrappedAttribute);
+        }
+    }
+
     public void applyToBiomeBuilder(Biome.BiomeBuilder builder) {
         for (WrappedEnvironmentAttribute<?, ?> wrappedAttribute : attributes) {
             addToBiomeBuilder(builder, wrappedAttribute);

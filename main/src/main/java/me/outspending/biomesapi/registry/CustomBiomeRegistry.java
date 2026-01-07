@@ -160,13 +160,13 @@ public class CustomBiomeRegistry implements BiomeRegistry {
         if (customBiome.getWaterFogColor() != -1) {
             environmentAttributeMapBuilder.set(EnvironmentAttributes.WATER_FOG_COLOR, customBiome.getWaterFogColor());
         }
+        WrappedEnvironmentAttributeMap wrappedAttributeMap = customBiome.getEnvironmentAttributeMap();
+        wrappedAttributeMap.applyToMapBuilder(environmentAttributeMapBuilder);
+
 
         EnvironmentAttributeMap environmentAttributeMap = environmentAttributeMapBuilder.build();
 
         BiomeSpecialEffects specialEffects = SPECIAL_EFFECTS_HANDLER.build(customBiome);
-
-        WrappedEnvironmentAttributeMap wrappedAttributeMap = customBiome.getEnvironmentAttributeMap();
-        ATTRIBUTE_MAP_HANDLER.apply(wrappedAttributeMap, environmentAttributeMap);
 
         // Time to reflect
         try {
