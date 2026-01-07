@@ -281,7 +281,6 @@ public final class CustomBiomeImpl implements CustomBiome {
                 return false;
             }
         }
-        if (!this.environmentAttributeMap.equals(otherBiome.getEnvironmentAttributeMap())) return false;
-        return true;
+        return this.environmentAttributeMap.equals(otherBiome.getEnvironmentAttributeMap());
     }
 }
