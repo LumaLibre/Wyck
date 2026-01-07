@@ -1,4 +1,4 @@
-package me.outspending.biomesapi.wrapper;
+package me.outspending.biomesapi.wrapper.environment;
 
 import me.outspending.biomesapi.annotations.AsOf;
 import net.minecraft.core.particles.ParticleOptions;
@@ -12,11 +12,11 @@ import org.jetbrains.annotations.NotNull;
  * This is an enumeration of all the possible ambient particles, each associated with a specific SimpleParticleType.
  * The @Getter annotation from the Lombok library is used to automatically generate a getter method for the 'particle' field.
  *
- * @version 1.0.1
+ * @version 1.0.2
  * @since 0.0.1
  * @author Outspending
  */
-@AsOf("1.0.1")
+@AsOf("1.0.2")
 public enum AmbientParticle {
 
     ANGRY_VILLAGER(ParticleTypes.ANGRY_VILLAGER),

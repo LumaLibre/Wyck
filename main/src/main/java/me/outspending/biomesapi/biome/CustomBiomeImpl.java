@@ -3,12 +3,13 @@ package me.outspending.biomesapi.biome;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
 import me.outspending.biomesapi.wrapper.BiomeSettings;
-import me.outspending.biomesapi.wrapper.GrassColorModifier;
+import me.outspending.biomesapi.wrapper.environment.GrassColorModifier;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.packet.data.BlockReplacement;
 import me.outspending.biomesapi.registry.BiomeRegistry;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
 import me.outspending.biomesapi.renderer.ParticleRenderer;
+import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttributeMap;
 import net.minecraft.resources.Identifier;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Biome;
@@ -18,30 +19,33 @@ import org.jetbrains.annotations.NotNull;
  * This class represents a custom biome implementation.
  *
  * @author Outspending
- * @version 0.0.24
+ * @version 1.1.0
  * @since 0.0.2
  */
-@AsOf("0.0.24")
-public class CustomBiomeImpl implements CustomBiome {
+@AsOf("1.1.0")
+public final class CustomBiomeImpl implements CustomBiome {
 
     // Required Settings
     private final BiomeResourceKey resourceKey;
     private final BiomeSettings settings;
 
     // Required Colors
-    private int fogColor;
-    private int waterColor;
-    private int waterFogColor;
-    private int skyColor;
+    private int fogColor = -1;
+    private int waterColor = -1;
+    private int waterFogColor = -1;
+    private int skyColor = -1;
 
     // Optional Colors
-    private int foliageColor = 0;
-    private int grassColor = 0;
+    private int foliageColor = -1;
+    private int grassColor = -1;
+    private int dryFoliageColor = -1;
 
     // Optional Settings
     private GrassColorModifier grassColorModifier = GrassColorModifier.NONE;
-    private ParticleRenderer particleRenderer;
-    private BlockReplacement[] blockReplacements;
+    private ParticleRenderer particleRenderer = ParticleRenderer.EMPTY;
+    private BlockReplacement[] blockReplacements = new BlockReplacement[0];
+
+    private WrappedEnvironmentAttributeMap environmentAttributeMap = WrappedEnvironmentAttributeMap.EMPTY;
 
     @AsOf("0.0.2")
     public CustomBiomeImpl(
@@ -86,7 +90,7 @@ public class CustomBiomeImpl implements CustomBiome {
         this.blockReplacements = new BlockReplacement[0];
     }
 
-    @AsOf("0.0.24")
+    @AsOf("1.0.2")
     public CustomBiomeImpl(
             @NotNull BiomeResourceKey resourceKey,
             @NotNull BiomeSettings settings,
@@ -97,16 +101,20 @@ public class CustomBiomeImpl implements CustomBiome {
             int skyColor,
             int foliageColor,
             int grassColor,
+            int dryFoliageColor,
 
             @NotNull GrassColorModifier grassColorModifier,
             @NotNull ParticleRenderer particleRenderer,
-            @NotNull BlockReplacement[] blockReplacements
+            @NotNull BlockReplacement[] blockReplacements,
+            @NotNull WrappedEnvironmentAttributeMap environmentAttributeMap
     ) {
         this(resourceKey, settings, fogColor, waterColor, waterFogColor, skyColor, particleRenderer);
         this.foliageColor = foliageColor;
         this.grassColor = grassColor;
+        this.dryFoliageColor = dryFoliageColor;
         this.grassColorModifier = grassColorModifier;
         this.blockReplacements = blockReplacements;
+        this.environmentAttributeMap = environmentAttributeMap;
     }
 
     @Override
@@ -160,6 +168,10 @@ public class CustomBiomeImpl implements CustomBiome {
         return grassColor;
     }
 
+    public int getDryFoliageColor() {
+        return dryFoliageColor;
+    }
+
     @Override
     public GrassColorModifier getGrassColorModifier() {
         return grassColorModifier;
@@ -173,6 +185,11 @@ public class CustomBiomeImpl implements CustomBiome {
     @Override
     public @NotNull BlockReplacement[] getBlockReplacements() {
         return blockReplacements;
+    }
+
+    @Override
+    public @NotNull WrappedEnvironmentAttributeMap getEnvironmentAttributeMap() {
+        return environmentAttributeMap;
     }
 
     @Override
@@ -205,6 +222,10 @@ public class CustomBiomeImpl implements CustomBiome {
         this.grassColor = grassColor;
     }
 
+    public void setDryFoliageColor(int dryFoliageColor) {
+        this.dryFoliageColor = dryFoliageColor;
+    }
+
     @Override
     public void setGrassColorModifier(@NotNull GrassColorModifier grassColorModifier) {
         this.grassColorModifier = grassColorModifier;
@@ -218,6 +239,11 @@ public class CustomBiomeImpl implements CustomBiome {
     @Override
     public void setBlockReplacements(@NotNull BlockReplacement[] blockReplacements) {
         this.blockReplacements = blockReplacements;
+    }
+
+    @Override
+    public void setEnvironmentAttributeMap(@NotNull WrappedEnvironmentAttributeMap environmentAttributeMap) {
+        this.environmentAttributeMap = environmentAttributeMap;
     }
 
     @Override
@@ -246,6 +272,8 @@ public class CustomBiomeImpl implements CustomBiome {
         if (this.skyColor != otherBiome.getSkyColor()) return false;
         if (this.foliageColor != otherBiome.getFoliageColor()) return false;
         if (this.grassColor != otherBiome.getGrassColor()) return false;
+        if (this.dryFoliageColor != otherBiome.getDryFoliageColor()) return false;
+        if (!this.grassColorModifier.equals(otherBiome.getGrassColorModifier())) return false;
         if (!this.particleRenderer.equals(otherBiome.getParticleRenderer())) return false;
         if (this.blockReplacements.length != otherBiome.getBlockReplacements().length) return false;
         for (int i = 0; i < this.blockReplacements.length; i++) {
@@ -253,6 +281,6 @@ public class CustomBiomeImpl implements CustomBiome {
                 return false;
             }
         }
-        return true;
+        return this.environmentAttributeMap.equals(otherBiome.getEnvironmentAttributeMap());
     }
 }

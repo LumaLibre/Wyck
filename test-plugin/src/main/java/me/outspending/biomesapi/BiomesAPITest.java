@@ -2,14 +2,19 @@ package me.outspending.biomesapi;
 
 import io.papermc.paper.connection.PlayerConfigurationConnection;
 import io.papermc.paper.event.connection.configuration.PlayerConnectionReconfigureEvent;
+import me.outspending.biomesapi.biome.BiomeHandler;
 import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.packet.PacketHandler;
 import me.outspending.biomesapi.packet.data.PhonyCustomBiome;
 import me.outspending.biomesapi.packet.data.BlockReplacement;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
-import me.outspending.biomesapi.wrapper.AmbientParticle;
+import me.outspending.biomesapi.setter.BiomeSetter;
+import me.outspending.biomesapi.wrapper.environment.AmbientParticle;
 import me.outspending.biomesapi.renderer.ParticleRenderer;
 import me.outspending.biomesapi.wrapper.BiomeSettings;
+import me.outspending.biomesapi.wrapper.environment.BedRule;
+import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttributeMap;
+import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttributes;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -25,22 +30,7 @@ import java.util.UUID;
 
 public final class BiomesAPITest extends JavaPlugin implements Listener {
 
-    //CustomBiome yellowBiome = CustomBiome.builder()
-    //                .resourceKey(BiomeResourceKey.of("test", "custombiome"))
-    //                .settings(BiomeSettings.defaultSettings())
-    //                .fogColor("#ffe606") // #db4929
-    //                .foliageColor("#ffe606")
-    //                .skyColor("#ffe606")
-    //                .waterColor("#ffe606") // #F5F2EB
-    //                .waterFogColor("#ffe606")
-    //                .grassColor("#ffe606")
-    //                .particleRenderer(ParticleRenderer.of(AmbientParticle.DRIPPING_HONEY, 1.0f))
-    //                .blockReplacements(new BlockReplacement(Material.OAK_LEAVES, Material.SPRUCE_LEAVES))
-    //                .build();
 
-
-
-    private final List<UUID> reconfiguring = new ArrayList<>();
     private PacketHandler packetHandler;
 
     @Override
@@ -48,12 +38,32 @@ public final class BiomesAPITest extends JavaPlugin implements Listener {
 
         getServer().getPluginManager().registerEvents(this, this);
 
+        int color = Integer.parseInt("4498DB", 16);
+        int red = Integer.parseInt("EE0000", 16);
+
+        BedRule bedRule = BedRule.builder()
+                .setCanSetSpawn(BedRule.Rule.NEVER)
+                .setExplodes(true)
+                .setErrorMessage(Component.text("You cannot sleep here!"))
+                .build();
+
+        WrappedEnvironmentAttributeMap attributeMap = WrappedEnvironmentAttributeMap.builder()
+                .setAttribute(WrappedEnvironmentAttributes.CLOUD_COLOR, red)
+                .setAttribute(WrappedEnvironmentAttributes.SUNRISE_SUNSET_COLOR, color)
+                .setAttribute(WrappedEnvironmentAttributes.BED_RULE, bedRule)
+                .setAttribute(WrappedEnvironmentAttributes.FOG_COLOR, color)
+                .setAttribute(WrappedEnvironmentAttributes.WATER_EVAPORATES, true)
+                .setAttribute(WrappedEnvironmentAttributes.MONSTERS_BURN, false)
+                .setAttribute(WrappedEnvironmentAttributes.FOG_START_DISTANCE, 1.0f)
+                .setAttribute(WrappedEnvironmentAttributes.FAST_LAVA, true)
+                .build();
+
         CustomBiome biome = CustomBiome.builder()
                 .resourceKey(BiomeResourceKey.of("test", "custombiome"))
                 .settings(BiomeSettings.defaultSettings())
-                .fogColor("#FFFFFF") // #db4929
+                //.fogColor("#FFFFFF") // #db4929
                 .foliageColor("#F5F2EB")
-                .skyColor("#000000")
+                .skyColor("#B99DFC")
                 .waterColor("#F5F2EB") // #F5F2EB
                 .waterFogColor("#000000")
                 .grassColor("#9D00FF")
@@ -62,49 +72,39 @@ public final class BiomesAPITest extends JavaPlugin implements Listener {
                         BlockReplacement.of(Material.GRASS_BLOCK, Material.WATER),
                         BlockReplacement.of(Material.STONE, Material.DIAMOND_BLOCK)
                 )
+                .environmentAttributeMap(attributeMap)
                 .build();
 
         biome.register();
 
 
-        packetHandler = PacketHandler.of(this, PacketHandler.Manipulator.PACKETEVENTS);
-        packetHandler.register();
-
-
-        PhonyCustomBiome phonyCustomBiome = PhonyCustomBiome.builder()
-                .setCustomBiome(biome)
-                .build();
-
-        packetHandler.appendBiome(phonyCustomBiome);
+//        packetHandler = PacketHandler.of(this, PacketHandler.Manipulator.PACKETEVENTS);
+//        packetHandler.register();
+//
+//
+//        PhonyCustomBiome phonyCustomBiome = PhonyCustomBiome.builder()
+//                .setCustomBiome(biome)
+//                .build();
+//
+//        packetHandler.appendBiome(phonyCustomBiome);
     }
 
     @Override
     public void onDisable() {
-        packetHandler.unregister();
+        //packetHandler.unregister();
     }
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent e) {
-        Bukkit.getScheduler().runTaskLater(this, () -> {
-            Player player = e.getPlayer();
-
-            player.getConnection().reenterConfiguration();
-            reconfiguring.add(player.getUniqueId());
-        }, 20);
-
-
-    }
-
-
-    @EventHandler
-    public void onPlayerPlayerConnectionReconfigure(PlayerConnectionReconfigureEvent event) {
-        PlayerConfigurationConnection connection = event.getConnection();
-        connection.completeReconfiguration();
-
-        UUID uuid = connection.getProfile().getId();
-        if (reconfiguring.contains(uuid)) {
-            connection.getAudience().sendMessage(Component.text("Reconfigured connection for biome changes!"));
-            reconfiguring.remove(uuid);
+        CustomBiome customBiome = BiomeHandler.getBiome(BiomeResourceKey.of("test", "custombiome"));
+        if (customBiome == null) {
+            throw new IllegalStateException("Custom biome not found!");
         }
+
+        Player player = e.getPlayer();
+
+        BiomeSetter biomeSetter = BiomeSetter.of();
+        biomeSetter.setChunkBiome(e.getBlock().getChunk(), customBiome, true);
+
     }
 }

@@ -2,6 +2,7 @@ package me.outspending.biomesapi.registry;
 
 import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.nms.BiomeLock;
+import me.outspending.biomesapi.registry.handlers.AttributeMapHandler;
 import me.outspending.biomesapi.wrapper.BiomeSettings;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.biome.BiomeHandler;
@@ -11,6 +12,7 @@ import me.outspending.biomesapi.nms.NMSHandler;
 import me.outspending.biomesapi.registry.handlers.ParticleRendererHandler;
 import me.outspending.biomesapi.registry.handlers.SpecialEffectsHandler;
 import me.outspending.biomesapi.renderer.ParticleRenderer;
+import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttributeMap;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.attribute.EnvironmentAttributeMap;
@@ -38,6 +40,7 @@ public class CustomBiomeRegistry implements BiomeRegistry {
 
     private static final SpecialEffectsHandler SPECIAL_EFFECTS_HANDLER = new SpecialEffectsHandler();
     private static final ParticleRendererHandler RENDERER_HANDLER = new ParticleRendererHandler();
+    private static final AttributeMapHandler ATTRIBUTE_MAP_HANDLER = new AttributeMapHandler();
 
     //private static final String MINECRAFT_NAMESPACE = "minecraft";
 
@@ -75,12 +78,18 @@ public class CustomBiomeRegistry implements BiomeRegistry {
                         .temperatureAdjustment(settings.modifier().getModifier())
                         .hasPrecipitation(settings.hasPrecipitation())
                         .mobSpawnSettings(MobSpawnSettings.EMPTY)
-                        .generationSettings(BiomeGenerationSettings.EMPTY)
-                        .setAttribute(EnvironmentAttributes.FOG_COLOR, biome.getFogColor())
-                        .setAttribute(EnvironmentAttributes.SKY_COLOR, biome.getSkyColor())
-                        .setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, biome.getWaterColor())
-                        // TODO: rest of the biome settings should be added to the api
-                        ;
+                        .generationSettings(BiomeGenerationSettings.EMPTY);
+
+                // TODO: Replace with WrappedEnvironmentAttributeMap in the future
+                if (biome.getFogColor() != -1) {
+                    biomeBuilder.setAttribute(EnvironmentAttributes.FOG_COLOR, biome.getFogColor());
+                }
+                if (biome.getSkyColor() != -1) {
+                    biomeBuilder.setAttribute(EnvironmentAttributes.SKY_COLOR, biome.getWaterColor());
+                }
+                if (biome.getWaterFogColor() != -1) {
+                    biomeBuilder.setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, biome.getWaterFogColor());
+                }
 
                 // Create a new Biome object with the settings and colors from the CustomBiome object
                 BiomeSpecialEffects effects = SPECIAL_EFFECTS_HANDLER.build(biome);
@@ -88,6 +97,9 @@ public class CustomBiomeRegistry implements BiomeRegistry {
 
                 ParticleRenderer particleRenderer = biome.getParticleRenderer();
                 RENDERER_HANDLER.handle(particleRenderer, biomeBuilder);
+
+                WrappedEnvironmentAttributeMap wrappedAttributeMap = biome.getEnvironmentAttributeMap();
+                ATTRIBUTE_MAP_HANDLER.handle(wrappedAttributeMap, biomeBuilder);
 
                 // Register the new Biome object to the biome registry
                 Biome createdBiome = biomeBuilder.build();
@@ -135,14 +147,26 @@ public class CustomBiomeRegistry implements BiomeRegistry {
         List<net.minecraft.world.attribute.AmbientParticle> particles = RENDERER_HANDLER.create(particleRenderer);
 
 
-        EnvironmentAttributeMap environmentAttributeMap = EnvironmentAttributeMap.builder()
-                .set(EnvironmentAttributes.FOG_COLOR, customBiome.getFogColor())
-                .set(EnvironmentAttributes.SKY_COLOR, customBiome.getSkyColor())
-                .set(EnvironmentAttributes.WATER_FOG_COLOR, customBiome.getWaterColor())
-                .set(EnvironmentAttributes.AMBIENT_PARTICLES, particles)
-                .build();
+        EnvironmentAttributeMap.Builder environmentAttributeMapBuilder = EnvironmentAttributeMap.builder()
+                .set(EnvironmentAttributes.AMBIENT_PARTICLES, particles);
+
+        // TODO: Replace with WrappedEnvironmentAttributeMap in the future
+        if (customBiome.getFogColor() != -1) {
+            environmentAttributeMapBuilder.set(EnvironmentAttributes.FOG_COLOR, customBiome.getFogColor());
+        }
+        if (customBiome.getSkyColor() != -1) {
+            environmentAttributeMapBuilder.set(EnvironmentAttributes.SKY_COLOR, customBiome.getSkyColor());
+        }
+        if (customBiome.getWaterFogColor() != -1) {
+            environmentAttributeMapBuilder.set(EnvironmentAttributes.WATER_FOG_COLOR, customBiome.getWaterFogColor());
+        }
+
+        EnvironmentAttributeMap environmentAttributeMap = environmentAttributeMapBuilder.build();
 
         BiomeSpecialEffects specialEffects = SPECIAL_EFFECTS_HANDLER.build(customBiome);
+
+        WrappedEnvironmentAttributeMap wrappedAttributeMap = customBiome.getEnvironmentAttributeMap();
+        ATTRIBUTE_MAP_HANDLER.apply(wrappedAttributeMap, environmentAttributeMap);
 
         // Time to reflect
         try {

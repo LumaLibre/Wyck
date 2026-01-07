@@ -1,4 +1,4 @@
-package me.outspending.biomesapi.wrapper;
+package me.outspending.biomesapi.wrapper.environment;
 
 import me.outspending.biomesapi.annotations.AsOf;
 import net.minecraft.world.level.biome.Biome;

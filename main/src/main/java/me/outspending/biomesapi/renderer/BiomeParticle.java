@@ -1,7 +1,7 @@
 package me.outspending.biomesapi.renderer;
 
 import me.outspending.biomesapi.annotations.AsOf;
-import me.outspending.biomesapi.wrapper.AmbientParticle;
+import me.outspending.biomesapi.wrapper.environment.AmbientParticle;
 import net.minecraft.core.particles.*;
 
 /**

@@ -7,7 +7,7 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeSpecialEffects;
 import org.jetbrains.annotations.NotNull;
 
-@AsOf("0.0.25")
+@AsOf("1.0.2")
 public class SpecialEffectsHandler implements BuilderHandler<Biome.BiomeBuilder, BiomeSpecialEffects> {
 
     @Override
@@ -19,19 +19,21 @@ public class SpecialEffectsHandler implements BuilderHandler<Biome.BiomeBuilder,
 
     @Override
     public BiomeSpecialEffects build(@NotNull CustomBiome biome) {
-        // TODO: Expand this to include more special effects settings
         BiomeSpecialEffects.Builder builder = new BiomeSpecialEffects.Builder();
-        if (biome.getFoliageColor() != 0) {
+        if (biome.getFoliageColor() != -1) {
             builder.foliageColorOverride(biome.getFoliageColor());
-            builder.dryFoliageColorOverride(biome.getFoliageColor());
         }
 
-        if (biome.getWaterColor() != 0) {
+        if (biome.getWaterColor() != -1) {
             builder.waterColor(biome.getWaterColor());
         }
 
-        if (biome.getGrassColor() != 0) {
+        if (biome.getGrassColor() != -1) {
             builder.grassColorOverride(biome.getGrassColor());
+        }
+
+        if (biome.getDryFoliageColor() != -1) {
+            builder.dryFoliageColorOverride(biome.getDryFoliageColor());
         }
 
         builder.grassColorModifier(biome.getGrassColorModifier().getDelegateModifier());
