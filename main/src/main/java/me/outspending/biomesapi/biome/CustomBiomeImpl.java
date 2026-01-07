@@ -30,12 +30,12 @@ public final class CustomBiomeImpl implements CustomBiome {
     private final BiomeSettings settings;
 
     // Required Colors
-    private int fogColor = -1;
-    private int waterColor = -1;
-    private int waterFogColor = -1;
-    private int skyColor = -1;
+    private int waterColor = 0xF54927;
 
     // Optional Colors
+    private int fogColor = -1;
+    private int waterFogColor = -1;
+    private int skyColor = -1;
     private int foliageColor = -1;
     private int grassColor = -1;
     private int dryFoliageColor = -1;

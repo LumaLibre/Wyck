@@ -24,10 +24,6 @@ public class SpecialEffectsHandler implements BuilderHandler<Biome.BiomeBuilder,
             builder.foliageColorOverride(biome.getFoliageColor());
         }
 
-        if (biome.getWaterColor() != -1) {
-            builder.waterColor(biome.getWaterColor());
-        }
-
         if (biome.getGrassColor() != -1) {
             builder.grassColorOverride(biome.getGrassColor());
         }
@@ -36,6 +32,7 @@ public class SpecialEffectsHandler implements BuilderHandler<Biome.BiomeBuilder,
             builder.dryFoliageColorOverride(biome.getDryFoliageColor());
         }
 
+        builder.waterColor(biome.getWaterColor());
         builder.grassColorModifier(biome.getGrassColorModifier().getDelegateModifier());
 
         return builder.build();
