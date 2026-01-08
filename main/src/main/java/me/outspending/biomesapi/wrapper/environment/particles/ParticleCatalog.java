@@ -13,6 +13,9 @@ import java.util.List;
 
 /**
  * A catalog of ambient particles for a biome.
+ *
+ * @since 1.1.0
+ * @author Jsinco
  * @param particles The list of wrapped ambient particles.
  */
 @AsOf("1.1.0")

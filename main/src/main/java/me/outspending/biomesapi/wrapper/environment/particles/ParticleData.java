@@ -7,6 +7,10 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * An interface for particle data that can be applied to a specific particle type.
+ *
+ * @see ParticleCatalog
+ * @since 1.1.0
+ * @author Jsinco
  * @param <T> The type of ParticleOptions associated with the particle data.
  */
 public interface ParticleData<T extends ParticleOptions> {

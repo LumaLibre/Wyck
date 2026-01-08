@@ -11,6 +11,9 @@ import org.jetbrains.annotations.Nullable;
 /**
  * A wrapper for ambient particles in a biome, including their type, probability, and optional data.
  *
+ * @see ParticleCatalog
+ * @since 1.1.0
+ * @author Jsinco
  * @param <T> The type of ParticleOptions associated with the particle.
  */
 @AsOf("1.1.0")
