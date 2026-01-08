@@ -2,7 +2,6 @@ package me.outspending.biomesapi.wrapper.environment.particles;
 
 import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.annotations.AsOf;
-import me.outspending.biomesapi.renderer.ParticleRenderer;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.world.attribute.AmbientParticle;
 import org.jetbrains.annotations.NotNull;
@@ -56,7 +55,7 @@ public record ParticleCatalog(List<WrappedAmbientParticle<?>> particles) {
     @SuppressWarnings("removal")
     @Deprecated(since = "1.1.0", forRemoval = true)
     @AsOf("1.1.0")
-    public static ParticleCatalog fromParticleRenderer(ParticleRenderer renderer) {
+    public static ParticleCatalog fromParticleRenderer(me.outspending.biomesapi.renderer.ParticleRenderer renderer) {
         ParticleCatalog.Builder builder = ParticleCatalog.builder();
         for (var entry : renderer.ambientParticles().entrySet()) {
             builder.addSimple(WrappedParticleTypes.fromAmbientParticle(entry.getKey()), entry.getValue());
