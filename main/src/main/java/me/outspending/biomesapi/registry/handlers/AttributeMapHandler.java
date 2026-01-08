@@ -14,7 +14,6 @@ public class AttributeMapHandler implements BuilderHandler<Biome.BiomeBuilder, W
     public void handle(WrappedEnvironmentAttributeMap value, Biome.@NotNull BiomeBuilder key) {
         if (value == null || value.empty()) return;
 
-
         value.applyToBiomeBuilder(key);
     }
 

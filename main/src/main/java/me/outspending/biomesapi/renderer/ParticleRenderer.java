@@ -1,7 +1,6 @@
 package me.outspending.biomesapi.renderer;
 
 import me.outspending.biomesapi.annotations.AsOf;
-import me.outspending.biomesapi.wrapper.environment.AmbientParticle;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -15,9 +14,12 @@ import java.util.Map;
  * @version 0.0.8
  * @since 0.0.1
  * @author Outspending
+ * @deprecated Use {@link me.outspending.biomesapi.wrapper.environment.particles.ParticleCatalog} instead.
  */
 @AsOf("0.0.8")
-public record ParticleRenderer(@NotNull Map<@NotNull AmbientParticle, @NotNull Float> ambientParticles) {
+@Deprecated(since = "1.1.0", forRemoval = true)
+@SuppressWarnings("removal")
+public record ParticleRenderer(@NotNull Map<me.outspending.biomesapi.wrapper.environment.AmbientParticle, @NotNull Float> ambientParticles) {
 
     public static final ParticleRenderer EMPTY = new ParticleRenderer(Map.of());
 
@@ -31,12 +33,12 @@ public record ParticleRenderer(@NotNull Map<@NotNull AmbientParticle, @NotNull F
      * @version 0.0.8
      */
     @AsOf("0.0.8")
-    public static @NotNull ParticleRenderer of(@NotNull List<@NotNull AmbientParticle> ambientParticles, @NotNull List<@NotNull Float> probabilities) {
+    public static @NotNull ParticleRenderer of(@NotNull List<me.outspending.biomesapi.wrapper.environment.AmbientParticle> ambientParticles, @NotNull List<@NotNull Float> probabilities) {
         if (ambientParticles.size() != probabilities.size()) {
             throw new IllegalArgumentException("The size of ambientParticles and probabilities must be the same.");
         }
 
-        Map<AmbientParticle, Float> particleMap = new HashMap<>();
+        Map<me.outspending.biomesapi.wrapper.environment.AmbientParticle, Float> particleMap = new HashMap<>();
         for (int i = 0; i < ambientParticles.size(); i++) {
             particleMap.put(ambientParticles.get(i), probabilities.get(i));
         }
@@ -54,7 +56,7 @@ public record ParticleRenderer(@NotNull Map<@NotNull AmbientParticle, @NotNull F
      * @version 0.0.1
      */
     @AsOf("0.0.1")
-    public static @NotNull ParticleRenderer of(@NotNull AmbientParticle ambientParticle, float probability) {
+    public static @NotNull ParticleRenderer of(@NotNull me.outspending.biomesapi.wrapper.environment.AmbientParticle ambientParticle, float probability) {
         return new ParticleRenderer(Map.of(ambientParticle, probability));
     }
 
@@ -67,7 +69,7 @@ public record ParticleRenderer(@NotNull Map<@NotNull AmbientParticle, @NotNull F
      */
     @AsOf("0.0.1")
     public static @NotNull ParticleRenderer defaultSettings() {
-        return new ParticleRenderer(Map.of(AmbientParticle.CLOUD, 0.008F));
+        return new ParticleRenderer(Map.of(me.outspending.biomesapi.wrapper.environment.AmbientParticle.CLOUD, 0.008F));
     }
 
     public List<net.minecraft.world.attribute.AmbientParticle> getDelegateParticles() {
@@ -102,7 +104,7 @@ public record ParticleRenderer(@NotNull Map<@NotNull AmbientParticle, @NotNull F
      */
     @AsOf("0.0.8")
     public static class Builder {
-        private final Map<AmbientParticle, Float> ambientParticles = new HashMap<>();
+        private final Map<me.outspending.biomesapi.wrapper.environment.AmbientParticle, Float> ambientParticles = new HashMap<>();
 
         /**
          * Adds an ambient particle with the specified probability to the ParticleRenderer being built.
@@ -112,7 +114,7 @@ public record ParticleRenderer(@NotNull Map<@NotNull AmbientParticle, @NotNull F
          * @return the Builder instance for method chaining
          */
         @AsOf("0.0.8")
-        public Builder addAmbientParticle(@NotNull AmbientParticle ambientParticle, float probability) {
+        public Builder addAmbientParticle(@NotNull me.outspending.biomesapi.wrapper.environment.AmbientParticle ambientParticle, float probability) {
             ambientParticles.put(ambientParticle, probability);
             return this;
         }

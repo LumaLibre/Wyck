@@ -9,10 +9,10 @@ import me.outspending.biomesapi.biome.BiomeHandler;
 import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.nms.NMS;
 import me.outspending.biomesapi.nms.NMSHandler;
-import me.outspending.biomesapi.registry.handlers.ParticleRendererHandler;
+import me.outspending.biomesapi.registry.handlers.ParticleCatalogHandler;
 import me.outspending.biomesapi.registry.handlers.SpecialEffectsHandler;
-import me.outspending.biomesapi.renderer.ParticleRenderer;
 import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttributeMap;
+import me.outspending.biomesapi.wrapper.environment.particles.ParticleCatalog;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.attribute.EnvironmentAttributeMap;
@@ -39,10 +39,9 @@ import java.util.List;
 public class CustomBiomeRegistry implements BiomeRegistry {
 
     private static final SpecialEffectsHandler SPECIAL_EFFECTS_HANDLER = new SpecialEffectsHandler();
-    private static final ParticleRendererHandler RENDERER_HANDLER = new ParticleRendererHandler();
+    private static final ParticleCatalogHandler PARTICLE_CATALOG_HANDLER = new ParticleCatalogHandler();
     private static final AttributeMapHandler ATTRIBUTE_MAP_HANDLER = new AttributeMapHandler();
 
-    //private static final String MINECRAFT_NAMESPACE = "minecraft";
 
     /**
      * This method registers a custom biome to a Minecraft server.
@@ -59,7 +58,6 @@ public class CustomBiomeRegistry implements BiomeRegistry {
     @SuppressWarnings("unchecked")
     public void register(@NotNull CustomBiome biome) {
         Preconditions.checkNotNull(biome, "biome cannot be null");
-        //Preconditions.checkArgument(!biome.toNamespacedKey().namespace().equals(MINECRAFT_NAMESPACE), "Illegal namespace: %s", MINECRAFT_NAMESPACE);
 
         BiomeLock.unlock(() -> {
 
@@ -95,8 +93,8 @@ public class CustomBiomeRegistry implements BiomeRegistry {
                 BiomeSpecialEffects effects = SPECIAL_EFFECTS_HANDLER.build(biome);
                 SPECIAL_EFFECTS_HANDLER.handle(effects, biomeBuilder);
 
-                ParticleRenderer particleRenderer = biome.getParticleRenderer();
-                RENDERER_HANDLER.handle(particleRenderer, biomeBuilder);
+                ParticleCatalog particleCatalog = biome.getParticleCatalog();
+                PARTICLE_CATALOG_HANDLER.handle(particleCatalog, biomeBuilder);
 
                 WrappedEnvironmentAttributeMap wrappedAttributeMap = biome.getEnvironmentAttributeMap();
                 ATTRIBUTE_MAP_HANDLER.handle(wrappedAttributeMap, biomeBuilder);
@@ -143,8 +141,8 @@ public class CustomBiomeRegistry implements BiomeRegistry {
 
         // Rebuild biome components
         Biome.ClimateSettings climateSettings = new Biome.ClimateSettings(settings.hasPrecipitation(), settings.temperature(), settings.modifier().getModifier(), settings.downfall());
-        ParticleRenderer particleRenderer = customBiome.getParticleRenderer();
-        List<net.minecraft.world.attribute.AmbientParticle> particles = RENDERER_HANDLER.create(particleRenderer);
+        ParticleCatalog particleCatalog = customBiome.getParticleCatalog();
+        List<net.minecraft.world.attribute.AmbientParticle> particles = PARTICLE_CATALOG_HANDLER.create(particleCatalog);
 
 
         EnvironmentAttributeMap.Builder environmentAttributeMapBuilder = EnvironmentAttributeMap.builder()
