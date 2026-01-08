@@ -11,9 +11,15 @@ import me.outspending.biomesapi.wrapper.BiomeSettings;
 import me.outspending.biomesapi.wrapper.environment.BedRule;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleCatalog;
 import me.outspending.biomesapi.wrapper.environment.particle.WrappedParticleTypes;
+import me.outspending.biomesapi.wrapper.environment.particle.options.BlockParticle;
 import me.outspending.biomesapi.wrapper.environment.particle.options.DustParticle;
+import me.outspending.biomesapi.wrapper.environment.particle.options.VibrationParticle;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Chunk;
 import org.bukkit.Material;
+import org.bukkit.Vibration;
+import org.bukkit.block.Biome;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -61,13 +67,14 @@ public final class BiomesAPITest extends JavaPlugin implements Listener {
                 .grassColor("#9D00FF")
                 .particleCatalog(
                         ParticleCatalog.builder()
-                                .addSimple(WrappedParticleTypes.WITCH, 0.01f)
+                                //.addSimple(WrappedParticleTypes.WITCH, 0.01f)
+                                .addComplex(WrappedParticleTypes.BLOCK, 0.1f, BlockParticle.of(Material.STONE))
                                 .addComplex(WrappedParticleTypes.DUST, 0.1f, DustParticle.of("#B99DFC"))
                                 .build()
                 )
                 .blockReplacements(
-                        BlockReplacement.of(Material.GRASS_BLOCK, Material.WATER),
-                        BlockReplacement.of(Material.STONE, Material.DIAMOND_BLOCK)
+//                        BlockReplacement.of(Material.GRASS_BLOCK, Material.WATER),
+//                        BlockReplacement.of(Material.STONE, Material.DIAMOND_BLOCK)
                 )
                 //.environmentAttributeMap(attributeMap)
                 .build();
@@ -81,6 +88,10 @@ public final class BiomesAPITest extends JavaPlugin implements Listener {
 
         PhonyCustomBiome phonyCustomBiome = PhonyCustomBiome.builder()
                 .setCustomBiome(biome)
+//                .setConditional((player, chunkLocation) -> {
+//                    Block block = chunkLocation.centerBlock(player.getWorld());
+//                    return block.getBiome() == Biome.BIRCH_FOREST;
+//                })
                 .build();
 
         packetHandler.appendBiome(phonyCustomBiome);

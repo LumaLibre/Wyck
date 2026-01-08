@@ -3,6 +3,9 @@ package me.outspending.biomesapi.renderer.packet.data;
 import me.outspending.biomesapi.annotations.AsOf;
 import net.minecraft.world.level.chunk.LevelChunk;
 import org.bukkit.Chunk;
+import org.bukkit.World;
+import org.bukkit.block.Biome;
+import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -113,7 +116,37 @@ public record ChunkLocation(int x, int z) {
         return new ChunkLocation(-this.x, -this.z);
     }
 
+    /**
+     * Converts this ChunkLocation to a Bukkit Chunk in the given world.
+     * @param world the world to get the chunk from
+     * @return the Bukkit Chunk at this ChunkLocation in the given world
+     */
+    @AsOf("1.2.0")
+    public @NotNull Chunk toBukkitChunk(World world) {
+        return world.getChunkAt(x, z);
+    }
 
+    /**
+     * Gets the center block of this chunk in the given world.
+     * @param world the world to get the block from
+     * @return the center block of this chunk in the given world
+     */
+    @AsOf("1.2.0")
+    public @NotNull Block centerBlock(@NotNull World world) {
+        Chunk chunk = toBukkitChunk(world);
+        return chunk.getBlock(7, 0, 7); // starts at 0, so 7 is the center block in a 16x16 chunk
+    }
+
+    /**
+     * Gets the biome of the center block of this chunk in the given world.
+     * @param world the world to get the biome from
+     * @return the biome of the center block of this chunk in the given world
+     */
+    @AsOf("1.2.0")
+    public @NotNull Biome getCenterBiome(@NotNull World world) {
+        Block centerBlock = centerBlock(world);
+        return centerBlock.getBiome();
+    }
 
     @Override
     public boolean equals(Object obj) {
