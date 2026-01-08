@@ -1,18 +1,18 @@
 package me.outspending.biomesapi.registry;
 
 import com.google.common.base.Preconditions;
-import me.outspending.biomesapi.nms.BiomeLock;
+import me.outspending.biomesapi.unsafe.BiomeLock;
 import me.outspending.biomesapi.registry.handlers.AttributeMapHandler;
 import me.outspending.biomesapi.wrapper.BiomeSettings;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.biome.BiomeHandler;
 import me.outspending.biomesapi.biome.CustomBiome;
-import me.outspending.biomesapi.nms.NMS;
-import me.outspending.biomesapi.nms.NMSHandler;
+import me.outspending.biomesapi.unsafe.UnsafeNMS;
+import me.outspending.biomesapi.unsafe.UnsafeNMSHandler;
 import me.outspending.biomesapi.registry.handlers.ParticleCatalogHandler;
 import me.outspending.biomesapi.registry.handlers.SpecialEffectsHandler;
 import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttributeMap;
-import me.outspending.biomesapi.wrapper.environment.particles.ParticleCatalog;
+import me.outspending.biomesapi.wrapper.environment.particle.ParticleCatalog;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.attribute.EnvironmentAttributeMap;
@@ -26,16 +26,15 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.reflect.Field;
 import java.util.List;
 
-// TODO: should possibly be moved down to NMS-level packages
 /**
  * This class implements the BiomeRegistry interface and provides a method to register a custom biome to a Minecraft server.
  * It uses the BiomeLock class to unlock the biome registry before registering the custom biome, and then freezes the registry again.
  *
- * @version 0.0.1
+ * @version 1.1.0
  * @since 0.0.1
  * @author Outspending
  */
-@AsOf("0.0.15")
+@AsOf("1.1.0")
 public class CustomBiomeRegistry implements BiomeRegistry {
 
     private static final SpecialEffectsHandler SPECIAL_EFFECTS_HANDLER = new SpecialEffectsHandler();
@@ -62,7 +61,7 @@ public class CustomBiomeRegistry implements BiomeRegistry {
         BiomeLock.unlock(() -> {
 
             // Retrieve the biome registry from NMS
-            NMSHandler.executeNMS(nms -> {
+            UnsafeNMSHandler.executeNMS(nms -> {
                 Registry<@NotNull Biome> registry = (Registry<@NotNull Biome>) nms.getRegistry();
 
                 // Get the ResourceLocation and BiomeSettings from the CustomBiome object
@@ -132,7 +131,7 @@ public class CustomBiomeRegistry implements BiomeRegistry {
 
         BiomeSettings settings = customBiome.getSettings();
 
-        NMS nms = NMSHandler.getNMS().orElseThrow();
+        UnsafeNMS nms = UnsafeNMSHandler.getNMS().orElseThrow();
 
         Registry<net.minecraft.world.level.biome.@NotNull Biome> biomeRegistry = (Registry<net.minecraft.world.level.biome.Biome>) nms.getRegistry();
         net.minecraft.world.level.biome.Biome biome = biomeRegistry.getOptional(resourceKey.resourceLocation()).orElseThrow(
