@@ -6,8 +6,8 @@ import me.outspending.biomesapi.wrapper.environment.GrassColorModifier;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.packet.data.BlockReplacement;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
-import me.outspending.biomesapi.renderer.ParticleRenderer;
 import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttributeMap;
+import me.outspending.biomesapi.wrapper.environment.particles.ParticleCatalog;
 import org.bukkit.Color;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Biome;
@@ -149,9 +149,23 @@ public interface CustomBiome {
      *
      * @return the ParticleRenderer of the CustomBiome
      * @since 0.0.1
+     * @deprecated use {@link #getParticleCatalog()} instead.
      */
     @AsOf("0.0.1")
-    ParticleRenderer getParticleRenderer();
+    @Deprecated(forRemoval = true, since = "1.1.0")
+    @SuppressWarnings("removal")
+    default me.outspending.biomesapi.renderer.ParticleRenderer getParticleRenderer() {
+        throw new UnsupportedOperationException("Use getParticleCatalog() instead.");
+    }
+
+    /**
+     * Returns the ParticleRenderer of the CustomBiome.
+     *
+     * @return the ParticleRenderer of the CustomBiome
+     * @since 1.1.0
+     */
+    @AsOf("1.1.0")
+    ParticleCatalog getParticleCatalog();
 
     /**
      * Returns the BlockReplacements of the CustomBiome.
@@ -248,10 +262,24 @@ public interface CustomBiome {
      * Sets the ParticleRenderer of the CustomBiome.
      *
      * @param particleRenderer the ParticleRenderer of the CustomBiome
-     * @since 0.0.5
+     * @since 0.0.1
+     * @deprecated use {@link #setParticleCatalog(ParticleCatalog)} instead.
      */
-    @AsOf("0.0.5")
-    void setParticleRenderer(@NotNull ParticleRenderer particleRenderer);
+    @AsOf("0.0.1")
+    @Deprecated(forRemoval = true, since = "1.1.0")
+    @SuppressWarnings("removal")
+    default void setParticleRenderer(@NotNull me.outspending.biomesapi.renderer.ParticleRenderer particleRenderer) {
+        setParticleCatalog(ParticleCatalog.fromParticleRenderer(particleRenderer));
+    }
+
+    /**
+     * Sets the ParticleRenderer of the CustomBiome.
+     *
+     * @param particleCatalog the ParticleRenderer of the CustomBiome
+     * @since 1.1.0
+     */
+    @AsOf("1.1.0")
+    void setParticleCatalog(@NotNull ParticleCatalog particleCatalog);
 
     /**
      * Sets the BlockReplacements of the CustomBiome.
@@ -336,7 +364,7 @@ public interface CustomBiome {
         private @Nullable Integer dryFoliageColor = -1;
 
         private GrassColorModifier grassColorModifier = GrassColorModifier.NONE;
-        private ParticleRenderer particleRenderer = ParticleRenderer.EMPTY;
+        private ParticleCatalog particleCatalog = ParticleCatalog.EMPTY;
         private BlockReplacement[] blockReplacements = new BlockReplacement[0];
         private WrappedEnvironmentAttributeMap environmentAttributeMap = WrappedEnvironmentAttributeMap.EMPTY;
 
@@ -394,7 +422,7 @@ public interface CustomBiome {
             this.grassColor = biome.getGrassColor();
             this.dryFoliageColor = biome.getDryFoliageColor();
             this.grassColorModifier = biome.getGrassColorModifier();
-            this.particleRenderer = biome.getParticleRenderer();
+            this.particleCatalog = biome.getParticleCatalog();
             this.blockReplacements = biome.getBlockReplacements();
             this.environmentAttributeMap = biome.getEnvironmentAttributeMap();
         }
@@ -612,12 +640,28 @@ public interface CustomBiome {
          * This method sets the particle renderer property of the CustomBiome.
          *
          * @param particleRenderer The particle renderer of the custom biome.
-         * @version 0.0.1
+         * @since 0.0.1
          * @return The Builder object, for chaining method calls.
+         * @deprecated use {@link #particleCatalog(ParticleCatalog)} instead.
          */
         @AsOf("0.0.1")
-        public @NotNull Builder particleRenderer(@NotNull ParticleRenderer particleRenderer) {
-            this.particleRenderer = particleRenderer;
+        @Deprecated(forRemoval = true, since = "1.1.0")
+        @SuppressWarnings("removal")
+        public @NotNull Builder particleRenderer(@NotNull me.outspending.biomesapi.renderer.ParticleRenderer particleRenderer) {
+            this.particleCatalog = ParticleCatalog.fromParticleRenderer(particleRenderer);
+            return this;
+        }
+
+        /**
+         * This method sets the particle catalog property of the CustomBiome.
+         *
+         * @param particleCatalog The particle catalog of the custom biome.
+         * @since 1.1.0
+         * @return The Builder object, for chaining method calls.
+         */
+        @AsOf("1.1.0")
+        public @NotNull Builder particleCatalog(@NotNull ParticleCatalog particleCatalog) {
+            this.particleCatalog = particleCatalog;
             return this;
         }
 
@@ -671,7 +715,7 @@ public interface CustomBiome {
                     grassColor,
                     dryFoliageColor,
                     grassColorModifier,
-                    particleRenderer,
+                    particleCatalog,
                     blockReplacements,
                     environmentAttributeMap
             );

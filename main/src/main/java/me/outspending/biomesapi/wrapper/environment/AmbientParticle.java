@@ -15,8 +15,10 @@ import org.jetbrains.annotations.NotNull;
  * @version 1.0.2
  * @since 0.0.1
  * @author Outspending
+ * @deprecated Use {@link me.outspending.biomesapi.wrapper.environment.particles.WrappedAmbientParticle} instead.
  */
 @AsOf("1.0.2")
+@Deprecated(since = "1.1.0", forRemoval = true)
 public enum AmbientParticle {
 
     ANGRY_VILLAGER(ParticleTypes.ANGRY_VILLAGER),
@@ -122,10 +124,9 @@ public enum AmbientParticle {
     /**
      * Constructor for the AmbientParticle enum.
      * This constructor is used to associate a specific SimpleParticleType with each ambient particle.
-     * The @AsOf annotation indicates the version when this constructor was introduced.
      *
      * @param particle the SimpleParticleType associated with the ambient particle
-     * @version 0.0.1
+     * @since  0.0.1
      */
     @AsOf("0.0.1")
     AmbientParticle(SimpleParticleType particle) {
@@ -135,15 +136,15 @@ public enum AmbientParticle {
 
     /**
      * This method returns the SimpleParticleType associated with the ambient particle.
-     * The @AsOf annotation indicates the version when this method was introduced.
      *
      * @return the SimpleParticleType associated with the ambient particle
-     * @version 0.0.1
+     * @since 0.0.1
      */
     @AsOf("0.0.1")
     public <T extends ParticleOptions> ParticleType<@NotNull T> getParticle() {
         return (ParticleType<T>) particle;
     }
+
 
     /**
      * Get the SimpleParticleType of this AmbientParticle.

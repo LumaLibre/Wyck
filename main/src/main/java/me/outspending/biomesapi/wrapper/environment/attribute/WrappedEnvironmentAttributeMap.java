@@ -44,18 +44,21 @@ public record WrappedEnvironmentAttributeMap(List<WrappedEnvironmentAttribute<?,
         return builder.build();
     }
 
+    @AsOf("1.1.0")
     public void applyToMap(EnvironmentAttributeMap map) {
         for (WrappedEnvironmentAttribute<?, ?> wrappedAttribute : attributes) {
             addToMap(map, wrappedAttribute);
         }
     }
 
+    @AsOf("1.1.0")
     public void applyToMapBuilder(EnvironmentAttributeMap.Builder mapBuilder) {
         for (WrappedEnvironmentAttribute<?, ?> wrappedAttribute : attributes) {
             addToBuilder(mapBuilder, wrappedAttribute);
         }
     }
 
+    @AsOf("1.1.0")
     public void applyToBiomeBuilder(Biome.BiomeBuilder builder) {
         for (WrappedEnvironmentAttribute<?, ?> wrappedAttribute : attributes) {
             addToBiomeBuilder(builder, wrappedAttribute);
@@ -77,10 +80,12 @@ public record WrappedEnvironmentAttributeMap(List<WrappedEnvironmentAttribute<?,
         builder.set(wrappedAttribute.getAttribute(), wrappedAttribute.getConvertedValue());
     }
 
+    @AsOf("1.1.0")
     private <T, K> void addToMap(EnvironmentAttributeMap map, WrappedEnvironmentAttribute<T, K> wrappedAttribute) {
         map.applyModifier(wrappedAttribute.getAttribute(), wrappedAttribute.getConvertedValue());
     }
 
+    @AsOf("1.1.0")
     private <T, K> void addToBiomeBuilder(Biome.BiomeBuilder builder, WrappedEnvironmentAttribute<T, K> wrappedAttribute) {
         builder.setAttribute(wrappedAttribute.getAttribute(), wrappedAttribute.getConvertedValue());
     }

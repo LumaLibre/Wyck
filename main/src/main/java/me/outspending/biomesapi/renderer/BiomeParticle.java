@@ -1,13 +1,12 @@
 package me.outspending.biomesapi.renderer;
 
 import me.outspending.biomesapi.annotations.AsOf;
-import me.outspending.biomesapi.wrapper.environment.AmbientParticle;
 import net.minecraft.core.particles.*;
 
 /**
  * An interface containing constants for various biome particle types.
  *
- * @deprecated Use {@link AmbientParticle} instead.
+ * @deprecated Use {@link me.outspending.biomesapi.wrapper.environment.particles.WrappedParticleTypes} instead.
  * @version 0.0.1
  * @since 0.0.1
  * @author Outspending
