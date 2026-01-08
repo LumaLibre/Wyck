@@ -7,4 +7,4 @@ rootProject.name = "BiomesAPI"
 include("main")
 include("test-plugin")
 include("minecraft:Wrapper")
-include("minecraft:1.21_R7")
+include("minecraft:1_21_11")

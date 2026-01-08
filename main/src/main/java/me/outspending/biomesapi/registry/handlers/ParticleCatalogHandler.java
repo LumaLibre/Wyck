@@ -2,7 +2,7 @@ package me.outspending.biomesapi.registry.handlers;
 
 import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.registry.BuilderHandler;
-import me.outspending.biomesapi.wrapper.environment.particles.ParticleCatalog;
+import me.outspending.biomesapi.wrapper.environment.particle.ParticleCatalog;
 import net.minecraft.world.attribute.AmbientParticle;
 import net.minecraft.world.attribute.EnvironmentAttributes;
 import net.minecraft.world.level.biome.Biome;

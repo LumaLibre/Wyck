@@ -1,7 +1,7 @@
 package me.outspending.biomesapi;
 
 import me.outspending.biomesapi.annotations.AsOf;
-import me.outspending.biomesapi.nms.NMSHandler;
+import me.outspending.biomesapi.unsafe.UnsafeNMSHandler;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -39,7 +39,7 @@ public class BiomeUpdaterImpl implements BiomeUpdater {
 
     @Override
     public void updateChunks(@NotNull List<Chunk> chunks) {
-        NMSHandler.executeNMS(nms -> nms.updateChunks(chunks));
+        UnsafeNMSHandler.executeNMS(nms -> nms.updateChunks(chunks));
     }
 
 

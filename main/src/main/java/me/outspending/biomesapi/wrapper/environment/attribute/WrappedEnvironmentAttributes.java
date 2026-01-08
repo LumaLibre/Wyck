@@ -1,12 +1,13 @@
 package me.outspending.biomesapi.wrapper.environment.attribute;
 
 import me.outspending.biomesapi.annotations.AsOf;
-import me.outspending.biomesapi.renderer.ParticleRenderer;
 import me.outspending.biomesapi.wrapper.environment.Activity;
-import me.outspending.biomesapi.wrapper.environment.AmbientParticle;
 import me.outspending.biomesapi.wrapper.environment.BedRule;
 import me.outspending.biomesapi.wrapper.environment.MoonPhase;
+import me.outspending.biomesapi.wrapper.environment.particle.ParticleCatalog;
+import me.outspending.biomesapi.wrapper.environment.particle.WrappedAmbientParticle;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.world.attribute.AmbientParticle;
 import net.minecraft.world.attribute.AmbientSounds;
 import net.minecraft.world.attribute.BackgroundMusic;
 import net.minecraft.world.attribute.EnvironmentAttributes;
@@ -66,9 +67,9 @@ public final class WrappedEnvironmentAttributes {
     /** Untested */
     public static final WrappedEnvironmentAttributeSupplier<Float, Float> SKY_LIGHT_FACTOR = WrappedEnvironmentAttribute.ofSupplier(EnvironmentAttributes.SKY_LIGHT_FACTOR);
     /** Untested */
-    public static final WrappedEnvironmentAttributeSupplier<ParticleOptions, AmbientParticle> DEFAULT_DRIPSTONE_PARTICLE = WrappedEnvironmentAttribute.ofSupplier(EnvironmentAttributes.DEFAULT_DRIPSTONE_PARTICLE, AmbientParticle::getSimpleParticle);
+    public static final WrappedEnvironmentAttributeSupplier<ParticleOptions, WrappedAmbientParticle<?>> DEFAULT_DRIPSTONE_PARTICLE = WrappedEnvironmentAttribute.ofSupplier(EnvironmentAttributes.DEFAULT_DRIPSTONE_PARTICLE, WrappedAmbientParticle::toMinecraftParticle);
     /** Adds visual particles to the biome */
-    public static final WrappedEnvironmentAttributeSupplier<List<net.minecraft.world.attribute.AmbientParticle>, ParticleRenderer> AMBIENT_PARTICLES = WrappedEnvironmentAttribute.ofSupplier(EnvironmentAttributes.AMBIENT_PARTICLES, ParticleRenderer::getDelegateParticles);
+    public static final WrappedEnvironmentAttributeSupplier<List<AmbientParticle>, ParticleCatalog> AMBIENT_PARTICLES = WrappedEnvironmentAttribute.ofSupplier(EnvironmentAttributes.AMBIENT_PARTICLES, ParticleCatalog::delegateParticles);
     /** Untested */
     public static final WrappedEnvironmentAttributeSupplier<Float, Float> MUSIC_VOLUME = WrappedEnvironmentAttribute.ofSupplier(EnvironmentAttributes.MUSIC_VOLUME);
 
