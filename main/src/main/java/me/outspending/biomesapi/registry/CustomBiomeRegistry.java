@@ -82,7 +82,7 @@ public class CustomBiomeRegistry implements BiomeRegistry {
                     biomeBuilder.setAttribute(EnvironmentAttributes.FOG_COLOR, biome.getFogColor());
                 }
                 if (biome.getSkyColor() != null) {
-                    biomeBuilder.setAttribute(EnvironmentAttributes.SKY_COLOR, biome.getWaterColor());
+                    biomeBuilder.setAttribute(EnvironmentAttributes.SKY_COLOR, biome.getSkyColor());
                 }
                 if (biome.getWaterFogColor() != null) {
                     biomeBuilder.setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, biome.getWaterFogColor());
