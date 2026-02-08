@@ -11,17 +11,18 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Utility class for updating biomes in Minecraft.
  * This class provides methods for updating the biomes of chunks and regions in a Minecraft world.
  * It uses the UnsafeValues instance to perform unsafe operations.
  *
- * @version 0.0.15
+ * @version 1.2.0
  * @since 0.0.1
  * @author Outspending
  */
-@AsOf("0.0.15")
+@AsOf("1.2.0")
 public interface BiomeUpdater {
 
     /**
@@ -44,21 +45,21 @@ public interface BiomeUpdater {
      * @param from The starting location.
      * @param to The ending location.
      * @return A list of chunks between the two locations.
-     * @version 0.0.1
+     * @since 0.0.1
      */
-    @AsOf("0.0.1")
-    default @NotNull List<Chunk> getChunksBetweenLocations(@NotNull Location from, @NotNull Location to) {
+    @AsOf("1.2.0")
+    default @NotNull List<CompletableFuture<Chunk>> getChunksBetweenLocations(@NotNull Location from, @NotNull Location to) {
         if (!from.getWorld().equals(to.getWorld())) {
             throw new IllegalArgumentException("Locations must be in the same world.");
         }
 
-        List<Chunk> chunks = new ArrayList<>();
+        List<CompletableFuture<Chunk>> chunks = new ArrayList<>();
 
         PointRange2D range = PointRange2D.of(from, to);
         World world = from.getWorld();
         for (int x = range.minX(); x <= range.maxX(); x += 16) {
             for (int z = range.minZ(); z <= range.maxZ(); z += 16) {
-                chunks.add(world.getChunkAt(x >> 4, z >> 4));
+                chunks.add(world.getChunkAtAsync(x >> 4, z >> 4));
             }
         }
 
@@ -70,10 +71,10 @@ public interface BiomeUpdater {
      * This method is a convenience method that calls the updateChunks method with a list containing the chunk.
      *
      * @param chunk The chunk to update.
-     * @version 0.0.1
+     * @since 0.0.1
      */
-    @AsOf("0.0.1")
-    void updateChunk(@NotNull Chunk chunk);
+    @AsOf("1.2.0")
+    void updateChunk(@NotNull CompletableFuture<Chunk> chunk);
 
     /**
      * Updates the biomes of the chunks between two locations.
@@ -93,10 +94,10 @@ public interface BiomeUpdater {
      * The update packet contains the new biome data for the chunk.
      *
      * @param chunks The chunks to update.
-     * @version 0.0.1
+     * @since 0.0.1
      */
-    @AsOf("0.0.1")
-    void updateChunks(@NotNull List<Chunk> chunks);
+    @AsOf("1.2.0")
+    void updateChunks(@NotNull List<CompletableFuture<Chunk>> chunks);
 
 
     /**

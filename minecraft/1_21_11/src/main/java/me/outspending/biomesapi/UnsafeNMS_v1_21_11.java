@@ -63,18 +63,25 @@ public class UnsafeNMS_v1_21_11 implements UnsafeNMS {
      * @param chunks The chunks to update.
      */
     @Override
-    public void updateChunks(@NotNull List<Chunk> chunks) {
+    public void updateChunks(@NotNull List<CompletableFuture<Chunk>> chunks) {
         CompletableFuture.runAsync(() -> {
-            for (Chunk chunk : chunks) {
-                LevelChunk levelChunk = (LevelChunk) ((CraftChunk) chunk).getHandle(ChunkStatus.BIOMES);
-                LevelLightEngine levelLightEngine = levelChunk.getLevel().getLightEngine();
+            for (CompletableFuture<Chunk> chunkFuture : chunks) {
+                chunkFuture.thenAccept(chunk -> {
+                    LevelChunk levelChunk = (LevelChunk) ((CraftChunk) chunk).getHandle(ChunkStatus.BIOMES);
+                    LevelLightEngine levelLightEngine = levelChunk.getLevel().getLightEngine();
 
-                ClientboundLevelChunkWithLightPacket packet = new ClientboundLevelChunkWithLightPacket(levelChunk, levelLightEngine, null, null, true);
-                for (Player player : getPlayersInDistance(chunk)) {
-                    ((CraftPlayer) player).getHandle().connection.send(packet);
-                }
+                    ClientboundLevelChunkWithLightPacket packet = new ClientboundLevelChunkWithLightPacket(levelChunk, levelLightEngine, null, null, true);
+                    for (Player player : getPlayersInDistance(chunk)) {
+                        ((CraftPlayer) player).getHandle().connection.send(packet);
+                    }
+                }).exceptionally(ex -> {
+                    ex.printStackTrace();
+                    return null;
+                });
             }
-
+        }).exceptionally(ex -> {
+            ex.printStackTrace();
+            return null;
         });
     }
 
@@ -161,10 +168,14 @@ public class UnsafeNMS_v1_21_11 implements UnsafeNMS {
             for (int x = minLoc.getBlockX(); x <= maxLoc.getBlockX(); x++) {
                 for (int y = minLoc.getBlockY(); y <= maxLoc.getBlockY(); y++) {
                     for (int z = minLoc.getBlockZ(); z <= maxLoc.getBlockZ(); z++) {
-                        Chunk chunk = minLoc.getWorld().getChunkAt(x, z);
-                        LevelChunk levelChunk = (LevelChunk) ((CraftChunk) chunk).getHandle(ChunkStatus.BIOMES);
+                        final int finalX = x;
+                        final int finalY = y;
+                        final int finalZ = z;
 
-                        levelChunk.setBiome(x, y, z, biome);
+                        minLoc.getWorld().getChunkAtAsync(x, z).thenAccept(chunk -> {
+                            LevelChunk levelChunk = (LevelChunk) ((CraftChunk) chunk).getHandle(ChunkStatus.BIOMES);
+                            levelChunk.setBiome(finalX, finalY, finalZ, biome);
+                        });
                     }
                 }
             }

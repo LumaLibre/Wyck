@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Implementation of the BiomeUpdater interface.
@@ -22,7 +23,7 @@ import java.util.List;
 public class BiomeUpdaterImpl implements BiomeUpdater {
 
     @Override
-    public void updateChunk(@NotNull Chunk chunk) {
+    public void updateChunk(@NotNull CompletableFuture<Chunk> chunk) {
         updateChunks(List.of(chunk));
     }
 
@@ -31,28 +32,28 @@ public class BiomeUpdaterImpl implements BiomeUpdater {
         if (from == null || to == null) {
             throw new IllegalArgumentException("Locations cannot be null.");
         } else {
-            List<Chunk> updateChunks = getChunksBetweenLocations(from, to);
+            List<CompletableFuture<Chunk>> updateChunks = getChunksBetweenLocations(from, to);
 
             updateChunks(updateChunks);
         }
     }
 
     @Override
-    public void updateChunks(@NotNull List<Chunk> chunks) {
+    public void updateChunks(@NotNull List<CompletableFuture<Chunk>> chunks) {
         UnsafeNMSHandler.executeNMS(nms -> nms.updateChunks(chunks));
     }
 
 
     @Override
     public void updateChunkRadius(@NotNull Chunk chunk, int radius) {
-        List<Chunk> chunks = new ArrayList<>();
+        List<CompletableFuture<Chunk>> chunks = new ArrayList<>();
         World world = chunk.getWorld();
         int chunkX = chunk.getX();
         int chunkZ = chunk.getZ();
 
         for (int x = chunkX - radius; x <= chunkX + radius; x++) {
             for (int z = chunkZ - radius; z <= chunkZ + radius; z++) {
-                chunks.add(world.getChunkAt(x, z));
+                chunks.add(world.getChunkAtAsync(x, z));
             }
         }
         updateChunks(chunks);
@@ -66,10 +67,10 @@ public class BiomeUpdaterImpl implements BiomeUpdater {
 
         int playerChunkX = playerLocation.getBlockX() >> 4;
         int playerChunkZ = playerLocation.getBlockZ() >> 4;
-        List<Chunk> chunksToUpdate = new ArrayList<>();
+        List<CompletableFuture<Chunk>> chunksToUpdate = new ArrayList<>();
         for (int x = playerChunkX - viewDistance; x <= playerChunkX + viewDistance; x++) {
             for (int z = playerChunkZ - viewDistance; z <= playerChunkZ + viewDistance; z++) {
-                chunksToUpdate.add(world.getChunkAt(x, z));
+                chunksToUpdate.add(world.getChunkAtAsync(x, z));
             }
         }
 

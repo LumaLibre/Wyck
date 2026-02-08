@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
 public interface UnsafeNMS {
@@ -55,7 +56,7 @@ public interface UnsafeNMS {
      *
      * @param chunks The chunks to update.
      */
-    void updateChunks(@NotNull List<Chunk> chunks);
+    void updateChunks(@NotNull List<CompletableFuture<Chunk>> chunks);
 
     /**
      * Locks or unlocks the biome registry.

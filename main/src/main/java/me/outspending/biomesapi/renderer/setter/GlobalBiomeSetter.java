@@ -15,6 +15,8 @@ import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.concurrent.CompletableFuture;
+
 /**
  * This class provides methods to set the biome of blocks, chunks, and regions in the game.
  *
@@ -43,7 +45,7 @@ public class GlobalBiomeSetter implements BiomeSetter {
         accessor.setBiome(location.getBlockX(), location.getBlockY(), location.getBlockZ(), customBiome.toBukkitBiome());
 
         if (updateBiome) {
-            BIOME_UPDATER.updateChunk(location.getChunk());
+            BIOME_UPDATER.updateChunk(location.getWorld().getChunkAtAsync(location));
         }
     }
 
@@ -92,7 +94,7 @@ public class GlobalBiomeSetter implements BiomeSetter {
         }
 
         if (updateBiome) {
-            BIOME_UPDATER.updateChunk(chunk);
+            BIOME_UPDATER.updateChunk(CompletableFuture.completedFuture(chunk));
         }
     }
 

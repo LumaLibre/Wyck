@@ -8,15 +8,17 @@ import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.concurrent.CompletableFuture;
+
 /**
  * A data class representing a chunk location.
  * @param x the chunk x coordinate
  * @param z the chunk z coordinate
- * @version 0.0.11
+ * @version 1.2.0
  * @since 0.0.6
  * @author Jsinco
  */
-@AsOf("0.0.11")
+@AsOf("1.2.0")
 public record ChunkLocation(int x, int z) {
 
     /**
@@ -122,8 +124,8 @@ public record ChunkLocation(int x, int z) {
      * @return the Bukkit Chunk at this ChunkLocation in the given world
      */
     @AsOf("1.2.0")
-    public @NotNull Chunk toBukkitChunk(World world) {
-        return world.getChunkAt(x, z);
+    public @NotNull CompletableFuture<Chunk> toBukkitChunk(World world) {
+        return world.getChunkAtAsync(x, z);
     }
 
     /**
@@ -132,9 +134,8 @@ public record ChunkLocation(int x, int z) {
      * @return the center block of this chunk in the given world
      */
     @AsOf("1.2.0")
-    public @NotNull Block centerBlock(@NotNull World world) {
-        Chunk chunk = toBukkitChunk(world);
-        return chunk.getBlock(7, 0, 7); // starts at 0, so 7 is the center block in a 16x16 chunk
+    public @NotNull CompletableFuture<Block> centerBlock(@NotNull World world) {
+        return toBukkitChunk(world).thenApply(chunk -> chunk.getBlock(7, 0, 7));
     }
 
     /**
@@ -143,9 +144,8 @@ public record ChunkLocation(int x, int z) {
      * @return the biome of the center block of this chunk in the given world
      */
     @AsOf("1.2.0")
-    public @NotNull Biome getCenterBiome(@NotNull World world) {
-        Block centerBlock = centerBlock(world);
-        return centerBlock.getBiome();
+    public @NotNull CompletableFuture<Biome> getCenterBiome(@NotNull World world) {
+        return centerBlock(world).thenApply(Block::getBiome);
     }
 
     @Override
