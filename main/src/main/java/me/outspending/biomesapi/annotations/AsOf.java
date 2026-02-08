@@ -30,7 +30,8 @@ import java.lang.annotation.Target;
         ElementType.TYPE,
         ElementType.CONSTRUCTOR,
         ElementType.MODULE,
-        ElementType.PACKAGE
+        ElementType.PACKAGE,
+        ElementType.FIELD
 })
 @AsOf("0.0.1")
 public @interface AsOf {
