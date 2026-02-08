@@ -6,7 +6,9 @@ import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +23,12 @@ import java.util.concurrent.CompletableFuture;
  */
 @AsOf("0.0.1")
 public class BiomeUpdaterImpl implements BiomeUpdater {
+
+    private final @Nullable Plugin plugin;
+
+    public BiomeUpdaterImpl(@Nullable Plugin plugin) {
+        this.plugin = plugin;
+    }
 
     @Override
     public void updateChunk(@NotNull CompletableFuture<Chunk> chunk) {
@@ -40,7 +48,7 @@ public class BiomeUpdaterImpl implements BiomeUpdater {
 
     @Override
     public void updateChunks(@NotNull List<CompletableFuture<Chunk>> chunks) {
-        UnsafeNMSHandler.executeNMS(nms -> nms.updateChunks(chunks));
+        UnsafeNMSHandler.executeNMS(nms -> nms.updateChunks(chunks, plugin));
     }
 
 

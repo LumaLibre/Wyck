@@ -26,7 +26,9 @@ import org.bukkit.craftbukkit.CraftChunk;
 import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -63,16 +65,16 @@ public class UnsafeNMS_v1_21_11 implements UnsafeNMS {
      * @param chunks The chunks to update.
      */
     @Override
-    public void updateChunks(@NotNull List<CompletableFuture<Chunk>> chunks) {
+    public void updateChunks(@NotNull List<CompletableFuture<Chunk>> chunks, @Nullable Plugin plugin) {
         CompletableFuture.runAsync(() -> {
             for (CompletableFuture<Chunk> chunkFuture : chunks) {
                 chunkFuture.thenAccept(chunk -> {
-                    LevelChunk levelChunk = (LevelChunk) ((CraftChunk) chunk).getHandle(ChunkStatus.BIOMES);
-                    LevelLightEngine levelLightEngine = levelChunk.getLevel().getLightEngine();
-
-                    ClientboundLevelChunkWithLightPacket packet = new ClientboundLevelChunkWithLightPacket(levelChunk, levelLightEngine, null, null, true);
-                    for (Player player : getPlayersInDistance(chunk)) {
-                        ((CraftPlayer) player).getHandle().connection.send(packet);
+                    if (plugin != null) {
+                        Bukkit.getRegionScheduler().run(plugin, chunk.getWorld(), chunk.getX(), chunk.getZ(), task -> {
+                            doUpdateChunk(chunk);
+                        });
+                    } else {
+                        doUpdateChunk(chunk);
                     }
                 }).exceptionally(ex -> {
                     ex.printStackTrace();
@@ -83,6 +85,16 @@ public class UnsafeNMS_v1_21_11 implements UnsafeNMS {
             ex.printStackTrace();
             return null;
         });
+    }
+
+    private void doUpdateChunk(Chunk chunk) {
+        LevelChunk levelChunk = (LevelChunk) ((CraftChunk) chunk).getHandle(ChunkStatus.BIOMES);
+        LevelLightEngine levelLightEngine = levelChunk.getLevel().getLightEngine();
+
+        ClientboundLevelChunkWithLightPacket packet = new ClientboundLevelChunkWithLightPacket(levelChunk, levelLightEngine, null, null, true);
+        for (Player player : getPlayersInDistance(chunk)) {
+            ((CraftPlayer) player).getHandle().connection.send(packet);
+        }
     }
 
     /**

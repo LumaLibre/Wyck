@@ -6,7 +6,9 @@ import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -56,7 +58,7 @@ public interface UnsafeNMS {
      *
      * @param chunks The chunks to update.
      */
-    void updateChunks(@NotNull List<CompletableFuture<Chunk>> chunks);
+    void updateChunks(@NotNull List<CompletableFuture<Chunk>> chunks, @Nullable Plugin plugin);
 
     /**
      * Locks or unlocks the biome registry.

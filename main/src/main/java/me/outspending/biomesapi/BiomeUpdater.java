@@ -6,6 +6,7 @@ import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -30,11 +31,24 @@ public interface BiomeUpdater {
      * This method returns an instance of BiomeUpdaterImpl.
      *
      * @return an instance of BiomeUpdater.
-     * @version 0.0.2
+     * @since 0.0.2
+     * @deprecated {@link #of(Plugin)} is preferred for compatability reasons (Folia).
      */
-    @AsOf("0.0.2")
+    @Deprecated
+    @AsOf("1.2.0")
     static @NotNull BiomeUpdater of() {
-        return new BiomeUpdaterImpl();
+        return new BiomeUpdaterImpl(null);
+    }
+
+    /**
+     * Returns an instance of BiomeUpdater with a plugin reference.
+     * @param plugin the plugin to use for scheduling chunk updates. Necessary for Folia compatibility.
+     * @return an instance of BiomeUpdater with a plugin reference
+     * @since 1.2.0
+     */
+    @AsOf("1.2.0")
+    static @NotNull BiomeUpdater of(@NotNull Plugin plugin) {
+        return new BiomeUpdaterImpl(plugin);
     }
 
     /**
