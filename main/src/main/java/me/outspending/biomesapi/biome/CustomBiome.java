@@ -582,7 +582,6 @@ public interface CustomBiome {
             return this;
         }
 
-
         /**
          * This method sets the dry foliage color property of the CustomBiome.
          *
@@ -590,9 +589,22 @@ public interface CustomBiome {
          * @since 1.0.2
          * @return The Builder object, for chaining method calls.
          */
-        @AsOf("1.0.2")
+        @AsOf("1.2.0")
         public @NotNull Builder dryFoliageColor(@NotNull String dryFoliageColor) {
-            this.dryFoliageColor = Integer.parseInt(formatHex(dryFoliageColor), 16);
+            this.dryFoliageColor = parseHex(dryFoliageColor);
+            return this;
+        }
+
+        /**
+         * This method sets the dry foliage color property of the CustomBiome.
+         *
+         * @param dryFoliageColor The dry foliage color of the custom biome.
+         * @since 1.2.0
+         * @return The Builder object, for chaining method calls.
+         */
+        @AsOf("1.2.0")
+        public @NotNull Builder dryFoliageColor(@NotNull Color dryFoliageColor) {
+            this.dryFoliageColor = dryFoliageColor.asRGB();
             return this;
         }
 
