@@ -27,8 +27,8 @@ public interface UnsafeNMS {
         Location playerLocation = player.getLocation();
 
         int viewDistance = Bukkit.getViewDistance();
-        int playerChunkX = playerLocation.getChunk().getX();
-        int playerChunkZ = playerLocation.getChunk().getZ();
+        int playerChunkX = playerLocation.getBlockX() >> 4;
+        int playerChunkZ = playerLocation.getBlockZ() >> 4;
 
         int targetChunkX = chunk.getX();
         int targetChunkZ = chunk.getZ();
