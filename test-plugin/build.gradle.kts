@@ -1,10 +1,12 @@
 plugins {
     alias(libs.plugins.run.paper)
     alias(libs.plugins.plugin.yml.bukkit)
+    alias(libs.plugins.paperweight.userdev)
 }
 
 dependencies {
     implementation(project(":main"))
+    paperweight.paperDevBundle(libs.versions.minecraft.v1.m21.r11)
 }
 
 tasks {

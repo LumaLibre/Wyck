@@ -1,3 +1,7 @@
+plugins {
+    alias(libs.plugins.paperweight.userdev)
+}
+
 val minecraft = ":minecraft"
 val minecraftProjects = project(minecraft)
     .subprojects
@@ -12,6 +16,7 @@ dependencies {
     for (project in minecraftProjects) {
         implementation(project(path = "${minecraft}:${project}"))
     }
+    paperweight.paperDevBundle(libs.versions.minecraft.v1.m21.r11)
 }
 
 java {

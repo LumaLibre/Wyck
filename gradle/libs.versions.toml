@@ -1,11 +1,12 @@
 [versions]
-paperweight-userdev = "2.0.0-beta.19"
+paperweight-userdev = "2.0.0-beta.21"
 gradleup-shadow = "9.0.0-beta9"
 kyori-adventure = "4.17.0"
 protocollib = "5.4.0"
 packetevents = "2.11.1"
 google-guava = "33.5.0-jre"
-minecraft-v1-m21-r7 = "1.21.11-R0.1-SNAPSHOT"
+minecraft-v1-m21-r11 = "1.21.11-R0.1-SNAPSHOT"
+minecraft-v26-m1-r1 = "26.1.1.build.+"
 run-paper = "2.3.1"
 plugin-yml-bukkit = "0.7.1"
 
@@ -21,3 +22,4 @@ kyori-minimessage = { group = "net.kyori", name = "adventure-text-minimessage", 
 protocollib = { group = "net.dmulloy2", name = "ProtocolLib", version.ref = "protocollib" }
 packetevents = { group = "com.github.retrooper", name = "packetevents-spigot", version.ref = "packetevents" }
 google-guava = { group = "com.google.guava", name = "guava", version.ref = "google-guava" }
+paper-api = { group = "io.papermc.paper", name = "paper-api", version.ref = "minecraft-v1-m21-r11" }

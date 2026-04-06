@@ -1,6 +1,7 @@
 package me.outspending.biomesapi.unsafe;
 
 import me.outspending.biomesapi.UnsafeNMS_v1_21_11;
+import me.outspending.biomesapi.UnsafeNMS_v26_1_1;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.exceptions.UnknownNMSVersionException;
 import org.bukkit.Bukkit;
@@ -50,7 +51,8 @@ public class UnsafeNMSHandler {
 
         String version = Bukkit.getMinecraftVersion();
         switch (version) {
-            case "1.21.11", "1.21.10" -> NMS_VERSION = new UnsafeNMS_v1_21_11();
+            case "1.21.11", "1.21.10", "1.21.9" -> NMS_VERSION = new UnsafeNMS_v1_21_11();
+            case "26.1.1", "26.1" -> NMS_VERSION = new UnsafeNMS_v26_1_1();
             default -> throw new UnknownNMSVersionException("The version " + version + " is not supported by BiomesAPI. Make sure you are up-to-date with the latest version of BiomesAPI.");
         }
     }

@@ -3,18 +3,17 @@ import java.nio.charset.Charset
 plugins {
     java
     `maven-publish`
-    alias(libs.plugins.paperweight.userdev)
     alias(libs.plugins.gradleup.shadow)
+    alias(libs.plugins.paperweight.userdev) apply false
 }
 
 val isSnapshot: Boolean = project.hasProperty("snapshot") || System.getProperty("snapshot")?.toBoolean() == true
-val stable = "1.2.0"
+val stable = "1.2.1"
 
 allprojects {
     apply(plugin = "java")
     apply(plugin = "maven-publish")
     apply(plugin = "com.gradleup.shadow")
-    apply(plugin = "io.papermc.paperweight.userdev")
 
     group = "me.outspending.biomesapi"
     version = if (isSnapshot) "$stable-${gitShortCommitHash()}" else stable
@@ -29,18 +28,17 @@ allprojects {
 
     dependencies {
         val libs = rootProject.libs
-        paperweight.paperDevBundle(libs.versions.minecraft.v1.m21.r7)
         implementation(libs.google.guava)
         compileOnly(libs.kyori.adventure)
         compileOnly(libs.kyori.minimessage)
     }
 
-    java {
-        toolchain.languageVersion = JavaLanguageVersion.of(21)
-    }
-
     tasks.withType<JavaCompile> {
         options.encoding = "UTF-8"
+    }
+
+    java {
+        toolchain.languageVersion.set(JavaLanguageVersion.of(25))
     }
 }
 
