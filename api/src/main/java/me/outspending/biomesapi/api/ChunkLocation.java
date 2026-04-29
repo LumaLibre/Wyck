@@ -1,7 +1,8 @@
-package me.outspending.biomesapi.renderer.packet.data;
+package me.outspending.biomesapi.api;
 
-import me.outspending.biomesapi.annotations.AsOf;
-import net.minecraft.world.level.chunk.LevelChunk;
+import me.outspending.biomesapi.api.annotations.AsOf;
+import me.outspending.biomesapi.api.factory.WireFactories;
+import me.outspending.biomesapi.api.factory.WireProvider;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
@@ -10,27 +11,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.CompletableFuture;
 
-/**
- * A data class representing a chunk location.
- * @param x the chunk x coordinate
- * @param z the chunk z coordinate
- * @version 1.2.0
- * @since 0.0.6
- * @author Jsinco
- */
-@AsOf("1.2.0")
-public record ChunkLocation(int x, int z) {
+public interface ChunkLocation {
 
-    /**
-     * Creates a ChunkLocation from block coordinates.
-     * @param blockX the block x coordinate
-     * @param blockZ the block z coordinate
-     * @return a ChunkLocation representing the chunk containing the given block coordinates
-     */
-    @AsOf("0.0.6")
-    public static ChunkLocation fromBlockCoords(int blockX, int blockZ) {
-        return new ChunkLocation(blockX >> 4, blockZ >> 4);
-    }
+    WireProvider<WireFactories.OfII<ChunkLocation>> FACTORY = WireProvider.create("ChunkLocation");
+
 
     /**
      * Creates a ChunkLocation from chunk coordinates.
@@ -39,9 +23,27 @@ public record ChunkLocation(int x, int z) {
      * @return a ChunkLocation representing the given chunk coordinates
      */
     @AsOf("0.0.6")
-    public static ChunkLocation of(int chunkX, int chunkZ) {
-        return new ChunkLocation(chunkX, chunkZ);
+    static ChunkLocation of(int chunkX, int chunkZ) {
+        return FACTORY.get().create(chunkX, chunkZ);
     }
+
+    /**
+     * Creates a ChunkLocation from block coordinates.
+     * @param blockX the block x coordinate
+     * @param blockZ the block z coordinate
+     * @return a ChunkLocation representing the chunk containing the given block coordinates
+     */
+    @AsOf("0.0.6")
+    static ChunkLocation fromBlockCoords(int blockX, int blockZ) {
+        return of(blockX >> 4, blockZ >> 4);
+    }
+
+
+    int x();
+
+    int z();
+
+
 
     /**
      * Checks if this ChunkLocation matches the given Bukkit Chunk.
@@ -49,8 +51,8 @@ public record ChunkLocation(int x, int z) {
      * @return true if the coordinates match, false otherwise
      */
     @AsOf("0.0.6")
-    public boolean isChunk(Chunk bukkitChunk) {
-        return this.x == bukkitChunk.getX() && this.z == bukkitChunk.getZ();
+    default boolean isChunk(Chunk bukkitChunk) {
+        return this.x() == bukkitChunk.getX() && this.z() == bukkitChunk.getZ();
     }
 
     /**
@@ -59,9 +61,7 @@ public record ChunkLocation(int x, int z) {
      * @return true if the coordinates match, false otherwise
      */
     @AsOf("0.0.6")
-    public boolean isChunk(LevelChunk nmsChunk) {
-        return this.x == nmsChunk.getPos().x && this.z == nmsChunk.getPos().z;
-    }
+    boolean isChunk(Object nmsChunk);
 
     /**
      * Checks if this ChunkLocation matches the given chunk coordinates.
@@ -70,8 +70,8 @@ public record ChunkLocation(int x, int z) {
      * @return true if the coordinates match, false otherwise
      */
     @AsOf("0.0.6")
-    public boolean isChunk(int chunkX, int chunkZ) {
-        return this.x == chunkX && this.z == chunkZ;
+    default boolean isChunk(int chunkX, int chunkZ) {
+        return this.x() == chunkX && this.z() == chunkZ;
     }
 
 
@@ -82,9 +82,9 @@ public record ChunkLocation(int x, int z) {
      * @return true if this ChunkLocation is within the radius of the other, false otherwise
      */
     @AsOf("0.0.11")
-    public boolean isWithinRadius(ChunkLocation other, int radius) {
-        int deltaX = this.x - other.x;
-        int deltaZ = this.z - other.z;
+    default boolean isWithinRadius(ChunkLocation other, int radius) {
+        int deltaX = this.x() - other.x();
+        int deltaZ = this.z() - other.z();
         return (deltaX * deltaX + deltaZ * deltaZ) <= (radius * radius);
     }
 
@@ -95,8 +95,8 @@ public record ChunkLocation(int x, int z) {
      * @return a new ChunkLocation with the offset applied
      */
     @AsOf("0.0.11")
-    public @NotNull ChunkLocation offset(int offsetX, int offsetZ) {
-        return new ChunkLocation(this.x + offsetX, this.z + offsetZ);
+    default @NotNull ChunkLocation offset(int offsetX, int offsetZ) {
+        return of(this.x() + offsetX, this.z() + offsetZ);
     }
 
     /**
@@ -105,8 +105,8 @@ public record ChunkLocation(int x, int z) {
      * @return a new ChunkLocation with the offset applied
      */
     @AsOf("0.0.11")
-    public @NotNull ChunkLocation offset(@NotNull ChunkLocation offset) {
-        return new ChunkLocation(this.x + offset.x, this.z + offset.z);
+    default @NotNull ChunkLocation offset(@NotNull ChunkLocation offset) {
+        return of(this.x() + offset.x(), this.z() + offset.z());
     }
 
     /**
@@ -114,8 +114,8 @@ public record ChunkLocation(int x, int z) {
      * @return a new ChunkLocation with negated x and z coordinates
      */
     @AsOf("0.0.11")
-    public @NotNull ChunkLocation negate() {
-        return new ChunkLocation(-this.x, -this.z);
+    default @NotNull ChunkLocation negate() {
+        return of(-this.x(), -this.z());
     }
 
     /**
@@ -124,8 +124,8 @@ public record ChunkLocation(int x, int z) {
      * @return the Bukkit Chunk at this ChunkLocation in the given world
      */
     @AsOf("1.2.0")
-    public @NotNull CompletableFuture<Chunk> toBukkitChunk(World world) {
-        return world.getChunkAtAsync(x, z);
+    default @NotNull CompletableFuture<Chunk> toBukkitChunk(World world) {
+        return world.getChunkAtAsync(this.x(), this.z());
     }
 
     /**
@@ -134,7 +134,7 @@ public record ChunkLocation(int x, int z) {
      * @return the center block of this chunk in the given world
      */
     @AsOf("1.2.0")
-    public @NotNull CompletableFuture<Block> centerBlock(@NotNull World world) {
+    default @NotNull CompletableFuture<Block> centerBlock(@NotNull World world) {
         return toBukkitChunk(world).thenApply(chunk -> chunk.getBlock(7, 0, 7));
     }
 
@@ -144,24 +144,8 @@ public record ChunkLocation(int x, int z) {
      * @return the biome of the center block of this chunk in the given world
      */
     @AsOf("1.2.0")
-    public @NotNull CompletableFuture<Biome> getCenterBiome(@NotNull World world) {
+    default @NotNull CompletableFuture<Biome> getCenterBiome(@NotNull World world) {
         return centerBlock(world).thenApply(Block::getBiome);
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-        ChunkLocation that = (ChunkLocation) obj;
-        return x == that.x && z == that.z;
-    }
-
-    @Override
-    public int hashCode() {
-        return 31 * x + z;
-    }
-
-    public @NotNull String toString() {
-        return "ChunkLocation{x=" + x + ", z=" + z + "}";
-    }
 }

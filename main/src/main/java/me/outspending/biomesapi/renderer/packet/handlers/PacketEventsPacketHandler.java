@@ -18,14 +18,13 @@ import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerCh
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerMultiBlockChange;
 import com.google.common.base.Preconditions;
 import io.github.retrooper.packetevents.util.SpigotConversionUtil;
-import me.outspending.biomesapi.annotations.AsOf;
-import me.outspending.biomesapi.biome.CustomBiome;
+import me.outspending.biomesapi.api.annotations.AsOf;
+import me.outspending.biomesapi.api.biome.CustomBiome;
 import me.outspending.biomesapi.renderer.packet.PacketHandler;
 import me.outspending.biomesapi.renderer.packet.PhonyCustomBiomeCollector;
 import me.outspending.biomesapi.renderer.packet.data.BlockReplacement;
-import me.outspending.biomesapi.renderer.packet.data.ChunkLocation;
 import me.outspending.biomesapi.renderer.packet.data.PhonyCustomBiome;
-import me.outspending.biomesapi.registry.BiomeResourceKey;
+import me.outspending.biomesapi.api.registry.BiomeResourceKey;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;

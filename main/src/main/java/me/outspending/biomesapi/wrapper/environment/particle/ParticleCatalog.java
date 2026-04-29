@@ -1,7 +1,8 @@
 package me.outspending.biomesapi.wrapper.environment.particle;
 
 import com.google.common.base.Preconditions;
-import me.outspending.biomesapi.annotations.AsOf;
+import me.outspending.biomesapi.api.annotations.AsOf;
+import me.outspending.biomesapi.api.wrapper.environment.particle.ParticleData;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.world.attribute.AmbientParticle;
 import org.jetbrains.annotations.NotNull;

@@ -1,7 +1,7 @@
 package me.outspending.biomesapi.renderer.setter;
 
-import me.outspending.biomesapi.annotations.AsOf;
-import me.outspending.biomesapi.biome.CustomBiome;
+import me.outspending.biomesapi.api.annotations.AsOf;
+import me.outspending.biomesapi.api.biome.CustomBiome;
 import me.outspending.biomesapi.renderer.AbstractBiomeRenderer;
 import org.bukkit.Chunk;
 import org.bukkit.Location;

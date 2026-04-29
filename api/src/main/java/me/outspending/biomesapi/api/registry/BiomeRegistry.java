@@ -1,8 +1,11 @@
-package me.outspending.biomesapi.registry;
+package me.outspending.biomesapi.api.registry;
 
-import me.outspending.biomesapi.annotations.AsOf;
+import me.outspending.biomesapi.api.annotations.AsOf;
+import me.outspending.biomesapi.api.factory.WireProvider;
 import me.outspending.biomesapi.biome.CustomBiome;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.function.Supplier;
 
 /**
  * An interface for registering and modifying custom biomes on a Minecraft server.
@@ -17,6 +20,8 @@ import org.jetbrains.annotations.NotNull;
 @AsOf("0.0.1")
 public interface BiomeRegistry {
 
+    WireProvider<Supplier<BiomeRegistry>> FACTORY = WireProvider.create("BiomeRegistry");
+
     /**
      * This static method creates a new BiomeRegistry object.
      * It returns a new instance of CustomBiomeRegistry.
@@ -26,7 +31,7 @@ public interface BiomeRegistry {
      */
     @AsOf("0.0.1")
     static BiomeRegistry newRegistry() {
-        return new CustomBiomeRegistry();
+        return FACTORY.get().get();
     }
 
     /**

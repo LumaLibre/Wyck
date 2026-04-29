@@ -1,9 +1,10 @@
 package me.outspending.biomesapi.biome;
 
 import com.google.common.base.Preconditions;
-import me.outspending.biomesapi.annotations.AsOf;
+import me.outspending.biomesapi.api.annotations.AsOf;
+import me.outspending.biomesapi.api.biome.CustomBiome;
 import me.outspending.biomesapi.exceptions.UnknownBiomeException;
-import me.outspending.biomesapi.registry.BiomeResourceKey;
+import me.outspending.biomesapi.api.registry.BiomeResourceKey;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

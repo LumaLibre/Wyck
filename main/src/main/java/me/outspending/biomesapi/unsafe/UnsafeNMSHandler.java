@@ -2,7 +2,8 @@ package me.outspending.biomesapi.unsafe;
 
 import me.outspending.biomesapi.UnsafeNMS_v1_21_11;
 import me.outspending.biomesapi.UnsafeNMS_v26_1_1;
-import me.outspending.biomesapi.annotations.AsOf;
+import me.outspending.biomesapi.api.UnsafeNMS;
+import me.outspending.biomesapi.api.annotations.AsOf;
 import me.outspending.biomesapi.exceptions.UnknownNMSVersionException;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;

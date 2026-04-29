@@ -1,6 +1,6 @@
 package me.outspending.biomesapi.exceptions;
 
-import me.outspending.biomesapi.annotations.AsOf;
+import me.outspending.biomesapi.api.annotations.AsOf;
 
 /**
  * Exception thrown when the required packet library is missing.

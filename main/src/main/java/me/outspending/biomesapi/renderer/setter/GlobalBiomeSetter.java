@@ -2,8 +2,8 @@ package me.outspending.biomesapi.renderer.setter;
 
 import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.BiomeUpdater;
-import me.outspending.biomesapi.annotations.AsOf;
-import me.outspending.biomesapi.biome.CustomBiome;
+import me.outspending.biomesapi.api.annotations.AsOf;
+import me.outspending.biomesapi.api.biome.CustomBiome;
 import me.outspending.biomesapi.misc.PointRange3D;
 import org.bukkit.Chunk;
 import org.bukkit.Location;

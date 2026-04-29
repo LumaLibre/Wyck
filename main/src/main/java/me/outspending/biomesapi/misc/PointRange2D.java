@@ -1,6 +1,6 @@
 package me.outspending.biomesapi.misc;
 
-import me.outspending.biomesapi.annotations.AsOf;
+import me.outspending.biomesapi.api.annotations.AsOf;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;

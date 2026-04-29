@@ -1,17 +1,18 @@
 package me.outspending.biomesapi.wrapper.environment.particle.options;
 
-import me.outspending.biomesapi.annotations.AsOf;
-import me.outspending.biomesapi.wrapper.environment.particle.ParticleData;
-import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleType;
-import net.minecraft.core.particles.PowerParticleOption;
+import me.outspending.biomesapi.api.annotations.AsOf;
+import me.outspending.biomesapi.api.wrapper.environment.particle.ParticleData;
+import me.outspending.biomesapi.api.wrapper.environment.particle.ParticleOptionsHandle;
+import me.outspending.biomesapi.api.wrapper.environment.particle.ParticleTypeHandle;
+import me.outspending.biomesapi.api.wrapper.environment.particle.options.ParticleOptionsFactory;
 import org.jetbrains.annotations.NotNull;
 
-@AsOf("1.1.0")
-public record PowerParticle(float power) implements ParticleData<PowerParticleOption> {
+@AsOf("2.0.0")
+public record PowerParticle(float power) implements ParticleData<PowerParticle> {
+
     @Override
-    public @NotNull ParticleOptions apply(@NotNull ParticleType<@NotNull PowerParticleOption> particleType) {
-        return PowerParticleOption.create(particleType, power);
+    public @NotNull ParticleOptionsHandle apply(@NotNull ParticleTypeHandle<PowerParticle> particleType) {
+        return ParticleOptionsFactory.OPTIONS.get().power(particleType, power);
     }
 
     public static PowerParticle of(float power) {

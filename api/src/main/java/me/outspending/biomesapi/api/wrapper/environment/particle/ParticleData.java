@@ -1,8 +1,6 @@
-package me.outspending.biomesapi.wrapper.environment.particle;
+package me.outspending.biomesapi.api.wrapper.environment.particle;
 
-import me.outspending.biomesapi.annotations.AsOf;
-import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleType;
+import me.outspending.biomesapi.api.annotations.AsOf;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -13,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Jsinco
  * @param <T> The type of ParticleOptions associated with the particle data.
  */
-public interface ParticleData<T extends ParticleOptions> {
+public interface ParticleData<T> {
 
     /**
      * Parses a hexadecimal color string and returns its integer representation.
@@ -36,6 +34,6 @@ public interface ParticleData<T extends ParticleOptions> {
      * @return The ParticleOptions representing the applied particle data.
      */
     @AsOf("1.1.0")
-    @NotNull ParticleOptions apply(@NotNull ParticleType<@NotNull T> particleType);
+    @NotNull ParticleOptionsHandle apply(@NotNull ParticleTypeHandle<@NotNull T> particleType);
 
 }

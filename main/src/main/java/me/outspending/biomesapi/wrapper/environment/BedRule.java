@@ -1,7 +1,7 @@
 package me.outspending.biomesapi.wrapper.environment;
 
 import io.papermc.paper.adventure.AdventureComponent;
-import me.outspending.biomesapi.annotations.AsOf;
+import me.outspending.biomesapi.api.annotations.AsOf;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

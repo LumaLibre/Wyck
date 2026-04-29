@@ -1,6 +1,6 @@
 package me.outspending.biomesapi.wrapper.environment.attribute;
 
-import me.outspending.biomesapi.annotations.AsOf;
+import me.outspending.biomesapi.api.annotations.AsOf;
 import net.minecraft.world.attribute.EnvironmentAttributeMap;
 import net.minecraft.world.level.biome.Biome;
 import org.jetbrains.annotations.ApiStatus;

@@ -1,12 +1,14 @@
 package me.outspending.biomesapi.registry;
 
 import com.google.common.base.Preconditions;
+import me.outspending.biomesapi.api.registry.BiomeRegistry;
+import me.outspending.biomesapi.api.registry.BiomeResourceKey;
 import me.outspending.biomesapi.unsafe.BiomeLock;
 import me.outspending.biomesapi.registry.handlers.AttributeMapHandler;
-import me.outspending.biomesapi.wrapper.BiomeSettings;
-import me.outspending.biomesapi.annotations.AsOf;
+import me.outspending.biomesapi.api.wrapper.BiomeSettings;
+import me.outspending.biomesapi.api.annotations.AsOf;
 import me.outspending.biomesapi.biome.BiomeHandler;
-import me.outspending.biomesapi.biome.CustomBiome;
+import me.outspending.biomesapi.api.biome.CustomBiome;
 import me.outspending.biomesapi.unsafe.UnsafeNMS;
 import me.outspending.biomesapi.unsafe.UnsafeNMSHandler;
 import me.outspending.biomesapi.registry.handlers.ParticleCatalogHandler;
@@ -37,6 +39,10 @@ import java.util.List;
 @AsOf("1.1.0")
 public class CustomBiomeRegistry implements BiomeRegistry {
 
+    static {
+        BiomeRegistry.FACTORY.set(CustomBiomeRegistry::new);
+    }
+
     private static final SpecialEffectsHandler SPECIAL_EFFECTS_HANDLER = new SpecialEffectsHandler();
     private static final ParticleCatalogHandler PARTICLE_CATALOG_HANDLER = new ParticleCatalogHandler();
     private static final AttributeMapHandler ATTRIBUTE_MAP_HANDLER = new AttributeMapHandler();
@@ -65,14 +71,14 @@ public class CustomBiomeRegistry implements BiomeRegistry {
                 Registry<@NotNull Biome> registry = (Registry<@NotNull Biome>) nms.getRegistry();
 
                 // Get the ResourceLocation and BiomeSettings from the CustomBiome object
-                Identifier resourceLocation = biome.getResourceKey().resourceLocation();
+                Identifier resourceLocation = ((BiomeResourceKeyImpl) biome.getResourceKey()).resourceLocation();
                 BiomeSettings settings = biome.getSettings();
 
                 // Build the Biome object
                 Biome.BiomeBuilder biomeBuilder = new Biome.BiomeBuilder()
                         .downfall(settings.downfall())
                         .temperature(settings.temperature())
-                        .temperatureAdjustment(settings.modifier().getModifier())
+                        .temperatureAdjustment(settings.modifier().toNms(Biome.TemperatureModifier.class))
                         .hasPrecipitation(settings.hasPrecipitation())
                         .mobSpawnSettings(MobSpawnSettings.EMPTY)
                         .generationSettings(BiomeGenerationSettings.EMPTY);

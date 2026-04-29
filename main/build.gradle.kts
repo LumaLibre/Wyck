@@ -11,12 +11,13 @@ dependencies {
     val libs = rootProject.libs
     compileOnly(libs.protocollib)
     compileOnly(libs.packetevents)
+    implementation(project(":api"))
 
     // NMS Implementations
     for (project in minecraftProjects) {
         implementation(project(path = "${minecraft}:${project}"))
     }
-    paperweight.paperDevBundle(libs.versions.minecraft.v1.m21.r11)
+    paperweight.paperDevBundle(libs.versions.minecraft.v26.m1.r1)
 }
 
 java {

@@ -1,17 +1,18 @@
 package me.outspending.biomesapi.wrapper.environment.particle.options;
 
-import me.outspending.biomesapi.annotations.AsOf;
-import me.outspending.biomesapi.wrapper.environment.particle.ParticleData;
-import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleType;
-import net.minecraft.core.particles.SculkChargeParticleOptions;
+import me.outspending.biomesapi.api.annotations.AsOf;
+import me.outspending.biomesapi.api.wrapper.environment.particle.ParticleData;
+import me.outspending.biomesapi.api.wrapper.environment.particle.ParticleOptionsHandle;
+import me.outspending.biomesapi.api.wrapper.environment.particle.ParticleTypeHandle;
+import me.outspending.biomesapi.api.wrapper.environment.particle.options.ParticleOptionsFactory;
 import org.jetbrains.annotations.NotNull;
 
-@AsOf("1.1.0")
-public record SculkChargeParticle(float roll) implements ParticleData<SculkChargeParticleOptions> {
+@AsOf("2.0.0")
+public record SculkChargeParticle(float roll) implements ParticleData<SculkChargeParticle> {
+
     @Override
-    public @NotNull ParticleOptions apply(@NotNull ParticleType<@NotNull SculkChargeParticleOptions> particleType) {
-        return new SculkChargeParticleOptions(roll);
+    public @NotNull ParticleOptionsHandle apply(@NotNull ParticleTypeHandle<SculkChargeParticle> particleType) {
+        return ParticleOptionsFactory.OPTIONS.get().sculkCharge(roll);
     }
 
     public static SculkChargeParticle of(float roll) {

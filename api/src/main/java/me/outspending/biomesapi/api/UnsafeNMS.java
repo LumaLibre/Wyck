@@ -1,4 +1,4 @@
-package me.outspending.biomesapi.unsafe;
+package me.outspending.biomesapi.api;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;

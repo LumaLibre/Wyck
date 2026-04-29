@@ -1,17 +1,18 @@
 package me.outspending.biomesapi.wrapper.environment.particle.options;
 
-import me.outspending.biomesapi.annotations.AsOf;
-import me.outspending.biomesapi.wrapper.environment.particle.ParticleData;
-import net.minecraft.core.particles.DustColorTransitionOptions;
-import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleType;
+import me.outspending.biomesapi.api.annotations.AsOf;
+import me.outspending.biomesapi.api.wrapper.environment.particle.ParticleData;
+import me.outspending.biomesapi.api.wrapper.environment.particle.ParticleOptionsHandle;
+import me.outspending.biomesapi.api.wrapper.environment.particle.ParticleTypeHandle;
+import me.outspending.biomesapi.api.wrapper.environment.particle.options.ParticleOptionsFactory;
 import org.jetbrains.annotations.NotNull;
 
-@AsOf("1.1.0")
-public record DustTransitionParticle(int fromColor, int toColor, float scale) implements ParticleData<DustColorTransitionOptions> {
+@AsOf("2.0.0")
+public record DustTransitionParticle(int fromColor, int toColor, float scale) implements ParticleData<DustTransitionParticle> {
+
     @Override
-    public @NotNull ParticleOptions apply(@NotNull ParticleType<@NotNull DustColorTransitionOptions> particleType) {
-        return new DustColorTransitionOptions(fromColor, toColor, scale);
+    public @NotNull ParticleOptionsHandle apply(@NotNull ParticleTypeHandle<DustTransitionParticle> particleType) {
+        return ParticleOptionsFactory.OPTIONS.get().dustTransition(fromColor, toColor, scale);
     }
 
     public static DustTransitionParticle of(String fromHexColor, String toHexColor, float scale) {

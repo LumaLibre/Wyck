@@ -1,6 +1,6 @@
 package me.outspending.biomesapi.renderer.packet.data;
 
-import me.outspending.biomesapi.annotations.AsOf;
+import me.outspending.biomesapi.api.annotations.AsOf;
 import org.bukkit.Material;
 
 /**

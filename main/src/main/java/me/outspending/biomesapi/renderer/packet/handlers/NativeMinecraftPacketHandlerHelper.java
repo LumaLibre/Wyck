@@ -2,8 +2,8 @@ package me.outspending.biomesapi.renderer.packet.handlers;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import me.outspending.biomesapi.annotations.AsOf;
-import me.outspending.biomesapi.biome.CustomBiome;
+import me.outspending.biomesapi.api.annotations.AsOf;
+import me.outspending.biomesapi.api.biome.CustomBiome;
 import me.outspending.biomesapi.renderer.packet.PacketHandler;
 import me.outspending.biomesapi.renderer.packet.data.BlockReplacement;
 import net.minecraft.core.Holder;

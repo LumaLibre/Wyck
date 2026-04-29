@@ -1,6 +1,9 @@
 package me.outspending.biomesapi.wrapper.environment.particle;
 
-import me.outspending.biomesapi.annotations.AsOf;
+import me.outspending.biomesapi.api.annotations.AsOf;
+import me.outspending.biomesapi.api.wrapper.environment.particle.ParticleData;
+import me.outspending.biomesapi.api.wrapper.environment.particle.ParticleTypeHandle;
+import me.outspending.biomesapi.api.wrapper.environment.particle.options.ParticleOptionsFactory;
 import me.outspending.biomesapi.wrapper.environment.particle.options.BlockParticle;
 import me.outspending.biomesapi.wrapper.environment.particle.options.ColorParticle;
 import me.outspending.biomesapi.wrapper.environment.particle.options.DustParticle;
@@ -11,10 +14,6 @@ import me.outspending.biomesapi.wrapper.environment.particle.options.SculkCharge
 import me.outspending.biomesapi.wrapper.environment.particle.options.SpellParticle;
 import me.outspending.biomesapi.wrapper.environment.particle.options.TrailParticle;
 import me.outspending.biomesapi.wrapper.environment.particle.options.VibrationParticle;
-import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleType;
-import net.minecraft.core.particles.ParticleTypes;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -24,178 +23,172 @@ import org.jetbrains.annotations.Nullable;
  * @see WrappedAmbientParticle
  * @see ParticleCatalog
  * @see ParticleData
- * @since 1.1.0
+ * @since 2.0.0
  * @author Jsinco
  */
-@AsOf("1.1.0")
+@AsOf("2.0.0")
 public enum WrappedParticleTypes {
 
-    ANGRY_VILLAGER(ParticleTypes.ANGRY_VILLAGER),
-    BLOCK(ParticleTypes.BLOCK, BlockParticle.class),
-    BLOCK_MARKER(ParticleTypes.BLOCK_MARKER, BlockParticle.class),
-    BUBBLE(ParticleTypes.BUBBLE),
-    CLOUD(ParticleTypes.CLOUD),
-    COPPER_FIRE_FLAME(ParticleTypes.COPPER_FIRE_FLAME),
-    CRIT(ParticleTypes.CRIT),
-    DAMAGE_INDICATOR(ParticleTypes.DAMAGE_INDICATOR),
-    DRAGON_BREATH(ParticleTypes.DRAGON_BREATH, PowerParticle.class),
-    DRIPPING_LAVA(ParticleTypes.DRIPPING_LAVA),
-    FALLING_LAVA(ParticleTypes.FALLING_LAVA),
-    LANDING_LAVA(ParticleTypes.LANDING_LAVA),
-    DRIPPING_WATER(ParticleTypes.DRIPPING_WATER),
-    FALLING_WATER(ParticleTypes.FALLING_WATER),
-    DUST(ParticleTypes.DUST, DustParticle.class),
-    DUST_COLOR_TRANSITION(ParticleTypes.DUST_COLOR_TRANSITION, DustTransitionParticle.class),
-    EFFECT(ParticleTypes.EFFECT, SpellParticle.class),
-    ELDER_GUARDIAN(ParticleTypes.ELDER_GUARDIAN),
-    ENCHANTED_HIT(ParticleTypes.ENCHANTED_HIT),
-    ENCHANT(ParticleTypes.ENCHANT),
-    END_ROD(ParticleTypes.END_ROD),
-    ENTITY_EFFECT(ParticleTypes.ENTITY_EFFECT, ColorParticle.class),
-    EXPLOSION_EMITTER(ParticleTypes.EXPLOSION_EMITTER),
-    EXPLOSION(ParticleTypes.EXPLOSION),
-    GUST(ParticleTypes.GUST),
-    SMALL_GUST(ParticleTypes.SMALL_GUST),
-    GUST_EMITTER_LARGE(ParticleTypes.GUST_EMITTER_LARGE),
-    GUST_EMITTER_SMALL(ParticleTypes.GUST_EMITTER_SMALL),
-    SONIC_BOOM(ParticleTypes.SONIC_BOOM),
-    FALLING_DUST(ParticleTypes.FALLING_DUST, BlockParticle.class),
-    FIREWORK(ParticleTypes.FIREWORK),
-    FISHING(ParticleTypes.FISHING),
-    FLAME(ParticleTypes.FLAME),
-    INFESTED(ParticleTypes.INFESTED),
-    CHERRY_LEAVES(ParticleTypes.CHERRY_LEAVES),
-    PALE_OAK_LEAVES(ParticleTypes.PALE_OAK_LEAVES),
-    TINTED_LEAVES(ParticleTypes.TINTED_LEAVES, ColorParticle.class),
-    SCULK_SOUL(ParticleTypes.SCULK_SOUL),
-    SCULK_CHARGE(ParticleTypes.SCULK_CHARGE, SculkChargeParticle.class),
-    SCULK_CHARGE_POP(ParticleTypes.SCULK_CHARGE_POP),
-    SOUL_FIRE_FLAME(ParticleTypes.SOUL_FIRE_FLAME),
-    SOUL(ParticleTypes.SOUL),
-    FLASH(ParticleTypes.FLASH, ColorParticle.class),
-    HAPPY_VILLAGER(ParticleTypes.HAPPY_VILLAGER),
-    COMPOSTER(ParticleTypes.COMPOSTER),
-    HEART(ParticleTypes.HEART),
-    INSTANT_EFFECT(ParticleTypes.INSTANT_EFFECT, SpellParticle.class),
-    ITEM(ParticleTypes.ITEM, ItemParticle.class),
-    VIBRATION(ParticleTypes.VIBRATION, VibrationParticle.class),
-    TRAIL(ParticleTypes.TRAIL, TrailParticle.class),
-    ITEM_SLIME(ParticleTypes.ITEM_SLIME),
-    ITEM_COBWEB(ParticleTypes.ITEM_COBWEB),
-    ITEM_SNOWBALL(ParticleTypes.ITEM_SNOWBALL),
-    LARGE_SMOKE(ParticleTypes.LARGE_SMOKE),
-    LAVA(ParticleTypes.LAVA),
-    MYCELIUM(ParticleTypes.MYCELIUM),
-    NOTE(ParticleTypes.NOTE),
-    POOF(ParticleTypes.POOF),
-    PORTAL(ParticleTypes.PORTAL),
-    RAIN(ParticleTypes.RAIN),
-    SMOKE(ParticleTypes.SMOKE),
-    WHITE_SMOKE(ParticleTypes.WHITE_SMOKE),
-    SNEEZE(ParticleTypes.SNEEZE),
-    SPIT(ParticleTypes.SPIT),
-    SQUID_INK(ParticleTypes.SQUID_INK),
-    SWEEP_ATTACK(ParticleTypes.SWEEP_ATTACK),
-    TOTEM_OF_UNDYING(ParticleTypes.TOTEM_OF_UNDYING),
-    UNDERWATER(ParticleTypes.UNDERWATER),
-    SPLASH(ParticleTypes.SPLASH),
-    WITCH(ParticleTypes.WITCH),
-    BUBBLE_POP(ParticleTypes.BUBBLE_POP),
-    CURRENT_DOWN(ParticleTypes.CURRENT_DOWN),
-    BUBBLE_COLUMN_UP(ParticleTypes.BUBBLE_COLUMN_UP),
-    NAUTILUS(ParticleTypes.NAUTILUS),
-    DOLPHIN(ParticleTypes.DOLPHIN),
-    CAMPFIRE_COSY_SMOKE(ParticleTypes.CAMPFIRE_COSY_SMOKE),
-    CAMPFIRE_SIGNAL_SMOKE(ParticleTypes.CAMPFIRE_SIGNAL_SMOKE),
-    DRIPPING_HONEY(ParticleTypes.DRIPPING_HONEY),
-    FALLING_HONEY(ParticleTypes.FALLING_HONEY),
-    LANDING_HONEY(ParticleTypes.LANDING_HONEY),
-    FALLING_NECTAR(ParticleTypes.FALLING_NECTAR),
-    FALLING_SPORE_BLOSSOM(ParticleTypes.FALLING_SPORE_BLOSSOM),
-    ASH(ParticleTypes.ASH),
-    CRIMSON_SPORE(ParticleTypes.CRIMSON_SPORE),
-    WARPED_SPORE(ParticleTypes.WARPED_SPORE),
-    SPORE_BLOSSOM_AIR(ParticleTypes.SPORE_BLOSSOM_AIR),
-    DRIPPING_OBSIDIAN_TEAR(ParticleTypes.DRIPPING_OBSIDIAN_TEAR),
-    FALLING_OBSIDIAN_TEAR(ParticleTypes.FALLING_OBSIDIAN_TEAR),
-    LANDING_OBSIDIAN_TEAR(ParticleTypes.LANDING_OBSIDIAN_TEAR),
-    REVERSE_PORTAL(ParticleTypes.REVERSE_PORTAL),
-    WHITE_ASH(ParticleTypes.WHITE_ASH),
-    SMALL_FLAME(ParticleTypes.SMALL_FLAME),
-    SNOWFLAKE(ParticleTypes.SNOWFLAKE),
-    DRIPPING_DRIPSTONE_LAVA(ParticleTypes.DRIPPING_DRIPSTONE_LAVA),
-    FALLING_DRIPSTONE_LAVA(ParticleTypes.FALLING_DRIPSTONE_LAVA),
-    DRIPPING_DRIPSTONE_WATER(ParticleTypes.DRIPPING_DRIPSTONE_WATER),
-    FALLING_DRIPSTONE_WATER(ParticleTypes.FALLING_DRIPSTONE_WATER),
-    GLOW_SQUID_INK(ParticleTypes.GLOW_SQUID_INK),
-    GLOW(ParticleTypes.GLOW),
-    WAX_ON(ParticleTypes.WAX_ON),
-    WAX_OFF(ParticleTypes.WAX_OFF),
-    ELECTRIC_SPARK(ParticleTypes.ELECTRIC_SPARK),
-    SCRAPE(ParticleTypes.SCRAPE),
-    SHRIEK(ParticleTypes.SHRIEK),
-    EGG_CRACK(ParticleTypes.EGG_CRACK),
-    DUST_PLUME(ParticleTypes.DUST_PLUME),
-    TRIAL_SPAWNER_DETECTED_PLAYER(ParticleTypes.TRIAL_SPAWNER_DETECTED_PLAYER),
-    TRIAL_SPAWNER_DETECTED_PLAYER_OMINOUS(ParticleTypes.TRIAL_SPAWNER_DETECTED_PLAYER_OMINOUS),
-    VAULT_CONNECTION(ParticleTypes.VAULT_CONNECTION),
-    DUST_PILLAR(ParticleTypes.DUST_PILLAR, BlockParticle.class),
-    OMINOUS_SPAWNING(ParticleTypes.OMINOUS_SPAWNING),
-    RAID_OMEN(ParticleTypes.RAID_OMEN),
-    TRIAL_OMEN(ParticleTypes.TRIAL_OMEN),
-    BLOCK_CRUMBLE(ParticleTypes.BLOCK_CRUMBLE, BlockParticle.class),
-    FIREFLY(ParticleTypes.FIREFLY);
+    ANGRY_VILLAGER("angry_villager"),
+    BLOCK("block", BlockParticle.class),
+    BLOCK_MARKER("block_marker", BlockParticle.class),
+    BUBBLE("bubble"),
+    CLOUD("cloud"),
+    COPPER_FIRE_FLAME("copper_fire_flame"),
+    CRIT("crit"),
+    DAMAGE_INDICATOR("damage_indicator"),
+    DRAGON_BREATH("dragon_breath", PowerParticle.class),
+    DRIPPING_LAVA("dripping_lava"),
+    FALLING_LAVA("falling_lava"),
+    LANDING_LAVA("landing_lava"),
+    DRIPPING_WATER("dripping_water"),
+    FALLING_WATER("falling_water"),
+    DUST("dust", DustParticle.class),
+    DUST_COLOR_TRANSITION("dust_color_transition", DustTransitionParticle.class),
+    EFFECT("effect", SpellParticle.class),
+    ELDER_GUARDIAN("elder_guardian"),
+    ENCHANTED_HIT("enchanted_hit"),
+    ENCHANT("enchant"),
+    END_ROD("end_rod"),
+    ENTITY_EFFECT("entity_effect", ColorParticle.class),
+    EXPLOSION_EMITTER("explosion_emitter"),
+    EXPLOSION("explosion"),
+    GUST("gust"),
+    SMALL_GUST("small_gust"),
+    GUST_EMITTER_LARGE("gust_emitter_large"),
+    GUST_EMITTER_SMALL("gust_emitter_small"),
+    SONIC_BOOM("sonic_boom"),
+    FALLING_DUST("falling_dust", BlockParticle.class),
+    FIREWORK("firework"),
+    FISHING("fishing"),
+    FLAME("flame"),
+    INFESTED("infested"),
+    CHERRY_LEAVES("cherry_leaves"),
+    PALE_OAK_LEAVES("pale_oak_leaves"),
+    TINTED_LEAVES("tinted_leaves", ColorParticle.class),
+    SCULK_SOUL("sculk_soul"),
+    SCULK_CHARGE("sculk_charge", SculkChargeParticle.class),
+    SCULK_CHARGE_POP("sculk_charge_pop"),
+    SOUL_FIRE_FLAME("soul_fire_flame"),
+    SOUL("soul"),
+    FLASH("flash", ColorParticle.class),
+    HAPPY_VILLAGER("happy_villager"),
+    COMPOSTER("composter"),
+    HEART("heart"),
+    INSTANT_EFFECT("instant_effect", SpellParticle.class),
+    ITEM("item", ItemParticle.class),
+    VIBRATION("vibration", VibrationParticle.class),
+    TRAIL("trail", TrailParticle.class),
+    ITEM_SLIME("item_slime"),
+    ITEM_COBWEB("item_cobweb"),
+    ITEM_SNOWBALL("item_snowball"),
+    LARGE_SMOKE("large_smoke"),
+    LAVA("lava"),
+    MYCELIUM("mycelium"),
+    NOTE("note"),
+    POOF("poof"),
+    PORTAL("portal"),
+    RAIN("rain"),
+    SMOKE("smoke"),
+    WHITE_SMOKE("white_smoke"),
+    SNEEZE("sneeze"),
+    SPIT("spit"),
+    SQUID_INK("squid_ink"),
+    SWEEP_ATTACK("sweep_attack"),
+    TOTEM_OF_UNDYING("totem_of_undying"),
+    UNDERWATER("underwater"),
+    SPLASH("splash"),
+    WITCH("witch"),
+    BUBBLE_POP("bubble_pop"),
+    CURRENT_DOWN("current_down"),
+    BUBBLE_COLUMN_UP("bubble_column_up"),
+    NAUTILUS("nautilus"),
+    DOLPHIN("dolphin"),
+    CAMPFIRE_COSY_SMOKE("campfire_cosy_smoke"),
+    CAMPFIRE_SIGNAL_SMOKE("campfire_signal_smoke"),
+    DRIPPING_HONEY("dripping_honey"),
+    FALLING_HONEY("falling_honey"),
+    LANDING_HONEY("landing_honey"),
+    FALLING_NECTAR("falling_nectar"),
+    FALLING_SPORE_BLOSSOM("falling_spore_blossom"),
+    ASH("ash"),
+    CRIMSON_SPORE("crimson_spore"),
+    WARPED_SPORE("warped_spore"),
+    SPORE_BLOSSOM_AIR("spore_blossom_air"),
+    DRIPPING_OBSIDIAN_TEAR("dripping_obsidian_tear"),
+    FALLING_OBSIDIAN_TEAR("falling_obsidian_tear"),
+    LANDING_OBSIDIAN_TEAR("landing_obsidian_tear"),
+    REVERSE_PORTAL("reverse_portal"),
+    WHITE_ASH("white_ash"),
+    SMALL_FLAME("small_flame"),
+    SNOWFLAKE("snowflake"),
+    DRIPPING_DRIPSTONE_LAVA("dripping_dripstone_lava"),
+    FALLING_DRIPSTONE_LAVA("falling_dripstone_lava"),
+    DRIPPING_DRIPSTONE_WATER("dripping_dripstone_water"),
+    FALLING_DRIPSTONE_WATER("falling_dripstone_water"),
+    GLOW_SQUID_INK("glow_squid_ink"),
+    GLOW("glow"),
+    WAX_ON("wax_on"),
+    WAX_OFF("wax_off"),
+    ELECTRIC_SPARK("electric_spark"),
+    SCRAPE("scrape"),
+    SHRIEK("shriek"),
+    EGG_CRACK("egg_crack"),
+    DUST_PLUME("dust_plume"),
+    TRIAL_SPAWNER_DETECTED_PLAYER("trial_spawner_detected_player"),
+    TRIAL_SPAWNER_DETECTED_PLAYER_OMINOUS("trial_spawner_detected_player_ominous"),
+    VAULT_CONNECTION("vault_connection"),
+    DUST_PILLAR("dust_pillar", BlockParticle.class),
+    OMINOUS_SPAWNING("ominous_spawning"),
+    RAID_OMEN("raid_omen"),
+    TRIAL_OMEN("trial_omen"),
+    BLOCK_CRUMBLE("block_crumble", BlockParticle.class),
+    FIREFLY("firefly");
 
-    private final ParticleType<?> particleType;
+    private final String key;
     private final @Nullable Class<? extends ParticleData<?>> particleDataClass;
+    private volatile ParticleTypeHandle<?> cachedHandle;
 
-    @AsOf("1.1.0")
-    WrappedParticleTypes(ParticleType<?> particleType) {
-        this.particleType = particleType;
-        this.particleDataClass = null;
+    WrappedParticleTypes(String key) {
+        this(key, null);
     }
 
-    @AsOf("1.1.0")
-    WrappedParticleTypes(ParticleType<?> particleType, Class<? extends ParticleData<?>> particleDataClass) {
-        this.particleType = particleType;
+    WrappedParticleTypes(String key, @Nullable Class<? extends ParticleData<?>> particleDataClass) {
+        this.key = key;
         this.particleDataClass = particleDataClass;
     }
 
     /**
-     * Gets the raw Minecraft ParticleType.
-     * @return The Minecraft ParticleType.
+     * The namespaced name of this particle (without the "minecraft:" prefix).
      */
     @AsOf("1.1.0")
-    public ParticleType<?> getParticleTypeRaw() {
-        return particleType;
+    public String getKey() {
+        return key;
     }
 
     /**
-     * Gets the Minecraft ParticleType with the appropriate generic type.
-     * @return The Minecraft ParticleType.
-     * @param <T> The type of ParticleOptions.
+     * Gets a version-agnostic handle to this particle type, resolved on first access
+     * via the registered factory and cached.
      */
     @AsOf("1.1.0")
-    public <T extends ParticleOptions> ParticleType<@NotNull T> getParticleType() {
-        return (ParticleType<T>) particleType;
+    public <T> ParticleTypeHandle<T> getParticleType() {
+        ParticleTypeHandle<?> cached = cachedHandle;
+        if (cached == null) {
+            cached = ParticleOptionsFactory.OPTIONS.get().typeByKey(key);
+            cachedHandle = cached;
+        }
+        @SuppressWarnings("unchecked")
+        ParticleTypeHandle<T> typed = (ParticleTypeHandle<T>) cached;
+        return typed;
     }
 
-    /**
-     * Gets the ParticleData class associated with this particle type, or null if it is a simple particle.
-     * @return The ParticleData class, or null.
-     */
     @AsOf("1.1.0")
     public @Nullable Class<? extends ParticleData<?>> getParticleDataClass() {
         return particleDataClass;
     }
 
-    /**
-     * Checks if this particle type is simple (i.e., does not require additional data).
-     * @return True if the particle type is simple, false otherwise.
-     */
     @AsOf("1.1.0")
     public boolean isSimple() {
         return particleDataClass == null;
     }
-
 }

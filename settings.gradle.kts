@@ -6,6 +6,6 @@ rootProject.name = "BiomesAPI"
 
 include("main")
 include("test-plugin")
-include("minecraft:Wrapper")
+include("api")
 include("minecraft:1_21_11")
 include("minecraft:26_1_1")

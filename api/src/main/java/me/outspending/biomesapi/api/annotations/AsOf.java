@@ -1,4 +1,4 @@
-package me.outspending.biomesapi.annotations;
+package me.outspending.biomesapi.api.annotations;
 
 import org.jetbrains.annotations.ApiStatus;
 

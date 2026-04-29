@@ -1,11 +1,12 @@
 package me.outspending.biomesapi.renderer.packet.data;
 
 import com.google.common.base.Preconditions;
-import me.outspending.biomesapi.annotations.AsOf;
+import me.outspending.biomesapi.api.ChunkLocation;
+import me.outspending.biomesapi.api.annotations.AsOf;
 import me.outspending.biomesapi.biome.BiomeHandler;
-import me.outspending.biomesapi.biome.CustomBiome;
+import me.outspending.biomesapi.api.biome.CustomBiome;
 import me.outspending.biomesapi.renderer.packet.PacketHandler;
-import me.outspending.biomesapi.registry.BiomeResourceKey;
+import me.outspending.biomesapi.api.registry.BiomeResourceKey;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 

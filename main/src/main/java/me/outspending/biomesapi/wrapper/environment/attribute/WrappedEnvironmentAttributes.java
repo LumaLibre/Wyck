@@ -1,6 +1,6 @@
 package me.outspending.biomesapi.wrapper.environment.attribute;
 
-import me.outspending.biomesapi.annotations.AsOf;
+import me.outspending.biomesapi.api.annotations.AsOf;
 import me.outspending.biomesapi.wrapper.environment.Activity;
 import me.outspending.biomesapi.wrapper.environment.BedRule;
 import me.outspending.biomesapi.wrapper.environment.MoonPhase;

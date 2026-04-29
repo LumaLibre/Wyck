@@ -1,7 +1,7 @@
 package me.outspending.biomesapi;
 
 import com.google.common.base.Preconditions;
-import me.outspending.biomesapi.annotations.AsOf;
+import me.outspending.biomesapi.api.annotations.AsOf;
 import me.outspending.biomesapi.misc.PointRange2D;
 import org.bukkit.Chunk;
 import org.bukkit.Location;

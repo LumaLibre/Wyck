@@ -1,12 +1,12 @@
-package me.outspending.biomesapi.biome;
+package me.outspending.biomesapi.api.biome;
 
 import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.renderer.packet.PacketHandler;
-import me.outspending.biomesapi.wrapper.BiomeSettings;
-import me.outspending.biomesapi.wrapper.environment.GrassColorModifier;
-import me.outspending.biomesapi.annotations.AsOf;
+import me.outspending.biomesapi.api.wrapper.BiomeSettings;
+import me.outspending.biomesapi.api.wrapper.environment.GrassColorModifier;
+import me.outspending.biomesapi.api.annotations.AsOf;
 import me.outspending.biomesapi.renderer.packet.data.BlockReplacement;
-import me.outspending.biomesapi.registry.BiomeResourceKey;
+import me.outspending.biomesapi.api.registry.BiomeResourceKey;
 import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttributeMap;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleCatalog;
 import org.bukkit.Color;

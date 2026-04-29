@@ -1,7 +1,7 @@
 package me.outspending.biomesapi;
 
 import com.google.common.base.Preconditions;
-import me.outspending.biomesapi.unsafe.UnsafeNMS;
+import me.outspending.biomesapi.api.UnsafeNMS;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.biome.Biome;

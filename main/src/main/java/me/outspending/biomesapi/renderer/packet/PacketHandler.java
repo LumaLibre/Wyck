@@ -1,12 +1,12 @@
 package me.outspending.biomesapi.renderer.packet;
 
-import me.outspending.biomesapi.annotations.AsOf;
+import me.outspending.biomesapi.api.annotations.AsOf;
 import me.outspending.biomesapi.exceptions.MissingPacketManipulatorLibraryException;
 import me.outspending.biomesapi.renderer.AbstractBiomeRenderer;
 import me.outspending.biomesapi.renderer.packet.data.PhonyCustomBiome;
 import me.outspending.biomesapi.renderer.packet.handlers.PacketEventsPacketHandler;
 import me.outspending.biomesapi.renderer.packet.handlers.ProtocolLibPacketHandler;
-import me.outspending.biomesapi.registry.BiomeResourceKey;
+import me.outspending.biomesapi.api.registry.BiomeResourceKey;
 import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.ApiStatus;

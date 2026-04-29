@@ -1,6 +1,6 @@
 package me.outspending.biomesapi.renderer;
 
-import me.outspending.biomesapi.annotations.AsOf;
+import me.outspending.biomesapi.api.annotations.AsOf;
 
 /**
  * Represents an abstract biome renderer.

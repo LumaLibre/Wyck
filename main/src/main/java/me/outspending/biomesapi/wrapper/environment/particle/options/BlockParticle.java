@@ -1,21 +1,19 @@
 package me.outspending.biomesapi.wrapper.environment.particle.options;
 
-import me.outspending.biomesapi.annotations.AsOf;
-import me.outspending.biomesapi.wrapper.environment.particle.ParticleData;
-import net.minecraft.core.particles.BlockParticleOption;
-import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleType;
-import net.minecraft.world.level.block.state.BlockState;
+import me.outspending.biomesapi.api.annotations.AsOf;
+import me.outspending.biomesapi.api.wrapper.environment.particle.ParticleData;
+import me.outspending.biomesapi.api.wrapper.environment.particle.ParticleOptionsHandle;
+import me.outspending.biomesapi.api.wrapper.environment.particle.ParticleTypeHandle;
+import me.outspending.biomesapi.api.wrapper.environment.particle.options.ParticleOptionsFactory;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.util.CraftMagicNumbers;
 import org.jetbrains.annotations.NotNull;
 
-@AsOf("1.1.0")
-public record BlockParticle(Material type) implements ParticleData<BlockParticleOption> {
+@AsOf("2.0.0")
+public record BlockParticle(Material type) implements ParticleData<BlockParticle> {
+
     @Override
-    public @NotNull ParticleOptions apply(@NotNull ParticleType<@NotNull BlockParticleOption> particleType) {
-        BlockState minecraftBlockState = CraftMagicNumbers.getBlock(type).defaultBlockState();
-        return new BlockParticleOption(particleType, minecraftBlockState);
+    public @NotNull ParticleOptionsHandle apply(@NotNull ParticleTypeHandle<BlockParticle> particleType) {
+        return ParticleOptionsFactory.OPTIONS.get().block(particleType, type);
     }
 
     public static BlockParticle of(Material material) {

@@ -1,11 +1,11 @@
 package me.outspending.biomesapi.wrapper.environment.particle;
 
 import com.google.common.base.Preconditions;
-import me.outspending.biomesapi.annotations.AsOf;
-import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleType;
-import net.minecraft.core.particles.SimpleParticleType;
-import org.jetbrains.annotations.NotNull;
+import me.outspending.biomesapi.api.annotations.AsOf;
+import me.outspending.biomesapi.api.wrapper.environment.particle.ParticleData;
+import me.outspending.biomesapi.api.wrapper.environment.particle.ParticleOptionsHandle;
+import me.outspending.biomesapi.api.wrapper.environment.particle.ParticleTypeHandle;
+import me.outspending.biomesapi.api.wrapper.environment.particle.options.ParticleOptionsFactory;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -17,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
  * @param <T> The type of ParticleOptions associated with the particle.
  */
 @AsOf("1.1.0")
-public class WrappedAmbientParticle<T extends ParticleOptions> {
+public class WrappedAmbientParticle<T extends ParticleOptionsHandle> {
 
     private final WrappedParticleTypes ambientParticle;
     private final float probability;
@@ -57,10 +57,10 @@ public class WrappedAmbientParticle<T extends ParticleOptions> {
      * @return The corresponding Minecraft ParticleOptions.
      */
     @AsOf("1.1.0")
-    public ParticleOptions toMinecraftParticle() {
-        ParticleType<@NotNull T> particleType = ambientParticle.getParticleType();
-        if (particleType instanceof SimpleParticleType simpleParticleType) {
-            return simpleParticleType;
+    public ParticleOptionsHandle toMinecraftParticle() {
+        ParticleTypeHandle<T> particleType = ambientParticle.getParticleType();
+        if (ambientParticle.isSimple()) {
+            return ParticleOptionsFactory.OPTIONS.get().simple(particleType);
         }
 
         Preconditions.checkNotNull(particleData, "Particle data must not be null for complex particle types.");

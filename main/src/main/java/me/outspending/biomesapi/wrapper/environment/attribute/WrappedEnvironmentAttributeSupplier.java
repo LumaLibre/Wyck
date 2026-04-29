@@ -1,6 +1,6 @@
 package me.outspending.biomesapi.wrapper.environment.attribute;
 
-import me.outspending.biomesapi.annotations.AsOf;
+import me.outspending.biomesapi.api.annotations.AsOf;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.function.Supplier;

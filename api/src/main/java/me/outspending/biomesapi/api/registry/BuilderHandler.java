@@ -1,7 +1,7 @@
-package me.outspending.biomesapi.registry;
+package me.outspending.biomesapi.api.registry;
 
-import me.outspending.biomesapi.annotations.AsOf;
-import me.outspending.biomesapi.biome.CustomBiome;
+import me.outspending.biomesapi.api.annotations.AsOf;
+import me.outspending.biomesapi.api.biome.CustomBiome;
 import org.jetbrains.annotations.NotNull;
 
 /**

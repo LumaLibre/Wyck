@@ -1,7 +1,7 @@
-package me.outspending.biomesapi.wrapper;
+package me.outspending.biomesapi.api.wrapper;
 
-import me.outspending.biomesapi.annotations.AsOf;
-import me.outspending.biomesapi.wrapper.environment.BiomeTempModifier;
+import me.outspending.biomesapi.api.annotations.AsOf;
+import me.outspending.biomesapi.api.wrapper.environment.BiomeTempModifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 

@@ -1,6 +1,6 @@
 package me.outspending.biomesapi.unsafe;
 
-import me.outspending.biomesapi.annotations.AsOf;
+import me.outspending.biomesapi.api.annotations.AsOf;
 
 import java.util.function.Supplier;
 

@@ -1,8 +1,8 @@
 package me.outspending.biomesapi.registry.handlers;
 
-import me.outspending.biomesapi.annotations.AsOf;
-import me.outspending.biomesapi.biome.CustomBiome;
-import me.outspending.biomesapi.registry.BuilderHandler;
+import me.outspending.biomesapi.api.annotations.AsOf;
+import me.outspending.biomesapi.api.biome.CustomBiome;
+import me.outspending.biomesapi.api.registry.BuilderHandler;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeSpecialEffects;
 import org.jetbrains.annotations.NotNull;

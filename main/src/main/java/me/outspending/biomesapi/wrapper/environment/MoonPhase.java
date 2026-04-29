@@ -1,6 +1,6 @@
 package me.outspending.biomesapi.wrapper.environment;
 
-import me.outspending.biomesapi.annotations.AsOf;
+import me.outspending.biomesapi.api.annotations.AsOf;
 
 /**
  * This enum represents the phases of the moon in Minecraft.

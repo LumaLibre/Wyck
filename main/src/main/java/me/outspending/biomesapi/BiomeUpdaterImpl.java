@@ -1,6 +1,6 @@
 package me.outspending.biomesapi;
 
-import me.outspending.biomesapi.annotations.AsOf;
+import me.outspending.biomesapi.api.annotations.AsOf;
 import me.outspending.biomesapi.unsafe.UnsafeNMSHandler;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
