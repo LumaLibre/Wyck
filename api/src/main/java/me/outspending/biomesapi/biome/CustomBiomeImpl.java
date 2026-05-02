@@ -196,72 +196,81 @@ public final class CustomBiomeImpl implements CustomBiome {
     }
 
     @Override
-    public void setFogColor(@Nullable Integer fogColor) {
+    public CustomBiome setFogColor(@Nullable Integer fogColor) {
         this.fogColor = fogColor;
+        return this;
     }
 
     @Override
-    public void setWaterColor(int waterColor) {
+    public CustomBiome setWaterColor(int waterColor) {
         this.waterColor = waterColor;
+        return this;
     }
 
     @Override
-    public void setWaterFogColor(@Nullable Integer waterFogColor) {
+    public CustomBiome setWaterFogColor(@Nullable Integer waterFogColor) {
         this.waterFogColor = waterFogColor;
+        return this;
     }
 
     @Override
-    public void setSkyColor(@Nullable Integer skyColor) {
+    public CustomBiome setSkyColor(@Nullable Integer skyColor) {
         this.skyColor = skyColor;
+        return this;
     }
 
     @Override
-    public void setFoliageColor(@Nullable Integer foliageColor) {
+    public CustomBiome setFoliageColor(@Nullable Integer foliageColor) {
         this.foliageColor = foliageColor;
+        return this;
     }
 
     @Override
-    public void setGrassColor(@Nullable Integer grassColor) {
+    public CustomBiome setGrassColor(@Nullable Integer grassColor) {
         this.grassColor = grassColor;
+        return this;
     }
 
-    public void setDryFoliageColor(@Nullable Integer dryFoliageColor) {
+    @Override
+    public CustomBiome setDryFoliageColor(@Nullable Integer dryFoliageColor) {
         this.dryFoliageColor = dryFoliageColor;
+        return this;
     }
 
     @Override
-    public void setGrassColorModifier(@NotNull GrassColorModifier grassColorModifier) {
+    public CustomBiome setGrassColorModifier(@NotNull GrassColorModifier grassColorModifier) {
         this.grassColorModifier = grassColorModifier;
+        return this;
     }
 
     @Override
-    public void setParticleCatalog(@NotNull ParticleCatalog particleCatalog) {
+    public CustomBiome setParticleCatalog(@NotNull ParticleCatalog particleCatalog) {
         this.particleCatalog = particleCatalog;
+        return this;
     }
 
     @Override
-    public void setBlockReplacements(@NotNull BlockReplacement[] blockReplacements) {
+    public CustomBiome setBlockReplacements(@NotNull BlockReplacement[] blockReplacements) {
         this.blockReplacements = blockReplacements;
+        return this;
     }
 
     @Override
-    public void setEnvironmentAttributeMap(@NotNull WrappedEnvironmentAttributeMap environmentAttributeMap) {
+    public CustomBiome setEnvironmentAttributeMap(@NotNull WrappedEnvironmentAttributeMap environmentAttributeMap) {
         this.environmentAttributeMap = environmentAttributeMap;
+        return this;
     }
 
     @Override
-    public Builder toBuilder() {
-        return new Builder(this);
-    }
-
-    @Override
-    public void register() {
+    public CustomBiome register() {
         BiomeRegistry.newRegistry().register(this);
+        return this;
     }
 
     @Override
-    public void modify() {
+    public CustomBiome modify() {
         BiomeRegistry.newRegistry().modify(this);
+        return this;
     }
 
     @Override // TODO: cleanup

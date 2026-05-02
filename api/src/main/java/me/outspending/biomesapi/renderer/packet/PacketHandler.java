@@ -21,11 +21,10 @@ import org.jetbrains.annotations.NotNull;
  * An external packet handling library (either ProtocolLib or PacketEvents) is required
  * for this interface.
  * </p>
- * @version 1.2.0
+ * @version 2.1.0
  * @since 0.0.6
  * @author Jsinco
  */
-@ApiStatus.Experimental
 @AsOf("1.2.0")
 public interface PacketHandler extends AbstractBiomeRenderer {
 
@@ -99,33 +98,38 @@ public interface PacketHandler extends AbstractBiomeRenderer {
      * Registers the necessary packet listeners to handle biome injection.
      * Calling this in your plugin's onLoad/onEnable is recommended
      * assuming your plugin soft-depends on PacketEvents and/or ProtocolLib.
+     * @return the registered PacketHandler instance
      */
     @AsOf("0.0.6")
-    void register();
+    PacketHandler register();
 
     /**
      * Unregisters the packet listeners handling biome injection.
      * Calling this in your plugin's onDisable is recommended.
+     * @return the unregistered PacketHandler instance
      */
     @AsOf("0.0.6")
-    void unregister();
+    PacketHandler unregister();
 
     /**
      * Appends a custom biome to the packet handler's list of biomes to inject.
      * @param biome The phony custom biome to append
+     * @return the PacketHandler instance for chaining
      */
     @AsOf("0.0.6")
-    void appendBiome(@NotNull PhonyCustomBiome biome);
+    PacketHandler appendBiome(@NotNull PhonyCustomBiome biome);
 
     /**
      * Appends multiple custom biomes to the packet handler's list of biomes to inject.
      * @param biomes The phony custom biomes to append
+     * @return the PacketHandler instance for chaining
      */
     @AsOf("0.0.6")
-    default void appendBiome(@NotNull PhonyCustomBiome... biomes) {
+    default PacketHandler appendBiome(@NotNull PhonyCustomBiome... biomes) {
         for (PhonyCustomBiome biome : biomes) {
             appendBiome(biome);
         }
+        return this;
     }
 
     /**
@@ -137,12 +141,34 @@ public interface PacketHandler extends AbstractBiomeRenderer {
     boolean removeBiome(@NotNull PhonyCustomBiome biome);
 
     /**
+     * Removes a custom biome from the packet handler's list of biomes to inject.
+     * @param biome The phony custom biome to remove
+     * @return the PacketHandler instance for chaining
+     */
+    @AsOf("2.1.0")
+    default PacketHandler dismissBiome(@NotNull PhonyCustomBiome biome) {
+        removeBiome(biome);
+        return this;
+    }
+
+    /**
      * Removes a custom biome from the packet handler's list of biomes to inject by its BiomeResourceKey.
      * @param biomeKey The BiomeResourceKey of the biome to remove
      * @return true if the biome was removed, false if it was not found
      */
     @AsOf("0.0.6")
     boolean removeBiome(@NotNull BiomeResourceKey biomeKey);
+
+    /**
+     * Removes a custom biome from the packet handler's list of biomes to inject by its BiomeResourceKey.
+     * @param biomeKey The BiomeResourceKey of the biome to remove
+     * @return the PacketHandler instance for chaining
+     */
+    @AsOf("2.1.0")
+    default PacketHandler dismissBiome(@NotNull BiomeResourceKey biomeKey) {
+        removeBiome(biomeKey);
+        return this;
+    }
 
     /**
      * Checks if a custom biome is in the packet handler's list of biomes to inject.
@@ -162,9 +188,10 @@ public interface PacketHandler extends AbstractBiomeRenderer {
 
     /**
      * Clears all phony custom biomes from the packet handler's list of biomes to inject.
+     * @return the PacketHandler instance for chaining
      */
     @AsOf("0.0.6")
-    void clearBiomes();
+    PacketHandler clearBiomes();
 
     /**
      * The number of sections in each dimension.

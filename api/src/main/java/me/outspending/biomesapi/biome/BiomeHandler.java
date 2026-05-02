@@ -24,7 +24,7 @@ public class BiomeHandler {
 
     private static final List<CustomBiome> REGISTERED_BIOMES = new ArrayList<>();
 
-    public BiomeHandler() {
+    private BiomeHandler() {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated.");
     }
 

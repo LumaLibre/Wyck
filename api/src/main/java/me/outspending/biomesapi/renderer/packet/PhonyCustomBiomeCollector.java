@@ -6,7 +6,6 @@ import me.outspending.biomesapi.misc.ChunkLocation;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
 import me.outspending.biomesapi.renderer.packet.data.PhonyCustomBiome;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,7 +20,6 @@ import java.util.Set;
  * @since 0.0.6
  * @author Jsinco
  */
-@ApiStatus.Experimental
 @AsOf("0.0.6")
 public class PhonyCustomBiomeCollector {
 

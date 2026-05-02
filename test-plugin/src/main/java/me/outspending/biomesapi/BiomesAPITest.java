@@ -50,7 +50,7 @@ public final class BiomesAPITest extends JavaPlugin implements Listener {
 //                .setAttribute(WrappedEnvironmentAttributes.FAST_LAVA, true)
 //                .build();
 
-        CustomBiome biome = CustomBiome.builder()
+        PhonyCustomBiome phonyCustomBiome = CustomBiome.builder()
                 .resourceKey(BiomeResourceKey.of("test", "custombiome"))
                 .settings(BiomeSettings.defaultSettings())
                 //.fogColor("#FFFFFF") // #db4929
@@ -66,29 +66,13 @@ public final class BiomesAPITest extends JavaPlugin implements Listener {
                                 .addComplex(WrappedParticleTypes.DUST, 0.1f, DustParticle.of("#B99DFC"))
                                 .build()
                 )
-                .blockReplacements(
-//                        BlockReplacement.of(Material.GRASS_BLOCK, Material.WATER),
-//                        BlockReplacement.of(Material.STONE, Material.DIAMOND_BLOCK)
-                )
-                //.environmentAttributeMap(attributeMap)
-                .build();
-
-        biome.register();
+                .register()
+                .toPhony();
 
 
-        packetHandler = PacketHandler.of(this, PacketHandler.Manipulator.PACKETEVENTS);
-        packetHandler.register();
-
-
-        PhonyCustomBiome phonyCustomBiome = PhonyCustomBiome.builder()
-                .setCustomBiome(biome)
-//                .setConditional((player, chunkLocation) -> {
-//                    Block block = chunkLocation.centerBlock(player.getWorld());
-//                    return block.getBiome() == Biome.BIRCH_FOREST;
-//                })
-                .build();
-
-        packetHandler.appendBiome(phonyCustomBiome);
+        PacketHandler.of(this, PacketHandler.Manipulator.PACKETEVENTS)
+                        .appendBiome(phonyCustomBiome)
+                        .register();
     }
 
     @Override

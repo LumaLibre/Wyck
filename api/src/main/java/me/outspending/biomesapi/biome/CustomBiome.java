@@ -5,6 +5,7 @@ import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
 import me.outspending.biomesapi.renderer.packet.PacketHandler;
 import me.outspending.biomesapi.renderer.packet.data.BlockReplacement;
+import me.outspending.biomesapi.renderer.packet.data.PhonyCustomBiome;
 import me.outspending.biomesapi.wrapper.BiomeSettings;
 import me.outspending.biomesapi.wrapper.environment.GrassColorModifier;
 import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttributeMap;
@@ -14,6 +15,8 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.block.Biome;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Collection;
 
 /**
  * This interface represents a custom biome in the BiomesAPI.
@@ -178,81 +181,90 @@ public interface CustomBiome {
      *
      * @param fogColor the fog color of the CustomBiome
      * @since 0.0.5
+     * @return the CustomBiome with the updated fog color
      */
     @AsOf("1.1.0")
-    void setFogColor(@Nullable Integer fogColor);
+    CustomBiome setFogColor(@Nullable Integer fogColor);
 
     /**
      * Sets the water color of the CustomBiome.
      *
      * @param waterColor the water color of the CustomBiome
      * @since 0.0.5
+     * @return the CustomBiome with the updated water color
      */
     @AsOf("0.0.5")
-    void setWaterColor(int waterColor);
+    CustomBiome setWaterColor(int waterColor);
 
     /**
      * Sets the water fog color of the CustomBiome.
      *
      * @param waterFogColor the water fog color of the CustomBiome
      * @since 0.0.5
+     * @return the CustomBiome with the updated water fog color
      */
     @AsOf("1.1.0")
-    void setWaterFogColor(@Nullable Integer waterFogColor);
+    CustomBiome setWaterFogColor(@Nullable Integer waterFogColor);
 
     /**
      * Sets the sky color of the CustomBiome.
      *
      * @param skyColor the sky color of the CustomBiome
      * @since 0.0.5
+     * @return the CustomBiome with the updated sky color
      */
     @AsOf("1.1.0")
-    void setSkyColor(@Nullable Integer skyColor);
+    CustomBiome setSkyColor(@Nullable Integer skyColor);
 
     /**
      * Sets the foliage color of the CustomBiome.
      *
      * @param foliageColor the foliage color of the CustomBiome
      * @since 0.0.5
+     * @return the CustomBiome with the updated foliage color
      */
     @AsOf("1.1.0")
-    void setFoliageColor(@Nullable Integer foliageColor);
+    CustomBiome setFoliageColor(@Nullable Integer foliageColor);
 
     /**
      * Sets the grass color of the CustomBiome.
      *
      * @param grassColor the grass color of the CustomBiome
      * @since 0.0.5
+     * @return the CustomBiome with the updated grass color
      */
     @AsOf("1.1.0")
-    void setGrassColor(@Nullable Integer grassColor);
+    CustomBiome setGrassColor(@Nullable Integer grassColor);
 
     /**
      * Sets the dry foliage color of the CustomBiome.
      *
      * @param dryFoliageColor the dry foliage color of the CustomBiome
      * @since 1.0.2
+     * @return the CustomBiome with the updated dry foliage color
      */
     @AsOf("1.1.0")
-    void setDryFoliageColor(@Nullable Integer dryFoliageColor);
+    CustomBiome setDryFoliageColor(@Nullable Integer dryFoliageColor);
 
     /**
      * Sets the GrassColorModifier of the CustomBiome.
      *
      * @param grassColorModifier the GrassColorModifier of the CustomBiome
      * @since 0.0.24
+     * @return the CustomBiome with the updated GrassColorModifier
      */
     @AsOf("0.0.24")
-    void setGrassColorModifier(@NotNull GrassColorModifier grassColorModifier);
+    CustomBiome setGrassColorModifier(@NotNull GrassColorModifier grassColorModifier);
 
     /**
      * Sets the ParticleRenderer of the CustomBiome.
      *
      * @param particleCatalog the ParticleRenderer of the CustomBiome
      * @since 1.1.0
+     * @return the CustomBiome with the updated ParticleRenderer
      */
     @AsOf("1.1.0")
-    void setParticleCatalog(@NotNull ParticleCatalog particleCatalog);
+    CustomBiome setParticleCatalog(@NotNull ParticleCatalog particleCatalog);
 
     /**
      * Sets the BlockReplacements of the CustomBiome.
@@ -260,9 +272,10 @@ public interface CustomBiome {
      * @apiNote Block replacements are only supported when rendering custom biomes to clients via the {@link PacketHandler}.
      * @param blockReplacements the BlockReplacements of the CustomBiome
      * @since 0.0.6
+     * @return the CustomBiome with the updated BlockReplacements
      */
     @AsOf("0.0.6")
-    void setBlockReplacements(@NotNull BlockReplacement... blockReplacements);
+    CustomBiome setBlockReplacements(@NotNull BlockReplacement... blockReplacements);
 
 
     /**
@@ -270,26 +283,20 @@ public interface CustomBiome {
      *
      * @param environmentAttributeMap the WrappedEnvironmentAttributeMap of the CustomBiome
      * @since 1.1.0
+     * @return the CustomBiome with the updated WrappedEnvironmentAttributeMap
      */
     @AsOf("1.1.0")
-    void setEnvironmentAttributeMap(@NotNull WrappedEnvironmentAttributeMap environmentAttributeMap);
+    CustomBiome setEnvironmentAttributeMap(@NotNull WrappedEnvironmentAttributeMap environmentAttributeMap);
 
-    /**
-     * Returns a new Builder instance with the properties of the CustomBiome.
-     *
-     * @return a new Builder instance with the properties of the CustomBiome
-     * @since 0.0.5
-     */
-    @AsOf("0.0.5")
-    Builder toBuilder();
 
     /**
      * Registers the CustomBiome to the biome registry.
      *
      * @since 0.0.2
+     * @return the registered CustomBiome
      */
     @AsOf("0.0.2")
-    void register();
+    CustomBiome register();
 
 
     /**
@@ -302,7 +309,7 @@ public interface CustomBiome {
      * @since 0.0.17
      */
     @AsOf("0.0.17")
-    void modify();
+    CustomBiome modify();
 
     /**
      * Compares this CustomBiome to another CustomBiome to determine if they are similar.
@@ -316,12 +323,76 @@ public interface CustomBiome {
     boolean isSimilar(@NotNull CustomBiome otherBiome);
 
     /**
+     * Returns a new Builder instance with the properties of the CustomBiome.
+     *
+     * @return a new Builder instance with the properties of the CustomBiome
+     * @since 0.0.5
+     */
+    @AsOf("0.0.5")
+    default Builder toBuilder() {
+        return new Builder(this);
+    }
+
+    /**
+     * Returns a new Builder instance with the properties of the CustomBiome.
+     *
+     * @since 2.1.0
+     * @return a new Builder instance with the properties of the CustomBiome
+     */
+    @AsOf("2.1.0")
+    default Builder asBuilder() {
+        return new Builder(this);
+    }
+
+    /**
+     * Converts this CustomBiome to a PhonyCustomBiome for packet sending purposes.
+     *
+     * @see PacketHandler
+     * @see PhonyCustomBiome
+     * @since 2.1.0
+     * @return a PhonyCustomBiome representation of this CustomBiome
+     */
+    default PhonyCustomBiome toPhony() {
+        if (!isRegistered()) {
+            register();
+        }
+        return asPhony().build();
+    }
+
+    /**
+     * Converts this CustomBiome to a PhonyCustomBiome for packet sending purposes.
+     *
+     * @see PacketHandler
+     * @see PhonyCustomBiome
+     * @since 2.1.0
+     * @return a PhonyCustomBiome representation of this CustomBiome
+     */
+    default PhonyCustomBiome.Builder asPhony() {
+        if (!isRegistered()) {
+            register();
+        }
+        return PhonyCustomBiome.builder().setCustomBiome(this);
+    }
+
+    /**
+     * Checks if the CustomBiome is registered in the biome registry.
+     * @return true if the CustomBiome is registered, false otherwise.
+     * @since 2.1.0
+     */
+    @AsOf("2.1.0")
+    default boolean isRegistered() {
+        return BiomeHandler.isBiome(getResourceKey());
+    }
+
+    /**
      * This class is used to create a new CustomBiome object.
      * It provides methods to set the properties of the CustomBiome.
      *
-     * @version 0.0.1
+     * @version 2.1.0
+     * @since 0.0.1
+     * @author Outspending
      */
-    @AsOf("0.0.1")
+    @AsOf("2.1.0")
     class Builder {
 
         private BiomeResourceKey resourceKey = null;
@@ -648,6 +719,19 @@ public interface CustomBiome {
             return this;
         }
 
+        /**
+         * This method sets the block replacements property of the CustomBiome.
+         *
+         * @apiNote Block replacements are only supported when rendering custom biomes to clients via the {@link PacketHandler}.
+         * @param blockReplacements The block replacements of the custom biome.
+         * @since 2.1.0
+         * @return The Builder object, for chaining method calls.
+         */
+        @AsOf("2.1.0")
+        public @NotNull Builder blockReplacements(@NotNull Collection<BlockReplacement> blockReplacements) {
+            this.blockReplacements = blockReplacements.toArray(new BlockReplacement[0]);
+            return this;
+        }
 
         /**
          * This method sets the environment attribute map property of the CustomBiome.
@@ -666,6 +750,7 @@ public interface CustomBiome {
          * This method creates a new CustomBiome object with the properties set in the Builder.
          *
          * @since 0.0.1
+         * @throws IllegalArgumentException if the resource key or settings are not set.
          * @return a new CustomBiome object.
          */
         @AsOf("1.1.0")
@@ -688,6 +773,17 @@ public interface CustomBiome {
                     blockReplacements,
                     environmentAttributeMap
             );
+        }
+
+        /**
+         * This method registers the CustomBiome in the biome registry.
+         *
+         * @return The registered CustomBiome.
+         * @since 2.1.0
+         */
+        @AsOf("2.1.0")
+        public @NotNull CustomBiome register() {
+            return build().register();
         }
 
     }
