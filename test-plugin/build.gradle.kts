@@ -5,7 +5,7 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":main"))
+    implementation(project(":commons"))
     paperweight.paperDevBundle(libs.versions.minecraft.v1.m21.r11)
 }
 
@@ -25,9 +25,9 @@ tasks {
     }
 
     runServer {
-        minecraftVersion("1.21.11")
+        minecraftVersion("26.1.2")
         downloadPlugins {
-            modrinth("packetevents", "2.11.1+spigot")
+            modrinth("packetevents", "2.12.1+spigot")
             // ProtocolLib has no direct downloads, maybe figure out how to unzip then add locally?
         }
     }

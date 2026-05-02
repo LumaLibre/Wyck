@@ -1,17 +1,17 @@
 import java.nio.charset.Charset
 
 plugins {
-    java
+    `java-library`
     `maven-publish`
     alias(libs.plugins.gradleup.shadow)
     alias(libs.plugins.paperweight.userdev) apply false
 }
 
 val isSnapshot: Boolean = project.hasProperty("snapshot") || System.getProperty("snapshot")?.toBoolean() == true
-val stable = "1.2.1"
+val stable = "2.0.0"
 
 allprojects {
-    apply(plugin = "java")
+    apply(plugin = "java-library")
     apply(plugin = "maven-publish")
     apply(plugin = "com.gradleup.shadow")
 

@@ -6,8 +6,8 @@ protocollib = "5.4.0"
 packetevents = "2.11.1"
 google-guava = "33.5.0-jre"
 minecraft-v1-m21-r11 = "1.21.11-R0.1-SNAPSHOT"
-minecraft-v26-m1-r1 = "26.1.1.build.+"
-run-paper = "2.3.1"
+minecraft-v26-m1-r2 = "26.1.2.build.+"
+run-paper = "3.0.2"
 plugin-yml-bukkit = "0.7.1"
 
 [plugins]

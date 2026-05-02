@@ -1,0 +1,37 @@
+package me.outspending.biomesapi.wrapper.environment.attribute;
+
+import me.outspending.biomesapi.annotations.AsOf;
+import me.outspending.biomesapi.factory.WireProvider;
+import org.jetbrains.annotations.ApiStatus;
+
+/**
+ * A factory for creating EnvironmentAttribute instances.
+ * @version 2.0.0
+ * @since 2.0.0
+ * @author Jsinco
+ */
+@AsOf("2.0.0")
+public interface EnvironmentAttributeFactory {
+
+    @ApiStatus.Internal
+    WireProvider<EnvironmentAttributeFactory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.environment.attribute.NmsEnvironmentAttributeFactory");
+
+    /**
+     * Resolves a vanilla environment attribute by name (e.g. "fog_color").
+     * @since 2.0.0
+     * @param key the name of the attribute to resolve
+     * @return an EnvironmentAttributeHandle for the specified attribute, or null if no such attribute exists
+     */
+    @AsOf("2.0.0")
+    <T> EnvironmentAttributeHandle<T> byKey(String key);
+
+    /**
+     * Returns the default value of the wrapped attribute. Needed because the
+     * default value comes from NMS (EnvironmentAttribute#defaultValue).
+     * @since 2.0.0
+     * @param handle the EnvironmentAttributeHandle to get the default value of
+     * @return the default value of the wrapped attribute
+     */
+    @AsOf("2.0.0")
+    <T> T defaultValue(EnvironmentAttributeHandle<T> handle);
+}

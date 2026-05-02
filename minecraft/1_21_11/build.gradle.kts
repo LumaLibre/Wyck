@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    compileOnly(project(":minecraft:Wrapper"))
+    compileOnly(project(":api"))
     paperweight.paperDevBundle(libs.versions.minecraft.v1.m21.r11)
 }
 
