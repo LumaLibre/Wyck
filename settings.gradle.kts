@@ -4,8 +4,8 @@ plugins {
 
 rootProject.name = "BiomesAPI"
 
-include("main")
-include("test-plugin")
-include("api")
-include("minecraft:1_21_11")
-include("minecraft:26_1_1")
+include(":api")
+include(":commons")
+include(":minecraft:1_21_11")
+include(":minecraft:26_1")
+include(":test-plugin")
