@@ -20,7 +20,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Publish API
-        run: "./gradlew :main:publish"
+        run: "./gradlew :commons:publish"
         env:
           REPO_URL: ${{ secrets.REPO_URL }}
           REPO_USERNAME: ${{ secrets.REPO_USERNAME }}
