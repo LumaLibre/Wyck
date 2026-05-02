@@ -2,9 +2,10 @@ package me.outspending.biomesapi.registry.handlers;
 
 import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.registry.BuilderHandler;
-import me.outspending.biomesapi.v26_1.wrapper.environment.particle.NmsParticleOptionsHandle;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleCatalog;
+import me.outspending.biomesapi.wrapper.environment.particle.ParticleOptionsHandle;
 import me.outspending.biomesapi.wrapper.environment.particle.ResolvedAmbientParticle;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.world.attribute.AmbientParticle;
 import net.minecraft.world.attribute.EnvironmentAttributes;
 import net.minecraft.world.level.biome.Biome;
@@ -41,6 +42,7 @@ public class ParticleCatalogHandler implements BuilderHandler<Biome.BiomeBuilder
     }
 
     private static AmbientParticle toNms(ResolvedAmbientParticle resolved) {
-        return new AmbientParticle(((NmsParticleOptionsHandle) resolved.options()).nms(), resolved.probability());
+        ParticleOptionsHandle handle = resolved.options();
+        return new AmbientParticle((ParticleOptions) handle.nms(), resolved.probability());
     }
 }
