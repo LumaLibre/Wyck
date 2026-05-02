@@ -83,7 +83,7 @@ public record ParticleCatalog(List<WrappedAmbientParticle<?>> particles) {
          * @param <T> The type of particle options.
          */
         @AsOf("1.1.0")
-        public <T extends ParticleData<T>> Builder addParticle(WrappedParticleTypes particleType, float probability, @Nullable ParticleData<T> data) {
+        public <T> Builder addParticle(WrappedParticleTypes particleType, float probability, @Nullable ParticleData<T> data) {
             particles.add(new WrappedAmbientParticle<>(particleType, probability, data));
             return this;
         }
@@ -97,7 +97,7 @@ public record ParticleCatalog(List<WrappedAmbientParticle<?>> particles) {
          * @param <T> The type of particle options.
          */
         @AsOf("1.1.0")
-        public <T extends ParticleData<T>> Builder addComplex(WrappedParticleTypes particleType, float probability, @NotNull ParticleData<T> data) {
+        public <T> Builder addComplex(WrappedParticleTypes particleType, float probability, @NotNull ParticleData<T> data) {
             Preconditions.checkArgument(!particleType.isSimple(), "Particle type must not be simple.");
             particles.add(new WrappedAmbientParticle<>(particleType, probability, data));
             return this;

@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
  * @param <T> The type of ParticleOptions associated with the particle.
  */
 @AsOf("1.1.0")
-public class WrappedAmbientParticle<T extends ParticleData<T>> {
+public class WrappedAmbientParticle<T> {
 
     private final WrappedParticleTypes ambientParticle;
     private final float probability;
