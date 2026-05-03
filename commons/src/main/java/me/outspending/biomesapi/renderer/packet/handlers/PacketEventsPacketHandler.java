@@ -66,22 +66,25 @@ public class PacketEventsPacketHandler implements PacketHandler {
 
 
     @Override
-    public void register() {
+    public PacketHandler register() {
         for (PacketListener listener : packetListeners) {
             PacketEvents.getAPI().getEventManager().registerListener(listener, packetListenerPriority);
         }
+        return this;
     }
 
     @Override
-    public void unregister() {
+    public PacketHandler unregister() {
         for (PacketListener listener : packetListeners) {
             PacketEvents.getAPI().getEventManager().unregisterListener(listener.asAbstract(packetListenerPriority));
         }
+        return this;
     }
 
     @Override
-    public void appendBiome(@NotNull PhonyCustomBiome biome) {
+    public PacketHandler appendBiome(@NotNull PhonyCustomBiome biome) {
         collector.appendBiome(biome);
+        return this;
     }
 
     @Override
@@ -105,8 +108,9 @@ public class PacketEventsPacketHandler implements PacketHandler {
     }
 
     @Override
-    public void clearBiomes() {
+    public PacketHandler clearBiomes() {
         collector.clearBiomes();
+        return this;
     }
 
 

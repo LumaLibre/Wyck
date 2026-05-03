@@ -49,26 +49,29 @@ public class ProtocolLibPacketHandler implements PacketHandler {
     }
 
     @Override
-    public void register() {
+    public PacketHandler register() {
         ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
 
         for (PacketAdapter listener : protocolListeners) {
             protocolManager.addPacketListener(listener);
         }
+        return this;
     }
 
     @Override
-    public void unregister() {
+    public PacketHandler unregister() {
         ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
 
         for (PacketAdapter listener : protocolListeners) {
             protocolManager.removePacketListener(listener);
         }
+        return this;
     }
 
     @Override
-    public void appendBiome(@NotNull PhonyCustomBiome biome) {
+    public PacketHandler appendBiome(@NotNull PhonyCustomBiome biome) {
         collector.appendBiome(biome);
+        return this;
     }
 
     @Override
@@ -92,8 +95,9 @@ public class ProtocolLibPacketHandler implements PacketHandler {
     }
 
     @Override
-    public void clearBiomes() {
+    public PacketHandler clearBiomes() {
         collector.clearBiomes();
+        return this;
     }
 
 
