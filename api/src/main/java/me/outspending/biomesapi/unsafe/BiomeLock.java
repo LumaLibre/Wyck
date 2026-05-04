@@ -54,4 +54,16 @@ public interface BiomeLock {
         UnsafeNMSHandler.executeNMS(nms -> nms.biomeRegistryLock(isLocked));
     }
 
+    /**
+     * Checks if the biome registry is locked.
+     *
+     * @return true if the biome registry is locked, false otherwise.
+     * @since 2.1.0
+     * @throws IllegalStateException if the NMS version is not present.
+     */
+    @AsOf("2.1.0")
+    static boolean isLocked() {
+        return UnsafeNMSHandler.getNMS().orElseThrow().isBiomeRegistryLocked();
+    }
+
 }

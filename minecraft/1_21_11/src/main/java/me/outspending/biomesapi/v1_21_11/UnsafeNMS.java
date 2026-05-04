@@ -145,6 +145,23 @@ public class UnsafeNMS implements me.outspending.biomesapi.unsafe.UnsafeNMS {
     }
 
     /**
+     * Checks if the biome registry is locked.
+     * @return true if the biome registry is locked, false otherwise.
+     */
+    @Override
+    public boolean isBiomeRegistryLocked() {
+        MappedRegistry<@NotNull Biome> biomes = getRegistry(Registries.BIOME);
+        try {
+            Class<?> registryClass = biomes.getClass();
+            Field field = registryClass.getDeclaredField("frozen");
+            field.setAccessible(true);
+            return field.getBoolean(biomes);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new RuntimeException("Failed to determine biome registry lock state", e);
+        }
+    }
+
+    /**
      * Retrieves the biome registry from the Minecraft server.
      *
      * This method gets the server instance from the Bukkit API, accesses the registry of the server,

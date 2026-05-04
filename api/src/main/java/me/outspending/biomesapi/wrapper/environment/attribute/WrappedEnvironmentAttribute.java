@@ -92,8 +92,7 @@ public class WrappedEnvironmentAttribute<T, K> {
     }
 
     @AsOf("1.1.0")
-    public static <T, K> WrappedEnvironmentAttribute<T, K> of(EnvironmentAttributeHandle<T> attribute,
-                                                              Converter<T, K> converter) {
+    public static <T, K> WrappedEnvironmentAttribute<T, K> of(EnvironmentAttributeHandle<T> attribute, Converter<T, K> converter) {
         return new WrappedEnvironmentAttribute<>(attribute, converter, null);
     }
 

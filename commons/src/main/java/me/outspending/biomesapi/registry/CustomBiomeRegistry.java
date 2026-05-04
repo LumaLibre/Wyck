@@ -27,6 +27,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * This class implements the BiomeRegistry interface and provides a method to register a custom biome to a Minecraft server.
@@ -53,7 +54,7 @@ public class CustomBiomeRegistry implements BiomeRegistry {
      * Finally, it freezes the biome registry again using the BiomeLock class.
      *
      * @param biome The CustomBiome object that should be registered to the server.
-     * @version 0.0.1
+     * @since  0.0.1
      */
     @Override
     @AsOf("0.0.1")
@@ -61,59 +62,64 @@ public class CustomBiomeRegistry implements BiomeRegistry {
     public void register(@NotNull CustomBiome biome) {
         Preconditions.checkNotNull(biome, "biome cannot be null");
 
-        BiomeLock.unlock(() -> {
-
+        Consumer<UnsafeNMS> consumer = nms -> {
             // Retrieve the biome registry from NMS
-            UnsafeNMSHandler.executeNMS(nms -> {
-                Registry<@NotNull Biome> registry = (Registry<@NotNull Biome>) nms.getRegistry();
+            Registry<@NotNull Biome> registry = (Registry<@NotNull Biome>) nms.getRegistry();
 
-                // Get the ResourceLocation and BiomeSettings from the CustomBiome object
-                Identifier resourceLocation = ((BiomeResourceKeyImpl) biome.getResourceKey()).resourceLocation();
-                BiomeSettings settings = biome.getSettings();
+            // Get the ResourceLocation and BiomeSettings from the CustomBiome object
+            Identifier resourceLocation = ((BiomeResourceKeyImpl) biome.getResourceKey()).resourceLocation();
+            BiomeSettings settings = biome.getSettings();
 
-                // Build the Biome object
-                Biome.BiomeBuilder biomeBuilder = new Biome.BiomeBuilder()
-                        .downfall(settings.downfall())
-                        .temperature(settings.temperature())
-                        .temperatureAdjustment(settings.modifier().toNms(Biome.TemperatureModifier.class))
-                        .hasPrecipitation(settings.hasPrecipitation())
-                        .mobSpawnSettings(MobSpawnSettings.EMPTY)
-                        .generationSettings(BiomeGenerationSettings.EMPTY);
+            // Build the Biome object
+            Biome.BiomeBuilder biomeBuilder = new Biome.BiomeBuilder()
+                    .downfall(settings.downfall())
+                    .temperature(settings.temperature())
+                    .temperatureAdjustment(settings.modifier().toNms(Biome.TemperatureModifier.class))
+                    .hasPrecipitation(settings.hasPrecipitation())
+                    .mobSpawnSettings(MobSpawnSettings.EMPTY)
+                    .generationSettings(BiomeGenerationSettings.EMPTY);
 
-                // TODO: Replace with WrappedEnvironmentAttributeMap in the future
-                if (biome.getFogColor() != null) {
-                    biomeBuilder.setAttribute(EnvironmentAttributes.FOG_COLOR, biome.getFogColor());
-                }
-                if (biome.getSkyColor() != null) {
-                    biomeBuilder.setAttribute(EnvironmentAttributes.SKY_COLOR, biome.getSkyColor());
-                }
-                if (biome.getWaterFogColor() != null) {
-                    biomeBuilder.setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, biome.getWaterFogColor());
-                }
+            // TODO: Replace with WrappedEnvironmentAttributeMap in the future
+            if (biome.getFogColor() != null) {
+                biomeBuilder.setAttribute(EnvironmentAttributes.FOG_COLOR, biome.getFogColor());
+            }
+            if (biome.getSkyColor() != null) {
+                biomeBuilder.setAttribute(EnvironmentAttributes.SKY_COLOR, biome.getSkyColor());
+            }
+            if (biome.getWaterFogColor() != null) {
+                biomeBuilder.setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, biome.getWaterFogColor());
+            }
 
-                // Create a new Biome object with the settings and colors from the CustomBiome object
-                BiomeSpecialEffects effects = SPECIAL_EFFECTS_HANDLER.build(biome);
-                SPECIAL_EFFECTS_HANDLER.handle(effects, biomeBuilder);
+            // Create a new Biome object with the settings and colors from the CustomBiome object
+            BiomeSpecialEffects effects = SPECIAL_EFFECTS_HANDLER.build(biome);
+            SPECIAL_EFFECTS_HANDLER.handle(effects, biomeBuilder);
 
-                ParticleCatalog particleCatalog = biome.getParticleCatalog();
-                PARTICLE_CATALOG_HANDLER.handle(particleCatalog, biomeBuilder);
+            ParticleCatalog particleCatalog = biome.getParticleCatalog();
+            PARTICLE_CATALOG_HANDLER.handle(particleCatalog, biomeBuilder);
 
-                WrappedEnvironmentAttributeMap wrappedAttributeMap = biome.getEnvironmentAttributeMap();
-                ATTRIBUTE_MAP_HANDLER.handle(wrappedAttributeMap, biomeBuilder);
+            WrappedEnvironmentAttributeMap wrappedAttributeMap = biome.getEnvironmentAttributeMap();
+            ATTRIBUTE_MAP_HANDLER.handle(wrappedAttributeMap, biomeBuilder);
 
-                // Register the new Biome object to the biome registry
-                Biome createdBiome = biomeBuilder.build();
+            // Register the new Biome object to the biome registry
+            Biome createdBiome = biomeBuilder.build();
 
-                if (!registry.containsKey(resourceLocation)) {
-                    Registry.register(registry, resourceLocation, createdBiome);
-                }
+            if (!registry.containsKey(resourceLocation)) {
+                Registry.register(registry, resourceLocation, createdBiome);
+            }
 
-                // Add the custom biome to the list of registered biomes
-                BiomeHandler.getRegisteredBiomes().add(biome);
+            // Add the custom biome to the list of registered biomes
+            BiomeHandler.getRegisteredBiomes().add(biome);
+        };
+
+        if (BiomeLock.isLocked()) {
+            BiomeLock.unlock(() -> {
+                UnsafeNMSHandler.executeNMS(consumer);
+                return null;
             });
-
-            return null;
-        });
+        } else {
+            // Assume we're in the bootstrap phase
+            UnsafeNMSHandler.executeNMS(consumer);
+        }
     }
 
     /**
