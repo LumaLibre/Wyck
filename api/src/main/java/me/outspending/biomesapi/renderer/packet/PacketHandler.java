@@ -11,6 +11,7 @@ import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * An interface for handling packet manipulation related to biome injection.
@@ -25,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
  * @since 0.0.6
  * @author Jsinco
  */
-@AsOf("1.2.0")
+@AsOf("2.1.0")
 public interface PacketHandler extends AbstractBiomeRenderer {
 
     /**
@@ -48,7 +49,7 @@ public interface PacketHandler extends AbstractBiomeRenderer {
          * @return A new PacketHandler instance
          * @throws MissingPacketManipulatorLibraryException if the manipulator library is not installed
          */
-        @NotNull PacketHandler create(@NotNull Plugin provider, @NotNull Manipulator manipulator, @NotNull Priority priority);
+        @NotNull PacketHandler create(@NotNull Plugin provider, @NotNull Injector manipulator, @NotNull Priority priority);
     }
 
     /**
@@ -58,12 +59,25 @@ public interface PacketHandler extends AbstractBiomeRenderer {
      * @return A new PacketHandler instance
      * @since 0.0.6
      * @throws MissingPacketManipulatorLibraryException if ProtocolLib is not installed
-     * @deprecated use {@link #of(Plugin, Manipulator)} or {@link #of(Plugin, Manipulator, Priority)} instead
      */
-    @Deprecated(since = "0.0.19")
-    @AsOf("0.0.6")
+    @AsOf("2.1.0")
     static @NotNull PacketHandler of(@NotNull Plugin provider) {
-        return of(provider, Manipulator.PROTOCOLLIB, Priority.NORMAL);
+        return of(provider, Injector.NETTY, Priority.NORMAL);
+    }
+
+
+    /**
+     * Creates a PacketHandler using the specified packet manipulation library.
+     * The packet listener priority defaults to NORMAL.
+     * @param provider The plugin providing this PacketHandler
+     * @param injector The packet manipulation library to use
+     * @return A new PacketHandler instance
+     * @since 2.1.0
+     * @throws MissingPacketManipulatorLibraryException if the specified manipulator library is not installed
+     */
+    @AsOf("2.1.0")
+    static @NotNull PacketHandler of(@NotNull Plugin provider, @NotNull Injector injector) {
+        return of(provider, injector, Priority.NORMAL);
     }
 
     /**
@@ -76,8 +90,23 @@ public interface PacketHandler extends AbstractBiomeRenderer {
      * @throws MissingPacketManipulatorLibraryException if the specified manipulator library is not installed
      */
     @AsOf("0.0.19")
+    @Deprecated(since = "2.1.0", forRemoval = true)
     static @NotNull PacketHandler of(@NotNull Plugin provider, @NotNull Manipulator manipulator) {
-        return of(provider, manipulator, Priority.NORMAL);
+        return of(provider, manipulator.injector, Priority.NORMAL);
+    }
+
+    /**
+     * Creates a PacketHandler using the specified packet manipulation library.
+     * @param provider The plugin providing this PacketHandler
+     * @param injector The packet manipulation library to use
+     * @param priority The priority of the packet listener
+     * @return A new PacketHandler instance
+     * @since 2.1.0
+     * @throws MissingPacketManipulatorLibraryException if the specified injector library is not installed
+     */
+    @AsOf("2.1.0")
+    static @NotNull PacketHandler of(@NotNull Plugin provider, @NotNull Injector injector, @NotNull PacketHandler.Priority priority) {
+        return WIRE.get().create(provider, injector, priority);
     }
 
     /**
@@ -87,11 +116,11 @@ public interface PacketHandler extends AbstractBiomeRenderer {
      * @param priority The priority of the packet listener
      * @return A new PacketHandler instance
      * @since 0.0.19
-     * @throws MissingPacketManipulatorLibraryException if the specified manipulator library is not installed
+     * @throws MissingPacketManipulatorLibraryException if the specified injector library is not installed
      */
     @AsOf("0.0.19")
     static @NotNull PacketHandler of(@NotNull Plugin provider, @NotNull Manipulator manipulator, @NotNull PacketHandler.Priority priority) {
-        return WIRE.get().create(provider, manipulator, priority);
+        return WIRE.get().create(provider, manipulator.injector, priority);
     }
 
     /**
@@ -244,7 +273,9 @@ public interface PacketHandler extends AbstractBiomeRenderer {
         LOW(1),
         NORMAL(2),
         HIGH(3),
-        HIGHEST(4);
+        HIGHEST(4),
+        @ApiStatus.Internal
+        MONITOR(5);
 
         private final int level;
 
@@ -275,20 +306,27 @@ public interface PacketHandler extends AbstractBiomeRenderer {
 
     /**
      * Enum constant for supported packet manipulation libraries.
-     * @version 0.0.19
-     * @since 0.0.19
+     * @version 2.1.0
+     * @since 2.1.0
+     * @author Jsinco
      */
-    @AsOf("0.0.19")
-    enum Manipulator {
+    @AsOf("2.1.0")
+    enum Injector {
+        /** Requires ProtocolLib to be installed. */
         PROTOCOLLIB("ProtocolLib", "com.comphenix.protocol.ProtocolLibrary"),
-        PACKETEVENTS("PacketEvents", "com.github.retrooper.packetevents.PacketEvents");
+        /** Requires PacketEvents to be installed.
+         * By default, PacketEvents does NOT re-sync registries.
+         * The server administrator needs to add '-Dpacketevents.force-per-user-registries=true' to their JVM arguments. */
+        PACKETEVENTS("PacketEvents", "com.github.retrooper.packetevents.PacketEvents"),
+        /** Standalone implementation. */
+        NETTY("Netty", null);
 
         private final String name;
-        private final String owningClass;
+        private final @Nullable String className;
 
-        Manipulator(String name, String owningClass) {
+        Injector(String name, @Nullable String className) {
             this.name = name;
-            this.owningClass = owningClass;
+            this.className = className;
         }
 
         public String getName() {
@@ -296,12 +334,42 @@ public interface PacketHandler extends AbstractBiomeRenderer {
         }
 
         public boolean isAvailable() {
+            if (className == null) return true;
             try {
-                Class.forName(owningClass);
+                Class.forName(className);
                 return true;
             } catch (ClassNotFoundException e) {
                 return false;
             }
+        }
+
+    }
+
+    /**
+     * Enum constant for supported packet manipulation libraries.
+     * @version 0.0.19
+     * @since 0.0.19
+     * @author Jsinco
+     * @deprecated Use {@link Injector} instead.
+     */
+    @AsOf("0.0.19")
+    @Deprecated(since = "2.1.0", forRemoval = true)
+    enum Manipulator {
+        PROTOCOLLIB(Injector.PROTOCOLLIB),
+        PACKETEVENTS(Injector.PACKETEVENTS);
+
+        private final Injector injector;
+
+        Manipulator(Injector injector) {
+            this.injector = injector;
+        }
+
+        public String getName() {
+            return injector.getName();
+        }
+
+        public boolean isAvailable() {
+            return injector.isAvailable();
         }
     }
 }

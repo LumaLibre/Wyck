@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * ProtocolLib-based implementation of the PacketHandler interface.
  *
- * @version 0.0.6
+ * @version 2.1.0
  * @since 0.0.6
  * @author Jsinco
  */

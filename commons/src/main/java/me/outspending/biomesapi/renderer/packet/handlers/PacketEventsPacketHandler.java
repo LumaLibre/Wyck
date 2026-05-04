@@ -41,7 +41,7 @@ import static me.outspending.biomesapi.renderer.packet.handlers.NativeChunkPacke
 /**
  * PacketEvents-based implementation of the PacketHandler interface.
  *
- * @version 0.0.19
+ * @version 2.1.0
  * @since 0.0.6
  * @author Jsinco
  */

@@ -4,6 +4,7 @@ import me.outspending.biomesapi.biome.BiomeHandler;
 import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
 import me.outspending.biomesapi.renderer.packet.PacketHandler;
+import me.outspending.biomesapi.renderer.packet.data.BlockReplacement;
 import me.outspending.biomesapi.renderer.packet.data.PhonyCustomBiome;
 import me.outspending.biomesapi.renderer.setter.BiomeSetter;
 import me.outspending.biomesapi.wrapper.BiomeSettings;
@@ -66,11 +67,14 @@ public final class BiomesAPITest extends JavaPlugin implements Listener {
                                 .addComplex(WrappedParticleTypes.DUST, 0.1f, DustParticle.of("#B99DFC"))
                                 .build()
                 )
+                .blockReplacements(
+                        BlockReplacement.of(Material.GRASS_BLOCK, Material.LAVA)
+                )
                 .register()
                 .toPhony();
 
 
-        PacketHandler.of(this, PacketHandler.Manipulator.PACKETEVENTS)
+        packetHandler = PacketHandler.of(this, PacketHandler.Injector.NETTY)
                         .appendBiome(phonyCustomBiome)
                         .register();
     }
