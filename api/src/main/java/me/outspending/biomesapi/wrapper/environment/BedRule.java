@@ -38,7 +38,7 @@ public record BedRule(Rule canSleep, Rule canSetSpawn, boolean explodes, @Nullab
         /** Beds can never be slept in. */
         NEVER("never");
 
-        public static final KeyedEnumTranslator<Rule> TRANSLATOR = KeyedEnumTranslator.byKey(Rule::getKey);
+        public static final KeyedEnumTranslator<Rule> TRANSLATOR = KeyedEnumTranslator.byKey(Rule::getKey, Rule.values());
 
         private final String key;
 

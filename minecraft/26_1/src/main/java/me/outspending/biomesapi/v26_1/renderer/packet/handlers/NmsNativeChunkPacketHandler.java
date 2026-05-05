@@ -2,6 +2,7 @@ package me.outspending.biomesapi.v26_1.renderer.packet.handlers;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import me.outspending.biomesapi.annotations.WireFactory;
 import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.renderer.packet.PacketHandler;
 import me.outspending.biomesapi.renderer.packet.data.BlockReplacement;
@@ -23,6 +24,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 
+@WireFactory
 public final class NmsNativeChunkPacketHandler implements NativeChunkPacketHandler {
 
     @Override

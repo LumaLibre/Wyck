@@ -11,6 +11,7 @@ import org.bukkit.RegionAccessor;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
@@ -27,7 +28,23 @@ import java.util.concurrent.CompletableFuture;
 @AsOf("1.0.1")
 public class GlobalBiomeSetter implements BiomeSetter {
 
-    private static final BiomeUpdater BIOME_UPDATER = BiomeUpdater.of();
+    private final BiomeUpdater biomeUpdater;
+
+    /**
+     * @deprecated Use {@link GlobalBiomeSetter(Plugin)} instead.
+     */
+    @Deprecated
+    public GlobalBiomeSetter() {
+        this.biomeUpdater = BiomeUpdater.of();
+    }
+
+    public GlobalBiomeSetter(Plugin plugin) {
+        this.biomeUpdater = BiomeUpdater.of(plugin);
+    }
+
+    public GlobalBiomeSetter(BiomeUpdater biomeUpdater) {
+        this.biomeUpdater = biomeUpdater;
+    }
 
     @Override
     public void setBlockBiome(@NotNull Block block, @NotNull CustomBiome customBiome) {
@@ -45,7 +62,7 @@ public class GlobalBiomeSetter implements BiomeSetter {
         accessor.setBiome(location.getBlockX(), location.getBlockY(), location.getBlockZ(), customBiome.toBukkitBiome());
 
         if (updateBiome) {
-            BIOME_UPDATER.updateChunk(location.getWorld().getChunkAtAsync(location));
+            biomeUpdater.updateChunk(location.getWorld().getChunkAtAsync(location));
         }
     }
 
@@ -94,7 +111,7 @@ public class GlobalBiomeSetter implements BiomeSetter {
         }
 
         if (updateBiome) {
-            BIOME_UPDATER.updateChunk(CompletableFuture.completedFuture(chunk));
+            biomeUpdater.updateChunk(CompletableFuture.completedFuture(chunk));
         }
     }
 
@@ -154,7 +171,7 @@ public class GlobalBiomeSetter implements BiomeSetter {
         }
 
         if (updateBiome) {
-            BIOME_UPDATER.updateChunks(from, to);
+            biomeUpdater.updateChunks(from, to);
         }
     }
 

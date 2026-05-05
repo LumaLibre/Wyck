@@ -2,6 +2,7 @@ package me.outspending.biomesapi.v26_1;
 
 import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.annotations.AsOf;
+import me.outspending.biomesapi.annotations.WireFactory;
 import net.minecraft.core.Holder;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
@@ -43,6 +44,7 @@ import java.util.function.Supplier;
  * @version 1.2.1
  * @since 1.2.1
  */
+@WireFactory
 @AsOf("1.2.1")
 public class UnsafeNMS implements me.outspending.biomesapi.unsafe.UnsafeNMS {
 

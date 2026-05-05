@@ -24,7 +24,7 @@ public enum MoonPhase implements NmsEnumTranslatable<MoonPhase> {
     FIRST_QUARTER("first_quarter"),
     WAXING_GIBBOUS("waxing_gibbous");
 
-    public static final KeyedEnumTranslator<MoonPhase> TRANSLATOR = KeyedEnumTranslator.byKey(MoonPhase::getKey);
+    public static final KeyedEnumTranslator<MoonPhase> TRANSLATOR = KeyedEnumTranslator.byKey(MoonPhase::getKey, MoonPhase.values());
 
     private final String key;
 

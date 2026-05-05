@@ -30,7 +30,7 @@ public interface BiomeLock {
      * 3. It performs the operation provided as the Supplier.
      * 4. It locks the biome registry again by calling the freeze method on the MappedRegistry object.
      *
-     * @version 0.0.1
+     * @since 0.0.1
      */
     @AsOf("0.0.1")
     static void unlock(Supplier<?> supplier) {
@@ -47,7 +47,7 @@ public interface BiomeLock {
      * @throws ClassNotFoundException if the RegistryMaterials class cannot be found.
      * @throws IllegalAccessException if the boolean field in the RegistryMaterials class cannot be accessed.
      *
-     * @version 0.0.1
+     * @since 0.0.1
      */
     @AsOf("0.0.1")
     static void changeRegistryLock(boolean isLocked) {

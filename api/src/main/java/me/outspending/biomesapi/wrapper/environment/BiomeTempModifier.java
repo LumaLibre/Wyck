@@ -19,7 +19,7 @@ public enum BiomeTempModifier implements NmsEnumTranslatable<BiomeTempModifier> 
     NONE("none"),
     FROZEN("frozen");
 
-    public static final KeyedEnumTranslator<BiomeTempModifier> TRANSLATOR = KeyedEnumTranslator.byKey(BiomeTempModifier::getKey);
+    public static final KeyedEnumTranslator<BiomeTempModifier> TRANSLATOR = KeyedEnumTranslator.byKey(BiomeTempModifier::getKey, BiomeTempModifier.values());
 
     private final String key;
 

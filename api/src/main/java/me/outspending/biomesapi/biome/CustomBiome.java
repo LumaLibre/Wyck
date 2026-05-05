@@ -8,9 +8,14 @@ import me.outspending.biomesapi.renderer.packet.data.BlockReplacement;
 import me.outspending.biomesapi.renderer.packet.data.PhonyCustomBiome;
 import me.outspending.biomesapi.wrapper.BiomeSettings;
 import me.outspending.biomesapi.wrapper.environment.GrassColorModifier;
+import me.outspending.biomesapi.wrapper.environment.attribute.IntColorSupplier;
 import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttributeMap;
+import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttributeSupplier;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleCatalog;
+import me.outspending.biomesapi.wrapper.environment.particle.ParticleData;
+import me.outspending.biomesapi.wrapper.environment.particle.WrappedParticleTypes;
 import org.bukkit.Color;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Biome;
 import org.jetbrains.annotations.NotNull;
@@ -706,6 +711,34 @@ public interface CustomBiome {
         }
 
         /**
+         * Adds a particle to the particle catalog of the CustomBiome.
+         * @param particleType The particle type to add.
+         * @param probability The probability of the particle being spawned.
+         * @return The Builder object, for chaining method calls.
+         * @since 2.1.0
+         */
+        @AsOf("2.1.0")
+        public @NotNull Builder ambientParticle(@NotNull WrappedParticleTypes particleType, float probability) {
+            this.particleCatalog = this.particleCatalog.with(particleType, probability);
+            return this;
+        }
+
+        /**
+         * Adds a particle to the particle catalog of the CustomBiome.
+         * @param particleType The particle type to add.
+         * @param probability The probability of the particle being spawned.
+         * @param data The data of the particle.
+         * @return The Builder object, for chaining method calls.
+         * @param <T> The type of the particle data.
+         * @since 2.1.0
+         */
+        @AsOf("2.1.0")
+        public @NotNull <T extends ParticleData<T>> Builder ambientParticle(@NotNull WrappedParticleTypes particleType, float probability, @Nullable T data) {
+            this.particleCatalog = this.particleCatalog.with(particleType, probability, data);
+            return this;
+        }
+
+        /**
          * This method sets the block replacements property of the CustomBiome.
          *
          * @apiNote Block replacements are only supported when rendering custom biomes to clients via the {@link PacketHandler}.
@@ -733,16 +766,98 @@ public interface CustomBiome {
             return this;
         }
 
+
+        /**
+         * This method adds a block to to the block replacements property of the CustomBiome.
+         * @apiNote Block replacements are only supported when rendering custom biomes to clients via the {@link PacketHandler}.
+         * @param from The from block material to be replaced.
+         * @param to The to block material.
+         * @return The Builder object, for chaining method calls.
+         * @since 2.1.0
+         */
+        @AsOf("2.1.0")
+        public @NotNull Builder replace(@NotNull Material from, @NotNull Material to) {
+            BlockReplacement newReplacement = new BlockReplacement(from, to);
+            BlockReplacement[] newArray = new BlockReplacement[blockReplacements.length + 1];
+            System.arraycopy(blockReplacements, 0, newArray, 0, blockReplacements.length);
+            newArray[newArray.length - 1] = newReplacement;
+            this.blockReplacements = newArray;
+            return this;
+        }
+
+        /**
+         * This method adds a block replacement to the block replacements property of the CustomBiome.
+         * @apiNote Block replacements are only supported when rendering custom biomes to clients via the {@link PacketHandler}.
+         * @param replacement The block replacement to be added.
+         * @return The Builder object, for chaining method calls.
+         * @since 2.1.0
+         */
+        @AsOf("2.1.0")
+        public @NotNull Builder replace(@NotNull BlockReplacement replacement) {
+            BlockReplacement[] newArray = new BlockReplacement[blockReplacements.length + 1];
+            System.arraycopy(blockReplacements, 0, newArray, 0, blockReplacements.length);
+            newArray[newArray.length - 1] = replacement;
+            this.blockReplacements = newArray;
+            return this;
+        }
+
         /**
          * This method sets the environment attribute map property of the CustomBiome.
+         * Replaces any attributes previously added via {@link #setAttribute}.
          *
          * @param environmentAttributeMap The environment attribute map of the custom biome.
-         * @since 1.1.0
          * @return The Builder object, for chaining method calls.
+         * @since 1.1.0
+         * @deprecated Use {@link #setAttributes} instead.
          */
         @AsOf("1.1.0")
+        @Deprecated(forRemoval = true, since = "2.1.0")
         public @NotNull Builder environmentAttributeMap(@NotNull WrappedEnvironmentAttributeMap environmentAttributeMap) {
+            setAttributes(environmentAttributeMap);
+            return this;
+        }
+
+        /**
+         * This method sets the environment attribute map property of the CustomBiome.
+         * Replaces any attributes previously added via {@link #setAttribute}.
+         *
+         * @param environmentAttributeMap The environment attribute map of the custom biome.
+         * @return The Builder object, for chaining method calls.
+         * @since 2.1.0
+         */
+        @AsOf("2.1.0")
+        public @NotNull Builder setAttributes(@NotNull WrappedEnvironmentAttributeMap environmentAttributeMap) {
             this.environmentAttributeMap = environmentAttributeMap;
+            return this;
+        }
+
+        /**
+         * Adds an environment attribute to the environment attribute map property of the CustomBiome.
+         *
+         * @param supplier The supplier function that returns the environment attribute.
+         * @param value The value of the environment attribute.
+         * @param <T> The type of the environment attribute.
+         * @param <K> The value type of the environment attribute.
+         * @return The Builder object, for chaining method calls.
+         * @since 2.1.0
+         */
+        @AsOf("2.1.0")
+        public @NotNull <T, K> Builder setAttribute(@NotNull WrappedEnvironmentAttributeSupplier<T, K> supplier, @NotNull K value) {
+            this.environmentAttributeMap = this.environmentAttributeMap.with(supplier, value);
+            return this;
+        }
+
+        /**
+         * Adds an environment attribute to the environment attribute map property of the CustomBiome.
+         *
+         * @param supplier The color attribute supplier.
+         * @param hex The hex value (e.g. {@code "#FF10F0"}).
+         * @return The Builder object, for chaining method calls.
+         * @since 2.1.0
+         */
+        @AsOf("2.1.0")
+        public @NotNull Builder setAttribute(@NotNull IntColorSupplier supplier, @NotNull String hex) {
+            this.environmentAttributeMap = this.environmentAttributeMap.with(supplier, hex);
             return this;
         }
 

@@ -13,7 +13,6 @@ import java.util.List;
 /**
  * This is a utility class that provides static methods to interact with the biome registry in a Minecraft server.
  * It provides methods to retrieve a Biome object from the registry and to check if a biome exists in the registry.
- * This class uses the Bukkit API to interact with the Minecraft server.
  *
  * @version 0.0.1
  * @since 0.0.1

@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @version 2.0.0
  * @since 2.0.0
+ * @author Jsinco
  */
 @AsOf("2.0.0")
 @ApiStatus.Internal

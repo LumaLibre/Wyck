@@ -3,6 +3,8 @@ package me.outspending.biomesapi.wrapper.environment.attribute;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * A factory for creating EnvironmentAttribute instances.
@@ -14,7 +16,7 @@ import org.jetbrains.annotations.ApiStatus;
 public interface EnvironmentAttributeFactory {
 
     @ApiStatus.Internal
-    WireProvider<EnvironmentAttributeFactory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.environment.attribute.NmsEnvironmentAttributeFactory");
+    WireProvider<EnvironmentAttributeFactory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.environment.attribute.EnvironmentAttributeFactoryImpl");
 
     /**
      * Resolves a vanilla environment attribute by name (e.g. "fog_color").
@@ -23,7 +25,7 @@ public interface EnvironmentAttributeFactory {
      * @return an EnvironmentAttributeHandle for the specified attribute, or null if no such attribute exists
      */
     @AsOf("2.0.0")
-    <T> EnvironmentAttributeHandle<T> byKey(String key);
+    @Nullable <T> EnvironmentAttributeHandle<T> byKey(String key);
 
     /**
      * Returns the default value of the wrapped attribute. Needed because the
@@ -33,5 +35,5 @@ public interface EnvironmentAttributeFactory {
      * @return the default value of the wrapped attribute
      */
     @AsOf("2.0.0")
-    <T> T defaultValue(EnvironmentAttributeHandle<T> handle);
+    @NotNull <T> T defaultValue(EnvironmentAttributeHandle<T> handle);
 }

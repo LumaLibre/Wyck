@@ -20,7 +20,7 @@ public enum GrassColorModifier implements NmsEnumTranslatable<GrassColorModifier
     SWAMP("swamp"),
     DARK_FOREST("dark_forest");
 
-    public static final KeyedEnumTranslator<GrassColorModifier> TRANSLATOR = KeyedEnumTranslator.byKey(GrassColorModifier::getKey);
+    public static final KeyedEnumTranslator<GrassColorModifier> TRANSLATOR = KeyedEnumTranslator.byKey(GrassColorModifier::getKey, GrassColorModifier.values());
 
     private final String key;
 

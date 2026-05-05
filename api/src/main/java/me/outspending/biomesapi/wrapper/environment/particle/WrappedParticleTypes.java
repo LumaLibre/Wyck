@@ -189,4 +189,29 @@ public enum WrappedParticleTypes {
     public boolean isSimple() {
         return particleDataClass == null;
     }
+
+
+    /**
+     * Creates a WrappedAmbientParticle with the specified probability and optional particle data.
+     * @param probability The probability of the particle.
+     * @param data The optional particle data.
+     * @return A WrappedAmbientParticle with the specified probability and optional particle data.
+     * @since 2.1.0
+     */
+    @AsOf("2.1.0")
+    public WrappedAmbientParticle<?> create(float probability, @Nullable ParticleData<?> data) {
+        return WrappedAmbientParticle.of(this, probability, data);
+    }
+
+    /**
+     * Creates a simple WrappedAmbientParticle with the specified probability and no particle data.
+     * @param probability The probability of the particle.
+     * @return A simple WrappedAmbientParticle with the specified probability and no particle data.
+     * @since 2.1.0
+     */
+    @AsOf("2.1.0")
+    public WrappedAmbientParticle<?> create(float probability) {
+        return WrappedAmbientParticle.of(this, probability);
+    }
+
 }

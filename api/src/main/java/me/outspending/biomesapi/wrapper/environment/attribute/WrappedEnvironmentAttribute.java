@@ -25,9 +25,7 @@ public class WrappedEnvironmentAttribute<T, K> {
     private @MonotonicNonNull K value;
 
     @AsOf("1.1.0")
-    public WrappedEnvironmentAttribute(@NotNull EnvironmentAttributeHandle<T> attribute,
-                                       @Nullable Converter<T, K> converter,
-                                       @Nullable K value) {
+    public WrappedEnvironmentAttribute(@NotNull EnvironmentAttributeHandle<T> attribute, @Nullable Converter<T, K> converter, @Nullable K value) {
         this.attribute = attribute;
         this.converter = converter;
         this.value = value;
@@ -62,6 +60,17 @@ public class WrappedEnvironmentAttribute<T, K> {
         return converter.convert(value);
     }
 
+    /**
+     * Checks if this attribute is similar to another attribute. By comparing the attribute handles.
+     * @param other the other WrappedEnvironmentAttribute to compare to
+     * @return true if the attributes are similar, false otherwise
+     * @since 2.1.0
+     */
+    @AsOf("2.1.0")
+    public boolean isSimilar(WrappedEnvironmentAttribute<?, ?> other) {
+        return attribute.equals(other.attribute);
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -77,10 +86,18 @@ public class WrappedEnvironmentAttribute<T, K> {
         return result;
     }
 
+    @Override
+    public String toString() {
+        return attribute + " = " + value;
+    }
+
     @AsOf("1.1.0")
     @ApiStatus.Internal
     @SuppressWarnings("unchecked")
-    public static <T, K> WrappedEnvironmentAttribute<T, K> of(EnvironmentAttributeHandle<T> attribute) {
+    public static <T, K> WrappedEnvironmentAttribute<T, K> of(@Nullable EnvironmentAttributeHandle<T> attribute) {
+        if (attribute == null) {
+            return null;
+        }
         T defaultValue = EnvironmentAttributeFactory.WIRE.get().defaultValue(attribute);
         return new WrappedEnvironmentAttribute<>(attribute, null, (K) defaultValue);
     }
@@ -102,14 +119,12 @@ public class WrappedEnvironmentAttribute<T, K> {
     }
 
     @AsOf("1.1.0")
-    public static <T, K> WrappedEnvironmentAttributeSupplier<T, K> ofSupplier(EnvironmentAttributeHandle<T> attribute,
-                                                                              @NotNull K value) {
+    public static <T, K> WrappedEnvironmentAttributeSupplier<T, K> ofSupplier(EnvironmentAttributeHandle<T> attribute, @NotNull K value) {
         return new WrappedEnvironmentAttributeSupplier<>(of(attribute, value));
     }
 
     @AsOf("1.1.0")
-    public static <T, K> WrappedEnvironmentAttributeSupplier<T, K> ofSupplier(EnvironmentAttributeHandle<T> attribute,
-                                                                              Converter<T, K> converter) {
+    public static <T, K> WrappedEnvironmentAttributeSupplier<T, K> ofSupplier(EnvironmentAttributeHandle<T> attribute, Converter<T, K> converter) {
         return new WrappedEnvironmentAttributeSupplier<>(of(attribute, converter));
     }
 

@@ -3,6 +3,7 @@ package me.outspending.biomesapi.wrapper.environment.particle;
 import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.wrapper.environment.particle.options.ParticleOptionsFactory;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -71,5 +72,30 @@ public class WrappedAmbientParticle<T> {
     @AsOf("1.1.0")
     public float getProbability() {
         return probability;
+    }
+
+    /**
+     * Constructs a new WrappedAmbientParticle instance.
+     * @param ambientParticle The ambient particle type.
+     * @param probability The probability of the particle.
+     * @param particleData The particle data.
+     * @return A new WrappedAmbientParticle instance.
+     * @since 2.1.0
+     */
+    @AsOf("2.1.0")
+    public static WrappedAmbientParticle<?> of(@NotNull WrappedParticleTypes ambientParticle, float probability, @Nullable ParticleData<?> particleData) {
+        return new WrappedAmbientParticle<>(ambientParticle, probability, (ParticleData<?>) particleData);
+    }
+
+    /**
+     * Constructs a new WrappedAmbientParticle instance for a simple particle type.
+     * @param ambientParticle The ambient particle type.
+     * @param probability The probability of the particle.
+     * @return A new WrappedAmbientParticle instance for a simple particle type.
+     * @since 2.1.0
+     */
+    @AsOf("2.1.0")
+    public static WrappedAmbientParticle<?> of(@NotNull WrappedParticleTypes ambientParticle, float probability) {
+        return new WrappedAmbientParticle<>(ambientParticle, probability);
     }
 }

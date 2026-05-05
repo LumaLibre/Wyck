@@ -27,7 +27,7 @@ public record BiomeSettings(
     /**
      * This method creates a new Builder object for creating instances of BiomeSettings.
      *
-     * @version 0.0.1
+     * @since 0.0.1
      * @return a new Builder object.
      */
     @AsOf("0.0.1")
@@ -39,7 +39,7 @@ public record BiomeSettings(
      * This method creates a new BiomeSettings object with default settings.
      * The default settings are a depth of 0.1, a scale of 0.2, a temperature of 0.5, a downfall of 0.5, and a temperature modifier of NONE.
      *
-     * @version 0.0.1
+     * @since 0.0.1
      * @return a new BiomeSettings object with default settings.
      */
     @AsOf("0.0.1")
@@ -52,9 +52,10 @@ public record BiomeSettings(
      * It uses the Builder pattern, where you call a chain of methods to set the properties,
      * and then call build() to create the object.
      *
-     * @version 0.0.1
+     * @version 0.0.8
+     * @since 0.0.1
      */
-    @AsOf("0.0.1")
+    @AsOf("0.0.8")
     public static final class Builder {
 
         private float depth = 0.1F;
@@ -68,7 +69,7 @@ public record BiomeSettings(
          * This method sets the depth property of the BiomeSettings.
          *
          * @param depth The depth of the biome.
-         * @version 0.0.1
+         * @since 0.0.1
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("0.0.1")
@@ -81,7 +82,7 @@ public record BiomeSettings(
          * This method sets the scale property of the BiomeSettings.
          *
          * @param scale The scale of the biome.
-         * @version 0.0.1
+         * @since 0.0.1
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("0.0.1")
@@ -94,7 +95,7 @@ public record BiomeSettings(
          * This method sets the temperature property of the BiomeSettings.
          *
          * @param temperature The temperature of the biome.
-         * @version 0.0.1
+         * @since 0.0.1
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("0.0.1")
@@ -107,7 +108,7 @@ public record BiomeSettings(
          * This method sets the downfall property of the BiomeSettings.
          *
          * @param downfall The downfall of the biome.
-         * @version 0.0.1
+         * @since 0.0.1
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("0.0.1")
@@ -120,10 +121,10 @@ public record BiomeSettings(
          * This method sets the temperature modifier property of the BiomeSettings.
          *
          * @param modifier The temperature modifier of the biome.
-         * @version 0.0.1
+         * @since  0.0.1
          * @return The Builder object, for chaining method calls.
          */
-        @AsOf("0.0.1")
+        @AsOf("0.0.8")
         public @NotNull Builder modifier(@NotNull BiomeTempModifier modifier) {
             this.modifier = modifier;
             return this;
@@ -133,7 +134,7 @@ public record BiomeSettings(
          * This method sets whether the biome has precipitation.
          *
          * @param hasPrecipitation Whether the biome has precipitation.
-         * @version 0.0.8
+         * @since 0.0.8
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("0.0.8")
@@ -145,7 +146,7 @@ public record BiomeSettings(
         /**
          * This method creates a new BiomeSettings object with the properties set in the Builder.
          *
-         * @version 0.0.1
+         * @since 0.0.1
          * @return a new BiomeSettings object.
          */
         @AsOf("0.0.1")

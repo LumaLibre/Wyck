@@ -42,7 +42,7 @@ public enum Activity implements NmsEnumTranslatable<Activity> {
     EMERGE("emerge"),
     DIG("dig");
 
-    public static final KeyedEnumTranslator<Activity> TRANSLATOR = KeyedEnumTranslator.byKey(Activity::getKey);
+    public static final KeyedEnumTranslator<Activity> TRANSLATOR = KeyedEnumTranslator.byKey(Activity::getKey, Activity.values());
 
     private final String key;
 

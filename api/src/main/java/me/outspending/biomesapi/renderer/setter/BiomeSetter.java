@@ -1,5 +1,6 @@
 package me.outspending.biomesapi.renderer.setter;
 
+import me.outspending.biomesapi.BiomeUpdater;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.renderer.AbstractBiomeRenderer;
@@ -8,20 +9,19 @@ import org.bukkit.Location;
 import org.bukkit.RegionAccessor;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * This utility class provides methods to set the biome of blocks, chunks, and regions in the game.
- * It uses the @AsOf annotation to indicate the version since the class or its methods have been present or modified.
- * It is a final class, meaning it cannot be subclassed.
  *
- * @version 1.2.0
+ * @version 2.1.0
  * @since 0.0.1
  * @author Outspending
  */
-@AsOf("1.2.0")
+@AsOf("2.1.0")
 public interface BiomeSetter extends AbstractBiomeRenderer {
 
     int OVERWORLD_MIN_HEIGHT = -64;
@@ -34,18 +34,45 @@ public interface BiomeSetter extends AbstractBiomeRenderer {
      * Returns a new instance of the BiomeSetter interface.
      *
      * @return a new instance of the BiomeSetter interface
-     * @version 0.0.1
+     * @since 0.0.1
+     * @deprecated Use {@link #of(Plugin)} instead.
      */
+    @AsOf("0.0.1")
+    @Deprecated(since = "2.1.0")
     static BiomeSetter of() {
         return new GlobalBiomeSetter();
     }
+
+    /**
+     * Returns a new instance of the BiomeSetter interface with the given provider.
+     * @param provider the provider
+     * @return a new instance of the BiomeSetter interface with the given provider
+     * @since 2.1.0
+     */
+    @AsOf("2.1.0")
+    static BiomeSetter of(@NotNull Plugin provider) {
+        return new GlobalBiomeSetter(provider);
+    }
+
+    /**
+     * Returns a new instance of the BiomeSetter interface with the given BiomeUpdater.
+     * @param updater the BiomeUpdater
+     * @return a new instance of the BiomeSetter interface with the given BiomeUpdater
+     * @since 2.1.0
+     */
+    @AsOf("2.1.0")
+    static BiomeSetter of(@NotNull BiomeUpdater updater) {
+        return new GlobalBiomeSetter(updater);
+    }
+
+
 
     /**
      * Returns the RegionAccessor for the given location.
      *
      * @param location the location
      * @return the RegionAccessor for the location
-     * @version 0.0.1
+     * @since 0.0.1
      */
     @AsOf("0.0.1")
     default @NotNull RegionAccessor getRegionAccessor(@NotNull Location location) {
@@ -57,7 +84,7 @@ public interface BiomeSetter extends AbstractBiomeRenderer {
      *
      * @param block the block
      * @param customBiome the custom biome
-     * @version 0.0.1
+     * @since 0.0.1
      */
     @AsOf("0.0.1")
     void setBlockBiome(@NotNull Block block, @NotNull CustomBiome customBiome);
@@ -71,7 +98,7 @@ public interface BiomeSetter extends AbstractBiomeRenderer {
      * @param block The block whose biome is to be set.
      * @param customBiome The custom biome to set for the block.
      * @param updateBiome A flag indicating whether to update the biome of the block immediately.
-     * @version 0.0.1
+     * @since 0.0.1
      */
     @AsOf("0.0.1")
     void setBlockBiome(@NotNull Block block, @NotNull CustomBiome customBiome, boolean updateBiome);
@@ -81,7 +108,7 @@ public interface BiomeSetter extends AbstractBiomeRenderer {
      *
      * @param chunk the chunk
      * @param customBiome the custom biome
-     * @version 0.0.1
+     * @since 0.0.1
      */
     @AsOf("0.0.1")
     void setChunkBiome(@NotNull Chunk chunk, @NotNull CustomBiome customBiome);
@@ -94,7 +121,7 @@ public interface BiomeSetter extends AbstractBiomeRenderer {
      * @param chunk The chunk whose biome is to be set.
      * @param customBiome The custom biome to set for the chunk.
      * @param updateBiome A flag indicating whether to update the biome of the chunk immediately.
-     * @version 0.0.1
+     * @since 0.0.1
      */
     @AsOf("0.0.1")
     void setChunkBiome(@NotNull Chunk chunk, @NotNull CustomBiome customBiome, boolean updateBiome);
@@ -106,7 +133,7 @@ public interface BiomeSetter extends AbstractBiomeRenderer {
      * @param minHeight the minimum height
      * @param maxHeight the maximum height
      * @param customBiome the custom biome
-     * @version 0.0.1
+     * @since 0.0.1
      */
     @AsOf("0.0.1")
     void setChunkBiome(@NotNull Chunk chunk, int minHeight, int maxHeight, @NotNull CustomBiome customBiome);
@@ -122,7 +149,7 @@ public interface BiomeSetter extends AbstractBiomeRenderer {
      * @param maxHeight The maximum height within the chunk for the biome change.
      * @param customBiome The custom biome to set for the chunk.
      * @param updateBiome A flag indicating whether to update the biome of the chunk immediately.
-     * @version 0.0.1
+     * @since 0.0.1
      */
    @AsOf("0.0.1")
    void setChunkBiome(@NotNull Chunk chunk, int minHeight, int maxHeight, @NotNull CustomBiome customBiome, boolean updateBiome);
@@ -133,7 +160,7 @@ public interface BiomeSetter extends AbstractBiomeRenderer {
      * @param world the world
      * @param boundingBox the bounding box
      * @param customBiome the custom biome
-     * @version 0.0.1
+     * @since 0.0.1
      */
     @AsOf("0.0.1")
     void setBoundingBoxBiome(@NotNull World world, @NotNull BoundingBox boundingBox, @NotNull CustomBiome customBiome);
@@ -144,7 +171,7 @@ public interface BiomeSetter extends AbstractBiomeRenderer {
      * @param from the starting location
      * @param to the ending location
      * @param customBiome the custom biome
-     * @version 0.0.1
+     * @since 0.0.1
      */
     @AsOf("0.0.1")
     void setRegionBiome(@NotNull Location from, @NotNull Location to, @NotNull CustomBiome customBiome);
@@ -157,7 +184,7 @@ public interface BiomeSetter extends AbstractBiomeRenderer {
      * @param to the ending location
      * @param customBiome the custom biome
      * @param updateBiome a flag indicating whether to update the biome of the region immediately
-     * @version 0.0.1
+     * @since 0.0.1
      */
     @AsOf("0.0.1")
     void setRegionBiome(@NotNull Location from, @NotNull Location to, @NotNull CustomBiome customBiome, boolean updateBiome);
@@ -169,7 +196,7 @@ public interface BiomeSetter extends AbstractBiomeRenderer {
      * @param from the starting vector
      * @param to the ending vector
      * @param customBiome the custom biome
-     * @version 0.0.1
+     * @since 0.0.1
      */
     @AsOf("0.0.1")
     void setRegionBiome(@NotNull World world, @NotNull Vector from, @NotNull Vector to, @NotNull CustomBiome customBiome);
@@ -183,7 +210,7 @@ public interface BiomeSetter extends AbstractBiomeRenderer {
      * @param to the ending vector
      * @param customBiome the custom biome
      * @param updateBiome a flag indicating whether to update the biome of the region immediately
-     * @version 0.0.1
+     * @since 0.0.1
      */
     @AsOf("0.0.2")
     void setRegionBiome(@NotNull World world, @NotNull Vector from, @NotNull Vector to, @NotNull CustomBiome customBiome, boolean updateBiome);
@@ -199,7 +226,7 @@ public interface BiomeSetter extends AbstractBiomeRenderer {
      * @param to The ending vector of the region.
      * @param customBiome The custom biome to set for the region.
      * @param updateBiome A flag indicating whether to update the biome of the region immediately.
-     * @version 0.0.2
+     * @since 0.0.2
      */
     @AsOf("0.0.1")
     void setRegionBiome(@NotNull World world, @NotNull Location from, @NotNull Location to, @NotNull CustomBiome customBiome, boolean updateBiome);

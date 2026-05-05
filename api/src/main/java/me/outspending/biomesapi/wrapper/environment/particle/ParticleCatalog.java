@@ -20,6 +20,11 @@ public record ParticleCatalog(List<WrappedAmbientParticle<?>> particles) {
 
     public static final ParticleCatalog EMPTY = new ParticleCatalog(List.of());
 
+    @AsOf("2.1.0")
+    public ParticleCatalog {
+        particles = List.copyOf(particles);
+    }
+
     /**
      * Creates a ParticleCatalog with a single complex particle.
      * @param particleType The wrapped particle type.
@@ -56,6 +61,37 @@ public record ParticleCatalog(List<WrappedAmbientParticle<?>> particles) {
             list.add(new ResolvedAmbientParticle(wrapped.toParticleOptions(), wrapped.getProbability()));
         }
         return list;
+    }
+
+    /**
+     * Creates a new ParticleCatalog with the specified particle added.
+     * @param type The wrapped particle type.
+     * @param probability The probability of the particle.
+     * @return A new ParticleCatalog with the specified particle added.
+     * @since 2.1.0
+     */
+    @AsOf("2.1.0")
+    public ParticleCatalog with(WrappedParticleTypes type, float probability) {
+        Preconditions.checkArgument(type.isSimple(), "Particle type must be simple. Got: " + type);
+        List<WrappedAmbientParticle<?>> copy = new ArrayList<>(particles);
+        copy.add(new WrappedAmbientParticle<>(type, probability));
+        return new ParticleCatalog(copy);
+    }
+
+    /**
+     * Creates a new ParticleCatalog with the specified particle added.
+     * @param type The wrapped particle type.
+     * @param probability The probability of the particle.
+     * @param data The particle data.
+     * @return A new ParticleCatalog with the specified particle added.
+     * @param <T> The type of particle options.
+     * @since 2.1.0
+     */
+    @AsOf("2.1.0")
+    public <T extends ParticleData<T>> ParticleCatalog with(WrappedParticleTypes type, float probability, @Nullable T data) {
+        List<WrappedAmbientParticle<?>> copy = new ArrayList<>(particles);
+        copy.add(new WrappedAmbientParticle<>(type, probability, data));
+        return new ParticleCatalog(copy);
     }
 
 
@@ -113,6 +149,29 @@ public record ParticleCatalog(List<WrappedAmbientParticle<?>> particles) {
         public Builder addSimple(WrappedParticleTypes particleType, float probability) {
             Preconditions.checkArgument(particleType.isSimple(), "Particle type must be simple.");
             particles.add(new WrappedAmbientParticle<>(particleType, probability));
+            return this;
+        }
+
+        /**
+         * Clears the catalog.
+         * @return The builder instance.
+         * @since 2.1.0
+         */
+        @AsOf("2.1.0")
+        public Builder clear() {
+            particles.clear();
+            return this;
+        }
+
+        /**
+         * Adds all particles from another ParticleCatalog to this one.
+         * @param source The source ParticleCatalog.
+         * @return The builder instance.
+         * @since 2.1.0
+         */
+        @AsOf("2.1.0")
+        public Builder addAll(@NotNull ParticleCatalog source) {
+            particles.addAll(source.particles);
             return this;
         }
 
