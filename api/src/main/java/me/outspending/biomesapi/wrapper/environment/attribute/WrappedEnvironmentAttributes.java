@@ -7,6 +7,15 @@ import me.outspending.biomesapi.wrapper.environment.MoonPhase;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleCatalog;
 import me.outspending.biomesapi.wrapper.environment.particle.WrappedAmbientParticle;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @AsOf("1.1.0")
 public final class WrappedEnvironmentAttributes {
@@ -200,60 +209,139 @@ public final class WrappedEnvironmentAttributes {
     @Deprecated
     public static final WrappedEnvironmentAttributeSupplier<Object, Activity> BABY_VILLAGER_ACTIVITY = supplierWith("gameplay/baby_villager_activity", AttributeConverters.ACTIVITY);
 
-    private WrappedEnvironmentAttributes() {
-        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+    /** The background music to play.
+     * @apiNote The value type ({@code BackgroundMusic}) is an NMS-only
+     * type without an API wrapper yet - pass an instance obtained directly from NMS. */
+    @ApiStatus.Experimental
+    public static final WrappedEnvironmentAttributeSupplier<Object, Object> BACKGROUND_MUSIC = supplier("audio/background_music");
+
+    /** Controls ambient sounds that are played around the camera.
+     * @apiNote The value type ({@code AmbientSounds}) is an NMS-only
+     * type without an API wrapper yet - pass an instance obtained directly from NMS. */
+    @ApiStatus.Experimental
+    public static final WrappedEnvironmentAttributeSupplier<Object, Object> AMBIENT_SOUNDS = supplier("audio/ambient_sounds");
+
+    /**
+     * How eyeblossoms should behave.
+     * True: eyeblossoms will open
+     * False: eyeblossoms will close
+     * Default: eyeblossom will stay in their current state
+     * @apiNote The value type ({@code TriState})
+     * is an NMS-only type without an API wrapper yet - pass an instance obtained directly from NMS.
+     * @deprecated No consumers at a biome level (timelines only). */
+    @Deprecated
+    @ApiStatus.Experimental
+    public static final WrappedEnvironmentAttributeSupplier<Object, Object> EYEBLOSSOM_OPEN = supplier("gameplay/eyeblossom_open");
+
+
+    @ApiStatus.Internal
+    private static Map<String, WrappedEnvironmentAttributeSupplier<?, ?>> BY_ID;
+    @ApiStatus.Internal
+    private static volatile Map<String, WrappedEnvironmentAttributeSupplier<?, ?>> BY_NAME;
+
+    /**
+     * Returns the supplier registered under the given NMS attribute id (e.g. {@code "visual/fog_color"}),
+     * or null if none exists.
+     */
+    @AsOf("2.1.0")
+    public static @Nullable WrappedEnvironmentAttributeSupplier<?, ?> byId(@NotNull String id) {
+        return byIdMap().get(id);
     }
 
+    /**
+     * Returns the supplier whose constant name matches (e.g. {@code "FOG_COLOR"}), or null if none exists.
+     */
+    @AsOf("2.1.0")
+    public static @Nullable WrappedEnvironmentAttributeSupplier<?, ?> byName(@NotNull String name) {
+        Map<String, WrappedEnvironmentAttributeSupplier<?, ?>> map = BY_NAME;
+        if (map == null) {
+            synchronized (WrappedEnvironmentAttributes.class) {
+                map = BY_NAME;
+                if (map == null) {
+                    map = buildNameIndex();
+                    BY_NAME = map;
+                }
+            }
+        }
+        return map.get(name);
+    }
+
+    /**
+     * All registered suppliers (excluding Unmapped). Iteration order matches declaration order.
+     */
+    @AsOf("2.1.0")
+    public static @NotNull Collection<WrappedEnvironmentAttributeSupplier<?, ?>> values() {
+        return Collections.unmodifiableCollection(byIdMap().values());
+    }
+
+    /**
+     * All registered ids (excluding Unmapped). Iteration order matches declaration order.
+     */
+    @AsOf("2.1.0")
+    public static @NotNull Collection<String> ids() {
+        return Collections.unmodifiableCollection(byIdMap().keySet());
+    }
+
+
     private static <T, K> WrappedEnvironmentAttributeSupplier<T, K> supplier(String key) {
-        return new WrappedEnvironmentAttributeSupplier<>(() -> {
+        WrappedEnvironmentAttributeSupplier<T, K> s = new WrappedEnvironmentAttributeSupplier<>(() -> {
             EnvironmentAttributeHandle<T> handle = EnvironmentAttributeFactory.WIRE.get().byKey(key);
             return WrappedEnvironmentAttribute.of(handle);
         });
+        byIdMap().put(key, s);
+        return s;
     }
 
-    private static <K> WrappedEnvironmentAttributeSupplier<Object, K> supplierWith(
-            String key, WrappedEnvironmentAttribute.Converter<Object, K> converter) {
-        return new WrappedEnvironmentAttributeSupplier<>(() -> {
+    private static <K> WrappedEnvironmentAttributeSupplier<Object, K> supplierWith(String key, WrappedEnvironmentAttribute.Converter<Object, K> converter) {
+        WrappedEnvironmentAttributeSupplier<Object, K> s = new WrappedEnvironmentAttributeSupplier<>(() -> {
             EnvironmentAttributeHandle<Object> handle = EnvironmentAttributeFactory.WIRE.get().byKey(key);
             return WrappedEnvironmentAttribute.of(handle, converter);
         });
+        byIdMap().put(key, s);
+        return s;
     }
 
     private static IntColorSupplier colorSupplier(String key) {
-        return new IntColorSupplier(() -> {
+        IntColorSupplier s = new IntColorSupplier(() -> {
             EnvironmentAttributeHandle<Integer> handle = EnvironmentAttributeFactory.WIRE.get().byKey(key);
             return WrappedEnvironmentAttribute.of(handle);
         });
+        byIdMap().put(key, s);
+        return s;
     }
 
-    @AsOf("1.1.0")
-    @ApiStatus.Experimental
-    public static final class Unmapped {
-
-        /** The background music to play.
-         * The value type ({@code BackgroundMusic}) is an NMS-only
-         * type without an API wrapper yet - pass an instance obtained directly from NMS. */
-        public static final WrappedEnvironmentAttributeSupplier<Object, Object> BACKGROUND_MUSIC = supplier("audio/background_music");
-
-        /** Controls ambient sounds that are played around the camera.
-         * The value type ({@code AmbientSounds}) is an NMS-only
-         * type without an API wrapper yet - pass an instance obtained directly from NMS. */
-        public static final WrappedEnvironmentAttributeSupplier<Object, Object> AMBIENT_SOUNDS = supplier("audio/ambient_sounds");
-
-        /**
-         * How eyeblossoms should behave.
-         * True: eyeblossoms will open
-         * False: eyeblossoms will close
-         * Default: eyeblossom will stay in their current state
-         * The value type ({@code TriState})
-         * is an NMS-only type without an API wrapper yet - pass an instance obtained directly from NMS.
-         * @deprecated No consumers at a biome level (timelines only). */
-        @Deprecated
-        public static final WrappedEnvironmentAttributeSupplier<Object, Object> EYEBLOSSOM_OPEN = supplier("gameplay/eyeblossom_open");
-
-
-        private Unmapped() {
-            throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+    private static Map<String, WrappedEnvironmentAttributeSupplier<?, ?>> byIdMap() {
+        Map<String, WrappedEnvironmentAttributeSupplier<?, ?>> map = BY_ID;
+        if (map == null) {
+            map = new LinkedHashMap<>();
+            BY_ID = map;
         }
+        return map;
+    }
+
+    private static Map<String, WrappedEnvironmentAttributeSupplier<?, ?>> buildNameIndex() {
+        Map<String, WrappedEnvironmentAttributeSupplier<?, ?>> map = new LinkedHashMap<>();
+        collectStaticFields(map);
+        return Collections.unmodifiableMap(map);
+    }
+
+    private static void collectStaticFields(Map<String, WrappedEnvironmentAttributeSupplier<?, ?>> out) {
+        for (Field field : WrappedEnvironmentAttributes.class.getDeclaredFields()) {
+            if (!Modifier.isStatic(field.getModifiers())) continue;
+            if (!WrappedEnvironmentAttributeSupplier.class.isAssignableFrom(field.getType())) continue;
+            try {
+                field.setAccessible(true);
+                Object value = field.get(null);
+                if (value instanceof WrappedEnvironmentAttributeSupplier<?, ?> supplier) {
+                    out.put(field.getName(), supplier);
+                }
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    private WrappedEnvironmentAttributes() {
+        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
     }
 }

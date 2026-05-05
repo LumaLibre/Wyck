@@ -10,9 +10,16 @@ public record EnvironmentAttributeHandleImpl<T>(EnvironmentAttribute<@NotNull T>
             EnvironmentAttribute.builder(AttributeTypes.BOOLEAN)
                     .defaultValue(false)
                     .build();
+
+
     @Override
     public T defaultValue() {
         return nms.defaultValue();
+    }
+
+    @Override
+    public boolean isClientAware() {
+        return nms.isSyncable();
     }
 
     @Override

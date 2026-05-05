@@ -17,7 +17,6 @@ import org.jetbrains.annotations.Nullable;
  * @author Jsinco
  */
 @AsOf("1.1.0")
-@ApiStatus.Experimental
 public class WrappedEnvironmentAttribute<T, K> {
 
     private final EnvironmentAttributeHandle<T> attribute;
