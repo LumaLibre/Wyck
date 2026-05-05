@@ -29,103 +29,129 @@ import java.util.Map;
 public final class WrappedEnvironmentAttributes {
 
     /** Color of the fog when underwater (also affected by time of day, weather, and potion effects) */
+    @AsOf("1.1.0")
     public static final IntColorSupplier FOG_COLOR = colorSupplier("visual/fog_color");
 
     /** Distance in blocks from where the fog starts to have an effect. If negative, fog already exists at 0 distance. */
+    @AsOf("1.1.0")
     public static final WrappedEnvironmentAttributeSupplier<Float, Float> FOG_START_DISTANCE = supplier("visual/fog_start_distance");
 
     /** Distance in blocks when the fog affecting the clouds reaches maximum density.
      * (also affected by the cloud distance option) */
+    @AsOf("1.1.0")
     public static final WrappedEnvironmentAttributeSupplier<Float, Float> FOG_END_DISTANCE = supplier("visual/fog_end_distance");
 
     /** Distance in blocks when the fog affecting the sky reaches maximum density. (also affected by the render distance) */
+    @AsOf("1.1.0")
     public static final WrappedEnvironmentAttributeSupplier<Float, Float> SKY_FOG_END_DISTANCE = supplier("visual/sky_fog_end_distance");
 
     /** Distance in blocks when the fog affecting the clouds reaches maximum density.
      * (also affected by the cloud distance option) */
+    @AsOf("1.1.0")
     public static final WrappedEnvironmentAttributeSupplier<Float, Float> CLOUD_FOG_END_DISTANCE = supplier("visual/cloud_fog_end_distance");
 
     /** Color of the fog when underwater (also affected by time of day, weather, and potion effects) */
+    @AsOf("1.1.0")
     public static final IntColorSupplier WATER_FOG_COLOR = colorSupplier("visual/water_fog_color");
 
     /** Distance in blocks from where the underwater fog starts to have an effect.
      * If negative, fog already exists at 0 distance.
      * (also affected by how long the player has been underwater) */
+    @AsOf("1.1.0")
     public static final WrappedEnvironmentAttributeSupplier<Float, Float> WATER_FOG_START_DISTANCE = supplier("visual/water_fog_start_distance");
 
     /** Distance in blocks when the underwater fog reaches maximum density
      * (also affected by how long the player has been underwater) */
+    @AsOf("1.1.0")
     public static final WrappedEnvironmentAttributeSupplier<Float, Float> WATER_FOG_END_DISTANCE = supplier("visual/water_fog_end_distance");
 
     /** Color of the sky
      * (also affected by time of day and weather) */
+    @AsOf("1.1.0")
     public static final IntColorSupplier SKY_COLOR = colorSupplier("visual/sky_color");
 
     /** Color and intensity of sunrise and sunset. Only used with the overworld skybox type. */
+    @AsOf("1.1.0")
     public static final IntColorSupplier SUNRISE_SUNSET_COLOR = colorSupplier("visual/sunrise_sunset_color");
 
     /** Opacity of the clouds.
      * If fully transparent, Happy Ghast does not regenerate health faster when at cloud height. */
+    @AsOf("1.1.0")
     public static final IntColorSupplier CLOUD_COLOR = colorSupplier("visual/cloud_color");
 
     /** Height of the clouds */
+    @AsOf("1.1.0")
     public static final WrappedEnvironmentAttributeSupplier<Float, Float> CLOUD_HEIGHT = supplier("visual/cloud_height");
 
     /** Position of the sun in degrees from east to west. 0 is directly up. Only used with the overworld skybox type. */
+    @AsOf("1.1.0")
     public static final WrappedEnvironmentAttributeSupplier<Float, Float> SUN_ANGLE = supplier("visual/sun_angle");
 
     /** Position of the moon in degrees from east to west. 0 is directly up. Only used with the overworld skybox type. */
+    @AsOf("1.1.0")
     public static final WrappedEnvironmentAttributeSupplier<Float, Float> MOON_ANGLE = supplier("visual/moon_angle");
 
     /** Position of the sun in degrees from east to west. Only used with the overworld skybox type. */
+    @AsOf("1.1.0")
     public static final WrappedEnvironmentAttributeSupplier<Float, Float> STAR_ANGLE = supplier("visual/star_angle");
 
     /** Phase of the moon. Only used with the overworld skybox type.
      * @deprecated No consumers at a biome level (dimensions only). */
     @Deprecated
+    @AsOf("1.1.0")
     public static final WrappedEnvironmentAttributeSupplier<Object, MoonPhase> MOON_PHASE = supplierWith("visual/moon_phase", AttributeConverters.MOON_PHASE);
 
     /** Brightness of the stars. 0.5 is the default night start brightness. Only used with the overworld skybox type. */
+    @AsOf("1.1.0")
     public static final WrappedEnvironmentAttributeSupplier<Float, Float> STAR_BRIGHTNESS = supplier("visual/star_brightness");
 
     /** Tint of the block light.
      * Block light color starts as dark gray at low light levels,
      * becomes tinted by this attribute at medium levels, and turns white at high levels.
      * By default, it provides the yellowish tint of torches.*/
+    @AsOf("2.1.0")
     public static final IntColorSupplier BLOCK_LIGHT_TINT = colorSupplier("visual/block_light_tint");
 
     /** Color of the skylight.
      * Has no effect on blocks with a skylight of 0.
      * This value is passed to the lightmap.fsh shader as SkyLightColor */
+    @AsOf("1.1.0")
     public static final IntColorSupplier SKY_LIGHT_COLOR = colorSupplier("visual/sky_light_color");
 
     /** Visual brightness of the skylight.
      * The skylight color is multiplied with this value and passed to the lightmap.fsh shader as SkyFactor */
+    @AsOf("1.1.0")
     public static final WrappedEnvironmentAttributeSupplier<Float, Float> SKY_LIGHT_FACTOR = supplier("visual/sky_light_factor");
 
     /** Used similarly to ambient light color
      * When the night vision effect is active,
      * a per-component maximum of visual/night_vision_color and visual/ambient_light_color is used as ambient color.
      * Night Vision is not tinted by default. */
+    @AsOf("2.1.0")
     public static final IntColorSupplier NIGHT_VISION_COLOR = colorSupplier("visual/night_vision_color");
 
     /** Defines both the ambient light tint and brightness
      This light is applied to the world at 0 light levels.
      Block and skylight are added on top of it. */
+    @AsOf("2.1.0")
     public static final IntColorSupplier AMBIENT_LIGHT_COLOR = colorSupplier("visual/ambient_light_color");
 
     /** The particle generated by downward pointed dripstone when no liquid is above.
      * @deprecated No consumers at a biome level (dimensions only). */
     @Deprecated
+    @AsOf("1.1.0")
     public static final WrappedEnvironmentAttributeSupplier<Object, WrappedAmbientParticle<?>> DEFAULT_DRIPSTONE_PARTICLE = supplierWith("visual/default_dripstone_particle", AttributeConverters.DRIPSTONE_PARTICLE);
 
     /** Particles that spawn randomly around the camera where probability is the chance to spawn a particle in an empty space */
+    @AsOf("1.1.0")
     public static final WrappedEnvironmentAttributeSupplier<Object, ParticleCatalog> AMBIENT_PARTICLES = supplierWith("visual/ambient_particles", AttributeConverters.AMBIENT_PARTICLES);
 
     /** Volume of the music. Music volume will fade over time to this value. */
+    @AsOf("1.1.0")
     public static final WrappedEnvironmentAttributeSupplier<Float, Float> MUSIC_VOLUME = supplier("audio/music_volume");
 
     /** Whether a firefly bush plays ambient sounds when not under an opaque block. */
+    @AsOf("1.1.0")
     public static final WrappedEnvironmentAttributeSupplier<Boolean, Boolean> FIREFLY_BUSH_SOUNDS = supplier("audio/firefly_bush_sounds");
 
     /** The internal skylight level (inversely known as the "darkening" skylight level), not the actual skylight level.
@@ -133,72 +159,88 @@ public final class WrappedEnvironmentAttributes {
      * The visual effect is controlled by visual/sky_light_factor.
      * @deprecated Not positional or spatially interpolated (dimensions only). */
     @Deprecated
+    @AsOf("1.1.0")
     public static final WrappedEnvironmentAttributeSupplier<Float, Float> SKY_LIGHT_LEVEL = supplier("gameplay/sky_light_level");
 
     /** Whether a player with Raid Omen can start a raid.
      * @deprecated No consumers at a biome level (dimensions only). */
     @Deprecated
+    @AsOf("1.1.0")
     public static final WrappedEnvironmentAttributeSupplier<Boolean, Boolean> CAN_START_RAID = supplier("gameplay/can_start_raid");
 
     /** Whether water can be placed from a bucket, or by melting ice, or whether a wet sponge will dry out.
      * @deprecated No consumers at a biome level, but the client will recognize this attribute and spawn particles above placed water.*/
     @Deprecated
+    @AsOf("1.1.0")
     public static final WrappedEnvironmentAttributeSupplier<Boolean, Boolean> WATER_EVAPORATES = supplier("gameplay/water_evaporates");
 
     /** Controls behavior of interacting with beds.
      * @deprecated No consumers at a biome level (dimensions only). */
     @Deprecated
+    @AsOf("1.1.0")
     public static final WrappedEnvironmentAttributeSupplier<Object, BedRule> BED_RULE = supplierWith("gameplay/bed_rule", AttributeConverters.BED_RULE);
 
     /** Whether a respawn anchor can be used to set spawn. If set to false, a respawn anchor explodes once used.
      * @deprecated No consumers at a biome level (dimensions only). */
     @Deprecated
+    @AsOf("1.1.0")
     public static final WrappedEnvironmentAttributeSupplier<Boolean, Boolean> RESPAWN_ANCHOR_WORKS = supplier("gameplay/respawn_anchor_works");
 
     /** Whether a nether portal can spawn zombified piglins.
      * @deprecated No consumers at a biome level (dimensions only). */
     @Deprecated
+    @AsOf("1.1.0")
     public static final WrappedEnvironmentAttributeSupplier<Boolean, Boolean> NETHER_PORTAL_SPAWNS_PIGLIN = supplier("gameplay/nether_portal_spawns_piglin");
     /** Whether lava should spread faster and further, and have a stronger pushing force on entities.
      * @deprecated Not positional or spatially interpolated (dimensions only). */
     @Deprecated
+    @AsOf("1.1.0")
     public static final WrappedEnvironmentAttributeSupplier<Boolean, Boolean> FAST_LAVA = supplier("gameplay/fast_lava");
 
     /** Whether fire should burn out more quickly. */
+    @AsOf("1.1.0")
     public static final WrappedEnvironmentAttributeSupplier<Boolean, Boolean> INCREASED_FIRE_BURNOUT = supplier("gameplay/increased_fire_burnout");
 
     /** Chance for a turtle egg to progress to its next hatching state on a random tick.
      * @deprecated No consumers at a biome level (timelines only). */
     @Deprecated
+    @AsOf("1.1.0")
     public static final WrappedEnvironmentAttributeSupplier<Float, Float> TURTLE_EGG_HATCH_CHANCE = supplier("gameplay/turtle_egg_hatch_chance");
 
     /** Whether piglins and hoglins zombify.
      * @deprecated No consumers at a biome level (dimensions only). */
     @Deprecated
+    @AsOf("1.1.0")
     public static final WrappedEnvironmentAttributeSupplier<Boolean, Boolean> PIGLINS_ZOMBIFY = supplier("gameplay/piglins_zombify");
 
     /** Whether snow golems should take damage passively. */
+    @AsOf("1.1.0")
     public static final WrappedEnvironmentAttributeSupplier<Boolean, Boolean> SNOW_GOLEM_MELTS = supplier("gameplay/snow_golem_melts");
 
     /** When true, a creaking heart will become active. When false, it will become inactive. */
+    @AsOf("1.1.0")
     public static final WrappedEnvironmentAttributeSupplier<Boolean, Boolean> CREAKING_ACTIVE = supplier("gameplay/creaking_active");
 
     /** Chance of additional slime spawn on the surface in biomes in the #allows_surface_slime_spawns tag. */
+    @AsOf("1.1.0")
     public static final WrappedEnvironmentAttributeSupplier<Float, Float> SURFACE_SLIME_SPAWN_CHANCE = supplier("gameplay/surface_slime_spawn_chance");
 
     /** Chance of a cat dropping a gift when the player wakes up.
      * @deprecated No consumers at a biome level (timelines only). */
     @Deprecated
+    @AsOf("1.1.0")
     public static final WrappedEnvironmentAttributeSupplier<Float, Float> CAT_WAKING_UP_GIFT_CHANCE = supplier("gameplay/cat_waking_up_gift_chance");
 
     /** When true, bees will pathfind to beehives and not exit (except when the Hive is broken or next to fire).
      * @deprecated No consumers at a biome level (timelines/weather only). */
     @Deprecated
+    @AsOf("1.1.0")
     public static final WrappedEnvironmentAttributeSupplier<Boolean, Boolean> BEES_STAY_IN_HIVE = supplier("gameplay/bees_stay_in_hive");
 
     /** Whether monsters burn when exposed to the sky.
      * @deprecated No consumers at a biome level (dimensions/timelines only). */
     @Deprecated
+    @AsOf("1.1.0")
     public static final WrappedEnvironmentAttributeSupplier<Boolean, Boolean> MONSTERS_BURN = supplier("gameplay/monsters_burn");
 
     /** Whether patrols can spawn when the global skylight is greater than 11. */
@@ -209,6 +251,7 @@ public final class WrappedEnvironmentAttributes {
      * Other activities are allowed causing the villager to do nothing.
      * @deprecated No consumers at a biome level (timelines only). */
     @Deprecated
+    @AsOf("1.1.0")
     public static final WrappedEnvironmentAttributeSupplier<Object, Activity> VILLAGER_ACTIVITY = supplierWith("gameplay/villager_activity", AttributeConverters.ACTIVITY);
 
     /** Controls the default AI activity of baby villagers.
@@ -216,17 +259,20 @@ public final class WrappedEnvironmentAttributes {
      * Other activities are allowed causing the villager to do nothing.
      * @deprecated No consumers at a biome level (timelines only). */
     @Deprecated
+    @AsOf("1.1.0")
     public static final WrappedEnvironmentAttributeSupplier<Object, Activity> BABY_VILLAGER_ACTIVITY = supplierWith("gameplay/baby_villager_activity", AttributeConverters.ACTIVITY);
 
     /** The background music to play.
      * @apiNote The value type ({@code BackgroundMusic}) is an NMS-only
      * type without an API wrapper yet - pass an instance obtained directly from NMS. */
+    @AsOf("1.1.0")
     @ApiStatus.Experimental
     public static final WrappedEnvironmentAttributeSupplier<Object, Object> BACKGROUND_MUSIC = supplier("audio/background_music");
 
     /** Controls ambient sounds that are played around the camera.
      * @apiNote The value type ({@code AmbientSounds}) is an NMS-only
      * type without an API wrapper yet - pass an instance obtained directly from NMS. */
+    @AsOf("1.1.0")
     @ApiStatus.Experimental
     public static final WrappedEnvironmentAttributeSupplier<Object, Object> AMBIENT_SOUNDS = supplier("audio/ambient_sounds");
 
@@ -239,6 +285,7 @@ public final class WrappedEnvironmentAttributes {
      * is an NMS-only type without an API wrapper yet - pass an instance obtained directly from NMS.
      * @deprecated No consumers at a biome level (timelines only). */
     @Deprecated
+    @AsOf("1.1.0")
     @ApiStatus.Experimental
     public static final WrappedEnvironmentAttributeSupplier<Object, Object> EYEBLOSSOM_OPEN = supplier("gameplay/eyeblossom_open");
 
