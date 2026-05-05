@@ -2,16 +2,11 @@ package me.outspending.biomesapi.wrapper.environment.attribute;
 
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.attribute.AttributeTypes;
 import net.minecraft.world.attribute.EnvironmentAttribute;
 import org.jetbrains.annotations.NotNull;
 
 public record EnvironmentAttributeHandleImpl<T>(EnvironmentAttribute<@NotNull T> nms) implements EnvironmentAttributeHandle<T> {
 
-    public static final EnvironmentAttribute<@NotNull Boolean> UNSUPPORTED =
-            EnvironmentAttribute.builder(AttributeTypes.BOOLEAN)
-                    .defaultValue(false)
-                    .build();
 
     @Override
     public @NotNull T defaultValue() {
