@@ -5,6 +5,6 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import org.jetbrains.annotations.NotNull;
 
-public record NmsParticleTypeHandle<T extends ParticleOptions>(ParticleType<@NotNull T> nms) implements ParticleTypeHandle<T> {
+public record NmsParticleTypeHandle<T extends ParticleOptions>(ParticleType<@NotNull T> nms) implements ParticleTypeHandle {
 
 }

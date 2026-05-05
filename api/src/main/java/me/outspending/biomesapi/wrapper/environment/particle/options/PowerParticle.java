@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 public record PowerParticle(float power) implements ParticleData<PowerParticle> {
 
     @Override
-    public @NotNull ParticleOptionsHandle apply(@NotNull ParticleTypeHandle<PowerParticle> particleType) {
+    public @NotNull ParticleOptionsHandle apply(@NotNull ParticleTypeHandle particleType) {
         return ParticleOptionsFactory.WIRE.get().power(particleType, power);
     }
 

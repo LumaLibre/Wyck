@@ -56,7 +56,7 @@ public class WrappedAmbientParticle<T> {
      */
     @AsOf("1.1.0")
     public ParticleOptionsHandle toParticleOptions() {
-        ParticleTypeHandle<T> particleType = ambientParticle.getParticleType();
+        ParticleTypeHandle particleType = ambientParticle.getParticleType();
         if (ambientParticle.isSimple()) {
             return ParticleOptionsFactory.WIRE.get().simple(particleType);
         }

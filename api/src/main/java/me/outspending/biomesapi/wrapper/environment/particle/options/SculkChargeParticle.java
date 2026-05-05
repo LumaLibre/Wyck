@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 public record SculkChargeParticle(float roll) implements ParticleData<SculkChargeParticle> {
 
     @Override
-    public @NotNull ParticleOptionsHandle apply(@NotNull ParticleTypeHandle<SculkChargeParticle> particleType) {
+    public @NotNull ParticleOptionsHandle apply(@NotNull ParticleTypeHandle particleType) {
         return ParticleOptionsFactory.WIRE.get().sculkCharge(roll);
     }
 

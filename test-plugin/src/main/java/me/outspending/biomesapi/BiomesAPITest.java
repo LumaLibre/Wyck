@@ -9,7 +9,6 @@ import me.outspending.biomesapi.wrapper.BiomeSettings;
 import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttributes;
 import me.outspending.biomesapi.wrapper.environment.particle.WrappedParticleTypes;
 import me.outspending.biomesapi.wrapper.environment.particle.options.DustParticle;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -30,18 +29,21 @@ public final class BiomesAPITest extends JavaPlugin implements Listener {
                 .resourceKey(BiomeResourceKey.of("test", "custombiome"))
                 .settings(BiomeSettings.defaultSettings())
                 //.fogColor("#FFFFFF") // #db4929
-                .foliageColor("#F5F2EB")
-                .skyColor("#B99DFC")
-                .waterColor("#F5F2EB") // #F5F2EB
-                .waterFogColor("#000000")
-                .grassColor("#9D00FF")
+                //.foliageColor("#F5F2EB")
+                //.skyColor("#B99DFC")
+                //.waterColor("#F5F2EB") // #F5F2EB
+                //.waterFogColor("#000000")
+                //.grassColor("#DBE9EC")
                 .ambientParticle(WrappedParticleTypes.DUST, 0.1f, DustParticle.of("#B99DFC"))
-                .replace(Material.GRASS_BLOCK, Material.LAVA)
                 .setAttribute(WrappedEnvironmentAttributes.BLOCK_LIGHT_TINT, "#FF10F0")
-                .setAttribute(WrappedEnvironmentAttributes.SKY_LIGHT_FACTOR, 0.1f)
-                .setAttribute(WrappedEnvironmentAttributes.SKY_LIGHT_COLOR, "#2FD900")
+                .setAttribute(WrappedEnvironmentAttributes.SKY_LIGHT_FACTOR, 0.9f)
+                //.setAttribute(WrappedEnvironmentAttributes.SKY_LIGHT_COLOR, "#FDE3AA")
                 .register()
-                .toPhony();
+                .asPhony()
+                .setConditional(((player, chunkLocation) -> {
+                    return chunkLocation.x() % 2 == 0 && chunkLocation.z() % 2 == 0; // Only apply to chunks where both x and z are even
+                }))
+                .build();
 
 
 

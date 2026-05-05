@@ -27,11 +27,11 @@ import java.util.Collection;
  * This interface represents a custom biome in the BiomesAPI.
  * It provides methods to retrieve and modify the properties of the custom biome.
  *
- * @version 1.1.0
+ * @version 2.1.0
  * @since 0.0.1
  * @author Outspending
  */
-@AsOf("1.1.0")
+@AsOf("2.1.0")
 public interface CustomBiome {
 
     /**
@@ -43,6 +43,18 @@ public interface CustomBiome {
     @AsOf("0.0.1")
     static @NotNull Builder builder() {
         return new Builder();
+    }
+
+    /**
+     * Returns a new instance of the Builder class with the provided resource key.
+     * @param resourceKey the BiomeResourceKey to set for the CustomBiome being built
+     * @return a new Builder instance
+     * @since 2.1.0
+     */
+    @AsOf("2.1.0")
+    static @NotNull Builder builder(@NotNull BiomeResourceKey resourceKey) {
+        Preconditions.checkNotNull(resourceKey, "Resource key cannot be null.");
+        return new Builder().resourceKey(resourceKey);
     }
 
     /**
@@ -403,14 +415,14 @@ public interface CustomBiome {
         private BiomeResourceKey resourceKey = null;
         private BiomeSettings settings = BiomeSettings.defaultSettings();
 
-        private int waterColor = 0xF54927; // Meadow biome default water color
+        private int waterColor = 0x3F75C4;
 
-        private @Nullable Integer fogColor = -1;
-        private @Nullable Integer waterFogColor = -1;
-        private @Nullable Integer skyColor = -1;
-        private @Nullable Integer foliageColor = -1;
-        private @Nullable Integer grassColor = -1;
-        private @Nullable Integer dryFoliageColor = -1;
+        private @Nullable Integer fogColor = null;
+        private @Nullable Integer waterFogColor = null;
+        private @Nullable Integer skyColor = null;
+        private @Nullable Integer foliageColor = null;
+        private @Nullable Integer grassColor = null;
+        private @Nullable Integer dryFoliageColor = null;
 
         private GrassColorModifier grassColorModifier = GrassColorModifier.NONE;
         private ParticleCatalog particleCatalog = ParticleCatalog.EMPTY;
@@ -537,7 +549,8 @@ public interface CustomBiome {
          */
         @AsOf("0.0.1")
         public @NotNull Builder waterColor(@NotNull String waterColor) {
-            this.waterColor = parseHex(waterColor);
+            @Nullable Integer parsedColor = parseHex(waterColor);
+            if (parsedColor != null) this.waterColor = parsedColor;
             return this;
         }
 
@@ -876,8 +889,8 @@ public interface CustomBiome {
             return new CustomBiomeImpl(
                     resourceKey,
                     settings,
-                    fogColor,
                     waterColor,
+                    fogColor,
                     waterFogColor,
                     skyColor,
                     foliageColor,

@@ -34,6 +34,6 @@ public interface ParticleData<T> {
      * @return The ParticleOptions representing the applied particle data.
      */
     @AsOf("1.1.0")
-    @NotNull ParticleOptionsHandle apply(@NotNull ParticleTypeHandle<@NotNull T> particleType);
+    @NotNull ParticleOptionsHandle apply(@NotNull ParticleTypeHandle particleType);
 
 }

@@ -29,7 +29,7 @@ public interface ParticleOptionsFactory {
      * @return A ParticleOptionsHandle configured for the specified block particle type and material.
      */
     @AsOf("2.0.0")
-    ParticleOptionsHandle block(ParticleTypeHandle<?> type, Material material);
+    ParticleOptionsHandle block(ParticleTypeHandle type, Material material);
 
     /**
      * Creates a particle options handle for a color particle with the specified RGB color.
@@ -38,7 +38,7 @@ public interface ParticleOptionsFactory {
      * @return A ParticleOptionsHandle configured for the specified color particle type and RGB color.
      */
     @AsOf("2.0.0")
-    ParticleOptionsHandle color(ParticleTypeHandle<?> type, int rgb);
+    ParticleOptionsHandle color(ParticleTypeHandle type, int rgb);
 
     /**
      * Creates a particle options handle for a dust particle with the specified RGB color and size.
@@ -66,7 +66,7 @@ public interface ParticleOptionsFactory {
      * @return A ParticleOptionsHandle configured for the specified item particle type and item stack.
      */
     @AsOf("2.0.0")
-    ParticleOptionsHandle item(ParticleTypeHandle<?> type, ItemStack itemStack);
+    ParticleOptionsHandle item(ParticleTypeHandle type, ItemStack itemStack);
 
     /**
      * Creates a particle options handle for a power particle with the specified power level.
@@ -75,7 +75,7 @@ public interface ParticleOptionsFactory {
      * @return A ParticleOptionsHandle configured for the specified power particle type and power level.
      */
     @AsOf("2.0.0")
-    ParticleOptionsHandle power(ParticleTypeHandle<?> type, float power);
+    ParticleOptionsHandle power(ParticleTypeHandle type, float power);
 
     /**
      * Creates a particle options handle for a sculk charge particle with the specified roll.
@@ -91,7 +91,7 @@ public interface ParticleOptionsFactory {
      * @return A ParticleOptionsHandle configured for the specified simple particle type.
      */
     @AsOf("2.0.0")
-    ParticleOptionsHandle simple(ParticleTypeHandle<?> type);
+    ParticleOptionsHandle simple(ParticleTypeHandle type);
 
     /**
      * Creates a particle options handle for a spell particle with the specified particle type, RGB color, and power.
@@ -101,7 +101,7 @@ public interface ParticleOptionsFactory {
      * @return A ParticleOptionsHandle configured for the specified spell particle type, RGB color, and power.
      */
     @AsOf("2.0.0")
-    ParticleOptionsHandle spell(ParticleTypeHandle<?> type, int rgb, float power);
+    ParticleOptionsHandle spell(ParticleTypeHandle type, int rgb, float power);
 
     /**
      * Creates a particle options handle for a trail particle with the specified target location, RGB color, and duration.
@@ -129,5 +129,5 @@ public interface ParticleOptionsFactory {
      * @param <T> The type of particle options associated with the particle type.
      */
     @AsOf("2.0.0")
-    <T> ParticleTypeHandle<T> typeByKey(String key);
+    <T> ParticleTypeHandle typeByKey(String key);
 }

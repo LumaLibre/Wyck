@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 public record ColorParticle(int color) implements ParticleData<ColorParticle> {
 
     @Override
-    public @NotNull ParticleOptionsHandle apply(@NotNull ParticleTypeHandle<ColorParticle> particleType) {
+    public @NotNull ParticleOptionsHandle apply(@NotNull ParticleTypeHandle particleType) {
         return ParticleOptionsFactory.WIRE.get().color(particleType, color);
     }
 

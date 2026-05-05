@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 public record DustTransitionParticle(int fromColor, int toColor, float scale) implements ParticleData<DustTransitionParticle> {
 
     @Override
-    public @NotNull ParticleOptionsHandle apply(@NotNull ParticleTypeHandle<DustTransitionParticle> particleType) {
+    public @NotNull ParticleOptionsHandle apply(@NotNull ParticleTypeHandle particleType) {
         return ParticleOptionsFactory.WIRE.get().dustTransition(fromColor, toColor, scale);
     }
 

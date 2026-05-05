@@ -7,11 +7,11 @@ import me.outspending.biomesapi.wrapper.environment.particle.ParticleTypeHandle;
 import org.bukkit.Vibration;
 import org.jetbrains.annotations.NotNull;
 
-@AsOf("1.1.0")
+@AsOf("2.0.0")
 public record VibrationParticle(Vibration.Destination destination, int arrivalInTicks) implements ParticleData<VibrationParticle> {
 
     @Override
-    public @NotNull ParticleOptionsHandle apply(@NotNull ParticleTypeHandle<VibrationParticle> particleType) {
+    public @NotNull ParticleOptionsHandle apply(@NotNull ParticleTypeHandle particleType) {
         return ParticleOptionsFactory.WIRE.get().vibration(destination, arrivalInTicks);
     }
 

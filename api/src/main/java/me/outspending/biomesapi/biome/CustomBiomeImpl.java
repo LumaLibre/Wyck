@@ -22,11 +22,11 @@ import java.util.Objects;
  * This class represents a custom biome implementation.
  *
  * @author Outspending
- * @version 1.1.0
+ * @version 2.1.0
  * @since 0.0.2
  */
 @ApiStatus.Internal
-@AsOf("1.1.0")
+@AsOf("2.1.0")
 public final class CustomBiomeImpl implements CustomBiome {
 
     // Required Settings
@@ -34,7 +34,7 @@ public final class CustomBiomeImpl implements CustomBiome {
     private final BiomeSettings settings;
 
     // Required Colors
-    private int waterColor = 0xF54927;
+    private int waterColor;
 
     // Optional Colors
     private Integer fogColor;
@@ -45,78 +45,40 @@ public final class CustomBiomeImpl implements CustomBiome {
     private Integer dryFoliageColor;
 
     // Optional Settings
-    private GrassColorModifier grassColorModifier = GrassColorModifier.NONE;
-    private ParticleCatalog particleCatalog = ParticleCatalog.EMPTY;
-    private BlockReplacement[] blockReplacements = new BlockReplacement[0];
+    private GrassColorModifier grassColorModifier;
+    private ParticleCatalog particleCatalog;
+    private BlockReplacement[] blockReplacements;
 
-    private WrappedEnvironmentAttributeMap environmentAttributeMap = WrappedEnvironmentAttributeMap.EMPTY;
+    private WrappedEnvironmentAttributeMap environmentAttributeMap;
 
-    @AsOf("1.1.0")
+
+    @AsOf("2.1.0")
     public CustomBiomeImpl(
             @NotNull BiomeResourceKey resourceKey,
             @NotNull BiomeSettings settings,
-
-            @Nullable Integer fogColor,
             int waterColor,
-            @Nullable Integer waterFogColor,
-            @Nullable Integer skyColor,
-
-            @NotNull ParticleCatalog particleCatalog
-    ) {
-        this.resourceKey = resourceKey;
-        this.settings = settings;
-        this.particleCatalog = particleCatalog;
-
-        this.fogColor = fogColor;
-        this.waterColor = waterColor;
-        this.waterFogColor = waterFogColor;
-        this.skyColor = skyColor;
-        this.blockReplacements = new BlockReplacement[0];
-    }
-
-    @AsOf("1.1.0")
-    public CustomBiomeImpl(
-            @NotNull BiomeResourceKey resourceKey,
-            @NotNull BiomeSettings settings,
-
             @Nullable Integer fogColor,
-            int waterColor,
-            @Nullable Integer waterFogColor,
-            @Nullable Integer skyColor,
-            @Nullable Integer foliageColor,
-            @Nullable Integer grassColor,
-
-            @NotNull ParticleCatalog particleCatalog
-    ) {
-        this(resourceKey, settings, fogColor, waterColor, waterFogColor, skyColor, particleCatalog);
-        this.foliageColor = foliageColor;
-        this.grassColor = grassColor;
-        this.blockReplacements = new BlockReplacement[0];
-    }
-
-    @AsOf("1.1.0")
-    public CustomBiomeImpl(
-            @NotNull BiomeResourceKey resourceKey,
-            @NotNull BiomeSettings settings,
-
-            @Nullable Integer fogColor,
-            int waterColor,
             @Nullable Integer waterFogColor,
             @Nullable Integer skyColor,
             @Nullable Integer foliageColor,
             @Nullable Integer grassColor,
             @Nullable Integer dryFoliageColor,
-
             @NotNull GrassColorModifier grassColorModifier,
             @NotNull ParticleCatalog particleCatalog,
             @NotNull BlockReplacement[] blockReplacements,
             @NotNull WrappedEnvironmentAttributeMap environmentAttributeMap
     ) {
-        this(resourceKey, settings, fogColor, waterColor, waterFogColor, skyColor, particleCatalog);
+        this.resourceKey = resourceKey;
+        this.settings = settings;
+        this.waterColor = waterColor;
+        this.fogColor = fogColor;
+        this.waterFogColor = waterFogColor;
+        this.skyColor = skyColor;
         this.foliageColor = foliageColor;
         this.grassColor = grassColor;
         this.dryFoliageColor = dryFoliageColor;
         this.grassColorModifier = grassColorModifier;
+        this.particleCatalog = particleCatalog;
         this.blockReplacements = blockReplacements;
         this.environmentAttributeMap = environmentAttributeMap;
     }

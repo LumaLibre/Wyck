@@ -145,7 +145,7 @@ public enum WrappedParticleTypes {
 
     private final String key;
     private final @Nullable Class<? extends ParticleData<?>> particleDataClass;
-    private volatile ParticleTypeHandle<?> cachedHandle;
+    private volatile ParticleTypeHandle cachedHandle;
 
     WrappedParticleTypes(String key) {
         this(key, null);
@@ -169,14 +169,14 @@ public enum WrappedParticleTypes {
      * via the registered factory and cached.
      */
     @AsOf("1.1.0")
-    public <T> ParticleTypeHandle<T> getParticleType() {
-        ParticleTypeHandle<?> cached = cachedHandle;
+    public <T> ParticleTypeHandle getParticleType() {
+        ParticleTypeHandle cached = cachedHandle;
         if (cached == null) {
             cached = ParticleOptionsFactory.WIRE.get().typeByKey(key);
             cachedHandle = cached;
         }
         @SuppressWarnings("unchecked")
-        ParticleTypeHandle<T> typed = (ParticleTypeHandle<T>) cached;
+        ParticleTypeHandle typed = (ParticleTypeHandle) cached;
         return typed;
     }
 

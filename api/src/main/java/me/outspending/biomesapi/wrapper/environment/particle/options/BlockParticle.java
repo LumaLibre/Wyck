@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 public record BlockParticle(Material type) implements ParticleData<BlockParticle> {
 
     @Override
-    public @NotNull ParticleOptionsHandle apply(@NotNull ParticleTypeHandle<BlockParticle> particleType) {
+    public @NotNull ParticleOptionsHandle apply(@NotNull ParticleTypeHandle particleType) {
         return ParticleOptionsFactory.WIRE.get().block(particleType, type);
     }
 

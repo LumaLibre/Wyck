@@ -12,10 +12,11 @@ import java.util.List;
  * A catalog of ambient particles for a biome.
  *
  * @since 1.1.0
+ * @version 2.1.0
  * @author Jsinco
  * @param particles The list of wrapped ambient particles.
  */
-@AsOf("1.1.0")
+@AsOf("2.1.0")
 public record ParticleCatalog(List<WrappedAmbientParticle<?>> particles) {
 
     public static final ParticleCatalog EMPTY = new ParticleCatalog(List.of());
@@ -94,7 +95,11 @@ public record ParticleCatalog(List<WrappedAmbientParticle<?>> particles) {
         return new ParticleCatalog(copy);
     }
 
-
+    /**
+     * Creates a new ParticleCatalog builder.
+     * @return A new ParticleCatalog builder.
+     * @since 1.1.0
+     */
     @AsOf("1.1.0")
     public static Builder builder() {
         return new Builder();
@@ -104,9 +109,10 @@ public record ParticleCatalog(List<WrappedAmbientParticle<?>> particles) {
      * A builder for creating ParticleCatalog instances.
      *
      * @since 1.1.0
+     * @version 2.1.0
      * @author Jsinco
      */
-    @AsOf("1.1.0")
+    @AsOf("2.1.0")
     public static class Builder {
         private final List<WrappedAmbientParticle<?>> particles = new ArrayList<>();
 

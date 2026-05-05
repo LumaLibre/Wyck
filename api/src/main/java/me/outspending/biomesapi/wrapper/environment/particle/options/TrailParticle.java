@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 public record TrailParticle(Location target, int color, int duration) implements ParticleData<TrailParticle> {
 
     @Override
-    public @NotNull ParticleOptionsHandle apply(@NotNull ParticleTypeHandle<TrailParticle> particleType) {
+    public @NotNull ParticleOptionsHandle apply(@NotNull ParticleTypeHandle particleType) {
         return ParticleOptionsFactory.WIRE.get().trail(target, color, duration);
     }
 

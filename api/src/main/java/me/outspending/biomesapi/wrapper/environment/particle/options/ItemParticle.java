@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 public record ItemParticle(ItemStack bukkitItemStack) implements ParticleData<ItemParticle> {
 
     @Override
-    public @NotNull ParticleOptionsHandle apply(@NotNull ParticleTypeHandle<ItemParticle> particleType) {
+    public @NotNull ParticleOptionsHandle apply(@NotNull ParticleTypeHandle particleType) {
         return ParticleOptionsFactory.WIRE.get().item(particleType, bukkitItemStack);
     }
 

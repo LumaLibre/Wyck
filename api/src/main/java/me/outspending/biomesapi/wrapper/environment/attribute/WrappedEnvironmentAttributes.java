@@ -17,7 +17,15 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-@AsOf("1.1.0")
+/**
+ * A registry of wrapped environment attribute suppliers,
+ * which provide access to the various attributes that can be defined for biomes.
+ *
+ * @since 1.1.0
+ * @version 2.1.0
+ * @author Jsinco
+ */
+@AsOf("2.1.0")
 public final class WrappedEnvironmentAttributes {
 
     /** Color of the fog when underwater (also affected by time of day, weather, and potion effects) */
@@ -144,6 +152,7 @@ public final class WrappedEnvironmentAttributes {
 
     /** Whether a respawn anchor can be used to set spawn. If set to false, a respawn anchor explodes once used.
      * @deprecated No consumers at a biome level (dimensions only). */
+    @Deprecated
     public static final WrappedEnvironmentAttributeSupplier<Boolean, Boolean> RESPAWN_ANCHOR_WORKS = supplier("gameplay/respawn_anchor_works");
 
     /** Whether a nether portal can spawn zombified piglins.

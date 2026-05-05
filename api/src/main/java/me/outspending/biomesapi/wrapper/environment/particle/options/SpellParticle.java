@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 public record SpellParticle(int color, float power) implements ParticleData<SpellParticle> {
 
     @Override
-    public @NotNull ParticleOptionsHandle apply(@NotNull ParticleTypeHandle<SpellParticle> particleType) {
+    public @NotNull ParticleOptionsHandle apply(@NotNull ParticleTypeHandle particleType) {
         return ParticleOptionsFactory.WIRE.get().spell(particleType, color, power);
     }
 
