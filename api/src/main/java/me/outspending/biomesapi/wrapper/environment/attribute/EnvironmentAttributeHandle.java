@@ -1,6 +1,7 @@
 package me.outspending.biomesapi.wrapper.environment.attribute;
 
 import me.outspending.biomesapi.annotations.AsOf;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Opaque handle to an NMS EnvironmentAttribute<T>.
@@ -18,7 +19,7 @@ public interface EnvironmentAttributeHandle<T> {
      * @since 2.1.0
      */
     @AsOf("2.1.0")
-    T defaultValue();
+    @NotNull T defaultValue();
 
     /**
      * Whether the client reacts to this attribute or not.
@@ -27,5 +28,13 @@ public interface EnvironmentAttributeHandle<T> {
      */
     @AsOf("2.1.0")
     boolean isClientAware();
+
+    /**
+     * The id of this attribute.
+     * @return the id of this attribute
+     * @since 2.1.0
+     */
+    @AsOf("2.1.0")
+    @NotNull String key();
 
 }

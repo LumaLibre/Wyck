@@ -1,7 +1,6 @@
 package me.outspending.biomesapi.wrapper.environment.attribute;
 
 import me.outspending.biomesapi.annotations.AsOf;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
@@ -15,7 +14,6 @@ import java.util.function.Supplier;
  * @author Jsinco
  */
 @AsOf("2.1.0")
-@ApiStatus.Internal
 public class WrappedEnvironmentAttributeSupplier<T, K> {
 
     private final Supplier<WrappedEnvironmentAttribute<T, K>> supplier;
