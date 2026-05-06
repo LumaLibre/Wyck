@@ -76,21 +76,15 @@ At the time of writing, there are no other APIs that allow you to create custom 
 
 BiomesAPI is designed to be easy to use, flexible, and friendly for developers of all skill levels.
 
-## Advantages & Disadvantages 👌
+## Features 👌
 
-### Advantages
+
 - Easy to use
 - Updated frequently
 - Free forever
 - Wiki and javadocs available
 - Supports modern Minecraft versions
 - Supports packet-based biome changing with ProtocolLib or PacketEvents
-
-### Disadvantages
-- Only works on 1.21.11+ Paper-based servers
-- Requires shading to avoid conflicts
-- Still in active development, so some features may be missing
-- Registered biomes cannot be unregistered without restarting the server
 
 ## Credits 🙏
 BiomesAPI was originally created by Outspending. I (Jsinco) have forked the project to add additional features and
