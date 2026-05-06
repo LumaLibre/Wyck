@@ -24,6 +24,10 @@ java {
     withSourcesJar()
 }
 
+tasks.shadowJar {
+    relocate("dev.faststats", "me.outspending.biomesapi.metrics")
+}
+
 publishing {
     val repo: String? = System.getenv("REPO_URL")
     val user: String? = System.getenv("REPO_USERNAME")

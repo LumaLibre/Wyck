@@ -1,10 +1,10 @@
 package me.outspending.biomesapi.renderer.setter;
 
 import com.google.common.base.Preconditions;
-import me.outspending.biomesapi.BiomeUpdater;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.misc.PointRange3D;
+import me.outspending.biomesapi.renderer.updater.BiomeUpdater;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.RegionAccessor;
@@ -30,19 +30,15 @@ public class GlobalBiomeSetter implements BiomeSetter {
 
     private final BiomeUpdater biomeUpdater;
 
-    /**
-     * @deprecated Use {@link GlobalBiomeSetter(Plugin)} instead.
-     */
-    @Deprecated
     public GlobalBiomeSetter() {
         this.biomeUpdater = BiomeUpdater.of();
     }
 
-    public GlobalBiomeSetter(Plugin plugin) {
+    public GlobalBiomeSetter(@NotNull Plugin plugin) {
         this.biomeUpdater = BiomeUpdater.of(plugin);
     }
 
-    public GlobalBiomeSetter(BiomeUpdater biomeUpdater) {
+    public GlobalBiomeSetter(@NotNull BiomeUpdater biomeUpdater) {
         this.biomeUpdater = biomeUpdater;
     }
 

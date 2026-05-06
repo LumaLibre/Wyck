@@ -37,15 +37,20 @@ public class ProtocolLibPacketHandler implements PacketHandler {
     private final PacketAdapter[] protocolListeners;
 
 
-    @AsOf("0.0.6")
-    public ProtocolLibPacketHandler(@NotNull Plugin provider, Priority priority) {
-        this.collector = new PhonyCustomBiomeCollector();
+    @AsOf("2.1.0")
+    public ProtocolLibPacketHandler(@NotNull Plugin provider, @NotNull Priority priority, @NotNull PhonyCustomBiomeCollector collector) {
+        this.collector = collector;
         ListenerPriority protocolLibPrio = priority.getDelegatePriority(ListenerPriority.class);
         this.protocolListeners = new PacketAdapter[] {
                 new MapChunkPacketListener(provider, protocolLibPrio, this),
                 new BlockChangePacketListener(provider, protocolLibPrio, this),
                 new MultiBlockChangePacketListener(provider, protocolLibPrio, this)
         };
+    }
+
+    @AsOf("0.0.6")
+    public ProtocolLibPacketHandler(@NotNull Plugin provider, @NotNull Priority priority) {
+        this(provider, priority, new PhonyCustomBiomeCollector());
     }
 
     @Override

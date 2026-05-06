@@ -1,12 +1,12 @@
 package me.outspending.biomesapi.renderer.packet;
 
-import me.outspending.biomesapi.BiomeUpdater;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.exceptions.MissingPacketManipulatorLibraryException;
 import me.outspending.biomesapi.factory.WireProvider;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
 import me.outspending.biomesapi.renderer.AbstractBiomeRenderer;
 import me.outspending.biomesapi.renderer.packet.data.PhonyCustomBiome;
+import me.outspending.biomesapi.renderer.updater.BiomeUpdater;
 import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.ApiStatus;
@@ -273,9 +273,7 @@ public interface PacketHandler extends AbstractBiomeRenderer {
         LOW(1),
         NORMAL(2),
         HIGH(3),
-        HIGHEST(4),
-        @ApiStatus.Internal
-        MONITOR(5);
+        HIGHEST(4);
 
         private final int level;
 

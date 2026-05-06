@@ -1,6 +1,6 @@
-package me.outspending.biomesapi;
+package me.outspending.biomesapi.renderer.updater;
 
-import com.google.common.base.Preconditions;
+import me.outspending.biomesapi.BiomesAPI;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.misc.PointRange2D;
 import org.bukkit.Chunk;
@@ -8,6 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -32,6 +33,7 @@ public interface BiomeUpdater {
      * @since 1.2.0
      */
     @AsOf("1.2.0")
+    @Deprecated
     boolean FOLIA = classExists("io.papermc.paper.threadedregions.RegionizedServer");
 
     /**
@@ -40,13 +42,10 @@ public interface BiomeUpdater {
      *
      * @return an instance of BiomeUpdater.
      * @since 0.0.2
-     * @deprecated {@link #of(Plugin)} is preferred for compatability reasons (Folia).
      */
-    @Deprecated
     @AsOf("1.2.0")
     static @NotNull BiomeUpdater of() {
-        Preconditions.checkArgument(!FOLIA, "Folia detected, please use BiomeUpdater#of(Plugin) instead.");
-        return new BiomeUpdaterImpl(null);
+        return new BiomeUpdaterImpl(BiomesAPI.biomesapi().plugin());
     }
 
     /**
@@ -56,6 +55,7 @@ public interface BiomeUpdater {
      * @since 1.2.0
      */
     @AsOf("1.2.0")
+    @ApiStatus.Obsolete
     static @NotNull BiomeUpdater of(@NotNull Plugin plugin) {
         return new BiomeUpdaterImpl(plugin);
     }

@@ -1,5 +1,6 @@
-package me.outspending.biomesapi;
+package me.outspending.biomesapi.renderer.updater;
 
+import me.outspending.biomesapi.BiomesAPI;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.unsafe.UnsafeNMSHandler;
 import org.bukkit.Chunk;
@@ -8,7 +9,6 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,10 +24,11 @@ import java.util.concurrent.CompletableFuture;
 @AsOf("0.0.1")
 public class BiomeUpdaterImpl implements BiomeUpdater {
 
-    private final @Nullable Plugin plugin;
+    private final Plugin plugin;
 
-    public BiomeUpdaterImpl(@Nullable Plugin plugin) {
-        this.plugin = plugin;
+    @AsOf("2.1.0")
+    public BiomeUpdaterImpl(@NotNull Plugin plugin) {
+        this.plugin = BiomesAPI.biomesapi().isExternal() ? BiomesAPI.biomesapi().plugin() : plugin;
     }
 
     @Override

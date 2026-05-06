@@ -24,6 +24,8 @@ allprojects {
         maven("https://repo.papermc.io/repository/maven-public/")
         maven("https://oss.sonatype.org/content/groups/public/")
         maven("https://repo.codemc.io/repository/maven-releases/")
+        maven("https://repo.okaeri.cloud/releases")
+        maven("https://repo.faststats.dev/releases")
     }
 
     dependencies {
@@ -31,6 +33,7 @@ allprojects {
         implementation(libs.google.guava)
         compileOnly(libs.kyori.adventure)
         compileOnly(libs.kyori.minimessage)
+
     }
 
     tasks.withType<JavaCompile> {

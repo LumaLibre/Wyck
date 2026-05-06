@@ -1,9 +1,9 @@
 package me.outspending.biomesapi.renderer.setter;
 
-import me.outspending.biomesapi.BiomeUpdater;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.renderer.AbstractBiomeRenderer;
+import me.outspending.biomesapi.renderer.updater.BiomeUpdater;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.RegionAccessor;
@@ -12,6 +12,7 @@ import org.bukkit.block.Block;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -35,10 +36,8 @@ public interface BiomeSetter extends AbstractBiomeRenderer {
      *
      * @return a new instance of the BiomeSetter interface
      * @since 0.0.1
-     * @deprecated Use {@link #of(Plugin)} instead.
      */
     @AsOf("0.0.1")
-    @Deprecated(since = "2.1.0")
     static BiomeSetter of() {
         return new GlobalBiomeSetter();
     }
@@ -50,6 +49,7 @@ public interface BiomeSetter extends AbstractBiomeRenderer {
      * @since 2.1.0
      */
     @AsOf("2.1.0")
+    @ApiStatus.Obsolete
     static BiomeSetter of(@NotNull Plugin provider) {
         return new GlobalBiomeSetter(provider);
     }

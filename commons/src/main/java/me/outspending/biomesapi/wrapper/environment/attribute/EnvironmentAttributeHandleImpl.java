@@ -22,7 +22,7 @@ public record EnvironmentAttributeHandleImpl<T>(EnvironmentAttribute<@NotNull T>
     public @NotNull String key() {
         Identifier id = BuiltInRegistries.ENVIRONMENT_ATTRIBUTE.getKey(nms);
         if (id == null) {
-            throw new IllegalStateException("Attribute '" + nms + "' in registry, but it wasn't found");
+            return "unknown_attribute";
         }
         return id.getPath();
     }

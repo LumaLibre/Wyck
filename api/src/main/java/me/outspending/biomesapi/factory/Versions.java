@@ -1,5 +1,6 @@
 package me.outspending.biomesapi.factory;
 
+import me.outspending.biomesapi.BiomesAPI;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.exceptions.UnknownNMSVersionException;
 import org.bukkit.Bukkit;
@@ -30,6 +31,9 @@ public enum Versions {
 
     @AsOf("2.0.0")
     public static Version getActive() {
+        // This is here to prevent lazy loading of the BiomesAPI interface
+        BiomesAPI.biomesapi();
+
         String mc = Bukkit.getMinecraftVersion();
 
         for (Versions versions : values()) {

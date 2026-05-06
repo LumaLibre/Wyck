@@ -436,7 +436,7 @@ public interface CustomBiome {
          *
          * @param color the color string to format
          * @return the formatted color string
-         * @version 0.0.1
+         * @since 0.0.1
          */
         @AsOf("0.0.1")
         private String formatHex(@NotNull String color) {
@@ -460,7 +460,7 @@ public interface CustomBiome {
         /**
          * This method creates a new Builder object.
          *
-         * @version 0.0.1
+         * @since 0.0.1
          */
         @AsOf("0.0.1")
         public Builder() {}
@@ -469,7 +469,7 @@ public interface CustomBiome {
          * This method creates a new Builder object with the properties of the provided CustomBiome.
          *
          * @param biome The CustomBiome object to copy the properties from.
-         * @version 0.0.5
+         * @since 0.0.5
          */
         @AsOf("0.0.5")
         public Builder(@NotNull CustomBiome biome) {
@@ -492,7 +492,7 @@ public interface CustomBiome {
          * This method sets the BiomeResourceKey property of the CustomBiome.
          *
          * @param resourceKey The BiomeResourceKey of the custom biome.
-         * @version 0.0.1
+         * @since 0.0.1
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("0.0.1")
@@ -505,7 +505,7 @@ public interface CustomBiome {
          * This method sets the BiomeSettings property of the CustomBiome.
          *
          * @param settings The BiomeSettings of the custom biome.
-         * @version 0.0.1
+         * @since 0.0.1
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("0.0.1")
@@ -518,7 +518,7 @@ public interface CustomBiome {
          * This method sets the fog color property of the CustomBiome.
          *
          * @param fogColor The fog color of the custom biome.
-         * @version 0.0.1
+         * @since 0.0.1
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("0.0.1")
@@ -531,7 +531,7 @@ public interface CustomBiome {
          * This method sets the fog color property of the CustomBiome.
          *
          * @param fogColor The fog color of the custom biome.
-         * @version 0.0.1
+         * @since 0.0.1
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("0.0.1")
@@ -544,7 +544,7 @@ public interface CustomBiome {
          * This method sets the water color property of the CustomBiome.
          *
          * @param waterColor The water color of the custom biome.
-         * @version 0.0.1
+         * @since 0.0.1
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("0.0.1")
@@ -558,7 +558,7 @@ public interface CustomBiome {
          * This method sets the water color property of the CustomBiome.
          *
          * @param waterColor The water color of the custom biome.
-         * @version 0.0.1
+         * @since 0.0.1
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("0.0.1")
@@ -571,7 +571,7 @@ public interface CustomBiome {
          * This method sets the water fog color property of the CustomBiome.
          *
          * @param waterFogColor The water fog color of the custom biome.
-         * @version 0.0.1
+         * @since 0.0.1
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("0.0.1")
@@ -584,7 +584,7 @@ public interface CustomBiome {
          * This method sets the water fog color property of the CustomBiome.
          *
          * @param waterFogColor The water fog color of the custom biome.
-         * @version 0.0.1
+         * @since 0.0.1
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("0.0.1")
@@ -597,7 +597,7 @@ public interface CustomBiome {
          * This method sets the sky color property of the CustomBiome.
          *
          * @param skyColor The sky color of the custom biome.
-         * @version 0.1.0
+         * @since 0.1.0
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("0.0.1")
@@ -610,7 +610,7 @@ public interface CustomBiome {
          * This method sets the sky color property of the CustomBiome.
          *
          * @param skyColor The sky color of the custom biome.
-         * @version 0.0.1
+         * @since 0.0.1
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("0.0.1")
@@ -623,7 +623,7 @@ public interface CustomBiome {
          * This method sets the foliage color property of the CustomBiome.
          *
          * @param foliageColor The foliage color of the custom biome.
-         * @version 0.1.0
+         * @since 0.1.0
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("0.0.1")
@@ -636,7 +636,7 @@ public interface CustomBiome {
          * This method sets the foliage color property of the CustomBiome.
          *
          * @param foliageColor The foliage color of the custom biome.
-         * @version 0.0.1
+         * @since 0.0.1
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("0.0.1")
@@ -649,7 +649,7 @@ public interface CustomBiome {
          * This method sets the grass color property of the CustomBiome.
          *
          * @param grassColor The grass color of the custom biome.
-         * @version 0.1.0
+         * @since 0.1.0
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("0.0.1")
@@ -662,7 +662,7 @@ public interface CustomBiome {
          * This method sets the grass color property of the CustomBiome.
          *
          * @param grassColor The grass color of the custom biome.
-         * @version 0.0.1
+         * @since 0.0.1
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("0.0.1")
@@ -701,7 +701,7 @@ public interface CustomBiome {
          * This method sets the grass color modifier property of the CustomBiome.
          *
          * @param grassColorModifier The grass color modifier of the custom biome.
-         * @version 0.0.24
+         * @since 0.0.24
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("0.0.24")

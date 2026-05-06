@@ -12,12 +12,14 @@ import org.jetbrains.annotations.ApiStatus;
  */
 @AsOf("2.0.0")
 @ApiStatus.Internal
-public final class WireProvider<F> {
+public sealed class WireProvider<F> permits NullableWireProvider {
+
+    private static final String ALLOWED_PACKAGE = "me.outspending.biomesapi";
 
     private final String classNameTemplate;
-    private volatile F factory;
+    protected volatile F factory;
 
-    private WireProvider(String classNameTemplate) {
+    protected WireProvider(String classNameTemplate) {
         this.classNameTemplate = classNameTemplate;
     }
 
@@ -62,5 +64,13 @@ public final class WireProvider<F> {
                 throw new IllegalStateException("Failed to load wire factory: " + resolved, e);
             }
         }
+    }
+
+
+    public void setProvider(Class<?> caller, F factory) {
+        if (!caller.getPackage().getName().startsWith(ALLOWED_PACKAGE)) {
+            throw new IllegalStateException("Cannot set provider outside of '" + ALLOWED_PACKAGE + "'");
+        }
+        this.factory = factory;
     }
 }

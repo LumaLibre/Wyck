@@ -54,14 +54,20 @@ public class PacketEventsPacketHandler implements PacketHandler {
     private final PacketListener[] packetListeners;
     private final PacketListenerPriority packetListenerPriority;
 
-    public PacketEventsPacketHandler(PacketHandler.Priority priority) {
-        this.collector = new PhonyCustomBiomeCollector();
+    @AsOf("2.1.0")
+    public PacketEventsPacketHandler(@NotNull PacketHandler.Priority priority, @NotNull PhonyCustomBiomeCollector collector) {
+        this.collector = collector;
         this.packetListeners = new PacketListener[] {
                 new MapChunkPacketListener(this),
                 new BlockChangePacketListener(this),
                 new MultiBlockChangePacketListener(this)
         };
         this.packetListenerPriority = priority.getDelegatePriority(PacketListenerPriority.class);
+    }
+
+    @AsOf("0.0.19")
+    public PacketEventsPacketHandler(@NotNull PacketHandler.Priority priority) {
+        this(priority, new PhonyCustomBiomeCollector());
     }
 
 

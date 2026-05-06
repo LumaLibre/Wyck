@@ -11,7 +11,10 @@ import me.outspending.biomesapi.annotations.AsOf;
  */
 @AsOf("2.0.0")
 public final class BuildInfo {
-    /** The version of the BiomesAPI. */
+    /** The version of the BiomesAPI. */    /** The version of the BiomesAPI. */
     @AsOf("2.0.0")
     public static final String VERSION = "${version}";
+    /** Non-sensitive FastStats metrics token. */
+    @AsOf("2.1.0")
+    public static final String METRICS_TOKEN = "1fad62f4a237fd41d17d1d328ccd12bd";
 }

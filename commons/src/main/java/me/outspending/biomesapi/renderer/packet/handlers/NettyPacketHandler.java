@@ -55,10 +55,16 @@ public class NettyPacketHandler implements PacketHandler, Listener {
     private final PhonyCustomBiomeCollector collector;
     private final String handlerName;
 
-    public NettyPacketHandler(@NotNull Plugin provider) {
+    @AsOf("2.1.0")
+    public NettyPacketHandler(@NotNull Plugin provider, @NotNull PhonyCustomBiomeCollector collector) {
         this.provider = provider;
-        this.collector = new PhonyCustomBiomeCollector();
+        this.collector = collector;
         this.handlerName = provider.getName().toLowerCase() + "_biomesapi_handler";
+    }
+
+    @AsOf("2.1.0")
+    public NettyPacketHandler(@NotNull Plugin provider) {
+        this(provider, new PhonyCustomBiomeCollector());
     }
 
     @Override

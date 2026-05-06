@@ -11,6 +11,7 @@ import net.kyori.adventure.text.Component;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.world.attribute.AmbientParticle;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 @WireFactory
@@ -19,17 +20,19 @@ public final class AttributeConverterImpl implements AttributeConverter {
 
     @Override
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public <W extends NmsEnumTranslatable<W>> Object convertEnum(W wrapped, String nmsClassName) {
-
-        try {
-            Class<?> nmsClass = Class.forName(nmsClassName);
-            if (!nmsClass.isEnum()) {
-                throw new IllegalArgumentException(nmsClassName + " is not an enum");
+    public <W extends NmsEnumTranslatable<W>> Object convertEnum(W wrapped, String... nmsClassNames) {
+        for (String nmsClassName : nmsClassNames) {
+            try {
+                Class<?> nmsClass = Class.forName(nmsClassName);
+                if (!nmsClass.isEnum()) {
+                    throw new IllegalArgumentException(nmsClassName + " is not an enum");
+                }
+                return (wrapped).toNms((Class) nmsClass);
+            } catch (ClassNotFoundException e) {
+                // Try the next class name
             }
-            return (wrapped).toNms((Class) nmsClass);
-        } catch (ClassNotFoundException e) {
-            throw new IllegalStateException("NMS enum class not found: " + nmsClassName, e);
         }
+        throw new IllegalStateException("NMS enum class not found: " + Arrays.toString(nmsClassNames));
     }
 
     @Override
