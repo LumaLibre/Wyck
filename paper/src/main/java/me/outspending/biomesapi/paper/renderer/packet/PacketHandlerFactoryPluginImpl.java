@@ -52,7 +52,7 @@ public final class PacketHandlerFactoryPluginImpl implements PacketHandler.Facto
         PacketHandler handler = switch (effective) {
             case PROTOCOLLIB -> new MonotonicProtocolLibHandler(plugin, priority, collector);
             case PACKETEVENTS -> new MonotonicPacketEventsHandler(priority, collector);
-            case NETTY -> new MonotonicNettyHandler(plugin, collector);
+            case NETTY -> new MonotonicNettyHandler("internal", collector);
         };
 
         if (enabled) {

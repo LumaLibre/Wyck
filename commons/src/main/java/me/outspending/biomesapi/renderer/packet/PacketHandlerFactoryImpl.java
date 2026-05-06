@@ -21,7 +21,7 @@ public final class PacketHandlerFactoryImpl implements PacketHandler.Factory {
         return switch (injector) {
             case PROTOCOLLIB -> new ProtocolLibPacketHandler(provider, priority);
             case PACKETEVENTS -> new PacketEventsPacketHandler(priority);
-            case NETTY -> new NettyPacketHandler(provider);
+            case NETTY -> new NettyPacketHandler(provider.getName().toLowerCase());
         };
     }
 }

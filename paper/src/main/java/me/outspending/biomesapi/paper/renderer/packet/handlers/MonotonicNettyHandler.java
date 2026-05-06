@@ -4,7 +4,6 @@ import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.renderer.packet.PacketHandler;
 import me.outspending.biomesapi.renderer.packet.PhonyCustomBiomeCollector;
 import me.outspending.biomesapi.renderer.packet.handlers.NettyPacketHandler;
-import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,8 +13,8 @@ public class MonotonicNettyHandler extends NettyPacketHandler {
 
     private boolean registered;
 
-    public MonotonicNettyHandler(@NotNull Plugin provider, @NotNull PhonyCustomBiomeCollector collector) {
-        super(provider, collector);
+    public MonotonicNettyHandler(@NotNull String name, @NotNull PhonyCustomBiomeCollector collector) {
+        super(name, collector);
     }
 
     @Override

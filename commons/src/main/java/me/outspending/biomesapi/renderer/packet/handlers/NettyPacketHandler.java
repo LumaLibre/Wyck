@@ -5,6 +5,7 @@ import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.ChannelPromise;
+import io.papermc.paper.network.ChannelInitializeListenerHolder;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.misc.ChunkLocation;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
@@ -12,6 +13,7 @@ import me.outspending.biomesapi.renderer.packet.PacketHandler;
 import me.outspending.biomesapi.renderer.packet.PhonyCustomBiomeCollector;
 import me.outspending.biomesapi.renderer.packet.data.BlockReplacement;
 import me.outspending.biomesapi.renderer.packet.data.PhonyCustomBiome;
+import net.kyori.adventure.key.Key;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
 import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
@@ -23,14 +25,8 @@ import org.bukkit.Material;
 import org.bukkit.craftbukkit.block.data.CraftBlockData;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.util.NoSuchElementException;
@@ -47,82 +43,77 @@ import java.util.logging.Logger;
  * @author Jsinco
  */
 @AsOf("2.1.0")
-public class NettyPacketHandler implements PacketHandler, Listener {
+public class NettyPacketHandler implements PacketHandler {
 
     private static final Logger LOGGER = Logger.getLogger(NettyPacketHandler.class.getName());
 
-    private final Plugin provider;
     private final PhonyCustomBiomeCollector collector;
     private final String handlerName;
+    private final Key listenerKey;
 
     @AsOf("2.1.0")
-    public NettyPacketHandler(@NotNull Plugin provider, @NotNull PhonyCustomBiomeCollector collector) {
-        this.provider = provider;
+    public NettyPacketHandler(@NotNull String name, @NotNull PhonyCustomBiomeCollector collector) {
         this.collector = collector;
-        this.handlerName = provider.getName().toLowerCase() + "_biomesapi_handler";
+        this.handlerName = name + "_biomesapi_handler";
+        this.listenerKey = Key.key("biomesapi", name + "_channel_init");
     }
 
     @AsOf("2.1.0")
-    public NettyPacketHandler(@NotNull Plugin provider) {
-        this(provider, new PhonyCustomBiomeCollector());
+    public NettyPacketHandler(@NotNull String name) {
+        this(name, new PhonyCustomBiomeCollector());
     }
 
     @Override
     public PacketHandler register() {
-        Bukkit.getPluginManager().registerEvents(this, provider);
-        // reload safety
+        ChannelInitializeListenerHolder.addListener(listenerKey, channel -> injectChannel(channel, null));
+
         for (Player online : Bukkit.getOnlinePlayers()) {
-            inject(online);
+            Channel channel = channelOf(online);
+            if (channel != null) {
+                injectChannel(channel, online);
+            }
         }
         return this;
     }
 
     @Override
     public PacketHandler unregister() {
-        HandlerList.unregisterAll(this);
-        for (Player online : Bukkit.getOnlinePlayers()) {
-            uninject(online);
-        }
+        ChannelInitializeListenerHolder.removeListener(listenerKey);
+        clearBiomes(); // todo: change?
         return this;
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onJoin(PlayerJoinEvent event) {
-        inject(event.getPlayer());
-    }
-
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onQuit(PlayerQuitEvent event) {
-        uninject(event.getPlayer());
-    }
-
+    /**
+     * Adds the BiomesAPI handler to a channel's pipeline if not already present.
+     * If {@code knownPlayer} is non-null, the handler starts with the player pre-cached.
+     *
+     * @param channel the channel to inject the handler into
+     * @param knownPlayer an optional player whose channel this is, to prime the handler's cache and avoid a lookup on the first packet
+     */
     @SuppressWarnings("resource")
-    private void inject(Player player) {
-        Channel channel = channelOf(player);
-        if (channel == null) return;
-
+    private void injectChannel(@NotNull Channel channel, @Nullable Player knownPlayer) {
         channel.eventLoop().execute(() -> {
             ChannelPipeline pipeline = channel.pipeline();
-            if (pipeline.get(handlerName) != null) return; // already injected
+            if (pipeline.get(handlerName) != null) return;
             try {
-                pipeline.addBefore("packet_handler", handlerName, new NettyChannelHandler(player, collector));
+                NettyChannelHandler handler = new NettyChannelHandler(collector);
+                if (knownPlayer != null) {
+                    handler.player = knownPlayer;
+                }
+                pipeline.addBefore("packet_handler", handlerName, handler);
             } catch (NoSuchElementException | IllegalArgumentException e) {
-                LOGGER.log(Level.WARNING, "Failed to inject Netty handler for " + player.getName(), e);
+                LOGGER.log(Level.WARNING, "Failed to inject Netty handler", e);
             }
         });
     }
 
-    @SuppressWarnings("resource")
-    private void uninject(Player player) {
-        Channel channel = channelOf(player);
-        if (channel == null) return;
-
-        channel.eventLoop().execute(() -> {
-            ChannelPipeline pipeline = channel.pipeline();
-            if (pipeline.get(handlerName) != null) {
-                pipeline.remove(handlerName);
-            }
-        });
+    private static @Nullable Channel channelOf(Player player) {
+        try {
+            return ((CraftPlayer) player).getHandle().connection.connection.channel;
+        } catch (Throwable t) {
+            LOGGER.log(Level.WARNING, "Could not resolve Netty channel for " + player.getName(), t);
+            return null;
+        }
     }
 
     @Override
@@ -157,15 +148,6 @@ public class NettyPacketHandler implements PacketHandler, Listener {
         return this;
     }
 
-    private static Channel channelOf(Player player) {
-        try {
-            return ((CraftPlayer) player).getHandle().connection.connection.channel;
-        } catch (Throwable t) {
-            LOGGER.log(Level.WARNING, "Could not resolve Netty channel for " + player.getName(), t);
-            return null;
-        }
-    }
-
 
     @AsOf("2.1.0")
     private static class NettyChannelHandler extends ChannelDuplexHandler {
@@ -176,32 +158,46 @@ public class NettyPacketHandler implements PacketHandler, Listener {
         private static final Field SECTION_POS_FIELD = findFieldByType(ClientboundSectionBlocksUpdatePacket.class, SectionPos.class, "sectionPos");
         private static final Field SECTION_STATES_FIELD = findFieldByType(ClientboundSectionBlocksUpdatePacket.class, BlockState[].class, "states");
 
-
-        private final Player player;
         private final PhonyCustomBiomeCollector collector;
 
-        public NettyChannelHandler(Player player, PhonyCustomBiomeCollector collector) {
-            this.player = player;
+        @Nullable Player player;
+
+        public NettyChannelHandler(PhonyCustomBiomeCollector collector) {
             this.collector = collector;
         }
 
         @Override
         public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
             try {
-                if (msg instanceof ClientboundLevelChunkWithLightPacket chunkPacket) {
-                    handleChunkPacket(chunkPacket);
-                } else if (msg instanceof ClientboundBlockUpdatePacket blockPacket) {
-                    handleBlockUpdate(blockPacket);
-                } else if (msg instanceof ClientboundSectionBlocksUpdatePacket sectionPacket) {
-                    handleSectionUpdate(sectionPacket);
+                if (player == null) {
+                    player = resolvePlayer(ctx.channel());
+                }
+                if (player != null) {
+                    if (msg instanceof ClientboundLevelChunkWithLightPacket chunkPacket) {
+                        handleChunkPacket(player, chunkPacket);
+                    } else if (msg instanceof ClientboundBlockUpdatePacket blockPacket) {
+                        handleBlockUpdate(player, blockPacket);
+                    } else if (msg instanceof ClientboundSectionBlocksUpdatePacket sectionPacket) {
+                        handleSectionUpdate(player, sectionPacket);
+                    }
                 }
             } catch (Throwable t) {
-                LOGGER.log(Level.WARNING, "Failed to process outbound packet for " + player.getName(), t);
+                LOGGER.log(Level.WARNING, "Failed to process outbound packet", t);
             }
             super.write(ctx, msg, promise);
         }
 
-        private void handleChunkPacket(ClientboundLevelChunkWithLightPacket packet) {
+        private static @Nullable Player resolvePlayer(Channel channel) {
+            for (Player online : Bukkit.getOnlinePlayers()) {
+                try {
+                    Channel playerChannel = ((CraftPlayer) online).getHandle().connection.connection.channel;
+                    if (playerChannel == channel) return online;
+                } catch (Throwable ignored) {}
+            }
+            return null;
+        }
+
+        private void handleChunkPacket(Player player, ClientboundLevelChunkWithLightPacket packet) {
             ChunkLocation loc = ChunkLocation.of(packet.getX(), packet.getZ());
             PhonyCustomBiome override = collector.bestBiomeFor(player, loc);
             if (override == null) return;
@@ -213,7 +209,7 @@ public class NettyPacketHandler implements PacketHandler, Listener {
                     .modifyChunkBiomes(packet.getChunkData(), override.customBiome(), sectionCount);
         }
 
-        private void handleBlockUpdate(ClientboundBlockUpdatePacket packet) {
+        private void handleBlockUpdate(Player player, ClientboundBlockUpdatePacket packet) {
             if (BLOCK_UPDATE_STATE_FIELD == null) return;
 
             BlockPos pos = packet.getPos();
@@ -241,7 +237,7 @@ public class NettyPacketHandler implements PacketHandler, Listener {
             }
         }
 
-        private void handleSectionUpdate(ClientboundSectionBlocksUpdatePacket packet) {
+        private void handleSectionUpdate(Player player, ClientboundSectionBlocksUpdatePacket packet) {
             if (SECTION_POS_FIELD == null || SECTION_STATES_FIELD == null) return;
 
             try {
@@ -279,11 +275,6 @@ public class NettyPacketHandler implements PacketHandler, Listener {
             }
         }
 
-
-        /**
-         * Resolve a field by Mojang-mapped name first, falling back to scanning by exact type.
-         * Returns null and logs if neither approach works — callers degrade to no-op.
-         */
         private static Field findFieldByType(Class<?> owner, Class<?> type, String mojangName) {
             try {
                 Field f = owner.getDeclaredField(mojangName);
