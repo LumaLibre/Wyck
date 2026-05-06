@@ -3,7 +3,8 @@ title: The PacketHandler
 description: All about BiomesAPI's PacketHandler
 ---
 
-import { Tabs, TabItem } from "@astrojs/starlight/components";
+
+import {TabItem, Tabs} from "@astrojs/starlight/components";
 
 The `PacketHandler` is the second of two biome renderer BiomesAPI provides for developers.
 Unlike the `BiomeSetter`, the `PacketHandler` does not support gameplay changes because it simply modifies biome data directly through packets.
@@ -16,10 +17,13 @@ Unlike the `BiomeSetter`, the `PacketHandler` does not support gameplay changes 
 
 ### Packet Manipulator Required!
 
-To use the `PacketHandler`, your plugin must *depend* on **ProtocolLib** or **PacketEvents** (or softdepend both).
-Picking which manipulator to use entirely depends on your setup.
-If you plan on dynamically adding, removing, or changing biomes, you should probably use **ProtocolLib** because **PacketEvents** caches the biome registry by default.
-This can be changed with the [`force-per-user-registries` JVM flag](/guides/interfaces/packet-handler/#packetevents-caching-registries).
+As of BiomesAPI **2.1.0**, BiomesAPI now has its own built-in **Netty** handler that does not require any external dependencies.
+For custom biome injection via packets.
+
+- **ProtocolLib**: Injects block replacements and custom biomes into packets using ProtocolLib injectors.
+- **PacketEvents**: Injects block replacements and custom biomes into packets using PacketEvents wrappers and injectors.
+- **NETTY**: Works similarly to ProtocolLib, doesn't need any external dependencies.
+
 
 
 ### PacketEvents Caching Registries
@@ -27,7 +31,7 @@ This can be changed with the [`force-per-user-registries` JVM flag](/guides/inte
 By default, **PacketEvents** will cache player registries.
 This means that when the **Minecraft Registry** is modified AFTER the server finishes starting up, PacketEvents will stop syncing up with the built-in Minecraft registries.
 This behavior can only be changed by adding the `-Dpacketevents.force-per-user-registries=true` in your JVM arguments.
-This is not ideal for public plugins that want as little setup as possible, so if you are registering biomes OUTSIDE of your `onLoad()` or `onEnable()` (or modifying them later in the lifecycle!), you should use **ProtocolLib**.
+This is not ideal for public plugins that want as little setup as possible, so if you are registering biomes OUTSIDE of your `onLoad()` or `onEnable()` (or modifying them later in the lifecycle!), you should use **ProtocolLib** or **Netty**.
 
 ### PhonyCustomBiome
 

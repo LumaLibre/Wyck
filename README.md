@@ -1,17 +1,20 @@
+![biomesapi.png](docs/src/assets/biomesapi.png)
+
 <div align="center">
     <h1>BiomesAPI</h1>
-    <p>Custom Biomes! (1.21.11+)</p>
+    <p>Custom Biomes for Paper servers without datapacks.</p>
     <img src="https://img.shields.io/github/last-commit/LumaLibre/BiomesAPI">
     <img src="https://img.shields.io/github/contributors/LumaLibre/BiomesAPI">
     <img src="https://img.shields.io/github/forks/LumaLibre/BiomesAPI">
-    <img src="https://img.shields.io/github/stars/LumaLibre/BiomesAPI">
 </div>
 
 ---
 
-> [!NOTE]  
-> BiomesAPI is currently being developed and ain't finished yet
 
+## Docs 📚
+
+Documentation for BiomesAPI can be found at https://biomes.lumas.dev. 
+Documentation is still under construction!
 
 ## About 📃
 
@@ -21,8 +24,7 @@ but version support will expand with time.
 
 
 Please be aware that BiomesAPI is in active development, and some features may not be fully implemented yet.
-
-**From Outspending:** "BiomesAPI was made for servers who are looking for more of an aesthetic feel to their builds."
+BiomesAPI was made for servers who are looking for more of an aesthetic feel to their builds.
 
 
 ## Getting Started ⭐
@@ -37,7 +39,7 @@ And example for Gradle Kotlin DSL is provided below:
 
 ```kotlin
 plugins {
-    // Make sure to shade it in!
+    // Make sure to shade it in if you're not using it as an external dependency!
     id("com.gradleup.shadow") version "$SHADOW_VERSION"
 }
 
@@ -57,7 +59,7 @@ shadowJar {
 }
 ```
 
-You must know how to shade dependencies in order to use BiomesAPI. BiomesAPI is not a standalone plugin.
+BiomesAPI comes as a shaded dependency or a standalone plugin, take your pick!
 
 
 ## Wiki 🌙
