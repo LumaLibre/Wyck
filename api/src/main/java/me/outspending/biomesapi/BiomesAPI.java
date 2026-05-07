@@ -133,14 +133,16 @@ public interface BiomesAPI {
                     .addMetric(Metric.bool("is_external", this::isExternal))
                     .create(plugin);
 
-            Bukkit.getPluginManager().registerEvents(new Listener() {
-                @EventHandler
-                public void onDisable(PluginDisableEvent event) {
-                    if (event.getPlugin().equals(plugin)) {
-                        metrics.shutdown();
+            Bukkit.getGlobalRegionScheduler().run(plugin, task -> {
+                Bukkit.getPluginManager().registerEvents(new Listener() {
+                    @EventHandler
+                    public void onDisable(PluginDisableEvent event) {
+                        if (event.getPlugin().equals(plugin)) {
+                            metrics.shutdown();
+                        }
                     }
-                }
-            }, plugin);
+                }, plugin);
+            });
         }
     }
 }
