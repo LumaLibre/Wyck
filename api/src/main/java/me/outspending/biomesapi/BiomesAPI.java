@@ -8,10 +8,6 @@ import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.biome.BiomeHandler;
 import me.outspending.biomesapi.factory.BuildInfo;
 import me.outspending.biomesapi.factory.NullableWireProvider;
-import org.bukkit.Bukkit;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -133,16 +129,11 @@ public interface BiomesAPI {
                     .addMetric(Metric.bool("is_external", this::isExternal))
                     .create(plugin);
 
-            Bukkit.getGlobalRegionScheduler().run(plugin, task -> {
-                Bukkit.getPluginManager().registerEvents(new Listener() {
-                    @EventHandler
-                    public void onDisable(PluginDisableEvent event) {
-                        if (event.getPlugin().equals(plugin)) {
-                            metrics.shutdown();
-                        }
-                    }
-                }, plugin);
-            });
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                try {
+                    metrics.shutdown();
+                } catch (Throwable _) {}
+            }, "BiomesAPI-Metrics-Shutdown"));
         }
     }
 }
