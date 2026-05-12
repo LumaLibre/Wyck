@@ -66,6 +66,7 @@ public final class BiomesAPIPlugin extends JavaPlugin implements BiomesAPI {
                     .addMetric(Metric.string("forced_injector", () -> config.forcedInjector.toString()))
                     .addMetric(Metric.number("registered_biomes", () -> BiomeHandler.getRegisteredBiomes().size()))
                     .addMetric(Metric.bool("is_external", this::isExternal))
+                    .addMetric(Metric.string("plugin_name", () -> "BiomesAPI (Standalone)"))
                     .create(this);
 
             metrics.ready();

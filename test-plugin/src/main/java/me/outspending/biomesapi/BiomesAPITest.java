@@ -17,7 +17,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class BiomesAPITest extends JavaPlugin implements Listener {
 
 
-    private PacketHandler packetHandler;
+    private PacketHandler packetHandler = PacketHandler.of(this, PacketHandler.Injector.NETTY);
 
     @Override
     public void onEnable() {
@@ -47,8 +47,7 @@ public final class BiomesAPITest extends JavaPlugin implements Listener {
 
 
 
-        packetHandler = PacketHandler.of(this, PacketHandler.Injector.NETTY)
-                        .appendBiome(phonyCustomBiome)
+        packetHandler.appendBiome(phonyCustomBiome)
                         .register();
     }
 
