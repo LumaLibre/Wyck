@@ -20,7 +20,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 
 /**
  * Common interface for miscellaneous BiomesAPI methods and utilities.
@@ -38,7 +37,6 @@ public interface BiomesAPI {
 
     @ApiStatus.Internal
     NullableWireProvider<BiomesAPI> WIRE = NullableWireProvider.empty();
-    Logger LOGGER = Logger.getLogger("BiomesAPI");
 
     /**
      * @return the active BiomesAPI instance. When running as a standalone plugin, this is the
@@ -48,7 +46,6 @@ public interface BiomesAPI {
      */
     @AsOf("2.1.0")
     static @NotNull BiomesAPI biomesapi() {
-        LOGGER.info("BiomesAPI version " + BuildInfo.VERSION + " is active.");
         return WIRE.optional().orElseGet(ShadedBiomesAPI::get);
     }
 
