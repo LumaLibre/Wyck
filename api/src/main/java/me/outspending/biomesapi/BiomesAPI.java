@@ -114,7 +114,6 @@ public interface BiomesAPI {
     @ApiStatus.Internal
     final class ShadedBiomesAPI implements BiomesAPI {
 
-        private static final Logger LOGGER = Logger.getLogger(ShadedBiomesAPI.class.getName());
         private static final long ENABLE_WAIT_TIMEOUT_SECONDS = 10;
 
         private static ShadedBiomesAPI INSTANCE;
@@ -161,7 +160,6 @@ public interface BiomesAPI {
                     return;
                 }
                 if (System.currentTimeMillis() - startMillis > timeoutMillis) {
-                    LOGGER.warning("Metrics gave up waiting for plugin to enable after " + ENABLE_WAIT_TIMEOUT_SECONDS + "s.");
                     executor.shutdown();
                 }
             }, 100, 100, TimeUnit.MILLISECONDS);
@@ -191,12 +189,9 @@ public interface BiomesAPI {
                 public void onDisable(PluginDisableEvent event) {
                     if (event.getPlugin().equals(plugin)) {
                         built.shutdown();
-                        LOGGER.info("BiomesAPI metrics disabled for " + plugin.getName());
                     }
                 }
             }, plugin);
-
-            LOGGER.info("BiomesAPI metrics enabled for " + plugin.getName());
         }
     }
 }
