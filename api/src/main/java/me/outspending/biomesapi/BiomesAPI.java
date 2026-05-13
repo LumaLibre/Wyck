@@ -57,10 +57,14 @@ public interface BiomesAPI {
      */
     @AsOf("2.1.0")
     default @NotNull JavaPlugin plugin() {
-        return WIRE.optional()
-                .filter(api -> api instanceof JavaPlugin)
-                .map(api -> (JavaPlugin) api)
-                .orElse(JavaPlugin.getProvidingPlugin(BiomesAPI.class));
+        try {
+            return WIRE.optional()
+                    .filter(api -> api instanceof JavaPlugin)
+                    .map(api -> (JavaPlugin) api)
+                    .orElse(JavaPlugin.getProvidingPlugin(BiomesAPI.class));
+        } catch (IllegalStateException e) {
+            throw new IllegalStateException("Called before plugin was loaded. Do not use static initializers in your main plugin class or non-lazy classes for this component.", e);
+        }
     }
 
     /**

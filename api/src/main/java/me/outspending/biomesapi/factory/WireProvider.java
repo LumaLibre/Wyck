@@ -3,14 +3,16 @@ package me.outspending.biomesapi.factory;
 import me.outspending.biomesapi.annotations.AsOf;
 import org.jetbrains.annotations.ApiStatus;
 
+import java.lang.reflect.Constructor;
+
 /**
  * A provider for lazily loading factory instances based on the active Minecraft version.
  * @param <F> the type of the factory
- * @version 2.0.0
+ * @version 2.2.0
  * @since 2.0.0
  * @author Jsinco
  */
-@AsOf("2.0.0")
+@AsOf("2.2.0")
 @ApiStatus.Internal
 public sealed class WireProvider<F> permits NullableWireProvider {
 
@@ -18,6 +20,9 @@ public sealed class WireProvider<F> permits NullableWireProvider {
 
     private final String classNameTemplate;
     protected volatile F factory;
+
+    /** Cached constructor for {@link #getNew()}. Resolved once, reused thereafter. */
+    private volatile Constructor<? extends F> cachedCtor;
 
     protected WireProvider(String classNameTemplate) {
         this.classNameTemplate = classNameTemplate;
@@ -31,7 +36,7 @@ public sealed class WireProvider<F> permits NullableWireProvider {
      */
     @AsOf("2.0.0")
     public static <F> WireProvider<F> create(String classNameTemplate) {
-        return new WireProvider<>(classNameTemplate);
+        return new WireProvider<F>(classNameTemplate);
     }
 
     /**
@@ -48,24 +53,54 @@ public sealed class WireProvider<F> permits NullableWireProvider {
      * @return the factory instance
      */
     @AsOf("2.0.0")
-    @SuppressWarnings("unchecked")
     public F get() {
         F f = factory;
         if (f != null) return f;
 
         synchronized (this) {
             if (factory != null) return factory;
-            String resolved = classNameTemplate.replace("*", Versions.ACTIVE.id());
-            try {
-                Class<?> cls = Class.forName(resolved);
-                factory = (F) cls.getDeclaredConstructor().newInstance();
-                return factory;
-            } catch (ReflectiveOperationException e) {
-                throw new IllegalStateException("Failed to load wire factory: " + resolved, e);
-            }
+            factory = newInstance();
+            return factory;
         }
     }
 
+    /**
+     * Forces a new factory instance, bypassing the cached singleton. The
+     * resolved class and constructor are cached internally, so only the
+     * instantiation cost is paid per call.
+     * @return a fresh factory instance
+     */
+    @AsOf("2.2.0")
+    public F getNew() {
+        return newInstance();
+    }
+
+    @AsOf("2.2.0")
+    @SuppressWarnings("unchecked")
+    private F newInstance() {
+        Constructor<? extends F> ctor = cachedCtor;
+        if (ctor == null) {
+            synchronized (this) {
+                ctor = cachedCtor;
+                if (ctor == null) {
+                    String resolved = classNameTemplate.replace("*", Versions.ACTIVE.id());
+                    try {
+                        Class<? extends F> cls = (Class<? extends F>) Class.forName(resolved);
+                        ctor = cls.getDeclaredConstructor();
+                        ctor.setAccessible(true);
+                        cachedCtor = ctor;
+                    } catch (ReflectiveOperationException e) {
+                        throw new IllegalStateException("Failed to load wire factory: " + resolved, e);
+                    }
+                }
+            }
+        }
+        try {
+            return ctor.newInstance();
+        } catch (ReflectiveOperationException e) {
+            throw new IllegalStateException("Failed to instantiate wire factory", e);
+        }
+    }
 
     public void setProvider(Class<?> caller, F factory) {
         if (!caller.getPackage().getName().startsWith(ALLOWED_PACKAGE)) {

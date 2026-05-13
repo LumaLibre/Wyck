@@ -29,14 +29,6 @@ import java.util.concurrent.CompletableFuture;
 public interface BiomeUpdater {
 
     /**
-     * Detects if the server is running Folia by checking for the presence 'io.papermc.paper.threadedregions.RegionizedServer'.
-     * @since 1.2.0
-     */
-    @AsOf("1.2.0")
-    @Deprecated
-    boolean FOLIA = classExists("io.papermc.paper.threadedregions.RegionizedServer");
-
-    /**
      * Returns an instance of BiomeUpdater.
      * This method returns an instance of BiomeUpdaterImpl.
      *
@@ -141,14 +133,4 @@ public interface BiomeUpdater {
      */
     @AsOf("0.0.15")
     void updateChunksForPlayer(@NotNull Player player);
-
-
-    private static boolean classExists(String className) {
-        try {
-            Class.forName(className);
-            return true;
-        } catch (ClassNotFoundException e) {
-            return false;
-        }
-    }
 }
