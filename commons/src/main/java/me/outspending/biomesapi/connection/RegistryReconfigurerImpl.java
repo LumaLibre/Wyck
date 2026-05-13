@@ -36,13 +36,9 @@ import java.util.Queue;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @SuppressWarnings("UnstableApiUsage")
 public class RegistryReconfigurerImpl implements RegistryReconfigurer {
-
-    private static final Logger LOGGER = Logger.getLogger(RegistryReconfigurerImpl.class.getName());
 
     private static final Field SYNC_TASK_FIELD = getField(ServerConfigurationPacketListenerImpl.class, "synchronizeRegistriesTask");
     private static final Field CURRENT_TASK_FIELD = getField(ServerConfigurationPacketListenerImpl.class, "currentTask");
@@ -79,7 +75,7 @@ public class RegistryReconfigurerImpl implements RegistryReconfigurer {
         player.getConnection().reenterConfiguration();
     }
 
-    /** Registers the listener if it isn't already. Idempotent, thread-safe. */
+
     private void ensureListenerActive() {
         if (listenerActive) return;
         synchronized (this) {
@@ -89,7 +85,6 @@ public class RegistryReconfigurerImpl implements RegistryReconfigurer {
         }
     }
 
-    /** Tears down the listener once nothing is pending. Idempotent. */
     private void releaseListenerIfIdle() {
         if (!pending.isEmpty()) return;
         synchronized (this) {
@@ -122,13 +117,12 @@ public class RegistryReconfigurerImpl implements RegistryReconfigurer {
                         consumer.accept(paperCfg);
                     }
                 } catch (Throwable t) {
-                    LOGGER.log(Level.WARNING, "Consumer threw an unhandled exception", t);
+                    t.printStackTrace();
                 }
                 drive(mcListener, ctx.profile());
                 ctx.future().complete(null);
             } catch (Throwable t) {
                 ctx.future().completeExceptionally(t);
-                plugin.getLogger().severe("Resync failed: " + t);
                 t.printStackTrace();
             } finally {
                 releaseListenerIfIdle();
