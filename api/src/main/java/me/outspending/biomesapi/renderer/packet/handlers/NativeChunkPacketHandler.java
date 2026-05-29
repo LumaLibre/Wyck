@@ -1,16 +1,17 @@
 package me.outspending.biomesapi.renderer.packet.handlers;
 
 import me.outspending.biomesapi.annotations.AsOf;
-import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.factory.WireProvider;
+import me.outspending.biomesapi.misc.ChunkLocation;
 import me.outspending.biomesapi.renderer.packet.PacketHandler;
+import me.outspending.biomesapi.renderer.packet.PhonyBiomeResolver;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Internal handler for NMS-level chunk packet manipulation. Implemented by the NMS module.
  *
- * @version 2.0.0
+ * @version 2.2.0
  * @since 2.0.0
  * @author Jsinco
  */
@@ -25,13 +26,20 @@ public interface NativeChunkPacketHandler {
     int CHUNK_SECTIONS = 4;
 
     /**
-     * Rewrites a clientbound chunk packet to use the given custom biome's biome ID
-     * and apply its block replacements.
+     * Decodes a clientbound chunk packet exactly once, lets the supplied resolver inspect the
+     * real biome/block data and choose a custom biome, and  only if one is chosen 
+     * rewrites the packet to use that biome's ID and apply its block replacements.
+     *
+     * <p>If the resolver returns {@code null}, the packet is left untouched and no serialization
+     * or reflection write occurs.
      *
      * @param chunkData the NMS ClientboundLevelChunkPacketData (passed as Object since the
      *                  API module cannot reference NMS types directly)
-     * @param customBiome the custom biome whose biome ID and block replacements should be applied
+     * @param chunkLocation the chunk being sent, used to build the snapshot view
+     * @param resolver chooses the custom biome to apply based on the decoded chunk data,
+     *                 or returns {@code null} to leave the packet unmodified
      * @param dimensionSectionCount how many sections the dimension has
      */
-    void modifyChunkBiomes(@NotNull Object chunkData, @NotNull CustomBiome customBiome, @NotNull PacketHandler.DimensionSectionCount dimensionSectionCount);
+    @AsOf("2.2.0")
+    void modifyChunkBiomes(@NotNull Object chunkData, @NotNull ChunkLocation chunkLocation, @NotNull PhonyBiomeResolver resolver, @NotNull PacketHandler.DimensionSectionCount dimensionSectionCount);
 }

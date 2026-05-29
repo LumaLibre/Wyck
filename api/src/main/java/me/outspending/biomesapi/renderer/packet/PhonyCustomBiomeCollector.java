@@ -5,18 +5,22 @@ import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.misc.ChunkLocation;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
 import me.outspending.biomesapi.renderer.packet.data.PhonyCustomBiome;
+import me.outspending.biomesapi.renderer.packet.data.SnapshotChunkData;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.function.BiPredicate;
 
 /**
  * A collector for managing PhonyCustomBiome instances.
  *
- * @version 0.0.6
+ * @version 2.2.0
  * @since 0.0.6
  * @author Jsinco
  */
@@ -92,6 +96,11 @@ public class PhonyCustomBiomeCollector {
 
     /**
      * Picks the 'best' phony custom biome for the given player and chunk location.
+     *
+     * <p>Note: this only evaluates the cheap spatial {@link PhonyCustomBiome#conditional()}.
+     * Biome-aware conditions are ignored here; use {@link #resolverFor(Player, ChunkLocation)}
+     * for the full biome-aware path used by the chunk packet listener.
+     *
      * @param player the player
      * @param chunkLocation the chunk location
      * @return the best phony custom biome, or null if none match
@@ -109,7 +118,7 @@ public class PhonyCustomBiomeCollector {
     }
 
     /**
-     * Picks the 'best' custom biome for the given player and chunk location.
+     * Picks the 'best' custom biome for the given player and chunk location (spatial only).
      * @param player the player
      * @param chunkLocation the chunk location
      * @return the best custom biome, or null if none match
@@ -118,5 +127,69 @@ public class PhonyCustomBiomeCollector {
     public @Nullable CustomBiome bestCustomBiomeFor(@NotNull Player player, @NotNull ChunkLocation chunkLocation) {
         PhonyCustomBiome phony = bestBiomeFor(player, chunkLocation);
         return phony != null ? phony.toCustomBiome() : null;
+    }
+
+    /**
+     * Cheap pre-decode gate. Returns a biome-aware resolver only when at least one phony biome
+     * spatially applies to this chunk for this player, otherwise {@code null}.
+     *
+     * <p>Returning {@code null} is the hot path: the caller skips chunk decoding entirely.
+     * The returned resolver is invoked by the NMS handler <em>after</em> it has decoded the
+     * chunk once, and evaluates the biome-aware conditions against the decoded data.
+     *
+     * @param player the player the packet is being sent to
+     * @param chunkLocation the chunk being sent
+     * @return a resolver, or {@code null} if nothing could apply
+     */
+    @AsOf("2.2.0")
+    public @Nullable PhonyBiomeResolver resolverFor(@NotNull Player player, @NotNull ChunkLocation chunkLocation) {
+        List<PhonyCustomBiome> candidates = spatialCandidates(player, chunkLocation);
+        if (candidates.isEmpty()) {
+            return null;
+        }
+        return snapshot -> {
+            PhonyCustomBiome best = bestMatching(candidates, player, snapshot);
+            return best == null ? null : best.toCustomBiome();
+        };
+    }
+
+    /**
+     * Stage 1 (cheap, pre-decode): the phony biomes whose spatial {@link PhonyCustomBiome#conditional()}
+     * accepts this player + chunk. Needs no biome data, so it can run before the chunk is decoded.
+     */
+    private @NotNull List<PhonyCustomBiome> spatialCandidates(@NotNull Player player, @NotNull ChunkLocation chunkLocation) {
+        if (backing.isEmpty()) {
+            return List.of();
+        }
+        List<PhonyCustomBiome> candidates = new ArrayList<>();
+        for (PhonyCustomBiome phony : backing) {
+            if (phony.conditional().test(player, chunkLocation)) {
+                candidates.add(phony);
+            }
+        }
+        return candidates;
+    }
+
+    /**
+     * Stage 2 (post-decode): among the spatial candidates, keep those whose biome-aware condition
+     * accepts the decoded chunk (a {@code null} condition always passes), then pick the highest priority.
+     * Biome reads on {@code snapshot} are lazy + memoized, so candidates without a biome condition
+     * never trigger a biome lookup.
+     */
+    private @Nullable PhonyCustomBiome bestMatching(@NotNull List<PhonyCustomBiome> candidates, @NotNull Player player, @NotNull SnapshotChunkData snapshot) {
+        PhonyCustomBiome best = null;
+        int bestLevel = Integer.MIN_VALUE;
+        for (PhonyCustomBiome phony : candidates) {
+            BiPredicate<Player, SnapshotChunkData> biomeCondition = phony.biomeCondition();
+            if (biomeCondition != null && !biomeCondition.test(player, snapshot)) {
+                continue;
+            }
+            int level = phony.priority().getLevel();
+            if (level > bestLevel) {
+                bestLevel = level;
+                best = phony;
+            }
+        }
+        return best;
     }
 }

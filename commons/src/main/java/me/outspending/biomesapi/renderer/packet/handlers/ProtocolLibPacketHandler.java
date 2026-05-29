@@ -14,6 +14,7 @@ import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.misc.ChunkLocation;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
 import me.outspending.biomesapi.renderer.packet.PacketHandler;
+import me.outspending.biomesapi.renderer.packet.PhonyBiomeResolver;
 import me.outspending.biomesapi.renderer.packet.PhonyCustomBiomeCollector;
 import me.outspending.biomesapi.renderer.packet.data.BlockReplacement;
 import me.outspending.biomesapi.renderer.packet.data.PhonyCustomBiome;
@@ -125,15 +126,15 @@ public class ProtocolLibPacketHandler implements PacketHandler {
             StructureModifier<Integer> ints = packet.getIntegers();
             ChunkLocation chunkLocation = ChunkLocation.of(ints.read(0), ints.read(1));
 
-            PhonyCustomBiome override = context.collector.bestBiomeFor(player, chunkLocation);
-            if (override == null) {
+            PhonyBiomeResolver resolver = context.collector.resolverFor(player, chunkLocation);
+            if (resolver == null) {
                 return;
             }
 
             DimensionSectionCount dimensionSectionCount = DimensionSectionCount.fromBukkitEnvironment(player.getWorld().getEnvironment());
             ClientboundLevelChunkPacketData chunkData = packet.getSpecificModifier(ClientboundLevelChunkPacketData.class).read(0);
 
-            NativeChunkPacketHandler.WIRE.get().modifyChunkBiomes(chunkData, override.customBiome(), dimensionSectionCount);
+            NativeChunkPacketHandler.WIRE.get().modifyChunkBiomes(chunkData, chunkLocation, resolver, dimensionSectionCount);
         }
     }
 

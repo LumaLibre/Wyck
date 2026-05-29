@@ -165,7 +165,7 @@ public class PacketEventsPacketHandler implements PacketHandler {
             Player player = event.getPlayer();
             ChunkLocation chunkLocation = ChunkLocation.of(column.getX(), column.getZ());
 
-
+            // TODO: SnapshotChunkData
             PhonyCustomBiome phonyCustomBiome = context.collector.bestBiomeFor(player, chunkLocation);
             if (phonyCustomBiome == null) {
                 return;

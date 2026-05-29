@@ -2,11 +2,16 @@ package me.outspending.biomesapi.v26_1.renderer.packet.handlers;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.annotations.WireFactory;
 import me.outspending.biomesapi.biome.CustomBiome;
+import me.outspending.biomesapi.misc.ChunkLocation;
 import me.outspending.biomesapi.renderer.packet.PacketHandler;
+import me.outspending.biomesapi.renderer.packet.PhonyBiomeResolver;
 import me.outspending.biomesapi.renderer.packet.data.BlockReplacement;
+import me.outspending.biomesapi.renderer.packet.data.SnapshotChunkData;
 import me.outspending.biomesapi.renderer.packet.handlers.NativeChunkPacketHandler;
+import me.outspending.biomesapi.v26_1.renderer.packet.handlers.data.NmsSnapshotChunkData;
 import net.minecraft.core.Holder;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.game.ClientboundLevelChunkPacketData;
@@ -25,13 +30,20 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.reflect.Field;
 
 @WireFactory
+@AsOf("0.0.6")
 public final class NmsNativeChunkPacketHandler implements NativeChunkPacketHandler {
 
     @Override
-    public void modifyChunkBiomes(@NotNull Object chunkDataObj, @NotNull CustomBiome customBiome, @NotNull PacketHandler.DimensionSectionCount dimensionSectionCount) {
+    public void modifyChunkBiomes(@NotNull Object chunkDataObj, @NotNull ChunkLocation chunkLocation, @NotNull PhonyBiomeResolver resolver, @NotNull PacketHandler.DimensionSectionCount dimensionSectionCount) {
         ClientboundLevelChunkPacketData chunkData = (ClientboundLevelChunkPacketData) chunkDataObj;
 
         LevelChunkSection[] sections = extractChunkSections(chunkData, dimensionSectionCount.getSectionCount());
+
+        SnapshotChunkData snapshot = new NmsSnapshotChunkData(chunkLocation, sections);
+        CustomBiome customBiome = resolver.resolve(snapshot);
+        if (customBiome == null) {
+            return;
+        }
 
         Biome bukkitBiome = customBiome.toBukkitBiome();
         Holder<net.minecraft.world.level.biome.@NotNull Biome> minecraftBiome =
@@ -64,7 +76,8 @@ public final class NmsNativeChunkPacketHandler implements NativeChunkPacketHandl
 
                         for (BlockReplacement replacement : blockReplacements) {
                             if (asBukkitMaterial != replacement.originalBlock()) continue;
-                            BlockState newState = CraftMagicNumbers.getBlock(replacement.replacementBlock()).defaultBlockState();
+                            BlockState newState = CraftMagicNumbers.getBlock(replacement.replacementBlock())
+                                    .defaultBlockState();
                             section.setBlockState(x, y, z, newState);
                             break;
                         }

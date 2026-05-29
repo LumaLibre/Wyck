@@ -10,6 +10,7 @@ import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.misc.ChunkLocation;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
 import me.outspending.biomesapi.renderer.packet.PacketHandler;
+import me.outspending.biomesapi.renderer.packet.PhonyBiomeResolver;
 import me.outspending.biomesapi.renderer.packet.PhonyCustomBiomeCollector;
 import me.outspending.biomesapi.renderer.packet.data.BlockReplacement;
 import me.outspending.biomesapi.renderer.packet.data.PhonyCustomBiome;
@@ -199,14 +200,13 @@ public class NettyPacketHandler implements PacketHandler {
 
         private void handleChunkPacket(Player player, ClientboundLevelChunkWithLightPacket packet) {
             ChunkLocation loc = ChunkLocation.of(packet.getX(), packet.getZ());
-            PhonyCustomBiome override = collector.bestBiomeFor(player, loc);
-            if (override == null) return;
 
-            PacketHandler.DimensionSectionCount sectionCount =
-                    PacketHandler.DimensionSectionCount.fromBukkitEnvironment(player.getWorld().getEnvironment());
+            PhonyBiomeResolver resolver = collector.resolverFor(player, loc);
+            if (resolver == null) return;
 
-            NativeChunkPacketHandler.WIRE.get()
-                    .modifyChunkBiomes(packet.getChunkData(), override.customBiome(), sectionCount);
+            PacketHandler.DimensionSectionCount sectionCount = PacketHandler.DimensionSectionCount.fromBukkitEnvironment(player.getWorld().getEnvironment());
+
+            NativeChunkPacketHandler.WIRE.get().modifyChunkBiomes(packet.getChunkData(), loc, resolver, sectionCount);
         }
 
         private void handleBlockUpdate(Player player, ClientboundBlockUpdatePacket packet) {
