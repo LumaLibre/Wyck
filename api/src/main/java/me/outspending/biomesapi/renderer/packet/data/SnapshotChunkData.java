@@ -51,9 +51,9 @@ public interface SnapshotChunkData {
      * The biome at the given <em>chunk-relative</em> block coordinates.
      * {@code y} is relative to the bottom of the chunk column (section 0), not world Y.
      *
-     * @param x chunk-relative block X (0&ndash;15)
+     * @param x chunk-relative block X (0-15)
      * @param y chunk-relative block Y (0 .. sectionCount*16 - 1)
-     * @param z chunk-relative block Z (0&ndash;15)
+     * @param z chunk-relative block Z (0-15)
      * @return the source biome at those coordinates
      */
     @NotNull Biome biomeAt(int x, int y, int z);
