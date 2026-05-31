@@ -1,0 +1,12 @@
+---
+import { getLatestRelease, getLatestSnapshot } from "@/utils/versions.ts";
+
+interface Props {
+    channel?: "release" | "snapshot";
+}
+
+const { channel = "release" } = Astro.props;
+const version =
+    channel === "snapshot" ? await getLatestSnapshot() : await getLatestRelease();
+---
+<code>{version}</code>

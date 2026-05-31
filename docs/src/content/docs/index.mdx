@@ -1,18 +1,45 @@
 ---
 title: BiomesAPI Docs
-description: The documentation for my fork of BiomesAPI.
-#template: splash # Remove or comment out this line to display the site sidebar on this page.
+description: Documentation for BiomesAPI, a Minecraft plugin API for creating custom biomes and rendering them to players.
+head:
+  - tag: title
+    content: BiomesAPI Docs
+  - tag: style
+    content: |
+      .hero-html {
+        --size: 12rem;
+        font-size: var(--size);
+        justify-content: center;
+        line-height: var(--size);
+      }
+template: splash
+editUrl: false
+lastUpdated: false
+hero:
+  tagline: BiomesAPI is a custom biome API for Paper servers without the use of datapacks.
+  #image:
+  #  file: ../../assets/biomesapi.png
+  actions:
+    - text: Getting Started
+      link: /setup/
+      icon: rocket
+    - text: Github
+      link: https://github.com/LumaLibre/BiomesAPI
+      icon: right-arrow
+      variant: minimal
 ---
 
-BiomesAPI is a custom biome library for `1.21.11+` Paper servers. It is a fork of the original
-[BiomesAPI](https://github.com/Outspending/BiomesAPI) project by Outspending.
 
+import {Card, CardGrid} from '@astrojs/starlight/components'
 
-## Supported versions
+## Guides
 
-BiomesAPI only supports `1.21.11+` **Paper-based** servers. Support is not guarenteed anywhere else!
-
-
-## Leave us a star!
-
-If you like BiomesAPI, please consider leaving it a star on [GitHub](https://github.com/LumaLibre/BiomesAPI).
+<CardGrid>
+  <Card title="Getting Started" icon="puzzle">
+      Check the [getting started guide](/setup/) for installation
+      instructions.
+  </Card>
+  <Card title="Creating Biomes" icon="rocket">
+      Learn how to create [custom biomes](/biomes/custom-biome).
+  </Card>
+</CardGrid>

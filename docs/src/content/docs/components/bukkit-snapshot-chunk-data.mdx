@@ -1,0 +1,25 @@
+---
+title: Bukkit Snapshot Chunk Data
+---
+
+
+import SourceLink from "@/components/SourceLink.astro";
+
+#### <SourceLink path="renderer/packet/data/BukkitSnapshotChunkData.java">BukkitSnapshotChunkData</SourceLink>
+
+A [`SnapshotChunkData`](/renderer/packet/data/snapshot-chunk-data) backed by a
+real Bukkit `ChunkSnapshot`. It exposes full block data, but you can only
+construct it if you already hold a snapshot.
+
+:::caution
+
+Obtaining a snapshot (`world.getChunkAt(...).getChunkSnapshot()`) touches the
+live world and must happen on the main thread, never on the Netty thread inside
+a packet listener. Only use this when you legitimately have a snapshot in hand.
+Otherwise the packet-backed implementation is the correct, safe choice.
+
+:::
+
+* <SourceLink path="renderer/packet/data/BukkitSnapshotChunkData.java" line={28}>centerBiome()</SourceLink>: The biome at the chunk's center sample (block 7, 0, 7).
+* <SourceLink path="renderer/packet/data/BukkitSnapshotChunkData.java" line={33}>biomeAt(int, int, int)</SourceLink>: The biome at the given chunk-relative block coordinates.
+* <SourceLink path="renderer/packet/data/BukkitSnapshotChunkData.java" line={38}>{"bukkitSnapshot()"}</SourceLink>: Returns the backing `ChunkSnapshot`, always present for this implementation.

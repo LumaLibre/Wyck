@@ -1,0 +1,523 @@
+---
+import { Code } from "astro:components";
+
+interface Example {
+    code: string;
+    lang?: string;
+    label?: string;
+    filename?: string;
+}
+
+interface Props {
+    examples: Example[];
+    showDots?: boolean;
+}
+
+const { examples, showDots = true } = Astro.props;
+
+// Friendly display names for the language badge.
+const LANG_LABELS: Record<string, string> = {
+    java: "Java",
+    js: "JavaScript",
+    javascript: "JavaScript",
+    ts: "TypeScript",
+    typescript: "TypeScript",
+    jsx: "JSX",
+    tsx: "TSX",
+    json: "JSON",
+    yaml: "YAML",
+    yml: "YAML",
+    toml: "TOML",
+    bash: "Bash",
+    sh: "Shell",
+    shell: "Shell",
+    py: "Python",
+    python: "Python",
+    rs: "Rust",
+    go: "Go",
+    kotlin: "Kotlin",
+    kt: "Kotlin",
+    html: "HTML",
+    css: "CSS",
+    sql: "SQL",
+    xml: "XML",
+    md: "Markdown",
+    text: "Text",
+};
+
+const langLabel = (lang: string) =>
+    LANG_LABELS[lang.toLowerCase()] ?? lang.toUpperCase();
+
+// Unique id base so multiple instances on one page don't collide.
+const uid = `codetabs-${Math.random().toString(36).slice(2, 9)}`;
+
+const tabs = examples.map((ex, i) => ({
+    ...ex,
+    lang: ex.lang ?? "text",
+    label: ex.label ?? ex.filename ?? `Example ${i + 1}`,
+    badge: langLabel(ex.lang ?? "text"),
+    tabId: `${uid}-tab-${i}`,
+    panelId: `${uid}-panel-${i}`,
+}));
+---
+
+<figure class="codetabs" data-codetabs>
+    <figcaption class="codetabs__bar">
+        {
+            showDots && (
+                        <span class="codetabs__dots" aria-hidden="true">
+          <span class="codetabs__dot codetabs__dot--red" />
+          <span class="codetabs__dot codetabs__dot--yellow" />
+          <span class="codetabs__dot codetabs__dot--green" />
+        </span>
+            )
+        }
+
+        <div class="codetabs__tabs" role="tablist" aria-label="Code examples">
+            {
+                tabs.map((tab, i) => (
+                        <button
+                                type="button"
+                                role="tab"
+                                id={tab.tabId}
+                                class="codetabs__tab"
+                                data-tab={i}
+                                data-lang-label={tab.badge}
+                                data-filename={tab.filename ?? ""}
+                                aria-controls={tab.panelId}
+                                aria-selected={i === 0 ? "true" : "false"}
+                                tabindex={i === 0 ? 0 : -1}
+                        >
+                            {tab.label}
+                        </button>
+                ))
+            }
+        </div>
+
+        <span class="codetabs__spacer" />
+
+        <span class="codetabs__lang" data-lang-badge>{tabs[0]?.badge}</span>
+
+        <button
+                type="button"
+                class="codetabs__copy"
+                data-copy
+                aria-label="Copy code to clipboard"
+        >
+            <svg
+                    class="codetabs__icon codetabs__icon--copy"
+                    viewBox="0 0 24 24"
+                    width="16"
+                    height="16"
+                    aria-hidden="true"
+            >
+                <rect
+                        x="9"
+                        y="9"
+                        width="11"
+                        height="11"
+                        rx="2"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                />
+                <path
+                        d="M5 15V6a2 2 0 0 1 2-2h9"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                />
+            </svg>
+            <svg
+                    class="codetabs__icon codetabs__icon--check"
+                    viewBox="0 0 24 24"
+                    width="16"
+                    height="16"
+                    aria-hidden="true"
+            >
+                <path
+                        d="M5 12.5l4.5 4.5L19 7"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                />
+            </svg>
+            <span class="codetabs__copy-label" data-copy-label>Copy</span>
+        </button>
+    </figcaption>
+
+    <div class="codetabs__body">
+        {
+            tabs.map((tab, i) => (
+                    <div
+                            class="codetabs__panel"
+                            role="tabpanel"
+                            id={tab.panelId}
+                            data-panel={i}
+                            data-code={tab.code}
+                            aria-labelledby={tab.tabId}
+                            hidden={i !== 0}
+                    >
+                        <Code
+                                code={tab.code}
+                                lang={tab.lang as any}
+                                themes={{ light: "catppuccin-latte", dark: "catppuccin-mocha" }}
+                                defaultColor={false}
+                        />
+                    </div>
+            ))
+        }
+    </div>
+</figure>
+
+<style>
+    .codetabs {
+        --cb-radius: 0.85rem;
+        position: relative;
+        margin: 1.75rem 0;
+        border: 1px solid var(--sl-color-gray-5);
+        border-radius: var(--cb-radius);
+        background: var(--sl-color-gray-6);
+        overflow: hidden;
+        box-shadow:
+                0 1px 2px rgba(0, 0, 0, 0.18),
+                0 12px 32px -12px rgba(0, 0, 0, 0.45);
+    }
+
+    .codetabs::before {
+        content: "";
+        position: absolute;
+        inset: 0 0 auto 0;
+        height: 1px;
+        background: linear-gradient(
+                to right,
+                transparent,
+                color-mix(in srgb, var(--sl-color-white) 22%, transparent),
+                transparent
+        );
+        pointer-events: none;
+    }
+
+    .codetabs__bar {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.55rem 0.85rem;
+        background: color-mix(in srgb, var(--sl-color-gray-5) 55%, transparent);
+        border-bottom: 1px solid var(--sl-color-gray-5);
+        font-size: 0.8rem;
+        line-height: 1;
+    }
+
+    .codetabs__dots {
+        display: flex;
+        align-items: center;
+        gap: 0.45rem;
+        flex: 0 0 auto;
+    }
+
+    .codetabs__dot {
+        width: 0.72rem;
+        height: 0.72rem;
+        border-radius: 9999px;
+        box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.18);
+    }
+
+    .codetabs__dot--red {
+        background: #ff5f57;
+    }
+    .codetabs__dot--yellow {
+        background: #febc2e;
+    }
+    .codetabs__dot--green {
+        background: #28c840;
+    }
+
+    /* The tab strip scrolls horizontally if there are many examples. */
+    .codetabs__tabs {
+        display: flex;
+        align-items: stretch;
+        gap: 0.25rem;
+        flex: 0 1 auto;
+        min-width: 0;
+        overflow-x: auto;
+        scrollbar-width: none;
+    }
+    .codetabs__tabs::-webkit-scrollbar {
+        display: none;
+    }
+
+    .codetabs__tab {
+        flex: 0 0 auto;
+        margin: 0;
+        padding: 0.32rem 0.7rem;
+        border: 1px solid transparent;
+        border-radius: 0.45rem;
+        background: transparent;
+        color: var(--sl-color-gray-3);
+        font: inherit;
+        font-family: var(--__sl-font-mono, ui-monospace, monospace);
+        font-size: 0.74rem;
+        line-height: 1;
+        white-space: nowrap;
+        cursor: pointer;
+        appearance: none;
+        -webkit-appearance: none;
+        transition:
+                color 0.18s ease,
+                background 0.18s ease,
+                border-color 0.18s ease;
+    }
+
+    .codetabs__tab:hover {
+        color: var(--sl-color-white);
+        background: color-mix(in srgb, var(--sl-color-gray-5) 60%, transparent);
+    }
+
+    .codetabs__tab:focus-visible {
+        outline: 2px solid var(--sl-color-accent);
+        outline-offset: 2px;
+    }
+
+    .codetabs__tab[aria-selected="true"] {
+        color: var(--sl-color-white);
+        background: var(--sl-color-gray-6);
+        border-color: var(--sl-color-gray-5);
+    }
+
+    .codetabs__spacer {
+        flex: 1 1 auto;
+    }
+
+    .codetabs__lang {
+        font-family: var(--__sl-font-mono, ui-monospace, monospace);
+        font-size: 0.68rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--sl-color-gray-3);
+        padding: 0.18rem 0.5rem;
+        border: 1px solid var(--sl-color-gray-5);
+        border-radius: 9999px;
+        flex: 0 0 auto;
+    }
+
+    .codetabs__copy {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        margin: 0;
+        padding: 0.3rem 0.6rem;
+        border: 1px solid var(--sl-color-gray-5);
+        border-radius: 0.5rem;
+        background: transparent;
+        color: var(--sl-color-gray-2);
+        font: inherit;
+        font-size: 0.72rem;
+        line-height: 1;
+        cursor: pointer;
+        flex: 0 0 auto;
+        appearance: none;
+        -webkit-appearance: none;
+        transition:
+                color 0.18s ease,
+                background 0.18s ease,
+                border-color 0.18s ease;
+    }
+
+    .codetabs__copy:hover {
+        color: var(--sl-color-white);
+        background: var(--sl-color-gray-5);
+        border-color: var(--sl-color-gray-4);
+    }
+
+    .codetabs__copy:focus-visible {
+        outline: 2px solid var(--sl-color-accent);
+        outline-offset: 2px;
+    }
+
+    .codetabs__icon {
+        flex: 0 0 auto;
+        display: inline-block;
+        vertical-align: middle;
+        margin: 0;
+    }
+
+    .codetabs__icon--check {
+        display: none;
+        color: var(--sl-color-accent-high, #28c840);
+    }
+
+    .codetabs__copy[data-copied="true"] .codetabs__icon--copy {
+        display: none;
+    }
+    .codetabs__copy[data-copied="true"] .codetabs__icon--check {
+        display: inline-block;
+    }
+    .codetabs__copy[data-copied="true"] {
+        color: var(--sl-color-white);
+    }
+
+    .codetabs__copy-label {
+        font-weight: 500;
+        vertical-align: middle;
+    }
+
+    .codetabs__body {
+        position: relative;
+    }
+
+    .codetabs__panel {
+        overflow-x: auto;
+        padding: 0.35rem 0;
+    }
+
+    .codetabs__panel[hidden] {
+        display: none;
+    }
+
+    .codetabs__body :global(.astro-code) {
+        margin: 0;
+        padding: 0.9rem 1.15rem;
+        background: transparent !important;
+        font-family: var(--__sl-font-mono, ui-monospace, "JetBrains Mono", monospace);
+        font-size: 0.86rem;
+        line-height: 1.65;
+        tab-size: 2;
+    }
+
+    .codetabs__body :global(.astro-code),
+    .codetabs__body :global(.astro-code span) {
+        color: var(--shiki-light);
+        background-color: transparent !important;
+        font-style: var(--shiki-light-font-style);
+        font-weight: var(--shiki-light-font-weight);
+        text-decoration: var(--shiki-light-text-decoration);
+    }
+
+    :global([data-theme="dark"]) .codetabs__body :global(.astro-code),
+    :global([data-theme="dark"]) .codetabs__body :global(.astro-code span) {
+        color: var(--shiki-dark);
+        font-style: var(--shiki-dark-font-style);
+        font-weight: var(--shiki-dark-font-weight);
+        text-decoration: var(--shiki-dark-text-decoration);
+    }
+
+    .codetabs__panel::-webkit-scrollbar {
+        height: 0.5rem;
+    }
+    .codetabs__panel::-webkit-scrollbar-thumb {
+        background: var(--sl-color-gray-5);
+        border-radius: 9999px;
+    }
+    .codetabs__panel::-webkit-scrollbar-thumb:hover {
+        background: var(--sl-color-gray-4);
+    }
+    .codetabs__panel::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .codetabs__tab,
+        .codetabs__copy {
+            transition: none;
+        }
+    }
+</style>
+
+<script>
+    function initCodeTabs() {
+        const groups =
+            document.querySelectorAll<HTMLElement>("[data-codetabs]");
+
+        groups.forEach((group) => {
+            if (group.dataset.bound === "true") return;
+            group.dataset.bound = "true";
+
+            const tabs = Array.from(
+                group.querySelectorAll<HTMLButtonElement>("[data-tab]")
+            );
+            const panels = Array.from(
+                group.querySelectorAll<HTMLElement>("[data-panel]")
+            );
+            const badge = group.querySelector<HTMLElement>("[data-lang-badge]");
+            const copyBtn = group.querySelector<HTMLButtonElement>("[data-copy]");
+            const copyLabel =
+                copyBtn?.querySelector<HTMLElement>("[data-copy-label]");
+            const originalLabel = copyLabel?.textContent ?? "Copy";
+            let copyTimer: ReturnType<typeof setTimeout> | undefined;
+
+            if (tabs.length === 0) return;
+
+            const activate = (index: number, focus = false) => {
+                tabs.forEach((tab, i) => {
+                    const selected = i === index;
+                    tab.setAttribute("aria-selected", String(selected));
+                    tab.tabIndex = selected ? 0 : -1;
+                    if (selected && focus) tab.focus();
+                });
+                panels.forEach((panel, i) => {
+                    panel.hidden = i !== index;
+                });
+                if (badge) {
+                    badge.textContent = tabs[index].dataset.langLabel ?? badge.textContent;
+                }
+            };
+
+            tabs.forEach((tab, i) => {
+                tab.addEventListener("click", () => activate(i));
+                tab.addEventListener("keydown", (event) => {
+                    let next: number | null = null;
+                    if (event.key === "ArrowRight") next = (i + 1) % tabs.length;
+                    else if (event.key === "ArrowLeft")
+                        next = (i - 1 + tabs.length) % tabs.length;
+                    else if (event.key === "Home") next = 0;
+                    else if (event.key === "End") next = tabs.length - 1;
+                    if (next !== null) {
+                        event.preventDefault();
+                        activate(next, true);
+                    }
+                });
+            });
+
+            copyBtn?.addEventListener("click", async () => {
+                const active = panels.find((panel) => !panel.hidden);
+                const code = active?.dataset.code ?? "";
+
+                try {
+                    await navigator.clipboard.writeText(code);
+                } catch {
+                    const area = document.createElement("textarea");
+                    area.value = code;
+                    area.style.position = "fixed";
+                    area.style.opacity = "0";
+                    document.body.appendChild(area);
+                    area.select();
+                    try {
+                        document.execCommand("copy");
+                    } catch {
+                        /* give up silently */
+                    }
+                    document.body.removeChild(area);
+                }
+
+                copyBtn.dataset.copied = "true";
+                if (copyLabel) copyLabel.textContent = "Copied";
+                copyBtn.setAttribute("aria-label", "Code copied to clipboard");
+
+                clearTimeout(copyTimer);
+                copyTimer = setTimeout(() => {
+                    copyBtn.dataset.copied = "false";
+                    if (copyLabel) copyLabel.textContent = originalLabel;
+                    copyBtn.setAttribute("aria-label", "Copy code to clipboard");
+                }, 1800);
+            });
+        });
+    }
+
+    initCodeTabs();
+    document.addEventListener("astro:page-load", initCodeTabs);
+</script>

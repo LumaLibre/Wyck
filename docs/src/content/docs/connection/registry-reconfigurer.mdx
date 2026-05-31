@@ -1,0 +1,52 @@
+---
+title: Resynchronizing Registries
+description: Learn how to use the RegistryReconfigurer to send modified biomes to players without the need for them to relog.
+---
+
+
+import SourceLink from "@/components/SourceLink.astro";
+import CodeBlock from "@/components/CodeBlock.astro";
+
+:::caution
+
+The <SourceLink path="connection/RegistryReconfigurer.java">RegistryReconfigurer</SourceLink> reconfigures the connection of a player
+to re-synchronize registries and show updated biome data to the player without them needing to relog.
+
+As such, this API cannot be used if other plugins on the server that listen to the [`PlayerLoginEvent`](https://jd.papermc.io/paper/26.1.2/org/bukkit/event/player/PlayerLoginEvent.html).
+
+:::
+
+The <SourceLink path="connection/RegistryReconfigurer.java">RegistryReconfigurer</SourceLink>
+is a utility for reconfiguring the connection of a player to re-synchronize registries and show updated biome data to the player without them needing to relog.
+
+* <SourceLink path="connection/RegistryReconfigurer.java" line={61}>resendRegistries(Player)</SourceLink>: Resends the registry data to the specified player.
+* <SourceLink path="connection/RegistryReconfigurer.java" line={72}>{"resendRegistries(Player, Consumer<PlayerConfigurationConnection>)"}</SourceLink>: Resends the registry data to the specified player with a callback to modify the connection configuration before resending.
+
+
+### Example Usage
+<CodeBlock
+    lang="java"
+    filename="ExampleListener.java"
+    code={`import me.outspending.biomesapi.connection.RegistryReconfigurer;
+import me.outspending.biomesapi.exceptions.HorriblePlayerLoginEvent;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
+
+public class ExampleListener implements Listener {
+
+    private static final RegistryReconfigurer REGISTRY_RECONFIGURER = RegistryReconfigurer.newReconfigurer();
+
+    @EventHandler
+    public void onBlockBreak(BlockBreakEvent event) {
+        Player player = event.getPlayer();
+        try {
+            REGISTRY_RECONFIGURER.resendRegistries(player);
+        } catch (HorriblePlayerLoginEvent e) {
+            // Thrown if a plugin is listening to PlayerLoginEvent.
+            e.printStackTrace();
+        }
+    }
+}`}
+/>

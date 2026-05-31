@@ -1,0 +1,26 @@
+---
+title: Snapshot Chunk Data
+---
+
+
+import SourceLink from "@/components/SourceLink.astro";
+
+#### <SourceLink path="renderer/packet/data/SnapshotChunkData.java">SnapshotChunkData</SourceLink>
+
+A read-only view of the chunk being sent to a player, passed to biome
+conditionals so they can inspect the real biome and block data before a phony
+biome is applied. Values are computed lazily and cached, so a conditional only
+pays for what it reads.
+
+:::caution
+
+<SourceLink path="renderer/packet/data/SnapshotChunkData.java" line={73}>{"bukkitSnapshot()"}</SourceLink> is empty in the normal packet-handler path, a real snapshot
+can't be built safely on the Netty thread. It's only present when you construct
+a [`BukkitSnapshotChunkData`](/components/bukkit-snapshot-chunk-data.mdx) from a snapshot you got on the main thread.
+
+:::
+
+* <SourceLink path="renderer/packet/data/SnapshotChunkData.java" line={40}>location()</SourceLink>: The chunk this data belongs to.
+* <SourceLink path="renderer/packet/data/SnapshotChunkData.java" line={48}>centerBiome()</SourceLink>: The source biome at the chunk's center sample.
+* <SourceLink path="renderer/packet/data/SnapshotChunkData.java" line={59}>biomeAt(int, int, int)</SourceLink>: The source biome at chunk-relative block coordinates. `y` is relative to the bottom of the chunk column, not world Y.
+* <SourceLink path="renderer/packet/data/SnapshotChunkData.java" line={73}>{"bukkitSnapshot()"}</SourceLink>: The full Bukkit `ChunkSnapshot`, if one is available — empty for the packet-backed implementation. Prefer `centerBiome()` or `biomeAt(...)` instead.

@@ -1,0 +1,16 @@
+---
+title: 2D Point Range
+---
+
+
+import SourceLink from "@/components/SourceLink.astro";
+
+#### <SourceLink path="misc/PointRange2D.java">PointRange2D</SourceLink>
+
+An immutable record describing a 2D rectangular range in a world, defined by
+minimum and maximum X and Z coordinates. It ignores the Y axis, so it
+represents a region across the full vertical column rather than a box.
+
+* <SourceLink path="misc/PointRange2D.java" line={29}>of(Location, Location)</SourceLink>: Creates a `PointRange2D` spanning two locations, sorting their X and Z block coordinates into the correct min/max bounds automatically.
+* <SourceLink path="misc/PointRange2D.java" line={48}>{"getMinLocation(World)"}</SourceLink>: Returns the minimum-corner `Location` in the given world (Y is always 0).
+* <SourceLink path="misc/PointRange2D.java" line={62}>{"getMaxLocation(World)"}</SourceLink>: Returns the maximum-corner `Location` in the given world (Y is always 0).

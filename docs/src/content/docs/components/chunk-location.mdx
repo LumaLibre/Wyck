@@ -1,0 +1,43 @@
+---
+title: Chunk Location API
+---
+
+
+import SourceLink from "@/components/SourceLink.astro";
+
+:::note
+
+Predominantly for use with [PacketHandlers](/renderers/packet-handlers).
+
+:::
+
+#### <SourceLink path="misc/ChunkLocation.java">ChunkLocation</SourceLink>
+
+A chunk location, represented as (x, z) chunk coordinates. It's an immutable
+record of chunk-space `(x, z)` coordinates, with helpers for converting to and
+from block coordinates and Bukkit chunks.
+
+### Construction
+
+* <SourceLink path="misc/ChunkLocation.java" line={31}>of(int, int)</SourceLink>: Creates a `ChunkLocation` from chunk coordinates.
+* <SourceLink path="misc/ChunkLocation.java" line={42}>fromBlockCoords(int, int)</SourceLink>: Creates a `ChunkLocation` from block coordinates, converting them to the containing chunk.
+
+### Comparison
+
+* <SourceLink path="misc/ChunkLocation.java" line={52}>isChunk(Chunk)</SourceLink>: Checks whether this location matches the given Bukkit `Chunk`.
+* <SourceLink path="misc/ChunkLocation.java" line={63}>isChunk(int, int)</SourceLink>: Checks whether this location matches the given chunk coordinates.
+* <SourceLink path="misc/ChunkLocation.java" line={83}>isWithinRadius(ChunkLocation, int)</SourceLink>: Returns whether this location falls within `radius` chunks of another.
+
+### Transformation
+
+* <SourceLink path="misc/ChunkLocation.java" line={96}>offset(int, int)</SourceLink>: Returns a new `ChunkLocation` shifted by the given x/z offsets.
+* <SourceLink path="misc/ChunkLocation.java" line={106}>offset(ChunkLocation)</SourceLink>: Returns a new `ChunkLocation` shifted by another location's coordinates.
+* <SourceLink path="misc/ChunkLocation.java" line={115}>negate()</SourceLink>: Returns a new `ChunkLocation` with both coordinates negated.
+
+### World lookups
+
+These resolve against a live `World` and return a `CompletableFuture`, since the chunk may need to load asynchronously.
+
+* <SourceLink path="misc/ChunkLocation.java" line={125}>{"toBukkitChunk(World)"}</SourceLink>: Resolves this location to a Bukkit `Chunk` in the given world.
+* <SourceLink path="misc/ChunkLocation.java" line={135}>{"centerBlock(World)"}</SourceLink>: Gets the center block of this chunk in the given world.
+* <SourceLink path="misc/ChunkLocation.java" line={145}>{"getCenterBiome(World)"}</SourceLink>: Gets the biome of this chunk's center block in the given world.

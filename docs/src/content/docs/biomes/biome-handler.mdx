@@ -1,0 +1,45 @@
+---
+title: Referencing Custom Biomes
+description: Learn how to keep references to your custom biomes using the BiomeHandler
+sidebar:
+    order: 2
+---
+
+
+import CodeBlock from "@/components/CodeBlock.astro";
+import SourceLink from "@/components/SourceLink.astro";
+
+In addition to being able to keep references to your <SourceLink path="biome/CustomBiome.java">CustomBiome</SourceLink>s
+in your own code, **BiomesAPI** also provides a built-in <SourceLink path="biome/BiomeHandler.java">BiomeHandler</SourceLink>
+that allows you to get a reference to your custom biomes just from a <SourceLink path="registry/BiomeResourceKey.java">BiomeResourceKey</SourceLink>.
+
+* <SourceLink path="biome/BiomeHandler.java" line={37}>getRegisteredBiomes</SourceLink>
+* <SourceLink path="biome/BiomeHandler.java" line={54}>getBiome(BiomeResourceKey)</SourceLink>
+* <SourceLink path="biome/BiomeHandler.java" line={74}>isBiome(BiomeResourceKey)</SourceLink>
+
+### Example Usage
+<CodeBlock
+    lang="java"
+    filename="ExamplePlugin.java"
+    code={`import me.outspending.biomesapi.biome.BiomeHandler;
+import me.outspending.biomesapi.biome.CustomBiome;
+import me.outspending.biomesapi.registry.BiomeResourceKey;
+import me.outspending.biomesapi.wrapper.BiomeSettings;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class ExamplePlugin extends JavaPlugin {
+    @Override
+    public void onEnable() {
+        CustomBiome.builder()
+            .resourceKey(BiomeResourceKey.of("test", "custombiome"))
+            .settings(BiomeSettings.defaultSettings())
+            .waterColor("#F5F2EB")
+            .register();
+    }
+
+    private void example() {
+        CustomBiome reference = BiomeHandler.getBiome(BiomeResourceKey.of("test", "custombiome"));
+        // Do something with the reference!
+    }
+}`}
+/>

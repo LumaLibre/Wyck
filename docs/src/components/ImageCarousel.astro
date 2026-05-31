@@ -1,0 +1,256 @@
+---
+interface ImageItem {
+  src: string | { src: string };
+  alt?: string;
+}
+
+interface Props {
+  /** One or more images to display in the carousel. */
+  images: (string | ImageItem)[];
+  /** Fallback alt text applied to any image that doesn't provide its own. */
+  alt?: string;
+}
+
+const { images, alt = "" } = Astro.props;
+
+const slides = images.map((image) => {
+  if (typeof image === "string") {
+    return { src: image, alt };
+  }
+  const src = typeof image.src === "string" ? image.src : image.src.src;
+  return { src, alt: image.alt ?? alt };
+});
+
+const showControls = slides.length > 1;
+---
+
+<div class="image-carousel" data-carousel>
+  <div class="image-carousel__viewport">
+    <div class="image-carousel__track" data-track>
+      {
+        slides.map((slide, index) => (
+            <figure class="image-carousel__slide">
+              <img
+                  src={slide.src}
+                  alt={slide.alt}
+                  loading={index === 0 ? "eager" : "lazy"}
+                  draggable="false"
+              />
+            </figure>
+        ))
+      }
+    </div>
+  </div>
+
+  {
+      showControls && (
+          <>
+            <button
+                type="button"
+                class="image-carousel__arrow image-carousel__arrow--prev"
+                data-prev
+                aria-label="Previous image"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true" width="24" height="24">
+                <path
+                    d="M15 6l-6 6 6 6"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+            <button
+                type="button"
+                class="image-carousel__arrow image-carousel__arrow--next"
+                data-next
+                aria-label="Next image"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true" width="24" height="24">
+                <path
+                    d="M9 6l6 6-6 6"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+            <div class="image-carousel__dots" data-dots>
+              {slides.map((_, index) => (
+                  <button
+                      type="button"
+                      class="image-carousel__dot"
+                      data-dot={index}
+                      aria-label={`Go to image ${index + 1}`}
+                  />
+              ))}
+            </div>
+          </>
+      )
+  }
+</div>
+
+<style>
+  .image-carousel {
+    position: relative;
+    width: 100%;
+    margin: 1.5rem 0;
+  }
+
+  .image-carousel__viewport {
+    overflow: hidden;
+    border-radius: 0.75rem;
+  }
+
+  .image-carousel__track {
+    display: flex;
+    transition: transform 0.35s ease;
+  }
+
+  .image-carousel__slide {
+    flex: 0 0 100%;
+    min-width: 0;
+    margin: 0;
+  }
+
+  .image-carousel__slide img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 0.75rem;
+    user-select: none;
+  }
+
+  .image-carousel__arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 9999px;
+    background: var(--sl-color-black);
+    color: var(--sl-color-white);
+    cursor: pointer;
+    opacity: 0.85;
+    transition: opacity 0.2s ease, background 0.2s ease;
+  }
+
+  .image-carousel__arrow:hover {
+    opacity: 1;
+    background: var(--sl-color-gray-6);
+  }
+
+  .image-carousel__arrow:focus-visible {
+    outline: 2px solid var(--sl-color-accent);
+    outline-offset: 2px;
+  }
+
+  .image-carousel__arrow--prev {
+    left: 0.75rem;
+  }
+
+  .image-carousel__arrow--next {
+    right: 0.75rem;
+  }
+
+  .image-carousel__dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+  }
+
+  .image-carousel__dot {
+    flex: 0 0 auto;
+    width: 0.6rem;
+    height: 0.6rem;
+    margin: 0;
+    padding: 0;
+    border: none;
+    border-radius: 9999px;
+    background: var(--sl-color-gray-5);
+    cursor: pointer;
+    vertical-align: middle;
+    appearance: none;
+    -webkit-appearance: none;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+
+  .image-carousel__dot:hover {
+    background: var(--sl-color-gray-4);
+  }
+
+  .image-carousel__dot[data-active="true"] {
+    background: var(--sl-color-accent);
+    transform: scale(1.15);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .image-carousel__track {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  function initCarousels() {
+    const carousels =
+        document.querySelectorAll<HTMLElement>("[data-carousel]");
+
+    carousels.forEach((carousel) => {
+      if (carousel.dataset.init === "true") return;
+      carousel.dataset.init = "true";
+
+      const track = carousel.querySelector<HTMLElement>("[data-track]");
+      const slides = carousel.querySelectorAll(".image-carousel__slide");
+      const dots = carousel.querySelectorAll<HTMLElement>("[data-dot]");
+      const total = slides.length;
+      if (!track || total <= 1) return;
+
+      let index = 0;
+
+      const update = () => {
+        track.style.transform = `translateX(-${index * 100}%)`;
+        dots.forEach((dot, i) =>
+            dot.setAttribute("data-active", String(i === index))
+        );
+      };
+
+      carousel
+          .querySelector("[data-prev]")
+          ?.addEventListener("click", () => {
+            index = (index - 1 + total) % total;
+            update();
+          });
+
+      carousel
+          .querySelector("[data-next]")
+          ?.addEventListener("click", () => {
+            index = (index + 1) % total;
+            update();
+          });
+
+      dots.forEach((dot, i) =>
+          dot.addEventListener("click", () => {
+            index = i;
+            update();
+          })
+      );
+
+      update();
+    });
+  }
+
+  initCarousels();
+  document.addEventListener("astro:page-load", initCarousels);
+</script>

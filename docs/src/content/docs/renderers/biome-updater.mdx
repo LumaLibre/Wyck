@@ -1,0 +1,52 @@
+---
+title: Updating Biomes
+description: An interface for updating biomes in real-time without the need for players to relog or for chunks to be reloaded.
+sidebar:
+    order: 3
+---
+
+
+import CodeBlock from "@/components/CodeBlock.astro";
+import SourceLink from "@/components/SourceLink.astro";
+
+:::tip
+
+The <SourceLink path="renderer/updater/BiomeUpdater.java">BiomeUpdater</SourceLink> can be used with any type of biome renderer.
+
+:::
+
+
+The <SourceLink path="renderer/updater/BiomeUpdater.java">BiomeUpdater</SourceLink>
+is an interface for updating biomes in real-time without the need for players to relog or for chunks to be reloaded.
+
+The biome updater works by re-sending the chunk packets to players with the updated biome data.
+
+* <SourceLink path="renderer/updater/BiomeUpdater.java" line={103}>updateChunk(Chunk)</SourceLink>
+* <SourceLink path="renderer/updater/BiomeUpdater.java" line={93}>{"updateChunkAsync(CompletableFuture<Chunk>)"}</SourceLink>
+* <SourceLink path="renderer/updater/BiomeUpdater.java" line={131}>{"updateChunks(Collection<Chunk>)"}</SourceLink>
+* <SourceLink path="renderer/updater/BiomeUpdater.java" line={142}>{"updateChunksAsync(Collection<CompletableFuture<Chunk>>)"}</SourceLink>
+* <SourceLink path="renderer/updater/BiomeUpdater.java" line={182}>updateChunkRadius(Chunk, int)</SourceLink>
+* <SourceLink path="renderer/updater/BiomeUpdater.java" line={191}>updateChunksForPlayer(Player)</SourceLink>
+
+### Example Usage
+<CodeBlock
+    lang="java"
+    filename="ExampleListener.java"
+    code={`import me.outspending.biomesapi.renderer.updater.BiomeUpdater;
+import org.bukkit.Chunk;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
+
+public class ExampleListener implements Listener {
+
+    private static final BiomeUpdater BIOME_UPDATER = BiomeUpdater.of();
+
+    @EventHandler
+    public void onBlockBreak(BlockBreakEvent event) {
+        Chunk chunk = event.getBlock().getChunk();
+        // Update the biome of the chunk
+        BIOME_UPDATER.updateChunk(chunk);
+    }
+}`}
+/>

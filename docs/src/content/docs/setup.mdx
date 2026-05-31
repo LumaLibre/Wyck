@@ -1,0 +1,119 @@
+---
+title: Getting Started
+description: A guide to getting started with BiomesAPI, including installation instructions and a quick overview of the API.
+#tableOfContents: false
+---
+
+
+import {getLatestRelease, getLatestSnapshot} from "@/utils/versions.ts";
+import CodeTabs from "@/components/CodeTabs.astro";
+
+export const latestRelease = await getLatestRelease();
+export const latestSnapshot = await getLatestSnapshot();
+
+BiomesAPI is a custom biome API for [Paper](https://papermc.io/software/paper) servers without the use of datapacks.
+Our wrappers allow you to easily add new biomes to the game and send them to clients without touching any internals.
+
+## Compatibility
+
+BiomesAPI is compatible with **Minecraft 1.21.10, 1.21.11, 26.1.2** and requires a [Paper](https://papermc.io/software/paper) server running on **Java 25** or later.
+BiomesAPI is also compatible with [Folia](https://papermc.io/software/folia), but it is up to you to ensure that the rest of your plugin is compatible with Folia if you choose to support it.
+
+
+## Installation
+
+Installation depends on your build system and whether you choose to use BiomesAPI as a shaded dependency or external plugin dependency.
+This guide will assume you are using **Gradle (Kotlin DSL)** and will cover both shaded and external dependency methods.
+
+The latest stable release is [<Versions />](https://github.com/LumaLibre/BiomesAPI/releases) and the latest snapshot is [<Versions channel="snapshot" />](https://repo.jsinco.dev/#/releases/me/outspending/biomesapi/BiomesAPI).
+
+<CodeTabs
+    examples={[
+        {
+            label: "Shaded",
+            filename: "build.gradle.kts",
+            lang: "kotlin",
+            code:
+`plugins {
+    id("com.gradleup.shadow") version "9.4.2"
+}
+
+repositories {
+    maven("https://repo.jsinco.dev/releases/")
+}
+
+dependencies {
+    implementation("me.outspending.biomesapi:BiomesAPI:${latestSnapshot}")
+}
+
+tasks {
+    shadowJar {
+        val pack = "com.example.testplugin"
+        relocate("me.outspending.biomesapi", "\$pack.biomesapi")
+        archiveClassifier.set("") // Remove the -all suffix
+    }
+
+    jar {
+        enabled = false // Disable the default jar task
+    }
+
+    build {
+        dependsOn(shadowJar) // Ensure the shadowJar task is run before the build
+    }
+}`,
+        },
+        {
+            label: "External",
+            filename: "build.gradle.kts",
+            lang: "kotlin",
+            code:
+`repositories {
+    maven("https://repo.jsinco.dev/releases/")
+}
+
+dependencies {
+    compileOnly("me.outspending.biomesapi:BiomesAPI:${latestRelease}")
+}`,
+        },
+    ]}
+/>
+
+**If you are using BiomesAPI as external dependency** you will need to add BiomesAPI as a plugin dependency in your `plugin.yml`, or `paper-plugin.yml`.
+
+<CodeTabs
+    examples={[
+        {
+            label: "Bukkit Plugin",
+            filename: "plugin.yml",
+            lang: "yaml",
+            code:
+`name: ExamplePlugin
+main: com.example.ExamplePlugin
+version: 1.0-SNAPSHOT
+api-version: 1.21
+depend: [BiomesAPI] # Add this line!`,
+        },
+        {
+            label: "Paper Plugin",
+            filename: "paper-plugin.yml",
+            lang: "yaml",
+            code:
+`name: ExamplePlugin
+main: com.example.ExamplePlugin
+version: 1.0-SNAPSHOT
+api-version: 1.21
+# Add these lines:
+dependencies:
+    server:
+      BiomesAPI:
+        load: BEFORE
+        required: true
+        join-classpath: true`,
+        },
+    ]}
+/>
+
+
+## Leave a Star, Please!
+
+If you find BiomesAPI useful, please consider leaving a star on our [GitHub repository](https://github.com/LumaLibre/BiomesAPI).

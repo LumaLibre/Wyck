@@ -1,0 +1,386 @@
+---
+import { Code } from "astro:components";
+
+interface Props {
+    code: string;
+    lang?: string;
+    filename?: string;
+    showDots?: boolean;
+}
+
+const { code, lang = "text", filename, showDots = true } = Astro.props;
+
+// Friendly display names for the language badge.
+const LANG_LABELS: Record<string, string> = {
+    java: "Java",
+    js: "JavaScript",
+    javascript: "JavaScript",
+    ts: "TypeScript",
+    typescript: "TypeScript",
+    jsx: "JSX",
+    tsx: "TSX",
+    json: "JSON",
+    yaml: "YAML",
+    yml: "YAML",
+    toml: "TOML",
+    bash: "Bash",
+    sh: "Shell",
+    shell: "Shell",
+    py: "Python",
+    python: "Python",
+    rs: "Rust",
+    go: "Go",
+    kotlin: "Kotlin",
+    kt: "Kotlin",
+    html: "HTML",
+    css: "CSS",
+    sql: "SQL",
+    xml: "XML",
+    md: "Markdown",
+    text: "Text",
+};
+
+const label = LANG_LABELS[lang.toLowerCase()] ?? lang.toUpperCase();
+---
+
+<figure class="codeblock" data-codeblock>
+    <figcaption class="codeblock__bar">
+        {
+            showDots && (
+                        <span class="codeblock__dots" aria-hidden="true">
+          <span class="codeblock__dot codeblock__dot--red" />
+          <span class="codeblock__dot codeblock__dot--yellow" />
+          <span class="codeblock__dot codeblock__dot--green" />
+        </span>
+            )
+        }
+
+        {filename && <span class="codeblock__filename">{filename}</span>}
+
+        <span class="codeblock__spacer" />
+
+        <span class="codeblock__lang">{label}</span>
+
+        <button
+                type="button"
+                class="codeblock__copy"
+                data-copy
+                data-code={code}
+                aria-label="Copy code to clipboard"
+        >
+            <svg
+                    class="codeblock__icon codeblock__icon--copy"
+                    viewBox="0 0 24 24"
+                    width="16"
+                    height="16"
+                    aria-hidden="true"
+            >
+                <rect
+                        x="9"
+                        y="9"
+                        width="11"
+                        height="11"
+                        rx="2"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                />
+                <path
+                        d="M5 15V6a2 2 0 0 1 2-2h9"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                />
+            </svg>
+            <svg
+                    class="codeblock__icon codeblock__icon--check"
+                    viewBox="0 0 24 24"
+                    width="16"
+                    height="16"
+                    aria-hidden="true"
+            >
+                <path
+                        d="M5 12.5l4.5 4.5L19 7"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                />
+            </svg>
+            <span class="codeblock__copy-label" data-copy-label>Copy</span>
+        </button>
+    </figcaption>
+
+    <div class="codeblock__body">
+        <Code
+                code={code}
+                lang={lang as any}
+                themes={{ light: "catppuccin-latte", dark: "catppuccin-mocha" }}
+                defaultColor={false}
+        />
+    </div>
+</figure>
+
+<style>
+    .codeblock {
+        --cb-radius: 0.85rem;
+        position: relative;
+        margin: 1.75rem 0;
+        border: 1px solid var(--sl-color-gray-5);
+        border-radius: var(--cb-radius);
+        background: var(--sl-color-gray-6);
+        overflow: hidden;
+        box-shadow:
+                0 1px 2px rgba(0, 0, 0, 0.18),
+                0 12px 32px -12px rgba(0, 0, 0, 0.45);
+    }
+
+    /* Faint highlight along the very top edge for a glassy, lifted feel. */
+    .codeblock::before {
+        content: "";
+        position: absolute;
+        inset: 0 0 auto 0;
+        height: 1px;
+        background: linear-gradient(
+                to right,
+                transparent,
+                color-mix(in srgb, var(--sl-color-white) 22%, transparent),
+                transparent
+        );
+        pointer-events: none;
+    }
+
+    .codeblock__bar {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.6rem 0.85rem;
+        background: color-mix(in srgb, var(--sl-color-gray-5) 55%, transparent);
+        border-bottom: 1px solid var(--sl-color-gray-5);
+        font-size: 0.8rem;
+        line-height: 1;
+    }
+
+    .codeblock__dots {
+        display: flex;
+        align-items: center;
+        gap: 0.45rem;
+        flex: 0 0 auto;
+    }
+
+    .codeblock__dot {
+        width: 0.72rem;
+        height: 0.72rem;
+        border-radius: 9999px;
+        box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.18);
+    }
+
+    .codeblock__dot--red {
+        background: #ff5f57;
+    }
+    .codeblock__dot--yellow {
+        background: #febc2e;
+    }
+    .codeblock__dot--green {
+        background: #28c840;
+    }
+
+    .codeblock__filename {
+        font-family: var(--__sl-font-mono, ui-monospace, monospace);
+        font-size: 0.78rem;
+        color: var(--sl-color-gray-2);
+        letter-spacing: 0.01em;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .codeblock__spacer {
+        flex: 1 1 auto;
+    }
+
+    .codeblock__lang {
+        font-family: var(--__sl-font-mono, ui-monospace, monospace);
+        font-size: 0.68rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--sl-color-gray-3);
+        padding: 0.18rem 0.5rem;
+        border: 1px solid var(--sl-color-gray-5);
+        border-radius: 9999px;
+        flex: 0 0 auto;
+    }
+
+    .codeblock__copy {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        margin: 0;
+        padding: 0.3rem 0.6rem;
+        border: 1px solid var(--sl-color-gray-5);
+        border-radius: 0.5rem;
+        background: transparent;
+        color: var(--sl-color-gray-2);
+        font: inherit;
+        font-size: 0.72rem;
+        line-height: 1;
+        cursor: pointer;
+        flex: 0 0 auto;
+        appearance: none;
+        -webkit-appearance: none;
+        transition:
+                color 0.18s ease,
+                background 0.18s ease,
+                border-color 0.18s ease;
+    }
+
+    .codeblock__copy:hover {
+        color: var(--sl-color-white);
+        background: var(--sl-color-gray-5);
+        border-color: var(--sl-color-gray-4);
+    }
+
+    .codeblock__copy:focus-visible {
+        outline: 2px solid var(--sl-color-accent);
+        outline-offset: 2px;
+    }
+
+    .codeblock__icon {
+        flex: 0 0 auto;
+        display: inline-block;
+        vertical-align: middle;
+        margin: 0;
+    }
+
+    .codeblock__icon--check {
+        display: none;
+        color: var(--sl-color-accent-high, #28c840);
+    }
+
+    .codeblock__copy[data-copied="true"] .codeblock__icon--copy {
+        display: none;
+    }
+    .codeblock__copy[data-copied="true"] .codeblock__icon--check {
+        display: inline-block;
+    }
+    .codeblock__copy[data-copied="true"] {
+        color: var(--sl-color-white);
+    }
+
+    .codeblock__copy-label {
+        font-weight: 500;
+        vertical-align: middle;
+    }
+
+    .codeblock__body {
+        overflow-x: auto;
+        padding: 0.35rem 0;
+    }
+
+    /* The Shiki output. Strip its own padding/background so our frame owns it. */
+    .codeblock__body :global(.astro-code) {
+        margin: 0;
+        padding: 0.9rem 1.15rem;
+        background: transparent !important;
+        font-family: var(--__sl-font-mono, ui-monospace, "JetBrains Mono", monospace);
+        font-size: 0.86rem;
+        line-height: 1.65;
+        tab-size: 2;
+    }
+
+    /* Dual-theme token colors: default to the light palette, swap to dark
+       when Starlight sets data-theme="dark" on the root. */
+    .codeblock__body :global(.astro-code),
+    .codeblock__body :global(.astro-code span) {
+        color: var(--shiki-light);
+        background-color: transparent !important;
+        font-style: var(--shiki-light-font-style);
+        font-weight: var(--shiki-light-font-weight);
+        text-decoration: var(--shiki-light-text-decoration);
+    }
+
+    :global([data-theme="dark"]) .codeblock__body :global(.astro-code),
+    :global([data-theme="dark"]) .codeblock__body :global(.astro-code span) {
+        color: var(--shiki-dark);
+        font-style: var(--shiki-dark-font-style);
+        font-weight: var(--shiki-dark-font-weight);
+        text-decoration: var(--shiki-dark-text-decoration);
+    }
+
+    /* Thin, themed scrollbar for long lines. */
+    .codeblock__body::-webkit-scrollbar {
+        height: 0.5rem;
+    }
+    .codeblock__body::-webkit-scrollbar-thumb {
+        background: var(--sl-color-gray-5);
+        border-radius: 9999px;
+    }
+    .codeblock__body::-webkit-scrollbar-thumb:hover {
+        background: var(--sl-color-gray-4);
+    }
+    .codeblock__body::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .codeblock__copy {
+            transition: none;
+        }
+    }
+</style>
+
+<script>
+    function initCodeBlocks() {
+        const buttons =
+            document.querySelectorAll<HTMLButtonElement>("[data-copy]");
+
+        buttons.forEach((button) => {
+            if (button.dataset.bound === "true") return;
+            button.dataset.bound = "true";
+
+            const label = button.querySelector<HTMLElement>("[data-copy-label]");
+            const original = label?.textContent ?? "Copy";
+            let timer: ReturnType<typeof setTimeout> | undefined;
+
+            button.addEventListener("click", async () => {
+                // dataset decodes the HTML-escaped attribute back to the raw source.
+                const code = button.dataset.code ?? "";
+
+                try {
+                    await navigator.clipboard.writeText(code);
+                } catch {
+                    // Fallback for non-secure contexts where the Clipboard API is blocked.
+                    const area = document.createElement("textarea");
+                    area.value = code;
+                    area.style.position = "fixed";
+                    area.style.opacity = "0";
+                    document.body.appendChild(area);
+                    area.select();
+                    try {
+                        document.execCommand("copy");
+                    } catch {
+                        /* give up silently */
+                    }
+                    document.body.removeChild(area);
+                }
+
+                button.dataset.copied = "true";
+                if (label) label.textContent = "Copied";
+                button.setAttribute("aria-label", "Code copied to clipboard");
+
+                clearTimeout(timer);
+                timer = setTimeout(() => {
+                    button.dataset.copied = "false";
+                    if (label) label.textContent = original;
+                    button.setAttribute("aria-label", "Copy code to clipboard");
+                }, 1800);
+            });
+        });
+    }
+
+    initCodeBlocks();
+    document.addEventListener("astro:page-load", initCodeBlocks);
+</script>

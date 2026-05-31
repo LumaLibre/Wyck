@@ -11,12 +11,18 @@ importers:
       '@astrojs/starlight':
         specifier: ^0.37.1
         version: 0.37.1(astro@5.16.6(@types/node@25.0.3)(rollup@4.54.0)(typescript@5.9.3))
+      '@catppuccin/starlight':
+        specifier: ^2.0.1
+        version: 2.0.1(@astrojs/starlight@0.37.1(astro@5.16.6(@types/node@25.0.3)(rollup@4.54.0)(typescript@5.9.3)))(astro@5.16.6(@types/node@25.0.3)(rollup@4.54.0)(typescript@5.9.3))
       astro:
         specifier: ^5.6.1
         version: 5.16.6(@types/node@25.0.3)(rollup@4.54.0)(typescript@5.9.3)
       sharp:
         specifier: ^0.34.2
         version: 0.34.5
+      starlight-theme-vintage:
+        specifier: ^0.1.0
+        version: 0.1.0(@astrojs/starlight@0.37.1(astro@5.16.6(@types/node@25.0.3)(rollup@4.54.0)(typescript@5.9.3)))
 
 packages:
 
@@ -75,6 +81,12 @@ packages:
   '@capsizecss/unpack@3.0.1':
     resolution: {integrity: sha512-8XqW8xGn++Eqqbz3e9wKuK7mxryeRjs4LOHLxbh2lwKeSbuNR4NFifDZT4KzvjU6HMOPbiNTsWpniK5EJfTWkg==}
     engines: {node: '>=18'}
+
+  '@catppuccin/starlight@2.0.1':
+    resolution: {integrity: sha512-+ddv7PS8z0E+eae92KYVPTKl3f7zi6Rz/y1aLC0pleybtHfvqrM4eHRa5TUS9R5xfXEcoFWShDw3rPBJ4sBF9g==}
+    peerDependencies:
+      '@astrojs/starlight': '>=0.38'
+      astro: ^6.0.0
 
   '@ctrl/tinycolor@4.2.0':
     resolution: {integrity: sha512-kzyuwOAQnXJNLS9PSyrk0CWk35nWJW/zl/6KvnTBMFK65gm7U1/Z5BqjxeapjZCIhQcM/DsrEmcbRwDyXyXK4A==}
@@ -1530,6 +1542,12 @@ packages:
   space-separated-tokens@2.0.2:
     resolution: {integrity: sha512-PEGlAwrG8yXGXRjW32fGbg66JAlOAwbObuqVoJpv/mRgoWDQfgH1wDPvtzWyUSNAXBGSk8h755YDbbcEy3SH2Q==}
 
+  starlight-theme-vintage@0.1.0:
+    resolution: {integrity: sha512-xHp5ovkqkg66TpRfWV85lIPQ8/F2eiYxINnj8fKseBgnzOUVts0sGMFozzrC1QURffiN1LjtdwiXT9PL7ZrfZg==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      '@astrojs/starlight': '>=0.37.0'
+
   stream-replace-string@2.0.0:
     resolution: {integrity: sha512-TlnjJ1C0QrmxRNrON00JvaFFlNh5TTG00APw23j74ET7gkQpTASi6/L2fuiav8pzK715HXtUeClpBTw2NPSn6w==}
 
@@ -1954,6 +1972,11 @@ snapshots:
   '@capsizecss/unpack@3.0.1':
     dependencies:
       fontkit: 2.0.4
+
+  '@catppuccin/starlight@2.0.1(@astrojs/starlight@0.37.1(astro@5.16.6(@types/node@25.0.3)(rollup@4.54.0)(typescript@5.9.3)))(astro@5.16.6(@types/node@25.0.3)(rollup@4.54.0)(typescript@5.9.3))':
+    dependencies:
+      '@astrojs/starlight': 0.37.1(astro@5.16.6(@types/node@25.0.3)(rollup@4.54.0)(typescript@5.9.3))
+      astro: 5.16.6(@types/node@25.0.3)(rollup@4.54.0)(typescript@5.9.3)
 
   '@ctrl/tinycolor@4.2.0': {}
 
@@ -3910,6 +3933,10 @@ snapshots:
   source-map@0.7.6: {}
 
   space-separated-tokens@2.0.2: {}
+
+  starlight-theme-vintage@0.1.0(@astrojs/starlight@0.37.1(astro@5.16.6(@types/node@25.0.3)(rollup@4.54.0)(typescript@5.9.3))):
+    dependencies:
+      '@astrojs/starlight': 0.37.1(astro@5.16.6(@types/node@25.0.3)(rollup@4.54.0)(typescript@5.9.3))
 
   stream-replace-string@2.0.0: {}
 

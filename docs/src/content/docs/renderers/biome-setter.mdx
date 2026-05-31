@@ -1,0 +1,52 @@
+---
+title: Using the BiomeSetter
+description: Setting Biomes in worlds using the BiomeSetter
+sidebar:
+    order: 1
+---
+
+
+import CodeBlock from "@/components/CodeBlock.astro";
+
+:::danger
+
+The <SourceLink path="renderer/setter/BiomeSetter.java">BiomeSetter</SourceLink> changes the biome of a chunk on the server directly.
+This means that the biome change is not just visual, but also affects gameplay elements such as mob spawns, weather, and more.
+
+If your biome fails to register for any reason, the server will reset the biome to the default biome for that chunk, which can cause unexpected behavior.
+To avoid this, register your biomes during the Bootstrap phase of your plugin's lifecycle.
+
+:::
+
+The <SourceLink path="renderer/setter/BiomeSetter.java">BiomeSetter</SourceLink> is the most straightforward way to set biomes in your world.
+It directly modifies the biome of a chunk on the server, which means that the biome change is not just visual, but also affects gameplay elements such as mob spawns, weather, and more.
+
+#### When to use the BiomeSetter
+
+* You want to change the biome of a chunk for all players in the same way.
+* You want to change gameplay elements of the biome such as mob spawns.
+
+### Example Usage
+<CodeBlock
+    lang="java"
+    filename="ExampleListener.java"
+    code={`import me.outspending.biomesapi.biome.CustomBiome;
+import me.outspending.biomesapi.renderer.setter.BiomeSetter;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.world.ChunkLoadEvent;
+
+public class ExampleListener implements Listener {
+
+    private static final BiomeSetter BIOME_SETTER = BiomeSetter.of();
+
+    @EventHandler
+    public void onChunkLoad(ChunkLoadEvent event) {
+        // Store a reference to your biome or use the BiomeHandler
+        CustomBiome biome = ...;
+
+        BIOME_SETTER.setChunkBiome(event.getChunk(), biome);
+    }
+}`}
+/>
+
