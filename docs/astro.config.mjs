@@ -7,6 +7,14 @@ import {fileURLToPath} from 'node:url';
 // https://astro.build/config
 export default defineConfig({
   site: "https://biomes.lumas.dev",
+  markdown: {
+    shikiConfig: {
+      themes: {
+        light: "catppuccin-latte",
+        dark: "catppuccin-mocha",
+      },
+    },
+  },
   vite: {
     resolve: {
       alias: {
