@@ -2,10 +2,18 @@
 import {defineConfig} from 'astro/config';
 import starlight from '@astrojs/starlight';
 import starlightThemeVintage from 'starlight-theme-vintage';
+import {fileURLToPath} from 'node:url';
 
 // https://astro.build/config
 export default defineConfig({
   site: "https://biomes.lumas.dev",
+  vite: {
+    resolve: {
+      alias: {
+        '@': fileURLToPath(new URL('./src', import.meta.url)),
+      },
+    },
+  },
   integrations: [
     starlight({
       plugins: [starlightThemeVintage()],
