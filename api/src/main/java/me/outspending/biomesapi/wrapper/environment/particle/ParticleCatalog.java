@@ -131,6 +131,18 @@ public record ParticleCatalog(List<WrappedAmbientParticle<?>> particles) {
         }
 
         /**
+         * Adds a particle to the catalog.
+         * @param particleType The wrapped particle type.
+         * @param probability The probability of the particle.
+         * @return The builder instance.
+         */
+        @AsOf("1.1.0")
+        public Builder addParticle(WrappedParticleTypes particleType, float probability) {
+            particles.add(new WrappedAmbientParticle<>(particleType, probability));
+            return this;
+        }
+
+        /**
          * Adds a complex particle to the catalog.
          * @param particleType The wrapped particle type.
          * @param probability The probability of the particle.

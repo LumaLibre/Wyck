@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Optional;
 
 /**
- * A read-only, lazily-evaluated view of the chunk currently being sent to a player,
+ * A read-only, lazily evaluated view of the chunk currently being sent to a player,
  * handed to biome conditionals so they can inspect the <em>real</em> biome/block data
  * before a phony biome is applied.
  *

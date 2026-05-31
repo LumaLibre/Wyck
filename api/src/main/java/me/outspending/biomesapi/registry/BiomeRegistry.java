@@ -30,7 +30,7 @@ public interface BiomeRegistry {
      * @return a new CustomBiomeRegistry object.
      */
     @AsOf("0.0.1")
-    static BiomeRegistry newRegistry() {
+    static BiomeRegistry newRegistry() { // TODO: Misleading name
         return WIRE.get();
     }
 

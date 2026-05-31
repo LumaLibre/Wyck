@@ -20,6 +20,7 @@ import java.util.function.Consumer;
  * @author Jsinco
  */
 @AsOf("2.2.0")
+@ApiStatus.Experimental
 public interface RegistryReconfigurer {
 
     @ApiStatus.Internal

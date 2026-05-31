@@ -169,15 +169,11 @@ public enum WrappedParticleTypes {
      * via the registered factory and cached.
      */
     @AsOf("1.1.0")
-    public <T> ParticleTypeHandle getParticleType() {
-        ParticleTypeHandle cached = cachedHandle;
-        if (cached == null) {
-            cached = ParticleOptionsFactory.WIRE.get().typeByKey(key);
-            cachedHandle = cached;
+    public ParticleTypeHandle getParticleType() {
+        if (cachedHandle == null) {
+            cachedHandle = ParticleOptionsFactory.WIRE.get().typeByKey(key);
         }
-        @SuppressWarnings("unchecked")
-        ParticleTypeHandle typed = (ParticleTypeHandle) cached;
-        return typed;
+        return cachedHandle;
     }
 
     @AsOf("1.1.0")
