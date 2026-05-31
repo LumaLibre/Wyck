@@ -13,6 +13,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -86,10 +87,10 @@ public interface BiomeUpdater {
      * This method is a convenience method that calls the updateChunks method with a list containing the chunk.
      *
      * @param chunk The chunk to update.
-     * @since 0.0.1
+     * @since 2.2.0
      */
-    @AsOf("1.2.0")
-    void updateChunk(@NotNull CompletableFuture<Chunk> chunk);
+    @AsOf("2.0.0")
+    void updateChunkAsync(@NotNull CompletableFuture<Chunk> chunk);
 
     /**
      * Updates the biome of a chunk.
@@ -101,6 +102,20 @@ public interface BiomeUpdater {
     @AsOf("2.2.0")
     default void updateChunk(@NotNull Chunk chunk) {
         updateChunk(CompletableFuture.completedFuture(chunk));
+    }
+
+    /**
+     * Updates the biome of a chunk.
+     * This method is a convenience method that calls the updateChunks method with a list containing the chunk.
+     *
+     * @param chunk The chunk to update.
+     * @since 0.0.1
+     * @deprecated Use {@link #updateChunkAsync(CompletableFuture)} instead.
+     */
+    @AsOf("1.2.0")
+    @Deprecated(since = "2.0.0")
+    default void updateChunk(@NotNull CompletableFuture<Chunk> chunk) {
+        updateChunkAsync(chunk);
     }
 
     /**
@@ -121,10 +136,39 @@ public interface BiomeUpdater {
      * The update packet contains the new biome data for the chunk.
      *
      * @param chunks The chunks to update.
+     * @since 2.2.0
+     */
+    @AsOf("2.2.0")
+    void updateChunksAsync(@NotNull List<CompletableFuture<Chunk>> chunks);
+
+
+    /**
+     * Updates the biomes of a list of chunks within a certain distance.
+     * This method sends an update packet to all players within the specified distance of each chunk in the list.
+     * The update packet contains the new biome data for the chunk.
+     *
+     * @param chunks The chunks to update.
+     * @since 2.0.0
+     */
+    @AsOf("2.0.0")
+    default void updateChunks(@NotNull Collection<Chunk> chunks) {
+        updateChunks(chunks.stream().map(CompletableFuture::completedFuture).toList());
+    }
+
+    /**
+     * Updates the biomes of a list of chunks within a certain distance.
+     * This method sends an update packet to all players within the specified distance of each chunk in the list.
+     * The update packet contains the new biome data for the chunk.
+     *
+     * @param chunks The chunks to update.
      * @since 0.0.1
+     * @deprecated Use {@link #updateChunksAsync(List)} instead.
      */
     @AsOf("1.2.0")
-    void updateChunks(@NotNull List<CompletableFuture<Chunk>> chunks);
+    @Deprecated(forRemoval = true, since = "2.2.0")
+    default void updateChunks(@NotNull List<CompletableFuture<Chunk>> chunks) {
+        updateChunksAsync(chunks);
+    }
 
 
     /**
