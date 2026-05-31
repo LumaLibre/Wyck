@@ -92,6 +92,18 @@ public interface BiomeUpdater {
     void updateChunk(@NotNull CompletableFuture<Chunk> chunk);
 
     /**
+     * Updates the biome of a chunk.
+     * This method is a convenience method that calls the updateChunks method with a list containing the chunk.
+     *
+     * @param chunk The chunk to update.
+     * @since 2.2.0
+     */
+    @AsOf("2.2.0")
+    default void updateChunk(@NotNull Chunk chunk) {
+        updateChunk(CompletableFuture.completedFuture(chunk));
+    }
+
+    /**
      * Updates the biomes of the chunks between two locations.
      * This method is a convenience method that calls the updateChunks method with the chunks between the 'from' and 'to' locations.
      *
