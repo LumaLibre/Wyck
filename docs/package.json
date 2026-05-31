@@ -18,5 +18,6 @@
   },
   "pnpm": {
     "onlyBuiltDependencies": ["sharp", "esbuild"]
-  }
+  },
+  "packageManager": "pnpm@10.26.2"
 }
