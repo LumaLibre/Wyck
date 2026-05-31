@@ -139,7 +139,7 @@ public interface BiomeUpdater {
      * @since 2.2.0
      */
     @AsOf("2.2.0")
-    void updateChunksAsync(@NotNull List<CompletableFuture<Chunk>> chunks);
+    void updateChunksAsync(@NotNull Collection<CompletableFuture<Chunk>> chunks);
 
 
     /**
@@ -162,7 +162,7 @@ public interface BiomeUpdater {
      *
      * @param chunks The chunks to update.
      * @since 0.0.1
-     * @deprecated Use {@link #updateChunksAsync(List)} instead.
+     * @deprecated Use {@link #updateChunksAsync(Collection)} instead.
      */
     @AsOf("1.2.0")
     @Deprecated(forRemoval = true, since = "2.2.0")

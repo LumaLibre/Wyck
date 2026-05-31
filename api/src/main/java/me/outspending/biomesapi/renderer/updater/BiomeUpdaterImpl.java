@@ -11,6 +11,7 @@ import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -32,8 +33,8 @@ public class BiomeUpdaterImpl implements BiomeUpdater {
     }
 
     @Override
-    public void updateChunk(@NotNull CompletableFuture<Chunk> chunk) {
-        updateChunks(List.of(chunk));
+    public void updateChunkAsync(@NotNull CompletableFuture<Chunk> chunk) {
+        updateChunksAsync(List.of(chunk));
     }
 
     @Override
@@ -43,13 +44,13 @@ public class BiomeUpdaterImpl implements BiomeUpdater {
         } else {
             List<CompletableFuture<Chunk>> updateChunks = getChunksBetweenLocations(from, to);
 
-            updateChunks(updateChunks);
+            updateChunksAsync(updateChunks);
         }
     }
 
     @Override
-    public void updateChunks(@NotNull List<CompletableFuture<Chunk>> chunks) {
-        UnsafeNMSHandler.executeNMS(nms -> nms.updateChunks(chunks, plugin));
+    public void updateChunksAsync(@NotNull Collection<CompletableFuture<Chunk>> chunks) {
+        UnsafeNMSHandler.executeNMS(nms -> nms.updateChunks(List.copyOf(chunks), plugin));
     }
 
 
@@ -65,7 +66,7 @@ public class BiomeUpdaterImpl implements BiomeUpdater {
                 chunks.add(world.getChunkAtAsync(x, z));
             }
         }
-        updateChunks(chunks);
+        updateChunksAsync(chunks);
     }
 
     @Override
@@ -83,6 +84,6 @@ public class BiomeUpdaterImpl implements BiomeUpdater {
             }
         }
 
-        updateChunks(chunksToUpdate);
+        updateChunksAsync(chunksToUpdate);
     }
 }
