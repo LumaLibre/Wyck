@@ -1,0 +1,337 @@
+---
+/**
+    * ConfigViewer
+    *
+    * An expandable, anchor-linkable config reference (à la the Paper docs), wrapped
+    * in the same macOS-style window chrome as CodeBlock. Each leaf shows
+    * `key: default` and expands on click to reveal its description.
+    *
+    * IMPORTANT: the root carries Starlight's `not-content` class so the surrounding
+    * `.sl-markdown-content` styles don't bleed onto the inner <details>/<code>/<p>.
+    *
+    * Self-contained: descriptions support a small Markdown subset (links,
+    * `inline code`, **bold**, blank-line paragraphs). Swap `renderDesc` for a real
+    * markdown lib if you need more.
+    *
+    * Data shape (nested object). A node is one of:
+    *   - leaf:    { default?: string; description: string }
+    *   - callout: { message: string; inline?: boolean; color?: string }
+    *   - branch:  { [key: string]: Node }
+    *
+    * Usage:
+    *   import ConfigViewer from "@/components/ConfigViewer.astro";
+    *   import config from "@/data/plugin-config.yaml";
+    *   <ConfigViewer data={config} filename="config.yml" lang="yaml" />
+    */
+
+type Leaf = { default?: string; description: string };
+type Callout = { message: string; inline?: boolean; color?: string };
+type Branch = { [key: string]: ConfigNode };
+type ConfigNode = Leaf | Callout | Branch;
+
+type Language = "yaml" | "json" | "properties";
+
+interface Props {
+    data: Branch;
+    lang?: Language;
+    filename?: string;
+    showDots?: boolean;
+    child?: boolean;
+    path?: string[];
+}
+
+const {
+    data,
+    lang = "yaml",
+    filename,
+    showDots = true,
+    child = false,
+    path = [],
+} = Astro.props;
+
+const LANG_LABELS: Record<Language, string> = {
+    yaml: "YAML",
+    json: "JSON",
+    properties: "Properties",
+};
+
+const json = lang === "json";
+const separator = lang === "properties" ? "=" : ": ";
+
+function renderDesc(md: string): string {
+    let html = md
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+    html = html.replace(/`([^`]+)`/g, "<code>$1</code>");
+    html = html.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+    html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+    return html
+        .split(/\n{2,}/)
+        .map((p) => `<p>${p.trim().replace(/\n/g, " ")}</p>`)
+        .join("");
+}
+
+function formatDefault(value?: string): { value: string; inline: boolean } {
+    if (!value) value = lang === "properties" ? "" : '""';
+    if (!json && value.length > 2 && /^\[.+]$/.test(value)) {
+        return {
+            value: value.slice(1, -1).split(",").map((i) => ` - ${i.trim()}`).join("\n"),
+            inline: false,
+        };
+    }
+    return { value, inline: true };
+}
+
+const isLeaf = (n: ConfigNode): n is Leaf => "description" in n;
+const isCallout = (n: ConfigNode): n is Callout => "message" in n;
+const entries = Object.entries(data);
+---
+
+{child ? (
+<div class="cfg__node">
+    {entries.map(([key, node], i) => {
+        const displayKey = json ? `"${key.replace(/_+$/, "")}"` : key.replace(/_+$/, "");
+        const childPath = [...path, key.replace(/[-<> ]/g, "_")];
+        const id = childPath.join("_");
+        const hasComma = json && i !== entries.length - 1;
+
+        if (isCallout(node)) {
+            return (
+                    <section id={id} class="cfg__section">
+                        <div
+                                class:list={["cfg__msg", node.inline && "cfg__msg--inline"]}
+                                style={node.color ? `border-left-color: ${node.color}` : undefined}
+                                set:html={renderDesc(node.message)}
+                        />
+                    </section>
+            );
+        }
+
+        if (isLeaf(node)) {
+            const { value, inline } = formatDefault(node.default);
+            return (
+                    <section id={id} class="cfg__section">
+                        <details class="cfg__details">
+                            <summary class="cfg__row">
+                <span class="cfg__chevron" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="12" height="12">
+                    <path d="M9 6l6 6-6 6" fill="none" stroke="currentColor"
+                          stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </span>
+                                <span class="cfg__key cfg__key--leaf">{displayKey}</span>
+                                <span class="cfg__sep">{separator}</span>
+                                {inline ? (
+                                        <span class="cfg__val">{value}</span>
+                                ) : (
+                                        <span class="cfg__val cfg__val--block">{value}</span>
+                                )}
+                                {hasComma && <span class="cfg__sep">,</span>}
+                                <a class="cfg__anchor" href={`#${id}`} aria-label="Link to this option">#</a>
+                            </summary>
+                            <div class="cfg__desc" set:html={renderDesc(node.description)} />
+                        </details>
+                    </section>
+            );
+        }
+
+        return (
+                <section id={id} class="cfg__section">
+                    <div class="cfg__row cfg__row--branch">
+                        <span class="cfg__key">{displayKey}</span>
+                        <span class="cfg__sep">{separator}</span>
+                        <a class="cfg__anchor" href={`#${id}`} aria-label="Link to this section">#</a>
+                    </div>
+                    <Astro.self child data={node as Branch} path={childPath} lang={lang} />
+                </section>
+        );
+    })}
+</div>
+    ) : (
+<figure class="not-content cfg" data-config>
+    <figcaption class="cfg__bar">
+        {showDots && (
+                <span class="cfg__dots" aria-hidden="true">
+          <span class="cfg__dot cfg__dot--red" />
+          <span class="cfg__dot cfg__dot--yellow" />
+          <span class="cfg__dot cfg__dot--green" />
+        </span>
+        )}
+        {filename && <span class="cfg__filename">{filename}</span>}
+        <span class="cfg__spacer" />
+        <span class="cfg__langbadge">{LANG_LABELS[lang]}</span>
+    </figcaption>
+
+    <div class="cfg__body">
+        {json && <p class="cfg__brace">{"{"}</p>}
+        <Astro.self child data={data} path={path} lang={lang} />
+        {json && <p class="cfg__brace">{"}"}</p>}
+    </div>
+</figure>
+    )}
+
+<style>
+    /* ---- Window chrome (mirrors CodeBlock) ---- */
+    .cfg {
+        --cb-radius: 0.85rem;
+        position: relative;
+        margin: 1.75rem 0;
+        border: 1px solid var(--sl-color-gray-5);
+        border-radius: var(--cb-radius);
+        background: var(--sl-color-gray-6);
+        overflow: hidden;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.18), 0 12px 32px -12px rgba(0,0,0,0.45);
+    }
+    .cfg::before {
+        content: "";
+        position: absolute;
+        inset: 0 0 auto 0;
+        height: 1px;
+        background: linear-gradient(to right, transparent,
+        color-mix(in srgb, var(--sl-color-white) 22%, transparent), transparent);
+        pointer-events: none;
+    }
+    .cfg__bar {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.6rem 0.85rem;
+        background: color-mix(in srgb, var(--sl-color-gray-5) 55%, transparent);
+        border-bottom: 1px solid var(--sl-color-gray-5);
+    }
+    .cfg__dots { display: flex; align-items: center; gap: 0.45rem; flex: 0 0 auto; }
+    .cfg__dot {
+        width: 0.72rem; height: 0.72rem; border-radius: 9999px;
+        box-shadow: inset 0 0 0 1px rgba(0,0,0,0.18);
+    }
+    .cfg__dot--red { background: #ff5f57; }
+    .cfg__dot--yellow { background: #febc2e; }
+    .cfg__dot--green { background: #28c840; }
+    .cfg__filename {
+        font-family: var(--__sl-font-mono, ui-monospace, monospace);
+        font-size: 0.78rem; color: var(--sl-color-gray-2);
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .cfg__spacer { flex: 1 1 auto; }
+    .cfg__langbadge {
+        font-family: var(--__sl-font-mono, ui-monospace, monospace);
+        font-size: 0.68rem; font-weight: 600; letter-spacing: 0.08em;
+        text-transform: uppercase; color: var(--sl-color-gray-3);
+        padding: 0.18rem 0.5rem; border: 1px solid var(--sl-color-gray-5);
+        border-radius: 9999px; flex: 0 0 auto;
+    }
+
+    /* ---- Tree body ---- */
+    .cfg__body {
+        padding: 0.5rem 0.4rem;
+        font-family: var(--__sl-font-mono, ui-monospace, monospace);
+        font-size: 0.82rem;
+        line-height: 1.5;
+    }
+    .cfg__brace { margin: 0 0 0 0.5rem; color: var(--sl-color-gray-3); }
+    .cfg__node { padding-left: 0.9rem; }
+    .cfg__section { border: none; }
+
+    /* Subtle highlight when an option is deep-linked. */
+    .cfg__section:target > .cfg__details > .cfg__row,
+    .cfg__section:target > .cfg__row {
+        background: color-mix(in srgb, var(--sl-color-accent) 14%, transparent);
+        box-shadow: inset 2px 0 0 var(--sl-color-accent);
+    }
+
+    /* Rows */
+    .cfg__row {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.1rem;
+        padding: 0.28rem 0.4rem;
+        border-radius: 0.4rem;
+        cursor: pointer;
+        list-style: none;
+        transition: background 0.15s ease;
+    }
+    .cfg__row::-webkit-details-marker { display: none; }
+    .cfg__row::marker { content: ""; }
+    .cfg__row:hover { background: color-mix(in srgb, var(--sl-color-gray-5) 50%, transparent); }
+    .cfg__row--branch { cursor: default; }
+
+    .cfg__chevron {
+        display: inline-flex;
+        align-items: center;
+        color: var(--sl-color-gray-3);
+        margin-right: 0.15rem;
+        transition: transform 0.18s ease;
+    }
+    .cfg__details[open] > .cfg__row > .cfg__chevron { transform: rotate(90deg); }
+
+    .cfg__key { color: var(--sl-color-gray-2); white-space: pre-wrap; }
+    .cfg__key--leaf { color: var(--sl-color-text-accent, var(--sl-color-accent-high)); font-weight: 600; }
+    .cfg__sep { color: var(--sl-color-gray-3); }
+    .cfg__val { color: var(--sl-color-white); white-space: pre-wrap; }
+    .cfg__val--block { white-space: pre; }
+
+    .cfg__anchor {
+        margin-left: 0.4rem;
+        color: var(--sl-color-accent-high);
+        text-decoration: none;
+        transition: opacity 0.15s ease;
+    }
+    @media not (hover: none) {
+        .cfg__anchor { opacity: 0; }
+        .cfg__row:hover .cfg__anchor { opacity: 1; }
+    }
+
+    /* ---- Expanded description (lean, readable) ---- */
+    .cfg__desc {
+        margin: 0.1rem 0 0.45rem 1.45rem;
+        padding: 0.5rem 0.75rem;
+        border-left: 2px solid var(--sl-color-accent);
+        border-radius: 0 0.4rem 0.4rem 0;
+        background: color-mix(in srgb, var(--sl-color-gray-5) 35%, transparent);
+        font-family: var(--sl-font, system-ui, sans-serif);
+        font-size: 0.85rem;
+        line-height: 1.55;
+        color: var(--sl-color-gray-1, var(--sl-color-white));
+    }
+    .cfg__desc :global(p) { margin: 0 0 0.5rem; }
+    .cfg__desc :global(p:last-child) { margin-bottom: 0; }
+    .cfg__desc :global(code) {
+        font-family: var(--__sl-font-mono, ui-monospace, monospace);
+        font-size: 0.85em;
+        padding: 0.05rem 0.3rem;
+        border-radius: 0.3rem;
+        background: var(--sl-color-gray-6);
+        color: var(--sl-color-text-accent, var(--sl-color-accent-high));
+    }
+    .cfg__desc :global(a) { color: var(--sl-color-text-accent, var(--sl-color-accent-high)); }
+
+    .cfg__msg {
+        margin: 0.3rem 0 0.5rem;
+        padding: 0.5rem 0.75rem;
+        border-left: 2px solid var(--sl-color-accent);
+        border-radius: 0 0.4rem 0.4rem 0;
+        background: color-mix(in srgb, var(--sl-color-gray-5) 35%, transparent);
+        font-family: var(--sl-font, system-ui, sans-serif);
+        font-size: 0.85rem;
+    }
+    .cfg__msg--inline {
+        margin: 0; padding: 0; background: none; border: none;
+        color: var(--sl-color-gray-3);
+    }
+</style>
+
+<script>
+    function openTargeted() {
+        const hash = window.location.hash.slice(1);
+        if (!hash) return;
+        const el = document.getElementById(hash);
+        if (!el) return;
+        const details = el.querySelector(":scope > details") as HTMLDetailsElement | null;
+        if (details) details.open = true;
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+    window.addEventListener("load", openTargeted);
+    document.addEventListener("astro:page-load", openTargeted);
+</script>

@@ -218,7 +218,7 @@ public final class CustomBiomeImpl implements CustomBiome {
     }
 
     @Override
-    public CustomBiome setEnvironmentAttributeMap(@NotNull WrappedEnvironmentAttributeMap environmentAttributeMap) {
+    public CustomBiome setAttributes(@NotNull WrappedEnvironmentAttributeMap environmentAttributeMap) {
         this.environmentAttributeMap = environmentAttributeMap;
         return this;
     }
@@ -256,5 +256,29 @@ public final class CustomBiomeImpl implements CustomBiome {
             }
         }
         return this.environmentAttributeMap.equals(otherBiome.getEnvironmentAttributeMap());
+    }
+
+    @Override
+    public @NotNull NamespacedKey getKey() {
+        return toNamespacedKey();
+    }
+
+
+    @Override
+    @SuppressWarnings({"removal", "UnstableApiUsage"})
+    public @NotNull String name() {
+        return getKey().toString();
+    }
+
+    @Override
+    @SuppressWarnings({"removal", "UnstableApiUsage"})
+    public int compareTo(@NotNull Biome other) {
+        throw new UnsupportedOperationException("Cannot compare custom biomes to Bukkit biomes");
+    }
+
+    @Override
+    @SuppressWarnings({"removal", "UnstableApiUsage"})
+    public int ordinal() {
+        throw new UnsupportedOperationException("Cannot compare custom biomes to Bukkit biomes");
     }
 }

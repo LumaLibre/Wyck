@@ -34,7 +34,12 @@ import java.util.function.BiPredicate;
  * @version 2.2.0
  */
 @AsOf("2.2.0")
-public record PhonyCustomBiome(BiomeResourceKey biomeResourceKey, BiPredicate<Player, ChunkLocation> conditional, @Nullable BiPredicate<Player, SnapshotChunkData> biomeCondition, PacketHandler.Priority priority) {
+public record PhonyCustomBiome(
+    BiomeResourceKey biomeResourceKey,
+    BiPredicate<Player, ChunkLocation> conditional,
+    @Nullable BiPredicate<Player, SnapshotChunkData> biomeCondition,
+    PacketHandler.Priority priority
+) {
 
     @Override
     public boolean equals(Object obj) {

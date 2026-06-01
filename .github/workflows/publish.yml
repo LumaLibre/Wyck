@@ -1,4 +1,4 @@
-name: Publish API to repo.jsinco.dev/releases
+name: Publish Everything
 
 on:
   release:
@@ -25,3 +25,8 @@ jobs:
           REPO_URL: ${{ secrets.REPO_URL }}
           REPO_USERNAME: ${{ secrets.REPO_USERNAME }}
           REPO_PASSWORD: ${{ secrets.REPO_PASSWORD }}
+
+      - name: Publish to Modrinth
+        run: "./gradlew :paper:modrinth"
+        env:
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}

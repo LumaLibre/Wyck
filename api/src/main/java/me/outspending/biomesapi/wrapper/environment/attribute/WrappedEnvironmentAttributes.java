@@ -101,7 +101,7 @@ public final class WrappedEnvironmentAttributes {
     @AsOf("1.1.0")
     public static final WrappedEnvironmentAttributeSupplier<Object, MoonPhase> MOON_PHASE = supplierWith("visual/moon_phase", AttributeConverters.MOON_PHASE);
 
-    /** Brightness of the stars. 0.5 is the default night start brightness. Only used with the overworld skybox type. */
+    /** Brightness of the stars. 0.5 is the default night star brightness. Only used with the overworld skybox type. */
     @AsOf("1.1.0")
     public static final WrappedEnvironmentAttributeSupplier<Float, Float> STAR_BRIGHTNESS = supplier("visual/star_brightness");
 

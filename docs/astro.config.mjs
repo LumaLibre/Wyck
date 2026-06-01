@@ -3,11 +3,13 @@ import {defineConfig} from 'astro/config';
 import starlight from '@astrojs/starlight';
 import starlightThemeVintage from 'starlight-theme-vintage';
 import {fileURLToPath} from 'node:url';
+import yaml from '@rollup/plugin-yaml';
 
 // https://astro.build/config
 export default defineConfig({
   site: "https://biomes.lumas.dev",
   vite: {
+    plugins: [yaml()],
     resolve: {
       alias: {
         '@': fileURLToPath(new URL('./src', import.meta.url)),
@@ -49,6 +51,10 @@ export default defineConfig({
         {
           label: "Components",
           autogenerate: { directory: "components" },
+        },
+        {
+          label: "Miscellaneous",
+          autogenerate: { directory: "misc" },
         }
       ],
     }),

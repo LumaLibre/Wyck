@@ -24,6 +24,7 @@
   },
   "packageManager": "pnpm@10.26.2",
   "devDependencies": {
+    "@rollup/plugin-yaml": "^5.0.0",
     "@shikijs/themes": "^4.1.0",
     "shiki": "^4.1.0"
   }

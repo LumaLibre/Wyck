@@ -1,6 +1,7 @@
 package me.outspending.biomesapi.paper.renderer.packet.handlers;
 
 import me.outspending.biomesapi.annotations.AsOf;
+import me.outspending.biomesapi.paper.BiomesAPIPlugin;
 import me.outspending.biomesapi.renderer.packet.PacketHandler;
 import me.outspending.biomesapi.renderer.packet.PhonyCustomBiomeCollector;
 import me.outspending.biomesapi.renderer.packet.handlers.PacketEventsPacketHandler;
@@ -28,10 +29,10 @@ public class MonotonicPacketEventsHandler extends PacketEventsPacketHandler {
 
     @Override
     public PacketHandler unregister() {
-        if (!registered) {
-            return this;
+        if (registered && BiomesAPIPlugin.STOPPING) {
+            registered = false;
+            return super.unregister();
         }
-        registered = false;
-        return super.unregister();
+        return this;
     }
 }

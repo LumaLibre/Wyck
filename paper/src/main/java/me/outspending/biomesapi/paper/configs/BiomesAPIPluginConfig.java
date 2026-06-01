@@ -1,22 +1,30 @@
 package me.outspending.biomesapi.paper.configs;
 
-import eu.okaeri.configs.OkaeriConfig;
-import eu.okaeri.configs.annotation.Comment;
+import lombok.Getter;
+import lombok.experimental.Accessors;
+import org.spongepowered.configurate.objectmapping.ConfigSerializable;
+import org.spongepowered.configurate.objectmapping.meta.Comment;
+import org.spongepowered.configurate.objectmapping.meta.Setting;
 
-public class BiomesAPIPluginConfig extends OkaeriConfig {
+@Getter
+@Accessors(fluent = true)
+@ConfigSerializable
+public class BiomesAPIPluginConfig {
     @Comment("Whether to enable FastStats metrics collection for this plugin.")
-    public boolean metrics = true;
+    @Setting("metrics")
+    private boolean metrics = true;
 
-    @Comment({
-            "BiomesAPI may force a specific packet handler implementation to be used by all plugins that hook into it.",
-            "If a plugin attempts to use another injector, BiomesAPI will silently redirect it to the injector defined below.",
-            "",
-            "* PROTOCOLLIB: Requires ProtocolLib to be installed alongside BiomesAPI.",
-            "* PACKETEVENTS: Requires PacketEvents to be installed alongside BiomesAPI. PacketEvents does not re-sync registries,",
-            "* plugins that register custom biomes after the server has started will not have their biomes rendered unless you enable '-Dpacketevents.force-per-user-registries=true'.",
-            "* NETTY: Standalone implementation that does not require any external dependencies.",
+    @Comment(
+            "BiomesAPI may force a specific packet handler implementation to be used by all plugins that hook into it.\n" +
+            "If a plugin attempts to use another injector, BiomesAPI will silently redirect it to the injector defined below.\n" +
+            "\n" +
+            "* PROTOCOLLIB: Requires ProtocolLib to be installed alongside BiomesAPI.\n" +
+            "* PACKETEVENTS: Requires PacketEvents to be installed alongside BiomesAPI. PacketEvents does not re-sync registries,\n" +
+            "* plugins that register custom biomes after the server has started will not have their biomes rendered unless you enable '-Dpacketevents.force-per-user-registries=true'\n" +
+            "* NETTY: Standalone implementation that does not require any external dependencies.\n" +
             "* NONE: No forced injector. Plugins that have chosen a specific injector will have a single instance of their injector used for sending packet-based biomes."
-    })
-    public ForcedInjector forcedInjector = ForcedInjector.NONE;
+    )
+    @Setting("forced-injector")
+    private ForcedInjector forcedInjector = ForcedInjector.NONE;
 
 }

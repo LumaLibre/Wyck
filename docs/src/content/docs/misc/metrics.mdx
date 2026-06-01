@@ -1,0 +1,60 @@
+---
+title: Metrics
+description: Learn how BiomesAPI collects anonymous usage data to help improve the project and how to opt out if you don't want to share your data.
+---
+
+import CodeBlock from "@/components/CodeBlock.astro";
+import SourceLink from "@/components/SourceLink.astro";
+
+BiomesAPI utilizes [FastStats](https://faststats.dev) for collecting anonymous usage data to help improve the project.
+This data includes information about the server environment, such as the Minecraft version, server software, and BiomesAPI version being used.
+It also collects data on which features of BiomesAPI are being used.
+
+### Opting Out
+
+If you do not want to share your data with us, you have a few ways of opting out.
+
+
+#### FastStats Config
+
+[FastStats](https://faststats.dev) creates a global configuration on all Bukkit servers that use it,
+you can find this configuration file at `~/plugins/FastStats/config.properties`.
+
+In this file, you can set `enabled=false` to disable FastStats and prevent it from collecting any data.
+
+<CodeBlock
+    lang="properties"
+    filename="~/plugins/FastStats/config.properties"
+    code={`debug=false
+enabled=false # Set this to false
+serverId=...
+submitAdditionalMetrics=true
+submitErrors=true`}
+/>
+
+#### When BiomesAPI is an External Plugin
+
+If BiomesAPI is being run as an external plugin,
+you can also disable metrics collection in the BiomesAPI configuration file at `~/plugins/BiomesAPI/settings.yml`.
+
+See our [configuration documentation](/misc/plugin-configuration/) for more information on the BiomesAPI configuration file.
+
+#### When BiomesAPI is a Shaded Library
+
+If BiomesAPI is being run as a shaded library, you can disable metrics collection by calling <SourceLink path="BiomesAPI.java" line={113}>disableMetrics()</SourceLink>
+in your plugin's `onLoad()` or `onEnable()` method.
+
+<CodeBlock
+    lang="java"
+    filename="ExamplePlugin.java"
+    code={`import org.bukkit.plugin.java.JavaPlugin;
+
+public class ExamplePlugin extends JavaPlugin {
+    @Override
+    public void onLoad() {
+        // Opt out for your plugin if you don't want your plugin to collect BiomesAPI metrics.
+        BiomesAPI.biomesapi().disableMetrics();
+    }
+}`}
+/>
+

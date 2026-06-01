@@ -95,12 +95,32 @@ public interface BiomesAPI {
     }
 
     /**
-     * Returns the metrics instance for the plugin.
-     * @return the metrics instance for the plugin
+     * Returns the metrics instance for BiomesAPI, if available.
+     * @return the metrics instance, or null if metrics is not available.
      * @since 2.1.0
      */
     @AsOf("2.1.0")
     @Nullable Metrics metrics();
+
+
+    /**
+     * Disables metrics for BiomesAPI when shaded into a consumer plugin.
+     * @since 2.2.0
+     * @throws UnsupportedOperationException if BiomesAPI is running as a standalone plugin.
+     * @throws IllegalStateException if metrics are already enabled.
+     */
+    @AsOf("2.2.0")
+    default void disableMetrics() {
+        if (isExternal()) {
+            throw new UnsupportedOperationException("Cannot disable metrics for BiomesAPI as an external plugin.");
+        }
+        ShadedBiomesAPI shaded = (ShadedBiomesAPI) biomesapi();
+        if (shaded.metrics == null) {
+            shaded.disableMetrics = true;
+        } else {
+            throw new IllegalStateException("Metrics already enabled, call this method in onLoad() or onEnable().");
+        }
+    }
 
     /**
      * Default implementation of BiomesAPI when shaded into a consumer plugin.
@@ -108,10 +128,10 @@ public interface BiomesAPI {
      * has registered itself.
      *
      * @since 2.1.0
-     * @version 2.1.2
+     * @version 2.2.0
      * @author Jsinco
      */
-    @AsOf("2.1.2")
+    @AsOf("2.2.0")
     @ApiStatus.Internal
     final class ShadedBiomesAPI implements BiomesAPI {
 
@@ -119,6 +139,7 @@ public interface BiomesAPI {
 
         private static ShadedBiomesAPI INSTANCE;
         private volatile @Nullable Metrics metrics;
+        private volatile boolean disableMetrics;
 
         private static synchronized ShadedBiomesAPI get() {
             if (INSTANCE == null) {
@@ -134,7 +155,9 @@ public interface BiomesAPI {
 
         private ShadedBiomesAPI() {
             Preconditions.checkState(INSTANCE == null, "Already initialized");
-            registerWhenReady();
+            if (!disableMetrics) { // Nothing can reach this early enough, but oh well
+                registerWhenReady();
+            }
         }
 
         private void registerWhenReady() {
@@ -154,9 +177,17 @@ public interface BiomesAPI {
             long timeoutMillis = TimeUnit.SECONDS.toMillis(ENABLE_WAIT_TIMEOUT_SECONDS);
 
             executor.scheduleAtFixedRate(() -> {
+                if (disableMetrics) {
+                    executor.shutdown();
+                    return;
+                }
+
                 JavaPlugin resolved = tryResolvePlugin();
                 if (resolved != null && resolved.isEnabled()) {
-                    Bukkit.getGlobalRegionScheduler().run(resolved, _ -> setupMetrics(resolved));
+                    Bukkit.getGlobalRegionScheduler().run(resolved, _ -> {
+                        if (disableMetrics) return;
+                        setupMetrics(resolved);
+                    });
                     executor.shutdown();
                     return;
                 }

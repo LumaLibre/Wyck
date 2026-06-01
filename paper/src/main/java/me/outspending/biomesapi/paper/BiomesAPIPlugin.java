@@ -4,8 +4,6 @@ import dev.faststats.bukkit.BukkitMetrics;
 import dev.faststats.core.ErrorTracker;
 import dev.faststats.core.Metrics;
 import dev.faststats.core.data.Metric;
-import eu.okaeri.configs.ConfigManager;
-import eu.okaeri.configs.yaml.snakeyaml.YamlSnakeYamlConfigurer;
 import me.outspending.biomesapi.BiomesAPI;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.annotations.WireFactory;
@@ -19,12 +17,16 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.spongepowered.configurate.CommentedConfigurationNode;
+import org.spongepowered.configurate.yaml.NodeStyle;
+import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
 @WireFactory
 @AsOf("2.1.0")
 @ApiStatus.Internal
 public final class BiomesAPIPlugin extends JavaPlugin implements BiomesAPI {
 
+    public static boolean STOPPING = false;
     private static final String CONFIG_FILE = "settings.yml";
     private static final ErrorTracker ERROR_TRACKER = ErrorTracker.contextAware();
 
@@ -33,23 +35,25 @@ public final class BiomesAPIPlugin extends JavaPlugin implements BiomesAPI {
     private Metrics metrics;
 
     public BiomesAPIPlugin() {
-        BiomesAPIPluginConfig configurations;
+        BiomesAPIPluginConfig loaded;
         try {
-            configurations = ConfigManager.create(BiomesAPIPluginConfig.class, it -> {
-                it.configure(config -> {
-                    config.configurer(new YamlSnakeYamlConfigurer());
-                    config.bindFile(getDataPath().resolve(CONFIG_FILE));
-                });
-                it.saveDefaults();
-                it.load(true);
-            });
+            YamlConfigurationLoader loader = YamlConfigurationLoader.builder()
+                .path(getDataPath().resolve(CONFIG_FILE))
+                .nodeStyle(NodeStyle.BLOCK)
+                .indent(2)
+                .build();
+
+            CommentedConfigurationNode root = loader.load();
+            loaded = root.get(BiomesAPIPluginConfig.class, new BiomesAPIPluginConfig());
+
+            root.set(BiomesAPIPluginConfig.class, loaded);
+            loader.save(root);
         } catch (Throwable e) {
-            getComponentLogger().error("Failed to load config, disabling", e);
-            getServer().getPluginManager().disablePlugin(this);
-            configurations = null;
+            getComponentLogger().error("Failed to load config", e);
+            loaded = new BiomesAPIPluginConfig();
         }
 
-        config = configurations;
+        config = loaded;
         handlerFactory = new PacketHandlerFactoryPluginImpl(this);
         PacketHandler.WIRE.setProvider(BiomesAPIPlugin.class, handlerFactory);
         getComponentLogger().info("Wired BiomesAPI PacketHandler to {}", handlerFactory.getClass().getName());
@@ -59,11 +63,11 @@ public final class BiomesAPIPlugin extends JavaPlugin implements BiomesAPI {
     public void onEnable() {
         handlerFactory.enableDeferredHandlers();
 
-        if (config.metrics) {
+        if (config.metrics()) {
             metrics = BukkitMetrics.factory()
                     .token(BuildInfo.METRICS_TOKEN)
                     .errorTracker(ERROR_TRACKER)
-                    .addMetric(Metric.string("forced_injector", () -> config.forcedInjector.toString()))
+                    .addMetric(Metric.string("forced_injector", () -> config.forcedInjector().toString()))
                     .addMetric(Metric.number("registered_biomes", () -> BiomeHandler.getRegisteredBiomes().size()))
                     .addMetric(Metric.bool("is_external", this::isExternal))
                     .addMetric(Metric.string("plugin_name", () -> "BiomesAPI (Standalone)"))
@@ -78,6 +82,7 @@ public final class BiomesAPIPlugin extends JavaPlugin implements BiomesAPI {
 
     @Override
     public void onDisable() {
+        STOPPING = true;
         for (PacketHandler packetHandler : handlerFactory.getHandlers()) {
             packetHandler.unregister();
         }
