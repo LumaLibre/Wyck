@@ -61,14 +61,6 @@ shadowJar {
 
 BiomesAPI comes as a shaded dependency or a standalone plugin, take your pick!
 
-
-## Wiki 🌙
-Our Wiki is a great place to learn how to use BiomesAPI. This Wiki is updated frequently to make sure our users know how to use our API.
-
-The wiki has everything from how to create a biome to how to use our API to its full potential. It's also pretty descriptive, so you'll know exactly what you're doing.
-
-Check out the Wiki at https://biomes.lumas.dev
-
 ## Why BiomesAPI 🤔
 
 I believe that BiomesAPI is one of the best ways to create custom biomes on a Paper-based Minecraft server.
