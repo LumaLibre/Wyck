@@ -6,12 +6,14 @@ import me.outspending.biomesapi.annotations.WireFactory;
 import me.outspending.biomesapi.biome.BiomeHandler;
 import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.registry.handlers.AttributeMapHandler;
+import me.outspending.biomesapi.registry.handlers.MobSpawnSettingsHandler;
 import me.outspending.biomesapi.registry.handlers.ParticleCatalogHandler;
 import me.outspending.biomesapi.registry.handlers.SpecialEffectsHandler;
 import me.outspending.biomesapi.unsafe.BiomeLock;
 import me.outspending.biomesapi.unsafe.UnsafeNMS;
 import me.outspending.biomesapi.unsafe.UnsafeNMSHandler;
 import me.outspending.biomesapi.wrapper.BiomeSettings;
+import me.outspending.biomesapi.wrapper.entity.BiomeSpawner;
 import me.outspending.biomesapi.wrapper.environment.attribute.NmsEnvironmentAttributes;
 import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttributeMap;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleCatalog;
@@ -44,6 +46,7 @@ public class CustomBiomeRegistry implements BiomeRegistry {
     private static final SpecialEffectsHandler SPECIAL_EFFECTS_HANDLER = new SpecialEffectsHandler();
     private static final ParticleCatalogHandler PARTICLE_CATALOG_HANDLER = new ParticleCatalogHandler();
     private static final AttributeMapHandler ATTRIBUTE_MAP_HANDLER = new AttributeMapHandler();
+    private static final MobSpawnSettingsHandler MOB_SPAWN_SETTINGS_HANDLER = new MobSpawnSettingsHandler();
 
 
     /**
@@ -97,8 +100,11 @@ public class CustomBiomeRegistry implements BiomeRegistry {
             ParticleCatalog particleCatalog = biome.getParticleCatalog();
             PARTICLE_CATALOG_HANDLER.handle(particleCatalog, biomeBuilder);
 
-            WrappedEnvironmentAttributeMap wrappedAttributeMap = biome.getEnvironmentAttributeMap();
+            WrappedEnvironmentAttributeMap wrappedAttributeMap = biome.getAttributes();
             ATTRIBUTE_MAP_HANDLER.handle(wrappedAttributeMap, biomeBuilder);
+
+            BiomeSpawner spawner = biome.getBiomeSpawner();
+            MOB_SPAWN_SETTINGS_HANDLER.handle(spawner, biomeBuilder);
 
             // Register the new Biome object to the biome registry
             Biome createdBiome = biomeBuilder.build();
@@ -166,13 +172,16 @@ public class CustomBiomeRegistry implements BiomeRegistry {
         if (customBiome.getWaterFogColor() != null) {
             environmentAttributeMapBuilder.set(EnvironmentAttributes.WATER_FOG_COLOR, customBiome.getWaterFogColor());
         }
-        WrappedEnvironmentAttributeMap wrappedAttributeMap = customBiome.getEnvironmentAttributeMap();
+        WrappedEnvironmentAttributeMap wrappedAttributeMap = customBiome.getAttributes();
         NmsEnvironmentAttributes.applyTo(environmentAttributeMapBuilder, wrappedAttributeMap);
+
 
 
         EnvironmentAttributeMap environmentAttributeMap = environmentAttributeMapBuilder.build();
 
         BiomeSpecialEffects specialEffects = SPECIAL_EFFECTS_HANDLER.build(customBiome);
+
+        BiomeSpawner spawner = customBiome.getBiomeSpawner();
 
         // Time to reflect
         try {
@@ -187,6 +196,12 @@ public class CustomBiomeRegistry implements BiomeRegistry {
             climateSettingsField.set(biome, climateSettings);
             environmentAttributesField.set(biome, environmentAttributeMap);
             specialEffectsField.set(biome, specialEffects);
+
+            if (spawner != null) {
+                Field mobSpawnSettingsField = Biome.class.getDeclaredField("mobSettings");
+                mobSpawnSettingsField.setAccessible(true);
+                mobSpawnSettingsField.set(biome, spawner.toMinecraft());
+            }
         } catch (NoSuchFieldException | IllegalAccessException e) {
             throw new RuntimeException("Failed to modify biome settings", e);
         }

@@ -7,6 +7,7 @@ import me.outspending.biomesapi.registry.BiomeRegistry;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
 import me.outspending.biomesapi.renderer.packet.data.BlockReplacement;
 import me.outspending.biomesapi.wrapper.BiomeSettings;
+import me.outspending.biomesapi.wrapper.entity.BiomeSpawner;
 import me.outspending.biomesapi.wrapper.environment.GrassColorModifier;
 import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttributeMap;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleCatalog;
@@ -51,6 +52,8 @@ public final class CustomBiomeImpl implements CustomBiome {
 
     private WrappedEnvironmentAttributeMap environmentAttributeMap;
 
+    private @Nullable BiomeSpawner biomeSpawner;
+
 
     @AsOf("2.1.0")
     public CustomBiomeImpl(
@@ -66,7 +69,8 @@ public final class CustomBiomeImpl implements CustomBiome {
             @NotNull GrassColorModifier grassColorModifier,
             @NotNull ParticleCatalog particleCatalog,
             @NotNull BlockReplacement[] blockReplacements,
-            @NotNull WrappedEnvironmentAttributeMap environmentAttributeMap
+            @NotNull WrappedEnvironmentAttributeMap environmentAttributeMap,
+            @Nullable BiomeSpawner biomeSpawner
     ) {
         this.resourceKey = resourceKey;
         this.settings = settings;
@@ -81,6 +85,7 @@ public final class CustomBiomeImpl implements CustomBiome {
         this.particleCatalog = particleCatalog;
         this.blockReplacements = blockReplacements;
         this.environmentAttributeMap = environmentAttributeMap;
+        this.biomeSpawner = biomeSpawner;
     }
 
     @Override
@@ -153,8 +158,13 @@ public final class CustomBiomeImpl implements CustomBiome {
     }
 
     @Override
-    public @NotNull WrappedEnvironmentAttributeMap getEnvironmentAttributeMap() {
+    public @NotNull WrappedEnvironmentAttributeMap getAttributes() {
         return environmentAttributeMap;
+    }
+
+    @Override
+    public @Nullable BiomeSpawner getBiomeSpawner() {
+        return biomeSpawner;
     }
 
     @Override
@@ -220,6 +230,12 @@ public final class CustomBiomeImpl implements CustomBiome {
     @Override
     public CustomBiome setAttributes(@NotNull WrappedEnvironmentAttributeMap environmentAttributeMap) {
         this.environmentAttributeMap = environmentAttributeMap;
+        return this;
+    }
+
+    @Override
+    public CustomBiome setBiomeSpawner(@Nullable BiomeSpawner biomeSpawner) {
+        this.biomeSpawner = biomeSpawner;
         return this;
     }
 

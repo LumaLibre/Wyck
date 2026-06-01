@@ -7,6 +7,7 @@ import me.outspending.biomesapi.renderer.packet.PacketHandler;
 import me.outspending.biomesapi.renderer.packet.data.BlockReplacement;
 import me.outspending.biomesapi.renderer.packet.data.PhonyCustomBiome;
 import me.outspending.biomesapi.wrapper.BiomeSettings;
+import me.outspending.biomesapi.wrapper.entity.BiomeSpawner;
 import me.outspending.biomesapi.wrapper.environment.GrassColorModifier;
 import me.outspending.biomesapi.wrapper.environment.attribute.IntColorSupplier;
 import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttributeMap;
@@ -183,15 +184,34 @@ public interface CustomBiome extends Biome {
     @AsOf("0.0.6")
     @NotNull BlockReplacement[] getBlockReplacements();
 
+    /**
+     * Returns the WrappedEnvironmentAttributeMap of the CustomBiome.
+     * @return the WrappedEnvironmentAttributeMap of the CustomBiome
+     * @since 2.3.0
+     */
+    @AsOf("2.3.0")
+    @NotNull WrappedEnvironmentAttributeMap getAttributes();
 
     /**
      * Returns the WrappedEnvironmentAttributeMap of the CustomBiome.
      *
      * @return the WrappedEnvironmentAttributeMap of the CustomBiome
      * @since 1.1.0
+     * @deprecated Use {@link #getAttributes()} instead.
      */
     @AsOf("1.1.0")
-    @NotNull WrappedEnvironmentAttributeMap getEnvironmentAttributeMap();
+    @Deprecated(forRemoval = true, since = "2.3.0")
+    default @NotNull WrappedEnvironmentAttributeMap getEnvironmentAttributeMap() {
+        return getAttributes();
+    }
+
+    /**
+     * Returns the BiomeSpawner of the CustomBiome.
+     * @return the BiomeSpawner of the CustomBiome
+     * @since 2.3.0
+     */
+    @AsOf("2.3.0")
+    @Nullable BiomeSpawner getBiomeSpawner();
 
     /**
      * Sets the fog color of the CustomBiome.
@@ -382,10 +402,19 @@ public interface CustomBiome extends Biome {
      * @deprecated Use {@link #setAttributes(WrappedEnvironmentAttributeMap)} instead.
      */
     @AsOf("1.1.0")
-    @Deprecated
+    @Deprecated(forRemoval = true, since = "2.3.0")
     default CustomBiome setEnvironmentAttributeMap(@NotNull WrappedEnvironmentAttributeMap environmentAttributeMap) {
         return setAttributes(environmentAttributeMap);
     }
+
+    /**
+     * Sets the BiomeSpawner of the CustomBiome.
+     * @param biomeSpawner the BiomeSpawner of the CustomBiome
+     * @return the CustomBiome with the updated BiomeSpawner
+     * @since 2.3.0
+     */
+    @AsOf("2.3.0")
+    CustomBiome setBiomeSpawner(@Nullable BiomeSpawner biomeSpawner);
 
 
     /**
@@ -524,6 +553,7 @@ public interface CustomBiome extends Biome {
         private ParticleCatalog particleCatalog = ParticleCatalog.EMPTY;
         private BlockReplacement[] blockReplacements = new BlockReplacement[0];
         private WrappedEnvironmentAttributeMap environmentAttributeMap = WrappedEnvironmentAttributeMap.EMPTY;
+        private @Nullable BiomeSpawner biomeSpawner = null;
 
         /**
          * This method creates a new Builder object.
@@ -943,6 +973,17 @@ public interface CustomBiome extends Biome {
         }
 
         /**
+         * This method sets the biome spawner property of the CustomBiome.
+         * @param biomeSpawner The biome spawner of the custom biome.
+         * @return The Builder object, for chaining method calls.
+         */
+        @AsOf("2.3.0")
+        public @NotNull Builder setSpawner(@Nullable BiomeSpawner biomeSpawner) {
+            this.biomeSpawner = biomeSpawner;
+            return this;
+        }
+
+        /**
          * This method creates a new CustomBiome object with the properties set in the Builder.
          *
          * @since 0.0.1
@@ -955,19 +996,20 @@ public interface CustomBiome extends Biome {
             Preconditions.checkArgument(settings != null, "Settings must be set");
 
             return new CustomBiomeImpl(
-                    resourceKey,
-                    settings,
-                    waterColor,
-                    fogColor,
-                    waterFogColor,
-                    skyColor,
-                    foliageColor,
-                    grassColor,
-                    dryFoliageColor,
-                    grassColorModifier,
-                    particleCatalog,
-                    blockReplacements,
-                    environmentAttributeMap
+                resourceKey,
+                settings,
+                waterColor,
+                fogColor,
+                waterFogColor,
+                skyColor,
+                foliageColor,
+                grassColor,
+                dryFoliageColor,
+                grassColorModifier,
+                particleCatalog,
+                blockReplacements,
+                environmentAttributeMap,
+                biomeSpawner
             );
         }
 

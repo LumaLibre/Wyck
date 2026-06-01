@@ -1,0 +1,18 @@
+package me.outspending.biomesapi.wrapper.entity.data;
+
+import me.outspending.biomesapi.annotations.AsOf;
+
+/**
+ * Represents the cost of spawning an entity.
+ * @param charge the amount of energy required to spawn the entity
+ * @param energyBudget the maximum amount of energy that can be used to spawn the entity
+ * @since 2.3.0
+ * @version 2.3.0
+ */
+@AsOf("2.3.0")
+public record SpawnCost(double charge, double energyBudget) {
+    @AsOf("2.3.0")
+    public static SpawnCost of(double charge, double energyBudget) {
+        return new SpawnCost(charge, energyBudget);
+    }
+}

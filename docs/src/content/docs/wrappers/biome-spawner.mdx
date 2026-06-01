@@ -1,0 +1,126 @@
+---
+title: Biome Spawners
+description: Learn how to use BiomesAPI's natural spawners.
+---
+
+import CodeBlock from "@/components/CodeBlock.astro";
+import SourceLink from "@/components/SourceLink.astro";
+import CodeTabs from "@/components/CodeTabs.astro";
+
+:::note
+
+<SourceLink path="wrapper/entity/BiomeSpawner.java">BiomeSpawner</SourceLink>s modify server-sided behavior and must be physically set in the world.
+This means that this API is not compatible with [`PacketHandlers`](/renderers/packet-handler/).
+
+:::
+
+BiomesAPI provides a built-in system for customizing mob spawns inside custom biomes. <SourceLink path="wrapper/entity/BiomeSpawner.java">BiomeSpawner</SourceLink>s
+inform the server what mobs to spawn, how many, how likely, and how many concurrently can spawn.
+
+### Example Usage
+<CodeTabs
+    examples={[
+        {
+            label: "Basic",
+            filename: "ExamplePlugin.java",
+            lang: "java",
+            code:
+`import me.outspending.biomesapi.biome.CustomBiome;
+import me.outspending.biomesapi.registry.BiomeResourceKey;
+import me.outspending.biomesapi.wrapper.BiomeSettings;
+import me.outspending.biomesapi.wrapper.entity.BiomeSpawner;
+import me.outspending.biomesapi.wrapper.entity.MobCategory;
+import me.outspending.biomesapi.wrapper.entity.data.NaturalSpawner;
+import org.bukkit.entity.EntityType;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class ExamplePlugin extends JavaPlugin {
+    @Override
+    public void onEnable() {
+        // A biome that will only ever spawn large quantities of pigs.
+        BiomeSpawner spawner = BiomeSpawner.builder()
+            .setCreatureGenerationProbability(0.1f)
+            .addSpawner(MobCategory.CREATURE, 100, NaturalSpawner.of(EntityType.PIG, 4, 12))
+            .build();
+
+        CustomBiome.builder()
+            .resourceKey(BiomeResourceKey.of("test", "custombiome"))
+            .settings(BiomeSettings.defaultSettings())
+            .waterColor("#F5F2EB")
+            .grassColor("#DBE9EC")
+            .setSpawner(spawner)
+            .register();
+    }
+}`,
+        },
+        {
+            label: "Empty",
+            filename: "ExamplePlugin.java",
+            lang: "java",
+            code:
+`import me.outspending.biomesapi.biome.CustomBiome;
+import me.outspending.biomesapi.registry.BiomeResourceKey;
+import me.outspending.biomesapi.wrapper.BiomeSettings;
+import me.outspending.biomesapi.wrapper.entity.BiomeSpawner;
+import me.outspending.biomesapi.wrapper.entity.MobCategory;
+import me.outspending.biomesapi.wrapper.entity.data.NaturalSpawner;
+import org.bukkit.entity.EntityType;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class ExamplePlugin extends JavaPlugin {
+    @Override
+    public void onEnable() {
+        // A biome that will spawn no mobs.
+        BiomeSpawner spawner = BiomeSpawner.empty();
+
+        CustomBiome.builder()
+            .resourceKey(BiomeResourceKey.of("test", "custombiome"))
+            .settings(BiomeSettings.defaultSettings())
+            .waterColor("#F5F2EB")
+            .grassColor("#DBE9EC")
+            .setSpawner(spawner)
+            .register();
+    }
+}`,
+        },
+    ]}
+/>
+
+## Mob Spawn Costs
+
+Setting <SourceLink path="wrapper/entity/data/SpawnCost.java" line={13}>charge</SourceLink> **lower** and <SourceLink path="wrapper/entity/data/SpawnCost.java" line={13}>energyBudget</SourceLink> **higher** allows more of a mob to spawn concurrently.
+
+### Example Usage
+<CodeBlock
+    lang="java"
+    filename="ExamplePlugin.java"
+    code={`import me.outspending.biomesapi.biome.CustomBiome;
+import me.outspending.biomesapi.registry.BiomeResourceKey;
+import me.outspending.biomesapi.wrapper.BiomeSettings;
+import me.outspending.biomesapi.wrapper.entity.BiomeSpawner;
+import me.outspending.biomesapi.wrapper.entity.MobCategory;
+import me.outspending.biomesapi.wrapper.entity.data.NaturalSpawner;
+import org.bukkit.entity.EntityType;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class ExamplePlugin extends JavaPlugin {
+    @Override
+    public void onEnable() {
+        BiomeSpawner spawner = BiomeSpawner.builder()
+            .setCreatureGenerationProbability(0.1f)
+            .addSpawner(MobCategory.CREATURE, 100, NaturalSpawner.of(EntityType.PIG, 4, 12))
+            .addSpawner(MobCategory.CREATURE, 100, NaturalSpawner.of(EntityType.COW, 4, 12))
+            // Allows sheep to spawn faster in this biome.
+            .addMobSpawnCost(EntityType.SHEEP, SpawnCost.of(25, 100))
+            .build();
+
+        CustomBiome.builder()
+            .resourceKey(BiomeResourceKey.of("test", "custombiome"))
+            .settings(BiomeSettings.defaultSettings())
+            .waterColor("#F5F2EB")
+            .grassColor("#DBE9EC")
+            .setSpawner(spawner)
+            .register();
+    }
+}`}
+/>
