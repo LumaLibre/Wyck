@@ -1,4 +1,4 @@
-name: Publish Everything
+name: Publish
 
 on:
   release:

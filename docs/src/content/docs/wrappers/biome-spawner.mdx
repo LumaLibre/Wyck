@@ -110,8 +110,8 @@ public class ExamplePlugin extends JavaPlugin {
             .setCreatureGenerationProbability(0.1f)
             .addSpawner(MobCategory.CREATURE, 100, NaturalSpawner.of(EntityType.PIG, 4, 12))
             .addSpawner(MobCategory.CREATURE, 100, NaturalSpawner.of(EntityType.COW, 4, 12))
-            // Allows sheep to spawn faster in this biome.
-            .addMobSpawnCost(EntityType.SHEEP, SpawnCost.of(25, 100))
+            // Allows cows to spawn faster in this biome.
+            .addMobSpawnCost(EntityType.COW, SpawnCost.of(25, 100))
             .build();
 
         CustomBiome.builder()
