@@ -24,6 +24,20 @@ java {
     withSourcesJar()
 }
 
+val bundledSourceProjects = listOf(":api")
+
+tasks.named<Jar>("sourcesJar") {
+    bundledSourceProjects.forEach { path ->
+        val proj = project(path)
+        val main = proj.extensions
+            .getByType<SourceSetContainer>()
+            .getByName("main")
+        from(main.allSource)
+    }
+    dependsOn(bundledSourceProjects.map { project(it).tasks.named("classes") })
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
 tasks.shadowJar {
     relocate("dev.faststats", "me.outspending.biomesapi.metrics")
 }
