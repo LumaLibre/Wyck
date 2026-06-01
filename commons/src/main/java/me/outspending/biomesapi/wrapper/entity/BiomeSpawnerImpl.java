@@ -26,12 +26,12 @@ public class BiomeSpawnerImpl implements BiomeSpawner {
     }
 
     @Override
-    public Map<MobCategory, WeightedList<NaturalSpawner>> spawners() {
+    public @NotNull Map<MobCategory, WeightedList<NaturalSpawner>> spawners() {
         return this.spawners;
     }
 
     @Override
-    public Map<EntityType, SpawnCost> mobSpawnCosts() {
+    public @NotNull Map<EntityType, SpawnCost> mobSpawnCosts() {
         return this.mobSpawnCosts;
     }
 

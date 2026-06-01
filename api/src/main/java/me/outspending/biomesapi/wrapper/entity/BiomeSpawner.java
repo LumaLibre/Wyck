@@ -40,7 +40,7 @@ public interface BiomeSpawner extends NmsHandle {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    Map<MobCategory, WeightedList<NaturalSpawner>> spawners();
+    @NotNull Map<MobCategory, WeightedList<NaturalSpawner>> spawners();
 
     /**
      * Gets the spawn cost for each mob type.
@@ -48,7 +48,7 @@ public interface BiomeSpawner extends NmsHandle {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    Map<EntityType, SpawnCost> mobSpawnCosts();
+    @NotNull Map<EntityType, SpawnCost> mobSpawnCosts();
 
     /**
      * Gets the creature generation probability.
@@ -57,6 +57,16 @@ public interface BiomeSpawner extends NmsHandle {
      */
     @AsOf("2.3.0")
     float creatureGenerationProbability();
+
+    /**
+     * Creates a new builder from this BiomeSpawner.
+     * @return a new builder from this BiomeSpawner
+     * @since 2.3.0
+     */
+    @AsOf("2.3.0")
+    default @NotNull Builder toBuilder() {
+        return new Builder(this);
+    }
 
     /**
      * @return a new BiomeSpawner builder
@@ -84,9 +94,30 @@ public interface BiomeSpawner extends NmsHandle {
      */
     @AsOf("2.3.0")
     final class Builder {
-        private final Map<MobCategory, WeightedList.Builder<NaturalSpawner>> spawners = Maps.newLinkedHashMap();
-        private final Map<EntityType, SpawnCost> mobSpawnCosts = Maps.newLinkedHashMap();
-        private float creatureGenerationProbability = DEFAULT_CREATURE_GENERATION_PROBABILITY;
+        private final Map<MobCategory, WeightedList.Builder<NaturalSpawner>> spawners;
+        private final Map<EntityType, SpawnCost> mobSpawnCosts;
+        private float creatureGenerationProbability;
+
+        @AsOf("2.3.0")
+        public Builder() {
+            this.spawners = Maps.newLinkedHashMap();
+            this.mobSpawnCosts = Maps.newLinkedHashMap();
+            this.creatureGenerationProbability = DEFAULT_CREATURE_GENERATION_PROBABILITY;
+        }
+
+        @AsOf("2.3.0")
+        public Builder(@NotNull BiomeSpawner biomeSpawner) {
+            this.spawners = Maps.newLinkedHashMap();
+            for (Map.Entry<MobCategory, WeightedList<NaturalSpawner>> entry : biomeSpawner.spawners().entrySet()) {
+                WeightedList.Builder<NaturalSpawner> builder = WeightedList.builder();
+                for (WeightedList.Weighted<NaturalSpawner> spawnerEntry : entry.getValue().unwrap()) {
+                    builder.add(spawnerEntry.value(), spawnerEntry.weight());
+                }
+                this.spawners.put(entry.getKey(), builder);
+            }
+            this.mobSpawnCosts = Maps.newLinkedHashMap(biomeSpawner.mobSpawnCosts());
+            this.creatureGenerationProbability = biomeSpawner.creatureGenerationProbability();
+        }
 
         /**
          * Adds a spawner to the builder.
