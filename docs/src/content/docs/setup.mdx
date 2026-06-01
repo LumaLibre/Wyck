@@ -104,6 +104,11 @@ version: 1.0-SNAPSHOT
 api-version: 1.21
 # Add these lines:
 dependencies:
+    bootstrap:
+      BiomesAPI:
+        load: BEFORE
+        required: true
+        join-classpath: true
     server:
       BiomesAPI:
         load: BEFORE
