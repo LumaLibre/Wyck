@@ -22,5 +22,9 @@
       "esbuild"
     ]
   },
-  "packageManager": "pnpm@10.26.2"
+  "packageManager": "pnpm@10.26.2",
+  "devDependencies": {
+    "@shikijs/themes": "^4.1.0",
+    "shiki": "^4.1.0"
+  }
 }

@@ -1,5 +1,7 @@
 ---
 import { Code } from "astro:components";
+import catppuccinLatte from "@shikijs/themes/catppuccin-latte";
+import catppuccinMocha from "@shikijs/themes/catppuccin-mocha";
 
 interface Props {
     code: string;
@@ -117,7 +119,7 @@ const label = LANG_LABELS[lang.toLowerCase()] ?? lang.toUpperCase();
         <Code
                 code={code}
                 lang={lang as any}
-                themes={{ light: "catppuccin-latte", dark: "catppuccin-mocha" }}
+                themes={{ light: catppuccinLatte, dark: catppuccinMocha }}
                 defaultColor={false}
         />
     </div>
