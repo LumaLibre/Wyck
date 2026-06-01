@@ -43,7 +43,7 @@ paper {
     authors = listOf("Jsinco", "Outspending")
     apiVersion = "1.21"
     description = "Standalone BiomesAPI plugin for Paper servers."
-    website = "https://github.com/LumaLibre/BiomesAPI"
+    website = "https://biomes.lumas.dev"
     hasOpenClassloader = true
     foliaSupported = true
     load = BukkitPluginDescription.PluginLoadOrder.STARTUP

@@ -24,13 +24,15 @@ In this file, you can set `enabled=false` to disable FastStats and prevent it fr
 
 <CodeBlock
     lang="properties"
-    filename="~/plugins/FastStats/config.properties"
+    filename="config.properties"
     code={`debug=false
 enabled=false # Set this to false
 serverId=...
 submitAdditionalMetrics=true
 submitErrors=true`}
 />
+
+You can also configure metrics using FastStats' [system properties](https://docs.faststats.dev/java/system-properties).
 
 #### When BiomesAPI is an External Plugin
 
@@ -42,7 +44,7 @@ See our [configuration documentation](/misc/plugin-configuration/) for more info
 #### When BiomesAPI is a Shaded Library
 
 If BiomesAPI is being run as a shaded library, you can disable metrics collection by calling <SourceLink path="BiomesAPI.java" line={113}>disableMetrics()</SourceLink>
-in your plugin's `onLoad()` or `onEnable()` method.
+in your plugin's [`onLoad()`](https://jd.papermc.io/paper/26.1.2/org/bukkit/plugin/java/JavaPlugin.html#onLoad()) or [`onEnable()`](https://jd.papermc.io/paper/26.1.2/org/bukkit/plugin/java/JavaPlugin.html#onEnable()) method.
 
 <CodeBlock
     lang="java"

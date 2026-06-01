@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Outspending
  */
 @AsOf("0.0.15")
-public interface BiomeResourceKey extends Keyed {
+public interface BiomeResourceKey extends Key, Keyed {
 
     @ApiStatus.Internal
     WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.registry.BiomeResourceKeyFactoryImpl");
@@ -41,6 +41,12 @@ public interface BiomeResourceKey extends Keyed {
      */
     @AsOf("0.0.15")
     @NotNull String path();
+
+    @AsOf("2.2.1")
+    @Override
+    default @NotNull String value() {
+        return path();
+    }
 
 
     @NotNull Object resourceLocation();
@@ -83,6 +89,12 @@ public interface BiomeResourceKey extends Keyed {
         String[] parts = keyString.split(String.valueOf(NAMESPACE_SEPARATOR), 2);
         Preconditions.checkArgument(parts.length == 2, "keyString must be in the format 'namespace:path'");
         return of(parts[0], parts[1]);
+    }
+
+    @AsOf("2.2.1")
+    @Override
+    default @NotNull String asString() {
+        return namespace() + NAMESPACE_SEPARATOR + path();
     }
 
     /**

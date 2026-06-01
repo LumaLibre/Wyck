@@ -12,6 +12,10 @@ interface Props {
 
 const { code, lang = "text", filename, showDots = true } = Astro.props;
 
+// Drop blank leading/trailing lines so Shiki doesn't render an empty row.
+// Strip only leading newlines (not spaces) to preserve first-line indentation.
+const cleanCode = code.replace(/^\n+/, "").replace(/\s+$/, "");
+
 // Friendly display names for the language badge.
 const LANG_LABELS: Record<string, string> = {
     java: "Java",
@@ -68,7 +72,7 @@ const label = LANG_LABELS[lang.toLowerCase()] ?? lang.toUpperCase();
                 type="button"
                 class="codeblock__copy"
                 data-copy
-                data-code={code}
+                data-code={cleanCode}
                 aria-label="Copy code to clipboard"
         >
             <svg
@@ -118,7 +122,7 @@ const label = LANG_LABELS[lang.toLowerCase()] ?? lang.toUpperCase();
 
     <div class="codeblock__body">
         <Code
-                code={code}
+                code={cleanCode}
                 lang={lang as any}
                 themes={{ light: catppuccinLatte, dark: catppuccinMocha }}
                 defaultColor={false}
@@ -280,22 +284,34 @@ const label = LANG_LABELS[lang.toLowerCase()] ?? lang.toUpperCase();
 
     .codeblock__body {
         overflow-x: auto;
-        padding: 0.35rem 0;
+        padding: 0;
     }
 
-    /* The Shiki output. Strip its own padding/background so our frame owns it. */
+    /* The Shiki output. Strip Starlight's default code-block chrome (border,
+       margin, radius, background, and any injected header pseudo-elements) so
+       our own frame is the only thing drawing around the code. */
     .codeblock__body :global(.astro-code) {
-        margin: 0;
+        margin: 0 !important;
+        border: 0 !important;
+        border-radius: 0 !important;
         padding: 0.9rem 1.15rem;
         background: transparent !important;
+        box-shadow: none !important;
         font-family: var(--__sl-font-mono, ui-monospace, "JetBrains Mono", monospace);
         font-size: 0.86rem;
         line-height: 1.65;
         tab-size: 2;
     }
 
+    .codeblock__body :global(.astro-code)::before,
+    .codeblock__body :global(.astro-code)::after {
+        content: none !important;
+        display: none !important;
+    }
+
     /* Dual-theme token colors: default to the light palette, swap to dark
        when Starlight sets data-theme="dark" on the root. */
+    /*noinspection CssUnresolvedCustomProperty*/
     .codeblock__body :global(.astro-code),
     .codeblock__body :global(.astro-code span) {
         color: var(--shiki-light);
@@ -305,6 +321,7 @@ const label = LANG_LABELS[lang.toLowerCase()] ?? lang.toUpperCase();
         text-decoration: var(--shiki-light-text-decoration);
     }
 
+    /*noinspection CssUnresolvedCustomProperty*/
     :global([data-theme="dark"]) .codeblock__body :global(.astro-code),
     :global([data-theme="dark"]) .codeblock__body :global(.astro-code span) {
         color: var(--shiki-dark);

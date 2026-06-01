@@ -106,14 +106,13 @@ public final class NmsParticleOptionsFactory implements ParticleOptionsFactory {
 
 
     @Override
-    @SuppressWarnings("unchecked")
     public <T> ParticleTypeHandle typeByKey(String key) {
         Identifier id = Identifier.withDefaultNamespace(key);
         ParticleType<?> nms = BuiltInRegistries.PARTICLE_TYPE.getValue(id);
         if (nms == null) {
             throw new IllegalArgumentException("Unknown particle type: " + key);
         }
-        return (ParticleTypeHandle) wrap(nms);
+        return wrap(nms);
     }
 
     @SuppressWarnings("unchecked")

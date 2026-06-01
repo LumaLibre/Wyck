@@ -19,11 +19,11 @@ export default defineConfig({
   integrations: [
     starlight({
       plugins: [starlightThemeVintage()],
-      title: '',
+      title: 'BiomesAPI',
       logo: {
         src: './src/assets/biomesapi.png',
+        replacesTitle: true,
       },
-      //favicon: '/biomesapi.png',
       social: [
         { icon: 'github', label: 'GitHub', href: 'https://github.com/LumaLibre/BiomesAPI' }
       ],

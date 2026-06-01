@@ -53,6 +53,9 @@ const uid = `codetabs-${Math.random().toString(36).slice(2, 9)}`;
 
 const tabs = examples.map((ex, i) => ({
     ...ex,
+    // Drop blank leading/trailing lines so Shiki doesn't render an empty row.
+    // Strip only leading newlines (not spaces) to preserve first-line indentation.
+    code: ex.code.replace(/^\n+/, "").replace(/\s+$/, ""),
     lang: ex.lang ?? "text",
     label: ex.label ?? ex.filename ?? `Example ${i + 1}`,
     badge: langLabel(ex.lang ?? "text"),
@@ -372,7 +375,7 @@ const tabs = examples.map((ex, i) => ({
 
     .codetabs__panel {
         overflow-x: auto;
-        padding: 0.35rem 0;
+        padding: 0;
     }
 
     .codetabs__panel[hidden] {
@@ -380,15 +383,25 @@ const tabs = examples.map((ex, i) => ({
     }
 
     .codetabs__body :global(.astro-code) {
-        margin: 0;
+        margin: 0 !important;
+        border: 0 !important;
+        border-radius: 0 !important;
         padding: 0.9rem 1.15rem;
         background: transparent !important;
+        box-shadow: none !important;
         font-family: var(--__sl-font-mono, ui-monospace, "JetBrains Mono", monospace);
         font-size: 0.86rem;
         line-height: 1.65;
         tab-size: 2;
     }
 
+    .codetabs__body :global(.astro-code)::before,
+    .codetabs__body :global(.astro-code)::after {
+        content: none !important;
+        display: none !important;
+    }
+
+    /*noinspection CssUnresolvedCustomProperty*/
     .codetabs__body :global(.astro-code),
     .codetabs__body :global(.astro-code span) {
         color: var(--shiki-light);
@@ -398,6 +411,7 @@ const tabs = examples.map((ex, i) => ({
         text-decoration: var(--shiki-light-text-decoration);
     }
 
+    /*noinspection CssUnresolvedCustomProperty*/
     :global([data-theme="dark"]) .codetabs__body :global(.astro-code),
     :global([data-theme="dark"]) .codetabs__body :global(.astro-code span) {
         color: var(--shiki-dark);

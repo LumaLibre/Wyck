@@ -5,11 +5,10 @@ description: A guide to getting started with BiomesAPI, including installation i
 ---
 
 import Versions from "@/components/Versions.astro";
-import {getLatestRelease, getLatestSnapshot} from "@/utils/versions.ts";
+import {getLatestRelease} from "@/utils/versions.ts";
 import CodeTabs from "@/components/CodeTabs.astro";
 
 export const latestRelease = await getLatestRelease();
-export const latestSnapshot = await getLatestSnapshot();
 
 BiomesAPI is a custom biome API for [Paper](https://papermc.io/software/paper) servers without the use of datapacks.
 Our wrappers allow you to easily add new biomes to the game and send them to clients without touching any internals.
@@ -43,7 +42,7 @@ repositories {
 }
 
 dependencies {
-    implementation("me.outspending.biomesapi:BiomesAPI:${latestSnapshot}")
+    implementation("me.outspending.biomesapi:BiomesAPI:${latestRelease}")
 }
 
 tasks {
