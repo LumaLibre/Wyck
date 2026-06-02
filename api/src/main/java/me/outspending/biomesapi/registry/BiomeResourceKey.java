@@ -22,6 +22,7 @@ public interface BiomeResourceKey extends Key, Keyed {
     @ApiStatus.Internal
     WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.registry.BiomeResourceKeyFactoryImpl");
 
+    String MINECRAFT_NAMESPACE = "minecraft";
     String BIOMESAPI_NAMESPACE = "biomesapi";
     char NAMESPACE_SEPARATOR = ':';
 
@@ -73,6 +74,17 @@ public interface BiomeResourceKey extends Key, Keyed {
     @AsOf("0.0.8")
     static @NotNull BiomeResourceKey biomesapi(@NotNull String path) {
         return of(BIOMESAPI_NAMESPACE, path);
+    }
+
+    /**
+     * Creates a new BiomeResourceKey in the "minecraft" namespace with the given path.
+     * @param path the path for the resource location
+     * @return a new BiomeResourceKey with the "minecraft" namespace and the given path
+     * @since 2.3.0
+     */
+    @AsOf("2.3.0")
+    static @NotNull BiomeResourceKey minecraft(@NotNull String path) {
+        return of(MINECRAFT_NAMESPACE, path);
     }
 
     /**

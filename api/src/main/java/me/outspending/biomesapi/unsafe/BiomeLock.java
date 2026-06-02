@@ -1,6 +1,7 @@
 package me.outspending.biomesapi.unsafe;
 
 import me.outspending.biomesapi.annotations.AsOf;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.function.Supplier;
 
@@ -14,6 +15,7 @@ import java.util.function.Supplier;
  * @author Outspending
  */
 @AsOf("0.0.1")
+@ApiStatus.NonExtendable
 public interface BiomeLock {
 
     /**

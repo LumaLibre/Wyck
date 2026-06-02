@@ -155,7 +155,7 @@ public interface BiomesAPI {
 
         private ShadedBiomesAPI() {
             Preconditions.checkState(INSTANCE == null, "Already initialized");
-            if (!disableMetrics) { // Nothing can reach this early enough, but oh well
+            if (!disableMetrics || isExternal()) { // Nothing can reach this early enough, but oh well
                 registerWhenReady();
             }
         }
@@ -177,7 +177,7 @@ public interface BiomesAPI {
             long timeoutMillis = TimeUnit.SECONDS.toMillis(ENABLE_WAIT_TIMEOUT_SECONDS);
 
             executor.scheduleAtFixedRate(() -> {
-                if (disableMetrics) {
+                if (disableMetrics || isExternal()) {
                     executor.shutdown();
                     return;
                 }
@@ -185,7 +185,7 @@ public interface BiomesAPI {
                 JavaPlugin resolved = tryResolvePlugin();
                 if (resolved != null && resolved.isEnabled()) {
                     Bukkit.getGlobalRegionScheduler().run(resolved, _ -> {
-                        if (disableMetrics) return;
+                        if (disableMetrics || isExternal()) return;
                         setupMetrics(resolved);
                     });
                     executor.shutdown();

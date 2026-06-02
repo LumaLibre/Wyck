@@ -28,9 +28,11 @@ public class BiomeHandler {
     /**
      * This method gets the registered biomes list
      *
-     * @version 0.0.1
-     * @return
+     * @since 0.0.1
+     * @return a list of all registered biomes
+     * @deprecated Use {@link RegisteredBiomes#registeredBiomes()} instead.
      */
+    @Deprecated
     @AsOf("0.0.1")
     public static List<CustomBiome> getRegisteredBiomes() {
         return List.copyOf(RegisteredBiomes.registeredBiomes());
@@ -49,6 +51,7 @@ public class BiomeHandler {
      * @since 0.0.1
      * @deprecated Use {@link RegisteredBiomes#getOrThrow(BiomeResourceKey)} instead.
      */
+    @Deprecated
     @AsOf("0.0.18")
     public static @Nullable CustomBiome getBiome(@NotNull BiomeResourceKey resourceKey) {
         return RegisteredBiomes.get(resourceKey);
@@ -65,6 +68,7 @@ public class BiomeHandler {
      * @since 0.0.1
      * @deprecated Use {@link RegisteredBiomes#isRegistered(BiomeResourceKey)} instead.
      */
+    @Deprecated
     @AsOf("0.0.18")
     public static boolean isBiome(@NotNull BiomeResourceKey resourceKey) {
         return RegisteredBiomes.isRegistered(resourceKey);
@@ -79,6 +83,7 @@ public class BiomeHandler {
      * @deprecated This method is not supported and will always return false.
      */
     @AsOf("0.0.8")
+    @Deprecated
     public static boolean replaceBiome(@NotNull BiomeResourceKey resourceKey, @NotNull CustomBiome newBiome) {
         throw new UnsupportedOperationException("Unsupported");
     }

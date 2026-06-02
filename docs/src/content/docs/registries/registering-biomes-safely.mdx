@@ -1,0 +1,112 @@
+---
+title: Registering Biomes Safely
+description: Learn how to safely register your biomes to prevent data loss and ensure that your biomes are always registered before they're used.
+---
+
+import CodeBlock from "@/components/CodeBlock.astro";
+
+:::tip
+
+If you're rendering your biomes using a [`PacketHandler`](/renderers/packet-handler/), you don't need to worry about this at all and can skip this article!
+
+:::
+
+## What Does "Registering Safely" Mean?
+
+**When we talk about registering your biomes safely, we generally mean ensuring that your biomes are correctly registered
+on the server before players can load any chunks that may have your biomes in them. This is important because if a chunk is
+loaded that references a biome that hasn't been registered yet, it can lead to the biomes of those chunks being reset to the default biome.
+Which can cause data loss and force you to set your biomes in those chunks again!**
+
+Example of what happens when a chunk loads a biome that isn't registered:
+```log
+[11:51:28 ERROR]: Recoverable errors when loading section [25, -4, 33]: (Unknown registry key in ResourceKey[minecraft:root / minecraft:worldgen/biome]: test:custombiome -> using default)
+```
+
+## Registering Long-term Biomes Safely
+
+If you plan to use BiomesAPI to make long-term modifications to your world either via the [`BiomeSetter`](/renderers/biome-setter/)
+or via a [`BiomeProvider`](/components/biome-providers/), it's generally recommended to make sure that the server either stops or fails to load
+if one or more of your custom biomes fails to properly register.
+
+### Using the Bootstrapper Registry
+
+Using our [`Bootstrapper Registry`](/registries/biome-bootstrap-registry/) is a great way to ensure that your biomes are registered before the server fully initializes
+because no chunks can be loaded before the bootstrap phase completes. If a biome fails to register during the bootstrap phase, we can stop the server from loading entirely.
+
+#### Example Usage
+<CodeBlock
+    lang="java"
+    filename="ExampleBootstrapper.java"
+    code={`import io.papermc.paper.plugin.bootstrap.BootstrapContext;
+import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
+import me.outspending.biomesapi.biome.CustomBiome;
+import me.outspending.biomesapi.registry.BiomeResourceKey;
+import me.outspending.biomesapi.registry.bootstrap.BootstrapBiomeRegistry;
+import me.outspending.biomesapi.registry.bootstrap.Composer;
+import me.outspending.biomesapi.wrapper.BiomeSettings;
+import org.bukkit.entity.EntityType;
+
+public class ExampleBootstrapper implements PluginBootstrap {
+    @Override
+    public void bootstrap(BootstrapContext context) {
+        BootstrapBiomeRegistry registry = BootstrapBiomeRegistry.compose(context, Composer.INJECTOR);
+
+        // If an exception is thrown in this block, the server will not start.
+        registry.deferring(() -> {
+            registry.queue(CustomBiome.builder()
+                .resourceKey(BiomeResourceKey.of("test", "custombiome"))
+                .settings(BiomeSettings.defaultSettings())
+                .fogColor("#FFFFFF")
+                .skyColor("#B99DFC")
+                .waterColor("#F5F2EB")
+                .grassColor("#DBE9EC")
+                .build()
+            );
+        });
+
+        context.getLogger().info("Finished registering biomes.");
+    }
+}`}
+/>
+
+
+### Using the Runtime Registry
+
+If you do not wish to use the bootstrapper registry or wish to register your biomes during your plugin's [`onLoad()`](https://jd.papermc.io/paper/26.1.2/org/bukkit/plugin/java/JavaPlugin.html#onLoad()) or [`onEnable()`](https://jd.papermc.io/paper/26.1.2/org/bukkit/plugin/java/JavaPlugin.html#onEnable()),
+you can also use the runtime registry. However, you must ensure that your properly prevent chunks from being loaded if something goes wrong.
+
+A simple way to do this is by simply shutting down the server if a biome fails to register.
+
+#### Example Usage
+<CodeBlock
+    lang="java"
+    filename="ExamplePlugin.java"
+    code={`import me.outspending.biomesapi.biome.CustomBiome;
+import me.outspending.biomesapi.registry.BiomeResourceKey;
+import me.outspending.biomesapi.wrapper.BiomeSettings;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.logging.Level;
+
+public class ExamplePlugin extends JavaPlugin {
+    @Override
+    public void onLoad() {
+        try {
+            CustomBiome.builder()
+                .resourceKey(BiomeResourceKey.of("test", "custombiome"))
+                .settings(BiomeSettings.defaultSettings())
+                .fogColor("#FFFFFF")
+                .skyColor("#B99DFC")
+                .waterColor("#F5F2EB")
+                .grassColor("#DBE9EC")
+                .register();
+        } catch (Throwable throwable) {
+            getLogger().log(Level.SEVERE, "Failed to register biome(s), shutting down to prevent data loss.", throwable);
+            getServer().shutdown();
+        }
+    }
+}`}
+/>
+
+

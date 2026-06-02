@@ -17,6 +17,7 @@ import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.biome.RegisteredBiomes;
 import me.outspending.biomesapi.registry.BiomeRegistry;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
+import me.outspending.biomesapi.util.ThrowingRunnable;
 import net.minecraft.SharedConstants;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -59,16 +60,18 @@ public final class DatapackBootstrapBiomeRegistry implements BootstrapBiomeRegis
     private final List<CustomBiome> pending = new ArrayList<>();
     private boolean installed = false;
     private String packId;
+    private Throwable deferred;
 
     @Override
     @AsOf("2.3.0")
-    public void queue(@NotNull CustomBiome biome) {
+    public @NotNull BootstrapBiomeRegistry queue(@NotNull CustomBiome biome) {
         this.pending.add(biome);
+        return this;
     }
 
     @Override
     @AsOf("2.3.0")
-    public void install(@NotNull BootstrapContext context) {
+    public @NotNull BootstrapBiomeRegistry install(@NotNull BootstrapContext context) {
         Preconditions.checkState(!this.installed, "already installed");
         this.installed = true;
         this.packId = String.format(PACK_ID_FORMAT, context.getPluginMeta().getName().toLowerCase(Locale.ROOT).replace(' ', '-'));
@@ -76,6 +79,23 @@ public final class DatapackBootstrapBiomeRegistry implements BootstrapBiomeRegis
         context.getLifecycleManager().registerEventHandler(
             LifecycleEvents.DATAPACK_DISCOVERY.newHandler(this::discover)
         );
+        return this;
+    }
+
+    @AsOf("2.3.0")
+    public @NotNull BootstrapBiomeRegistry deferring(@NotNull ThrowingRunnable action) {
+        if (this.deferred == null) {
+            try {
+                action.run();
+            } catch (Throwable t) {
+                if (this.deferred == null) {
+                    this.deferred = t;
+                } else {
+                    this.deferred.addSuppressed(t);
+                }
+            }
+        }
+        return this;
     }
 
     /**
@@ -83,6 +103,9 @@ public final class DatapackBootstrapBiomeRegistry implements BootstrapBiomeRegis
      * load aborts and the server refuses to start.
      */
     private void discover(RegistrarEvent<@NotNull DatapackRegistrar> event) {
+        if (this.deferred != null) {
+            throw new RuntimeException("Deferred custom biome failure; aborting startup", this.deferred);
+        }
         if (this.pending.isEmpty()) {
             return;
         }

@@ -153,49 +153,57 @@ public class CustomBiomeRegistry implements BiomeRegistry {
     @Override
     @AsOf("0.0.8")
     public void modify(@NotNull CustomBiome customBiome) {
-        BiomeResourceKey resourceKey = customBiome.getResourceKey();
+        Preconditions.checkNotNull(customBiome, "customBiome cannot be null");
 
-        Preconditions.checkArgument(RegisteredBiomes.isRegistered(resourceKey), "Biome %s is not registered", resourceKey);
+        BiomeResourceKey key = customBiome.getResourceKey();
 
+        Preconditions.checkArgument(RegisteredBiomes.isRegistered(key), "Biome %s is not registered", key);
+        modify(key, customBiome);
+    }
 
-        BiomeSettings settings = customBiome.getSettings();
+    @Override
+    @AsOf("2.3.0")
+    public void modify(@NotNull BiomeResourceKey key, @NotNull CustomBiome newData) {
+        Preconditions.checkNotNull(key, "key cannot be null");
+        Preconditions.checkNotNull(newData, "newData cannot be null");
+
+        BiomeSettings settings = newData.getSettings();
 
         UnsafeNMS nms = UnsafeNMSHandler.getNMS().orElseThrow();
 
-        Registry<net.minecraft.world.level.biome.@NotNull Biome> biomeRegistry = (Registry<net.minecraft.world.level.biome.Biome>) nms.getRegistry();
-        net.minecraft.world.level.biome.Biome biome = biomeRegistry.getOptional((Identifier) resourceKey.resourceLocation()).orElseThrow(
-                () -> new IllegalStateException("Biome " + resourceKey + " is not registered in the internal biome registry")
+        Registry<net.minecraft.world.level.biome.@NotNull Biome> biomeRegistry = (Registry<net.minecraft.world.level.biome.@NotNull Biome>) nms.getRegistry();
+        net.minecraft.world.level.biome.Biome biome = biomeRegistry.getOptional((Identifier) key.resourceLocation()).orElseThrow(
+            () -> new IllegalStateException("Biome " + key + " is not registered in the internal biome registry")
         );
 
         // Rebuild biome components
-        Biome.ClimateSettings climateSettings = new Biome.ClimateSettings(settings.hasPrecipitation(), settings.temperature(), settings.modifier().toNms(Biome.TemperatureModifier.class), settings.downfall());
-        ParticleCatalog particleCatalog = customBiome.getParticleCatalog();
+        Biome.ClimateSettings climateSettings = new Biome.ClimateSettings(
+            settings.hasPrecipitation(), settings.temperature(),
+            settings.modifier().toNms(Biome.TemperatureModifier.class), settings.downfall());
+        ParticleCatalog particleCatalog = newData.getParticleCatalog();
         List<net.minecraft.world.attribute.AmbientParticle> particles = PARTICLE_CATALOG_HANDLER.create(particleCatalog);
 
-
         EnvironmentAttributeMap.Builder environmentAttributeMapBuilder = EnvironmentAttributeMap.builder()
-                .set(EnvironmentAttributes.AMBIENT_PARTICLES, particles);
+            .set(EnvironmentAttributes.AMBIENT_PARTICLES, particles);
 
         // TODO: Replace with WrappedEnvironmentAttributeMap in the future
-        if (customBiome.getFogColor() != null) {
-            environmentAttributeMapBuilder.set(EnvironmentAttributes.FOG_COLOR, customBiome.getFogColor());
+        if (newData.getFogColor() != null) {
+            environmentAttributeMapBuilder.set(EnvironmentAttributes.FOG_COLOR, newData.getFogColor());
         }
-        if (customBiome.getSkyColor() != null) {
-            environmentAttributeMapBuilder.set(EnvironmentAttributes.SKY_COLOR, customBiome.getSkyColor());
+        if (newData.getSkyColor() != null) {
+            environmentAttributeMapBuilder.set(EnvironmentAttributes.SKY_COLOR, newData.getSkyColor());
         }
-        if (customBiome.getWaterFogColor() != null) {
-            environmentAttributeMapBuilder.set(EnvironmentAttributes.WATER_FOG_COLOR, customBiome.getWaterFogColor());
+        if (newData.getWaterFogColor() != null) {
+            environmentAttributeMapBuilder.set(EnvironmentAttributes.WATER_FOG_COLOR, newData.getWaterFogColor());
         }
-        WrappedEnvironmentAttributeMap wrappedAttributeMap = customBiome.getAttributes();
+        WrappedEnvironmentAttributeMap wrappedAttributeMap = newData.getAttributes();
         NmsEnvironmentAttributes.applyTo(environmentAttributeMapBuilder, wrappedAttributeMap);
-
-
 
         EnvironmentAttributeMap environmentAttributeMap = environmentAttributeMapBuilder.build();
 
-        BiomeSpecialEffects specialEffects = SPECIAL_EFFECTS_HANDLER.build(customBiome);
+        BiomeSpecialEffects specialEffects = SPECIAL_EFFECTS_HANDLER.build(newData);
 
-        BiomeSpawner spawner = customBiome.getBiomeSpawner();
+        BiomeSpawner spawner = newData.getBiomeSpawner();
 
         // Time to reflect
         try {
@@ -220,7 +228,6 @@ public class CustomBiomeRegistry implements BiomeRegistry {
             throw new RuntimeException("Failed to modify biome settings", e);
         }
 
-        RegisteredBiomes.replaceBiome(resourceKey, customBiome);
+        RegisteredBiomes.replaceBiome(key, newData);
     }
-
 }

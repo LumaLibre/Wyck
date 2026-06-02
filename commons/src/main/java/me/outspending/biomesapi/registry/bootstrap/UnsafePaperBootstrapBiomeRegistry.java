@@ -19,6 +19,7 @@ import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.biome.RegisteredBiomes;
 import me.outspending.biomesapi.registry.BiomeRegistry;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
+import me.outspending.biomesapi.util.ThrowingRunnable;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.RegistrationInfo;
 import net.minecraft.core.Registry;
@@ -56,16 +57,18 @@ public final class UnsafePaperBootstrapBiomeRegistry implements BootstrapBiomeRe
 
     private final List<CustomBiome> pending = new ArrayList<>();
     private boolean installed = false;
+    private Throwable deferred;
 
     @Override
     @AsOf("2.3.0")
-    public void queue(@NotNull CustomBiome biome) {
+    public @NotNull BootstrapBiomeRegistry queue(@NotNull CustomBiome biome) {
         this.pending.add(biome);
+        return this;
     }
 
     @Override
     @AsOf("2.3.0")
-    public void install(@NotNull BootstrapContext context) {
+    public @NotNull BootstrapBiomeRegistry install(@NotNull BootstrapContext context) {
         Preconditions.checkState(!this.installed, "already installed");
         this.installed = true;
 
@@ -79,6 +82,23 @@ public final class UnsafePaperBootstrapBiomeRegistry implements BootstrapBiomeRe
         } catch (Throwable t) {
             throw new RuntimeException("BiomesAPI bootstrap install failed", t);
         }
+        return this;
+    }
+
+    @Override
+    public @NotNull BootstrapBiomeRegistry deferring(@NotNull ThrowingRunnable action) {
+        if (this.deferred == null) {
+            try {
+                action.run();
+            } catch (Throwable t) {
+                if (this.deferred == null) {
+                    this.deferred = t;
+                } else {
+                    this.deferred.addSuppressed(t);
+                }
+            }
+        }
+        return this;
     }
 
     // Patchers
@@ -159,6 +179,9 @@ public final class UnsafePaperBootstrapBiomeRegistry implements BootstrapBiomeRe
     @SuppressWarnings({"unchecked", "rawtypes"})
     private void registerComposeHandler(BootstrapContext context, LifecycleEventType.Prioritizable eventType) {
         context.getLifecycleManager().registerEventHandler(eventType, event -> {
+            if (this.deferred != null) {
+                throw new RuntimeException("Deferred custom biome failure; aborting startup", this.deferred);
+            }
             try {
                 RegistryComposeEventImpl impl = (RegistryComposeEventImpl) event;
 

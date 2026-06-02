@@ -1,5 +1,6 @@
 package me.outspending.biomesapi.providers;
 
+import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.biome.CustomBiome;
 import org.bukkit.block.Biome;
@@ -88,6 +89,8 @@ public final class StepsBiomeProvider extends CustomBiomeProvider {
          */
         @AsOf("2.3.0")
         public @NotNull Builder step(@NotNull BiomeStep step, @NotNull CustomBiome... produces) {
+            Preconditions.checkNotNull(step, "step cannot be null");
+            Preconditions.checkNotNull(produces, "produces cannot be null");
             steps.add(step);
             Collections.addAll(biomes, produces);
             return this;
@@ -102,6 +105,8 @@ public final class StepsBiomeProvider extends CustomBiomeProvider {
          */
         @AsOf("2.3.0")
         public @NotNull Builder step(@NotNull CustomBiome biome, @NotNull BiomeCondition condition) {
+            Preconditions.checkNotNull(biome, "biome cannot be null");
+            Preconditions.checkNotNull(condition, "condition cannot be null");
             biomes.add(biome);
             steps.add((info, x, y, z) -> condition.test(info, x, y, z) ? biome : null);
             return this;
@@ -115,6 +120,7 @@ public final class StepsBiomeProvider extends CustomBiomeProvider {
          */
         @AsOf("2.3.0")
         public @NotNull Builder fallback(@NotNull CustomBiome biome) {
+            Preconditions.checkNotNull(biome, "fallback biome cannot be null");
             this.fallback = biome;
             this.biomes.add(biome);
             return this;

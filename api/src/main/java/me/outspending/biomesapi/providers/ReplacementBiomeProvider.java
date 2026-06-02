@@ -1,5 +1,6 @@
 package me.outspending.biomesapi.providers;
 
+import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.biome.CustomBiome;
 import org.bukkit.block.Biome;
@@ -23,7 +24,7 @@ public final class ReplacementBiomeProvider extends CustomBiomeProvider {
     private final Map<Biome, CustomBiome> replacements;
 
     @AsOf("2.3.0")
-    public ReplacementBiomeProvider(Map<Biome, CustomBiome> replacements) {
+    public ReplacementBiomeProvider(@NotNull Map<Biome, CustomBiome> replacements) {
         this.replacements = replacements;
         super(replacements.values());
     }
@@ -52,7 +53,9 @@ public final class ReplacementBiomeProvider extends CustomBiomeProvider {
         private final Map<Biome, CustomBiome> replacements = new HashMap<>();
 
         @AsOf("2.3.0")
-        public @NotNull Builder replace(Biome original, CustomBiome replacement) {
+        public @NotNull Builder replace(@NotNull Biome original, @NotNull CustomBiome replacement) {
+            Preconditions.checkNotNull(original, "original cannot be null");
+            Preconditions.checkNotNull(replacement, "replacement cannot be null");
             replacements.put(original, replacement);
             return this;
         }

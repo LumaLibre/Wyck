@@ -80,4 +80,13 @@ public interface BiomeRegistry {
     @AsOf("0.0.8")
     void modify(@NotNull CustomBiome biome);
 
+    /**
+     * Modifies an existing biome on the Minecraft server.
+     * @param key the key of the biome to modify
+     * @param newData the new biome data
+     * @since 2.3.0
+     */
+    @AsOf("2.3.0")
+    void modify(@NotNull BiomeResourceKey key, @NotNull CustomBiome newData);
+
 }

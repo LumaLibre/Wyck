@@ -89,6 +89,9 @@ public class PacketEventsPacketHandler implements PacketHandler {
 
     @Override
     public PacketHandler appendBiome(@NotNull PhonyCustomBiome biome) {
+        if (biome.biomeCondition() != null) {
+            throw new UnsupportedOperationException("Biome conditions are not supported by PacketEventsPacketHandler yet.");
+        }
         collector.appendBiome(biome);
         return this;
     }

@@ -1,5 +1,6 @@
 package me.outspending.biomesapi.providers;
 
+import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.util.Lazy;
@@ -23,7 +24,8 @@ public final class BasicBiomeProvider extends CustomBiomeProvider {
     private final Lazy<Biome> biome;
 
     @AsOf("2.3.0")
-    public BasicBiomeProvider(CustomBiome customBiome) {
+    public BasicBiomeProvider(@NotNull CustomBiome customBiome) {
+        Preconditions.checkNotNull(customBiome, "customBiome cannot be null");
         this.biome = Lazy.of(customBiome::toBukkitBiome);
         super(List.of(customBiome));
     }

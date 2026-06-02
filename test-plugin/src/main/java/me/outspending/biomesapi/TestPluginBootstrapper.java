@@ -17,32 +17,34 @@ public class TestPluginBootstrapper implements PluginBootstrap {
     public void bootstrap(BootstrapContext context) {
         BootstrapBiomeRegistry registry = BootstrapBiomeRegistry.compose(context, Composer.DATAPACK);
 
-        BiomeSpawner spawner = BiomeSpawner.builder()
-            .setCreatureGenerationProbability(0.1f)
-            .addSpawner(MobCategory.CREATURE, 100, NaturalSpawner.of(EntityType.PIG, 4, 12))
-            .build();
+        registry.deferring(() -> {
+            BiomeSpawner spawner = BiomeSpawner.builder()
+                .setCreatureGenerationProbability(0.2f)
+                .addSpawner(MobCategory.CREATURE, 100, NaturalSpawner.of(EntityType.PIG, 4, 8))
+                .build();
 
-        registry.queue(CustomBiome.builder()
-            .resourceKey(BiomeResourceKey.of("test", "a"))
-            .settings(BiomeSettings.defaultSettings())
-            .fogColor("#FFFFFF")
-            .skyColor("#B99DFC")
-            .waterColor("#F5F2EB")
-            .grassColor("#DBE9EC")
-            .setSpawner(spawner)
-            .build()
-        );
+            registry.queue(CustomBiome.builder()
+                .resourceKey(BiomeResourceKey.of("test", "custombiome"))
+                .settings(BiomeSettings.defaultSettings())
+                .fogColor("#FFFFFF")
+                .skyColor("#B99DFC")
+                .waterColor("#F5F2EB")
+                .grassColor("#DBE9EC")
+                .setSpawner(spawner)
+                .build()
+            );
 
-        registry.queue(CustomBiome.builder()
-            .resourceKey(BiomeResourceKey.of("test", "b"))
-            .settings(BiomeSettings.defaultSettings())
-            .fogColor("#DB00FD")
-            .skyColor("#2F46FF")
-            .waterColor("#000000")
-            .grassColor("#D1D13A")
-            .setSpawner(spawner)
-            .build()
-        );
+            registry.queue(CustomBiome.builder()
+                .resourceKey(BiomeResourceKey.of("test", "b"))
+                .settings(BiomeSettings.defaultSettings())
+                .fogColor("#DB00FD")
+                .skyColor("#2F46FF")
+                .waterColor("#000000")
+                .grassColor("#D1D13A")
+                .setSpawner(spawner)
+                .build()
+            );
+        });
         context.getLogger().info("Finished registering biomes.");
     }
 }

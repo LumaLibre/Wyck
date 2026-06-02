@@ -4,6 +4,7 @@ import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.factory.WireProvider;
+import me.outspending.biomesapi.util.ThrowingRunnable;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -48,7 +49,6 @@ public interface BootstrapBiomeRegistry {
      * @apiNote {@link #install(BootstrapContext)} must be called after this method.
      */
     @AsOf("2.3.0")
-    @ApiStatus.Internal
     static @NotNull BootstrapBiomeRegistry injector() {
         return UNSAFE.getNew();
     }
@@ -60,7 +60,6 @@ public interface BootstrapBiomeRegistry {
      * @apiNote {@link #install(BootstrapContext)} must be called after this method.
      */
     @AsOf("2.3.0")
-    @ApiStatus.Internal
     static @NotNull BootstrapBiomeRegistry datapack() {
         return DATAPACK.getNew();
     }
@@ -71,8 +70,7 @@ public interface BootstrapBiomeRegistry {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    @ApiStatus.Internal
-    void install(@NotNull BootstrapContext context);
+    @NotNull BootstrapBiomeRegistry install(@NotNull BootstrapContext context);
 
     /**
      * Queues a biome to be registered.
@@ -80,5 +78,14 @@ public interface BootstrapBiomeRegistry {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    void queue(@NotNull CustomBiome biome);
+    @NotNull BootstrapBiomeRegistry queue(@NotNull CustomBiome biome);
+
+    /**
+     * Defers the execution of a runnable until the registry is installed.
+     * @param runnable the runnable to defer
+     * @return this registry instance
+     * @since 2.3.0
+     */
+    @AsOf("2.3.0")
+    @NotNull BootstrapBiomeRegistry deferring(@NotNull ThrowingRunnable runnable);
 }
