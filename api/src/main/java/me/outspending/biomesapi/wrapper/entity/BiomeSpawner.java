@@ -31,7 +31,7 @@ public interface BiomeSpawner extends NmsHandle {
     @AsOf("2.3.0")
     @ApiStatus.Internal
     interface Factory {
-        BiomeSpawner create(Map<MobCategory, WeightedList.Builder<NaturalSpawner>> spawners, Map<EntityType, SpawnCost> mobSpawnCosts, float creatureGenerationProbability);
+        @NotNull BiomeSpawner create(@NotNull Map<MobCategory, WeightedList.Builder<NaturalSpawner>> spawners, @NotNull Map<EntityType, SpawnCost> mobSpawnCosts, float creatureGenerationProbability);
     }
 
     /**

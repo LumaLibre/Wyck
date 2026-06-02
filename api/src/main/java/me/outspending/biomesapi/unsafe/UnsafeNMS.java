@@ -26,6 +26,8 @@ import java.util.function.Supplier;
 @AsOf("0.0.1")
 public interface UnsafeNMS {
 
+    String UNAVAILABLE_REGISTRY = "Registry unavailable. Did you call #register() during the bootstrap phase?";
+
     /**
      * Checks if a given chunk is within the view distance of a player.
      *

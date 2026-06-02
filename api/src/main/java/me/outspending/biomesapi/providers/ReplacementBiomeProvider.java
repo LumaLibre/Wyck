@@ -33,7 +33,7 @@ public final class ReplacementBiomeProvider extends CustomBiomeProvider {
     public @NotNull Biome getBiome(@NotNull WorldInfo worldInfo, int x, int y, int z) {
         Biome vanilla = worldInfo.vanillaBiomeProvider().getBiome(worldInfo, x, y, z);
         CustomBiome replacement = replacements.get(vanilla);
-        return replacement != null ? replacement : vanilla;
+        return replacement != null ? replacement.toBukkitBiome() : vanilla;
     }
 
     @AsOf("2.3.0")

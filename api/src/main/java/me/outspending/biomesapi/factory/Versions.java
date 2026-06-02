@@ -1,5 +1,6 @@
 package me.outspending.biomesapi.factory;
 
+import io.papermc.paper.ServerBuildInfo;
 import me.outspending.biomesapi.BiomesAPI;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.exceptions.UnknownNMSVersionException;
@@ -14,7 +15,7 @@ import org.bukkit.Bukkit;
  */
 @AsOf("2.0.0")
 public enum Versions {
-    V1_21_11(Version.of(Version.Type.SUPPORTED, "v1_21_11", "1.21.9", "1.21.10", "1.21.11")),
+    V1_21_11(Version.of(Version.Type.SUPPORTED, "v1_21_11", "1.21.10", "1.21.11")),
     V26_1(Version.of(Version.Type.SUPPORTED, "v26_1", "26.1", "26.1.1", "26.1.2"));
 
     public static final Version ACTIVE = getActive();
@@ -34,7 +35,12 @@ public enum Versions {
         // This is here to prevent lazy loading of the BiomesAPI interface
         BiomesAPI.biomesapi();
 
-        String mc = Bukkit.getMinecraftVersion();
+        String mc;
+        try {
+            mc = ServerBuildInfo.buildInfo().minecraftVersionId();
+        } catch (Exception _) { // Listening for ClassNotFoundException; Should never happen
+            mc = Bukkit.getMinecraftVersion();
+        }
 
         for (Versions versions : values()) {
             if (versions.getVersion().isApplicable(mc)) {

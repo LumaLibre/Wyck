@@ -48,16 +48,69 @@ public class CustomBiomeRegistry implements BiomeRegistry {
     private static final AttributeMapHandler ATTRIBUTE_MAP_HANDLER = new AttributeMapHandler();
     private static final MobSpawnSettingsHandler MOB_SPAWN_SETTINGS_HANDLER = new MobSpawnSettingsHandler();
 
+    // TODO: Extract commons
+
 
     /**
-     * This method registers a custom biome to a Minecraft server.
-     * It first unlocks the biome registry using the BiomeLock class.
-     * Then, it retrieves the biome registry from the server and creates a new Biome object with the settings and colors from the CustomBiome object.
-     * The new Biome object is then registered to the biome registry using the ResourceLocation from the CustomBiome object.
-     * Finally, it freezes the biome registry again using the BiomeLock class.
+     * Builds the NMS {@link Biome} from a {@link CustomBiome} using the registered settings, colors,
+     * special effects, particles, environment attributes, and mob-spawn settings.
+     *
+     * <p>This performs no registration and touches no server state, so it is safe to call during the
+     * bootstrap/registry-load phase as well as at runtime. Covariantly narrows the API's
+     * {@link BiomeRegistry#buildNmsBiome(CustomBiome)} {@code Object} return to {@link Biome}.
+     *
+     * @param biome the custom biome to convert
+     * @return the constructed NMS biome
+     * @since 2.3.0
+     */
+    @Override
+    @AsOf("2.3.0")
+    public @NotNull Biome buildDelegate(@NotNull CustomBiome biome) {
+        Preconditions.checkNotNull(biome, "biome cannot be null");
+
+        BiomeSettings settings = biome.getSettings();
+
+        Biome.BiomeBuilder biomeBuilder = new Biome.BiomeBuilder()
+            .downfall(settings.downfall())
+            .temperature(settings.temperature())
+            .temperatureAdjustment(settings.modifier().toNms(Biome.TemperatureModifier.class))
+            .hasPrecipitation(settings.hasPrecipitation())
+            .mobSpawnSettings(MobSpawnSettings.EMPTY)
+            .generationSettings(BiomeGenerationSettings.EMPTY);
+
+        // TODO: Replace with WrappedEnvironmentAttributeMap in the future
+        if (biome.getFogColor() != null) {
+            biomeBuilder.setAttribute(EnvironmentAttributes.FOG_COLOR, biome.getFogColor());
+        }
+        if (biome.getSkyColor() != null) {
+            biomeBuilder.setAttribute(EnvironmentAttributes.SKY_COLOR, biome.getSkyColor());
+        }
+        if (biome.getWaterFogColor() != null) {
+            biomeBuilder.setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, biome.getWaterFogColor());
+        }
+
+        BiomeSpecialEffects effects = SPECIAL_EFFECTS_HANDLER.build(biome);
+        SPECIAL_EFFECTS_HANDLER.handle(effects, biomeBuilder);
+
+        ParticleCatalog particleCatalog = biome.getParticleCatalog();
+        PARTICLE_CATALOG_HANDLER.handle(particleCatalog, biomeBuilder);
+
+        WrappedEnvironmentAttributeMap wrappedAttributeMap = biome.getAttributes();
+        ATTRIBUTE_MAP_HANDLER.handle(wrappedAttributeMap, biomeBuilder);
+
+        BiomeSpawner spawner = biome.getBiomeSpawner();
+        MOB_SPAWN_SETTINGS_HANDLER.handle(spawner, biomeBuilder);
+
+        return biomeBuilder.build();
+    }
+
+    /**
+     * Registers a custom biome to the running server's biome registry (runtime injection).
+     * Unlocks the registry, builds the biome via {@link #buildDelegate(CustomBiome)}, registers it
+     * if absent, and re-freezes the registry.
      *
      * @param biome The CustomBiome object that should be registered to the server.
-     * @since  0.0.1
+     * @since 0.0.1
      */
     @Override
     @AsOf("0.0.1")
@@ -66,54 +119,15 @@ public class CustomBiomeRegistry implements BiomeRegistry {
         Preconditions.checkNotNull(biome, "biome cannot be null");
 
         Consumer<UnsafeNMS> consumer = nms -> {
-            // Retrieve the biome registry from NMS
             Registry<@NotNull Biome> registry = (Registry<@NotNull Biome>) nms.getRegistry();
-
-            // Get the ResourceLocation and BiomeSettings from the CustomBiome object
             Identifier resourceLocation = ((BiomeResourceKeyImpl) biome.getResourceKey()).resourceLocation();
-            BiomeSettings settings = biome.getSettings();
 
-            // Build the Biome object
-            Biome.BiomeBuilder biomeBuilder = new Biome.BiomeBuilder()
-                    .downfall(settings.downfall())
-                    .temperature(settings.temperature())
-                    .temperatureAdjustment(settings.modifier().toNms(Biome.TemperatureModifier.class))
-                    .hasPrecipitation(settings.hasPrecipitation())
-                    .mobSpawnSettings(MobSpawnSettings.EMPTY)
-                    .generationSettings(BiomeGenerationSettings.EMPTY);
-
-            // TODO: Replace with WrappedEnvironmentAttributeMap in the future
-            if (biome.getFogColor() != null) {
-                biomeBuilder.setAttribute(EnvironmentAttributes.FOG_COLOR, biome.getFogColor());
-            }
-            if (biome.getSkyColor() != null) {
-                biomeBuilder.setAttribute(EnvironmentAttributes.SKY_COLOR, biome.getSkyColor());
-            }
-            if (biome.getWaterFogColor() != null) {
-                biomeBuilder.setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, biome.getWaterFogColor());
-            }
-
-            // Create a new Biome object with the settings and colors from the CustomBiome object
-            BiomeSpecialEffects effects = SPECIAL_EFFECTS_HANDLER.build(biome);
-            SPECIAL_EFFECTS_HANDLER.handle(effects, biomeBuilder);
-
-            ParticleCatalog particleCatalog = biome.getParticleCatalog();
-            PARTICLE_CATALOG_HANDLER.handle(particleCatalog, biomeBuilder);
-
-            WrappedEnvironmentAttributeMap wrappedAttributeMap = biome.getAttributes();
-            ATTRIBUTE_MAP_HANDLER.handle(wrappedAttributeMap, biomeBuilder);
-
-            BiomeSpawner spawner = biome.getBiomeSpawner();
-            MOB_SPAWN_SETTINGS_HANDLER.handle(spawner, biomeBuilder);
-
-            // Register the new Biome object to the biome registry
-            Biome createdBiome = biomeBuilder.build();
+            Biome createdBiome = buildDelegate(biome);
 
             if (!registry.containsKey(resourceLocation)) {
                 Registry.register(registry, resourceLocation, createdBiome);
             }
 
-            // Add the custom biome to the list of registered biomes
             BiomeHandler.getRegisteredBiomes().add(biome);
         };
 

@@ -17,7 +17,7 @@ You may <SourceLink path="registry/BiomeRegistry.java" line={61}>modify(CustomBi
 
 :::
 
-* <SourceLink path="registry/BiomeRegistry.java" line={33}>newRegistry</SourceLink>: Creates a new instance of the BiomeRegistry.
+* <SourceLink path="registry/BiomeRegistry.java" line={30}>registry()</SourceLink>: Creates a new instance of the BiomeRegistry.
 * <SourceLink path="registry/BiomeRegistry.java" line={45}>register(CustomBiome)</SourceLink>: Registers a custom biome to the Minecraft registry.
 * <SourceLink path="registry/BiomeRegistry.java" line={61}>modify(CustomBiome)</SourceLink>: Modifies an existing biome in the Minecraft registry.
 
@@ -40,7 +40,7 @@ public class ExamplePlugin extends JavaPlugin {
             .waterColor("#F5F2EB")
             .build();
 
-        BiomeRegistry registry = BiomeRegistry.newRegistry();
+        BiomeRegistry registry = BiomeRegistry.registry();
         registry.register(customBiome);
     }
 }`}

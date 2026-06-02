@@ -1,0 +1,260 @@
+package me.outspending.biomesapi.registry.bootstrap;
+
+import com.google.common.base.Preconditions;
+import io.papermc.paper.plugin.bootstrap.BootstrapContext;
+import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEventType;
+import io.papermc.paper.registry.PaperRegistries;
+import io.papermc.paper.registry.RegistryHolder;
+import io.papermc.paper.registry.RegistryKey;
+import io.papermc.paper.registry.WritableCraftRegistry;
+import io.papermc.paper.registry.entry.RegistryEntry;
+import io.papermc.paper.registry.entry.RegistryEntryMeta;
+import io.papermc.paper.registry.event.RegistryComposeEventImpl;
+import io.papermc.paper.registry.event.RegistryEventProvider;
+import io.papermc.paper.registry.event.RegistryEventTypeProviderImpl;
+import io.papermc.paper.registry.event.type.RegistryEntryAddEventType;
+import me.outspending.biomesapi.annotations.AsOf;
+import me.outspending.biomesapi.annotations.WireFactory;
+import me.outspending.biomesapi.biome.BiomeHandler;
+import me.outspending.biomesapi.biome.CustomBiome;
+import me.outspending.biomesapi.registry.BiomeRegistry;
+import me.outspending.biomesapi.registry.BiomeResourceKey;
+import net.minecraft.core.MappedRegistry;
+import net.minecraft.core.RegistrationInfo;
+import net.minecraft.core.Registry;
+import net.minecraft.core.WritableRegistry;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.biome.Biome;
+import org.jetbrains.annotations.NotNull;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Deque;
+import java.util.IdentityHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+
+/**
+ * Implementation of {@link BootstrapBiomeRegistry} that registers custom biomes through Paper's
+ * {@link WritableCraftRegistry}. Unsafe, not guaranteed to work on the next Java LTS.
+ *
+ * @since 2.3.0
+ * @version 2.3.0
+ * @author Jsinco
+ */
+@WireFactory
+@AsOf("2.3.0")
+@SuppressWarnings("UnstableApiUsage")
+public final class UnsafePaperBootstrapBiomeRegistry implements BootstrapBiomeRegistry {
+
+    private final List<CustomBiome> pending = new ArrayList<>();
+    private boolean installed = false;
+
+    @Override
+    @AsOf("2.3.0")
+    public void queue(@NotNull CustomBiome biome) {
+        this.pending.add(biome);
+    }
+
+    @Override
+    @AsOf("2.3.0")
+    public void install(@NotNull BootstrapContext context) {
+        Preconditions.checkState(!this.installed, "already installed");
+        this.installed = true;
+
+        try {
+            // Flip biome's entry from read-only Craft -> ADDABLE Buildable whose holder is writable.
+            makeBiomeAddable();
+
+            // Subscribe to the new biome compose event
+            LifecycleEventType.Prioritizable<?, ?> eventType = biomeComposeEventType();
+            registerComposeHandler(context, eventType);
+        } catch (Throwable t) {
+            throw new RuntimeException("BiomesAPI bootstrap install failed", t);
+        }
+    }
+
+    // Patchers
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private static void makeBiomeAddable() throws Exception {
+        RegistryEntry original = PaperRegistries.getEntry(RegistryKey.BIOME);
+        if (original == null) {
+            throw new IllegalStateException("No biome RegistryEntry found in PaperRegistries");
+        }
+
+        // original is the stock biome entry (a .delayed() wrapper). Its meta() exposes the Craft
+        // ServerSide (mapper + serialization updater) we reuse to build an equivalent Buildable.
+        RegistryEntryMeta.ServerSide craftMeta = (RegistryEntryMeta.ServerSide) original.meta();
+
+        RegistryEntryMeta.Buildable buildable = new RegistryEntryMeta.Buildable(
+            craftMeta.mcKey(),
+            craftMeta.apiKey(),
+            craftMeta.classToPreload(),
+            craftMeta.registryTypeMapper(),
+            craftMeta.serializationUpdater(),
+            // compose-only: never invoked, since we never register an entryAdd handler for biome
+            (_, _) -> {
+                throw new UnsupportedOperationException("biome is compose-only; entryAdd unsupported");
+            },
+            RegistryEntryMeta.RegistryModificationApiSupport.ADDABLE
+        );
+
+        // createRegistryHolder is called by RegistryHolder.Delayed.loadFrom during load, with the
+        // REAL, populated NMS biome MappedRegistry. The Memoized supplier resolves lazily (inside
+        // runFreezeListeners), so we wrap the genuine registry the server uses. Producing a
+        // WritableCraftRegistry is what makes PaperRegistryAccess.getWritableRegistry succeed.
+        RegistryEntry inner = new RegistryEntry() {
+            @Override
+            public @NotNull RegistryHolder createRegistryHolder(@NotNull Registry r) {
+                return new RegistryHolder.Memoized<>(
+                    () -> new WritableCraftRegistry<>((MappedRegistry) r, buildable));
+            }
+
+            @Override
+            public @NotNull RegistryEntryMeta meta() {
+                return buildable;
+            }
+        };
+
+        // .delayed() is required: at org.bukkit.Registry.<clinit> the registry doesn't exist yet,
+        // and only a DelayedRegistryEntry is tolerated there (it seeds an empty Delayed holder
+        // instead of eagerly creating the registry). Without it: "No registry present for Biome".
+        @SuppressWarnings("deprecation") // TODO: Find replacement for .delayed()
+        RegistryEntry patched = inner.delayed();
+
+        overwriteEntry("BY_REGISTRY_KEY", RegistryKey.BIOME, patched);
+        overwriteEntry("BY_RESOURCE_KEY", Registries.BIOME, patched);
+    }
+
+
+    @SuppressWarnings({"unchecked", "rawtypes", "NonExtendableApiUsage"})
+    private static LifecycleEventType.Prioritizable biomeComposeEventType() {
+        RegistryEventProvider provider = new RegistryEventProvider() {
+            @Override
+            public @NotNull RegistryKey registryKey() {
+                return RegistryKey.BIOME;
+            }
+
+            @Override
+            public RegistryEntryAddEventType entryAdd() {
+                return null; // never used for biome (compose-only)
+            }
+
+            @Override
+            public LifecycleEventType.@NotNull Prioritizable compose() {
+                return RegistryEventTypeProviderImpl.instance().registryCompose(this);
+            }
+        };
+        return provider.compose();
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private void registerComposeHandler(BootstrapContext context, LifecycleEventType.Prioritizable eventType) {
+        context.getLifecycleManager().registerEventHandler(eventType, event -> {
+            try {
+                RegistryComposeEventImpl impl = (RegistryComposeEventImpl) event;
+
+                // The API writable registry wraps the live, pre-freeze NMS WritableRegistry<Biome>.
+                WritableRegistry<@NotNull Biome> nms = findNmsWritable(impl.registry());
+
+                // Single source of truth for biome construction (also used by runtime register()).
+                BiomeRegistry biomesAPIRegistry = BiomeRegistry.registry();
+
+                for (CustomBiome cb : this.pending) {
+                    Biome built = (Biome) biomesAPIRegistry.buildDelegate(cb);
+                    ResourceKey<@NotNull Biome> key = nmsKeyOf(cb);
+                    if (!nms.containsKey(key)) {
+                        nms.register(key, built, RegistrationInfo.BUILT_IN);
+                    }
+                    BiomeHandler.getRegisteredBiomes().add(cb);
+                }
+                this.pending.clear();
+            } catch (Throwable t) {
+                throw new RuntimeException("Failed to inject custom biomes during compose", t);
+            }
+        });
+    }
+
+
+
+    private static ResourceKey<@NotNull Biome> nmsKeyOf(CustomBiome cb) {
+        BiomeResourceKey rk = cb.getResourceKey();
+        return ResourceKey.create(Registries.BIOME, Identifier.fromNamespaceAndPath(rk.namespace(), rk.path()));
+    }
+
+    /**
+     * BFS the object graph of the API writable registry to find the backing NMS
+     * {@link WritableRegistry}. Defensive on purpose, avoids hard-coding Paper-internal field names.
+     */
+    @SuppressWarnings("unchecked")
+    private static WritableRegistry<@NotNull Biome> findNmsWritable(Object root) throws Exception {
+        Set<Object> seen = Collections.newSetFromMap(new IdentityHashMap<>());
+        Deque<Object> queue = new ArrayDeque<>();
+        queue.add(root);
+
+        while (!queue.isEmpty()) {
+            Object o = queue.poll();
+            if (o == null || !seen.add(o)) {
+                continue;
+            }
+
+            if (o instanceof WritableRegistry<?>) {
+                return (WritableRegistry<@NotNull Biome>) o;
+            }
+
+            for (Class<?> c = o.getClass(); c != null && c != Object.class; c = c.getSuperclass()) {
+                for (Field field : c.getDeclaredFields()) {
+                    if (Modifier.isStatic(field.getModifiers())) {
+                        continue;
+                    }
+                    Class<?> type = field.getType();
+                    if (type.isPrimitive() || type.getName().startsWith("java.")) {
+                        continue;
+                    }
+                    field.setAccessible(true);
+                    Object v = field.get(o);
+                    if (v != null) {
+                        queue.add(v);
+                    }
+                }
+            }
+        }
+        throw new IllegalStateException("Could not locate NMS WritableRegistry<Biome> from " + root.getClass());
+    }
+
+    // Unsafe operations
+
+    /**
+     * Overwrite a {@code private static final Map} field on {@link PaperRegistries} with a fresh
+     * unmodifiable copy that also contains our biome entry. Uses {@link sun.misc.Unsafe} static field
+     * base/offset, so it needs no {@code --add-opens}.
+     */
+    @SuppressWarnings({"unchecked", "removal"})
+    private static void overwriteEntry(String fieldName, Object key, RegistryEntry<?, ?> patched) throws Exception {
+        Field field = PaperRegistries.class.getDeclaredField(fieldName);
+
+        sun.misc.Unsafe unsafe = getUnsafe();
+        Object staticBase = unsafe.staticFieldBase(field);
+        long staticOffset = unsafe.staticFieldOffset(field);
+
+        Map<Object, Object> current = (Map<Object, Object>) unsafe.getObject(staticBase, staticOffset);
+        Map<Object, Object> copy = new IdentityHashMap<>(current);
+        copy.put(key, patched);
+
+        unsafe.putObject(staticBase, staticOffset, Collections.unmodifiableMap(copy));
+    }
+
+    private static sun.misc.Unsafe getUnsafe() throws Exception {
+        Field field = sun.misc.Unsafe.class.getDeclaredField("theUnsafe");
+        field.setAccessible(true);
+        return (sun.misc.Unsafe) field.get(null);
+    }
+}

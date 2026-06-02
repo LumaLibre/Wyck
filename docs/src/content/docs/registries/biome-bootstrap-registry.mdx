@@ -1,0 +1,82 @@
+---
+title: Bootstrap Registry
+description: Learn how to register biomes during the bootstrap phase of the Minecraft server lifecycle, allowing you to add biomes before the server fully initializes.
+---
+
+import CodeBlock from "@/components/CodeBlock.astro";
+import SourceLink from "@/components/SourceLink.astro";
+
+:::note
+
+The <SourceLink path="registry/bootstrap/BootstrapBiomeRegistry.java">BootstrapBiomeRegistry</SourceLink> leverages the
+Bootstrap API from [Paper Plugins](https://docs.papermc.io/paper/dev/getting-started/paper-plugins/). Your plugin must use a
+`paper-plugin.yml` for this API to be accessible to your project!
+
+:::
+
+The <SourceLink path="registry/bootstrap/BootstrapBiomeRegistry.java">BootstrapBiomeRegistry</SourceLink> allows you to register biomes during the bootstrap phase of the Minecraft server lifecycle, which occurs before the server fully initializes.
+This can be useful for adding biomes that need to be available early in the server's startup process, ensuring that your biomes are always registered and loaded before any code executes that may reference them.
+
+## Choosing a Composer
+
+When registering <SourceLink path="biome/CustomBiome.java">CustomBiome</SourceLink>s through the <SourceLink path="registry/bootstrap/BootstrapBiomeRegistry.java">BootstrapBiomeRegistry</SourceLink> API,
+you must choose a <SourceLink path="registry/bootstrap/Composer.java">Composer</SourceLink> to determine how the server will recognize your biomes.
+
+* <SourceLink path="registry/bootstrap/Composer.java" line={21}>INJECTOR</SourceLink>: Injects biomes directly into the live Minecraft biome registry by patching Paper's registry bootstrap process.
+* <SourceLink path="registry/bootstrap/Composer.java" line={26}>DATAPACK</SourceLink>: Biomes registered with this composer will be added to the server as if they were registered through a datapack.
+
+
+### Example Usage
+<CodeBlock
+    lang="java"
+    filename="ExampleBootstrapper.java"
+    code={`import io.papermc.paper.plugin.bootstrap.BootstrapContext;
+import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
+import me.outspending.biomesapi.biome.CustomBiome;
+import me.outspending.biomesapi.registry.BiomeResourceKey;
+import me.outspending.biomesapi.registry.bootstrap.BootstrapBiomeRegistry;
+import me.outspending.biomesapi.registry.bootstrap.Composer;
+import me.outspending.biomesapi.wrapper.BiomeSettings;
+import me.outspending.biomesapi.wrapper.entity.BiomeSpawner;
+import me.outspending.biomesapi.wrapper.entity.MobCategory;
+import me.outspending.biomesapi.wrapper.entity.data.NaturalSpawner;
+import org.bukkit.entity.EntityType;
+
+public class ExampleBootstrapper implements PluginBootstrap {
+    @Override
+    public void bootstrap(BootstrapContext context) {
+        // Registering 2 custom biomes during the bootstrap phase as if they were in a datapack.
+        BootstrapBiomeRegistry registry = BootstrapBiomeRegistry.compose(context, Composer.DATAPACK);
+
+        BiomeSpawner spawner = BiomeSpawner.builder()
+            .setCreatureGenerationProbability(0.1f)
+            .addSpawner(MobCategory.CREATURE, 100, NaturalSpawner.of(EntityType.PIG, 4, 12))
+            .build();
+
+        // #queue(CustomBiome) queues this biome for registration.
+        registry.queue(CustomBiome.builder()
+            .resourceKey(BiomeResourceKey.of("test", "a"))
+            .settings(BiomeSettings.defaultSettings())
+            .fogColor("#FFFFFF")
+            .skyColor("#B99DFC")
+            .waterColor("#F5F2EB")
+            .grassColor("#DBE9EC")
+            .setSpawner(spawner)
+            .build()
+        );
+
+        registry.queue(CustomBiome.builder()
+            .resourceKey(BiomeResourceKey.of("test", "b"))
+            .settings(BiomeSettings.defaultSettings())
+            .fogColor("#DB00FD")
+            .skyColor("#2F46FF")
+            .waterColor("#000000")
+            .grassColor("#D1D13A")
+            .setSpawner(spawner)
+            .build()
+        );
+
+        context.getLogger().info("Finished registering biomes.");
+    }
+}`}
+/>

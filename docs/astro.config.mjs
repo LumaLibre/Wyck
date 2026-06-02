@@ -41,6 +41,10 @@ export default defineConfig({
           autogenerate: { directory: "wrappers" },
         },
         {
+          label: "Registries",
+          autogenerate: { directory: "registries" },
+        },
+        {
           label: "Renderers",
           autogenerate: { directory: "renderers" },
         },

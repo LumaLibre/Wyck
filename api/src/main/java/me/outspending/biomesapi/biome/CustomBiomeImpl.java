@@ -11,6 +11,7 @@ import me.outspending.biomesapi.wrapper.entity.BiomeSpawner;
 import me.outspending.biomesapi.wrapper.environment.GrassColorModifier;
 import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttributeMap;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleCatalog;
+import net.kyori.adventure.key.Key;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Biome;
 import org.jetbrains.annotations.ApiStatus;
@@ -89,13 +90,20 @@ public final class CustomBiomeImpl implements CustomBiome {
     }
 
     @Override
-    public @NotNull NamespacedKey toNamespacedKey() {
+    public @NotNull Key key() {
+        @SuppressWarnings("PatternValidation")
+        Key key = Key.key(resourceKey.namespace(), resourceKey.path());
+        return key;
+    }
+
+    @Override
+    public @NotNull NamespacedKey getKey() {
         return new NamespacedKey(resourceKey.namespace(), resourceKey.path());
     }
 
-
+    @Override
     public @NotNull Biome toBukkitBiome() {
-        return RegistryAccess.registryAccess().getRegistry(RegistryKey.BIOME).getOrThrow(this.toNamespacedKey());
+        return RegistryAccess.registryAccess().getRegistry(RegistryKey.BIOME).getOrThrow(this.getKey());
     }
 
     @Override
@@ -241,13 +249,13 @@ public final class CustomBiomeImpl implements CustomBiome {
 
     @Override
     public CustomBiome register() {
-        BiomeRegistry.newRegistry().register(this);
+        BiomeRegistry.registry().register(this);
         return this;
     }
 
     @Override
     public CustomBiome modify() {
-        BiomeRegistry.newRegistry().modify(this);
+        BiomeRegistry.registry().modify(this);
         return this;
     }
 
@@ -271,30 +279,6 @@ public final class CustomBiomeImpl implements CustomBiome {
                 return false;
             }
         }
-        return this.environmentAttributeMap.equals(otherBiome.getEnvironmentAttributeMap());
-    }
-
-    @Override
-    public @NotNull NamespacedKey getKey() {
-        return toNamespacedKey();
-    }
-
-
-    @Override
-    @SuppressWarnings({"removal", "UnstableApiUsage"})
-    public @NotNull String name() {
-        return getKey().toString();
-    }
-
-    @Override
-    @SuppressWarnings({"removal", "UnstableApiUsage"})
-    public int compareTo(@NotNull Biome other) {
-        throw new UnsupportedOperationException("Cannot compare custom biomes to Bukkit biomes");
-    }
-
-    @Override
-    @SuppressWarnings({"removal", "UnstableApiUsage"})
-    public int ordinal() {
-        throw new UnsupportedOperationException("Cannot compare custom biomes to Bukkit biomes");
+        return this.environmentAttributeMap.equals(otherBiome.getAttributes());
     }
 }

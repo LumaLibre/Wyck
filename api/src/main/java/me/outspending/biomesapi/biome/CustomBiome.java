@@ -15,6 +15,7 @@ import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironment
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleCatalog;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleData;
 import me.outspending.biomesapi.wrapper.environment.particle.WrappedParticleTypes;
+import net.kyori.adventure.key.Keyed;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -33,7 +34,7 @@ import java.util.Collection;
  * @author Outspending
  */
 @AsOf("2.2.0")
-public interface CustomBiome extends Biome {
+public interface CustomBiome extends Keyed {
 
     /**
      * Returns a new instance of the Builder class.
@@ -59,13 +60,24 @@ public interface CustomBiome extends Biome {
     }
 
     /**
+     * @return the NamespacedKey of the CustomBiome.
+     * @since 2.3.0
+     */
+    @AsOf("2.3.0")
+    @NotNull NamespacedKey getKey();
+
+    /**
      * Returns the NamespacedKey of the CustomBiome.
      *
      * @return the NamespacedKey of the CustomBiome
      * @since 0.0.1
+     * @deprecated Use {@link #getKey()} instead.
      */
     @AsOf("0.0.1")
-    @NotNull NamespacedKey toNamespacedKey();
+    @Deprecated(forRemoval = true, since = "2.3.0")
+    default @NotNull NamespacedKey toNamespacedKey() {
+        return getKey();
+    }
 
     /**
      * Returns the Bukkit Biome of the CustomBiome.
@@ -552,7 +564,7 @@ public interface CustomBiome extends Biome {
         private GrassColorModifier grassColorModifier = GrassColorModifier.NONE;
         private ParticleCatalog particleCatalog = ParticleCatalog.EMPTY;
         private BlockReplacement[] blockReplacements = new BlockReplacement[0];
-        private WrappedEnvironmentAttributeMap environmentAttributeMap = WrappedEnvironmentAttributeMap.EMPTY;
+        private WrappedEnvironmentAttributeMap attributeMap = WrappedEnvironmentAttributeMap.EMPTY;
         private @Nullable BiomeSpawner biomeSpawner = null;
 
         /**
@@ -583,7 +595,8 @@ public interface CustomBiome extends Biome {
             this.grassColorModifier = biome.getGrassColorModifier();
             this.particleCatalog = biome.getParticleCatalog();
             this.blockReplacements = biome.getBlockReplacements();
-            this.environmentAttributeMap = biome.getEnvironmentAttributeMap();
+            this.attributeMap = biome.getAttributes();
+            this.biomeSpawner = biome.getBiomeSpawner();
         }
 
         /**
@@ -938,7 +951,7 @@ public interface CustomBiome extends Biome {
          */
         @AsOf("2.1.0")
         public @NotNull Builder setAttributes(@NotNull WrappedEnvironmentAttributeMap environmentAttributeMap) {
-            this.environmentAttributeMap = environmentAttributeMap;
+            this.attributeMap = environmentAttributeMap;
             return this;
         }
 
@@ -954,7 +967,7 @@ public interface CustomBiome extends Biome {
          */
         @AsOf("2.1.0")
         public @NotNull <T, K> Builder setAttribute(@NotNull WrappedEnvironmentAttributeSupplier<T, K> supplier, @NotNull K value) {
-            this.environmentAttributeMap = this.environmentAttributeMap.with(supplier, value);
+            this.attributeMap = this.attributeMap.with(supplier, value);
             return this;
         }
 
@@ -968,7 +981,7 @@ public interface CustomBiome extends Biome {
          */
         @AsOf("2.1.0")
         public @NotNull Builder setAttribute(@NotNull IntColorSupplier supplier, @NotNull String hex) {
-            this.environmentAttributeMap = this.environmentAttributeMap.with(supplier, hex);
+            this.attributeMap = this.attributeMap.with(supplier, hex);
             return this;
         }
 
@@ -1008,7 +1021,7 @@ public interface CustomBiome extends Biome {
                 grassColorModifier,
                 particleCatalog,
                 blockReplacements,
-                environmentAttributeMap,
+                attributeMap,
                 biomeSpawner
             );
         }

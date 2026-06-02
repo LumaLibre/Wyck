@@ -8,7 +8,7 @@ plugins {
     alias(libs.plugins.modrinth.minotaur)
 }
 
-val supported = listOf("26.1.2", "1.21.11", "1.21.10")
+val supported = listOf("26.1.2", "1.21.11")
 
 group = "me.outspending.biomesapi.paper"
 

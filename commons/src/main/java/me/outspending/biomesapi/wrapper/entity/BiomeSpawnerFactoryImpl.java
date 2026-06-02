@@ -5,6 +5,7 @@ import me.outspending.biomesapi.annotations.WireFactory;
 import me.outspending.biomesapi.wrapper.entity.data.SpawnCost;
 import me.outspending.biomesapi.wrapper.entity.data.NaturalSpawner;
 import org.bukkit.entity.EntityType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -14,7 +15,7 @@ import java.util.Map;
 @WireFactory
 public class BiomeSpawnerFactoryImpl implements BiomeSpawner.Factory {
     @Override
-    public BiomeSpawner create(Map<MobCategory, WeightedList.Builder<NaturalSpawner>> spawners, Map<EntityType, SpawnCost> mobSpawnCosts, float creatureGenerationProbability) {
+    public @NotNull BiomeSpawner create(@NotNull Map<MobCategory, WeightedList.Builder<NaturalSpawner>> spawners, @NotNull Map<EntityType, SpawnCost> mobSpawnCosts, float creatureGenerationProbability) {
         Map<MobCategory, WeightedList<NaturalSpawner>> built = new LinkedHashMap<>();
         spawners.forEach((category, listBuilder) -> built.put(category, listBuilder.build()));
 

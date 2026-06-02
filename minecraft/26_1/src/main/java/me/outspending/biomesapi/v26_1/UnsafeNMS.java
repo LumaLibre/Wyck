@@ -3,6 +3,7 @@ package me.outspending.biomesapi.v26_1;
 import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.annotations.WireFactory;
+import me.outspending.biomesapi.exceptions.RegistryUnavailable;
 import net.minecraft.core.Holder;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
@@ -55,8 +56,8 @@ public class UnsafeNMS implements me.outspending.biomesapi.unsafe.UnsafeNMS {
      * @return The registry associated with the given key.
      */
     private static <T> MappedRegistry<@NotNull T> getRegistry(ResourceKey<@NotNull Registry<@NotNull T>> key) {
-        DedicatedServer server = ((CraftServer) Bukkit.getServer()).getServer();
-        return (MappedRegistry<@NotNull T>) server.registryAccess().lookup(key).orElseThrow();
+        DedicatedServer server = RegistryUnavailable.attempt(() -> ((CraftServer) Bukkit.getServer()).getServer(), UNAVAILABLE_REGISTRY, NullPointerException.class);
+        return (MappedRegistry<@NotNull T>) server.registryAccess().lookup(key).orElseThrow(() -> new RegistryUnavailable("Could not retrieve registry for key: " + key));
     }
 
     /**

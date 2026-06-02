@@ -1,5 +1,6 @@
 package me.outspending.biomesapi;
 
+import me.outspending.biomesapi.biome.BiomeHandler;
 import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
 import me.outspending.biomesapi.renderer.setter.BiomeSetter;
@@ -23,22 +24,24 @@ public final class BiomesAPITest extends JavaPlugin implements Listener {
     public void onEnable() {
         getServer().getPluginManager().registerEvents(this, this);
 
-        BiomeSpawner spawner = new BiomeSpawner.Builder()
-            .setCreatureGenerationProbability(0.1f)
-            .addSpawner(MobCategory.CREATURE, 100, new NaturalSpawner(EntityType.PIG, 4, 12))
-            .build();
+//        BiomeSpawner spawner = new BiomeSpawner.Builder()
+//            .setCreatureGenerationProbability(0.1f)
+//            .addSpawner(MobCategory.CREATURE, 100, new NaturalSpawner(EntityType.PIG, 4, 12))
+//            .build();
 
-        customBiome = CustomBiome.builder()
-                .resourceKey(BiomeResourceKey.of("test", "custombiome"))
-                .settings(BiomeSettings.defaultSettings())
-                .fogColor("#FFFFFF") // #db4929
-                .foliageColor("#F5F2EB")
-                .skyColor("#B99DFC")
-                .waterColor("#F5F2EB") // #F5F2EB
-                .waterFogColor("#000000")
-                .grassColor("#DBE9EC")
-                .setSpawner(spawner)
-                .register();
+        customBiome = BiomeHandler.getBiome(BiomeResourceKey.of("test", "custombiome"));
+
+//        customBiome = CustomBiome.builder()
+//                .resourceKey(BiomeResourceKey.of("test", "custombiome"))
+//                .settings(BiomeSettings.defaultSettings())
+//                .fogColor("#FFFFFF") // #db4929
+//                .foliageColor("#F5F2EB")
+//                .skyColor("#B99DFC")
+//                .waterColor("#F5F2EB") // #F5F2EB
+//                .waterFogColor("#000000")
+//                .grassColor("#DBE9EC")
+//                .setSpawner(spawner)
+//                .register();
 
         biomeSetter = BiomeSetter.of(this);
 

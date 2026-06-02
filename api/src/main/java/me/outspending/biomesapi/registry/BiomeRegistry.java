@@ -23,22 +23,42 @@ public interface BiomeRegistry {
     WireProvider<BiomeRegistry> WIRE = WireProvider.create("me.outspending.biomesapi.registry.CustomBiomeRegistry");
 
     /**
+     * This static method returns the current BiomeRegistry instance.
+     * @return the current BiomeRegistry instance.
+     * @since 2.3.0
+     */
+    @AsOf("2.3.0")
+    static @NotNull BiomeRegistry registry() {
+        return WIRE.get();
+    }
+
+    /**
      * This static method creates a new BiomeRegistry object.
      * It returns a new instance of CustomBiomeRegistry.
      *
-     * @version 0.0.1
+     * @since 0.0.1
      * @return a new CustomBiomeRegistry object.
+     * @deprecated Misleading name, use {@link #registry()} instead.
      */
+    @Deprecated
     @AsOf("0.0.1")
-    static BiomeRegistry newRegistry() { // TODO: Misleading name
-        return WIRE.get();
+    static @NotNull BiomeRegistry newRegistry() {
+        return registry();
     }
+
+    /**
+     * Builds a custom biome into a minecraft biome.
+     * @param biome the biome to build
+     * @return the built biome
+     */
+    @AsOf("2.3.0")
+    @NotNull Object buildDelegate(@NotNull CustomBiome biome);
 
     /**
      * This method registers a custom biome to a Minecraft server.
      * It takes a CustomBiome object as an argument.
      *
-     * @version 0.0.1
+     * @since 0.0.1
      * @param biome The CustomBiome object that should be registered to the server.
      */
     @AsOf("0.0.1")
