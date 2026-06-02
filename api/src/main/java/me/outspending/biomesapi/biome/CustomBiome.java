@@ -29,11 +29,11 @@ import java.util.Collection;
  * This interface represents a custom biome in the BiomesAPI.
  * It provides methods to retrieve and modify the properties of the custom biome.
  *
- * @version 2.2.0
  * @since 0.0.1
+ * @version 2.3.0
  * @author Outspending
  */
-@AsOf("2.2.0")
+@AsOf("2.3.0")
 public interface CustomBiome extends Keyed {
 
     /**
@@ -521,7 +521,7 @@ public interface CustomBiome extends Keyed {
      */
     @AsOf("2.1.0")
     default boolean isRegistered() {
-        return BiomeHandler.isBiome(getResourceKey());
+        return RegisteredBiomes.isRegistered(getResourceKey());
     }
 
     /**

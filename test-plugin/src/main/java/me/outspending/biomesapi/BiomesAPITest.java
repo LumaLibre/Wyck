@@ -1,15 +1,10 @@
 package me.outspending.biomesapi;
 
-import me.outspending.biomesapi.biome.BiomeHandler;
 import me.outspending.biomesapi.biome.CustomBiome;
+import me.outspending.biomesapi.biome.RegisteredBiomes;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
 import me.outspending.biomesapi.renderer.setter.BiomeSetter;
 import me.outspending.biomesapi.providers.BasicBiomeProvider;
-import me.outspending.biomesapi.wrapper.BiomeSettings;
-import me.outspending.biomesapi.wrapper.entity.BiomeSpawner;
-import me.outspending.biomesapi.wrapper.entity.MobCategory;
-import me.outspending.biomesapi.wrapper.entity.data.NaturalSpawner;
-import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.ChunkLoadEvent;
@@ -29,7 +24,7 @@ public final class BiomesAPITest extends JavaPlugin implements Listener {
 //            .addSpawner(MobCategory.CREATURE, 100, new NaturalSpawner(EntityType.PIG, 4, 12))
 //            .build();
 
-        customBiome = BiomeHandler.getBiome(BiomeResourceKey.of("test", "custombiome"));
+        customBiome = RegisteredBiomes.get(BiomeResourceKey.of("test", "custombiome"));
 
 //        customBiome = CustomBiome.builder()
 //                .resourceKey(BiomeResourceKey.of("test", "custombiome"))

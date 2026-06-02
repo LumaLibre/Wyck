@@ -2,8 +2,8 @@ package me.outspending.biomesapi.renderer.packet.data;
 
 import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.annotations.AsOf;
-import me.outspending.biomesapi.biome.BiomeHandler;
 import me.outspending.biomesapi.biome.CustomBiome;
+import me.outspending.biomesapi.biome.RegisteredBiomes;
 import me.outspending.biomesapi.misc.ChunkLocation;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
 import me.outspending.biomesapi.renderer.packet.PacketHandler;
@@ -55,7 +55,7 @@ public record PhonyCustomBiome(
     }
 
     public @NotNull CustomBiome toCustomBiome() {
-        return Preconditions.checkNotNull(BiomeHandler.getBiome(biomeResourceKey), "CustomBiome with key " + biomeResourceKey + " is not registered.");
+        return RegisteredBiomes.getOrThrow(biomeResourceKey);
     }
 
     public @NotNull CustomBiome customBiome() {

@@ -1,4 +1,4 @@
-package me.outspending.biomesapi.wrapper.entity;
+package me.outspending.biomesapi.util;
 
 import me.outspending.biomesapi.annotations.AsOf;
 
@@ -15,7 +15,7 @@ import java.util.random.RandomGenerator;
  * proportional to total weight); at or above it, a linear scan (O(n) draw, O(n) memory).
  */
 @AsOf("2.3.0")
-public class WeightedList<E> {
+public final class WeightedList<E> {
 
     private static final int FLAT_THRESHOLD = 64;
 
@@ -23,7 +23,7 @@ public class WeightedList<E> {
     private final List<Weighted<E>> items;
     private final Selector<E> selector; // null when totalWeight == 0
 
-    protected WeightedList(List<? extends Weighted<E>> items) {
+    private WeightedList(List<? extends Weighted<E>> items) {
         this.items = List.copyOf(items);
         this.totalWeight = totalWeight(this.items);
         if (this.totalWeight == 0) {

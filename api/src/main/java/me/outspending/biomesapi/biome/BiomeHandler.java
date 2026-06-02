@@ -1,13 +1,11 @@
 package me.outspending.biomesapi.biome;
 
-import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.exceptions.UnknownBiomeException;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,11 +15,11 @@ import java.util.List;
  * @version 0.0.1
  * @since 0.0.1
  * @author Outspending
+ * @deprecated Use {@link RegisteredBiomes} instead.
  */
+@Deprecated
 @AsOf("0.0.1")
 public class BiomeHandler {
-
-    private static final List<CustomBiome> REGISTERED_BIOMES = new ArrayList<>();
 
     private BiomeHandler() {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated.");
@@ -35,7 +33,7 @@ public class BiomeHandler {
      */
     @AsOf("0.0.1")
     public static List<CustomBiome> getRegisteredBiomes() {
-        return REGISTERED_BIOMES;
+        return List.copyOf(RegisteredBiomes.registeredBiomes());
     }
 
     /**
@@ -49,15 +47,11 @@ public class BiomeHandler {
      *
      * @throws UnknownBiomeException if the biome does not exist in the registry.
      * @since 0.0.1
+     * @deprecated Use {@link RegisteredBiomes#getOrThrow(BiomeResourceKey)} instead.
      */
     @AsOf("0.0.18")
     public static @Nullable CustomBiome getBiome(@NotNull BiomeResourceKey resourceKey) {
-        Preconditions.checkNotNull(resourceKey, "resourceKey cannot be null");
-
-        return REGISTERED_BIOMES.stream()
-                .filter(b -> resourceKey.equals(b.getResourceKey()))
-                .findFirst()
-                .orElseThrow(() -> new UnknownBiomeException("Unknown biome: " + resourceKey));
+        return RegisteredBiomes.get(resourceKey);
     }
 
     /**
@@ -69,13 +63,11 @@ public class BiomeHandler {
      * @return true if the biome exists in the registry, false otherwise.
      *
      * @since 0.0.1
+     * @deprecated Use {@link RegisteredBiomes#isRegistered(BiomeResourceKey)} instead.
      */
     @AsOf("0.0.18")
     public static boolean isBiome(@NotNull BiomeResourceKey resourceKey) {
-        Preconditions.checkNotNull(resourceKey, "resourceKey cannot be null");
-
-        return REGISTERED_BIOMES.stream()
-                .anyMatch(b -> resourceKey.equals(b.getResourceKey()));
+        return RegisteredBiomes.isRegistered(resourceKey);
     }
 
     /**
@@ -83,20 +75,11 @@ public class BiomeHandler {
      * @param resourceKey The resource key of the biome to be replaced.
      * @param newBiome The new {@link CustomBiome} to replace the existing one.
      * @return true if the biome was successfully replaced, false if no matching biome was found.
-     * @version 0.0.8
+     * @since 0.0.8
+     * @deprecated This method is not supported and will always return false.
      */
     @AsOf("0.0.8")
     public static boolean replaceBiome(@NotNull BiomeResourceKey resourceKey, @NotNull CustomBiome newBiome) {
-        Preconditions.checkNotNull(resourceKey, "resourceKey cannot be null");
-        Preconditions.checkNotNull(newBiome, "newBiome cannot be null");
-
-        for (int i = 0; i < REGISTERED_BIOMES.size(); i++) {
-            CustomBiome biome = REGISTERED_BIOMES.get(i);
-            if (resourceKey.equals(biome.getResourceKey())) {
-                REGISTERED_BIOMES.set(i, newBiome);
-                return true;
-            }
-        }
-        return false;
+        throw new UnsupportedOperationException("Unsupported");
     }
 }

@@ -13,8 +13,8 @@ import io.papermc.paper.plugin.lifecycle.event.registrar.RegistrarEvent;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.annotations.WireFactory;
-import me.outspending.biomesapi.biome.BiomeHandler;
 import me.outspending.biomesapi.biome.CustomBiome;
+import me.outspending.biomesapi.biome.RegisteredBiomes;
 import me.outspending.biomesapi.registry.BiomeRegistry;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
 import net.minecraft.SharedConstants;
@@ -145,7 +145,7 @@ public final class DatapackBootstrapBiomeRegistry implements BootstrapBiomeRegis
             Files.createDirectories(biomeFile.getParent());
             Files.writeString(biomeFile, GSON.toJson(json));
 
-            BiomeHandler.getRegisteredBiomes().add(biome);
+            RegisteredBiomes.appendBiome(biome);
         }
         return root;
     }
@@ -167,8 +167,7 @@ public final class DatapackBootstrapBiomeRegistry implements BootstrapBiomeRegis
                     return ((Number) m.invoke(packFormat)).intValue();
                 }
             }
-            throw new IllegalStateException("PackFormat exposes no int accessor: "
-                + packFormat.getClass().getName());
+            throw new IllegalStateException("PackFormat exposes no int accessor: " + packFormat.getClass().getName());
         } catch (Throwable t) {
             throw new IllegalStateException("Could not determine server data pack_format", t);
         }

@@ -5,7 +5,7 @@ import dev.faststats.bukkit.BukkitMetrics;
 import dev.faststats.core.Metrics;
 import dev.faststats.core.data.Metric;
 import me.outspending.biomesapi.annotations.AsOf;
-import me.outspending.biomesapi.biome.BiomeHandler;
+import me.outspending.biomesapi.biome.RegisteredBiomes;
 import me.outspending.biomesapi.factory.BuildInfo;
 import me.outspending.biomesapi.factory.NullableWireProvider;
 import org.bukkit.Bukkit;
@@ -209,7 +209,7 @@ public interface BiomesAPI {
         private void setupMetrics(JavaPlugin plugin) {
             Metrics built = BukkitMetrics.factory()
                     .token(BuildInfo.METRICS_TOKEN)
-                    .addMetric(Metric.number("registered_biomes", () -> BiomeHandler.getRegisteredBiomes().size()))
+                    .addMetric(Metric.number("registered_biomes", RegisteredBiomes::size))
                     .addMetric(Metric.bool("is_external", this::isExternal))
                     .addMetric(Metric.string("plugin_name", plugin::getName))
                     .create(plugin);

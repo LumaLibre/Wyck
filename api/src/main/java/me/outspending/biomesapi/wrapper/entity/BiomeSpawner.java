@@ -3,6 +3,7 @@ package me.outspending.biomesapi.wrapper.entity;
 import com.google.common.collect.Maps;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
+import me.outspending.biomesapi.util.WeightedList;
 import me.outspending.biomesapi.wrapper.NmsHandle;
 import me.outspending.biomesapi.wrapper.entity.data.SpawnCost;
 import me.outspending.biomesapi.wrapper.entity.data.NaturalSpawner;
@@ -22,13 +23,11 @@ import java.util.Map;
 @AsOf("2.3.0")
 public interface BiomeSpawner extends NmsHandle {
 
-    @AsOf("2.3.0")
     float DEFAULT_CREATURE_GENERATION_PROBABILITY = 0.1F;
 
     @ApiStatus.Internal
     WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.entity.BiomeSpawnerFactoryImpl");
 
-    @AsOf("2.3.0")
     @ApiStatus.Internal
     interface Factory {
         @NotNull BiomeSpawner create(@NotNull Map<MobCategory, WeightedList.Builder<NaturalSpawner>> spawners, @NotNull Map<EntityType, SpawnCost> mobSpawnCosts, float creatureGenerationProbability);

@@ -1,0 +1,159 @@
+---
+title: Biome Providers
+description: Learn how to use BiomesAPI's custom biome providers to create biomes with Bukkit WorldCreators.
+---
+
+import CodeBlock from "@/components/CodeBlock.astro";
+import SourceLink from "@/components/SourceLink.astro";
+
+BiomesAPI provides a few built-in implementations of Bukkit's [`BiomeProvider`](https://jd.papermc.io/paper/26.1.2/org/bukkit/generator/BiomeProvider.html).
+These can be used in conjunction with Bukkit's [`WorldCreator`](https://jd.papermc.io/paper/26.1.2/org/bukkit/generator/WorldCreator.html) to create worlds with custom biomes
+from the ground-up rather than replacing biomes in existing worlds with the [`BiomeSetter`](/renderers/biome-setter).
+
+## Basic Biome Provider
+
+#### <SourceLink path="providers/BasicBiomeProvider.java">BasicBiomeProvider</SourceLink>
+
+* <SourceLink path="providers/BasicBiomeProvider.java" line={38}>of(CustomBiome)</SourceLink>: New instance of a BasicBiomeProvider with a single biome.
+
+### Example Usage
+<CodeBlock
+    lang="java"
+    filename="ExamplePlugin.java"
+    code={`import me.outspending.biomesapi.biome.CustomBiome;
+import me.outspending.biomesapi.providers.BasicBiomeProvider;
+import me.outspending.biomesapi.registry.BiomeResourceKey;
+import org.bukkit.WorldCreator;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class ExamplePlugin extends JavaPlugin {
+    @Override
+    public void onEnable() {
+        CustomBiome customBiome = CustomBiome.builder()
+            .resourceKey(BiomeResourceKey.of("test", "biome"))
+            .waterColor("#DB00FD")
+            .foliageColor("#2F46FF")
+            .skyColor("#D13A71")
+            .register();
+
+        BasicBiomeProvider provider = BasicBiomeProvider.of(customBiome)
+
+        new WorldCreator("example")
+            // Other worldgen settings...
+            .biomeProvider(provider)
+            .createWorld();
+    }
+}`}
+/>
+
+## Replacement Biome Provider
+
+#### <SourceLink path="providers/ReplacementBiomeProvider.java">ReplacementBiomeProvider</SourceLink>
+
+Replaces vanilla biomes with custom biomes on a one-to-one basis. At each position it asks the world's vanilla provider what biome would normally generate, and swaps in your custom biome if a mapping exists; unmapped biomes pass through unchanged.
+
+* <SourceLink path="providers/ReplacementBiomeProvider.java" line={51}>builder()</SourceLink>: New `Builder` for mapping vanilla biomes to custom replacements.
+* <SourceLink path="providers/ReplacementBiomeProvider.java" line={62}>Builder#replace(Biome, CustomBiome)</SourceLink>: Map a vanilla biome to the custom biome that should replace it.
+* <SourceLink path="providers/ReplacementBiomeProvider.java" line={68}>Builder#build()</SourceLink>: Build the configured `ReplacementBiomeProvider`.
+
+### Example Usage
+<CodeBlock
+    lang="java"
+    filename="ExamplePlugin.java"
+    code={`import me.outspending.biomesapi.biome.CustomBiome;
+import me.outspending.biomesapi.providers.ReplacementBiomeProvider;
+import me.outspending.biomesapi.registry.BiomeResourceKey;
+import org.bukkit.WorldCreator;
+import org.bukkit.block.Biome;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class ExamplePlugin extends JavaPlugin {
+    @Override
+    public void onEnable() {
+        CustomBiome customBiome = CustomBiome.builder()
+            .resourceKey(BiomeResourceKey.of("test", "biome"))
+            .waterColor("#DB00FD")
+            .foliageColor("#2F46FF")
+            .skyColor("#D13A71")
+            .register();
+
+        ReplacementBiomeProvider provider = ReplacementBiomeProvider.builder()
+            .replace(Biome.PLAINS, customBiome)
+            .build();
+
+        new WorldCreator("example")
+            // Other worldgen settings...
+            .biomeProvider(provider)
+            .createWorld();
+    }
+}`}
+/>
+
+## Steps Biome Provider
+
+#### <SourceLink path="providers/StepsBiomeProvider.java">StepsBiomeProvider</SourceLink>
+
+Determines the biome at each position by running an ordered series of steps. Each step inspects the position and either produces a biome or returns `null` to defer to the next step. The first step to produce a biome wins; if no step matches, the fallback is used, and if no fallback is set, generation defers to the world's vanilla provider.
+
+Steps are called concurrently during chunk generation, so each `BiomeStep` must be pure and free of side effects.
+
+* <SourceLink path="providers/StepsBiomeProvider.java" line={73}>builder()</SourceLink>: New `Builder` for assembling an ordered list of steps.
+* <SourceLink path="providers/StepsBiomeProvider.java" line={92}>Builder#step(BiomeStep, CustomBiome...)</SourceLink>: Full-control step. The lambda returns a biome to place or `null` to defer. Declare every biome the lambda can return via `produces` so the provider can advertise it from `getBiomes(...)`.
+* <SourceLink path="providers/StepsBiomeProvider.java" line={106}>Builder#step(CustomBiome, BiomeCondition)</SourceLink>: Convenience step for a simple position test; the biome is auto-registered as produced.
+* <SourceLink path="providers/StepsBiomeProvider.java" line={119}>Builder#fallback(CustomBiome)</SourceLink>: Biome to use when no step produces one.
+* <SourceLink path="providers/StepsBiomeProvider.java" line={125}>Builder#build()</SourceLink>: Build the configured `StepsBiomeProvider`.
+
+### Example Usage
+<CodeBlock
+    lang="java"
+    filename="ExamplePlugin.java"
+    code={`import me.outspending.biomesapi.biome.CustomBiome;
+import me.outspending.biomesapi.providers.StepsBiomeProvider;
+import me.outspending.biomesapi.registry.BiomeResourceKey;
+import org.bukkit.World;
+import org.bukkit.WorldCreator;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class ExamplePlugin extends JavaPlugin {
+    @Override
+    public void onEnable() {
+        CustomBiome volcanoBiome = CustomBiome.builder()
+            .resourceKey(BiomeResourceKey.of("test", "volcano"))
+            .skyColor("#D13A71")
+            .register();
+
+        CustomBiome ashBiome = CustomBiome.builder()
+            .resourceKey(BiomeResourceKey.of("test", "ash"))
+            .fogColor("#3A3A3A")
+            .ambientParticle(WrappedParticleTypes.ASH, 0.0001f)
+            .register();
+
+        CustomBiome oceanBiome = CustomBiome.builder()
+            .resourceKey(BiomeResourceKey.of("test", "ocean"))
+            .waterColor("#1E90FF")
+            .waterFogColor("#00BFFF")
+            .register();
+
+        CustomBiome plainsBiome = CustomBiome.builder()
+            .resourceKey(BiomeResourceKey.of("test", "plains"))
+            .foliageColor("#2F46FF")
+            .grassColor("#2F46FF")
+            .register();
+
+        StepsBiomeProvider provider = StepsBiomeProvider.builder()
+            .step((worldInfo, x, y, z) -> {
+                if (y > 200) return volcanoBiome;
+                if (worldInfo.getEnvironment() == World.Environment.NETHER) return ashBiome;
+                return null; // defer to next step
+            }, volcanoBiome, ashBiome)
+            .step(oceanBiome, (worldInfo, x, y, z) -> y < 40) // convenience form, auto-registered
+            .fallback(plainsBiome)
+            .build();
+
+        new WorldCreator("example")
+            // Other worldgen settings...
+            .biomeProvider(provider)
+            .createWorld();
+    }
+}`}
+/>

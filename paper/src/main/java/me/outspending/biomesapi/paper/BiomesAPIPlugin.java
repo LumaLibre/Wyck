@@ -7,7 +7,7 @@ import dev.faststats.core.data.Metric;
 import me.outspending.biomesapi.BiomesAPI;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.annotations.WireFactory;
-import me.outspending.biomesapi.biome.BiomeHandler;
+import me.outspending.biomesapi.biome.RegisteredBiomes;
 import me.outspending.biomesapi.factory.BuildInfo;
 import me.outspending.biomesapi.paper.configs.BiomesAPIPluginConfig;
 import me.outspending.biomesapi.paper.renderer.packet.PacketHandlerFactoryPluginImpl;
@@ -68,7 +68,7 @@ public final class BiomesAPIPlugin extends JavaPlugin implements BiomesAPI {
                     .token(BuildInfo.METRICS_TOKEN)
                     .errorTracker(ERROR_TRACKER)
                     .addMetric(Metric.string("forced_injector", () -> config.forcedInjector().toString()))
-                    .addMetric(Metric.number("registered_biomes", () -> BiomeHandler.getRegisteredBiomes().size()))
+                    .addMetric(Metric.number("registered_biomes", RegisteredBiomes::size))
                     .addMetric(Metric.bool("is_external", this::isExternal))
                     .addMetric(Metric.string("plugin_name", () -> "BiomesAPI (Standalone)"))
                     .create(this);

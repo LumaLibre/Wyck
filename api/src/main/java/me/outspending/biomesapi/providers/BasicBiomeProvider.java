@@ -2,7 +2,7 @@ package me.outspending.biomesapi.providers;
 
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.biome.CustomBiome;
-import me.outspending.biomesapi.factory.Lazy;
+import me.outspending.biomesapi.util.Lazy;
 import org.bukkit.block.Biome;
 import org.bukkit.generator.WorldInfo;
 import org.jetbrains.annotations.ApiStatus;

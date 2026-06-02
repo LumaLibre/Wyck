@@ -3,8 +3,8 @@ package me.outspending.biomesapi.registry;
 import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.annotations.WireFactory;
-import me.outspending.biomesapi.biome.BiomeHandler;
 import me.outspending.biomesapi.biome.CustomBiome;
+import me.outspending.biomesapi.biome.RegisteredBiomes;
 import me.outspending.biomesapi.registry.handlers.AttributeMapHandler;
 import me.outspending.biomesapi.registry.handlers.MobSpawnSettingsHandler;
 import me.outspending.biomesapi.registry.handlers.ParticleCatalogHandler;
@@ -128,7 +128,7 @@ public class CustomBiomeRegistry implements BiomeRegistry {
                 Registry.register(registry, resourceLocation, createdBiome);
             }
 
-            BiomeHandler.getRegisteredBiomes().add(biome);
+            RegisteredBiomes.appendBiome(biome);
         };
 
         if (BiomeLock.isLocked()) {
@@ -155,7 +155,7 @@ public class CustomBiomeRegistry implements BiomeRegistry {
     public void modify(@NotNull CustomBiome customBiome) {
         BiomeResourceKey resourceKey = customBiome.getResourceKey();
 
-        Preconditions.checkArgument(BiomeHandler.isBiome(resourceKey), "Biome %s is not registered", resourceKey);
+        Preconditions.checkArgument(RegisteredBiomes.isRegistered(resourceKey), "Biome %s is not registered", resourceKey);
 
 
         BiomeSettings settings = customBiome.getSettings();
@@ -220,7 +220,7 @@ public class CustomBiomeRegistry implements BiomeRegistry {
             throw new RuntimeException("Failed to modify biome settings", e);
         }
 
-        BiomeHandler.replaceBiome(resourceKey, customBiome);
+        RegisteredBiomes.replaceBiome(resourceKey, customBiome);
     }
 
 }
