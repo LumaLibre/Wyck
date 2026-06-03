@@ -1,17 +1,14 @@
-package me.outspending.biomesapi.biome;
+package me.outspending.biomesapi.biome.impl;
 
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
-import me.outspending.biomesapi.annotations.AsOf;
-import me.outspending.biomesapi.registry.BiomeRegistry;
+import me.outspending.biomesapi.biome.AbstractBiome;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
-import me.outspending.biomesapi.renderer.packet.data.BlockReplacement;
 import me.outspending.biomesapi.wrapper.BiomeSettings;
 import me.outspending.biomesapi.wrapper.entity.BiomeSpawner;
 import me.outspending.biomesapi.wrapper.environment.GrassColorModifier;
 import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttributeMap;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleCatalog;
-import net.kyori.adventure.key.Key;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Biome;
 import org.jetbrains.annotations.ApiStatus;
@@ -20,20 +17,12 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
-/**
- * This class represents a custom biome implementation.
- *
- * @author Outspending
- * @version 2.1.0
- * @since 0.0.2
- */
 @ApiStatus.Internal
-@AsOf("2.1.0")
-public final class CustomBiomeImpl implements CustomBiome {
+public class AbstractBiomeImpl implements AbstractBiome {
 
     // Required Settings
     private final BiomeResourceKey resourceKey;
-    private final BiomeSettings settings;
+    private BiomeSettings settings;
 
     // Required Colors
     private int waterColor;
@@ -49,29 +38,25 @@ public final class CustomBiomeImpl implements CustomBiome {
     // Optional Settings
     private GrassColorModifier grassColorModifier;
     private ParticleCatalog particleCatalog;
-    private BlockReplacement[] blockReplacements;
 
-    private WrappedEnvironmentAttributeMap environmentAttributeMap;
+    private WrappedEnvironmentAttributeMap attributes;
 
     private @Nullable BiomeSpawner biomeSpawner;
 
-
-    @AsOf("2.1.0")
-    public CustomBiomeImpl(
-            @NotNull BiomeResourceKey resourceKey,
-            @NotNull BiomeSettings settings,
-            int waterColor,
-            @Nullable Integer fogColor,
-            @Nullable Integer waterFogColor,
-            @Nullable Integer skyColor,
-            @Nullable Integer foliageColor,
-            @Nullable Integer grassColor,
-            @Nullable Integer dryFoliageColor,
-            @NotNull GrassColorModifier grassColorModifier,
-            @NotNull ParticleCatalog particleCatalog,
-            @NotNull BlockReplacement[] blockReplacements,
-            @NotNull WrappedEnvironmentAttributeMap environmentAttributeMap,
-            @Nullable BiomeSpawner biomeSpawner
+    public AbstractBiomeImpl(
+        BiomeResourceKey resourceKey,
+        BiomeSettings settings,
+        int waterColor,
+        @Nullable Integer fogColor,
+        @Nullable Integer waterFogColor,
+        @Nullable Integer skyColor,
+        @Nullable Integer foliageColor,
+        @Nullable Integer grassColor,
+        @Nullable Integer dryFoliageColor,
+        @Nullable GrassColorModifier grassColorModifier,
+        @Nullable ParticleCatalog particleCatalog,
+        @Nullable WrappedEnvironmentAttributeMap attributes,
+        @Nullable BiomeSpawner biomeSpawner
     ) {
         this.resourceKey = resourceKey;
         this.settings = settings;
@@ -84,16 +69,8 @@ public final class CustomBiomeImpl implements CustomBiome {
         this.dryFoliageColor = dryFoliageColor;
         this.grassColorModifier = grassColorModifier;
         this.particleCatalog = particleCatalog;
-        this.blockReplacements = blockReplacements;
-        this.environmentAttributeMap = environmentAttributeMap;
+        this.attributes = attributes;
         this.biomeSpawner = biomeSpawner;
-    }
-
-    @Override
-    public @NotNull Key key() {
-        @SuppressWarnings("PatternValidation")
-        Key key = Key.key(resourceKey.namespace(), resourceKey.path());
-        return key;
     }
 
     @Override
@@ -151,7 +128,7 @@ public final class CustomBiomeImpl implements CustomBiome {
     }
 
     @Override
-    public GrassColorModifier getGrassColorModifier() {
+    public @NotNull GrassColorModifier getGrassColorModifier() {
         return grassColorModifier;
     }
 
@@ -161,13 +138,8 @@ public final class CustomBiomeImpl implements CustomBiome {
     }
 
     @Override
-    public @NotNull BlockReplacement[] getBlockReplacements() {
-        return blockReplacements;
-    }
-
-    @Override
     public @NotNull WrappedEnvironmentAttributeMap getAttributes() {
-        return environmentAttributeMap;
+        return attributes;
     }
 
     @Override
@@ -176,91 +148,80 @@ public final class CustomBiomeImpl implements CustomBiome {
     }
 
     @Override
-    public CustomBiome setFogColor(@Nullable Integer fogColor) {
+    public AbstractBiomeImpl setSettings(@NotNull BiomeSettings settings) {
+        this.settings = settings;
+        return this;
+    }
+
+    @Override
+    public AbstractBiomeImpl setFogColor(@Nullable Integer fogColor) {
         this.fogColor = fogColor;
         return this;
     }
 
     @Override
-    public CustomBiome setWaterColor(int waterColor) {
+    public AbstractBiomeImpl setWaterColor(int waterColor) {
         this.waterColor = waterColor;
         return this;
     }
 
     @Override
-    public CustomBiome setWaterFogColor(@Nullable Integer waterFogColor) {
+    public AbstractBiomeImpl setWaterFogColor(@Nullable Integer waterFogColor) {
         this.waterFogColor = waterFogColor;
         return this;
     }
 
     @Override
-    public CustomBiome setSkyColor(@Nullable Integer skyColor) {
+    public AbstractBiomeImpl setSkyColor(@Nullable Integer skyColor) {
         this.skyColor = skyColor;
         return this;
     }
 
     @Override
-    public CustomBiome setFoliageColor(@Nullable Integer foliageColor) {
+    public AbstractBiomeImpl setFoliageColor(@Nullable Integer foliageColor) {
         this.foliageColor = foliageColor;
         return this;
     }
 
     @Override
-    public CustomBiome setGrassColor(@Nullable Integer grassColor) {
+    public AbstractBiomeImpl setGrassColor(@Nullable Integer grassColor) {
         this.grassColor = grassColor;
         return this;
     }
 
     @Override
-    public CustomBiome setDryFoliageColor(@Nullable Integer dryFoliageColor) {
+    public AbstractBiomeImpl setDryFoliageColor(@Nullable Integer dryFoliageColor) {
         this.dryFoliageColor = dryFoliageColor;
         return this;
     }
 
     @Override
-    public CustomBiome setGrassColorModifier(@NotNull GrassColorModifier grassColorModifier) {
+    public AbstractBiomeImpl setGrassColorModifier(@NotNull GrassColorModifier grassColorModifier) {
         this.grassColorModifier = grassColorModifier;
         return this;
     }
 
     @Override
-    public CustomBiome setParticleCatalog(@NotNull ParticleCatalog particleCatalog) {
+    public AbstractBiomeImpl setParticleCatalog(@NotNull ParticleCatalog particleCatalog) {
         this.particleCatalog = particleCatalog;
         return this;
     }
 
     @Override
-    public CustomBiome setBlockReplacements(@NotNull BlockReplacement[] blockReplacements) {
-        this.blockReplacements = blockReplacements;
+    public AbstractBiomeImpl setAttributes(@NotNull WrappedEnvironmentAttributeMap attributes) {
+        this.attributes = attributes;
         return this;
     }
 
     @Override
-    public CustomBiome setAttributes(@NotNull WrappedEnvironmentAttributeMap environmentAttributeMap) {
-        this.environmentAttributeMap = environmentAttributeMap;
-        return this;
-    }
-
-    @Override
-    public CustomBiome setBiomeSpawner(@Nullable BiomeSpawner biomeSpawner) {
+    public AbstractBiomeImpl setBiomeSpawner(@Nullable BiomeSpawner biomeSpawner) {
         this.biomeSpawner = biomeSpawner;
         return this;
     }
 
-    @Override
-    public CustomBiome register() {
-        BiomeRegistry.registry().register(this);
-        return this;
-    }
 
     @Override
-    public CustomBiome modify() {
-        BiomeRegistry.registry().modify(this);
-        return this;
-    }
-
-    @Override // TODO: cleanup
-    public boolean isSimilar(@NotNull CustomBiome otherBiome) {
+    public boolean isSimilar(@NotNull AbstractBiome otherBiome) {
         if (this == otherBiome) return true;
         if (!this.resourceKey.equals(otherBiome.getResourceKey())) return false;
         if (!this.settings.equals(otherBiome.getSettings())) return false;
@@ -273,12 +234,7 @@ public final class CustomBiomeImpl implements CustomBiome {
         if (!Objects.equals(this.dryFoliageColor, otherBiome.getDryFoliageColor())) return false;
         if (!this.grassColorModifier.equals(otherBiome.getGrassColorModifier())) return false;
         if (!this.particleCatalog.equals(otherBiome.getParticleCatalog())) return false;
-        if (this.blockReplacements.length != otherBiome.getBlockReplacements().length) return false;
-        for (int i = 0; i < this.blockReplacements.length; i++) {
-            if (!this.blockReplacements[i].equals(otherBiome.getBlockReplacements()[i])) {
-                return false;
-            }
-        }
-        return this.environmentAttributeMap.equals(otherBiome.getAttributes());
+        return this.attributes.equals(otherBiome.getAttributes());
     }
+
 }

@@ -1,7 +1,7 @@
 package me.outspending.biomesapi.registry.handlers;
 
 import me.outspending.biomesapi.annotations.AsOf;
-import me.outspending.biomesapi.biome.CustomBiome;
+import me.outspending.biomesapi.biome.AbstractBiome;
 import me.outspending.biomesapi.registry.BuilderHandler;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeSpecialEffects;
@@ -18,7 +18,7 @@ public class SpecialEffectsHandler implements BuilderHandler<Biome.BiomeBuilder,
     }
 
     @Override
-    public BiomeSpecialEffects build(@NotNull CustomBiome biome) {
+    public BiomeSpecialEffects build(@NotNull AbstractBiome biome) {
         BiomeSpecialEffects.Builder builder = new BiomeSpecialEffects.Builder();
         if (biome.getFoliageColor() != null) {
             builder.foliageColorOverride(biome.getFoliageColor());

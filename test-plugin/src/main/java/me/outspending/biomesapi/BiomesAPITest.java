@@ -1,21 +1,28 @@
 package me.outspending.biomesapi;
 
+import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.biome.RegisteredBiomes;
+import me.outspending.biomesapi.biome.VanillaBiome;
 import me.outspending.biomesapi.registry.BiomeRegistry;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
 import me.outspending.biomesapi.renderer.setter.BiomeSetter;
 import me.outspending.biomesapi.providers.BasicBiomeProvider;
+import me.outspending.biomesapi.unsafe.UnsafeNMSHandler;
 import me.outspending.biomesapi.util.Lazy;
 import me.outspending.biomesapi.wrapper.BiomeSettings;
 import me.outspending.biomesapi.wrapper.entity.BiomeSpawner;
 import me.outspending.biomesapi.wrapper.entity.MobCategory;
 import me.outspending.biomesapi.wrapper.entity.data.NaturalSpawner;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.biome.Biome;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 public final class BiomesAPITest extends JavaPlugin implements Listener {
 
@@ -37,13 +44,25 @@ public final class BiomesAPITest extends JavaPlugin implements Listener {
             .build();
 
         // Purely just a placeholder wrapper
-        CustomBiome newData = CustomBiome.builder(BiomeResourceKey.fromString("unused:placeholder"))
-            .setSpawner(spawner)
-            .build();
+//        CustomBiome newData = CustomBiome.builder(BiomeResourceKey.fromString("unused:placeholder"))
+//            .setSpawner(spawner)
+//            .build();
+//
+//        BiomeRegistry registry = BiomeRegistry.registry();
+//        registry.modify(BiomeResourceKey.minecraft("plains"), newData);
+//        registry.modify(BiomeResourceKey.minecraft("forest"), newData);
 
+        BiomeResourceKey key = BiomeResourceKey.minecraft("plains");
         BiomeRegistry registry = BiomeRegistry.registry();
-        registry.modify(BiomeResourceKey.minecraft("plains"), newData);
-        registry.modify(BiomeResourceKey.minecraft("forest"), newData);
+        VanillaBiome vanillaBiome = registry.getBiome(key);
+        BiomeSpawner biomeSpawner = Preconditions.checkNotNull(vanillaBiome.getBiomeSpawner(), "Biome spawner cannot be null")
+            .toBuilder()
+            .setCreatureGenerationProbability(0.2f)
+            .addSpawner(MobCategory.CREATURE, 100, NaturalSpawner.of(EntityType.PIG, 10, 15))
+            .build();
+        vanillaBiome.setBiomeSpawner(biomeSpawner);
+        vanillaBiome.modify();
+        System.out.println("done!");
     }
 
     @EventHandler

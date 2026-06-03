@@ -1,6 +1,6 @@
 package me.outspending.biomesapi.registry.handlers;
 
-import me.outspending.biomesapi.biome.CustomBiome;
+import me.outspending.biomesapi.biome.AbstractBiome;
 import me.outspending.biomesapi.registry.BuilderHandler;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleCatalog;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleOptionsHandle;
@@ -37,7 +37,7 @@ public class ParticleCatalogHandler implements BuilderHandler<Biome.BiomeBuilder
     }
 
     @Override
-    public @Nullable ParticleCatalog build(@NotNull CustomBiome biome) {
+    public @Nullable ParticleCatalog build(@NotNull AbstractBiome biome) {
         return null;
     }
 

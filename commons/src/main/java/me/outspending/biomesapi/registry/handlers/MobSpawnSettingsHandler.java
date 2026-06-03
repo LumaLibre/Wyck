@@ -1,7 +1,7 @@
 package me.outspending.biomesapi.registry.handlers;
 
 import me.outspending.biomesapi.annotations.AsOf;
-import me.outspending.biomesapi.biome.CustomBiome;
+import me.outspending.biomesapi.biome.AbstractBiome;
 import me.outspending.biomesapi.registry.BuilderHandler;
 import me.outspending.biomesapi.wrapper.entity.BiomeSpawner;
 import net.minecraft.world.level.biome.Biome;
@@ -19,7 +19,7 @@ public class MobSpawnSettingsHandler implements BuilderHandler<Biome.BiomeBuilde
     }
 
     @Override
-    public BiomeSpawner build(@NotNull CustomBiome biome) {
+    public BiomeSpawner build(@NotNull AbstractBiome biome) {
         return biome.getBiomeSpawner();
     }
 }

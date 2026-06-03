@@ -3,8 +3,10 @@ package me.outspending.biomesapi.registry;
 import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.annotations.WireFactory;
+import me.outspending.biomesapi.biome.AbstractBiome;
 import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.biome.RegisteredBiomes;
+import me.outspending.biomesapi.biome.VanillaBiome;
 import me.outspending.biomesapi.registry.handlers.AttributeMapHandler;
 import me.outspending.biomesapi.registry.handlers.MobSpawnSettingsHandler;
 import me.outspending.biomesapi.registry.handlers.ParticleCatalogHandler;
@@ -14,21 +16,35 @@ import me.outspending.biomesapi.unsafe.UnsafeNMS;
 import me.outspending.biomesapi.unsafe.UnsafeNMSHandler;
 import me.outspending.biomesapi.wrapper.BiomeSettings;
 import me.outspending.biomesapi.wrapper.entity.BiomeSpawner;
+import me.outspending.biomesapi.wrapper.entity.MobCategory;
+import me.outspending.biomesapi.wrapper.environment.BiomeTempModifier;
+import me.outspending.biomesapi.wrapper.environment.GrassColorModifier;
 import me.outspending.biomesapi.wrapper.environment.attribute.NmsEnvironmentAttributes;
+import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttribute;
 import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttributeMap;
+import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttributes;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleCatalog;
+import me.outspending.biomesapi.wrapper.environment.particle.WrappedParticleTypes;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.random.Weighted;
+import net.minecraft.world.attribute.AmbientParticle;
+import net.minecraft.world.attribute.EnvironmentAttribute;
 import net.minecraft.world.attribute.EnvironmentAttributeMap;
 import net.minecraft.world.attribute.EnvironmentAttributes;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.biome.BiomeSpecialEffects;
 import net.minecraft.world.level.biome.MobSpawnSettings;
+import org.bukkit.Color;
+import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 /**
@@ -57,7 +73,7 @@ public class CustomBiomeRegistry implements BiomeRegistry {
      *
      * <p>This performs no registration and touches no server state, so it is safe to call during the
      * bootstrap/registry-load phase as well as at runtime. Covariantly narrows the API's
-     * {@link BiomeRegistry#buildNmsBiome(CustomBiome)} {@code Object} return to {@link Biome}.
+     * {@link BiomeRegistry#buildDelegate(AbstractBiome)} {@code Object} return to {@link Biome}.
      *
      * @param biome the custom biome to convert
      * @return the constructed NMS biome
@@ -65,7 +81,7 @@ public class CustomBiomeRegistry implements BiomeRegistry {
      */
     @Override
     @AsOf("2.3.0")
-    public @NotNull Biome buildDelegate(@NotNull CustomBiome biome) {
+    public @NotNull Biome buildDelegate(@NotNull AbstractBiome biome) {
         Preconditions.checkNotNull(biome, "biome cannot be null");
 
         BiomeSettings settings = biome.getSettings();
@@ -106,7 +122,7 @@ public class CustomBiomeRegistry implements BiomeRegistry {
 
     /**
      * Registers a custom biome to the running server's biome registry (runtime injection).
-     * Unlocks the registry, builds the biome via {@link #buildDelegate(CustomBiome)}, registers it
+     * Unlocks the registry, builds the biome via {@link #buildDelegate(AbstractBiome)}, registers it
      * if absent, and re-freezes the registry.
      *
      * @param biome The CustomBiome object that should be registered to the server.
@@ -142,32 +158,23 @@ public class CustomBiomeRegistry implements BiomeRegistry {
         }
     }
 
+
     /**
      * This method modifies an existing biome on the Minecraft server.
      * Another biome must already exist with the same ResourceKey.
      * It takes a CustomBiome object as an argument.
      *
-     * @version 0.0.8
-     * @param customBiome The CustomBiome that should internally be used to modify the existing biome.
+     * @param abstractBiome The CustomBiome that should internally be used to modify the existing biome.
+     * @since 0.0.8
      */
     @Override
     @AsOf("0.0.8")
-    public void modify(@NotNull CustomBiome customBiome) {
-        Preconditions.checkNotNull(customBiome, "customBiome cannot be null");
-
-        BiomeResourceKey key = customBiome.getResourceKey();
-
-        Preconditions.checkArgument(RegisteredBiomes.isRegistered(key), "Biome %s is not registered", key);
-        modify(key, customBiome);
-    }
-
-    @Override
-    @AsOf("2.3.0")
-    public void modify(@NotNull BiomeResourceKey key, @NotNull CustomBiome newData) {
+    public void modify(@NotNull AbstractBiome abstractBiome) {
+        BiomeResourceKey key = abstractBiome.getResourceKey();
         Preconditions.checkNotNull(key, "key cannot be null");
-        Preconditions.checkNotNull(newData, "newData cannot be null");
+        Preconditions.checkNotNull(abstractBiome, "newData cannot be null");
 
-        BiomeSettings settings = newData.getSettings();
+        BiomeSettings settings = abstractBiome.getSettings();
 
         UnsafeNMS nms = UnsafeNMSHandler.getNMS().orElseThrow();
 
@@ -180,30 +187,30 @@ public class CustomBiomeRegistry implements BiomeRegistry {
         Biome.ClimateSettings climateSettings = new Biome.ClimateSettings(
             settings.hasPrecipitation(), settings.temperature(),
             settings.modifier().toNms(Biome.TemperatureModifier.class), settings.downfall());
-        ParticleCatalog particleCatalog = newData.getParticleCatalog();
+        ParticleCatalog particleCatalog = abstractBiome.getParticleCatalog();
         List<net.minecraft.world.attribute.AmbientParticle> particles = PARTICLE_CATALOG_HANDLER.create(particleCatalog);
 
         EnvironmentAttributeMap.Builder environmentAttributeMapBuilder = EnvironmentAttributeMap.builder()
             .set(EnvironmentAttributes.AMBIENT_PARTICLES, particles);
 
         // TODO: Replace with WrappedEnvironmentAttributeMap in the future
-        if (newData.getFogColor() != null) {
-            environmentAttributeMapBuilder.set(EnvironmentAttributes.FOG_COLOR, newData.getFogColor());
+        if (abstractBiome.getFogColor() != null) {
+            environmentAttributeMapBuilder.set(EnvironmentAttributes.FOG_COLOR, abstractBiome.getFogColor());
         }
-        if (newData.getSkyColor() != null) {
-            environmentAttributeMapBuilder.set(EnvironmentAttributes.SKY_COLOR, newData.getSkyColor());
+        if (abstractBiome.getSkyColor() != null) {
+            environmentAttributeMapBuilder.set(EnvironmentAttributes.SKY_COLOR, abstractBiome.getSkyColor());
         }
-        if (newData.getWaterFogColor() != null) {
-            environmentAttributeMapBuilder.set(EnvironmentAttributes.WATER_FOG_COLOR, newData.getWaterFogColor());
+        if (abstractBiome.getWaterFogColor() != null) {
+            environmentAttributeMapBuilder.set(EnvironmentAttributes.WATER_FOG_COLOR, abstractBiome.getWaterFogColor());
         }
-        WrappedEnvironmentAttributeMap wrappedAttributeMap = newData.getAttributes();
+        WrappedEnvironmentAttributeMap wrappedAttributeMap = abstractBiome.getAttributes();
         NmsEnvironmentAttributes.applyTo(environmentAttributeMapBuilder, wrappedAttributeMap);
 
         EnvironmentAttributeMap environmentAttributeMap = environmentAttributeMapBuilder.build();
 
-        BiomeSpecialEffects specialEffects = SPECIAL_EFFECTS_HANDLER.build(newData);
+        BiomeSpecialEffects specialEffects = SPECIAL_EFFECTS_HANDLER.build(abstractBiome);
 
-        BiomeSpawner spawner = newData.getBiomeSpawner();
+        BiomeSpawner spawner = abstractBiome.getBiomeSpawner();
 
         // Time to reflect
         try {
@@ -228,6 +235,124 @@ public class CustomBiomeRegistry implements BiomeRegistry {
             throw new RuntimeException("Failed to modify biome settings", e);
         }
 
-        RegisteredBiomes.replaceBiome(key, newData);
+        if (abstractBiome instanceof CustomBiome customBiome) {
+            RegisteredBiomes.replaceBiome(key, customBiome);
+        }
+    }
+
+    @AsOf("2.3.0")
+    @SuppressWarnings("unchecked")
+    public @Nullable AbstractBiome getBiome(@NotNull BiomeResourceKey key) {
+        Preconditions.checkNotNull(key, "key cannot be null");
+
+        if (RegisteredBiomes.isRegistered(key)) {
+            return RegisteredBiomes.get(key);
+        }
+
+        UnsafeNMS nms = UnsafeNMSHandler.getNMS().orElseThrow();
+        Registry<@NotNull Biome> biomeRegistry = (Registry<@NotNull Biome>) nms.getRegistry();
+
+        Biome biome = biomeRegistry.getOptional((Identifier) key.resourceLocation()).orElse(null);
+        if (biome == null) {
+            return null;
+        }
+
+        AbstractBiome.Builder builder = AbstractBiome.builder(key);
+
+        try {
+            Field climateSettingsField = Biome.class.getDeclaredField("climateSettings");
+            climateSettingsField.setAccessible(true);
+
+            Biome.ClimateSettings climate = (Biome.ClimateSettings) climateSettingsField.get(biome);
+            EnvironmentAttributeMap attributeMap = biome.getAttributes();
+            MobSpawnSettings mobSettings = biome.getMobSettings();
+            BiomeSpecialEffects specialEffects = biome.getSpecialEffects();
+
+            builder.waterColor(Color.fromARGB(specialEffects.waterColor()));
+            specialEffects.foliageColorOverride().ifPresent(c -> builder.foliageColor(Color.fromARGB(c)));
+            specialEffects.dryFoliageColorOverride().ifPresent(c -> builder.dryFoliageColor(Color.fromARGB(c)));
+            specialEffects.grassColorOverride().ifPresent(c -> builder.grassColor(Color.fromARGB(c)));
+            builder.grassColorModifier(GrassColorModifier.TRANSLATOR.fromNms(specialEffects.grassColorModifier()));
+
+
+            builder.settings(BiomeSettings.builder()
+                .hasPrecipitation(climate.hasPrecipitation())
+                .temperature(climate.temperature())
+                .downfall(climate.downfall())
+                .modifier(BiomeTempModifier.TRANSLATOR.fromNms(climate.temperatureModifier()))
+                .build());
+
+
+            if (attributeMap.contains(EnvironmentAttributes.FOG_COLOR)) {
+                builder.fogColor(Color.fromARGB(attributeMap.applyModifier(EnvironmentAttributes.FOG_COLOR, 0)));
+            }
+            if (attributeMap.contains(EnvironmentAttributes.SKY_COLOR)) {
+                builder.skyColor(Color.fromARGB(attributeMap.applyModifier(EnvironmentAttributes.SKY_COLOR, 0)));
+            }
+            if (attributeMap.contains(EnvironmentAttributes.WATER_FOG_COLOR)) {
+                builder.waterFogColor(Color.fromARGB(attributeMap.applyModifier(EnvironmentAttributes.WATER_FOG_COLOR, 0)));
+            }
+
+
+            builder.setSpawner(readSpawner(mobSettings));
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new RuntimeException("Failed to read biome state for " + key, e);
+        }
+
+        // TODO: Reverse AmbientParticles back to wrappers
+        // TODO: Reverse attributes back to wrappers
+        AbstractBiome abstractBiome = builder.build();
+        if (key.namespace().equals(BiomeResourceKey.MINECRAFT_NAMESPACE)) {
+            return VanillaBiome.builder(abstractBiome).build();
+        }
+        return abstractBiome;
+    }
+
+    @SuppressWarnings("unchecked")
+    private @NotNull BiomeSpawner readSpawner(@NotNull MobSpawnSettings settings) {
+        BiomeSpawner.Builder spawnerBuilder = BiomeSpawner.builder()
+            .setCreatureGenerationProbability(settings.getCreatureProbability());
+
+
+        for (net.minecraft.world.entity.MobCategory nmsCategory : net.minecraft.world.entity.MobCategory.values()) {
+            MobCategory category = toWrapperCategory(nmsCategory);
+            if (category == null) continue;
+
+            for (Weighted<MobSpawnSettings.@NotNull SpawnerData> weighted : settings.getMobs(nmsCategory).unwrap()) {
+                MobSpawnSettings.SpawnerData data = weighted.value();
+                org.bukkit.entity.EntityType type = toBukkitEntityType(data.type());
+                if (type == null) continue;
+                spawnerBuilder.addSpawners(category, weighted.weight(), type, data.minCount(), data.maxCount());
+            }
+        }
+
+        try {
+            Field costsField = MobSpawnSettings.class.getDeclaredField("mobSpawnCosts");
+            costsField.setAccessible(true);
+            Map<EntityType<?>, MobSpawnSettings.MobSpawnCost> costs =
+                (Map<net.minecraft.world.entity.EntityType<?>, MobSpawnSettings.MobSpawnCost>) costsField.get(settings);
+
+            for (Map.Entry<net.minecraft.world.entity.EntityType<?>, MobSpawnSettings.MobSpawnCost> entry : costs.entrySet()) {
+                org.bukkit.entity.EntityType type = toBukkitEntityType(entry.getKey());
+                if (type == null) continue;
+                MobSpawnSettings.MobSpawnCost cost = entry.getValue();
+
+                spawnerBuilder.addMobSpawnCost(type, cost.charge(), cost.energyBudget());
+            }
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new RuntimeException("Failed to read mob spawn costs", e);
+        }
+
+        return spawnerBuilder.build();
+    }
+
+    private static @Nullable MobCategory toWrapperCategory(@NotNull net.minecraft.world.entity.MobCategory nms) {
+        return MobCategory.TRANSLATOR.fromNms(nms);
+    }
+
+    private static @Nullable org.bukkit.entity.EntityType toBukkitEntityType(@NotNull net.minecraft.world.entity.EntityType<?> nms) {
+        NamespacedKey nmsKey = NamespacedKey.fromString(
+            net.minecraft.world.entity.EntityType.getKey(nms).toString());
+        return nmsKey == null ? null : org.bukkit.Registry.ENTITY_TYPE.get(nmsKey);
     }
 }

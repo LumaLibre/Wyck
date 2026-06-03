@@ -17,8 +17,8 @@ import java.util.List;
  * @author Outspending
  * @deprecated Use {@link RegisteredBiomes} instead.
  */
-@Deprecated
 @AsOf("0.0.1")
+@Deprecated(forRemoval = true, since = "2.3.0")
 public class BiomeHandler {
 
     private BiomeHandler() {

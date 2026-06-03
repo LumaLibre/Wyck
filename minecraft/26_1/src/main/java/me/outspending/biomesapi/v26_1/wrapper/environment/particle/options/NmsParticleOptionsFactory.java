@@ -131,3 +131,56 @@ public final class NmsParticleOptionsFactory implements ParticleOptionsFactory {
         throw new IllegalArgumentException("Unknown vibration destination " + dest);
     }
 }
+
+/* TODO
+@Override
+    public @Nullable ParticleData<?> decode(@NotNull Object nmsParticleOptions) {
+        ParticleOptions options = (ParticleOptions) nmsParticleOptions;
+
+        if (options instanceof DustColorTransitionOptions dct) {
+            return new DustTransitionParticle(dct.getFromColor(), dct.getToColor(), dct.getScale());
+        } else if (options instanceof DustParticleOptions dust) {
+            return new DustParticle(dust.getColor(), dust.getScale());
+        } else if (options instanceof BlockParticleOption block) {
+            Material material = CraftMagicNumbers.getMaterial(block.getState().getBlock());
+            return new BlockParticle(material);
+        } else if (options instanceof ItemParticleOption item) {
+            ItemStack bukkitStack = CraftItemStack.asBukkitCopy(new net.minecraft.world.item.ItemStack(item.getItem()));
+            return new ItemParticle(bukkitStack);
+        } else if (options instanceof ColorParticleOption color) {
+            int rgb = ((Math.round(color.getRed() * 255.0F) & 0xFF) << 16)
+                | ((Math.round(color.getGreen() * 255.0F) & 0xFF) << 8)
+                | (Math.round(color.getBlue() * 255.0F) & 0xFF);
+            return new ColorParticle(rgb);
+        } else if (options instanceof PowerParticleOption power) {
+            return new PowerParticle(power.getPower());
+        } else if (options instanceof SculkChargeParticleOptions(float roll)) {
+            return new SculkChargeParticle(roll);
+        } else if (options instanceof SpellParticleOption spell) {
+            int rgb = ((Math.round(spell.getRed() * 255.0F) & 0xFF) << 16)
+                | ((Math.round(spell.getGreen() * 255.0F) & 0xFF) << 8)
+                | (Math.round(spell.getBlue() * 255.0F) & 0xFF);
+            return new SpellParticle(rgb, spell.getPower());
+        } else if (options instanceof TrailParticleOption trail) {
+            Location target = CraftLocation.toBukkit(trail.target());
+            return new TrailParticle(target, trail.color(), trail.duration());
+        } else if (options instanceof VibrationParticleOption vib) {
+            Vibration.Destination destination = toBukkitDestination(vib.getDestination());
+            return new VibrationParticle(destination, vib.getArrivalInTicks());
+        }
+
+        return null; // simple / unmapped
+    }
+
+private static Vibration.Destination toBukkitDestination(PositionSource source) {
+        if (source instanceof BlockPositionSource block) {
+            BlockPos pos = block.getPosition(null).orElseThrow();
+            return new Vibration.Destination.BlockDestination(CraftLocation.toBukkit(pos, null));
+        } else if (source instanceof EntityPositionSource entity) {
+            // EntityPositionSource holds an entity-or-uuid; no stable public getter to a live Entity
+            // without a Level, so this branch can't be reconstructed standalone.
+            throw new IllegalArgumentException("Cannot decode entity-based vibration destination without a world context");
+        }
+        throw new IllegalArgumentException("Unknown position source " + source);
+    }
+ */

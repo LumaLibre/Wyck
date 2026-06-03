@@ -1,6 +1,6 @@
 package me.outspending.biomesapi.registry.handlers;
 
-import me.outspending.biomesapi.biome.CustomBiome;
+import me.outspending.biomesapi.biome.AbstractBiome;
 import me.outspending.biomesapi.registry.BuilderHandler;
 import me.outspending.biomesapi.wrapper.environment.attribute.NmsEnvironmentAttributes;
 import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttributeMap;
@@ -23,7 +23,7 @@ public class AttributeMapHandler implements BuilderHandler<Biome.BiomeBuilder, W
     }
 
     @Override
-    public @Nullable WrappedEnvironmentAttributeMap build(@NotNull CustomBiome biome) {
+    public @Nullable WrappedEnvironmentAttributeMap build(@NotNull AbstractBiome biome) {
         return null;
     }
 }

@@ -2,11 +2,12 @@ package me.outspending.biomesapi.biome;
 
 import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.annotations.AsOf;
+import me.outspending.biomesapi.biome.impl.CustomBiomeImpl;
+import me.outspending.biomesapi.registry.BiomeRegistry;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
 import me.outspending.biomesapi.renderer.packet.PacketHandler;
 import me.outspending.biomesapi.renderer.packet.data.BlockReplacement;
 import me.outspending.biomesapi.renderer.packet.data.PhonyCustomBiome;
-import me.outspending.biomesapi.util.ThrowingRunnable;
 import me.outspending.biomesapi.wrapper.BiomeSettings;
 import me.outspending.biomesapi.wrapper.entity.BiomeSpawner;
 import me.outspending.biomesapi.wrapper.environment.GrassColorModifier;
@@ -16,12 +17,8 @@ import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironment
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleCatalog;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleData;
 import me.outspending.biomesapi.wrapper.environment.particle.WrappedParticleTypes;
-import net.kyori.adventure.key.Keyed;
-import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.block.Biome;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -36,158 +33,7 @@ import java.util.Collection;
  * @author Outspending
  */
 @AsOf("2.3.0")
-public interface CustomBiome extends Keyed {
-
-    /**
-     * Returns a new instance of the Builder class.
-     *
-     * @return a new Builder instance
-     * @since 0.0.1
-     */
-    @AsOf("0.0.1")
-    static @NotNull Builder builder() {
-        return new Builder();
-    }
-
-    /**
-     * Returns a new instance of the Builder class with the provided resource key.
-     * @param resourceKey the BiomeResourceKey to set for the CustomBiome being built
-     * @return a new Builder instance
-     * @since 2.1.0
-     */
-    @AsOf("2.1.0")
-    static @NotNull Builder builder(@NotNull BiomeResourceKey resourceKey) {
-        Preconditions.checkNotNull(resourceKey, "Resource key cannot be null.");
-        return new Builder().resourceKey(resourceKey);
-    }
-
-    /**
-     * @return the NamespacedKey of the CustomBiome.
-     * @since 2.3.0
-     */
-    @AsOf("2.3.0")
-    @NotNull NamespacedKey getKey();
-
-    /**
-     * Returns the NamespacedKey of the CustomBiome.
-     *
-     * @return the NamespacedKey of the CustomBiome
-     * @since 0.0.1
-     * @deprecated Use {@link #getKey()} instead.
-     */
-    @AsOf("0.0.1")
-    @Deprecated(forRemoval = true, since = "2.3.0")
-    default @NotNull NamespacedKey toNamespacedKey() {
-        return getKey();
-    }
-
-    /**
-     * Returns the Bukkit Biome of the CustomBiome.
-     *
-     * @return the Bukkit Biome of the CustomBiome
-     * @since 0.0.6
-     */
-    @AsOf("0.0.6")
-    @NotNull Biome toBukkitBiome();
-
-    /**
-     * Returns the BiomeResourceKey of the CustomBiome.
-     *
-     * @return the BiomeResourceKey of the CustomBiome
-     * @since 0.0.1
-     */
-    @AsOf("0.0.1")
-    @NotNull BiomeResourceKey getResourceKey();
-
-    /**
-     * Returns the BiomeSettings of the CustomBiome.
-     *
-     * @return the BiomeSettings of the CustomBiome
-     * @since 0.0.1
-     */
-    @AsOf("0.0.1")
-    @NotNull BiomeSettings getSettings();
-
-    /**
-     * Returns the fog color of the CustomBiome.
-     *
-     * @return the fog color of the CustomBiome
-     * @since 0.0.1
-     */
-    @AsOf("0.0.1")
-    @Nullable Integer getFogColor();
-
-    /**
-     * Returns the water color of the CustomBiome.
-     *
-     * @return the water color of the CustomBiome
-     * @since 0.0.1
-     */
-    @AsOf("0.0.1")
-    int getWaterColor();
-
-    /**
-     * Returns the water fog color of the CustomBiome.
-     *
-     * @return the water fog color of the CustomBiome
-     * @since 0.0.1
-     */
-    @AsOf("0.0.1")
-    @Nullable Integer getWaterFogColor();
-
-    /**
-     * Returns the sky color of the CustomBiome.
-     *
-     * @return the sky color of the CustomBiome
-     * @since 0.0.1
-     */
-    @AsOf("0.0.1")
-    @Nullable Integer getSkyColor();
-
-    /**
-     * Returns the foliage color of the CustomBiome.
-     *
-     * @return the foliage color of the CustomBiome
-     * @since 0.0.1
-     */
-    @AsOf("0.0.1")
-    @Nullable Integer getFoliageColor();
-
-    /**
-     * Returns the grass color of the CustomBiome.
-     *
-     * @return the grass color of the CustomBiome
-     * @since 0.0.1
-     */
-    @AsOf("0.0.1")
-    @Nullable Integer getGrassColor();
-
-    /**
-     * Returns the dry foliage color of the CustomBiome.
-     *
-     * @return the dry foliage color of the CustomBiome
-     * @since 1.0.2
-     */
-    @AsOf("1.0.2")
-    @Nullable Integer getDryFoliageColor();
-
-    /**
-     * Returns the GrassColorModifier of the CustomBiome.
-     *
-     * @return the GrassColorModifier of the CustomBiome
-     * @since 0.0.24
-     */
-    @AsOf("0.0.24")
-    GrassColorModifier getGrassColorModifier();
-
-    /**
-     * Returns the ParticleRenderer of the CustomBiome.
-     *
-     * @return the ParticleRenderer of the CustomBiome
-     * @since 1.1.0
-     */
-    @AsOf("1.1.0")
-    ParticleCatalog getParticleCatalog();
+public interface CustomBiome extends AbstractBiome {
 
     /**
      * Returns the BlockReplacements of the CustomBiome.
@@ -199,193 +45,6 @@ public interface CustomBiome extends Keyed {
     @NotNull BlockReplacement[] getBlockReplacements();
 
     /**
-     * Returns the WrappedEnvironmentAttributeMap of the CustomBiome.
-     * @return the WrappedEnvironmentAttributeMap of the CustomBiome
-     * @since 2.3.0
-     */
-    @AsOf("2.3.0")
-    @NotNull WrappedEnvironmentAttributeMap getAttributes();
-
-    /**
-     * Returns the WrappedEnvironmentAttributeMap of the CustomBiome.
-     *
-     * @return the WrappedEnvironmentAttributeMap of the CustomBiome
-     * @since 1.1.0
-     * @deprecated Use {@link #getAttributes()} instead.
-     */
-    @AsOf("1.1.0")
-    @Deprecated(forRemoval = true, since = "2.3.0")
-    default @NotNull WrappedEnvironmentAttributeMap getEnvironmentAttributeMap() {
-        return getAttributes();
-    }
-
-    /**
-     * Returns the BiomeSpawner of the CustomBiome.
-     * @return the BiomeSpawner of the CustomBiome
-     * @since 2.3.0
-     */
-    @AsOf("2.3.0")
-    @Nullable BiomeSpawner getBiomeSpawner();
-
-    /**
-     * Sets the fog color of the CustomBiome.
-     *
-     * @param fogColor the fog color of the CustomBiome
-     * @return the CustomBiome with the updated fog color
-     * @since 0.0.5
-     */
-    @AsOf("1.1.0")
-    CustomBiome setFogColor(@Nullable Integer fogColor);
-
-    /**
-     * Sets the water color of the CustomBiome.
-     *
-     * @param waterColor the water color of the CustomBiome
-     * @return the CustomBiome with the updated water color
-     * @since 0.0.5
-     */
-    @AsOf("0.0.5")
-    CustomBiome setWaterColor(int waterColor);
-
-    /**
-     * Sets the water fog color of the CustomBiome.
-     * @param waterColor the water fog color of the CustomBiome
-     * @return the CustomBiome with the updated water fog color
-     * @since 2.2.0
-     */
-    @AsOf("2.2.0")
-    default CustomBiome setWaterColor(@NotNull String waterColor) {
-        @Nullable Integer parsedColor = parseHex(waterColor);
-        Preconditions.checkNotNull(parsedColor, "Invalid water fog color: %s", waterColor);
-        return setWaterColor(parsedColor);
-    }
-
-    /**
-     * Sets the water fog color of the CustomBiome.
-     *
-     * @param waterFogColor the water fog color of the CustomBiome
-     * @return the CustomBiome with the updated water fog color
-     * @since 0.0.5
-     */
-    @AsOf("1.1.0")
-    CustomBiome setWaterFogColor(@Nullable Integer waterFogColor);
-
-    /**
-     * Sets the water fog color of the CustomBiome.
-     * @param waterFogColor the water fog color of the CustomBiome
-     * @return the CustomBiome with the updated water fog color
-     * @since 2.2.0
-     */
-    @AsOf("2.2.0")
-    default CustomBiome setWaterFogColor(@Nullable String waterFogColor) {
-        return setWaterFogColor(parseHex(waterFogColor));
-    }
-
-    /**
-     * Sets the sky color of the CustomBiome.
-     *
-     * @param skyColor the sky color of the CustomBiome
-     * @return the CustomBiome with the updated sky color
-     * @since 0.0.5
-     */
-    @AsOf("1.1.0")
-    CustomBiome setSkyColor(@Nullable Integer skyColor);
-
-    /**
-     * Sets the sky color of the CustomBiome.
-     * @param skyColor the sky color of the CustomBiome
-     * @return the CustomBiome with the updated sky color
-     * @since 2.2.0
-     */
-    @AsOf("2.2.0")
-    default CustomBiome setSkyColor(@Nullable String skyColor) {
-        return setSkyColor(parseHex(skyColor));
-    }
-
-    /**
-     * Sets the foliage color of the CustomBiome.
-     *
-     * @param foliageColor the foliage color of the CustomBiome
-     * @since 0.0.5
-     * @return the CustomBiome with the updated foliage color
-     */
-    @AsOf("1.1.0")
-    CustomBiome setFoliageColor(@Nullable Integer foliageColor);
-
-    /**
-     * Sets the foliage color of the CustomBiome.
-     * @param foliageColor the foliage color of the CustomBiome
-     * @return the CustomBiome with the updated foliage color
-     * @since 2.2.0
-     */
-    @AsOf("2.2.0")
-    default CustomBiome setFoliageColor(@Nullable String foliageColor) {
-        return setFoliageColor(parseHex(foliageColor));
-    }
-
-    /**
-     * Sets the grass color of the CustomBiome.
-     *
-     * @param grassColor the grass color of the CustomBiome
-     * @return the CustomBiome with the updated grass color
-     * @since 0.0.5
-     */
-    @AsOf("1.1.0")
-    CustomBiome setGrassColor(@Nullable Integer grassColor);
-
-    /**
-     * Sets the grass color of the CustomBiome.
-     * @param grassColor the grass color of the CustomBiome
-     * @return the CustomBiome with the updated grass color
-     * @since 2.2.0
-     */
-    @AsOf("2.2.0")
-    default CustomBiome setGrassColor(@Nullable String grassColor) {
-        return setGrassColor(parseHex(grassColor));
-    }
-
-    /**
-     * Sets the dry foliage color of the CustomBiome.
-     *
-     * @param dryFoliageColor the dry foliage color of the CustomBiome
-     * @since 1.0.2
-     * @return the CustomBiome with the updated dry foliage color
-     */
-    @AsOf("1.1.0")
-    CustomBiome setDryFoliageColor(@Nullable Integer dryFoliageColor);
-
-    /**
-     * Sets the dry foliage color of the CustomBiome.
-     * @param dryFoliageColor the dry foliage color of the CustomBiome
-     * @return the CustomBiome with the updated dry foliage color
-     * @since 2.2.0
-     */
-    @AsOf("2.2.0")
-    default CustomBiome setDryFoliageColor(@Nullable String dryFoliageColor) {
-        return setDryFoliageColor(parseHex(dryFoliageColor));
-    }
-
-    /**
-     * Sets the GrassColorModifier of the CustomBiome.
-     *
-     * @param grassColorModifier the GrassColorModifier of the CustomBiome
-     * @return the CustomBiome with the updated GrassColorModifier
-     * @since 0.0.24
-     */
-    @AsOf("0.0.24")
-    CustomBiome setGrassColorModifier(@NotNull GrassColorModifier grassColorModifier);
-
-    /**
-     * Sets the ParticleRenderer of the CustomBiome.
-     *
-     * @param particleCatalog the ParticleRenderer of the CustomBiome
-     * @return the CustomBiome with the updated ParticleRenderer
-     * @since 1.1.0
-     */
-    @AsOf("1.1.0")
-    CustomBiome setParticleCatalog(@NotNull ParticleCatalog particleCatalog);
-
-    /**
      * Sets the BlockReplacements of the CustomBiome.
      *
      * @apiNote Block replacements are only supported when rendering custom biomes to clients via the {@link PacketHandler}.
@@ -394,64 +53,7 @@ public interface CustomBiome extends Keyed {
      * @return the CustomBiome with the updated BlockReplacements
      */
     @AsOf("0.0.6")
-    CustomBiome setBlockReplacements(@NotNull BlockReplacement... blockReplacements);
-
-
-    /**
-     * Sets the WrappedEnvironmentAttributeMap of the CustomBiome.
-     *
-     * @param environmentAttributeMap the WrappedEnvironmentAttributeMap of the CustomBiome
-     * @return the CustomBiome with the updated WrappedEnvironmentAttributeMap
-     * @since 2.2.0
-     */
-    @AsOf("2.2.0")
-    CustomBiome setAttributes(@NotNull WrappedEnvironmentAttributeMap environmentAttributeMap);
-
-    /**
-     * Sets the WrappedEnvironmentAttributeMap of the CustomBiome.
-     *
-     * @param environmentAttributeMap the WrappedEnvironmentAttributeMap of the CustomBiome
-     * @return the CustomBiome with the updated WrappedEnvironmentAttributeMap
-     * @since 1.1.0
-     * @deprecated Use {@link #setAttributes(WrappedEnvironmentAttributeMap)} instead.
-     */
-    @AsOf("1.1.0")
-    @Deprecated(forRemoval = true, since = "2.3.0")
-    default CustomBiome setEnvironmentAttributeMap(@NotNull WrappedEnvironmentAttributeMap environmentAttributeMap) {
-        return setAttributes(environmentAttributeMap);
-    }
-
-    /**
-     * Sets the BiomeSpawner of the CustomBiome.
-     * @param biomeSpawner the BiomeSpawner of the CustomBiome
-     * @return the CustomBiome with the updated BiomeSpawner
-     * @since 2.3.0
-     */
-    @AsOf("2.3.0")
-    CustomBiome setBiomeSpawner(@Nullable BiomeSpawner biomeSpawner);
-
-
-    /**
-     * Registers the CustomBiome to the biome registry.
-     *
-     * @return the registered CustomBiome
-     * @since 0.0.2
-     */
-    @AsOf("0.0.2")
-    CustomBiome register();
-
-
-    /**
-     * Modifies the existing biome in the biome registry with the properties of this CustomBiome.
-     *
-     * @since 0.0.17
-     * @throws IllegalArgumentException if the biome does not already exist in the registry.
-     * @apiNote This method can only change the properties of an existing biome on the <b>server</b>.
-     * Clients which have already received the biome will not see any changes until they enter the reconfiguration phase
-     * (e.g., by rejoining the server.)
-     */
-    @AsOf("0.0.17")
-    CustomBiome modify();
+    CustomBiome setBlockReplacements(@NotNull BlockReplacement[] blockReplacements);
 
     /**
      * Compares this CustomBiome to another CustomBiome to determine if they are similar.
@@ -465,14 +67,26 @@ public interface CustomBiome extends Keyed {
     boolean isSimilar(@NotNull CustomBiome otherBiome);
 
     /**
+     * Registers the CustomBiome to the biome registry.
+     *
+     * @return the registered CustomBiome
+     * @since 0.0.2
+     */
+    @AsOf("0.0.2")
+    default CustomBiome register() {
+        BiomeRegistry.registry().register(this);
+        return this;
+    }
+
+    /**
      * Returns a new Builder instance with the properties of the CustomBiome.
      *
      * @return a new Builder instance with the properties of the CustomBiome
      * @since 0.0.5
      */
     @AsOf("0.0.5")
-    default Builder toBuilder() {
-        return new Builder(this);
+    default CustomBiome.Builder toBuilder() {
+        return new CustomBiome.Builder(this);
     }
 
     /**
@@ -482,8 +96,8 @@ public interface CustomBiome extends Keyed {
      * @since 2.1.0
      */
     @AsOf("2.1.0")
-    default Builder asBuilder() {
-        return new Builder(this);
+    default CustomBiome.Builder asBuilder() {
+        return new CustomBiome.Builder(this);
     }
 
     /**
@@ -523,21 +137,30 @@ public interface CustomBiome extends Keyed {
      */
     @AsOf("2.1.0")
     default boolean isRegistered() {
-        return RegisteredBiomes.isRegistered(getResourceKey());
+        return RegisteredBiomes.isRegistered(this.getResourceKey());
     }
 
     /**
-     * Parses a hexadecimal color string into an integer.
+     * Returns a new instance of the Builder class.
      *
-     * @param color the color string to parse
-     * @return the integer representation of the color
+     * @return a new Builder instance
      * @since 0.0.1
      */
-    @AsOf("1.0.2")
-    private static @Nullable Integer parseHex(@Nullable String color) {
-        if (color == null || color.isEmpty()) return null;
-        final String formatted = color.startsWith("#") ? color.substring(1) : color;
-        return Integer.parseInt(formatted, 16);
+    @AsOf("0.0.1")
+    static @NotNull CustomBiome.Builder builder() {
+        return new CustomBiome.Builder();
+    }
+
+    /**
+     * Returns a new instance of the Builder class with the provided resource key.
+     * @param resourceKey the BiomeResourceKey to set for the CustomBiome being built
+     * @return a new Builder instance
+     * @since 2.1.0
+     */
+    @AsOf("2.1.0")
+    static @NotNull CustomBiome.Builder builder(@NotNull BiomeResourceKey resourceKey) {
+        Preconditions.checkNotNull(resourceKey, "Resource key cannot be null.");
+        return new CustomBiome.Builder().resourceKey(resourceKey);
     }
 
     /**
@@ -549,7 +172,7 @@ public interface CustomBiome extends Keyed {
      * @author Outspending
      */
     @AsOf("2.1.0")
-    class Builder {
+    final class Builder {
 
         private BiomeResourceKey resourceKey = null;
         private BiomeSettings settings = BiomeSettings.defaultSettings();
@@ -636,7 +259,7 @@ public interface CustomBiome extends Keyed {
          */
         @AsOf("0.0.1")
         public @NotNull Builder fogColor(@NotNull String fogColor) {
-            this.fogColor = parseHex(fogColor);
+            this.fogColor = AbstractBiome.parseHex(fogColor);
             return this;
         }
 
@@ -662,7 +285,7 @@ public interface CustomBiome extends Keyed {
          */
         @AsOf("0.0.1")
         public @NotNull Builder waterColor(@NotNull String waterColor) {
-            @Nullable Integer parsedColor = parseHex(waterColor);
+            @Nullable Integer parsedColor = AbstractBiome.parseHex(waterColor);
             if (parsedColor != null) this.waterColor = parsedColor;
             return this;
         }
@@ -689,7 +312,7 @@ public interface CustomBiome extends Keyed {
          */
         @AsOf("0.0.1")
         public @NotNull Builder waterFogColor(@NotNull String waterFogColor) {
-            this.waterFogColor = parseHex(waterFogColor);
+            this.waterFogColor = AbstractBiome.parseHex(waterFogColor);
             return this;
         }
 
@@ -715,7 +338,7 @@ public interface CustomBiome extends Keyed {
          */
         @AsOf("0.0.1")
         public @NotNull Builder skyColor(@NotNull String skyColor) {
-            this.skyColor = parseHex(skyColor);
+            this.skyColor = AbstractBiome.parseHex(skyColor);
             return this;
         }
 
@@ -741,7 +364,7 @@ public interface CustomBiome extends Keyed {
          */
         @AsOf("0.0.1")
         public @NotNull Builder foliageColor(@NotNull String foliageColor) {
-            this.foliageColor = parseHex(foliageColor);
+            this.foliageColor = AbstractBiome.parseHex(foliageColor);
             return this;
         }
 
@@ -767,7 +390,7 @@ public interface CustomBiome extends Keyed {
          */
         @AsOf("0.0.1")
         public @NotNull Builder grassColor(@NotNull String grassColor) {
-            this.grassColor = parseHex(grassColor);
+            this.grassColor = AbstractBiome.parseHex(grassColor);
             return this;
         }
 
@@ -793,7 +416,7 @@ public interface CustomBiome extends Keyed {
          */
         @AsOf("1.2.0")
         public @NotNull Builder dryFoliageColor(@NotNull String dryFoliageColor) {
-            this.dryFoliageColor = parseHex(dryFoliageColor);
+            this.dryFoliageColor = AbstractBiome.parseHex(dryFoliageColor);
             return this;
         }
 
@@ -1040,5 +663,4 @@ public interface CustomBiome extends Keyed {
         }
 
     }
-
 }

@@ -12,7 +12,12 @@ import me.outspending.biomesapi.wrapper.environment.particle.options.SculkCharge
 import me.outspending.biomesapi.wrapper.environment.particle.options.SpellParticle;
 import me.outspending.biomesapi.wrapper.environment.particle.options.TrailParticle;
 import me.outspending.biomesapi.wrapper.environment.particle.options.VibrationParticle;
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * An enum that wraps around Minecraft's ParticleTypes, providing additional metadata and functionality.
@@ -143,6 +148,9 @@ public enum WrappedParticleTypes {
     BLOCK_CRUMBLE("block_crumble", BlockParticle.class),
     FIREFLY("firefly");
 
+    @ApiStatus.Internal
+    private static volatile Map<String, WrappedParticleTypes> BY_KEY;
+
     private final String key;
     private final @Nullable Class<? extends ParticleData<?>> particleDataClass;
     private volatile ParticleTypeHandle cachedHandle;
@@ -208,6 +216,28 @@ public enum WrappedParticleTypes {
     @AsOf("2.1.0")
     public WrappedAmbientParticle<?> create(float probability) {
         return WrappedAmbientParticle.of(this, probability);
+    }
+
+    /**
+     * Returns the constant whose namespaced key matches (e.g. {@code "flame"}), or null if none.
+     * @since 2.3.0
+     */
+    @AsOf("2.3.0")
+    public static @Nullable WrappedParticleTypes byKey(@NotNull String key) {
+        Map<String, WrappedParticleTypes> map = BY_KEY;
+        if (map == null) {
+            synchronized (WrappedParticleTypes.class) {
+                map = BY_KEY;
+                if (map == null) {
+                    Map<String, WrappedParticleTypes> built = new HashMap<>();
+                    for (WrappedParticleTypes type : values()) {
+                        built.put(type.key, type);
+                    }
+                    BY_KEY = map = built;
+                }
+            }
+        }
+        return map.get(key);
     }
 
 }

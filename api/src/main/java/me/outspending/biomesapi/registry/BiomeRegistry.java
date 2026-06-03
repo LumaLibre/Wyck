@@ -1,6 +1,7 @@
 package me.outspending.biomesapi.registry;
 
 import me.outspending.biomesapi.annotations.AsOf;
+import me.outspending.biomesapi.biome.AbstractBiome;
 import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.factory.WireProvider;
 import org.jetbrains.annotations.ApiStatus;
@@ -10,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
  * An interface for registering and modifying custom biomes on a Minecraft server.
  *
  * @apiNote Biomes cannot be removed from the Minecraft registry once they have been added.
- * You may {@link #modify(CustomBiome) modify} existing biomes to reduce memory footprint.
+ * You may {@link #modify(AbstractBiome) modify} existing biomes to reduce memory footprint.
  *
  * @version 0.0.1
  * @since 0.0.1
@@ -52,7 +53,7 @@ public interface BiomeRegistry {
      * @return the built biome
      */
     @AsOf("2.3.0")
-    @NotNull Object buildDelegate(@NotNull CustomBiome biome);
+    @NotNull Object buildDelegate(@NotNull AbstractBiome biome);
 
     /**
      * This method registers a custom biome to a Minecraft server.
@@ -78,15 +79,10 @@ public interface BiomeRegistry {
      * @param biome The CustomBiome that should internally be used to modify the existing biome.
      */
     @AsOf("0.0.8")
-    void modify(@NotNull CustomBiome biome);
+    void modify(@NotNull AbstractBiome biome);
 
-    /**
-     * Modifies an existing biome on the Minecraft server.
-     * @param key the key of the biome to modify
-     * @param newData the new biome data
-     * @since 2.3.0
-     */
+
     @AsOf("2.3.0")
-    void modify(@NotNull BiomeResourceKey key, @NotNull CustomBiome newData);
+    <T extends AbstractBiome> T getBiome(BiomeResourceKey key);
 
 }

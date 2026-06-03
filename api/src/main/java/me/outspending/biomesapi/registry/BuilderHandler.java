@@ -1,7 +1,7 @@
 package me.outspending.biomesapi.registry;
 
 import me.outspending.biomesapi.annotations.AsOf;
-import me.outspending.biomesapi.biome.CustomBiome;
+import me.outspending.biomesapi.biome.AbstractBiome;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -19,5 +19,5 @@ public interface BuilderHandler<K, V> {
     void handle(V value, @NotNull K key);
 
     @AsOf("0.0.1")
-    V build(@NotNull CustomBiome biome);
+    V build(@NotNull AbstractBiome biome);
 }
