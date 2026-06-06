@@ -17,8 +17,8 @@ import java.util.Objects;
 
 /**
  * Wraps Minecraft's CanyonCarverConfiguration, the configuration consumed by
- * the CANYON carver. Exposes the full set of fields a datapack configured canyon
- * carver can specify.
+ * the CANYON carver.
+ *
  * @since 2.3.0
  * @version 2.3.0
  * @author Jsinco

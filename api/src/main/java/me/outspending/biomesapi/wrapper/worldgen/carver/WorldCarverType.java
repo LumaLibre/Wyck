@@ -1,9 +1,10 @@
-package me.outspending.biomesapi.wrapper.worldgen;
+package me.outspending.biomesapi.wrapper.worldgen.carver;
 
 import me.outspending.biomesapi.annotations.AsOf;
 
 /**
  * The vanilla world-carver algorithms that a configured carver can be built on.
+ *
  * @since 2.3.0
  * @version 2.3.0
  * @author Jsinco

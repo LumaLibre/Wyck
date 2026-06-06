@@ -2,6 +2,7 @@ package me.outspending.biomesapi.wrapper.worldgen.feature;
 
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 // TODO: Custom ConfiguredFeature implementations
@@ -13,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Jsinco
  */
 @AsOf("2.3.0")
+@ApiStatus.Experimental
 public enum FeatureType {
 
     NO_OP("no_op"),

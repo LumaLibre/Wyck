@@ -16,8 +16,8 @@ import java.util.Objects;
 
 /**
  * Wraps Minecraft's CaveCarverConfiguration, the configuration consumed by both
- * the CAVE and NETHER_CAVE carvers. Exposes the full set of fields a datapack
- * configured carver can specify.
+ * the CAVE and NETHER_CAVE carvers.
+ *
  * @since 2.3.0
  * @version 2.3.0
  * @author Jsinco

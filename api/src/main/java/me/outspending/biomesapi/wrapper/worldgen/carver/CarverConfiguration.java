@@ -12,6 +12,7 @@ import java.util.Collection;
 
 /**
  * Wraps Minecraft's CarverConfiguration class.
+ *
  * @since 2.3.0
  * @version 2.3.0
  * @author Jsinco

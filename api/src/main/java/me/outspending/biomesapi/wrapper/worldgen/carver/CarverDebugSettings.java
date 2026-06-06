@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Wraps Minecraft's CarverDebugSettings, the block states a carver paints
  * in air, water, lava, and barrier positions when debug mode is enabled.
+ *
  * @since 2.3.0
  * @version 2.3.0
  * @author Jsinco
