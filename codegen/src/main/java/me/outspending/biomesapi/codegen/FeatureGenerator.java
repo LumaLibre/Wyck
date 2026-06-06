@@ -19,6 +19,11 @@ import java.util.regex.Pattern;
 // AsOf 2.3.0
 public class FeatureGenerator {
 
+    // matches: @AsOf("1.2.3") \n public static final SomeType FIELD_NAME =
+    private static final Pattern EXISTING_FIELD = Pattern.compile(
+        "@AsOf\\(\"([^\"]+)\"\\)\\s+public\\s+static\\s+final\\s+\\w+\\s+(\\w+)\\s*="
+    );
+
     static void main(String[] args) throws Exception {
         String outputRoot = args[0];
         String version = args[1];
@@ -42,11 +47,6 @@ public class FeatureGenerator {
             System.out.println("generated " + outputPath);
         }
     }
-
-    // matches: @AsOf("1.2.3") \n public static final SomeType FIELD_NAME =
-    private static final Pattern EXISTING_FIELD = Pattern.compile(
-        "@AsOf\\(\"([^\"]+)\"\\)\\s+public\\s+static\\s+final\\s+\\w+\\s+(\\w+)\\s*="
-    );
 
     private static Map<String, String> readExistingVersions(Path outputPath) throws Exception {
         Map<String, String> versions = new HashMap<>();
