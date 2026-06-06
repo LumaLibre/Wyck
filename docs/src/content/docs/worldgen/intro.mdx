@@ -1,0 +1,26 @@
+---
+title: Introduction
+description: An introduction to world generation using BiomesAPI, covering the basics of biome generation.
+sidebar:
+    order: 1
+---
+
+BiomesAPI exposes Minecraft's underlying world generation system.
+World generation takes place in both biomes and dimensions but is primarily bound to biomes themselves.
+
+When we say `worldgen`, we are referring to how Minecraft blocks are placed in the world and how the game looks in a particular biome.
+This includes things like the terrain, vegetation, and structures that are generated in a biome.
+The world generation system is responsible for creating the unique landscapes and environments that players explore in Minecraft.
+
+Unlike Bukkit's [`ChunkGenerator`](https://jd.papermc.io/paper/1.13.2/index.html?org/bukkit/generator/ChunkGenerator.html),
+terrain generation is inherently tied to biomes themselves, although you may reuse the same biome generation logic across multiple biomes.
+
+## Puzzle Pieces
+
+A biome's generation is described by three kinds of components, which BiomesAPI wraps separately:
+
+* [**Carvers**](/worldgen/carvers) cut caves, canyons, and ravines into already-generated terrain.
+* [**Configured features**](/worldgen/configured-features) describe *what* to generate, such as an ore vein or a tree, by pairing a feature with its configuration.
+* [**Placed features**](/worldgen/placed-features) wrap a configured feature with placement rules that decide *where* and *how often* it generates.
+
+These come together in [**biome generation settings**](/worldgen/biome-generation-settings), which is attached to a custom biome.

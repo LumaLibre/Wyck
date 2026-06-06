@@ -1,0 +1,64 @@
+---
+title: Placed Features
+description: Learn how to reference and author placed features with BiomesAPI, controlling where and how often features generate.
+sidebar:
+    order: 4
+---
+
+import CodeBlock from "@/components/CodeBlock.astro";
+import SourceLink from "@/components/SourceLink.astro";
+import CodeTabs from "@/components/CodeTabs.astro";
+
+A <SourceLink path="wrapper/worldgen/placement/PlacedFeature.java" line={24}>PlacedFeature</SourceLink> is a
+[configured feature](/wrappers/worldgen/configured-features) together with a list of **placement modifiers** that decide where,
+how often, and under what conditions it should generate.
+
+A placed feature is either a **reference** to one already registered or a custom **authored** one.
+
+## Referencing Built-in Placed Features
+
+The <SourceLink path="wrapper/worldgen/placement/PlacedFeatures.java">PlacedFeatures</SourceLink> catalog holds typed
+references to every placeable vanilla feature.
+
+<CodeBlock
+    lang="java"
+    filename="ExamplePlugin.java"
+    code={`import me.outspending.biomesapi.wrapper.worldgen.placement.PlacedFeature;
+import me.outspending.biomesapi.wrapper.worldgen.placement.PlacedFeatures;
+
+PlacedFeature diamonds = PlacedFeatures.ORE_DIAMOND;`}
+/>
+
+## Authoring a Placed Feature
+
+To author one, pass a [configured feature](/wrappers/worldgen/configured-features) and the placement modifiers that position it.
+
+<CodeBlock
+    lang="java"
+    filename="ExamplePlugin.java"
+    code={`import me.outspending.biomesapi.wrapper.worldgen.HeightmapType;
+import me.outspending.biomesapi.wrapper.worldgen.PlacementModifier;
+import me.outspending.biomesapi.wrapper.worldgen.feature.ConfiguredFeatures;
+import me.outspending.biomesapi.wrapper.worldgen.placement.PlacedFeature;
+
+PlacedFeature flowers = PlacedFeature.of(
+    ConfiguredFeatures.FLOWER_DEFAULT,
+    PlacementModifier.rarityFilter(8),
+    PlacementModifier.inSquare(),
+    PlacementModifier.heightmap(HeightmapType.MOTION_BLOCKING),
+    PlacementModifier.biomeFilter()
+);`}
+/>
+
+## Placement Modifiers
+
+Placement modifiers run in order, each transforming the set of positions the feature will generate at.
+
+Such as:
+
+* <SourceLink path="wrapper/worldgen/PlacementModifier.java" line={156}>`count(n)`</SourceLink> / `count(IntProvider)`: generate the feature a fixed or variable number of times per chunk.
+* `rarityFilter(n)`: generate on average once every `n` chunks.
+* `inSquare()`: spread the position randomly within the chunk.
+* `heightmap(HeightmapType)`: place at the surface height of the given heightmap.
+* `heightRangeUniform(...)` / `heightRangeTriangle(...)`: choose a Y within a vertical range.
+* `biomeFilter()`: only generate if the target biome matches. Almost always added last.

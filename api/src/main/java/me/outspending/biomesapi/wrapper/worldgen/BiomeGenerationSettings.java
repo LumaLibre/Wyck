@@ -16,10 +16,8 @@ import java.util.Objects;
 
 /**
  * Wraps Minecraft's BiomeGenerationSettings, the carvers and placed features
- * that compose a biome's world generation. Carvers are an unordered collection;
- * placed features are grouped by their generation step. Both the carver holders
- * and the feature holders are produced by their own wrappers' toMinecraft()
- * calls, so this wrapper composes pre-resolved holders rather than registry keys.
+ * that compose a biome's world generation.
+ *
  * @since 2.3.0
  * @version 2.3.0
  * @author Jsinco

@@ -1,0 +1,100 @@
+---
+title: Carvers
+description: An introduction to world generation carvers, covering how to create and customize cave and canyon generation in Minecraft using BiomesAPI.
+sidebar:
+    order: 2
+---
+
+import CodeBlock from "@/components/CodeBlock.astro";
+import SourceLink from "@/components/SourceLink.astro";
+import CodeTabs from "@/components/CodeTabs.astro";
+
+Carvers are responsible for 'carving' out areas of a world to create caves, canyons, ravines, and other underground features.
+
+A <SourceLink path="wrapper/worldgen/carver/ConfiguredWorldCarver.java">ConfiguredWorldCarver</SourceLink> is either a
+**reference** to a carver already in the game, or a **custom** carver you may author from a
+carver type and a configuration. Both are added to a biome through its [generation settings](/worldgen/biome-generation-settings).
+
+## Referencing Built-in Carvers
+
+The <SourceLink path="wrapper/worldgen/carver/Carvers.java">Carvers</SourceLink> catalog holds typed references to every
+vanilla carver.
+
+<CodeBlock
+    lang="java"
+    filename="ExamplePlugin.java"
+    code={`import me.outspending.biomesapi.wrapper.worldgen.BiomeGenerationSettings;
+import me.outspending.biomesapi.wrapper.worldgen.carver.Carvers;
+
+BiomeGenerationSettings generation = BiomeGenerationSettings.builder()
+    .addCarver(Carvers.CAVE)
+    .addCarver(Carvers.CANYON)
+    .build();`}
+/>
+
+## Authoring a Custom Carver
+
+To author your own, pair a carver type with a configuration.
+
+<CodeTabs
+    examples={[
+        {
+            label: "Cave",
+            filename: "ExamplePlugin.java",
+            lang: "java",
+            code: `import me.outspending.biomesapi.wrapper.worldgen.carver.CaveCarverConfiguration;
+import me.outspending.biomesapi.wrapper.worldgen.carver.ConfiguredWorldCarver;
+import me.outspending.biomesapi.wrapper.worldgen.valueproviders.FloatProvider;
+import me.outspending.biomesapi.wrapper.worldgen.valueproviders.HeightProvider;
+import me.outspending.biomesapi.wrapper.worldgen.valueproviders.VerticalAnchor;
+import org.bukkit.Material;
+
+import java.util.List;
+
+ConfiguredWorldCarver cave = ConfiguredWorldCarver.cave(
+    CaveCarverConfiguration.builder()
+        .probability(0.15f)
+        .y(HeightProvider.uniform(VerticalAnchor.aboveBottom(8), VerticalAnchor.absolute(180)))
+        .yScale(FloatProvider.uniform(0.1f, 0.9f))
+        .lavaLevel(VerticalAnchor.aboveBottom(8))
+        .replaceable(List.of(Material.STONE, Material.DEEPSLATE))
+        .horizontalRadiusMultiplier(FloatProvider.uniform(0.7f, 1.4f))
+        .verticalRadiusMultiplier(FloatProvider.uniform(0.8f, 1.3f))
+        .floorLevel(FloatProvider.uniform(-1.0f, -0.4f))
+        .build()
+);`,
+        },
+        {
+            label: "Canyon",
+            filename: "ExamplePlugin.java",
+            lang: "java",
+            code: `import me.outspending.biomesapi.wrapper.worldgen.carver.CanyonCarverConfiguration;
+import me.outspending.biomesapi.wrapper.worldgen.carver.CanyonShapeConfiguration;
+import me.outspending.biomesapi.wrapper.worldgen.carver.ConfiguredWorldCarver;
+import me.outspending.biomesapi.wrapper.worldgen.valueproviders.FloatProvider;
+import me.outspending.biomesapi.wrapper.worldgen.valueproviders.HeightProvider;
+import me.outspending.biomesapi.wrapper.worldgen.valueproviders.VerticalAnchor;
+import org.bukkit.Material;
+
+import java.util.List;
+
+ConfiguredWorldCarver canyon = ConfiguredWorldCarver.canyon(
+    CanyonCarverConfiguration.builder()
+        .probability(0.02f)
+        .y(HeightProvider.uniform(VerticalAnchor.absolute(10), VerticalAnchor.absolute(67)))
+        .yScale(FloatProvider.constant(3.0f))
+        .lavaLevel(VerticalAnchor.aboveBottom(8))
+        .replaceable(List.of(Material.STONE, Material.DEEPSLATE))
+        .shape(CanyonShapeConfiguration.builder()
+            .distanceFactor(FloatProvider.uniform(0.75f, 1.0f))
+            .thickness(FloatProvider.trapezoid(0.0f, 6.0f, 2.0f))
+            .widthSmoothness(3)
+            .horizontalRadiusFactor(FloatProvider.uniform(0.75f, 1.0f))
+            .verticalRadiusDefaultFactor(1.0f)
+            .verticalRadiusCenterFactor(0.0f)
+            .build())
+        .build()
+);`,
+        },
+    ]}
+/>

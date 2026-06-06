@@ -1,0 +1,65 @@
+---
+title: Biome Generation Settings
+description: Learn how to attach carvers and features to a custom biome with BiomesAPI's generation settings.
+sidebar:
+    order: 5
+---
+
+import CodeBlock from "@/components/CodeBlock.astro";
+import SourceLink from "@/components/SourceLink.astro";
+import CodeTabs from "@/components/CodeTabs.astro";
+
+<SourceLink path="wrapper/worldgen/BiomeGenerationSettings.java">BiomeGenerationSettings</SourceLink> is what binds
+[`carvers`](/worldgen/carvers) and [`placed features`](/worldgen/placed-features) to a biome.
+
+## Generation Steps
+
+Placed features are added under a <SourceLink path="wrapper/worldgen/GenerationStep.java">GenerationStep</SourceLink>,
+which controls the order things generate in. Carvers are not stepped as they run in the carving phase of world generation.
+
+## Example Usage
+
+<CodeBlock
+    lang="java"
+    filename="ExamplePlugin.java"
+    code={`import me.outspending.biomesapi.biome.CustomBiome;
+import me.outspending.biomesapi.registry.BiomeResourceKey;
+import me.outspending.biomesapi.wrapper.BiomeSettings;
+import me.outspending.biomesapi.wrapper.worldgen.BiomeGenerationSettings;
+import me.outspending.biomesapi.wrapper.worldgen.GenerationStep;
+import me.outspending.biomesapi.wrapper.worldgen.HeightmapType;
+import me.outspending.biomesapi.wrapper.worldgen.PlacementModifier;
+import me.outspending.biomesapi.wrapper.worldgen.carver.Carvers;
+import me.outspending.biomesapi.wrapper.worldgen.feature.ConfiguredFeatures;
+import me.outspending.biomesapi.wrapper.worldgen.placement.PlacedFeature;
+import me.outspending.biomesapi.wrapper.worldgen.placement.PlacedFeatures;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class ExamplePlugin extends JavaPlugin {
+    @Override
+    public void onEnable() {
+        BiomeGenerationSettings generation = BiomeGenerationSettings.builder()
+            // carve caves using vanilla's cave carver
+            .addCarver(Carvers.CAVE)
+            // reference a vanilla placed ore feature
+            .addFeature(GenerationStep.UNDERGROUND_ORES, PlacedFeatures.ORE_DIAMOND)
+            // author a surface flower placement
+            .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeature.of(
+                ConfiguredFeatures.FLOWER_DEFAULT,
+                PlacementModifier.rarityFilter(8),
+                PlacementModifier.inSquare(),
+                PlacementModifier.heightmap(HeightmapType.MOTION_BLOCKING),
+                PlacementModifier.biomeFilter()))
+            .build();
+
+        CustomBiome.builder()
+            .resourceKey(BiomeResourceKey.of("test", "custombiome"))
+            .settings(BiomeSettings.defaultSettings())
+            .waterColor("#F5F2EB")
+            .grassColor("#DBE9EC")
+            .setGenerationSettings(generation)
+            .build()
+            .register();
+    }
+}`}
+/>

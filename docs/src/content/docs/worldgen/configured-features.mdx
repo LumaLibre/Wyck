@@ -1,0 +1,51 @@
+---
+title: Configured Features
+description: Learn how to reference and use Minecraft's configured features with BiomesAPI.
+sidebar:
+    order: 3
+---
+
+import CodeBlock from "@/components/CodeBlock.astro";
+import SourceLink from "@/components/SourceLink.astro";
+import CodeTabs from "@/components/CodeTabs.astro";
+
+:::caution
+
+`ConfiguredFeature` is currently experimental and only supports referencing existing configured features.
+Authoring a configured feature from a custom configuration is planned for a future release.
+Use the [`ConfiguredFeatures`](/worldgen/configured-features) catalog or `reference(BiomeResourceKey)` for now.
+
+:::
+
+A <SourceLink path="wrapper/worldgen/feature/ConfiguredFeature.java">ConfiguredFeature</SourceLink> is a feature paired
+with a configuration. The *feature* is the algorithm (an ore vein, a tree, a geode) and the *configuration* would be its
+parameters such as which ore, how big, etc.
+
+Configured features are not placed in the world on their own. A configured feature describes what to generate and a
+[placed feature](/worldgen/placed-features) formally wraps it with the placement rules that decide **where** and/or **how often** it should appear.
+
+## Referencing Built-in Configured Features
+
+The <SourceLink path="wrapper/worldgen/feature/ConfiguredFeatures.java">ConfiguredFeatures</SourceLink> catalog holds
+typed references to every configured feature vanilla registrar.
+
+<CodeBlock
+    lang="java"
+    filename="ExamplePlugin.java"
+    code={`import me.outspending.biomesapi.wrapper.worldgen.feature.ConfiguredFeature;
+import me.outspending.biomesapi.wrapper.worldgen.feature.ConfiguredFeatures;
+
+// a reference straight from the catalog
+ConfiguredFeature largeDiamonds = ConfiguredFeatures.ORE_DIAMOND_LARGE;
+
+    // or by key, for features not in the catalog
+    ConfiguredFeature byKey = ConfiguredFeature.reference(BiomeResourceKey.minecraft("ore_diamond_large"));`}
+/>
+
+:::note
+
+Configured feature names differ from placed feature names!
+
+:::
+
+To use a configured feature in a biome, wrap it in a [placed feature](/worldgen/placed-features).

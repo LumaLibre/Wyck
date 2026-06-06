@@ -49,6 +49,10 @@ export default defineConfig({
           autogenerate: { directory: "renderers" },
         },
         {
+          label: "World Generation",
+          autogenerate: { directory: "worldgen" },
+        },
+        {
           label: "Connection",
           autogenerate: { directory: "connection" },
         },

@@ -8,6 +8,7 @@ import me.outspending.biomesapi.wrapper.worldgen.BiomeGenerationSettings;
 import me.outspending.biomesapi.wrapper.worldgen.GenerationStep;
 import me.outspending.biomesapi.wrapper.worldgen.HeightmapType;
 import me.outspending.biomesapi.wrapper.worldgen.feature.ConfiguredFeatures;
+import me.outspending.biomesapi.wrapper.worldgen.placement.PlacedFeatures;
 import me.outspending.biomesapi.wrapper.worldgen.placement.PlacementModifier;
 import me.outspending.biomesapi.wrapper.worldgen.carver.CanyonCarverConfiguration;
 import me.outspending.biomesapi.wrapper.worldgen.carver.CanyonShapeConfiguration;
@@ -22,6 +23,7 @@ import org.bukkit.Material;
 import org.bukkit.WorldCreator;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.ChunkLoadEvent;
+import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.List;
@@ -33,84 +35,38 @@ public final class BiomesAPITest extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
+        //ChunkGenerator
         BiomeGenerationSettings generation = BiomeGenerationSettings.builder()
-            // --- carvers: vanilla refs + two authored variants ---
-            .addCarver(Carvers.CAVE)
-            .addCarver(Carvers.CANYON)
-            .addCarver(ConfiguredWorldCarver.cave(
-                CaveCarverConfiguration.builder()
-                    .probability(0.45F)
-                    .y(HeightProvider.uniform(VerticalAnchor.aboveBottom(8), VerticalAnchor.absolute(180)))
-                    .yScale(FloatProvider.uniform(0.5F, 1.4F))
-                    .lavaLevel(VerticalAnchor.aboveBottom(8))
-                    .replaceable(List.of(Material.STONE, Material.DEEPSLATE, Material.DIRT, Material.GRASS_BLOCK))
-                    .horizontalRadiusMultiplier(FloatProvider.uniform(1.2F, 2.4F))
-                    .verticalRadiusMultiplier(FloatProvider.uniform(1.0F, 1.8F))
-                    .floorLevel(FloatProvider.uniform(-1.0F, -0.4F))
-                    .build()))
-            .addCarver(ConfiguredWorldCarver.canyon(
-                CanyonCarverConfiguration.builder()
-                    .probability(0.20F)
-                    .y(HeightProvider.uniform(VerticalAnchor.absolute(10), VerticalAnchor.absolute(120)))
-                    .yScale(FloatProvider.constant(3.0F))
-                    .lavaLevel(VerticalAnchor.aboveBottom(8))
-                    .replaceable(List.of(Material.STONE, Material.DEEPSLATE))
-                    .verticalRotation(FloatProvider.uniform(-0.4F, 0.4F))
-                    .shape(CanyonShapeConfiguration.builder()
-                        .distanceFactor(FloatProvider.uniform(0.6F, 1.0F))
-                        .thickness(FloatProvider.trapezoid(0.0F, 8.0F, 3.0F))
-                        .widthSmoothness(3)
-                        .horizontalRadiusFactor(FloatProvider.uniform(0.75F, 1.0F))
-                        .verticalRadiusDefaultFactor(1.0F)
-                        .verticalRadiusCenterFactor(0.0F)
-                        .build())
-                    .build()))
-
-            // --- ores: every vanilla ore, whole column, via references ---
-            .addFeature(GenerationStep.UNDERGROUND_ORES, PlacedFeature.reference(BiomeResourceKey.minecraft("ore_coal_upper")))
-            .addFeature(GenerationStep.UNDERGROUND_ORES, PlacedFeature.reference(BiomeResourceKey.minecraft("ore_iron_upper")))
-            .addFeature(GenerationStep.UNDERGROUND_ORES, PlacedFeature.reference(BiomeResourceKey.minecraft("ore_gold")))
-            .addFeature(GenerationStep.UNDERGROUND_ORES, PlacedFeature.reference(BiomeResourceKey.minecraft("ore_redstone")))
-            .addFeature(GenerationStep.UNDERGROUND_ORES, PlacedFeature.reference(BiomeResourceKey.minecraft("ore_diamond")))
-            .addFeature(GenerationStep.UNDERGROUND_ORES, PlacedFeature.reference(BiomeResourceKey.minecraft("ore_lapis")))
-            .addFeature(GenerationStep.UNDERGROUND_ORES, PlacedFeature.reference(BiomeResourceKey.minecraft("ore_copper")))
-            .addFeature(GenerationStep.UNDERGROUND_ORES, PlacedFeature.reference(BiomeResourceKey.minecraft("ore_emerald")))
-
-            // --- authored ore: hand-built diamond placement, absurd density ---
-            .addFeature(GenerationStep.UNDERGROUND_ORES, PlacedFeature.of(
-                ConfiguredFeatures.ORE_DIAMOND_LARGE,
-                PlacementModifier.count(40),
-                PlacementModifier.inSquare(),
-                PlacementModifier.heightRangeUniform(VerticalAnchor.absolute(-60), VerticalAnchor.absolute(120)),
-                PlacementModifier.biomeFilter()))
-
-            // --- geodes + dripstone ---
-            .addFeature(GenerationStep.LOCAL_MODIFICATIONS, PlacedFeature.reference(BiomeResourceKey.minecraft("amethyst_geode")))
-            .addFeature(GenerationStep.UNDERGROUND_DECORATION, PlacedFeature.reference(BiomeResourceKey.minecraft("large_dripstone")))
-            .addFeature(GenerationStep.UNDERGROUND_DECORATION, PlacedFeature.reference(BiomeResourceKey.minecraft("pointed_dripstone")))
-
-            // --- springs ---
-            .addFeature(GenerationStep.FLUID_SPRINGS, PlacedFeature.reference(BiomeResourceKey.minecraft("spring_water")))
-            .addFeature(GenerationStep.FLUID_SPRINGS, PlacedFeature.reference(BiomeResourceKey.minecraft("spring_lava")))
-            .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeature.of(
-                ConfiguredFeatures.FANCY_OAK,
-                PlacementModifier.count(12),
-                PlacementModifier.inSquare(),
-                PlacementModifier.heightmap(HeightmapType.MOTION_BLOCKING),
-                PlacementModifier.biomeFilter()))
+            .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeatures.FANCY_OAK_CHECKED)
+            .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeatures.TREES_PLAINS)
+            .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeatures.FALLEN_OAK_TREE)
+            .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeatures.FLOWER_DEFAULT)
+            .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeatures.FLOWER_PLAINS)
+            .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeatures.WILDFLOWERS_MEADOW)
+            .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeatures.PATCH_GRASS_PLAIN)
+            .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeatures.PATCH_TALL_GRASS)
+            .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeatures.PATCH_TALL_GRASS_2)
+            .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeatures.PATCH_SUNFLOWER)
+            .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeatures.BROWN_MUSHROOM_NORMAL)
+            .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeatures.RED_MUSHROOM_NORMAL)
+            .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeatures.PATCH_PUMPKIN)
+            .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeatures.PATCH_FIREFLY_BUSH_NEAR_WATER)
+            .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeatures.OAK_BEES_002)
+            .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeatures.FANCY_OAK_BEES_002)
             .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeature.of(
                 ConfiguredFeatures.FLOWER_DEFAULT,
-                PlacementModifier.count(20),
+                PlacementModifier.count(18),
                 PlacementModifier.inSquare(),
                 PlacementModifier.heightmap(HeightmapType.MOTION_BLOCKING),
                 PlacementModifier.biomeFilter()))
             .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeature.of(
-                ConfiguredFeatures.PILE_PUMPKIN,
-                PlacementModifier.rarityFilter(4),
+                ConfiguredFeatures.FANCY_OAK,
+                PlacementModifier.count(5),
                 PlacementModifier.inSquare(),
                 PlacementModifier.heightmap(HeightmapType.MOTION_BLOCKING),
                 PlacementModifier.biomeFilter()))
-            .addFeature(GenerationStep.TOP_LAYER_MODIFICATION, PlacedFeature.reference(BiomeResourceKey.minecraft("freeze_top_layer")))
+            .addFeature(GenerationStep.FLUID_SPRINGS, PlacedFeatures.SPRING_WATER)
+            .addFeature(GenerationStep.TOP_LAYER_MODIFICATION, PlacedFeatures.FREEZE_TOP_LAYER)
             .build();
 
         CustomBiome mybiome = CustomBiome.builder()
@@ -124,7 +80,7 @@ public final class BiomesAPITest extends JavaPlugin implements Listener {
             .setGenerationSettings(generation)
             .register();
 
-        new WorldCreator("xyz")
+        new WorldCreator("new_world")
             .biomeProvider(BasicBiomeProvider.of(mybiome))
             .createWorld();
     }
