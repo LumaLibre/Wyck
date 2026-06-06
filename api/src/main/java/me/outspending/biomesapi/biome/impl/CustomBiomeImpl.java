@@ -8,6 +8,7 @@ import me.outspending.biomesapi.wrapper.entity.BiomeSpawner;
 import me.outspending.biomesapi.wrapper.environment.GrassColorModifier;
 import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttributeMap;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleCatalog;
+import me.outspending.biomesapi.wrapper.worldgen.BiomeGenerationSettings;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -31,7 +32,8 @@ public class CustomBiomeImpl extends AbstractBiomeImpl implements CustomBiome {
         @NotNull ParticleCatalog particleCatalog,
         @NotNull BlockReplacement[] blockReplacements,
         @NotNull WrappedEnvironmentAttributeMap attributes,
-        @Nullable BiomeSpawner biomeSpawner
+        @Nullable BiomeSpawner biomeSpawner,
+        @Nullable BiomeGenerationSettings generationSettings
     ) {
         super(
             resourceKey,
@@ -46,7 +48,8 @@ public class CustomBiomeImpl extends AbstractBiomeImpl implements CustomBiome {
             grassColorModifier,
             particleCatalog,
             attributes,
-            biomeSpawner
+            biomeSpawner,
+            generationSettings
         );
         this.blockReplacements = blockReplacements;
     }

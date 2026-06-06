@@ -7,6 +7,7 @@ import me.outspending.biomesapi.wrapper.entity.BiomeSpawner;
 import me.outspending.biomesapi.wrapper.environment.GrassColorModifier;
 import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttributeMap;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleCatalog;
+import me.outspending.biomesapi.wrapper.worldgen.BiomeGenerationSettings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,7 +25,8 @@ public class VanillaBiomeImpl extends AbstractBiomeImpl implements VanillaBiome 
         @NotNull GrassColorModifier grassColorModifier,
         @NotNull ParticleCatalog particleCatalog,
         @NotNull WrappedEnvironmentAttributeMap attributes,
-        @Nullable BiomeSpawner biomeSpawner
+        @Nullable BiomeSpawner biomeSpawner,
+        @Nullable BiomeGenerationSettings generationSettings
     ) {
         super(
             resourceKey,
@@ -39,7 +41,8 @@ public class VanillaBiomeImpl extends AbstractBiomeImpl implements VanillaBiome 
             grassColorModifier,
             particleCatalog,
             attributes,
-            biomeSpawner
+            biomeSpawner,
+            generationSettings
         );
     }
 
@@ -101,6 +104,12 @@ public class VanillaBiomeImpl extends AbstractBiomeImpl implements VanillaBiome 
     @Override
     public VanillaBiomeImpl setBiomeSpawner(@Nullable BiomeSpawner biomeSpawner) {
         super.setBiomeSpawner(biomeSpawner);
+        return this;
+    }
+
+    @Override
+    public VanillaBiomeImpl setGenerationSettings(@Nullable BiomeGenerationSettings generationSettings) {
+        super.setGenerationSettings(generationSettings);
         return this;
     }
 }

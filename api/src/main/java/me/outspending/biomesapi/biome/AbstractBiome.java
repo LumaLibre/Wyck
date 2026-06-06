@@ -14,6 +14,7 @@ import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironment
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleCatalog;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleData;
 import me.outspending.biomesapi.wrapper.environment.particle.WrappedParticleTypes;
+import me.outspending.biomesapi.wrapper.worldgen.BiomeGenerationSettings;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
 import org.bukkit.Color;
@@ -164,6 +165,15 @@ public interface AbstractBiome extends Keyed {
      */
     @AsOf("2.3.0")
     @Nullable BiomeSpawner getBiomeSpawner();
+
+    /**
+     * Returns the BiomeGenerationSettings of the AbstractBiome.
+     *
+     * @return the BiomeGenerationSettings of the AbstractBiome
+     * @since 2.3.0
+     */
+    @AsOf("2.3.0")
+    @Nullable BiomeGenerationSettings getGenerationSettings();
 
 
     /**
@@ -357,12 +367,22 @@ public interface AbstractBiome extends Keyed {
 
     /**
      * Sets the BiomeSpawner of the AbstractBiome.
+     *
      * @param biomeSpawner the BiomeSpawner of the AbstractBiome
      * @return the AbstractBiome with the updated BiomeSpawner
      * @since 2.3.0
      */
     @AsOf("2.3.0")
     AbstractBiome setBiomeSpawner(@Nullable BiomeSpawner biomeSpawner);
+
+    /**
+     * Sets the BiomeGenerationSettings of the AbstractBiome.
+     *
+     * @param generationSettings the BiomeGenerationSettings of the AbstractBiome
+     * @return the AbstractBiome with the updated BiomeGenerationSettings
+     * @since 2.3.0
+     */
+    AbstractBiome setGenerationSettings(@Nullable BiomeGenerationSettings generationSettings);
 
     /**
      * Compares this AbstractBiome to another AbstractBiome to determine if they are similar.
@@ -454,6 +474,7 @@ public interface AbstractBiome extends Keyed {
         private ParticleCatalog particleCatalog = ParticleCatalog.EMPTY;
         private WrappedEnvironmentAttributeMap attributeMap = WrappedEnvironmentAttributeMap.EMPTY;
         private @Nullable BiomeSpawner biomeSpawner = null;
+        private @Nullable BiomeGenerationSettings generationSettings = null;
 
         @AsOf("2.3.0")
         public Builder() {}
@@ -479,6 +500,7 @@ public interface AbstractBiome extends Keyed {
             this.particleCatalog = biome.getParticleCatalog();
             this.attributeMap = biome.getAttributes();
             this.biomeSpawner = biome.getBiomeSpawner();
+            this.generationSettings = biome.getGenerationSettings();
         }
 
         /**
@@ -642,6 +664,17 @@ public interface AbstractBiome extends Keyed {
         }
 
         /**
+         * Sets the generation settings of the biome.
+         * @param generationSettings the generation settings of the biome, or {@code null} for none
+         * @return this builder, for chaining
+         */
+        @AsOf("2.3.0")
+        public @NotNull Builder setGenerationSettings(@Nullable BiomeGenerationSettings generationSettings) {
+            this.generationSettings = generationSettings;
+            return this;
+        }
+
+        /**
          * Builds the {@link AbstractBiome}.
          *
          * @return a new AbstractBiome
@@ -666,7 +699,8 @@ public interface AbstractBiome extends Keyed {
                 grassColorModifier,
                 particleCatalog,
                 attributeMap,
-                biomeSpawner
+                biomeSpawner,
+                generationSettings
             );
         }
     }

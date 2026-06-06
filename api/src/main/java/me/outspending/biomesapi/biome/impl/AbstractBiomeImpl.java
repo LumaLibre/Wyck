@@ -9,6 +9,7 @@ import me.outspending.biomesapi.wrapper.entity.BiomeSpawner;
 import me.outspending.biomesapi.wrapper.environment.GrassColorModifier;
 import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttributeMap;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleCatalog;
+import me.outspending.biomesapi.wrapper.worldgen.BiomeGenerationSettings;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Biome;
 import org.jetbrains.annotations.ApiStatus;
@@ -42,6 +43,7 @@ public class AbstractBiomeImpl implements AbstractBiome {
     private WrappedEnvironmentAttributeMap attributes;
 
     private @Nullable BiomeSpawner biomeSpawner;
+    private @Nullable BiomeGenerationSettings generationSettings;
 
     public AbstractBiomeImpl(
         BiomeResourceKey resourceKey,
@@ -56,7 +58,8 @@ public class AbstractBiomeImpl implements AbstractBiome {
         @Nullable GrassColorModifier grassColorModifier,
         @Nullable ParticleCatalog particleCatalog,
         @Nullable WrappedEnvironmentAttributeMap attributes,
-        @Nullable BiomeSpawner biomeSpawner
+        @Nullable BiomeSpawner biomeSpawner,
+        @Nullable BiomeGenerationSettings generationSettings
     ) {
         this.resourceKey = resourceKey;
         this.settings = settings;
@@ -71,6 +74,7 @@ public class AbstractBiomeImpl implements AbstractBiome {
         this.particleCatalog = particleCatalog;
         this.attributes = attributes;
         this.biomeSpawner = biomeSpawner;
+        this.generationSettings = generationSettings;
     }
 
     @Override
@@ -148,6 +152,11 @@ public class AbstractBiomeImpl implements AbstractBiome {
     }
 
     @Override
+    public @Nullable BiomeGenerationSettings getGenerationSettings() {
+        return generationSettings;
+    }
+
+    @Override
     public AbstractBiomeImpl setSettings(@NotNull BiomeSettings settings) {
         this.settings = settings;
         return this;
@@ -216,6 +225,12 @@ public class AbstractBiomeImpl implements AbstractBiome {
     @Override
     public AbstractBiomeImpl setBiomeSpawner(@Nullable BiomeSpawner biomeSpawner) {
         this.biomeSpawner = biomeSpawner;
+        return this;
+    }
+
+    @Override
+    public AbstractBiomeImpl setGenerationSettings(@Nullable BiomeGenerationSettings generationSettings) {
+        this.generationSettings = generationSettings;
         return this;
     }
 

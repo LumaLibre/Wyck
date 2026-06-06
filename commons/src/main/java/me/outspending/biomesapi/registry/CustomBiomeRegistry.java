@@ -8,6 +8,7 @@ import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.biome.RegisteredBiomes;
 import me.outspending.biomesapi.biome.VanillaBiome;
 import me.outspending.biomesapi.registry.handlers.AttributeMapHandler;
+import me.outspending.biomesapi.registry.handlers.BiomeGenerationSettingsHandler;
 import me.outspending.biomesapi.registry.handlers.MobSpawnSettingsHandler;
 import me.outspending.biomesapi.registry.handlers.ParticleCatalogHandler;
 import me.outspending.biomesapi.registry.handlers.SpecialEffectsHandler;
@@ -20,21 +21,16 @@ import me.outspending.biomesapi.wrapper.entity.MobCategory;
 import me.outspending.biomesapi.wrapper.environment.BiomeTempModifier;
 import me.outspending.biomesapi.wrapper.environment.GrassColorModifier;
 import me.outspending.biomesapi.wrapper.environment.attribute.NmsEnvironmentAttributes;
-import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttribute;
 import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttributeMap;
-import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttributes;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleCatalog;
-import me.outspending.biomesapi.wrapper.environment.particle.WrappedParticleTypes;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.random.Weighted;
-import net.minecraft.world.attribute.AmbientParticle;
-import net.minecraft.world.attribute.EnvironmentAttribute;
 import net.minecraft.world.attribute.EnvironmentAttributeMap;
 import net.minecraft.world.attribute.EnvironmentAttributes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.BiomeGenerationSettings;
+import me.outspending.biomesapi.wrapper.worldgen.BiomeGenerationSettings;
 import net.minecraft.world.level.biome.BiomeSpecialEffects;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import org.bukkit.Color;
@@ -63,6 +59,7 @@ public class CustomBiomeRegistry implements BiomeRegistry {
     private static final ParticleCatalogHandler PARTICLE_CATALOG_HANDLER = new ParticleCatalogHandler();
     private static final AttributeMapHandler ATTRIBUTE_MAP_HANDLER = new AttributeMapHandler();
     private static final MobSpawnSettingsHandler MOB_SPAWN_SETTINGS_HANDLER = new MobSpawnSettingsHandler();
+    private static final BiomeGenerationSettingsHandler BIOME_GENERATION_SETTINGS_HANDLER = new BiomeGenerationSettingsHandler();
 
     // TODO: Extract commons
 
@@ -92,7 +89,7 @@ public class CustomBiomeRegistry implements BiomeRegistry {
             .temperatureAdjustment(settings.modifier().toNms(Biome.TemperatureModifier.class))
             .hasPrecipitation(settings.hasPrecipitation())
             .mobSpawnSettings(MobSpawnSettings.EMPTY)
-            .generationSettings(BiomeGenerationSettings.EMPTY);
+            .generationSettings(net.minecraft.world.level.biome.BiomeGenerationSettings.EMPTY);
 
         // TODO: Replace with WrappedEnvironmentAttributeMap in the future
         if (biome.getFogColor() != null) {
@@ -116,6 +113,9 @@ public class CustomBiomeRegistry implements BiomeRegistry {
 
         BiomeSpawner spawner = biome.getBiomeSpawner();
         MOB_SPAWN_SETTINGS_HANDLER.handle(spawner, biomeBuilder);
+
+        BiomeGenerationSettings generationSettings = biome.getGenerationSettings();
+        BIOME_GENERATION_SETTINGS_HANDLER.handle(generationSettings, biomeBuilder);
 
         return biomeBuilder.build();
     }
@@ -212,6 +212,8 @@ public class CustomBiomeRegistry implements BiomeRegistry {
 
         BiomeSpawner spawner = abstractBiome.getBiomeSpawner();
 
+        BiomeGenerationSettings generationSettings = abstractBiome.getGenerationSettings();
+
         // Time to reflect
         try {
             Field climateSettingsField = Biome.class.getDeclaredField("climateSettings");
@@ -231,6 +233,12 @@ public class CustomBiomeRegistry implements BiomeRegistry {
                 mobSpawnSettingsField.setAccessible(true);
                 mobSpawnSettingsField.set(biome, spawner.toMinecraft());
             }
+
+            if (generationSettings != null) {
+                Field generationSettingsField = Biome.class.getDeclaredField("generationSettings");
+                generationSettingsField.setAccessible(true);
+                generationSettingsField.set(biome, generationSettings.toMinecraft());
+            }
         } catch (NoSuchFieldException | IllegalAccessException e) {
             throw new RuntimeException("Failed to modify biome settings", e);
         }
@@ -246,7 +254,7 @@ public class CustomBiomeRegistry implements BiomeRegistry {
         Preconditions.checkNotNull(key, "key cannot be null");
 
         if (RegisteredBiomes.isRegistered(key)) {
-            return RegisteredBiomes.get(key);
+            return RegisteredBiomes.getOrThrow(key);
         }
 
         UnsafeNMS nms = UnsafeNMSHandler.getNMS().orElseThrow();
@@ -293,14 +301,17 @@ public class CustomBiomeRegistry implements BiomeRegistry {
                 builder.waterFogColor(Color.fromARGB(attributeMap.applyModifier(EnvironmentAttributes.WATER_FOG_COLOR, 0)));
             }
 
+            // TODO: Reverse AmbientParticles back to wrappers
+            // TODO: Reverse attributes back to wrappers
+            // TODO: Reverse generation settings back to wrappers
+            //attributeMap.applyModifier(Environment)
 
             builder.setSpawner(readSpawner(mobSettings));
         } catch (NoSuchFieldException | IllegalAccessException e) {
             throw new RuntimeException("Failed to read biome state for " + key, e);
         }
 
-        // TODO: Reverse AmbientParticles back to wrappers
-        // TODO: Reverse attributes back to wrappers
+
         AbstractBiome abstractBiome = builder.build();
         if (key.namespace().equals(BiomeResourceKey.MINECRAFT_NAMESPACE)) {
             return VanillaBiome.builder(abstractBiome).build();

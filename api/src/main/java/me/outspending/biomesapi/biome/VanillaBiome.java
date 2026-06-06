@@ -9,6 +9,7 @@ import me.outspending.biomesapi.wrapper.entity.BiomeSpawner;
 import me.outspending.biomesapi.wrapper.environment.GrassColorModifier;
 import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttributeMap;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleCatalog;
+import me.outspending.biomesapi.wrapper.worldgen.BiomeGenerationSettings;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -145,6 +146,18 @@ public interface VanillaBiome extends AbstractBiome {
     @AsOf("2.3.0")
     VanillaBiome setBiomeSpawner(@Nullable BiomeSpawner biomeSpawner);
 
+
+    /**
+     * Sets the {@link BiomeGenerationSettings} of the vanilla biome.
+     *
+     * @param generationSettings the BiomeGenerationSettings of the AbstractBiome
+     * @return this VanillaBiome with the updated BiomeGenerationSettings
+     * @since 2.3.0
+     */
+    @Override
+    @AsOf("2.3.0")
+    VanillaBiome setGenerationSettings(@Nullable BiomeGenerationSettings generationSettings);
+
     /**
      * @return a new, empty {@link Builder}.
      * @since 2.3.0
@@ -193,6 +206,7 @@ public interface VanillaBiome extends AbstractBiome {
         private ParticleCatalog particleCatalog = ParticleCatalog.EMPTY;
         private WrappedEnvironmentAttributeMap attributeMap = WrappedEnvironmentAttributeMap.EMPTY;
         private @Nullable BiomeSpawner biomeSpawner = null;
+        private @Nullable BiomeGenerationSettings generationSettings = null;
 
         @AsOf("2.3.0")
         public Builder() {}
@@ -219,6 +233,7 @@ public interface VanillaBiome extends AbstractBiome {
             this.particleCatalog = biome.getParticleCatalog();
             this.attributeMap = biome.getAttributes();
             this.biomeSpawner = biome.getBiomeSpawner();
+            this.generationSettings = biome.getGenerationSettings();
         }
 
         /**
@@ -242,6 +257,19 @@ public interface VanillaBiome extends AbstractBiome {
         @AsOf("2.3.0")
         public @NotNull Builder setSpawner(@Nullable BiomeSpawner biomeSpawner) {
             this.biomeSpawner = biomeSpawner;
+            return this;
+        }
+
+        /**
+         * Sets the generation settings of the biome.
+         *
+         * @param generationSettings the generation settings of the biome, or {@code null} for none
+         * @return this builder, for chaining
+         * @since 2.3.0
+         */
+        @AsOf("2.3.0")
+        public @NotNull Builder setGenerationSettings(@Nullable BiomeGenerationSettings generationSettings) {
+            this.generationSettings = generationSettings;
             return this;
         }
 
@@ -270,7 +298,8 @@ public interface VanillaBiome extends AbstractBiome {
                 grassColorModifier,
                 particleCatalog,
                 attributeMap,
-                biomeSpawner
+                biomeSpawner,
+                generationSettings
             );
         }
     }

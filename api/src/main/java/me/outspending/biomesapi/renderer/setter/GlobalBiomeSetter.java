@@ -58,7 +58,7 @@ public class GlobalBiomeSetter implements BiomeSetter {
         accessor.setBiome(location.getBlockX(), location.getBlockY(), location.getBlockZ(), customBiome.toBukkitBiome());
 
         if (updateBiome) {
-            biomeUpdater.updateChunk(location.getWorld().getChunkAtAsync(location));
+            biomeUpdater.updateChunkAsync(location.getWorld().getChunkAtAsync(location));
         }
     }
 

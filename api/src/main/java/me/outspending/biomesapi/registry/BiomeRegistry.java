@@ -82,7 +82,15 @@ public interface BiomeRegistry {
     void modify(@NotNull AbstractBiome biome);
 
 
+    /**
+     * Gets an abstract biome from the registry.
+     * @param key the key of the biome to get
+     * @return the abstract biome
+     * @param <T> the type of the biome
+     * @since 2.3.0
+     */
     @AsOf("2.3.0")
+    @ApiStatus.Experimental
     <T extends AbstractBiome> T getBiome(BiomeResourceKey key);
 
 }

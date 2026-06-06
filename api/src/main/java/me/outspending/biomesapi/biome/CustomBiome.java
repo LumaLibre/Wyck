@@ -17,6 +17,7 @@ import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironment
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleCatalog;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleData;
 import me.outspending.biomesapi.wrapper.environment.particle.WrappedParticleTypes;
+import me.outspending.biomesapi.wrapper.worldgen.BiomeGenerationSettings;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
@@ -191,6 +192,7 @@ public interface CustomBiome extends AbstractBiome {
         private BlockReplacement[] blockReplacements = new BlockReplacement[0];
         private WrappedEnvironmentAttributeMap attributeMap = WrappedEnvironmentAttributeMap.EMPTY;
         private @Nullable BiomeSpawner biomeSpawner = null;
+        private @Nullable BiomeGenerationSettings generationSettings = null;
 
         /**
          * This method creates a new Builder object.
@@ -222,6 +224,7 @@ public interface CustomBiome extends AbstractBiome {
             this.blockReplacements = biome.getBlockReplacements();
             this.attributeMap = biome.getAttributes();
             this.biomeSpawner = biome.getBiomeSpawner();
+            this.generationSettings = biome.getGenerationSettings();
         }
 
         /**
@@ -622,6 +625,19 @@ public interface CustomBiome extends AbstractBiome {
         }
 
         /**
+         * This method sets the generation settings property of the CustomBiome.
+         *
+         * @param generationSettings The generation settings of the custom biome.
+         * @return The Builder object, for chaining method calls.
+         * @since 2.3.0
+         */
+        @AsOf("2.3.0")
+        public @NotNull Builder setGenerationSettings(@Nullable BiomeGenerationSettings generationSettings) {
+            this.generationSettings = generationSettings;
+            return this;
+        }
+
+        /**
          * This method creates a new CustomBiome object with the properties set in the Builder.
          *
          * @since 0.0.1
@@ -647,7 +663,8 @@ public interface CustomBiome extends AbstractBiome {
                 particleCatalog,
                 blockReplacements,
                 attributeMap,
-                biomeSpawner
+                biomeSpawner,
+                generationSettings
             );
         }
 
