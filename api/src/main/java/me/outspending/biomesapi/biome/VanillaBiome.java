@@ -11,8 +11,8 @@ import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironment
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleCatalog;
 import me.outspending.biomesapi.wrapper.worldgen.BiomeGenerationSettings;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents a vanilla Minecraft biome.
@@ -24,12 +24,13 @@ import org.jetbrains.annotations.Nullable;
  * @version 2.3.0
  * @author Jsinco
  */
+@NullMarked
 @AsOf("2.3.0")
 public interface VanillaBiome extends AbstractBiome {
 
     @Override
     @AsOf("2.3.0")
-    default VanillaBiome setSettings(@NotNull BiomeSettings settings) {
+    default VanillaBiome setSettings(BiomeSettings settings) {
         throw new UnsupportedOperationException("Cannot set settings of vanilla biomes.");
     }
 
@@ -41,7 +42,7 @@ public interface VanillaBiome extends AbstractBiome {
 
     @Override
     @AsOf("2.3.0")
-    default VanillaBiome setWaterColor(@NotNull String waterColor) {
+    default VanillaBiome setWaterColor(String waterColor) {
         throw new UnsupportedOperationException("Cannot set water color of vanilla biomes.");
     }
 
@@ -119,19 +120,19 @@ public interface VanillaBiome extends AbstractBiome {
 
     @Override
     @AsOf("2.3.0")
-    default VanillaBiome setGrassColorModifier(@NotNull GrassColorModifier grassColorModifier) {
+    default VanillaBiome setGrassColorModifier(GrassColorModifier grassColorModifier) {
         throw new UnsupportedOperationException("Cannot set grass color modifier of vanilla biomes.");
     }
 
     @Override
     @AsOf("2.3.0")
-    default VanillaBiome setParticleCatalog(@NotNull ParticleCatalog particleCatalog) {
+    default VanillaBiome setParticleCatalog(ParticleCatalog particleCatalog) {
         throw new UnsupportedOperationException("Cannot set particle catalog of vanilla biomes.");
     }
 
     @Override
     @AsOf("2.3.0")
-    default VanillaBiome setAttributes(@NotNull WrappedEnvironmentAttributeMap attributes) {
+    default VanillaBiome setAttributes(WrappedEnvironmentAttributeMap attributes) {
         throw new UnsupportedOperationException("Cannot set attributes of vanilla biomes.");
     }
 
@@ -164,7 +165,7 @@ public interface VanillaBiome extends AbstractBiome {
      */
     @AsOf("2.3.0")
     @ApiStatus.Internal
-    static @NotNull Builder builder() {
+    static Builder builder() {
         return new Builder();
     }
 
@@ -175,7 +176,7 @@ public interface VanillaBiome extends AbstractBiome {
      */
     @AsOf("2.3.0")
     @ApiStatus.Internal
-    static @NotNull Builder builder(@NotNull AbstractBiome biome) {
+    static Builder builder(AbstractBiome biome) {
         return new Builder(biome);
     }
 
@@ -219,7 +220,7 @@ public interface VanillaBiome extends AbstractBiome {
          * @since 2.3.0
          */
         @AsOf("2.3.0")
-        public Builder(@NotNull AbstractBiome biome) {
+        public Builder(AbstractBiome biome) {
             this.resourceKey = biome.getResourceKey();
             this.settings = biome.getSettings();
             this.waterColor = biome.getWaterColor();
@@ -242,7 +243,7 @@ public interface VanillaBiome extends AbstractBiome {
          * @since 2.3.0
          */
         @AsOf("2.3.0")
-        public @NotNull Builder resourceKey(@NotNull BiomeResourceKey resourceKey) {
+        public Builder resourceKey(BiomeResourceKey resourceKey) {
             this.resourceKey = resourceKey;
             return this;
         }
@@ -255,7 +256,7 @@ public interface VanillaBiome extends AbstractBiome {
          * @since 2.3.0
          */
         @AsOf("2.3.0")
-        public @NotNull Builder setSpawner(@Nullable BiomeSpawner biomeSpawner) {
+        public Builder setSpawner(@Nullable BiomeSpawner biomeSpawner) {
             this.biomeSpawner = biomeSpawner;
             return this;
         }
@@ -268,7 +269,7 @@ public interface VanillaBiome extends AbstractBiome {
          * @since 2.3.0
          */
         @AsOf("2.3.0")
-        public @NotNull Builder setGenerationSettings(@Nullable BiomeGenerationSettings generationSettings) {
+        public Builder setGenerationSettings(@Nullable BiomeGenerationSettings generationSettings) {
             this.generationSettings = generationSettings;
             return this;
         }
@@ -281,7 +282,7 @@ public interface VanillaBiome extends AbstractBiome {
          * @since 2.3.0
          */
         @AsOf("2.3.0")
-        public @NotNull VanillaBiome build() {
+        public VanillaBiome build() {
             Preconditions.checkArgument(resourceKey != null, "Resource key must be set");
             Preconditions.checkArgument(settings != null, "Settings must be set");
 

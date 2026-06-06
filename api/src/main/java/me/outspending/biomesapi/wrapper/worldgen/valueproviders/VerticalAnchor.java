@@ -4,7 +4,7 @@ import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
 import me.outspending.biomesapi.wrapper.NmsHandle;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Wraps the VerticalAnchor value-provider family. Sampling occurs
@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
  * @version 2.3.0
  * @author Jsinco
  */
+@NullMarked
 @AsOf("2.3.0")
 public sealed interface VerticalAnchor extends NmsHandle permits VerticalAnchor.Absolute, VerticalAnchor.AboveBottom, VerticalAnchor.BelowTop {
 
@@ -22,7 +23,7 @@ public sealed interface VerticalAnchor extends NmsHandle permits VerticalAnchor.
 
     @ApiStatus.Internal
     interface Factory {
-        @NotNull Object toNms(@NotNull VerticalAnchor anchor);
+        Object toNms(VerticalAnchor anchor);
     }
 
     /**
@@ -32,7 +33,7 @@ public sealed interface VerticalAnchor extends NmsHandle permits VerticalAnchor.
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static @NotNull VerticalAnchor absolute(int y) {
+    static VerticalAnchor absolute(int y) {
         return new Absolute(y);
     }
 
@@ -43,7 +44,7 @@ public sealed interface VerticalAnchor extends NmsHandle permits VerticalAnchor.
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static @NotNull VerticalAnchor aboveBottom(int offset) {
+    static VerticalAnchor aboveBottom(int offset) {
         return new AboveBottom(offset);
     }
 
@@ -54,7 +55,7 @@ public sealed interface VerticalAnchor extends NmsHandle permits VerticalAnchor.
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static @NotNull VerticalAnchor belowTop(int offset) {
+    static VerticalAnchor belowTop(int offset) {
         return new BelowTop(offset);
     }
 
@@ -65,7 +66,7 @@ public sealed interface VerticalAnchor extends NmsHandle permits VerticalAnchor.
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static @NotNull VerticalAnchor bottom() {
+    static VerticalAnchor bottom() {
         return new AboveBottom(0);
     }
 
@@ -76,7 +77,7 @@ public sealed interface VerticalAnchor extends NmsHandle permits VerticalAnchor.
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static @NotNull VerticalAnchor top() {
+    static VerticalAnchor top() {
         return new BelowTop(0);
     }
 
@@ -88,7 +89,7 @@ public sealed interface VerticalAnchor extends NmsHandle permits VerticalAnchor.
      */
     @Override
     @AsOf("2.3.0")
-    default @NotNull Object toMinecraft() {
+    default Object toMinecraft() {
         return WIRE.get().toNms(this);
     }
 

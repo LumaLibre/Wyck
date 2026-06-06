@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,6 +26,7 @@ import java.util.concurrent.CompletableFuture;
  * @since 0.0.1
  * @author Outspending
  */
+@NullMarked
 @AsOf("1.2.0")
 public interface BiomeUpdater {
 
@@ -37,7 +38,7 @@ public interface BiomeUpdater {
      * @since 0.0.2
      */
     @AsOf("1.2.0")
-    static @NotNull BiomeUpdater of() {
+    static BiomeUpdater of() {
         return new BiomeUpdaterImpl(BiomesAPI.biomesapi().plugin());
     }
 
@@ -49,7 +50,7 @@ public interface BiomeUpdater {
      */
     @AsOf("1.2.0")
     @ApiStatus.Obsolete
-    static @NotNull BiomeUpdater of(@NotNull Plugin plugin) {
+    static BiomeUpdater of(Plugin plugin) {
         return new BiomeUpdaterImpl(plugin);
     }
 
@@ -64,7 +65,7 @@ public interface BiomeUpdater {
      * @since 0.0.1
      */
     @AsOf("1.2.0")
-    default @NotNull List<CompletableFuture<Chunk>> getChunksBetweenLocations(@NotNull Location from, @NotNull Location to) {
+    default List<CompletableFuture<Chunk>> getChunksBetweenLocations(Location from, Location to) {
         if (!from.getWorld().equals(to.getWorld())) {
             throw new IllegalArgumentException("Locations must be in the same world.");
         }
@@ -90,7 +91,7 @@ public interface BiomeUpdater {
      * @since 2.2.0
      */
     @AsOf("2.0.0")
-    void updateChunkAsync(@NotNull CompletableFuture<Chunk> chunk);
+    void updateChunkAsync(CompletableFuture<Chunk> chunk);
 
     /**
      * Updates the biome of a chunk.
@@ -100,7 +101,7 @@ public interface BiomeUpdater {
      * @since 2.2.0
      */
     @AsOf("2.2.0")
-    default void updateChunk(@NotNull Chunk chunk) {
+    default void updateChunk(Chunk chunk) {
         updateChunk(CompletableFuture.completedFuture(chunk));
     }
 
@@ -114,7 +115,7 @@ public interface BiomeUpdater {
      */
     @AsOf("1.2.0")
     @Deprecated(since = "2.0.0")
-    default void updateChunk(@NotNull CompletableFuture<Chunk> chunk) {
+    default void updateChunk(CompletableFuture<Chunk> chunk) {
         updateChunkAsync(chunk);
     }
 
@@ -139,7 +140,7 @@ public interface BiomeUpdater {
      * @since 2.2.0
      */
     @AsOf("2.2.0")
-    void updateChunksAsync(@NotNull Collection<CompletableFuture<Chunk>> chunks);
+    void updateChunksAsync(Collection<CompletableFuture<Chunk>> chunks);
 
 
     /**
@@ -151,7 +152,7 @@ public interface BiomeUpdater {
      * @since 2.0.0
      */
     @AsOf("2.0.0")
-    default void updateChunks(@NotNull Collection<Chunk> chunks) {
+    default void updateChunks(Collection<Chunk> chunks) {
         updateChunks(chunks.stream().map(CompletableFuture::completedFuture).toList());
     }
 
@@ -166,7 +167,7 @@ public interface BiomeUpdater {
      */
     @AsOf("1.2.0")
     @Deprecated(forRemoval = true, since = "2.2.0")
-    default void updateChunks(@NotNull List<CompletableFuture<Chunk>> chunks) {
+    default void updateChunks(List<CompletableFuture<Chunk>> chunks) {
         updateChunksAsync(chunks);
     }
 
@@ -179,7 +180,7 @@ public interface BiomeUpdater {
      * @param radius The radius around the chunk to update.
      */
     @AsOf("0.0.15")
-    void updateChunkRadius(@NotNull Chunk chunk, int radius);
+    void updateChunkRadius(Chunk chunk, int radius);
 
 
     /**
@@ -188,5 +189,5 @@ public interface BiomeUpdater {
      * @param player the player for whom to update the chunks
      */
     @AsOf("0.0.15")
-    void updateChunksForPlayer(@NotNull Player player);
+    void updateChunksForPlayer(Player player);
 }

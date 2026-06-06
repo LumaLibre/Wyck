@@ -6,15 +6,16 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.block.data.CraftBlockData;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 @WireFactory
 @AsOf("2.3.0")
 @ApiStatus.Internal
 public final class CarverDebugSettingsFactoryImpl implements CarverDebugSettings.Factory {
 
     @Override
-    public @NotNull Object toNms(@NotNull CarverDebugSettings settings) {
+    public Object toNms(CarverDebugSettings settings) {
         BlockState air = toNmsState(settings.airState());
         BlockState water = toNmsState(settings.waterState());
         BlockState lava = toNmsState(settings.lavaState());
@@ -22,7 +23,7 @@ public final class CarverDebugSettingsFactoryImpl implements CarverDebugSettings
         return net.minecraft.world.level.levelgen.carver.CarverDebugSettings.of(settings.debugMode(), air, water, lava, barrier);
     }
 
-    private BlockState toNmsState(@NotNull BlockData data) {
+    private BlockState toNmsState(BlockData data) {
         return ((CraftBlockData) data).getState();
     }
 }

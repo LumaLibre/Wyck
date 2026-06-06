@@ -4,8 +4,8 @@ import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.renderer.packet.data.SnapshotChunkData;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Bridges the API module and the NMS module across the chunk-rewrite boundary.
@@ -21,14 +21,15 @@ import org.jetbrains.annotations.Nullable;
  * @since 2.2.0
  * @author Jsinco
  */
-@FunctionalInterface
+@NullMarked
 @AsOf("2.2.0")
 @ApiStatus.Internal
+@FunctionalInterface
 public interface PhonyBiomeResolver {
 
     /**
      * @param chunkData the decoded chunk view, exposing the real biome/block data
      * @return the custom biome to apply, or {@code null} to leave the packet unmodified
      */
-    @Nullable CustomBiome resolve(@NotNull SnapshotChunkData chunkData);
+    @Nullable CustomBiome resolve(SnapshotChunkData chunkData);
 }

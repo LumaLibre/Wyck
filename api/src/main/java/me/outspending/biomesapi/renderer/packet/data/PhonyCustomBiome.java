@@ -8,8 +8,8 @@ import me.outspending.biomesapi.misc.ChunkLocation;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
 import me.outspending.biomesapi.renderer.packet.PacketHandler;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 import java.util.function.BiPredicate;
@@ -33,6 +33,7 @@ import java.util.function.BiPredicate;
  * @since 0.0.6
  * @version 2.2.0
  */
+@NullMarked
 @AsOf("2.2.0")
 public record PhonyCustomBiome(
     BiomeResourceKey biomeResourceKey,
@@ -54,11 +55,11 @@ public record PhonyCustomBiome(
         return Objects.hash(biomeResourceKey);
     }
 
-    public @NotNull CustomBiome toCustomBiome() {
+    public CustomBiome toCustomBiome() {
         return RegisteredBiomes.getOrThrow(biomeResourceKey);
     }
 
-    public @NotNull CustomBiome customBiome() {
+    public CustomBiome customBiome() {
         return toCustomBiome();
     }
 

@@ -28,7 +28,8 @@ import me.outspending.biomesapi.renderer.packet.data.BlockReplacement;
 import me.outspending.biomesapi.renderer.packet.data.PhonyCustomBiome;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -45,7 +46,9 @@ import static me.outspending.biomesapi.renderer.packet.handlers.NativeChunkPacke
  * @since 0.0.6
  * @author Jsinco
  */
+@NullMarked
 @AsOf("0.0.19")
+@ApiStatus.Internal
 public class PacketEventsPacketHandler implements PacketHandler {
 
     // TODO: Abstract out common code
@@ -55,7 +58,7 @@ public class PacketEventsPacketHandler implements PacketHandler {
     private final PacketListenerPriority packetListenerPriority;
 
     @AsOf("2.1.0")
-    public PacketEventsPacketHandler(@NotNull PacketHandler.Priority priority, @NotNull PhonyCustomBiomeCollector collector) {
+    public PacketEventsPacketHandler(PacketHandler.Priority priority, PhonyCustomBiomeCollector collector) {
         this.collector = collector;
         this.packetListeners = new PacketListener[] {
                 new MapChunkPacketListener(this),
@@ -66,7 +69,7 @@ public class PacketEventsPacketHandler implements PacketHandler {
     }
 
     @AsOf("0.0.19")
-    public PacketEventsPacketHandler(@NotNull PacketHandler.Priority priority) {
+    public PacketEventsPacketHandler(PacketHandler.Priority priority) {
         this(priority, new PhonyCustomBiomeCollector());
     }
 
@@ -88,7 +91,7 @@ public class PacketEventsPacketHandler implements PacketHandler {
     }
 
     @Override
-    public PacketHandler appendBiome(@NotNull PhonyCustomBiome biome) {
+    public PacketHandler appendBiome(PhonyCustomBiome biome) {
         if (biome.biomeCondition() != null) {
             throw new UnsupportedOperationException("Biome conditions are not supported by PacketEventsPacketHandler yet.");
         }
@@ -97,22 +100,22 @@ public class PacketEventsPacketHandler implements PacketHandler {
     }
 
     @Override
-    public boolean removeBiome(@NotNull PhonyCustomBiome biome) {
+    public boolean removeBiome(PhonyCustomBiome biome) {
         return collector.removeBiome(biome);
     }
 
     @Override
-    public boolean removeBiome(@NotNull BiomeResourceKey biomeKey) {
+    public boolean removeBiome(BiomeResourceKey biomeKey) {
         return collector.removeBiome(biomeKey);
     }
 
     @Override
-    public boolean hasBiome(@NotNull PhonyCustomBiome biome) {
+    public boolean hasBiome(PhonyCustomBiome biome) {
         return collector.hasBiome(biome);
     }
 
     @Override
-    public boolean hasBiome(@NotNull BiomeResourceKey biomeKey) {
+    public boolean hasBiome(BiomeResourceKey biomeKey) {
         return collector.hasBiome(biomeKey);
     }
 

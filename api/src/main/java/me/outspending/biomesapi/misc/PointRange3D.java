@@ -3,7 +3,7 @@ package me.outspending.biomesapi.misc;
 import me.outspending.biomesapi.annotations.AsOf;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Represents a 3D range of points defined by minimum and maximum coordinates in each axis (X, Y, Z).
@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
  * @since 0.0.1
  * @author Outspending
  */
+@NullMarked
 @AsOf("0.0.1")
 public record PointRange3D(int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
 
@@ -23,10 +24,10 @@ public record PointRange3D(int minX, int maxX, int minY, int maxY, int minZ, int
      * @param from The first location.
      * @param to The second location.
      * @return A new PointRange3D object.
-     * @version 0.0.1
+     * @since 0.0.1
      */
     @AsOf("0.0.1")
-    public static @NotNull PointRange3D of(@NotNull Location from, @NotNull Location to) {
+    public static PointRange3D of(Location from, Location to) {
         return new PointRange3D(
                 Math.min(from.getBlockX(), to.getBlockX()),
                 Math.max(from.getBlockX(), to.getBlockX()),
@@ -43,10 +44,10 @@ public record PointRange3D(int minX, int maxX, int minY, int maxY, int minZ, int
      *
      * @param world The world in which the location is.
      * @return The minimum location within the range.
-     * @version 0.0.1
+     * @since 0.0.1
      */
     @AsOf("0.0.2")
-    public @NotNull Location getMinLocation(@NotNull World world) {
+    public Location getMinLocation(World world) {
         return new Location(world, minX, minY, minZ);
     }
 
@@ -56,10 +57,10 @@ public record PointRange3D(int minX, int maxX, int minY, int maxY, int minZ, int
      *
      * @param world The world in which the location is.
      * @return The maximum location within the range.
-     * @version 0.0.1
+     * @since 0.0.1
      */
     @AsOf("0.0.2")
-    public @NotNull Location getMaxLocation(@NotNull World world) {
+    public Location getMaxLocation(World world) {
         return new Location(world, maxX, maxY, maxZ);
     }
 

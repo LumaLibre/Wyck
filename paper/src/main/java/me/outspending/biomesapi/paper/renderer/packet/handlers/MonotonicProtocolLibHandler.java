@@ -7,15 +7,16 @@ import me.outspending.biomesapi.renderer.packet.PhonyCustomBiomeCollector;
 import me.outspending.biomesapi.renderer.packet.handlers.ProtocolLibPacketHandler;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 @AsOf("2.1.0")
 @ApiStatus.Internal
 public class MonotonicProtocolLibHandler extends ProtocolLibPacketHandler {
 
     private boolean registered;
 
-    public MonotonicProtocolLibHandler(@NotNull Plugin provider, @NotNull Priority priority, @NotNull PhonyCustomBiomeCollector collector) {
+    public MonotonicProtocolLibHandler(Plugin provider, Priority priority, PhonyCustomBiomeCollector collector) {
         super(provider, priority, collector);
     }
 

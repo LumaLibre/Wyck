@@ -6,8 +6,8 @@ import me.outspending.biomesapi.exceptions.UnknownBiomeException;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
 import me.outspending.biomesapi.util.Lazy;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -20,6 +20,7 @@ import java.util.Set;
  * @version 2.3.0
  * @author Jsinco
  */
+@NullMarked
 @AsOf("2.3.0")
 public final class RegisteredBiomes implements Iterable<CustomBiome> {
 
@@ -34,7 +35,7 @@ public final class RegisteredBiomes implements Iterable<CustomBiome> {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    public static @Nullable CustomBiome get(@NotNull BiomeResourceKey resourceKey) {
+    public static @Nullable CustomBiome get(BiomeResourceKey resourceKey) {
         Preconditions.checkNotNull(resourceKey, "resourceKey cannot be null");
 
         return REGISTERED_BIOMES.stream()
@@ -51,7 +52,7 @@ public final class RegisteredBiomes implements Iterable<CustomBiome> {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    public static @NotNull CustomBiome getOrThrow(@NotNull BiomeResourceKey resourceKey) {
+    public static CustomBiome getOrThrow(BiomeResourceKey resourceKey) {
         CustomBiome biome = get(resourceKey);
         if (biome == null) {
             throw new UnknownBiomeException("Unknown biome: " + resourceKey);
@@ -66,7 +67,7 @@ public final class RegisteredBiomes implements Iterable<CustomBiome> {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    public static @NotNull Lazy<@org.jspecify.annotations.Nullable CustomBiome> getLazily(@NotNull BiomeResourceKey resourceKey) {
+    public static Lazy<@Nullable CustomBiome> getLazily(BiomeResourceKey resourceKey) {
         return Lazy.of(() -> get(resourceKey));
     }
 
@@ -78,7 +79,7 @@ public final class RegisteredBiomes implements Iterable<CustomBiome> {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    public static @NotNull Lazy<CustomBiome> getOrThrowLazily(@NotNull BiomeResourceKey resourceKey) {
+    public static Lazy<CustomBiome> getOrThrowLazily(BiomeResourceKey resourceKey) {
         return Lazy.of(() -> getOrThrow(resourceKey));
     }
 
@@ -89,7 +90,7 @@ public final class RegisteredBiomes implements Iterable<CustomBiome> {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    public static boolean isRegistered(@NotNull BiomeResourceKey resourceKey) {
+    public static boolean isRegistered(BiomeResourceKey resourceKey) {
         Preconditions.checkNotNull(resourceKey, "resourceKey cannot be null");
         return REGISTERED_BIOMES.stream().anyMatch(biome -> resourceKey.equals(biome.getResourceKey()));
     }
@@ -101,7 +102,7 @@ public final class RegisteredBiomes implements Iterable<CustomBiome> {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    public static @NotNull Lazy<Boolean> isRegisteredLazily(@NotNull BiomeResourceKey resourceKey) {
+    public static Lazy<Boolean> isRegisteredLazily(BiomeResourceKey resourceKey) {
         return Lazy.of(() -> isRegistered(resourceKey));
     }
 
@@ -112,7 +113,7 @@ public final class RegisteredBiomes implements Iterable<CustomBiome> {
      */
     @Override
     @AsOf("2.3.0")
-    public @NotNull Iterator<CustomBiome> iterator() {
+    public Iterator<CustomBiome> iterator() {
         return REGISTERED_BIOMES.iterator();
     }
 
@@ -147,7 +148,7 @@ public final class RegisteredBiomes implements Iterable<CustomBiome> {
     }
 
     @ApiStatus.Internal
-    public static void appendBiome(@NotNull CustomBiome biome) {
+    public static void appendBiome(CustomBiome biome) {
         Preconditions.checkNotNull(biome, "biome cannot be null");
         if (isRegistered(biome.getResourceKey())) {
             throw new IllegalArgumentException("Biome is already appended: " + biome.getResourceKey());
@@ -156,7 +157,7 @@ public final class RegisteredBiomes implements Iterable<CustomBiome> {
     }
 
     @ApiStatus.Internal
-    public static boolean replaceBiome(@NotNull BiomeResourceKey resourceKey, @NotNull CustomBiome newBiome) {
+    public static boolean replaceBiome(BiomeResourceKey resourceKey, CustomBiome newBiome) {
         Preconditions.checkNotNull(resourceKey, "resourceKey cannot be null");
         Preconditions.checkNotNull(newBiome, "newBiome cannot be null");
 

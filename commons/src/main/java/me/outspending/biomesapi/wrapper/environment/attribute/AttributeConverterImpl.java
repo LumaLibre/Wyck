@@ -10,11 +10,15 @@ import me.outspending.biomesapi.wrapper.environment.particle.WrappedAmbientParti
 import net.kyori.adventure.text.Component;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.world.attribute.AmbientParticle;
+import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Arrays;
 import java.util.Optional;
 
+@NullMarked
 @WireFactory
+@ApiStatus.Internal
 public final class AttributeConverterImpl implements AttributeConverter {
 
 

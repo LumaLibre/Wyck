@@ -2,12 +2,15 @@ package me.outspending.biomesapi.connection;
 
 import me.outspending.biomesapi.annotations.WireFactory;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 @WireFactory
+@ApiStatus.Internal
 public class RegistryReconfigurerFactoryImpl implements RegistryReconfigurer.Factory {
     @Override
-    public RegistryReconfigurer create(@NotNull Plugin provider) {
+    public RegistryReconfigurer create(Plugin provider) {
         return new RegistryReconfigurerImpl(provider);
     }
 }

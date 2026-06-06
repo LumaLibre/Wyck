@@ -1,6 +1,7 @@
 package me.outspending.biomesapi.renderer;
 
 import me.outspending.biomesapi.annotations.AsOf;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Represents an abstract biome renderer.
@@ -10,6 +11,7 @@ import me.outspending.biomesapi.annotations.AsOf;
  * @since 1.2.0
  * @author Jsinco
  */
+@NullMarked
 @AsOf("1.2.0")
 public interface AbstractBiomeRenderer {
 }

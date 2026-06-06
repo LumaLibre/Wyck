@@ -12,25 +12,26 @@ import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.CraftServer;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@NullMarked
 @WireFactory
 @AsOf("2.3.0")
 @ApiStatus.Internal
 public final class PlacedFeatureFactoryImpl implements PlacedFeature.Factory {
 
     @Override
-    public @NotNull Object toNms(@NotNull PlacedFeature feature) {
+    public Object toNms(PlacedFeature feature) {
         return switch (feature) {
             case PlacedFeature.Reference reference -> resolveReference(reference);
             case PlacedFeature.Custom custom -> buildCustom(custom);
         };
     }
 
-    private Object resolveReference(@NotNull PlacedFeature.Reference reference) {
+    private Object resolveReference(PlacedFeature.Reference reference) {
         MinecraftServer server = ((CraftServer) Bukkit.getServer()).getServer();
         RegistryAccess access = server.registryAccess();
 
@@ -45,8 +46,8 @@ public final class PlacedFeatureFactoryImpl implements PlacedFeature.Factory {
     }
 
     @SuppressWarnings("unchecked")
-    private Object buildCustom(@NotNull PlacedFeature.Custom custom) {
-        Holder<@NotNull ConfiguredFeature<?, ?>> featureHolder = (Holder<@NotNull ConfiguredFeature<?, ?>>) custom.feature().toMinecraft();
+    private Object buildCustom(PlacedFeature.Custom custom) {
+        Holder<ConfiguredFeature<?, ?>> featureHolder = (Holder<ConfiguredFeature<?, ?>>) custom.feature().toMinecraft();
 
         List<net.minecraft.world.level.levelgen.placement.PlacementModifier> placement = new ArrayList<>(custom.placement().size());
         for (PlacementModifier modifier : custom.placement()) {

@@ -9,26 +9,28 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.world.attribute.AmbientParticle;
 import net.minecraft.world.attribute.EnvironmentAttributes;
 import net.minecraft.world.level.biome.Biome;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
+@NullMarked
+@ApiStatus.Internal
 public class ParticleCatalogHandler implements BuilderHandler<Biome.BiomeBuilder, ParticleCatalog> {
 
     @Override
-    public void handle(ParticleCatalog value, @NotNull Biome.BiomeBuilder key) {
+    public void handle(@Nullable ParticleCatalog value, Biome.BiomeBuilder key) {
         if (value == null) return;
 
         List<AmbientParticle> minecraftAmbientParticles = create(value);
 
         key.setAttribute(EnvironmentAttributes.AMBIENT_PARTICLES, minecraftAmbientParticles);
     }
-
-    @Contract("null -> null")
+    
+    @Contract("_ -> new")
     public List<net.minecraft.world.attribute.AmbientParticle> create(ParticleCatalog value) {
-        if (value == null) return null;
 
         return value.resolveParticles()
                 .stream()
@@ -37,7 +39,7 @@ public class ParticleCatalogHandler implements BuilderHandler<Biome.BiomeBuilder
     }
 
     @Override
-    public @Nullable ParticleCatalog build(@NotNull AbstractBiome biome) {
+    public @Nullable ParticleCatalog build(AbstractBiome biome) {
         return null;
     }
 

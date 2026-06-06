@@ -15,8 +15,8 @@ import me.outspending.biomesapi.renderer.packet.PacketHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.yaml.NodeStyle;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
@@ -102,7 +102,7 @@ public final class BiomesAPIPlugin extends JavaPlugin implements BiomesAPI {
     }
 
     @Override
-    public @NotNull JavaPlugin plugin() {
+    public @NonNull JavaPlugin plugin() {
         return this;
     }
 }

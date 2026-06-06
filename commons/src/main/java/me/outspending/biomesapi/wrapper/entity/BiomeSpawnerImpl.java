@@ -9,11 +9,14 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.EntityType;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Map;
 
+@NullMarked
 @AsOf("2.3.0")
+@ApiStatus.Internal
 public class BiomeSpawnerImpl implements BiomeSpawner {
 
     private final Map<MobCategory, WeightedList<NaturalSpawner>> spawners;
@@ -27,12 +30,12 @@ public class BiomeSpawnerImpl implements BiomeSpawner {
     }
 
     @Override
-    public @NotNull Map<MobCategory, WeightedList<NaturalSpawner>> spawners() {
+    public Map<MobCategory, WeightedList<NaturalSpawner>> spawners() {
         return this.spawners;
     }
 
     @Override
-    public @NotNull Map<EntityType, SpawnCost> mobSpawnCosts() {
+    public Map<EntityType, SpawnCost> mobSpawnCosts() {
         return this.mobSpawnCosts;
     }
 
@@ -48,7 +51,7 @@ public class BiomeSpawnerImpl implements BiomeSpawner {
      * so they survive the translation as long as they were supplied when the list was built.
      */
     @Override
-    public @NotNull MobSpawnSettings toMinecraft() {
+    public MobSpawnSettings toMinecraft() {
         MobSpawnSettings.Builder builder = new MobSpawnSettings.Builder();
         builder.creatureGenerationProbability(this.creatureGenerationProbability);
 

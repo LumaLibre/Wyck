@@ -6,11 +6,13 @@ import me.outspending.biomesapi.wrapper.worldgen.carver.ConfiguredWorldCarver;
 import me.outspending.biomesapi.wrapper.worldgen.placement.PlacedFeature;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
+@NullMarked
 @WireFactory
 @AsOf("2.3.0")
 @ApiStatus.Internal
@@ -20,7 +22,7 @@ public final class BiomeGenerationSettingsImpl implements BiomeGenerationSetting
     private final Map<GenerationStep, List<PlacedFeature>> features;
 
     @AsOf("2.3.0")
-    public BiomeGenerationSettingsImpl(@NotNull List<ConfiguredWorldCarver> carvers, @NotNull Map<GenerationStep, List<PlacedFeature>> features) {
+    public BiomeGenerationSettingsImpl(List<ConfiguredWorldCarver> carvers, Map<GenerationStep, List<PlacedFeature>> features) {
         this.carvers = List.copyOf(carvers);
 
         // deep-copy the per-step lists so the map and its values are both immutable
@@ -32,18 +34,18 @@ public final class BiomeGenerationSettingsImpl implements BiomeGenerationSetting
     }
 
     @Override
-    public @NotNull List<ConfiguredWorldCarver> carvers() {
+    public List<ConfiguredWorldCarver> carvers() {
         return this.carvers;
     }
 
     @Override
-    public @NotNull Map<GenerationStep, List<PlacedFeature>> features() {
+    public Map<GenerationStep, List<PlacedFeature>> features() {
         return this.features;
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public @NotNull Object toMinecraft() {
+    public Object toMinecraft() {
         net.minecraft.world.level.biome.BiomeGenerationSettings.PlainBuilder builder =
                 new net.minecraft.world.level.biome.BiomeGenerationSettings.PlainBuilder();
 

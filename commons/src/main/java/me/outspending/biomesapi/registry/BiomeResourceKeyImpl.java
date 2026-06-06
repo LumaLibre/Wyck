@@ -1,25 +1,26 @@
 package me.outspending.biomesapi.registry;
 
-import me.outspending.biomesapi.annotations.WireFactory;
 import net.minecraft.resources.Identifier;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
 
-@WireFactory
-public record BiomeResourceKeyImpl(@NotNull Identifier resourceLocation) implements BiomeResourceKey {
+@NullMarked
+@ApiStatus.Internal
+public record BiomeResourceKeyImpl(Identifier resourceLocation) implements BiomeResourceKey {
 
     public BiomeResourceKeyImpl(String namespace, String path) {
         this(Identifier.fromNamespaceAndPath(namespace, path));
     }
 
     @Override
-    public @NotNull String namespace() {
+    public String namespace() {
         return resourceLocation.getNamespace();
     }
 
     @Override
-    public @NotNull String path() {
+    public String path() {
         return resourceLocation.getPath();
     }
 
@@ -36,7 +37,7 @@ public record BiomeResourceKeyImpl(@NotNull Identifier resourceLocation) impleme
     }
 
     @Override
-    public @NotNull String toString() {
+    public String toString() {
         return namespace() + NAMESPACE_SEPARATOR + path();
     }
 }

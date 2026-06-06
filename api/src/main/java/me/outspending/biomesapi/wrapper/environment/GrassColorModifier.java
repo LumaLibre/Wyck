@@ -3,6 +3,7 @@ package me.outspending.biomesapi.wrapper.environment;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.unsafe.KeyedEnumTranslator;
 import me.outspending.biomesapi.unsafe.NmsEnumTranslatable;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * This enum represents the grass color modifier for a biome in Minecraft.
@@ -13,6 +14,7 @@ import me.outspending.biomesapi.unsafe.NmsEnumTranslatable;
  * @since 0.0.24
  * @author Jsinco
  */
+@NullMarked
 @AsOf("0.0.24")
 public enum GrassColorModifier implements NmsEnumTranslatable<GrassColorModifier> {
 

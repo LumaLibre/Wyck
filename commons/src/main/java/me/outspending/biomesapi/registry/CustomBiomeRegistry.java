@@ -35,8 +35,9 @@ import net.minecraft.world.level.biome.BiomeSpecialEffects;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import org.bukkit.Color;
 import org.bukkit.NamespacedKey;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -51,8 +52,10 @@ import java.util.function.Consumer;
  * @since 0.0.1
  * @author Outspending
  */
+@NullMarked
 @WireFactory
 @AsOf("1.1.0")
+@ApiStatus.Internal
 public class CustomBiomeRegistry implements BiomeRegistry {
 
     private static final SpecialEffectsHandler SPECIAL_EFFECTS_HANDLER = new SpecialEffectsHandler();
@@ -78,7 +81,7 @@ public class CustomBiomeRegistry implements BiomeRegistry {
      */
     @Override
     @AsOf("2.3.0")
-    public @NotNull Biome buildDelegate(@NotNull AbstractBiome biome) {
+    public Biome buildDelegate(AbstractBiome biome) {
         Preconditions.checkNotNull(biome, "biome cannot be null");
 
         BiomeSettings settings = biome.getSettings();
@@ -131,11 +134,11 @@ public class CustomBiomeRegistry implements BiomeRegistry {
     @Override
     @AsOf("0.0.1")
     @SuppressWarnings("unchecked")
-    public void register(@NotNull CustomBiome biome) {
+    public void register(CustomBiome biome) {
         Preconditions.checkNotNull(biome, "biome cannot be null");
 
         Consumer<UnsafeNMS> consumer = nms -> {
-            Registry<@NotNull Biome> registry = (Registry<@NotNull Biome>) nms.getRegistry();
+            Registry<Biome> registry = (Registry<Biome>) nms.getRegistry();
             Identifier resourceLocation = ((BiomeResourceKeyImpl) biome.getResourceKey()).resourceLocation();
 
             Biome createdBiome = buildDelegate(biome);
@@ -169,7 +172,7 @@ public class CustomBiomeRegistry implements BiomeRegistry {
      */
     @Override
     @AsOf("0.0.8")
-    public void modify(@NotNull AbstractBiome abstractBiome) {
+    public void modify(AbstractBiome abstractBiome) {
         BiomeResourceKey key = abstractBiome.getResourceKey();
         Preconditions.checkNotNull(key, "key cannot be null");
         Preconditions.checkNotNull(abstractBiome, "newData cannot be null");
@@ -178,7 +181,7 @@ public class CustomBiomeRegistry implements BiomeRegistry {
 
         UnsafeNMS nms = UnsafeNMSHandler.getNMS().orElseThrow();
 
-        Registry<net.minecraft.world.level.biome.@NotNull Biome> biomeRegistry = (Registry<net.minecraft.world.level.biome.@NotNull Biome>) nms.getRegistry();
+        Registry<net.minecraft.world.level.biome.Biome> biomeRegistry = (Registry<net.minecraft.world.level.biome.Biome>) nms.getRegistry();
         net.minecraft.world.level.biome.Biome biome = biomeRegistry.getOptional((Identifier) key.resourceLocation()).orElseThrow(
             () -> new IllegalStateException("Biome " + key + " is not registered in the internal biome registry")
         );
@@ -250,7 +253,7 @@ public class CustomBiomeRegistry implements BiomeRegistry {
 
     @AsOf("2.3.0")
     @SuppressWarnings("unchecked")
-    public @Nullable AbstractBiome getBiome(@NotNull BiomeResourceKey key) {
+    public @Nullable AbstractBiome getBiome(BiomeResourceKey key) {
         Preconditions.checkNotNull(key, "key cannot be null");
 
         if (RegisteredBiomes.isRegistered(key)) {
@@ -258,7 +261,7 @@ public class CustomBiomeRegistry implements BiomeRegistry {
         }
 
         UnsafeNMS nms = UnsafeNMSHandler.getNMS().orElseThrow();
-        Registry<@NotNull Biome> biomeRegistry = (Registry<@NotNull Biome>) nms.getRegistry();
+        Registry<Biome> biomeRegistry = (Registry<Biome>) nms.getRegistry();
 
         Biome biome = biomeRegistry.getOptional((Identifier) key.resourceLocation()).orElse(null);
         if (biome == null) {
@@ -320,16 +323,15 @@ public class CustomBiomeRegistry implements BiomeRegistry {
     }
 
     @SuppressWarnings("unchecked")
-    private @NotNull BiomeSpawner readSpawner(@NotNull MobSpawnSettings settings) {
+    private BiomeSpawner readSpawner(MobSpawnSettings settings) {
         BiomeSpawner.Builder spawnerBuilder = BiomeSpawner.builder()
             .setCreatureGenerationProbability(settings.getCreatureProbability());
 
 
         for (net.minecraft.world.entity.MobCategory nmsCategory : net.minecraft.world.entity.MobCategory.values()) {
             MobCategory category = toWrapperCategory(nmsCategory);
-            if (category == null) continue;
 
-            for (Weighted<MobSpawnSettings.@NotNull SpawnerData> weighted : settings.getMobs(nmsCategory).unwrap()) {
+            for (Weighted<MobSpawnSettings.SpawnerData> weighted : settings.getMobs(nmsCategory).unwrap()) {
                 MobSpawnSettings.SpawnerData data = weighted.value();
                 org.bukkit.entity.EntityType type = toBukkitEntityType(data.type());
                 if (type == null) continue;
@@ -357,11 +359,11 @@ public class CustomBiomeRegistry implements BiomeRegistry {
         return spawnerBuilder.build();
     }
 
-    private static @Nullable MobCategory toWrapperCategory(@NotNull net.minecraft.world.entity.MobCategory nms) {
+    private static MobCategory toWrapperCategory(net.minecraft.world.entity.MobCategory nms) {
         return MobCategory.TRANSLATOR.fromNms(nms);
     }
 
-    private static @Nullable org.bukkit.entity.EntityType toBukkitEntityType(@NotNull net.minecraft.world.entity.EntityType<?> nms) {
+    private static org.bukkit.entity.@Nullable EntityType toBukkitEntityType(net.minecraft.world.entity.EntityType<?> nms) {
         NamespacedKey nmsKey = NamespacedKey.fromString(
             net.minecraft.world.entity.EntityType.getKey(nms).toString());
         return nmsKey == null ? null : org.bukkit.Registry.ENTITY_TYPE.get(nmsKey);

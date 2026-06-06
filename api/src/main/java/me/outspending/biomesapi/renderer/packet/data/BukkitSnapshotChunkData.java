@@ -4,7 +4,7 @@ import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.misc.ChunkLocation;
 import org.bukkit.ChunkSnapshot;
 import org.bukkit.block.Biome;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Optional;
 
@@ -21,21 +21,22 @@ import java.util.Optional;
  * @since 2.2.0
  * @author Jsinco
  */
+@NullMarked
 @AsOf("2.2.0")
-public record BukkitSnapshotChunkData(@NotNull ChunkLocation location, @NotNull ChunkSnapshot snapshot) implements SnapshotChunkData {
+public record BukkitSnapshotChunkData(ChunkLocation location, ChunkSnapshot snapshot) implements SnapshotChunkData {
 
     @Override
-    public @NotNull Biome centerBiome() {
+    public Biome centerBiome() {
         return snapshot.getBiome(7, 0, 7);
     }
 
     @Override
-    public @NotNull Biome biomeAt(int x, int y, int z) {
+    public Biome biomeAt(int x, int y, int z) {
         return snapshot.getBiome(x, y, z);
     }
 
     @Override
-    public @NotNull Optional<ChunkSnapshot> bukkitSnapshot() {
+    public Optional<ChunkSnapshot> bukkitSnapshot() {
         return Optional.of(snapshot);
     }
 }

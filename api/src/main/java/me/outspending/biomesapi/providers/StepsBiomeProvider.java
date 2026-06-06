@@ -6,8 +6,8 @@ import me.outspending.biomesapi.biome.CustomBiome;
 import org.bukkit.block.Biome;
 import org.bukkit.generator.WorldInfo;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,6 +37,7 @@ import java.util.Set;
  * @version 2.3.0
  * @author Jsinco
  */
+@NullMarked
 @AsOf("2.3.0")
 @ApiStatus.Experimental
 public final class StepsBiomeProvider extends CustomBiomeProvider {
@@ -46,7 +47,7 @@ public final class StepsBiomeProvider extends CustomBiomeProvider {
     private final CustomBiome fallback;
 
     @AsOf("2.3.0")
-    private StepsBiomeProvider(@NotNull Set<CustomBiome> biomes, @NotNull List<BiomeStep> steps, @Nullable CustomBiome fallback) {
+    private StepsBiomeProvider(Set<CustomBiome> biomes, List<BiomeStep> steps, @Nullable CustomBiome fallback) {
         super(biomes);
         this.steps = steps;
         this.fallback = fallback;
@@ -54,7 +55,7 @@ public final class StepsBiomeProvider extends CustomBiomeProvider {
 
     @Override
     @AsOf("2.3.0")
-    public @NotNull Biome getBiome(@NotNull WorldInfo worldInfo, int x, int y, int z) {
+    public Biome getBiome(WorldInfo worldInfo, int x, int y, int z) {
         // TODO: Cache bukkit biomes maybe?
         for (BiomeStep step : steps) {
             CustomBiome biome = step.apply(worldInfo, x, y, z);
@@ -66,7 +67,7 @@ public final class StepsBiomeProvider extends CustomBiomeProvider {
     }
 
     @AsOf("2.3.0")
-    public static @NotNull Builder builder() {
+    public static Builder builder() {
         return new Builder();
     }
 
@@ -88,7 +89,7 @@ public final class StepsBiomeProvider extends CustomBiomeProvider {
          * via {@code produces} so the provider can advertise it from {@code getBiomes(...)}.
          */
         @AsOf("2.3.0")
-        public @NotNull Builder step(@NotNull BiomeStep step, @NotNull CustomBiome... produces) {
+        public Builder step(BiomeStep step, CustomBiome... produces) {
             Preconditions.checkNotNull(step, "step cannot be null");
             Preconditions.checkNotNull(produces, "produces cannot be null");
             steps.add(step);
@@ -104,7 +105,7 @@ public final class StepsBiomeProvider extends CustomBiomeProvider {
          * @return this builder
          */
         @AsOf("2.3.0")
-        public @NotNull Builder step(@NotNull CustomBiome biome, @NotNull BiomeCondition condition) {
+        public Builder step(CustomBiome biome, BiomeCondition condition) {
             Preconditions.checkNotNull(biome, "biome cannot be null");
             Preconditions.checkNotNull(condition, "condition cannot be null");
             biomes.add(biome);
@@ -119,7 +120,7 @@ public final class StepsBiomeProvider extends CustomBiomeProvider {
          * @since 2.3.0
          */
         @AsOf("2.3.0")
-        public @NotNull Builder fallback(@NotNull CustomBiome biome) {
+        public Builder fallback(CustomBiome biome) {
             Preconditions.checkNotNull(biome, "fallback biome cannot be null");
             this.fallback = biome;
             this.biomes.add(biome);
@@ -127,7 +128,7 @@ public final class StepsBiomeProvider extends CustomBiomeProvider {
         }
 
         @AsOf("2.3.0")
-        public @NotNull StepsBiomeProvider build() {
+        public StepsBiomeProvider build() {
             return new StepsBiomeProvider(new LinkedHashSet<>(biomes), List.copyOf(steps), fallback);
         }
     }
@@ -140,7 +141,7 @@ public final class StepsBiomeProvider extends CustomBiomeProvider {
     @AsOf("2.3.0")
     @FunctionalInterface
     public interface BiomeStep {
-        @Nullable CustomBiome apply(@NotNull WorldInfo worldInfo, int x, int y, int z);
+        @Nullable CustomBiome apply(WorldInfo worldInfo, int x, int y, int z);
     }
 
     /**
@@ -149,6 +150,6 @@ public final class StepsBiomeProvider extends CustomBiomeProvider {
     @AsOf("2.3.0")
     @FunctionalInterface
     public interface BiomeCondition {
-        boolean test(@NotNull WorldInfo worldInfo, int x, int y, int z);
+        boolean test(WorldInfo worldInfo, int x, int y, int z);
     }
 }

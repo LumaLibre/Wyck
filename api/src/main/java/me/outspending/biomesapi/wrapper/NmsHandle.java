@@ -1,7 +1,7 @@
 package me.outspending.biomesapi.wrapper;
 
 import me.outspending.biomesapi.annotations.AsOf;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * A handle to an NMS object.
@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
  * @version 2.3.0
  * @author Jsinco
  */
+@NullMarked
 @AsOf("2.3.0")
 public interface NmsHandle {
     /**
@@ -17,5 +18,5 @@ public interface NmsHandle {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    @NotNull Object toMinecraft();
+    Object toMinecraft();
 }

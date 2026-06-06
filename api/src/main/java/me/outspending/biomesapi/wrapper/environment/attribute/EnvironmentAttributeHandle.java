@@ -1,7 +1,7 @@
 package me.outspending.biomesapi.wrapper.environment.attribute;
 
 import me.outspending.biomesapi.annotations.AsOf;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Opaque handle to an NMS EnvironmentAttribute<T>.
@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
  * @since 2.0.0
  * @author Jsinco
  */
+@NullMarked
 @AsOf("2.1.0")
 public interface EnvironmentAttributeHandle<T> {
 
@@ -19,7 +20,7 @@ public interface EnvironmentAttributeHandle<T> {
      * @since 2.1.0
      */
     @AsOf("2.1.0")
-    @NotNull T defaultValue();
+    T defaultValue();
 
     /**
      * Whether the client reacts to this attribute or not.
@@ -35,6 +36,6 @@ public interface EnvironmentAttributeHandle<T> {
      * @since 2.1.0
      */
     @AsOf("2.1.0")
-    @NotNull String key();
+    String key();
 
 }

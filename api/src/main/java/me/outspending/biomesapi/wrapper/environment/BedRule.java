@@ -4,8 +4,8 @@ import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.unsafe.KeyedEnumTranslator;
 import me.outspending.biomesapi.unsafe.NmsEnumTranslatable;
 import net.kyori.adventure.text.Component;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A record representing bed rules in a biome environment.
@@ -17,6 +17,7 @@ import org.jetbrains.annotations.Nullable;
  * @since 1.1.0
  * @author Jsinco
  */
+@NullMarked
 @AsOf("1.1.0")
 public record BedRule(Rule canSleep, Rule canSetSpawn, boolean explodes, @Nullable Component errorMessage) {
 
@@ -71,14 +72,14 @@ public record BedRule(Rule canSleep, Rule canSetSpawn, boolean explodes, @Nullab
         private Rule canSleep = Rule.WHEN_DARK;
         private Rule canSetSpawn = Rule.ALWAYS;
         private boolean explodes = false;
-        private Component errorMessage = Component.text("You can only sleep at night or during thunderstorms");
+        private @Nullable Component errorMessage = Component.text("You can only sleep at night or during thunderstorms");
 
-        public Builder setCanSleep(@NotNull Rule canSleep) {
+        public Builder setCanSleep(Rule canSleep) {
             this.canSleep = canSleep;
             return this;
         }
 
-        public Builder setCanSetSpawn(@NotNull Rule canSetSpawn) {
+        public Builder setCanSetSpawn(Rule canSetSpawn) {
             this.canSetSpawn = canSetSpawn;
             return this;
         }

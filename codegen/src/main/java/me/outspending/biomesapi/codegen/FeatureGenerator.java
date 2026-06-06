@@ -17,7 +17,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 // AsOf 2.3.0
-public class FeatureGenerator {
+public final class FeatureGenerator {
 
     // matches: @AsOf("1.2.3") \n public static final SomeType FIELD_NAME =
     private static final Pattern EXISTING_FIELD = Pattern.compile(
@@ -72,7 +72,7 @@ public class FeatureGenerator {
         sb.append("import me.outspending.biomesapi.annotations.AsOf;\n");
         sb.append("import me.outspending.biomesapi.annotations.Generated;\n");
         sb.append("import me.outspending.biomesapi.registry.BiomeResourceKey;\n");
-        sb.append("import org.jetbrains.annotations.NotNull;\n\n");
+        sb.append("import org.jspecify.annotations.NonNull;\n\n");
         sb.append("/**\n");
         sb.append(" * Auto-generated. Do not modify!\n");
         sb.append(" * Run ./gradlew generateSources to regenerate.\n");
@@ -132,8 +132,8 @@ public class FeatureGenerator {
             sb.append("\n");
         }
 
-        sb.append("    private static @NotNull ").append(spec.typeSimpleName())
-            .append(" reference(@NotNull String path) {\n");
+        sb.append("    private static @NonNull ").append(spec.typeSimpleName())
+            .append(" reference(@NonNull String path) {\n");
         sb.append("        return ").append(spec.referenceCall()).append("(BiomeResourceKey.minecraft(path));\n");
         sb.append("    }\n\n");
         sb.append("    private ").append(spec.outputClass()).append("() {\n");

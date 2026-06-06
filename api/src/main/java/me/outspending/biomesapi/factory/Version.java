@@ -2,6 +2,7 @@ package me.outspending.biomesapi.factory;
 
 import me.outspending.biomesapi.annotations.AsOf;
 import org.bukkit.Bukkit;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * A record class representing a version of Minecraft.
@@ -9,6 +10,7 @@ import org.bukkit.Bukkit;
  * @param id the version ID
  * @param type the type of version
  */
+@NullMarked
 @AsOf("2.0.0")
 public record Version(String[] applicable, String id, Type type) {
 

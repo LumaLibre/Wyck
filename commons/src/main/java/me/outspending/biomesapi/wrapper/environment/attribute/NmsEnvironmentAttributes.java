@@ -3,8 +3,11 @@ package me.outspending.biomesapi.wrapper.environment.attribute;
 import net.minecraft.world.attribute.EnvironmentAttribute;
 import net.minecraft.world.attribute.EnvironmentAttributeMap;
 import net.minecraft.world.level.biome.Biome;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
+@ApiStatus.Internal
 public final class NmsEnvironmentAttributes {
 
     private NmsEnvironmentAttributes() {
@@ -49,7 +52,7 @@ public final class NmsEnvironmentAttributes {
 
     private static <T, K> void apply(EnvironmentAttributeMap.Builder builder, WrappedEnvironmentAttribute<T, K> w) {
         EnvironmentAttributeHandleImpl<T> handle = (EnvironmentAttributeHandleImpl<T>) w.getAttribute();
-        EnvironmentAttribute<@NotNull T> nms = handle.nms();
+        EnvironmentAttribute<T> nms = handle.nms();
         T value = sanitize(nms, w.getConvertedValue());
         builder.set(nms, value);
     }
@@ -68,7 +71,7 @@ public final class NmsEnvironmentAttributes {
         builder.setAttribute(nms, value);
     }
 
-    private static <T> T sanitize(EnvironmentAttribute<@NotNull T> nms, T value) {
+    private static <T> T sanitize(EnvironmentAttribute<T> nms, T value) {
         return nms.sanitizeValue(value);
     }
 }

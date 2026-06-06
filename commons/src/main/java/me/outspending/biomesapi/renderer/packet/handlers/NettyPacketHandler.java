@@ -26,8 +26,9 @@ import org.bukkit.Material;
 import org.bukkit.craftbukkit.block.data.CraftBlockData;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.util.NoSuchElementException;
@@ -43,7 +44,9 @@ import java.util.logging.Logger;
  * @since 2.1.0
  * @author Jsinco
  */
+@NullMarked
 @AsOf("2.1.0")
+@ApiStatus.Internal
 public class NettyPacketHandler implements PacketHandler {
 
     private static final Logger LOGGER = Logger.getLogger(NettyPacketHandler.class.getName());
@@ -53,14 +56,14 @@ public class NettyPacketHandler implements PacketHandler {
     private final Key listenerKey;
 
     @AsOf("2.1.0")
-    public NettyPacketHandler(@NotNull String name, @NotNull PhonyCustomBiomeCollector collector) {
+    public NettyPacketHandler(String name, PhonyCustomBiomeCollector collector) {
         this.collector = collector;
         this.handlerName = name + "_biomesapi_handler";
         this.listenerKey = Key.key("biomesapi", name + "_channel_init");
     }
 
     @AsOf("2.1.0")
-    public NettyPacketHandler(@NotNull String name) {
+    public NettyPacketHandler(String name) {
         this(name, new PhonyCustomBiomeCollector());
     }
 
@@ -92,7 +95,7 @@ public class NettyPacketHandler implements PacketHandler {
      * @param knownPlayer an optional player whose channel this is, to prime the handler's cache and avoid a lookup on the first packet
      */
     @SuppressWarnings("resource")
-    private void injectChannel(@NotNull Channel channel, @Nullable Player knownPlayer) {
+    private void injectChannel(Channel channel, @Nullable Player knownPlayer) {
         channel.eventLoop().execute(() -> {
             ChannelPipeline pipeline = channel.pipeline();
             if (pipeline.get(handlerName) != null) return;
@@ -118,28 +121,28 @@ public class NettyPacketHandler implements PacketHandler {
     }
 
     @Override
-    public PacketHandler appendBiome(@NotNull PhonyCustomBiome biome) {
+    public PacketHandler appendBiome(PhonyCustomBiome biome) {
         collector.appendBiome(biome);
         return this;
     }
 
     @Override
-    public boolean removeBiome(@NotNull PhonyCustomBiome biome) {
+    public boolean removeBiome(PhonyCustomBiome biome) {
         return collector.removeBiome(biome);
     }
 
     @Override
-    public boolean removeBiome(@NotNull BiomeResourceKey biomeKey) {
+    public boolean removeBiome(BiomeResourceKey biomeKey) {
         return collector.removeBiome(biomeKey);
     }
 
     @Override
-    public boolean hasBiome(@NotNull PhonyCustomBiome biome) {
+    public boolean hasBiome(PhonyCustomBiome biome) {
         return collector.hasBiome(biome);
     }
 
     @Override
-    public boolean hasBiome(@NotNull BiomeResourceKey biomeKey) {
+    public boolean hasBiome(BiomeResourceKey biomeKey) {
         return collector.hasBiome(biomeKey);
     }
 

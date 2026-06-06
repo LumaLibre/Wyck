@@ -1,5 +1,7 @@
 package me.outspending.biomesapi.annotations;
 
+import org.jspecify.annotations.NonNull;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -20,5 +22,5 @@ public @interface Generated {
      * @return the time that this code was generated at
      * @since 2.3.0
      */
-    String value() default "";
+    @NonNull String value() default "";
 }

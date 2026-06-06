@@ -1,6 +1,7 @@
 package me.outspending.biomesapi.wrapper.entity.data;
 
 import me.outspending.biomesapi.annotations.AsOf;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Represents the cost of spawning an entity.
@@ -9,6 +10,7 @@ import me.outspending.biomesapi.annotations.AsOf;
  * @since 2.3.0
  * @version 2.3.0
  */
+@NullMarked
 @AsOf("2.3.0")
 public record SpawnCost(double charge, double energyBudget) {
     @AsOf("2.3.0")

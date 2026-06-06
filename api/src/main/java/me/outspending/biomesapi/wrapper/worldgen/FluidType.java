@@ -1,6 +1,7 @@
 package me.outspending.biomesapi.wrapper.worldgen;
 
 import me.outspending.biomesapi.annotations.AsOf;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * The vanilla fluids a block predicate can match against.
@@ -9,6 +10,7 @@ import me.outspending.biomesapi.annotations.AsOf;
  * @version 2.3.0
  * @author Jsinco
  */
+@NullMarked
 @AsOf("2.3.0")
 public enum FluidType {
 

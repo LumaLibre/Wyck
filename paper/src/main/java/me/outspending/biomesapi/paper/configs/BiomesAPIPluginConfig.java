@@ -7,8 +7,9 @@ import org.spongepowered.configurate.objectmapping.meta.Comment;
 import org.spongepowered.configurate.objectmapping.meta.Setting;
 
 @Getter
-@Accessors(fluent = true)
 @ConfigSerializable
+@Accessors(fluent = true)
+@SuppressWarnings("FieldMayBeFinal")
 public class BiomesAPIPluginConfig {
     @Comment("Whether to enable FastStats metrics collection for this plugin.")
     @Setting("metrics")

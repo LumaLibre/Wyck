@@ -14,7 +14,7 @@ import org.bukkit.block.Block;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -25,6 +25,7 @@ import java.util.concurrent.CompletableFuture;
  * @since 0.0.1
  * @author Outspending
  */
+@NullMarked
 @AsOf("1.0.1")
 public class GlobalBiomeSetter implements BiomeSetter {
 
@@ -34,21 +35,21 @@ public class GlobalBiomeSetter implements BiomeSetter {
         this.biomeUpdater = BiomeUpdater.of();
     }
 
-    public GlobalBiomeSetter(@NotNull Plugin plugin) {
+    public GlobalBiomeSetter(Plugin plugin) {
         this.biomeUpdater = BiomeUpdater.of(plugin);
     }
 
-    public GlobalBiomeSetter(@NotNull BiomeUpdater biomeUpdater) {
+    public GlobalBiomeSetter(BiomeUpdater biomeUpdater) {
         this.biomeUpdater = biomeUpdater;
     }
 
     @Override
-    public void setBlockBiome(@NotNull Block block, @NotNull CustomBiome customBiome) {
+    public void setBlockBiome(Block block, CustomBiome customBiome) {
         setBlockBiome(block, customBiome, false);
     }
 
     @Override
-    public void setBlockBiome(@NotNull Block block, @NotNull CustomBiome customBiome, boolean updateBiome) {
+    public void setBlockBiome(Block block, CustomBiome customBiome, boolean updateBiome) {
         Preconditions.checkNotNull(block, "block cannot be null");
         Preconditions.checkNotNull(customBiome, "customBiome cannot be null");
 
@@ -63,7 +64,7 @@ public class GlobalBiomeSetter implements BiomeSetter {
     }
 
     @Override
-    public void setChunkBiome(@NotNull Chunk chunk, @NotNull CustomBiome customBiome) {
+    public void setChunkBiome(Chunk chunk, CustomBiome customBiome) {
         World.Environment env = chunk.getWorld().getEnvironment();
         int minHeight = getMinHeight(env);
         int maxHeight = getMaxHeight(env);
@@ -71,7 +72,7 @@ public class GlobalBiomeSetter implements BiomeSetter {
     }
 
     @Override
-    public void setChunkBiome(@NotNull Chunk chunk, @NotNull CustomBiome customBiome, boolean updateBiome) {
+    public void setChunkBiome(Chunk chunk, CustomBiome customBiome, boolean updateBiome) {
         World.Environment env = chunk.getWorld().getEnvironment();
         int minHeight = getMinHeight(env);
         int maxHeight = getMaxHeight(env);
@@ -79,12 +80,12 @@ public class GlobalBiomeSetter implements BiomeSetter {
     }
 
     @Override
-    public void setChunkBiome(@NotNull Chunk chunk, int minHeight, int maxHeight, @NotNull CustomBiome customBiome) {
+    public void setChunkBiome(Chunk chunk, int minHeight, int maxHeight, CustomBiome customBiome) {
         setChunkBiome(chunk, minHeight, maxHeight, customBiome, false);
     }
 
     @Override
-    public void setChunkBiome(@NotNull Chunk chunk, int minHeight, int maxHeight, @NotNull CustomBiome customBiome, boolean updateBiome) {
+    public void setChunkBiome(Chunk chunk, int minHeight, int maxHeight, CustomBiome customBiome, boolean updateBiome) {
         Preconditions.checkNotNull(chunk, "chunk cannot be null");
         Preconditions.checkNotNull(customBiome, "customBiome cannot be null");
 
@@ -112,12 +113,12 @@ public class GlobalBiomeSetter implements BiomeSetter {
     }
 
     @Override
-    public void setBoundingBoxBiome(@NotNull World world, @NotNull BoundingBox boundingBox, @NotNull CustomBiome customBiome) {
+    public void setBoundingBoxBiome(World world, BoundingBox boundingBox, CustomBiome customBiome) {
         setRegionBiome(world, boundingBox.getMin(), boundingBox.getMax(), customBiome);
     }
 
     @Override
-    public void setRegionBiome(@NotNull Location from, @NotNull Location to, @NotNull CustomBiome customBiome) {
+    public void setRegionBiome(Location from, Location to, CustomBiome customBiome) {
         World world = from.getWorld();
         if (!world.equals(to.getWorld())) {
             throw new IllegalArgumentException("Locations must be in the same world!");
@@ -127,7 +128,7 @@ public class GlobalBiomeSetter implements BiomeSetter {
     }
 
     @Override
-    public void setRegionBiome(@NotNull Location from, @NotNull Location to, @NotNull CustomBiome customBiome, boolean updateBiome) {
+    public void setRegionBiome(Location from, Location to, CustomBiome customBiome, boolean updateBiome) {
         World world = from.getWorld();
         if (!world.equals(to.getWorld())) {
             throw new IllegalArgumentException("Locations must be in the same world!");
@@ -137,17 +138,17 @@ public class GlobalBiomeSetter implements BiomeSetter {
     }
 
     @Override
-    public void setRegionBiome(@NotNull World world, @NotNull Vector from, @NotNull Vector to, @NotNull CustomBiome customBiome) {
+    public void setRegionBiome(World world, Vector from, Vector to, CustomBiome customBiome) {
         setRegionBiome(world, from, to, customBiome, false);
     }
 
     @Override
-    public void setRegionBiome(@NotNull World world, @NotNull Vector from, @NotNull Vector to, @NotNull CustomBiome customBiome, boolean updateBiome) {
+    public void setRegionBiome(World world, Vector from, Vector to, CustomBiome customBiome, boolean updateBiome) {
         setRegionBiome(world, from.toLocation(world), to.toLocation(world), customBiome, updateBiome);
     }
 
     @Override
-    public void setRegionBiome(@NotNull World world, @NotNull Location from, @NotNull Location to, @NotNull CustomBiome customBiome, boolean updateBiome) {
+    public void setRegionBiome(World world, Location from, Location to, CustomBiome customBiome, boolean updateBiome) {
         Preconditions.checkNotNull(world, "world cannot be null");
         Preconditions.checkNotNull(from, "from cannot be null");
         Preconditions.checkNotNull(to, "to cannot be null");
@@ -172,14 +173,14 @@ public class GlobalBiomeSetter implements BiomeSetter {
     }
 
 
-    private int getMinHeight(@NotNull World.Environment environment) {
+    private int getMinHeight(World.Environment environment) {
         return switch (environment) {
             case NORMAL, CUSTOM -> OVERWORLD_MIN_HEIGHT;
             case NETHER, THE_END -> NETHER_END_MIN_HEIGHT;
         };
     }
 
-    private int getMaxHeight(@NotNull World.Environment environment) {
+    private int getMaxHeight(World.Environment environment) {
         return switch (environment) {
             case NORMAL, CUSTOM -> OVERWORLD_MAX_HEIGHT;
             case NETHER, THE_END -> NETHER_END_MAX_HEIGHT;

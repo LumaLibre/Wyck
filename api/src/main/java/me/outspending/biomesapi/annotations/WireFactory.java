@@ -15,9 +15,9 @@ import java.lang.annotation.Target;
  * @version 2.0.0
  * @author Jsinco
  */
-@ApiStatus.Internal
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
 @AsOf("2.0.0")
+@ApiStatus.Internal
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
 public @interface WireFactory {
 }

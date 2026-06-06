@@ -4,7 +4,7 @@ import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.misc.ChunkLocation;
 import org.bukkit.ChunkSnapshot;
 import org.bukkit.block.Biome;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Optional;
 
@@ -31,13 +31,14 @@ import java.util.Optional;
  * @since 2.2.0
  * @author Jsinco
  */
+@NullMarked
 @AsOf("2.2.0")
 public interface SnapshotChunkData {
 
     /**
      * @return the chunk this data belongs to
      */
-    @NotNull ChunkLocation location();
+    ChunkLocation location();
 
     /**
      * The biome currently in the packet at the legacy "center" sample (block 7, 0, 7).
@@ -45,7 +46,7 @@ public interface SnapshotChunkData {
      *
      * @return the source biome at the chunk center
      */
-    @NotNull Biome centerBiome();
+    Biome centerBiome();
 
     /**
      * The biome at the given <em>chunk-relative</em> block coordinates.
@@ -56,7 +57,7 @@ public interface SnapshotChunkData {
      * @param z chunk-relative block Z (0-15)
      * @return the source biome at those coordinates
      */
-    @NotNull Biome biomeAt(int x, int y, int z);
+    Biome biomeAt(int x, int y, int z);
 
     /**
      * The full Bukkit {@link ChunkSnapshot}, if one is available.
@@ -70,5 +71,5 @@ public interface SnapshotChunkData {
      *
      * @return the snapshot, or empty if none is available
      */
-    @NotNull Optional<ChunkSnapshot> bukkitSnapshot();
+    Optional<ChunkSnapshot> bukkitSnapshot();
 }

@@ -11,8 +11,9 @@ import net.minecraft.world.level.levelgen.carver.WorldCarver;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.CraftServer;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 @WireFactory
 @AsOf("2.3.0")
 @ApiStatus.Internal
@@ -20,14 +21,14 @@ public final class ConfiguredWorldCarverFactoryImpl implements ConfiguredWorldCa
 
 
     @Override
-    public @NotNull Object toNms(@NotNull ConfiguredWorldCarver carver) {
+    public Object toNms(ConfiguredWorldCarver carver) {
         return switch (carver) {
             case ConfiguredWorldCarver.Reference reference -> resolveReference(reference);
             case ConfiguredWorldCarver.Custom custom -> buildCustom(custom);
         };
     }
 
-    private Object resolveReference(@NotNull ConfiguredWorldCarver.Reference reference) {
+    private Object resolveReference(ConfiguredWorldCarver.Reference reference) {
         MinecraftServer server = ((CraftServer) Bukkit.getServer()).getServer();
         RegistryAccess access = server.registryAccess();
 
@@ -41,7 +42,7 @@ public final class ConfiguredWorldCarverFactoryImpl implements ConfiguredWorldCa
         return registry.getOrThrow(resourceKey);
     }
 
-    private Object buildCustom(@NotNull ConfiguredWorldCarver.Custom custom) {
+    private Object buildCustom(ConfiguredWorldCarver.Custom custom) {
         net.minecraft.world.level.levelgen.carver.CarverConfiguration nmsConfig =
             (net.minecraft.world.level.levelgen.carver.CarverConfiguration) custom.config().toMinecraft();
 
@@ -54,7 +55,7 @@ public final class ConfiguredWorldCarverFactoryImpl implements ConfiguredWorldCa
 
 
     @SuppressWarnings({"rawtypes", "unchecked"})
-    private net.minecraft.core.Holder<net.minecraft.world.level.levelgen.carver.@NotNull ConfiguredWorldCarver<?>> directHolder(
+    private net.minecraft.core.Holder<net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver<?>> directHolder(
         net.minecraft.world.level.levelgen.carver.WorldCarver carver,
         net.minecraft.world.level.levelgen.carver.CarverConfiguration config) {
 

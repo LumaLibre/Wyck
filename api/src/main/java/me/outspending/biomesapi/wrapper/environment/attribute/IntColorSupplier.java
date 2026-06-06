@@ -1,6 +1,7 @@
 package me.outspending.biomesapi.wrapper.environment.attribute;
 
 import me.outspending.biomesapi.annotations.AsOf;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.function.Supplier;
 
@@ -10,6 +11,7 @@ import java.util.function.Supplier;
  * @since 2.1.0
  * @author Jsinco
  */
+@NullMarked
 @AsOf("2.1.0")
 public final class IntColorSupplier extends WrappedEnvironmentAttributeSupplier<Integer, Integer> {
 

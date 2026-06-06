@@ -21,7 +21,8 @@ import me.outspending.biomesapi.renderer.packet.data.PhonyCustomBiome;
 import net.minecraft.network.protocol.game.ClientboundLevelChunkPacketData;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.NullMarked;
 
 // Credits to: kapstock/RealisticSeasons
 /**
@@ -31,7 +32,9 @@ import org.jetbrains.annotations.NotNull;
  * @since 0.0.6
  * @author Jsinco
  */
+@NullMarked
 @AsOf("0.0.6")
+@ApiStatus.Internal
 public class ProtocolLibPacketHandler implements PacketHandler {
 
     private final PhonyCustomBiomeCollector collector;
@@ -39,7 +42,7 @@ public class ProtocolLibPacketHandler implements PacketHandler {
 
 
     @AsOf("2.1.0")
-    public ProtocolLibPacketHandler(@NotNull Plugin provider, @NotNull Priority priority, @NotNull PhonyCustomBiomeCollector collector) {
+    public ProtocolLibPacketHandler(Plugin provider, Priority priority, PhonyCustomBiomeCollector collector) {
         this.collector = collector;
         ListenerPriority protocolLibPrio = priority.getDelegatePriority(ListenerPriority.class);
         this.protocolListeners = new PacketAdapter[] {
@@ -50,7 +53,7 @@ public class ProtocolLibPacketHandler implements PacketHandler {
     }
 
     @AsOf("0.0.6")
-    public ProtocolLibPacketHandler(@NotNull Plugin provider, @NotNull Priority priority) {
+    public ProtocolLibPacketHandler(Plugin provider, Priority priority) {
         this(provider, priority, new PhonyCustomBiomeCollector());
     }
 
@@ -75,28 +78,28 @@ public class ProtocolLibPacketHandler implements PacketHandler {
     }
 
     @Override
-    public PacketHandler appendBiome(@NotNull PhonyCustomBiome biome) {
+    public PacketHandler appendBiome(PhonyCustomBiome biome) {
         collector.appendBiome(biome);
         return this;
     }
 
     @Override
-    public boolean removeBiome(@NotNull PhonyCustomBiome biome) {
+    public boolean removeBiome(PhonyCustomBiome biome) {
         return collector.removeBiome(biome);
     }
 
     @Override
-    public boolean removeBiome(@NotNull BiomeResourceKey biomeKey) {
+    public boolean removeBiome(BiomeResourceKey biomeKey) {
         return collector.removeBiome(biomeKey);
     }
 
     @Override
-    public boolean hasBiome(@NotNull PhonyCustomBiome biome) {
+    public boolean hasBiome(PhonyCustomBiome biome) {
         return collector.hasBiome(biome);
     }
 
     @Override
-    public boolean hasBiome(@NotNull BiomeResourceKey biomeKey) {
+    public boolean hasBiome(BiomeResourceKey biomeKey) {
         return collector.hasBiome(biomeKey);
     }
 

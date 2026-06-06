@@ -6,7 +6,7 @@ import me.outspending.biomesapi.factory.WireProvider;
 import me.outspending.biomesapi.wrapper.NmsHandle;
 import me.outspending.biomesapi.wrapper.worldgen.valueproviders.FloatProvider;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
 
@@ -17,12 +17,13 @@ import java.util.Objects;
  * @version 2.3.0
  * @author Jsinco
  */
+@NullMarked
 @AsOf("2.3.0")
 public record CanyonShapeConfiguration(
-        @NotNull FloatProvider distanceFactor,
-        @NotNull FloatProvider thickness,
+        FloatProvider distanceFactor,
+        FloatProvider thickness,
         int widthSmoothness,
-        @NotNull FloatProvider horizontalRadiusFactor,
+        FloatProvider horizontalRadiusFactor,
         float verticalRadiusDefaultFactor,
         float verticalRadiusCenterFactor
 ) implements NmsHandle {
@@ -32,7 +33,7 @@ public record CanyonShapeConfiguration(
 
     @ApiStatus.Internal
     interface Factory {
-        @NotNull Object toNms(@NotNull CanyonShapeConfiguration configuration);
+        Object toNms(CanyonShapeConfiguration configuration);
     }
 
     @AsOf("2.3.0")
@@ -49,7 +50,7 @@ public record CanyonShapeConfiguration(
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    public static @NotNull Builder builder() {
+    public static Builder builder() {
         return new Builder();
     }
 
@@ -60,7 +61,7 @@ public record CanyonShapeConfiguration(
      */
     @Override
     @AsOf("2.3.0")
-    public @NotNull Object toMinecraft() {
+    public Object toMinecraft() {
         return WIRE.get().toNms(this);
     }
 
@@ -87,7 +88,7 @@ public record CanyonShapeConfiguration(
          * @since 2.3.0
          */
         @AsOf("2.3.0")
-        public @NotNull Builder distanceFactor(@NotNull FloatProvider distanceFactor) {
+        public Builder distanceFactor(FloatProvider distanceFactor) {
             this.distanceFactor = distanceFactor;
             return this;
         }
@@ -99,7 +100,7 @@ public record CanyonShapeConfiguration(
          * @since 2.3.0
          */
         @AsOf("2.3.0")
-        public @NotNull Builder thickness(@NotNull FloatProvider thickness) {
+        public Builder thickness(FloatProvider thickness) {
             this.thickness = thickness;
             return this;
         }
@@ -111,7 +112,7 @@ public record CanyonShapeConfiguration(
          * @since 2.3.0
          */
         @AsOf("2.3.0")
-        public @NotNull Builder widthSmoothness(int widthSmoothness) {
+        public Builder widthSmoothness(int widthSmoothness) {
             this.widthSmoothness = widthSmoothness;
             return this;
         }
@@ -123,7 +124,7 @@ public record CanyonShapeConfiguration(
          * @since 2.3.0
          */
         @AsOf("2.3.0")
-        public @NotNull Builder horizontalRadiusFactor(@NotNull FloatProvider horizontalRadiusFactor) {
+        public Builder horizontalRadiusFactor(FloatProvider horizontalRadiusFactor) {
             this.horizontalRadiusFactor = horizontalRadiusFactor;
             return this;
         }
@@ -135,7 +136,7 @@ public record CanyonShapeConfiguration(
          * @since 2.3.0
          */
         @AsOf("2.3.0")
-        public @NotNull Builder verticalRadiusDefaultFactor(float verticalRadiusDefaultFactor) {
+        public Builder verticalRadiusDefaultFactor(float verticalRadiusDefaultFactor) {
             this.verticalRadiusDefaultFactor = verticalRadiusDefaultFactor;
             return this;
         }
@@ -147,7 +148,7 @@ public record CanyonShapeConfiguration(
          * @since 2.3.0
          */
         @AsOf("2.3.0")
-        public @NotNull Builder verticalRadiusCenterFactor(float verticalRadiusCenterFactor) {
+        public Builder verticalRadiusCenterFactor(float verticalRadiusCenterFactor) {
             this.verticalRadiusCenterFactor = verticalRadiusCenterFactor;
             return this;
         }
@@ -159,7 +160,7 @@ public record CanyonShapeConfiguration(
          * @since 2.3.0
          */
         @AsOf("2.3.0")
-        public @NotNull CanyonShapeConfiguration build() {
+        public CanyonShapeConfiguration build() {
             Preconditions.checkState(this.distanceFactor != null, "distanceFactor must be set");
             Preconditions.checkState(this.thickness != null, "thickness must be set");
             Preconditions.checkState(this.widthSmoothness != null, "widthSmoothness must be set");

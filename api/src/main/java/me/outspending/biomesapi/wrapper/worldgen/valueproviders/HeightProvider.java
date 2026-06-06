@@ -4,7 +4,7 @@ import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
 import me.outspending.biomesapi.wrapper.NmsHandle;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Wraps the HeightProvider value-provider family.
@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
  * @version 2.3.0
  * @author Jsinco
  */
+@NullMarked
 @AsOf("2.3.0")
 public sealed interface HeightProvider extends NmsHandle permits HeightProvider.Constant, HeightProvider.Uniform, HeightProvider.Trapezoid, HeightProvider.BiasedToBottom, HeightProvider.VeryBiasedToBottom {
 
@@ -21,57 +22,57 @@ public sealed interface HeightProvider extends NmsHandle permits HeightProvider.
 
     @ApiStatus.Internal
     interface Factory {
-        @NotNull Object toNms(@NotNull HeightProvider provider);
+        Object toNms(HeightProvider provider);
     }
 
     /** A single fixed anchor. */
     @AsOf("2.3.0")
-    static @NotNull HeightProvider constant(@NotNull VerticalAnchor value) {
+    static HeightProvider constant(VerticalAnchor value) {
         return new Constant(value);
     }
 
     /** Uniformly distributed between two anchors (inclusive). */
     @AsOf("2.3.0")
-    static @NotNull HeightProvider uniform(@NotNull VerticalAnchor minInclusive, @NotNull VerticalAnchor maxInclusive) {
+    static HeightProvider uniform(VerticalAnchor minInclusive, VerticalAnchor maxInclusive) {
         return new Uniform(minInclusive, maxInclusive);
     }
 
     /** Trapezoidal distribution with a flat plateau of the given height. */
     @AsOf("2.3.0")
-    static @NotNull HeightProvider trapezoid(@NotNull VerticalAnchor minInclusive, @NotNull VerticalAnchor maxInclusive, int plateau) {
+    static HeightProvider trapezoid(VerticalAnchor minInclusive, VerticalAnchor maxInclusive, int plateau) {
         return new Trapezoid(minInclusive, maxInclusive, plateau);
     }
 
     /** Weighted toward the bottom of the range. */
     @AsOf("2.3.0")
-    static @NotNull HeightProvider biasedToBottom(@NotNull VerticalAnchor minInclusive, @NotNull VerticalAnchor maxInclusive, int inner) {
+    static HeightProvider biasedToBottom(VerticalAnchor minInclusive, VerticalAnchor maxInclusive, int inner) {
         return new BiasedToBottom(minInclusive, maxInclusive, inner);
     }
 
     /** Weighted very strongly toward the bottom of the range. */
     @AsOf("2.3.0")
-    static @NotNull HeightProvider veryBiasedToBottom(@NotNull VerticalAnchor minInclusive, @NotNull VerticalAnchor maxInclusive, int inner) {
+    static HeightProvider veryBiasedToBottom(VerticalAnchor minInclusive, VerticalAnchor maxInclusive, int inner) {
         return new VeryBiasedToBottom(minInclusive, maxInclusive, inner);
     }
 
     @Override
     @AsOf("2.3.0")
-    default @NotNull Object toMinecraft() {
+    default Object toMinecraft() {
         return WIRE.get().toNms(this);
     }
 
     @AsOf("2.3.0")
-    record Constant(@NotNull VerticalAnchor value) implements HeightProvider {}
+    record Constant(VerticalAnchor value) implements HeightProvider {}
 
     @AsOf("2.3.0")
-    record Uniform(@NotNull VerticalAnchor minInclusive, @NotNull VerticalAnchor maxInclusive) implements HeightProvider {}
+    record Uniform(VerticalAnchor minInclusive, VerticalAnchor maxInclusive) implements HeightProvider {}
 
     @AsOf("2.3.0")
-    record Trapezoid(@NotNull VerticalAnchor minInclusive, @NotNull VerticalAnchor maxInclusive, int plateau) implements HeightProvider {}
+    record Trapezoid(VerticalAnchor minInclusive, VerticalAnchor maxInclusive, int plateau) implements HeightProvider {}
 
     @AsOf("2.3.0")
-    record BiasedToBottom(@NotNull VerticalAnchor minInclusive, @NotNull VerticalAnchor maxInclusive, int inner) implements HeightProvider {}
+    record BiasedToBottom(VerticalAnchor minInclusive, VerticalAnchor maxInclusive, int inner) implements HeightProvider {}
 
     @AsOf("2.3.0")
-    record VeryBiasedToBottom(@NotNull VerticalAnchor minInclusive, @NotNull VerticalAnchor maxInclusive, int inner) implements HeightProvider {}
+    record VeryBiasedToBottom(VerticalAnchor minInclusive, VerticalAnchor maxInclusive, int inner) implements HeightProvider {}
 }

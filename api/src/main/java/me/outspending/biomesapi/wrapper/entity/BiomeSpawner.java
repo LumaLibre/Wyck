@@ -9,7 +9,7 @@ import me.outspending.biomesapi.wrapper.entity.data.SpawnCost;
 import me.outspending.biomesapi.wrapper.entity.data.NaturalSpawner;
 import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Map;
 
@@ -20,6 +20,7 @@ import java.util.Map;
  * @version 2.3.0
  * @author Jsinco
  */
+@NullMarked
 @AsOf("2.3.0")
 public interface BiomeSpawner extends NmsHandle {
 
@@ -30,7 +31,7 @@ public interface BiomeSpawner extends NmsHandle {
 
     @ApiStatus.Internal
     interface Factory {
-        @NotNull BiomeSpawner create(@NotNull Map<MobCategory, WeightedList.Builder<NaturalSpawner>> spawners, @NotNull Map<EntityType, SpawnCost> mobSpawnCosts, float creatureGenerationProbability);
+        BiomeSpawner create(Map<MobCategory, WeightedList.Builder<NaturalSpawner>> spawners, Map<EntityType, SpawnCost> mobSpawnCosts, float creatureGenerationProbability);
     }
 
     /**
@@ -39,7 +40,7 @@ public interface BiomeSpawner extends NmsHandle {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    @NotNull Map<MobCategory, WeightedList<NaturalSpawner>> spawners();
+    Map<MobCategory, WeightedList<NaturalSpawner>> spawners();
 
     /**
      * Gets the spawn cost for each mob type.
@@ -47,7 +48,7 @@ public interface BiomeSpawner extends NmsHandle {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    @NotNull Map<EntityType, SpawnCost> mobSpawnCosts();
+    Map<EntityType, SpawnCost> mobSpawnCosts();
 
     /**
      * Gets the creature generation probability.
@@ -63,7 +64,7 @@ public interface BiomeSpawner extends NmsHandle {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    default @NotNull Builder toBuilder() {
+    default Builder toBuilder() {
         return new Builder(this);
     }
 
@@ -72,7 +73,7 @@ public interface BiomeSpawner extends NmsHandle {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static @NotNull Builder builder() {
+    static Builder builder() {
         return new Builder();
     }
 
@@ -81,7 +82,7 @@ public interface BiomeSpawner extends NmsHandle {
      * @return an empty BiomeSpawner
      */
     @AsOf("2.3.0")
-    static @NotNull BiomeSpawner empty() {
+    static BiomeSpawner empty() {
         return builder().build();
     }
 
@@ -105,7 +106,7 @@ public interface BiomeSpawner extends NmsHandle {
         }
 
         @AsOf("2.3.0")
-        public Builder(@NotNull BiomeSpawner biomeSpawner) {
+        public Builder(BiomeSpawner biomeSpawner) {
             this.spawners = Maps.newLinkedHashMap();
             for (Map.Entry<MobCategory, WeightedList<NaturalSpawner>> entry : biomeSpawner.spawners().entrySet()) {
                 WeightedList.Builder<NaturalSpawner> builder = WeightedList.builder();
@@ -126,7 +127,7 @@ public interface BiomeSpawner extends NmsHandle {
          * @since 2.3.0
          */
         @AsOf("2.3.0")
-        public @NotNull Builder addSpawner(MobCategory category, NaturalSpawner spawner) {
+        public Builder addSpawner(MobCategory category, NaturalSpawner spawner) {
             this.spawners.computeIfAbsent(category, c -> WeightedList.builder()).add(spawner);
             return this;
         }
@@ -140,7 +141,7 @@ public interface BiomeSpawner extends NmsHandle {
          * @since 2.3.0
          */
         @AsOf("2.3.0")
-        public @NotNull Builder addSpawner(MobCategory category, int weight, NaturalSpawner spawner) {
+        public Builder addSpawner(MobCategory category, int weight, NaturalSpawner spawner) {
             this.spawners.computeIfAbsent(category, c -> WeightedList.builder()).add(spawner, weight);
             return this;
         }
@@ -156,7 +157,7 @@ public interface BiomeSpawner extends NmsHandle {
          * @since 2.3.0
          */
         @AsOf("2.3.0")
-        public @NotNull Builder addSpawners(MobCategory category, int weight, EntityType type, int minCount, int maxCount) {
+        public Builder addSpawners(MobCategory category, int weight, EntityType type, int minCount, int maxCount) {
             return this.addSpawner(category, weight, new NaturalSpawner(type, minCount, maxCount));
         }
 
@@ -168,7 +169,7 @@ public interface BiomeSpawner extends NmsHandle {
          * @since 2.3.0
          */
         @AsOf("2.3.0")
-        public @NotNull Builder addSpawners(MobCategory category, WeightedList<NaturalSpawner> list) {
+        public Builder addSpawners(MobCategory category, WeightedList<NaturalSpawner> list) {
             WeightedList.Builder<NaturalSpawner> weightedList = this.spawners.computeIfAbsent(category, c -> WeightedList.builder());
             for (WeightedList.Weighted<NaturalSpawner> entry : list.unwrap()) {
                 weightedList.add(entry.value(), entry.weight());
@@ -184,7 +185,7 @@ public interface BiomeSpawner extends NmsHandle {
          * @since 2.3.0
          */
         @AsOf("2.3.0")
-        public @NotNull Builder addMobSpawnCost(EntityType type, SpawnCost cost) {
+        public Builder addMobSpawnCost(EntityType type, SpawnCost cost) {
             this.mobSpawnCosts.put(type, cost);
             return this;
         }
@@ -198,7 +199,7 @@ public interface BiomeSpawner extends NmsHandle {
          * @since 2.3.0
          */
         @AsOf("2.3.0")
-        public @NotNull Builder addMobSpawnCost(EntityType type, double charge, double energyBudget) {
+        public Builder addMobSpawnCost(EntityType type, double charge, double energyBudget) {
             this.mobSpawnCosts.put(type, new SpawnCost(charge, energyBudget));
             return this;
         }
@@ -210,7 +211,7 @@ public interface BiomeSpawner extends NmsHandle {
          * @since 2.3.0
          */
         @AsOf("2.3.0")
-        public @NotNull Builder addMobSpawnCosts(Map<EntityType, SpawnCost> costs) {
+        public Builder addMobSpawnCosts(Map<EntityType, SpawnCost> costs) {
             this.mobSpawnCosts.putAll(costs);
             return this;
         }
@@ -223,7 +224,7 @@ public interface BiomeSpawner extends NmsHandle {
          * @since 2.3.0
          */
         @AsOf("2.3.0")
-        public @NotNull Builder setCreatureGenerationProbability(float probability) {
+        public Builder setCreatureGenerationProbability(float probability) {
             this.creatureGenerationProbability = probability;
             return this;
         }
@@ -234,7 +235,7 @@ public interface BiomeSpawner extends NmsHandle {
          * @since 2.3.0
          */
         @AsOf("2.3.0")
-        public @NotNull BiomeSpawner build() {
+        public BiomeSpawner build() {
             return WIRE.get().create(spawners, mobSpawnCosts, creatureGenerationProbability);
         }
     }

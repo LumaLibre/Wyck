@@ -3,6 +3,7 @@ package me.outspending.biomesapi.wrapper.environment;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.unsafe.KeyedEnumTranslator;
 import me.outspending.biomesapi.unsafe.NmsEnumTranslatable;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * This enum represents the temperature modifier for a biome in Minecraft.
@@ -13,6 +14,7 @@ import me.outspending.biomesapi.unsafe.NmsEnumTranslatable;
  * @since 0.0.1
  * @author Outspending
  */
+@NullMarked
 @AsOf("0.0.1")
 public enum BiomeTempModifier implements NmsEnumTranslatable<BiomeTempModifier> {
 

@@ -3,7 +3,7 @@ package me.outspending.biomesapi.wrapper.worldgen.feature;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.annotations.Generated;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Auto-generated. Do not modify!
@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
  * @author BiomesAPI codegen
  */
 @AsOf("2.3.0")
-@Generated("2026-06-06T03:41:23.393283Z")
+@Generated("2026-06-06T19:27:06.382526Z")
 public final class ConfiguredFeatures {
 
     // From: AquaticFeatures 
@@ -480,7 +480,7 @@ public final class ConfiguredFeatures {
     @AsOf("2.3.0")
     public static final ConfiguredFeature MANGROVE_VEGETATION = reference("mangrove_vegetation");
 
-    private static @NotNull ConfiguredFeature reference(@NotNull String path) {
+    private static @NonNull ConfiguredFeature reference(@NonNull String path) {
         return ConfiguredFeature.reference(BiomeResourceKey.minecraft(path));
     }
 

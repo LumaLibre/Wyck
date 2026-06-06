@@ -7,6 +7,7 @@ import me.outspending.biomesapi.renderer.packet.PacketHandler;
 import me.outspending.biomesapi.renderer.packet.PhonyBiomeResolver;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Internal handler for NMS-level chunk packet manipulation. Implemented by the NMS module.
@@ -15,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
  * @since 2.0.0
  * @author Jsinco
  */
+@NullMarked
 @AsOf("2.0.0")
 @ApiStatus.Internal
 public interface NativeChunkPacketHandler {
@@ -41,5 +43,5 @@ public interface NativeChunkPacketHandler {
      * @param dimensionSectionCount how many sections the dimension has
      */
     @AsOf("2.2.0")
-    void modifyChunkBiomes(@NotNull Object chunkData, @NotNull ChunkLocation chunkLocation, @NotNull PhonyBiomeResolver resolver, @NotNull PacketHandler.DimensionSectionCount dimensionSectionCount);
+    void modifyChunkBiomes(Object chunkData, ChunkLocation chunkLocation, PhonyBiomeResolver resolver, PacketHandler.DimensionSectionCount dimensionSectionCount);
 }

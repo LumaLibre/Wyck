@@ -7,6 +7,7 @@ import me.outspending.biomesapi.wrapper.NmsHandle;
 import me.outspending.biomesapi.wrapper.worldgen.feature.ConfiguredFeature;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 import java.util.Objects;
@@ -21,6 +22,7 @@ import java.util.Objects;
  * @version 2.3.0
  * @author Jsinco
  */
+@NullMarked
 @AsOf("2.3.0")
 public sealed interface PlacedFeature extends NmsHandle permits PlacedFeature.Reference, PlacedFeature.Custom {
 
@@ -29,7 +31,7 @@ public sealed interface PlacedFeature extends NmsHandle permits PlacedFeature.Re
 
     @ApiStatus.Internal
     interface Factory {
-        @NotNull Object toNms(@NotNull PlacedFeature feature);
+        Object toNms(PlacedFeature feature);
     }
 
     /**
@@ -39,7 +41,7 @@ public sealed interface PlacedFeature extends NmsHandle permits PlacedFeature.Re
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static @NotNull PlacedFeature reference(@NotNull BiomeResourceKey key) {
+    static PlacedFeature reference(BiomeResourceKey key) {
         return new Reference(key);
     }
 
@@ -51,7 +53,7 @@ public sealed interface PlacedFeature extends NmsHandle permits PlacedFeature.Re
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static @NotNull PlacedFeature of(@NotNull ConfiguredFeature feature, @NotNull List<PlacementModifier> placement) {
+    static PlacedFeature of(ConfiguredFeature feature, List<PlacementModifier> placement) {
         return new Custom(feature, placement);
     }
 
@@ -63,13 +65,13 @@ public sealed interface PlacedFeature extends NmsHandle permits PlacedFeature.Re
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static @NotNull PlacedFeature of(@NotNull ConfiguredFeature feature, @NotNull PlacementModifier... placement) {
+    static PlacedFeature of(ConfiguredFeature feature, PlacementModifier... placement) {
         return new Custom(feature, List.of(placement));
     }
 
     @Override
     @AsOf("2.3.0")
-    default @NotNull Object toMinecraft() {
+    default Object toMinecraft() {
         return WIRE.get().toNms(this);
     }
 
@@ -78,14 +80,14 @@ public sealed interface PlacedFeature extends NmsHandle permits PlacedFeature.Re
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    record Reference(@NotNull BiomeResourceKey key) implements PlacedFeature {}
+    record Reference(BiomeResourceKey key) implements PlacedFeature {}
 
     /**
      * A placed feature authored from a configured feature and a modifier list.
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    record Custom(@NotNull ConfiguredFeature feature, @NotNull List<PlacementModifier> placement) implements PlacedFeature {
+    record Custom(ConfiguredFeature feature, List<PlacementModifier> placement) implements PlacedFeature {
 
         @AsOf("2.3.0")
         public Custom {

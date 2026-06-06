@@ -1,17 +1,19 @@
 package me.outspending.biomesapi.wrapper.environment.particle;
 
 import me.outspending.biomesapi.annotations.AsOf;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * An interface for particle data that can be applied to a specific particle type.
  *
  * @see ParticleCatalog
  * @since 1.1.0
+ * @version 2.0.0
  * @author Jsinco
- * @param <T> The type of ParticleOptions associated with the particle data.
  */
-public interface ParticleData<T> {
+@NullMarked
+@AsOf("2.0.0")
+public interface ParticleData {
 
     /**
      * Parses a hexadecimal color string and returns its integer representation.
@@ -19,7 +21,7 @@ public interface ParticleData<T> {
      * @return The integer representation of the color.
      */
     @AsOf("1.1.0")
-    static int parseHex(@NotNull String color) {
+    static int parseHex(String color) {
         if (color.isEmpty()) {
             return 0;
         } else if (color.startsWith("#")) {
@@ -34,6 +36,6 @@ public interface ParticleData<T> {
      * @return The ParticleOptions representing the applied particle data.
      */
     @AsOf("1.1.0")
-    @NotNull ParticleOptionsHandle apply(@NotNull ParticleTypeHandle particleType);
+    ParticleOptionsHandle apply(ParticleTypeHandle particleType);
 
 }

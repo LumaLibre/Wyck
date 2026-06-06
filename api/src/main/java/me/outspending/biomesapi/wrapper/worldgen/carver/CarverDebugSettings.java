@@ -6,7 +6,7 @@ import me.outspending.biomesapi.wrapper.NmsHandle;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Wraps Minecraft's CarverDebugSettings, the block states a carver paints
@@ -16,13 +16,14 @@ import org.jetbrains.annotations.NotNull;
  * @version 2.3.0
  * @author Jsinco
  */
+@NullMarked
 @AsOf("2.3.0")
 public record CarverDebugSettings(
         boolean debugMode,
-        @NotNull BlockData airState,
-        @NotNull BlockData waterState,
-        @NotNull BlockData lavaState,
-        @NotNull BlockData barrierState
+        BlockData airState,
+        BlockData waterState,
+        BlockData lavaState,
+        BlockData barrierState
 ) implements NmsHandle {
 
     @ApiStatus.Internal
@@ -30,21 +31,21 @@ public record CarverDebugSettings(
 
     @ApiStatus.Internal
     protected interface Factory {
-        @NotNull Object toNms(@NotNull CarverDebugSettings settings);
+        Object toNms(CarverDebugSettings settings);
     }
 
     @AsOf("2.3.0")
-    public static @NotNull CarverDebugSettings of(boolean debugMode, @NotNull BlockData airState, @NotNull BlockData waterState, @NotNull BlockData lavaState, @NotNull BlockData barrierState) {
+    public static CarverDebugSettings of(boolean debugMode, BlockData airState, BlockData waterState, BlockData lavaState, BlockData barrierState) {
         return new CarverDebugSettings(debugMode, airState, waterState, lavaState, barrierState);
     }
 
     @AsOf("2.3.0")
-    public static @NotNull CarverDebugSettings of(@NotNull BlockData airState, @NotNull BlockData waterState, @NotNull BlockData lavaState, @NotNull BlockData barrierState) {
+    public static CarverDebugSettings of(BlockData airState, BlockData waterState, BlockData lavaState, BlockData barrierState) {
         return new CarverDebugSettings(false, airState, waterState, lavaState, barrierState);
     }
 
     @AsOf("2.3.0")
-    public static @NotNull CarverDebugSettings defaultSettings() {
+    public static CarverDebugSettings defaultSettings() {
         return new CarverDebugSettings(
                 false,
                 Material.ACACIA_BUTTON.createBlockData(),
@@ -56,7 +57,7 @@ public record CarverDebugSettings(
 
     @Override
     @AsOf("2.3.0")
-    public @NotNull Object toMinecraft() {
+    public Object toMinecraft() {
         return WIRE.get().toNms(this);
     }
 }

@@ -13,7 +13,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * This utility class provides methods to set the biome of blocks, chunks, and regions in the game.
@@ -22,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
  * @since 0.0.1
  * @author Outspending
  */
+@NullMarked
 @AsOf("2.1.0")
 public interface BiomeSetter extends AbstractBiomeRenderer {
 
@@ -50,7 +51,7 @@ public interface BiomeSetter extends AbstractBiomeRenderer {
      */
     @AsOf("2.1.0")
     @ApiStatus.Obsolete
-    static BiomeSetter of(@NotNull Plugin provider) {
+    static BiomeSetter of(Plugin provider) {
         return new GlobalBiomeSetter(provider);
     }
 
@@ -61,7 +62,7 @@ public interface BiomeSetter extends AbstractBiomeRenderer {
      * @since 2.1.0
      */
     @AsOf("2.1.0")
-    static BiomeSetter of(@NotNull BiomeUpdater updater) {
+    static BiomeSetter of(BiomeUpdater updater) {
         return new GlobalBiomeSetter(updater);
     }
 
@@ -75,7 +76,7 @@ public interface BiomeSetter extends AbstractBiomeRenderer {
      * @since 0.0.1
      */
     @AsOf("0.0.1")
-    default @NotNull RegionAccessor getRegionAccessor(@NotNull Location location) {
+    default RegionAccessor getRegionAccessor(Location location) {
         return location.getWorld();
     }
 
@@ -87,7 +88,7 @@ public interface BiomeSetter extends AbstractBiomeRenderer {
      * @since 0.0.1
      */
     @AsOf("0.0.1")
-    void setBlockBiome(@NotNull Block block, @NotNull CustomBiome customBiome);
+    void setBlockBiome(Block block, CustomBiome customBiome);
 
     /**
      * Sets the biome of a block to a custom biome.
@@ -101,7 +102,7 @@ public interface BiomeSetter extends AbstractBiomeRenderer {
      * @since 0.0.1
      */
     @AsOf("0.0.1")
-    void setBlockBiome(@NotNull Block block, @NotNull CustomBiome customBiome, boolean updateBiome);
+    void setBlockBiome(Block block, CustomBiome customBiome, boolean updateBiome);
 
     /**
      * Sets the biome of a chunk to a custom biome.
@@ -111,7 +112,7 @@ public interface BiomeSetter extends AbstractBiomeRenderer {
      * @since 0.0.1
      */
     @AsOf("0.0.1")
-    void setChunkBiome(@NotNull Chunk chunk, @NotNull CustomBiome customBiome);
+    void setChunkBiome(Chunk chunk, CustomBiome customBiome);
 
     /**
      * Sets the biome of a chunk to a custom biome within the default height range.
@@ -124,7 +125,7 @@ public interface BiomeSetter extends AbstractBiomeRenderer {
      * @since 0.0.1
      */
     @AsOf("0.0.1")
-    void setChunkBiome(@NotNull Chunk chunk, @NotNull CustomBiome customBiome, boolean updateBiome);
+    void setChunkBiome(Chunk chunk, CustomBiome customBiome, boolean updateBiome);
 
     /**
      * Sets the biome of a chunk to a custom biome within a height range.
@@ -136,7 +137,7 @@ public interface BiomeSetter extends AbstractBiomeRenderer {
      * @since 0.0.1
      */
     @AsOf("0.0.1")
-    void setChunkBiome(@NotNull Chunk chunk, int minHeight, int maxHeight, @NotNull CustomBiome customBiome);
+    void setChunkBiome(Chunk chunk, int minHeight, int maxHeight, CustomBiome customBiome);
 
    /**
      * Sets the biome of a chunk to a custom biome within a specified height range.
@@ -152,7 +153,7 @@ public interface BiomeSetter extends AbstractBiomeRenderer {
      * @since 0.0.1
      */
    @AsOf("0.0.1")
-   void setChunkBiome(@NotNull Chunk chunk, int minHeight, int maxHeight, @NotNull CustomBiome customBiome, boolean updateBiome);
+   void setChunkBiome(Chunk chunk, int minHeight, int maxHeight, CustomBiome customBiome, boolean updateBiome);
 
     /**
      * Sets the biome of a bounding box to a custom biome.
@@ -163,7 +164,7 @@ public interface BiomeSetter extends AbstractBiomeRenderer {
      * @since 0.0.1
      */
     @AsOf("0.0.1")
-    void setBoundingBoxBiome(@NotNull World world, @NotNull BoundingBox boundingBox, @NotNull CustomBiome customBiome);
+    void setBoundingBoxBiome(World world, BoundingBox boundingBox, CustomBiome customBiome);
 
     /**
      * Sets the biome of a region to a custom biome.
@@ -174,7 +175,7 @@ public interface BiomeSetter extends AbstractBiomeRenderer {
      * @since 0.0.1
      */
     @AsOf("0.0.1")
-    void setRegionBiome(@NotNull Location from, @NotNull Location to, @NotNull CustomBiome customBiome);
+    void setRegionBiome(Location from, Location to, CustomBiome customBiome);
 
     /**
      * Sets the biome of a region to a custom biome.
@@ -187,7 +188,7 @@ public interface BiomeSetter extends AbstractBiomeRenderer {
      * @since 0.0.1
      */
     @AsOf("0.0.1")
-    void setRegionBiome(@NotNull Location from, @NotNull Location to, @NotNull CustomBiome customBiome, boolean updateBiome);
+    void setRegionBiome(Location from, Location to, CustomBiome customBiome, boolean updateBiome);
 
     /**
      * Sets the biome of a region to a custom biome.
@@ -199,7 +200,7 @@ public interface BiomeSetter extends AbstractBiomeRenderer {
      * @since 0.0.1
      */
     @AsOf("0.0.1")
-    void setRegionBiome(@NotNull World world, @NotNull Vector from, @NotNull Vector to, @NotNull CustomBiome customBiome);
+    void setRegionBiome(World world, Vector from, Vector to, CustomBiome customBiome);
 
     /**
      * Sets the biome of a region to a custom biome.
@@ -213,7 +214,7 @@ public interface BiomeSetter extends AbstractBiomeRenderer {
      * @since 0.0.1
      */
     @AsOf("0.0.2")
-    void setRegionBiome(@NotNull World world, @NotNull Vector from, @NotNull Vector to, @NotNull CustomBiome customBiome, boolean updateBiome);
+    void setRegionBiome(World world, Vector from, Vector to, CustomBiome customBiome, boolean updateBiome);
 
     /**
      * Sets the biome of a region to a custom biome.
@@ -229,6 +230,6 @@ public interface BiomeSetter extends AbstractBiomeRenderer {
      * @since 0.0.2
      */
     @AsOf("0.0.1")
-    void setRegionBiome(@NotNull World world, @NotNull Location from, @NotNull Location to, @NotNull CustomBiome customBiome, boolean updateBiome);
+    void setRegionBiome(World world, Location from, Location to, CustomBiome customBiome, boolean updateBiome);
 
 }

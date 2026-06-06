@@ -14,8 +14,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -30,6 +30,7 @@ import java.util.concurrent.TimeUnit;
  * @version 2.1.0
  * @author Jsinco
  */
+@NullMarked
 @AsOf("2.1.0")
 @ApiStatus.Experimental
 @ApiStatus.NonExtendable
@@ -45,7 +46,7 @@ public interface BiomesAPI {
      * @since 2.1.0
      */
     @AsOf("2.1.0")
-    static @NotNull BiomesAPI biomesapi() {
+    static BiomesAPI biomesapi() {
         return WIRE.optional().orElseGet(ShadedBiomesAPI::get);
     }
 
@@ -56,7 +57,7 @@ public interface BiomesAPI {
      * @throws IllegalStateException if called from the static initializer for the given JavaPlugin
      */
     @AsOf("2.1.0")
-    default @NotNull JavaPlugin plugin() {
+    default JavaPlugin plugin() {
         try {
             return WIRE.optional()
                     .filter(api -> api instanceof JavaPlugin)
@@ -72,7 +73,7 @@ public interface BiomesAPI {
      * @since 2.1.0
      */
     @AsOf("2.1.0")
-    default @NotNull String version() {
+    default String version() {
         return BuildInfo.VERSION;
     }
 

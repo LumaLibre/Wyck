@@ -4,6 +4,7 @@ import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 // TODO: Custom ConfiguredFeature implementations
 /**
@@ -13,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
  * @version 2.3.0
  * @author Jsinco
  */
+@NullMarked
 @AsOf("2.3.0")
 @ApiStatus.Experimental
 public enum FeatureType {
@@ -91,7 +93,7 @@ public enum FeatureType {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    public @NotNull String getKey() {
+    public String getKey() {
         return this.key;
     }
 
@@ -101,7 +103,7 @@ public enum FeatureType {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    public @NotNull BiomeResourceKey resourceKey() {
+    public BiomeResourceKey resourceKey() {
         return BiomeResourceKey.minecraft(this.key);
     }
 }

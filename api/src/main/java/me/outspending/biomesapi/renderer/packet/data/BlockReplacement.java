@@ -3,6 +3,7 @@ package me.outspending.biomesapi.renderer.packet.data;
 import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.annotations.AsOf;
 import org.bukkit.Material;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,6 +18,7 @@ import java.util.Map;
  * @since 0.0.6
  * @author Jsinco
  */
+@NullMarked
 @AsOf("0.0.6")
 public record BlockReplacement(Material original, Material replacement) {
 

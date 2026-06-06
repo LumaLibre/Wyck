@@ -6,15 +6,16 @@ import me.outspending.biomesapi.renderer.packet.PacketHandler;
 import me.outspending.biomesapi.renderer.packet.PhonyCustomBiomeCollector;
 import me.outspending.biomesapi.renderer.packet.handlers.PacketEventsPacketHandler;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 @AsOf("2.1.0")
 @ApiStatus.Internal
 public class MonotonicPacketEventsHandler extends PacketEventsPacketHandler {
 
     private boolean registered;
 
-    public MonotonicPacketEventsHandler(@NotNull Priority priority, @NotNull PhonyCustomBiomeCollector collector) {
+    public MonotonicPacketEventsHandler(Priority priority, PhonyCustomBiomeCollector collector) {
         super(priority, collector);
     }
 

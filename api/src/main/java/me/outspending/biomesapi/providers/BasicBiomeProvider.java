@@ -7,7 +7,7 @@ import me.outspending.biomesapi.util.Lazy;
 import org.bukkit.block.Biome;
 import org.bukkit.generator.WorldInfo;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 
@@ -17,6 +17,7 @@ import java.util.List;
  * @version 2.3.0
  * @author Jsinco
  */
+@NullMarked
 @AsOf("2.3.0")
 @ApiStatus.Experimental
 public final class BasicBiomeProvider extends CustomBiomeProvider {
@@ -24,7 +25,7 @@ public final class BasicBiomeProvider extends CustomBiomeProvider {
     private final Lazy<Biome> biome;
 
     @AsOf("2.3.0")
-    public BasicBiomeProvider(@NotNull CustomBiome customBiome) {
+    public BasicBiomeProvider(CustomBiome customBiome) {
         Preconditions.checkNotNull(customBiome, "customBiome cannot be null");
         this.biome = Lazy.of(customBiome::toBukkitBiome);
         super(List.of(customBiome));
@@ -32,12 +33,12 @@ public final class BasicBiomeProvider extends CustomBiomeProvider {
 
     @Override
     @AsOf("2.3.0")
-    public @NotNull Biome getBiome(@NotNull WorldInfo worldInfo, int x, int y, int z) {
+    public Biome getBiome(WorldInfo worldInfo, int x, int y, int z) {
         return biome.get();
     }
 
     @AsOf("2.3.0")
-    public static @NotNull BasicBiomeProvider of(CustomBiome biome) {
+    public static BasicBiomeProvider of(CustomBiome biome) {
         return new BasicBiomeProvider(biome);
     }
 }

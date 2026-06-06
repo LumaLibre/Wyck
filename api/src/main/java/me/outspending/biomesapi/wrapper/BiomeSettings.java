@@ -2,8 +2,8 @@ package me.outspending.biomesapi.wrapper;
 
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.wrapper.environment.BiomeTempModifier;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * This is a record class that represents the settings for a biome in Minecraft.
@@ -14,13 +14,14 @@ import org.jetbrains.annotations.Range;
  * @since 0.0.1
  * @author Outspending
  */
+@NullMarked
 @AsOf("0.0.8")
 public record BiomeSettings(
         @Range(from = 0, to = 25) float depth,
         @Range(from = 0, to = 25) float scale,
         @Range(from = 0, to = 25) float temperature,
         @Range(from = 0, to = 25) float downfall,
-        @NotNull BiomeTempModifier modifier,
+        BiomeTempModifier modifier,
         boolean hasPrecipitation
 ) {
 
@@ -31,7 +32,7 @@ public record BiomeSettings(
      * @return a new Builder object.
      */
     @AsOf("0.0.1")
-    public static @NotNull Builder builder() {
+    public static Builder builder() {
         return new Builder();
     }
 
@@ -43,7 +44,7 @@ public record BiomeSettings(
      * @return a new BiomeSettings object with default settings.
      */
     @AsOf("0.0.1")
-    public static @NotNull BiomeSettings defaultSettings() {
+    public static BiomeSettings defaultSettings() {
         return new BiomeSettings(0.1F, 0.2F, 0.5F, 0.5F, BiomeTempModifier.NONE, true);
     }
 
@@ -73,7 +74,7 @@ public record BiomeSettings(
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("0.0.1")
-        public @NotNull Builder depth(@Range(from = 0, to = 25) float depth) {
+        public Builder depth(@Range(from = 0, to = 25) float depth) {
             this.depth = depth;
             return this;
         }
@@ -86,7 +87,7 @@ public record BiomeSettings(
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("0.0.1")
-        public @NotNull Builder scale(@Range(from = 0, to = 25) float scale) {
+        public Builder scale(@Range(from = 0, to = 25) float scale) {
             this.scale = scale;
             return this;
         }
@@ -99,7 +100,7 @@ public record BiomeSettings(
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("0.0.1")
-        public @NotNull Builder temperature(@Range(from = 0, to = 25) float temperature) {
+        public Builder temperature(@Range(from = 0, to = 25) float temperature) {
             this.temperature = temperature;
             return this;
         }
@@ -112,7 +113,7 @@ public record BiomeSettings(
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("0.0.1")
-        public @NotNull Builder downfall(@Range(from = 0, to = 25) float downfall) {
+        public Builder downfall(@Range(from = 0, to = 25) float downfall) {
             this.downfall = downfall;
             return this;
         }
@@ -125,7 +126,7 @@ public record BiomeSettings(
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("0.0.8")
-        public @NotNull Builder modifier(@NotNull BiomeTempModifier modifier) {
+        public Builder modifier(BiomeTempModifier modifier) {
             this.modifier = modifier;
             return this;
         }
@@ -138,7 +139,7 @@ public record BiomeSettings(
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("0.0.8")
-        public @NotNull Builder hasPrecipitation(boolean hasPrecipitation) {
+        public Builder hasPrecipitation(boolean hasPrecipitation) {
             this.hasPrecipitation = hasPrecipitation;
             return this;
         }
@@ -150,7 +151,7 @@ public record BiomeSettings(
          * @return a new BiomeSettings object.
          */
         @AsOf("0.0.1")
-        public @NotNull BiomeSettings build() {
+        public BiomeSettings build() {
             return new BiomeSettings(depth, scale, temperature, downfall, modifier, hasPrecipitation);
         }
 

@@ -2,6 +2,7 @@ package me.outspending.biomesapi.wrapper.worldgen.carver;
 
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Typed references to the built-in configured carvers registered by vanilla.
@@ -12,6 +13,7 @@ import me.outspending.biomesapi.registry.BiomeResourceKey;
  * @version 2.3.0
  * @author Jsinco
  */
+@NullMarked
 @AsOf("2.3.0")
 public final class Carvers {
 

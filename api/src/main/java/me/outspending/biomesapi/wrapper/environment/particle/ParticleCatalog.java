@@ -2,8 +2,8 @@ package me.outspending.biomesapi.wrapper.environment.particle;
 
 import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.annotations.AsOf;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +16,7 @@ import java.util.List;
  * @author Jsinco
  * @param particles The list of wrapped ambient particles.
  */
+@NullMarked
 @AsOf("2.1.0")
 public record ParticleCatalog(List<WrappedAmbientParticle<?>> particles) {
 
@@ -46,7 +47,7 @@ public record ParticleCatalog(List<WrappedAmbientParticle<?>> particles) {
      * @return A ParticleCatalog containing the specified complex particle.
      */
     @AsOf("1.1.0")
-    public static <T extends ParticleData<T>> ParticleCatalog ofComplex(WrappedParticleTypes particleType, float probability, @NotNull ParticleData<T> data) {
+    public static ParticleCatalog ofComplex(WrappedParticleTypes particleType, float probability, ParticleData data) {
         Preconditions.checkArgument(!particleType.isSimple(), "Particle type must not be simple.");
         return new ParticleCatalog(List.of(new WrappedAmbientParticle<>(particleType, probability, data)));
     }
@@ -85,11 +86,10 @@ public record ParticleCatalog(List<WrappedAmbientParticle<?>> particles) {
      * @param probability The probability of the particle.
      * @param data The particle data.
      * @return A new ParticleCatalog with the specified particle added.
-     * @param <T> The type of particle options.
      * @since 2.1.0
      */
     @AsOf("2.1.0")
-    public <T extends ParticleData<T>> ParticleCatalog with(WrappedParticleTypes type, float probability, @Nullable T data) {
+    public <T extends ParticleData> ParticleCatalog with(WrappedParticleTypes type, float probability, @Nullable T data) {
         List<WrappedAmbientParticle<?>> copy = new ArrayList<>(particles);
         copy.add(new WrappedAmbientParticle<>(type, probability, data));
         return new ParticleCatalog(copy);
@@ -122,10 +122,9 @@ public record ParticleCatalog(List<WrappedAmbientParticle<?>> particles) {
          * @param probability The probability of the particle.
          * @param data The particle data, or null for simple particles.
          * @return The builder instance.
-         * @param <T> The type of particle options.
          */
         @AsOf("1.1.0")
-        public <T> Builder addParticle(WrappedParticleTypes particleType, float probability, @Nullable ParticleData<T> data) {
+        public Builder addParticle(WrappedParticleTypes particleType, float probability, @Nullable ParticleData data) {
             particles.add(new WrappedAmbientParticle<>(particleType, probability, data));
             return this;
         }
@@ -148,10 +147,9 @@ public record ParticleCatalog(List<WrappedAmbientParticle<?>> particles) {
          * @param probability The probability of the particle.
          * @param data The particle data.
          * @return The builder instance.
-         * @param <T> The type of particle options.
          */
         @AsOf("1.1.0")
-        public <T> Builder addComplex(WrappedParticleTypes particleType, float probability, @NotNull ParticleData<T> data) {
+        public Builder addComplex(WrappedParticleTypes particleType, float probability, ParticleData data) {
             Preconditions.checkArgument(!particleType.isSimple(), "Particle type must not be simple.");
             particles.add(new WrappedAmbientParticle<>(particleType, probability, data));
             return this;
@@ -188,7 +186,7 @@ public record ParticleCatalog(List<WrappedAmbientParticle<?>> particles) {
          * @since 2.1.0
          */
         @AsOf("2.1.0")
-        public Builder addAll(@NotNull ParticleCatalog source) {
+        public Builder addAll(ParticleCatalog source) {
             particles.addAll(source.particles);
             return this;
         }

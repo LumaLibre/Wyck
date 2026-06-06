@@ -7,8 +7,8 @@ import me.outspending.biomesapi.registry.BiomeResourceKey;
 import me.outspending.biomesapi.renderer.packet.data.PhonyCustomBiome;
 import me.outspending.biomesapi.renderer.packet.data.SnapshotChunkData;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -24,6 +24,7 @@ import java.util.function.BiPredicate;
  * @since 0.0.6
  * @author Jsinco
  */
+@NullMarked
 @AsOf("0.0.6")
 public class PhonyCustomBiomeCollector {
 
@@ -35,7 +36,7 @@ public class PhonyCustomBiomeCollector {
      * @param biome the phony custom biome to append
      */
     @AsOf("0.0.6")
-    public void appendBiome(@NotNull PhonyCustomBiome biome) {
+    public void appendBiome(PhonyCustomBiome biome) {
         if (backing.contains(biome)) {
             throw new IllegalArgumentException("PhonyCustomBiome with key " + biome.biomeResourceKey() + " is already registered.");
         }
@@ -48,7 +49,7 @@ public class PhonyCustomBiomeCollector {
      * @return true if the collector has the biome, false otherwise
      */
     @AsOf("0.0.6")
-    public boolean hasBiome(@NotNull PhonyCustomBiome biome) {
+    public boolean hasBiome(PhonyCustomBiome biome) {
         return backing.contains(biome);
     }
 
@@ -59,7 +60,7 @@ public class PhonyCustomBiomeCollector {
      * @version 0.0.8
      */
     @AsOf("0.0.6")
-    public boolean hasBiome(@NotNull BiomeResourceKey biomeKey) {
+    public boolean hasBiome(BiomeResourceKey biomeKey) {
         return backing.stream().anyMatch((PhonyCustomBiome biome) -> biome.biomeResourceKey().equals(biomeKey));
     }
 
@@ -69,7 +70,7 @@ public class PhonyCustomBiomeCollector {
      * @return true if the biome was removed, false if it was not found
      */
     @AsOf("0.0.6")
-    public boolean removeBiome(@NotNull PhonyCustomBiome biome) {
+    public boolean removeBiome(PhonyCustomBiome biome) {
         return backing.remove(biome);
     }
 
@@ -81,7 +82,7 @@ public class PhonyCustomBiomeCollector {
      * @version 0.0.8
      */
     @AsOf("0.0.6")
-    public boolean removeBiome(@NotNull BiomeResourceKey biomeKey) {
+    public boolean removeBiome(BiomeResourceKey biomeKey) {
         return backing.removeIf((PhonyCustomBiome biome) -> biome.biomeResourceKey().equals(biomeKey));
     }
 
@@ -106,7 +107,7 @@ public class PhonyCustomBiomeCollector {
      * @return the best phony custom biome, or null if none match
      */
     @AsOf("0.0.6")
-    public @Nullable PhonyCustomBiome bestBiomeFor(@NotNull Player player, @NotNull ChunkLocation chunkLocation) {
+    public @Nullable PhonyCustomBiome bestBiomeFor(Player player, ChunkLocation chunkLocation) {
         if (backing.isEmpty()) {
             return null;
         }
@@ -124,7 +125,7 @@ public class PhonyCustomBiomeCollector {
      * @return the best custom biome, or null if none match
      */
     @AsOf("0.0.8")
-    public @Nullable CustomBiome bestCustomBiomeFor(@NotNull Player player, @NotNull ChunkLocation chunkLocation) {
+    public @Nullable CustomBiome bestCustomBiomeFor(Player player, ChunkLocation chunkLocation) {
         PhonyCustomBiome phony = bestBiomeFor(player, chunkLocation);
         return phony != null ? phony.toCustomBiome() : null;
     }
@@ -142,7 +143,7 @@ public class PhonyCustomBiomeCollector {
      * @return a resolver, or {@code null} if nothing could apply
      */
     @AsOf("2.2.0")
-    public @Nullable PhonyBiomeResolver resolverFor(@NotNull Player player, @NotNull ChunkLocation chunkLocation) {
+    public @Nullable PhonyBiomeResolver resolverFor(Player player, ChunkLocation chunkLocation) {
         List<PhonyCustomBiome> candidates = spatialCandidates(player, chunkLocation);
         if (candidates.isEmpty()) {
             return null;
@@ -157,7 +158,7 @@ public class PhonyCustomBiomeCollector {
      * Stage 1 (cheap, pre-decode): the phony biomes whose spatial {@link PhonyCustomBiome#conditional()}
      * accepts this player + chunk. Needs no biome data, so it can run before the chunk is decoded.
      */
-    private @NotNull List<PhonyCustomBiome> spatialCandidates(@NotNull Player player, @NotNull ChunkLocation chunkLocation) {
+    private List<PhonyCustomBiome> spatialCandidates(Player player, ChunkLocation chunkLocation) {
         if (backing.isEmpty()) {
             return List.of();
         }
@@ -176,7 +177,7 @@ public class PhonyCustomBiomeCollector {
      * Biome reads on {@code snapshot} are lazy + memoized, so candidates without a biome condition
      * never trigger a biome lookup.
      */
-    private @Nullable PhonyCustomBiome bestMatching(@NotNull List<PhonyCustomBiome> candidates, @NotNull Player player, @NotNull SnapshotChunkData snapshot) {
+    private @Nullable PhonyCustomBiome bestMatching(List<PhonyCustomBiome> candidates, Player player, SnapshotChunkData snapshot) {
         PhonyCustomBiome best = null;
         int bestLevel = Integer.MIN_VALUE;
         for (PhonyCustomBiome phony : candidates) {

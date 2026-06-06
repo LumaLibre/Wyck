@@ -7,9 +7,11 @@ import me.outspending.biomesapi.BiomesAPI;
 import me.outspending.biomesapi.annotations.AsOf;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.NonNull;
 
 @AsOf("2.1.0")
 @ApiStatus.Internal
+@SuppressWarnings("UnstableApiUsage")
 public final class BiomesAPIPluginBootstrap implements PluginBootstrap {
 
     @Override
@@ -18,7 +20,7 @@ public final class BiomesAPIPluginBootstrap implements PluginBootstrap {
     }
 
     @Override
-    public JavaPlugin createPlugin(PluginProviderContext context) {
+    public @NonNull JavaPlugin createPlugin(PluginProviderContext context) {
         BiomesAPIPlugin plugin = new BiomesAPIPlugin();
         BiomesAPI.WIRE.setProvider(BiomesAPIPluginBootstrap.class, plugin);
         context.getLogger().info("Wired BiomesAPI WireProvider to {}", plugin.getClass().getName());

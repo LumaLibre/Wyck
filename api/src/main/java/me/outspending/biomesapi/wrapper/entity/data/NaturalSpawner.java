@@ -2,6 +2,7 @@ package me.outspending.biomesapi.wrapper.entity.data;
 
 import me.outspending.biomesapi.annotations.AsOf;
 import org.bukkit.entity.EntityType;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Represents a natural spawner.
@@ -11,6 +12,7 @@ import org.bukkit.entity.EntityType;
  * @since 2.3.0
  * @version 2.3.0
  */
+@NullMarked
 @AsOf("2.3.0")
 public record NaturalSpawner(EntityType type, int minCount, int maxCount) {
     @AsOf("2.3.0")

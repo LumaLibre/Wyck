@@ -3,6 +3,7 @@ package me.outspending.biomesapi.wrapper.entity;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.unsafe.KeyedEnumTranslator;
 import me.outspending.biomesapi.unsafe.NmsEnumTranslatable;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Represents the category of a mob in Minecraft.
@@ -10,6 +11,7 @@ import me.outspending.biomesapi.unsafe.NmsEnumTranslatable;
  * @since 2.3.0
  * @author Jsinco
  */
+@NullMarked
 @AsOf("2.3.0")
 public enum MobCategory implements NmsEnumTranslatable<MobCategory> {
     MONSTER("monster"),

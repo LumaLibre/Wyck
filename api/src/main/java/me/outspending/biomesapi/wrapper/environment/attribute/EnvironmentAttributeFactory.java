@@ -3,15 +3,17 @@ package me.outspending.biomesapi.wrapper.environment.attribute;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * A factory for creating EnvironmentAttribute instances.
+ *
  * @version 2.0.0
  * @since 2.0.0
  * @author Jsinco
  */
+@NullMarked
 @AsOf("2.0.0")
 public interface EnvironmentAttributeFactory {
 
@@ -35,5 +37,5 @@ public interface EnvironmentAttributeFactory {
      * @return the default value of the wrapped attribute
      */
     @AsOf("2.0.0")
-    @NotNull <T> T defaultValue(EnvironmentAttributeHandle<T> handle);
+    <T> T defaultValue(EnvironmentAttributeHandle<T> handle);
 }

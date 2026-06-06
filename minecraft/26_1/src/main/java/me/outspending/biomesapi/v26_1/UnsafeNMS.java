@@ -25,8 +25,9 @@ import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -45,8 +46,10 @@ import java.util.function.Supplier;
  * @version 1.2.1
  * @since 1.2.1
  */
+@NullMarked
 @WireFactory
 @AsOf("1.2.1")
+@ApiStatus.Internal
 public class UnsafeNMS implements me.outspending.biomesapi.unsafe.UnsafeNMS {
 
     /**
@@ -55,9 +58,9 @@ public class UnsafeNMS implements me.outspending.biomesapi.unsafe.UnsafeNMS {
      * @param key The key for the registry to retrieve.
      * @return The registry associated with the given key.
      */
-    private static <T> MappedRegistry<@NotNull T> getRegistry(ResourceKey<@NotNull Registry<@NotNull T>> key) {
+    private static <T> MappedRegistry<T> getRegistry(ResourceKey<Registry<T>> key) {
         DedicatedServer server = RegistryUnavailable.attempt(() -> ((CraftServer) Bukkit.getServer()).getServer(), UNAVAILABLE_REGISTRY, NullPointerException.class);
-        return (MappedRegistry<@NotNull T>) server.registryAccess().lookup(key).orElseThrow(() -> new RegistryUnavailable("Could not retrieve registry for key: " + key));
+        return (MappedRegistry<T>) server.registryAccess().lookup(key).orElseThrow(() -> new RegistryUnavailable("Could not retrieve registry for key: " + key));
     }
 
     /**
@@ -67,7 +70,7 @@ public class UnsafeNMS implements me.outspending.biomesapi.unsafe.UnsafeNMS {
      * @param chunks The chunks to update.
      */
     @Override
-    public void updateChunks(@NotNull List<CompletableFuture<Chunk>> chunks, @Nullable Plugin plugin) {
+    public void updateChunks(List<CompletableFuture<Chunk>> chunks, @Nullable Plugin plugin) {
         CompletableFuture.runAsync(() -> {
             for (CompletableFuture<Chunk> chunkFuture : chunks) {
                 chunkFuture.thenAccept(chunk -> {
@@ -107,7 +110,7 @@ public class UnsafeNMS implements me.outspending.biomesapi.unsafe.UnsafeNMS {
      */
     @Override
     public void biomeRegistryLock(boolean lock) {
-        MappedRegistry<@NotNull Biome> biomes = getRegistry(Registries.BIOME);
+        MappedRegistry<Biome> biomes = getRegistry(Registries.BIOME);
         try {
             Class<?> registryClass = biomes.getClass();
             Field field = registryClass.getDeclaredField("frozen");
@@ -125,8 +128,8 @@ public class UnsafeNMS implements me.outspending.biomesapi.unsafe.UnsafeNMS {
      * @param supplier The supplier that provides the operation to perform on the unlocked registry.
      */
     @Override
-    public void unlockRegistry(@NotNull Supplier<?> supplier) {
-        MappedRegistry<@NotNull Biome> registry = getRegistry(Registries.BIOME);
+    public void unlockRegistry(Supplier<?> supplier) {
+        MappedRegistry<Biome> registry = getRegistry(Registries.BIOME);
         biomeRegistryLock(false);
         supplier.get();
 
@@ -153,7 +156,7 @@ public class UnsafeNMS implements me.outspending.biomesapi.unsafe.UnsafeNMS {
      */
     @Override
     public boolean isBiomeRegistryLocked() {
-        MappedRegistry<@NotNull Biome> biomes = getRegistry(Registries.BIOME);
+        MappedRegistry<Biome> biomes = getRegistry(Registries.BIOME);
         try {
             Class<?> registryClass = biomes.getClass();
             Field field = registryClass.getDeclaredField("frozen");
@@ -173,7 +176,7 @@ public class UnsafeNMS implements me.outspending.biomesapi.unsafe.UnsafeNMS {
      * @throws RuntimeException if the biome registry cannot be retrieved.
      */
     @Override
-    public @NotNull Registry<@NotNull Biome> getRegistry() {
+    public Registry<Biome> getRegistry() {
 
         return ((CraftServer) Bukkit.getServer()).getServer()
                 .registryAccess()
@@ -182,18 +185,18 @@ public class UnsafeNMS implements me.outspending.biomesapi.unsafe.UnsafeNMS {
     }
 
     @Override
-    public void updateBiome(@NotNull Location minLoc, @NotNull Location maxLoc, @NotNull NamespacedKey namespacedKey) {
+    public void updateBiome(Location minLoc, Location maxLoc, NamespacedKey namespacedKey) {
         CompletableFuture.runAsync(() -> {
 
             String namespace = namespacedKey.getNamespace();
             String path = namespacedKey.getKey();
 
-            ResourceKey<@NotNull Biome> biomeKey = ResourceKey.create(Registries.BIOME, Identifier.fromNamespaceAndPath(namespace, path));
-            Optional<Holder.Reference<@NotNull Biome>> biomeOptional = getRegistry().get(biomeKey);
+            ResourceKey<Biome> biomeKey = ResourceKey.create(Registries.BIOME, Identifier.fromNamespaceAndPath(namespace, path));
+            Optional<Holder.Reference<Biome>> biomeOptional = getRegistry().get(biomeKey);
 
             Preconditions.checkArgument(biomeOptional.isPresent(), "Biome with namespace " + namespace + ":" + path + " does not exist");
 
-            Holder<@NotNull Biome> biome = biomeOptional.orElseThrow();
+            Holder<Biome> biome = biomeOptional.orElseThrow();
 
             for (int x = minLoc.getBlockX(); x <= maxLoc.getBlockX(); x++) {
                 for (int y = minLoc.getBlockY(); y <= maxLoc.getBlockY(); y++) {

@@ -6,7 +6,7 @@ import me.outspending.biomesapi.biome.CustomBiome;
 import org.bukkit.block.Biome;
 import org.bukkit.generator.WorldInfo;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,6 +17,7 @@ import java.util.Map;
  * @version 2.3.0
  * @author Jsinco
  */
+@NullMarked
 @AsOf("2.3.0")
 @ApiStatus.Experimental
 public final class ReplacementBiomeProvider extends CustomBiomeProvider {
@@ -24,21 +25,21 @@ public final class ReplacementBiomeProvider extends CustomBiomeProvider {
     private final Map<Biome, CustomBiome> replacements;
 
     @AsOf("2.3.0")
-    public ReplacementBiomeProvider(@NotNull Map<Biome, CustomBiome> replacements) {
+    public ReplacementBiomeProvider(Map<Biome, CustomBiome> replacements) {
         this.replacements = replacements;
         super(replacements.values());
     }
 
     @Override
     @AsOf("2.3.0")
-    public @NotNull Biome getBiome(@NotNull WorldInfo worldInfo, int x, int y, int z) {
+    public Biome getBiome(WorldInfo worldInfo, int x, int y, int z) {
         Biome vanilla = worldInfo.vanillaBiomeProvider().getBiome(worldInfo, x, y, z);
         CustomBiome replacement = replacements.get(vanilla);
         return replacement != null ? replacement.toBukkitBiome() : vanilla;
     }
 
     @AsOf("2.3.0")
-    public static @NotNull Builder builder() {
+    public static Builder builder() {
         return new Builder();
     }
 
@@ -53,7 +54,7 @@ public final class ReplacementBiomeProvider extends CustomBiomeProvider {
         private final Map<Biome, CustomBiome> replacements = new HashMap<>();
 
         @AsOf("2.3.0")
-        public @NotNull Builder replace(@NotNull Biome original, @NotNull CustomBiome replacement) {
+        public Builder replace(Biome original, CustomBiome replacement) {
             Preconditions.checkNotNull(original, "original cannot be null");
             Preconditions.checkNotNull(replacement, "replacement cannot be null");
             replacements.put(original, replacement);
@@ -61,7 +62,7 @@ public final class ReplacementBiomeProvider extends CustomBiomeProvider {
         }
 
         @AsOf("2.3.0")
-        public @NotNull ReplacementBiomeProvider build() {
+        public ReplacementBiomeProvider build() {
             return new ReplacementBiomeProvider(replacements);
         }
     }

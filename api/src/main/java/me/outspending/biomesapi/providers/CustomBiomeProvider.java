@@ -7,7 +7,7 @@ import org.bukkit.block.Biome;
 import org.bukkit.generator.BiomeProvider;
 import org.bukkit.generator.WorldInfo;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -20,6 +20,7 @@ import java.util.Map;
  * @version 2.3.0
  * @author Jsinco
  */
+@NullMarked
 @AsOf("2.3.0")
 @ApiStatus.Experimental
 public abstract class CustomBiomeProvider extends BiomeProvider {
@@ -36,7 +37,7 @@ public abstract class CustomBiomeProvider extends BiomeProvider {
 
     @Override
     @AsOf("2.3.0")
-    public @NotNull List<Biome> getBiomes(@NotNull WorldInfo worldInfo) {
+    public List<Biome> getBiomes(WorldInfo worldInfo) {
         return biomeMap.values().stream().map(CustomBiome::toBukkitBiome).toList();
     }
 

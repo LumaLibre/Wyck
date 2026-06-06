@@ -5,7 +5,7 @@ import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -18,6 +18,7 @@ import java.util.concurrent.CompletableFuture;
  * @since 0.0.6
  * @author Jsinco
  */
+@NullMarked
 @AsOf("2.0.0")
 public record ChunkLocation(int x, int z) {
 
@@ -93,7 +94,7 @@ public record ChunkLocation(int x, int z) {
      * @return a new ChunkLocation with the offset applied
      */
     @AsOf("0.0.11")
-    public @NotNull ChunkLocation offset(int offsetX, int offsetZ) {
+    public ChunkLocation offset(int offsetX, int offsetZ) {
         return new ChunkLocation(x + offsetX, z + offsetZ);
     }
 
@@ -103,7 +104,7 @@ public record ChunkLocation(int x, int z) {
      * @return a new ChunkLocation with the offset applied
      */
     @AsOf("0.0.11")
-    public @NotNull ChunkLocation offset(@NotNull ChunkLocation offset) {
+    public ChunkLocation offset(ChunkLocation offset) {
         return new ChunkLocation(x + offset.x, z + offset.z);
     }
 
@@ -112,7 +113,7 @@ public record ChunkLocation(int x, int z) {
      * @return a new ChunkLocation with negated x and z coordinates
      */
     @AsOf("0.0.11")
-    public @NotNull ChunkLocation negate() {
+    public ChunkLocation negate() {
         return new ChunkLocation(-x, -z);
     }
 
@@ -122,7 +123,7 @@ public record ChunkLocation(int x, int z) {
      * @return the Bukkit Chunk at this ChunkLocation in the given world
      */
     @AsOf("1.2.0")
-    public @NotNull CompletableFuture<Chunk> toBukkitChunk(World world) {
+    public CompletableFuture<Chunk> toBukkitChunk(World world) {
         return world.getChunkAtAsync(x, z);
     }
 
@@ -132,7 +133,7 @@ public record ChunkLocation(int x, int z) {
      * @return the center block of this chunk in the given world
      */
     @AsOf("1.2.0")
-    public @NotNull CompletableFuture<Block> centerBlock(@NotNull World world) {
+    public CompletableFuture<Block> centerBlock(World world) {
         return toBukkitChunk(world).thenApply(chunk -> chunk.getBlock(7, 0, 7));
     }
 
@@ -142,7 +143,7 @@ public record ChunkLocation(int x, int z) {
      * @return the biome of the center block of this chunk in the given world
      */
     @AsOf("1.2.0")
-    public @NotNull CompletableFuture<Biome> getCenterBiome(@NotNull World world) {
+    public CompletableFuture<Biome> getCenterBiome(World world) {
         return centerBlock(world).thenApply(Block::getBiome);
     }
 
@@ -160,7 +161,7 @@ public record ChunkLocation(int x, int z) {
     }
 
     @Override
-    public @NotNull String toString() {
+    public String toString() {
         return "ChunkLocation{x=" + x + ", z=" + z + "}";
     }
 }

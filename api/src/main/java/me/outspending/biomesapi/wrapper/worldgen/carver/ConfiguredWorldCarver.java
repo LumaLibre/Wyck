@@ -5,7 +5,7 @@ import me.outspending.biomesapi.factory.WireProvider;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
 import me.outspending.biomesapi.wrapper.NmsHandle;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Wraps Minecraft's ConfiguredWorldCarver, a carver paired with its configuration.
@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
  * @version 2.3.0
  * @author Jsinco
  */
+@NullMarked
 @AsOf("2.3.0")
 public sealed interface ConfiguredWorldCarver extends NmsHandle permits ConfiguredWorldCarver.Reference, ConfiguredWorldCarver.Custom {
 
@@ -22,7 +23,7 @@ public sealed interface ConfiguredWorldCarver extends NmsHandle permits Configur
 
     @ApiStatus.Internal
     interface Factory {
-        @NotNull Object toNms(@NotNull ConfiguredWorldCarver carver);
+        Object toNms(ConfiguredWorldCarver carver);
     }
 
     /**
@@ -32,7 +33,7 @@ public sealed interface ConfiguredWorldCarver extends NmsHandle permits Configur
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static @NotNull ConfiguredWorldCarver reference(@NotNull BiomeResourceKey key) {
+    static ConfiguredWorldCarver reference(BiomeResourceKey key) {
         return new Reference(key);
     }
 
@@ -43,7 +44,7 @@ public sealed interface ConfiguredWorldCarver extends NmsHandle permits Configur
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static @NotNull ConfiguredWorldCarver cave(@NotNull CaveCarverConfiguration configuration) {
+    static ConfiguredWorldCarver cave(CaveCarverConfiguration configuration) {
         return new Custom(WorldCarverType.CAVE, configuration);
     }
 
@@ -54,7 +55,7 @@ public sealed interface ConfiguredWorldCarver extends NmsHandle permits Configur
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static @NotNull ConfiguredWorldCarver netherCave(@NotNull CaveCarverConfiguration configuration) {
+    static ConfiguredWorldCarver netherCave(CaveCarverConfiguration configuration) {
         return new Custom(WorldCarverType.NETHER_CAVE, configuration);
     }
 
@@ -65,13 +66,13 @@ public sealed interface ConfiguredWorldCarver extends NmsHandle permits Configur
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static @NotNull ConfiguredWorldCarver canyon(@NotNull CanyonCarverConfiguration configuration) {
+    static ConfiguredWorldCarver canyon(CanyonCarverConfiguration configuration) {
         return new Custom(WorldCarverType.CANYON, configuration);
     }
 
     @Override
     @AsOf("2.3.0")
-    default @NotNull Object toMinecraft() {
+    default Object toMinecraft() {
         return WIRE.get().toNms(this);
     }
 
@@ -80,12 +81,12 @@ public sealed interface ConfiguredWorldCarver extends NmsHandle permits Configur
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    record Reference(@NotNull BiomeResourceKey key) implements ConfiguredWorldCarver {}
+    record Reference(BiomeResourceKey key) implements ConfiguredWorldCarver {}
 
     /**
      * A configured carver authored from a vanilla algorithm and a custom config.
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    record Custom(@NotNull WorldCarverType type, @NotNull CarverConfiguration config) implements ConfiguredWorldCarver {}
+    record Custom(WorldCarverType type, CarverConfiguration config) implements ConfiguredWorldCarver {}
 }

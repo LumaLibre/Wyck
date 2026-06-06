@@ -2,7 +2,6 @@ package me.outspending.biomesapi.util;
 
 import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.annotations.AsOf;
-import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.Nullable;
 
 import java.util.function.Supplier;
@@ -16,11 +15,11 @@ import java.util.function.Supplier;
  * @author Jsinco
  */
 @AsOf("2.3.0")
-public final class Lazy<T> implements Supplier<T> {
+public final class Lazy<T> implements Supplier<@Nullable T> {
     private @Nullable Supplier<T> supplier;
     private @Nullable T value;
 
-    private Lazy(@Nullable Supplier<T> supplier) {
+    private Lazy(@Nullable Supplier<@Nullable T> supplier) {
         this.supplier = supplier;
     }
 
@@ -35,7 +34,7 @@ public final class Lazy<T> implements Supplier<T> {
     }
 
     @AsOf("2.3.0")
-    public static <T> Lazy<T> of(@NotNull Supplier<T> supplier) {
+    public static <T> Lazy<T> of(Supplier<@Nullable T> supplier) {
         Preconditions.checkNotNull(supplier, "supplier");
         return new Lazy<>(supplier);
     }

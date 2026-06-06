@@ -6,21 +6,33 @@ import me.outspending.biomesapi.wrapper.environment.particle.ParticleOptionsHand
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleTypeHandle;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
+/**
+ * Particle data for item particles.
+ * 
+ * @param itemStack The item stack to display in the particle.
+ * @since 2.0.0
+ * @version 2.0.0
+ * @author Jsinco
+ */
+@NullMarked
 @AsOf("2.0.0")
-public record ItemParticle(ItemStack bukkitItemStack) implements ParticleData<ItemParticle> {
+public record ItemParticle(ItemStack itemStack) implements ParticleData {
 
     @Override
-    public @NotNull ParticleOptionsHandle apply(@NotNull ParticleTypeHandle particleType) {
-        return ParticleOptionsFactory.WIRE.get().item(particleType, bukkitItemStack);
+    @AsOf("2.0.0")
+    public ParticleOptionsHandle apply(ParticleTypeHandle particleType) {
+        return ParticleOptionsFactory.WIRE.get().item(particleType, itemStack);
     }
 
-    public static ItemParticle of(@NotNull ItemStack itemStack) {
+    @AsOf("2.0.0")
+    public static ItemParticle of(ItemStack itemStack) {
         return new ItemParticle(itemStack);
     }
 
-    public static ItemParticle of(@NotNull Material material) {
+    @AsOf("2.0.0")
+    public static ItemParticle of(Material material) {
         return new ItemParticle(ItemStack.of(material));
     }
 }

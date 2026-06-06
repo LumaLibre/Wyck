@@ -9,6 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.Vibration;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * A factory for creating particle options handles.
@@ -16,6 +17,7 @@ import org.jetbrains.annotations.ApiStatus;
  * @since 2.0.0
  * @author Jsinco
  */
+@NullMarked
 @AsOf("2.0.0")
 public interface ParticleOptionsFactory {
 

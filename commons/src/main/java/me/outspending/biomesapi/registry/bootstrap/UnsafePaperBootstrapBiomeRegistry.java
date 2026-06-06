@@ -28,7 +28,9 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -50,25 +52,27 @@ import java.util.Set;
  * @version 2.3.0
  * @author Jsinco
  */
+@NullMarked
 @WireFactory
 @AsOf("2.3.0")
+@ApiStatus.Internal
 @SuppressWarnings("UnstableApiUsage")
 public final class UnsafePaperBootstrapBiomeRegistry implements BootstrapBiomeRegistry {
 
     private final List<CustomBiome> pending = new ArrayList<>();
     private boolean installed = false;
-    private Throwable deferred;
+    private @Nullable Throwable deferred;
 
     @Override
     @AsOf("2.3.0")
-    public @NotNull BootstrapBiomeRegistry queue(@NotNull CustomBiome biome) {
+    public BootstrapBiomeRegistry queue(CustomBiome biome) {
         this.pending.add(biome);
         return this;
     }
 
     @Override
     @AsOf("2.3.0")
-    public @NotNull BootstrapBiomeRegistry install(@NotNull BootstrapContext context) {
+    public BootstrapBiomeRegistry install(BootstrapContext context) {
         Preconditions.checkState(!this.installed, "already installed");
         this.installed = true;
 
@@ -86,7 +90,7 @@ public final class UnsafePaperBootstrapBiomeRegistry implements BootstrapBiomeRe
     }
 
     @Override
-    public @NotNull BootstrapBiomeRegistry deferring(@NotNull ThrowingRunnable action) {
+    public BootstrapBiomeRegistry deferring(ThrowingRunnable action) {
         if (this.deferred == null) {
             try {
                 action.run();
@@ -133,13 +137,13 @@ public final class UnsafePaperBootstrapBiomeRegistry implements BootstrapBiomeRe
         // WritableCraftRegistry is what makes PaperRegistryAccess.getWritableRegistry succeed.
         RegistryEntry inner = new RegistryEntry() {
             @Override
-            public @NotNull RegistryHolder createRegistryHolder(@NotNull Registry r) {
+            public RegistryHolder createRegistryHolder(Registry r) {
                 return new RegistryHolder.Memoized<>(
                     () -> new WritableCraftRegistry<>((MappedRegistry) r, buildable));
             }
 
             @Override
-            public @NotNull RegistryEntryMeta meta() {
+            public RegistryEntryMeta meta() {
                 return buildable;
             }
         };
@@ -159,7 +163,7 @@ public final class UnsafePaperBootstrapBiomeRegistry implements BootstrapBiomeRe
     private static LifecycleEventType.Prioritizable biomeComposeEventType() {
         RegistryEventProvider provider = new RegistryEventProvider() {
             @Override
-            public @NotNull RegistryKey registryKey() {
+            public RegistryKey registryKey() {
                 return RegistryKey.BIOME;
             }
 
@@ -169,7 +173,7 @@ public final class UnsafePaperBootstrapBiomeRegistry implements BootstrapBiomeRe
             }
 
             @Override
-            public LifecycleEventType.@NotNull Prioritizable compose() {
+            public LifecycleEventType.Prioritizable compose() {
                 return RegistryEventTypeProviderImpl.instance().registryCompose(this);
             }
         };
@@ -186,14 +190,14 @@ public final class UnsafePaperBootstrapBiomeRegistry implements BootstrapBiomeRe
                 RegistryComposeEventImpl impl = (RegistryComposeEventImpl) event;
 
                 // The API writable registry wraps the live, pre-freeze NMS WritableRegistry<Biome>.
-                WritableRegistry<@NotNull Biome> nms = findNmsWritable(impl.registry());
+                WritableRegistry<Biome> nms = findNmsWritable(impl.registry());
 
                 // Single source of truth for biome construction (also used by runtime register()).
                 BiomeRegistry biomesAPIRegistry = BiomeRegistry.registry();
 
                 for (CustomBiome cb : this.pending) {
                     Biome built = (Biome) biomesAPIRegistry.buildDelegate(cb);
-                    ResourceKey<@NotNull Biome> key = nmsKeyOf(cb);
+                    ResourceKey<Biome> key = nmsKeyOf(cb);
                     if (!nms.containsKey(key)) {
                         nms.register(key, built, RegistrationInfo.BUILT_IN);
                     }
@@ -208,7 +212,7 @@ public final class UnsafePaperBootstrapBiomeRegistry implements BootstrapBiomeRe
 
 
 
-    private static ResourceKey<@NotNull Biome> nmsKeyOf(CustomBiome cb) {
+    private static ResourceKey<Biome> nmsKeyOf(CustomBiome cb) {
         BiomeResourceKey rk = cb.getResourceKey();
         return ResourceKey.create(Registries.BIOME, Identifier.fromNamespaceAndPath(rk.namespace(), rk.path()));
     }
@@ -218,7 +222,7 @@ public final class UnsafePaperBootstrapBiomeRegistry implements BootstrapBiomeRe
      * {@link WritableRegistry}. Defensive on purpose, avoids hard-coding Paper-internal field names.
      */
     @SuppressWarnings("unchecked")
-    private static WritableRegistry<@NotNull Biome> findNmsWritable(Object root) throws Exception {
+    private static WritableRegistry<Biome> findNmsWritable(Object root) throws Exception {
         Set<Object> seen = Collections.newSetFromMap(new IdentityHashMap<>());
         Deque<Object> queue = new ArrayDeque<>();
         queue.add(root);
@@ -230,7 +234,7 @@ public final class UnsafePaperBootstrapBiomeRegistry implements BootstrapBiomeRe
             }
 
             if (o instanceof WritableRegistry<?>) {
-                return (WritableRegistry<@NotNull Biome>) o;
+                return (WritableRegistry<Biome>) o;
             }
 
             for (Class<?> c = o.getClass(); c != null && c != Object.class; c = c.getSuperclass()) {

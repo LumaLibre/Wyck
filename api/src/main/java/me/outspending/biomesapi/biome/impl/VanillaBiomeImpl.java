@@ -8,13 +8,14 @@ import me.outspending.biomesapi.wrapper.environment.GrassColorModifier;
 import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttributeMap;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleCatalog;
 import me.outspending.biomesapi.wrapper.worldgen.BiomeGenerationSettings;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
+@NullMarked
 public class VanillaBiomeImpl extends AbstractBiomeImpl implements VanillaBiome {
     public VanillaBiomeImpl(
-        @NotNull BiomeResourceKey resourceKey,
-        @NotNull BiomeSettings settings,
+        BiomeResourceKey resourceKey,
+        BiomeSettings settings,
         int waterColor,
         @Nullable Integer fogColor,
         @Nullable Integer waterFogColor,
@@ -22,9 +23,9 @@ public class VanillaBiomeImpl extends AbstractBiomeImpl implements VanillaBiome 
         @Nullable Integer foliageColor,
         @Nullable Integer grassColor,
         @Nullable Integer dryFoliageColor,
-        @NotNull GrassColorModifier grassColorModifier,
-        @NotNull ParticleCatalog particleCatalog,
-        @NotNull WrappedEnvironmentAttributeMap attributes,
+        GrassColorModifier grassColorModifier,
+        ParticleCatalog particleCatalog,
+        WrappedEnvironmentAttributeMap attributes,
         @Nullable BiomeSpawner biomeSpawner,
         @Nullable BiomeGenerationSettings generationSettings
     ) {
@@ -47,7 +48,7 @@ public class VanillaBiomeImpl extends AbstractBiomeImpl implements VanillaBiome 
     }
 
     @Override
-    public VanillaBiomeImpl setSettings(@NotNull BiomeSettings settings) {
+    public VanillaBiomeImpl setSettings(BiomeSettings settings) {
         throw new UnsupportedOperationException("Cannot set settings of vanilla biomes.");
     }
 
@@ -87,17 +88,17 @@ public class VanillaBiomeImpl extends AbstractBiomeImpl implements VanillaBiome 
     }
 
     @Override
-    public VanillaBiomeImpl setGrassColorModifier(@NotNull GrassColorModifier grassColorModifier) {
+    public VanillaBiomeImpl setGrassColorModifier(GrassColorModifier grassColorModifier) {
         throw new UnsupportedOperationException("Cannot set grass color modifier of vanilla biomes.");
     }
 
     @Override
-    public VanillaBiomeImpl setParticleCatalog(@NotNull ParticleCatalog particleCatalog) {
+    public VanillaBiomeImpl setParticleCatalog(ParticleCatalog particleCatalog) {
         throw new UnsupportedOperationException("Cannot set particle catalog of vanilla biomes.");
     }
 
     @Override
-    public VanillaBiomeImpl setAttributes(@NotNull WrappedEnvironmentAttributeMap attributes) {
+    public VanillaBiomeImpl setAttributes(WrappedEnvironmentAttributeMap attributes) {
         throw new UnsupportedOperationException("Cannot set attributes of vanilla biomes.");
     }
 

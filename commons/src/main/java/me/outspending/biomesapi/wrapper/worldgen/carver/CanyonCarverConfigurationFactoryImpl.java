@@ -10,20 +10,21 @@ import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.carver.CarverDebugSettings;
 import net.minecraft.world.level.levelgen.heightproviders.HeightProvider;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 @WireFactory
 @AsOf("2.3.0")
 @ApiStatus.Internal
 public final class CanyonCarverConfigurationFactoryImpl implements CanyonCarverConfiguration.Factory {
 
     @Override
-    public @NotNull Object toNms(@NotNull CanyonCarverConfiguration configuration) {
+    public Object toNms(CanyonCarverConfiguration configuration) {
         HeightProvider y = (HeightProvider) configuration.y().toMinecraft();
         FloatProvider yScale = (FloatProvider) configuration.yScale().toMinecraft();
         VerticalAnchor lavaLevel = (VerticalAnchor) configuration.lavaLevel().toMinecraft();
         CarverDebugSettings debugSettings = (CarverDebugSettings) configuration.debugSettings().toMinecraft();
-        HolderSet<@NotNull Block> replaceable = WorldgenConversions.toBlockHolderSet(configuration.replaceable());
+        HolderSet<Block> replaceable = WorldgenConversions.toBlockHolderSet(configuration.replaceable());
         FloatProvider verticalRotation = (FloatProvider) configuration.verticalRotation().toMinecraft();
         net.minecraft.world.level.levelgen.carver.CanyonCarverConfiguration.CanyonShapeConfiguration shape =
                 (net.minecraft.world.level.levelgen.carver.CanyonCarverConfiguration.CanyonShapeConfiguration) configuration.shape().toMinecraft();

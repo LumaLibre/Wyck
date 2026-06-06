@@ -2,7 +2,7 @@ package me.outspending.biomesapi.wrapper.environment.particle;
 
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.wrapper.NmsHandle;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Opaque handle to NMS ParticleOptions.
@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
  * @since 2.0.0
  * @author Jsinco
  */
+@NullMarked
 @AsOf("2.3.0")
 public interface ParticleOptionsHandle extends NmsHandle {
 
@@ -19,11 +20,11 @@ public interface ParticleOptionsHandle extends NmsHandle {
      * doesn't reference NMS types; Cast on the consuming side.
      */
     @AsOf("2.0.0")
-    @NotNull Object nms();
+    Object nms();
 
     @Override
     @AsOf("2.3.0")
-    default @NotNull Object toMinecraft() {
+    default Object toMinecraft() {
         return nms();
     }
 }

@@ -1,7 +1,7 @@
 package me.outspending.biomesapi.wrapper.environment.attribute;
 
 import me.outspending.biomesapi.annotations.AsOf;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.function.Supplier;
 
@@ -13,6 +13,7 @@ import java.util.function.Supplier;
  * @since 1.1.0
  * @author Jsinco
  */
+@NullMarked
 @AsOf("2.1.0")
 public class WrappedEnvironmentAttributeSupplier<T, K> {
 
@@ -53,7 +54,7 @@ public class WrappedEnvironmentAttributeSupplier<T, K> {
      * @since 2.1.0
      */
     @AsOf("2.1.0")
-    public WrappedEnvironmentAttribute<T, K> unbox(@NotNull K value) {
+    public WrappedEnvironmentAttribute<T, K> unbox(K value) {
         WrappedEnvironmentAttribute<T, K> attribute = supplier.get();
         attribute.setValue(value);
         return attribute;

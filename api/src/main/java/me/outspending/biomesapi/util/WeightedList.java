@@ -1,6 +1,8 @@
 package me.outspending.biomesapi.util;
 
 import me.outspending.biomesapi.annotations.AsOf;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,6 +16,7 @@ import java.util.random.RandomGenerator;
  * <p>Below {@link #FLAT_THRESHOLD} total weight it uses a flat lookup array (O(1) draw, memory
  * proportional to total weight); at or above it, a linear scan (O(n) draw, O(n) memory).
  */
+@NullMarked
 @AsOf("2.3.0")
 public final class WeightedList<E> {
 
@@ -21,7 +24,7 @@ public final class WeightedList<E> {
 
     private final int totalWeight;
     private final List<Weighted<E>> items;
-    private final Selector<E> selector; // null when totalWeight == 0
+    private final @Nullable Selector<E> selector; // null when totalWeight == 0
 
     private WeightedList(List<? extends Weighted<E>> items) {
         this.items = List.copyOf(items);

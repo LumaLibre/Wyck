@@ -3,6 +3,7 @@ package me.outspending.biomesapi.wrapper.environment;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.unsafe.KeyedEnumTranslator;
 import me.outspending.biomesapi.unsafe.NmsEnumTranslatable;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * This enum represents the phases of the moon in Minecraft.
@@ -12,6 +13,7 @@ import me.outspending.biomesapi.unsafe.NmsEnumTranslatable;
  * @since 1.1.0
  * @author Jsinco
  */
+@NullMarked
 @AsOf("1.1.0")
 public enum MoonPhase implements NmsEnumTranslatable<MoonPhase> {
 

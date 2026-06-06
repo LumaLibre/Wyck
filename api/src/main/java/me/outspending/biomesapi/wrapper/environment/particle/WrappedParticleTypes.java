@@ -12,9 +12,10 @@ import me.outspending.biomesapi.wrapper.environment.particle.options.SculkCharge
 import me.outspending.biomesapi.wrapper.environment.particle.options.SpellParticle;
 import me.outspending.biomesapi.wrapper.environment.particle.options.TrailParticle;
 import me.outspending.biomesapi.wrapper.environment.particle.options.VibrationParticle;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,6 +30,7 @@ import java.util.Map;
  * @since 2.0.0
  * @author Jsinco
  */
+@NullMarked
 @AsOf("2.0.0")
 public enum WrappedParticleTypes {
 
@@ -149,17 +151,17 @@ public enum WrappedParticleTypes {
     FIREFLY("firefly");
 
     @ApiStatus.Internal
-    private static volatile Map<String, WrappedParticleTypes> BY_KEY;
+    private static volatile @Nullable Map<String, WrappedParticleTypes> BY_KEY;
 
     private final String key;
-    private final @Nullable Class<? extends ParticleData<?>> particleDataClass;
-    private volatile ParticleTypeHandle cachedHandle;
+    private final @Nullable Class<? extends ParticleData> particleDataClass;
+    private volatile @Nullable ParticleTypeHandle cachedHandle;
 
     WrappedParticleTypes(String key) {
         this(key, null);
     }
 
-    WrappedParticleTypes(String key, @Nullable Class<? extends ParticleData<?>> particleDataClass) {
+    WrappedParticleTypes(String key, @Nullable Class<? extends ParticleData> particleDataClass) {
         this.key = key;
         this.particleDataClass = particleDataClass;
     }
@@ -185,7 +187,7 @@ public enum WrappedParticleTypes {
     }
 
     @AsOf("1.1.0")
-    public @Nullable Class<? extends ParticleData<?>> getParticleDataClass() {
+    public @Nullable Class<? extends ParticleData> getParticleDataClass() {
         return particleDataClass;
     }
 
@@ -203,7 +205,7 @@ public enum WrappedParticleTypes {
      * @since 2.1.0
      */
     @AsOf("2.1.0")
-    public WrappedAmbientParticle<?> create(float probability, @Nullable ParticleData<?> data) {
+    public WrappedAmbientParticle<?> create(float probability, @Nullable ParticleData data) {
         return WrappedAmbientParticle.of(this, probability, data);
     }
 
@@ -223,7 +225,7 @@ public enum WrappedParticleTypes {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    public static @Nullable WrappedParticleTypes byKey(@NotNull String key) {
+    public static @Nullable WrappedParticleTypes byKey(String key) {
         Map<String, WrappedParticleTypes> map = BY_KEY;
         if (map == null) {
             synchronized (WrappedParticleTypes.class) {

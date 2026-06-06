@@ -8,7 +8,7 @@ import me.outspending.biomesapi.wrapper.worldgen.valueproviders.HeightProvider;
 import me.outspending.biomesapi.wrapper.worldgen.valueproviders.VerticalAnchor;
 import org.bukkit.Material;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Collection;
 import java.util.List;
@@ -22,17 +22,18 @@ import java.util.Objects;
  * @version 2.3.0
  * @author Jsinco
  */
+@NullMarked
 @AsOf("2.3.0")
 public record CaveCarverConfiguration(
         float probability,
-        @NotNull HeightProvider y,
-        @NotNull FloatProvider yScale,
-        @NotNull VerticalAnchor lavaLevel,
-        @NotNull CarverDebugSettings debugSettings,
-        @NotNull Collection<Material> replaceable,
-        @NotNull FloatProvider horizontalRadiusMultiplier,
-        @NotNull FloatProvider verticalRadiusMultiplier,
-        @NotNull FloatProvider floorLevel
+        HeightProvider y,
+        FloatProvider yScale,
+        VerticalAnchor lavaLevel,
+        CarverDebugSettings debugSettings,
+        Collection<Material> replaceable,
+        FloatProvider horizontalRadiusMultiplier,
+        FloatProvider verticalRadiusMultiplier,
+        FloatProvider floorLevel
 ) implements CarverConfiguration {
 
     @ApiStatus.Internal
@@ -40,7 +41,7 @@ public record CaveCarverConfiguration(
 
     @ApiStatus.Internal
     protected interface Factory {
-        @NotNull Object toNms(@NotNull CaveCarverConfiguration configuration);
+        Object toNms(CaveCarverConfiguration configuration);
     }
 
     @AsOf("2.3.0")
@@ -56,13 +57,13 @@ public record CaveCarverConfiguration(
     }
 
     @AsOf("2.3.0")
-    public static @NotNull Builder builder() {
+    public static Builder builder() {
         return new Builder();
     }
 
     @Override
     @AsOf("2.3.0")
-    public @NotNull Object toMinecraft() {
+    public Object toMinecraft() {
         return WIRE.get().toNms(this);
     }
 
@@ -92,61 +93,61 @@ public record CaveCarverConfiguration(
         }
 
         @AsOf("2.3.0")
-        public @NotNull Builder probability(float probability) {
+        public Builder probability(float probability) {
             this.probability = probability;
             return this;
         }
 
         @AsOf("2.3.0")
-        public @NotNull Builder y(@NotNull HeightProvider y) {
+        public Builder y(HeightProvider y) {
             this.y = y;
             return this;
         }
 
         @AsOf("2.3.0")
-        public @NotNull Builder yScale(@NotNull FloatProvider yScale) {
+        public Builder yScale(FloatProvider yScale) {
             this.yScale = yScale;
             return this;
         }
 
         @AsOf("2.3.0")
-        public @NotNull Builder lavaLevel(@NotNull VerticalAnchor lavaLevel) {
+        public Builder lavaLevel(VerticalAnchor lavaLevel) {
             this.lavaLevel = lavaLevel;
             return this;
         }
 
         @AsOf("2.3.0")
-        public @NotNull Builder debugSettings(@NotNull CarverDebugSettings debugSettings) {
+        public Builder debugSettings(CarverDebugSettings debugSettings) {
             this.debugSettings = debugSettings;
             return this;
         }
 
         @AsOf("2.3.0")
-        public @NotNull Builder replaceable(@NotNull Collection<Material> replaceable) {
+        public Builder replaceable(Collection<Material> replaceable) {
             this.replaceable = replaceable;
             return this;
         }
 
         @AsOf("2.3.0")
-        public @NotNull Builder horizontalRadiusMultiplier(@NotNull FloatProvider horizontalRadiusMultiplier) {
+        public Builder horizontalRadiusMultiplier(FloatProvider horizontalRadiusMultiplier) {
             this.horizontalRadiusMultiplier = horizontalRadiusMultiplier;
             return this;
         }
 
         @AsOf("2.3.0")
-        public @NotNull Builder verticalRadiusMultiplier(@NotNull FloatProvider verticalRadiusMultiplier) {
+        public Builder verticalRadiusMultiplier(FloatProvider verticalRadiusMultiplier) {
             this.verticalRadiusMultiplier = verticalRadiusMultiplier;
             return this;
         }
 
         @AsOf("2.3.0")
-        public @NotNull Builder floorLevel(@NotNull FloatProvider floorLevel) {
+        public Builder floorLevel(FloatProvider floorLevel) {
             this.floorLevel = floorLevel;
             return this;
         }
 
         @AsOf("2.3.0")
-        public @NotNull CaveCarverConfiguration build() {
+        public CaveCarverConfiguration build() {
             Preconditions.checkState(this.probability != null, "probability must be set");
             Preconditions.checkState(this.y != null, "y must be set");
             Preconditions.checkState(this.yScale != null, "yScale must be set");

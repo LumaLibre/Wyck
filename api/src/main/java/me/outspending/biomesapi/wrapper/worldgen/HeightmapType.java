@@ -3,6 +3,7 @@ package me.outspending.biomesapi.wrapper.worldgen;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.unsafe.KeyedEnumTranslator;
 import me.outspending.biomesapi.unsafe.NmsEnumTranslatable;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Wraps Minecraft's Heightmap.Types, the heightmap a placement samples against.
@@ -11,6 +12,7 @@ import me.outspending.biomesapi.unsafe.NmsEnumTranslatable;
  * @since 2.3.0
  * @author Jsinco
  */
+@NullMarked
 @AsOf("2.3.0")
 public enum HeightmapType implements NmsEnumTranslatable<HeightmapType> {
 

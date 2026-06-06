@@ -2,6 +2,8 @@ package me.outspending.biomesapi.factory;
 
 import me.outspending.biomesapi.annotations.AsOf;
 import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Constructor;
 
@@ -12,6 +14,7 @@ import java.lang.reflect.Constructor;
  * @since 2.0.0
  * @author Jsinco
  */
+@NullMarked
 @AsOf("2.2.0")
 @ApiStatus.Internal
 public sealed class WireProvider<F> permits NullableWireProvider {
@@ -19,10 +22,10 @@ public sealed class WireProvider<F> permits NullableWireProvider {
     private static final String ALLOWED_PACKAGE = "me.outspending.biomesapi";
 
     private final String classNameTemplate;
-    protected volatile F factory;
+    protected volatile @Nullable F factory;
 
     /** Cached constructor for {@link #getNew()}. Resolved once, reused thereafter. */
-    private volatile Constructor<? extends F> cachedCtor;
+    private volatile @Nullable Constructor<? extends F> cachedCtor;
 
     protected WireProvider(String classNameTemplate) {
         this.classNameTemplate = classNameTemplate;

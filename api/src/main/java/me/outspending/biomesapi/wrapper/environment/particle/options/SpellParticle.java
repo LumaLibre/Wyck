@@ -4,21 +4,34 @@ import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleData;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleOptionsHandle;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleTypeHandle;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
+/**
+ * Particle data for spell particles.
+ * 
+ * @param color The color of the spell.
+ * @param power The power of the spell.
+ * @since 2.0.0
+ * @version 2.0.0
+ * @author Jsinco
+ */
+@NullMarked
 @AsOf("2.0.0")
-public record SpellParticle(int color, float power) implements ParticleData<SpellParticle> {
+public record SpellParticle(int color, float power) implements ParticleData {
 
     @Override
-    public @NotNull ParticleOptionsHandle apply(@NotNull ParticleTypeHandle particleType) {
+    @AsOf("2.0.0")
+    public ParticleOptionsHandle apply(ParticleTypeHandle particleType) {
         return ParticleOptionsFactory.WIRE.get().spell(particleType, color, power);
     }
 
-    public static SpellParticle of(@NotNull String hexColor, float power) {
+    @AsOf("2.0.0")
+    public static SpellParticle of(String hexColor, float power) {
         return new SpellParticle(ParticleData.parseHex(hexColor), power);
     }
 
-    public static SpellParticle of(@NotNull String hexColor) {
+    @AsOf("2.0.0")
+    public static SpellParticle of(String hexColor) {
         return of(hexColor, 1.0f);
     }
 }

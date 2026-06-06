@@ -2,6 +2,7 @@ package me.outspending.biomesapi.registry.bootstrap;
 
 import me.outspending.biomesapi.annotations.AsOf;
 import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Selects how custom biomes are registered into the biome registry during the bootstrap phase.
@@ -11,6 +12,7 @@ import org.jetbrains.annotations.ApiStatus;
  * @version 2.3.0
  * @author Jsinco
  */
+@NullMarked
 @AsOf("2.3.0")
 @ApiStatus.Experimental
 public enum Composer {

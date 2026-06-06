@@ -2,7 +2,9 @@ package me.outspending.biomesapi.unsafe;
 
 import me.outspending.biomesapi.annotations.AsOf;
 import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 @AsOf("2.0.0")
 @ApiStatus.Internal
 public interface NmsEnumTranslatable<W extends NmsEnumTranslatable<W>> {

@@ -20,8 +20,8 @@ import net.kyori.adventure.key.Keyed;
 import org.bukkit.Color;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Biome;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents an abstract biome in the game.
@@ -30,6 +30,7 @@ import org.jetbrains.annotations.Nullable;
  * @version 2.3.0
  * @author Jsinco
  */
+@NullMarked
 @AsOf("2.3.0")
 public interface AbstractBiome extends Keyed {
 
@@ -38,7 +39,7 @@ public interface AbstractBiome extends Keyed {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    @NotNull NamespacedKey getKey();
+    NamespacedKey getKey();
 
     /**
      * Returns the Bukkit Biome of the AbstractBiome.
@@ -47,7 +48,7 @@ public interface AbstractBiome extends Keyed {
      * @since 0.0.6
      */
     @AsOf("0.0.6")
-    @NotNull Biome toBukkitBiome();
+    Biome toBukkitBiome();
 
     /**
      * Returns the BiomeResourceKey of the AbstractBiome.
@@ -137,7 +138,7 @@ public interface AbstractBiome extends Keyed {
      * @since 0.0.24
      */
     @AsOf("0.0.24")
-    @NotNull GrassColorModifier getGrassColorModifier();
+    GrassColorModifier getGrassColorModifier();
 
     /**
      * Returns the ParticleRenderer of the AbstractBiome.
@@ -146,7 +147,7 @@ public interface AbstractBiome extends Keyed {
      * @since 1.1.0
      */
     @AsOf("1.1.0")
-    @NotNull ParticleCatalog getParticleCatalog();
+    ParticleCatalog getParticleCatalog();
 
     /**
      * Returns the WrappedEnvironmentAttributeMap of the AbstractBiome.
@@ -155,7 +156,7 @@ public interface AbstractBiome extends Keyed {
      * @since 1.1.0
      */
     @AsOf("1.1.0")
-    @NotNull WrappedEnvironmentAttributeMap getAttributes();
+    WrappedEnvironmentAttributeMap getAttributes();
 
     /**
      * Returns the BiomeSpawner of the AbstractBiome.
@@ -183,7 +184,7 @@ public interface AbstractBiome extends Keyed {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    AbstractBiome setSettings(@NotNull BiomeSettings settings);
+    AbstractBiome setSettings(BiomeSettings settings);
 
     /**
      * Sets the water color of the AbstractBiome.
@@ -203,7 +204,7 @@ public interface AbstractBiome extends Keyed {
      * @since 2.2.0
      */
     @AsOf("2.2.0")
-    default AbstractBiome setWaterColor(@NotNull String waterColor) {
+    default AbstractBiome setWaterColor(String waterColor) {
         @Nullable Integer parsedColor = parseHex(waterColor);
         Preconditions.checkNotNull(parsedColor, "Invalid water fog color: %s", waterColor);
         return setWaterColor(parsedColor);
@@ -343,7 +344,7 @@ public interface AbstractBiome extends Keyed {
      * @since 0.0.24
      */
     @AsOf("0.0.24")
-    AbstractBiome setGrassColorModifier(@NotNull GrassColorModifier grassColorModifier);
+    AbstractBiome setGrassColorModifier(GrassColorModifier grassColorModifier);
 
     /**
      * Sets the ParticleRenderer of the AbstractBiome.
@@ -353,7 +354,7 @@ public interface AbstractBiome extends Keyed {
      * @since 1.1.0
      */
     @AsOf("1.1.0")
-    AbstractBiome setParticleCatalog(@NotNull ParticleCatalog particleCatalog);
+    AbstractBiome setParticleCatalog(ParticleCatalog particleCatalog);
 
     /**
      * Sets the WrappedEnvironmentAttributeMap of the AbstractBiome.
@@ -363,7 +364,7 @@ public interface AbstractBiome extends Keyed {
      * @since 2.2.0
      */
     @AsOf("2.2.0")
-    AbstractBiome setAttributes(@NotNull WrappedEnvironmentAttributeMap attributes);
+    AbstractBiome setAttributes(WrappedEnvironmentAttributeMap attributes);
 
     /**
      * Sets the BiomeSpawner of the AbstractBiome.
@@ -393,7 +394,7 @@ public interface AbstractBiome extends Keyed {
      * @since 0.0.17
      */
     @AsOf("0.0.17")
-    boolean isSimilar(@NotNull AbstractBiome otherBiome);
+    boolean isSimilar(AbstractBiome otherBiome);
 
     /**
      * Modifies the existing biome in the biome registry with the properties of this CustomBiome.
@@ -411,7 +412,7 @@ public interface AbstractBiome extends Keyed {
     }
     
     @Override
-    default @NotNull Key key() {
+    default Key key() {
         return getResourceKey().key();
     }
 
@@ -434,7 +435,7 @@ public interface AbstractBiome extends Keyed {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static @NotNull Builder builder() {
+    static Builder builder() {
         return new Builder();
     }
 
@@ -444,7 +445,7 @@ public interface AbstractBiome extends Keyed {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static @NotNull Builder builder(@NotNull BiomeResourceKey resourceKey) {
+    static Builder builder(BiomeResourceKey resourceKey) {
         Preconditions.checkNotNull(resourceKey, "Resource key cannot be null.");
         return new Builder().resourceKey(resourceKey);
     }
@@ -458,7 +459,7 @@ public interface AbstractBiome extends Keyed {
     @AsOf("2.3.0")
     final class Builder {
 
-        private BiomeResourceKey resourceKey = null;
+        private @Nullable BiomeResourceKey resourceKey = null;
         private BiomeSettings settings = BiomeSettings.defaultSettings();
 
         private int waterColor = 0x3F75C4;
@@ -486,7 +487,7 @@ public interface AbstractBiome extends Keyed {
          * @since 2.3.0
          */
         @AsOf("2.3.0")
-        public Builder(@NotNull AbstractBiome biome) {
+        public Builder(AbstractBiome biome) {
             this.resourceKey = biome.getResourceKey();
             this.settings = biome.getSettings();
             this.waterColor = biome.getWaterColor();
@@ -509,7 +510,7 @@ public interface AbstractBiome extends Keyed {
          * @since 2.3.0
          */
         @AsOf("2.3.0")
-        public @NotNull Builder resourceKey(@NotNull BiomeResourceKey resourceKey) {
+        public Builder resourceKey(BiomeResourceKey resourceKey) {
             this.resourceKey = resourceKey;
             return this;
         }
@@ -520,134 +521,134 @@ public interface AbstractBiome extends Keyed {
          * @since 2.3.0
          */
         @AsOf("2.3.0")
-        public @NotNull Builder settings(@NotNull BiomeSettings settings) {
+        public Builder settings(BiomeSettings settings) {
             this.settings = settings;
             return this;
         }
 
         @AsOf("2.3.0")
-        public @NotNull Builder fogColor(@NotNull String fogColor) {
+        public Builder fogColor(String fogColor) {
             this.fogColor = AbstractBiome.parseHex(fogColor);
             return this;
         }
 
         @AsOf("2.3.0")
-        public @NotNull Builder fogColor(@NotNull Color fogColor) {
+        public Builder fogColor(Color fogColor) {
             this.fogColor = fogColor.asRGB();
             return this;
         }
 
         @AsOf("2.3.0")
-        public @NotNull Builder waterColor(@NotNull String waterColor) {
+        public Builder waterColor(String waterColor) {
             @Nullable Integer parsedColor = AbstractBiome.parseHex(waterColor);
             if (parsedColor != null) this.waterColor = parsedColor;
             return this;
         }
 
         @AsOf("2.3.0")
-        public @NotNull Builder waterColor(@NotNull Color waterColor) {
+        public Builder waterColor(Color waterColor) {
             this.waterColor = waterColor.asRGB();
             return this;
         }
 
         @AsOf("2.3.0")
-        public @NotNull Builder waterFogColor(@NotNull String waterFogColor) {
+        public Builder waterFogColor(String waterFogColor) {
             this.waterFogColor = AbstractBiome.parseHex(waterFogColor);
             return this;
         }
 
         @AsOf("2.3.0")
-        public @NotNull Builder waterFogColor(@NotNull Color waterFogColor) {
+        public Builder waterFogColor(Color waterFogColor) {
             this.waterFogColor = waterFogColor.asRGB();
             return this;
         }
 
         @AsOf("2.3.0")
-        public @NotNull Builder skyColor(@NotNull String skyColor) {
+        public Builder skyColor(String skyColor) {
             this.skyColor = AbstractBiome.parseHex(skyColor);
             return this;
         }
 
         @AsOf("2.3.0")
-        public @NotNull Builder skyColor(@NotNull Color skyColor) {
+        public Builder skyColor(Color skyColor) {
             this.skyColor = skyColor.asRGB();
             return this;
         }
 
         @AsOf("2.3.0")
-        public @NotNull Builder foliageColor(@NotNull String foliageColor) {
+        public Builder foliageColor(String foliageColor) {
             this.foliageColor = AbstractBiome.parseHex(foliageColor);
             return this;
         }
 
         @AsOf("2.3.0")
-        public @NotNull Builder foliageColor(@NotNull Color foliageColor) {
+        public Builder foliageColor(Color foliageColor) {
             this.foliageColor = foliageColor.asRGB();
             return this;
         }
 
         @AsOf("2.3.0")
-        public @NotNull Builder grassColor(@NotNull String grassColor) {
+        public Builder grassColor(String grassColor) {
             this.grassColor = AbstractBiome.parseHex(grassColor);
             return this;
         }
 
         @AsOf("2.3.0")
-        public @NotNull Builder grassColor(@NotNull Color grassColor) {
+        public Builder grassColor(Color grassColor) {
             this.grassColor = grassColor.asRGB();
             return this;
         }
 
         @AsOf("2.3.0")
-        public @NotNull Builder dryFoliageColor(@NotNull String dryFoliageColor) {
+        public Builder dryFoliageColor(String dryFoliageColor) {
             this.dryFoliageColor = AbstractBiome.parseHex(dryFoliageColor);
             return this;
         }
 
         @AsOf("2.3.0")
-        public @NotNull Builder dryFoliageColor(@NotNull Color dryFoliageColor) {
+        public Builder dryFoliageColor(Color dryFoliageColor) {
             this.dryFoliageColor = dryFoliageColor.asRGB();
             return this;
         }
 
         @AsOf("2.3.0")
-        public @NotNull Builder grassColorModifier(@NotNull GrassColorModifier grassColorModifier) {
+        public Builder grassColorModifier(GrassColorModifier grassColorModifier) {
             this.grassColorModifier = grassColorModifier;
             return this;
         }
 
         @AsOf("2.3.0")
-        public @NotNull Builder particleCatalog(@NotNull ParticleCatalog particleCatalog) {
+        public Builder particleCatalog(ParticleCatalog particleCatalog) {
             this.particleCatalog = particleCatalog;
             return this;
         }
 
         @AsOf("2.3.0")
-        public @NotNull Builder ambientParticle(@NotNull WrappedParticleTypes particleType, float probability) {
+        public Builder ambientParticle(WrappedParticleTypes particleType, float probability) {
             this.particleCatalog = this.particleCatalog.with(particleType, probability);
             return this;
         }
 
         @AsOf("2.3.0")
-        public @NotNull <T extends ParticleData<T>> Builder ambientParticle(@NotNull WrappedParticleTypes particleType, float probability, @Nullable T data) {
+        public <T extends ParticleData> Builder ambientParticle(WrappedParticleTypes particleType, float probability, @Nullable T data) {
             this.particleCatalog = this.particleCatalog.with(particleType, probability, data);
             return this;
         }
 
         @AsOf("2.3.0")
-        public @NotNull Builder setAttributes(@NotNull WrappedEnvironmentAttributeMap environmentAttributeMap) {
+        public Builder setAttributes(WrappedEnvironmentAttributeMap environmentAttributeMap) {
             this.attributeMap = environmentAttributeMap;
             return this;
         }
 
         @AsOf("2.3.0")
-        public @NotNull <T, K> Builder setAttribute(@NotNull WrappedEnvironmentAttributeSupplier<T, K> supplier, @NotNull K value) {
+        public <T, K> Builder setAttribute(WrappedEnvironmentAttributeSupplier<T, K> supplier, K value) {
             this.attributeMap = this.attributeMap.with(supplier, value);
             return this;
         }
 
         @AsOf("2.3.0")
-        public @NotNull Builder setAttribute(@NotNull IntColorSupplier supplier, @NotNull String hex) {
+        public Builder setAttribute(IntColorSupplier supplier, String hex) {
             this.attributeMap = this.attributeMap.with(supplier, hex);
             return this;
         }
@@ -658,7 +659,7 @@ public interface AbstractBiome extends Keyed {
          * @since 2.3.0
          */
         @AsOf("2.3.0")
-        public @NotNull Builder setSpawner(@Nullable BiomeSpawner biomeSpawner) {
+        public Builder setSpawner(@Nullable BiomeSpawner biomeSpawner) {
             this.biomeSpawner = biomeSpawner;
             return this;
         }
@@ -669,7 +670,7 @@ public interface AbstractBiome extends Keyed {
          * @return this builder, for chaining
          */
         @AsOf("2.3.0")
-        public @NotNull Builder setGenerationSettings(@Nullable BiomeGenerationSettings generationSettings) {
+        public Builder setGenerationSettings(@Nullable BiomeGenerationSettings generationSettings) {
             this.generationSettings = generationSettings;
             return this;
         }
@@ -682,7 +683,7 @@ public interface AbstractBiome extends Keyed {
          * @since 2.3.0
          */
         @AsOf("2.3.0")
-        public @NotNull AbstractBiome build() {
+        public AbstractBiome build() {
             Preconditions.checkArgument(resourceKey != null, "Resource key must be set");
             Preconditions.checkArgument(settings != null, "Settings must be set");
 

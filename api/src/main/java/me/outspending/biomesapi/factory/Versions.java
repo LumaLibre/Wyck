@@ -5,6 +5,7 @@ import me.outspending.biomesapi.BiomesAPI;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.exceptions.UnknownNMSVersionException;
 import org.bukkit.Bukkit;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * An enum representing supported Minecraft versions for the BiomesAPI.
@@ -13,6 +14,7 @@ import org.bukkit.Bukkit;
  * @since 2.0.0
  * @author Jsinco
  */
+@NullMarked
 @AsOf("2.0.0")
 public enum Versions {
     V1_21_11(Version.of(Version.Type.SUPPORTED, "v1_21_11", "1.21.10", "1.21.11")),

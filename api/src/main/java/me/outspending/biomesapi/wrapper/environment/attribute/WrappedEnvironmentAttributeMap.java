@@ -1,7 +1,7 @@
 package me.outspending.biomesapi.wrapper.environment.attribute;
 
 import me.outspending.biomesapi.annotations.AsOf;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -16,6 +16,7 @@ import java.util.Map;
  * @see WrappedEnvironmentAttributes
  * @since 1.1.0
  */
+@NullMarked
 @AsOf("2.1.0")
 public record WrappedEnvironmentAttributeMap(Map<EnvironmentAttributeHandle<?>, WrappedEnvironmentAttribute<?, ?>> attributes) {
 
@@ -66,7 +67,7 @@ public record WrappedEnvironmentAttributeMap(Map<EnvironmentAttributeHandle<?>, 
      * @since 2.1.0
      */
     @AsOf("2.1.0")
-    public <T, K> WrappedEnvironmentAttributeMap with(@NotNull WrappedEnvironmentAttributeSupplier<T, K> supplier, @NotNull K value) {
+    public <T, K> WrappedEnvironmentAttributeMap with(WrappedEnvironmentAttributeSupplier<T, K> supplier, K value) {
         WrappedEnvironmentAttribute<T, K> attr = supplier.unbox(value);
         Map<EnvironmentAttributeHandle<?>, WrappedEnvironmentAttribute<?, ?>> newAttrs = new LinkedHashMap<>(attributes);
         newAttrs.put(attr.getAttribute(), attr);
@@ -81,7 +82,7 @@ public record WrappedEnvironmentAttributeMap(Map<EnvironmentAttributeHandle<?>, 
      * @since 2.1.0
      */
     @AsOf("2.1.0")
-    public WrappedEnvironmentAttributeMap with(@NotNull IntColorSupplier supplier, @NotNull String hex) {
+    public WrappedEnvironmentAttributeMap with(IntColorSupplier supplier, String hex) {
         return with(supplier, IntColorSupplier.parseHex(hex));
     }
 
@@ -140,8 +141,8 @@ public record WrappedEnvironmentAttributeMap(Map<EnvironmentAttributeHandle<?>, 
          */
         @AsOf("1.1.0")
         public <T, K> Builder setAttribute(
-                @NotNull WrappedEnvironmentAttributeSupplier<T, K> supplier,
-                @NotNull K value) {
+                WrappedEnvironmentAttributeSupplier<T, K> supplier,
+                K value) {
             WrappedEnvironmentAttribute<T, K> wrappedEnvironmentAttribute = supplier.get();
             wrappedEnvironmentAttribute.setValue(value);
 
@@ -162,7 +163,7 @@ public record WrappedEnvironmentAttributeMap(Map<EnvironmentAttributeHandle<?>, 
          * @since 2.1.0
          */
         @AsOf("2.1.0")
-        public Builder setAttribute(@NotNull IntColorSupplier supplier, @NotNull String hex) {
+        public Builder setAttribute(IntColorSupplier supplier, String hex) {
             return setAttribute(supplier, IntColorSupplier.parseHex(hex));
         }
 
@@ -184,7 +185,7 @@ public record WrappedEnvironmentAttributeMap(Map<EnvironmentAttributeHandle<?>, 
          * @since 2.1.0
          */
         @AsOf("2.1.0")
-        public Builder putAll(@NotNull WrappedEnvironmentAttributeMap source) {
+        public Builder putAll(WrappedEnvironmentAttributeMap source) {
             for (var entry : source.attributes().entrySet()) {
                 if (attributes.containsKey(entry.getKey())) {
                     throw new IllegalArgumentException("Attribute: " + entry.getKey() + " is already present.");

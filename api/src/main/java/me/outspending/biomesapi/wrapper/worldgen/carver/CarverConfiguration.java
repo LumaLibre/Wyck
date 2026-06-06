@@ -6,7 +6,7 @@ import me.outspending.biomesapi.wrapper.worldgen.valueproviders.FloatProvider;
 import me.outspending.biomesapi.wrapper.worldgen.valueproviders.HeightProvider;
 import me.outspending.biomesapi.wrapper.worldgen.valueproviders.VerticalAnchor;
 import org.bukkit.Material;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Collection;
 
@@ -17,6 +17,7 @@ import java.util.Collection;
  * @version 2.3.0
  * @author Jsinco
  */
+@NullMarked
 @AsOf("2.3.0")
 public sealed interface CarverConfiguration extends NmsHandle permits CanyonCarverConfiguration, CaveCarverConfiguration {
 
@@ -32,33 +33,33 @@ public sealed interface CarverConfiguration extends NmsHandle permits CanyonCarv
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    @NotNull HeightProvider y();
+    HeightProvider y();
 
     /**
      * @return the y-scale of the carver
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    @NotNull FloatProvider yScale();
+    FloatProvider yScale();
 
     /**
      * @return the y-level of the lava level of the carver
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    @NotNull VerticalAnchor lavaLevel();
+    VerticalAnchor lavaLevel();
 
     /**
      * @return the debug settings of the carver
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    @NotNull CarverDebugSettings debugSettings();
+    CarverDebugSettings debugSettings();
 
     /**
      * @return the materials that can be replaced by this carver
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    @NotNull Collection<Material> replaceable();
+    Collection<Material> replaceable();
 }

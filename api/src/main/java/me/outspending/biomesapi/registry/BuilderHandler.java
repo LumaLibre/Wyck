@@ -2,7 +2,8 @@ package me.outspending.biomesapi.registry;
 
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.biome.AbstractBiome;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A handler interface for building and handling biome-related data.
@@ -12,12 +13,13 @@ import org.jetbrains.annotations.NotNull;
  * @since 0.0.1
  * @author Outspending
  */
+@NullMarked
 @AsOf("0.0.1")
 public interface BuilderHandler<K, V> {
 
     @AsOf("0.0.1")
-    void handle(V value, @NotNull K key);
+    void handle(@Nullable V value, K key);
 
     @AsOf("0.0.1")
-    V build(@NotNull AbstractBiome biome);
+    @Nullable V build(AbstractBiome biome);
 }

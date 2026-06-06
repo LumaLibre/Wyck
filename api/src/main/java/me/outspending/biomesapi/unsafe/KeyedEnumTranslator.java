@@ -3,11 +3,12 @@ package me.outspending.biomesapi.unsafe;
 import me.outspending.biomesapi.annotations.AsOf;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Locale;
 import java.util.function.Function;
 
+@NullMarked
 @AsOf("2.0.0")
 @ApiStatus.Internal
 public interface KeyedEnumTranslator<W> {
@@ -29,7 +30,7 @@ public interface KeyedEnumTranslator<W> {
      */
     @AsOf("2.1.0")
     @Contract(value = "_, _ -> new", pure = true)
-    static <W> @NotNull KeyedEnumTranslator<W> byKey(Function<W, String> keyExtractor, W[] wrapperValues) {
+    static <W> KeyedEnumTranslator<W> byKey(Function<W, String> keyExtractor, W[] wrapperValues) {
         return new KeyedEnumTranslator<>() {
             @Override
             public <N extends Enum<N>> N toNms(W wrapped, Class<N> nmsEnumClass) {
@@ -63,7 +64,7 @@ public interface KeyedEnumTranslator<W> {
      */
     @AsOf("2.1.0")
     @Contract(value = "_ -> new", pure = true)
-    static <W extends Enum<W>> @NotNull KeyedEnumTranslator<W> byName(Class<W> wrapperClass) {
+    static <W extends Enum<W>> KeyedEnumTranslator<W> byName(Class<W> wrapperClass) {
         return new KeyedEnumTranslator<>() {
             @Override
             public <N extends Enum<N>> N toNms(W wrapped, Class<N> nmsEnumClass) {

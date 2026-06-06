@@ -6,13 +6,16 @@ import me.outspending.biomesapi.renderer.packet.handlers.NettyPacketHandler;
 import me.outspending.biomesapi.renderer.packet.handlers.PacketEventsPacketHandler;
 import me.outspending.biomesapi.renderer.packet.handlers.ProtocolLibPacketHandler;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 @WireFactory
+@ApiStatus.Internal
 public final class PacketHandlerFactoryImpl implements PacketHandler.Factory {
 
     @Override
-    public @NotNull PacketHandler create(@NotNull Plugin provider, @NotNull PacketHandler.Injector injector, @NotNull PacketHandler.Priority priority) {
+    public PacketHandler create(Plugin provider, PacketHandler.Injector injector, PacketHandler.Priority priority) {
         if (!injector.isAvailable()) {
             throw new MissingPacketManipulatorLibraryException(
                 "Could not find required classes for injector: " + injector.getName() +

@@ -5,17 +5,29 @@ import me.outspending.biomesapi.wrapper.environment.particle.ParticleData;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleOptionsHandle;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleTypeHandle;
 import org.bukkit.Vibration;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
+/**
+ * Particle data for vibration particles.
+ * 
+ * @param destination The destination of the vibration.
+ * @param arrivalInTicks The time in ticks until the vibration arrives.
+ * @since 2.0.0
+ * @version 2.0.0
+ * @author Jsinco
+ */
+@NullMarked
 @AsOf("2.0.0")
-public record VibrationParticle(Vibration.Destination destination, int arrivalInTicks) implements ParticleData<VibrationParticle> {
+public record VibrationParticle(Vibration.Destination destination, int arrivalInTicks) implements ParticleData {
 
     @Override
-    public @NotNull ParticleOptionsHandle apply(@NotNull ParticleTypeHandle particleType) {
+    @AsOf("2.0.0")
+    public ParticleOptionsHandle apply(ParticleTypeHandle particleType) {
         return ParticleOptionsFactory.WIRE.get().vibration(destination, arrivalInTicks);
     }
 
-    public static VibrationParticle of(@NotNull Vibration.Destination destination, int arrivalInTicks) {
+    @AsOf("2.0.0")
+    public static VibrationParticle of(Vibration.Destination destination, int arrivalInTicks) {
         return new VibrationParticle(destination, arrivalInTicks);
     }
 }

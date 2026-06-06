@@ -8,7 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,18 +22,19 @@ import java.util.concurrent.CompletableFuture;
  * @since 0.0.1
  * @author Outspending
  */
+@NullMarked
 @AsOf("0.0.1")
 public class BiomeUpdaterImpl implements BiomeUpdater {
 
     private final Plugin plugin;
 
     @AsOf("2.1.0")
-    public BiomeUpdaterImpl(@NotNull Plugin plugin) {
+    public BiomeUpdaterImpl(Plugin plugin) {
         this.plugin = BiomesAPI.biomesapi().isExternal() ? BiomesAPI.biomesapi().plugin() : plugin;
     }
 
     @Override
-    public void updateChunkAsync(@NotNull CompletableFuture<Chunk> chunk) {
+    public void updateChunkAsync(CompletableFuture<Chunk> chunk) {
         updateChunksAsync(List.of(chunk));
     }
 
@@ -49,13 +50,13 @@ public class BiomeUpdaterImpl implements BiomeUpdater {
     }
 
     @Override
-    public void updateChunksAsync(@NotNull Collection<CompletableFuture<Chunk>> chunks) {
+    public void updateChunksAsync(Collection<CompletableFuture<Chunk>> chunks) {
         UnsafeNMSHandler.executeNMS(nms -> nms.updateChunks(List.copyOf(chunks), plugin));
     }
 
 
     @Override
-    public void updateChunkRadius(@NotNull Chunk chunk, int radius) {
+    public void updateChunkRadius(Chunk chunk, int radius) {
         List<CompletableFuture<Chunk>> chunks = new ArrayList<>();
         World world = chunk.getWorld();
         int chunkX = chunk.getX();
@@ -70,7 +71,7 @@ public class BiomeUpdaterImpl implements BiomeUpdater {
     }
 
     @Override
-    public void updateChunksForPlayer(@NotNull Player player) {
+    public void updateChunksForPlayer(Player player) {
         int viewDistance = player.getViewDistance();
         Location playerLocation = player.getLocation();
         World world = player.getWorld();

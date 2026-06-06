@@ -3,7 +3,7 @@ package me.outspending.biomesapi.wrapper.worldgen.placement;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.annotations.Generated;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Auto-generated. Do not modify!
@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
  * @author BiomesAPI codegen
  */
 @AsOf("2.3.0")
-@Generated("2026-06-06T03:41:23.398134Z")
+@Generated("2026-06-06T19:27:06.389597Z")
 public final class PlacedFeatures {
 
     // From: AquaticPlacements 
@@ -554,7 +554,7 @@ public final class PlacedFeatures {
     @AsOf("2.3.0")
     public static final PlacedFeature PATCH_BERRY_BUSH_VILLAGE = reference("patch_berry_bush");
 
-    private static @NotNull PlacedFeature reference(@NotNull String path) {
+    private static @NonNull PlacedFeature reference(@NonNull String path) {
         return PlacedFeature.reference(BiomeResourceKey.minecraft(path));
     }
 

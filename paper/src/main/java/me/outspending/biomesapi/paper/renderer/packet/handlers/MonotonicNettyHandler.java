@@ -6,15 +6,16 @@ import me.outspending.biomesapi.renderer.packet.PacketHandler;
 import me.outspending.biomesapi.renderer.packet.PhonyCustomBiomeCollector;
 import me.outspending.biomesapi.renderer.packet.handlers.NettyPacketHandler;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 @AsOf("2.1.0")
 @ApiStatus.Internal
 public class MonotonicNettyHandler extends NettyPacketHandler {
 
     private boolean registered;
 
-    public MonotonicNettyHandler(@NotNull String name, @NotNull PhonyCustomBiomeCollector collector) {
+    public MonotonicNettyHandler(String name, PhonyCustomBiomeCollector collector) {
         super(name, collector);
     }
 

@@ -1,6 +1,7 @@
 package me.outspending.biomesapi.annotations;
 
 import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.NonNull;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -23,17 +24,17 @@ import java.lang.annotation.Target;
  *
  * In the above example, the {@code someApiMethod} method has been present or modified since version 1.0.
  */
+@AsOf("0.0.1")
+@Target({
+    ElementType.METHOD,
+    ElementType.TYPE,
+    ElementType.CONSTRUCTOR,
+    ElementType.MODULE,
+    ElementType.PACKAGE,
+    ElementType.FIELD
+})
 @ApiStatus.Internal
 @Retention(RetentionPolicy.RUNTIME)
-@Target({
-        ElementType.METHOD,
-        ElementType.TYPE,
-        ElementType.CONSTRUCTOR,
-        ElementType.MODULE,
-        ElementType.PACKAGE,
-        ElementType.FIELD
-})
-@AsOf("0.0.1")
 public @interface AsOf {
 
     /**
@@ -41,6 +42,6 @@ public @interface AsOf {
      *
      * @return A string representing the version or date.
      */
-    String value();
+    @NonNull String value();
 
 }

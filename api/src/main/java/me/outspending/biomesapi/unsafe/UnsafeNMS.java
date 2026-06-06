@@ -9,8 +9,8 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -23,6 +23,7 @@ import java.util.function.Supplier;
  * @since 0.0.1
  * @author Outspending
  */
+@NullMarked
 @AsOf("0.0.1")
 public interface UnsafeNMS {
 
@@ -37,7 +38,7 @@ public interface UnsafeNMS {
      * @return true if the chunk is within the player's view distance, false otherwise.
      */
     @AsOf("0.0.1")
-    private boolean inChunkViewDistance(@NotNull Player player, @NotNull Chunk chunk) {
+    private boolean inChunkViewDistance(Player player, Chunk chunk) {
         Location playerLocation = player.getLocation();
 
         int viewDistance = Bukkit.getViewDistance();
@@ -61,7 +62,7 @@ public interface UnsafeNMS {
      * @return A list of players who are within the view distance of the chunk.
      */
     @AsOf("0.0.1")
-    default List<Player> getPlayersInDistance(@NotNull Chunk chunk) {
+    default List<Player> getPlayersInDistance(Chunk chunk) {
         World world = chunk.getWorld();
 
         return world.getPlayers().stream()
@@ -76,7 +77,7 @@ public interface UnsafeNMS {
      * @since 0.0.1
      */
     @AsOf("0.0.1")
-    void updateChunks(@NotNull List<CompletableFuture<Chunk>> chunks, @Nullable Plugin plugin);
+    void updateChunks(List<CompletableFuture<Chunk>> chunks, @Nullable Plugin plugin);
 
     /**
      * Locks or unlocks the biome registry.
@@ -96,7 +97,7 @@ public interface UnsafeNMS {
      * @since 0.0.1
      */
     @AsOf("0.0.1")
-    void unlockRegistry(@NotNull Supplier<?> supplier);
+    void unlockRegistry(Supplier<?> supplier);
 
     /**
      * Checks if the biome registry is locked.
@@ -117,7 +118,7 @@ public interface UnsafeNMS {
      * @since 0.0.1
      */
     @AsOf("0.0.1")
-    @NotNull Object getRegistry();
+    Object getRegistry();
 
     /**
      * Updates the biome of a region.
@@ -127,6 +128,6 @@ public interface UnsafeNMS {
      * @since 0.0.1
      */
     @AsOf("0.0.1")
-    void updateBiome(@NotNull Location minLoc, @NotNull Location maxLoc, @NotNull NamespacedKey namespacedKey);
+    void updateBiome(Location minLoc, Location maxLoc, NamespacedKey namespacedKey);
 
 }

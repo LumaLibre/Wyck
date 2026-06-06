@@ -7,12 +7,12 @@ import me.outspending.biomesapi.wrapper.environment.MoonPhase;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleCatalog;
 import me.outspending.biomesapi.wrapper.environment.particle.WrappedAmbientParticle;
 import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.NullMarked;
 
 /**
- * Converters bridging API wrapper types to their NMS counterparts. Each converter
- * delegates to a wire that the commons module fulfills, so the API has no direct
- * NMS imports.
+ * Converters bridging API wrapper types to their NMS counterparts.
  */
+@NullMarked
 @AsOf("2.1.0")
 @ApiStatus.Internal
 final class AttributeConverters {

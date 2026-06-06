@@ -1,7 +1,7 @@
 package me.outspending.biomesapi.paper.configs;
 
 import me.outspending.biomesapi.renderer.packet.PacketHandler;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public enum ForcedInjector {
     PROTOCOLLIB(PacketHandler.Injector.PROTOCOLLIB),
@@ -9,13 +9,13 @@ public enum ForcedInjector {
     NETTY(PacketHandler.Injector.NETTY),
     NONE(null);
 
-    private final @Nullable PacketHandler.Injector injector;
+    private final PacketHandler.@Nullable Injector injector;
 
-    ForcedInjector(@Nullable PacketHandler.Injector injector) {
+    ForcedInjector(PacketHandler.@Nullable Injector injector) {
         this.injector = injector;
     }
 
-    public @Nullable PacketHandler.Injector getInjector() {
+    public PacketHandler.@Nullable Injector getInjector() {
         return injector;
     }
 

@@ -2,7 +2,7 @@ package me.outspending.biomesapi.unsafe;
 
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -14,6 +14,7 @@ import java.util.function.Consumer;
  * @since 0.0.1
  * @author Outspending
  */
+@NullMarked
 @AsOf("1.2.0")
 public class UnsafeNMSHandler {
 
@@ -49,7 +50,7 @@ public class UnsafeNMSHandler {
      * @param consumer the consumer to execute
      */
     @AsOf("0.0.2")
-    public static void executeNMS(@NotNull Consumer<UnsafeNMS> consumer) {
+    public static void executeNMS(Consumer<UnsafeNMS> consumer) {
         getNMS().ifPresent(consumer);
     }
 

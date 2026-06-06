@@ -6,7 +6,7 @@ import me.outspending.biomesapi.wrapper.NmsHandle;
 import me.outspending.biomesapi.wrapper.worldgen.carver.ConfiguredWorldCarver;
 import me.outspending.biomesapi.wrapper.worldgen.placement.PlacedFeature;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -22,6 +22,7 @@ import java.util.Objects;
  * @version 2.3.0
  * @author Jsinco
  */
+@NullMarked
 @AsOf("2.3.0")
 public interface BiomeGenerationSettings extends NmsHandle {
 
@@ -30,7 +31,7 @@ public interface BiomeGenerationSettings extends NmsHandle {
 
     @ApiStatus.Internal
     interface Factory {
-        @NotNull BiomeGenerationSettings create(@NotNull List<ConfiguredWorldCarver> carvers, @NotNull Map<GenerationStep, List<PlacedFeature>> features);
+        BiomeGenerationSettings create(List<ConfiguredWorldCarver> carvers, Map<GenerationStep, List<PlacedFeature>> features);
     }
 
     /**
@@ -39,7 +40,7 @@ public interface BiomeGenerationSettings extends NmsHandle {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    @NotNull List<ConfiguredWorldCarver> carvers();
+    List<ConfiguredWorldCarver> carvers();
 
     /**
      * The placed features applied to this biome's generation, grouped by step.
@@ -47,10 +48,10 @@ public interface BiomeGenerationSettings extends NmsHandle {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    @NotNull Map<GenerationStep, List<PlacedFeature>> features();
+    Map<GenerationStep, List<PlacedFeature>> features();
 
     @AsOf("2.3.0")
-    static @NotNull Builder builder() {
+    static Builder builder() {
         return new Builder();
     }
 
@@ -60,7 +61,7 @@ public interface BiomeGenerationSettings extends NmsHandle {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static @NotNull BiomeGenerationSettings empty() {
+    static BiomeGenerationSettings empty() {
         return new Builder().build();
     }
 
@@ -89,7 +90,7 @@ public interface BiomeGenerationSettings extends NmsHandle {
          * @since 2.3.0
          */
         @AsOf("2.3.0")
-        public @NotNull Builder addCarver(@NotNull ConfiguredWorldCarver carver) {
+        public Builder addCarver(ConfiguredWorldCarver carver) {
             Objects.requireNonNull(carver, "carver");
             this.carvers.add(carver);
             return this;
@@ -103,7 +104,7 @@ public interface BiomeGenerationSettings extends NmsHandle {
          * @since 2.3.0
          */
         @AsOf("2.3.0")
-        public @NotNull Builder addFeature(@NotNull GenerationStep step, @NotNull PlacedFeature feature) {
+        public Builder addFeature(GenerationStep step, PlacedFeature feature) {
             Objects.requireNonNull(step, "step");
             Objects.requireNonNull(feature, "feature");
             this.features.computeIfAbsent(step, s -> new ArrayList<>()).add(feature);
@@ -111,7 +112,7 @@ public interface BiomeGenerationSettings extends NmsHandle {
         }
 
         @AsOf("2.3.0")
-        public @NotNull BiomeGenerationSettings build() {
+        public BiomeGenerationSettings build() {
             return WIRE.get().create(this.carvers, this.features);
         }
     }

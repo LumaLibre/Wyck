@@ -4,7 +4,7 @@ import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
 import me.outspending.biomesapi.wrapper.NmsHandle;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Wraps the FloatProvider value-provider family. Sampling occurs
@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
  * @version 2.3.0
  * @author Jsinco
  */
+@NullMarked
 @AsOf("2.3.0")
 public sealed interface FloatProvider extends NmsHandle permits FloatProvider.Constant, FloatProvider.Uniform, FloatProvider.ClampedNormal, FloatProvider.Trapezoid {
 
@@ -22,30 +23,38 @@ public sealed interface FloatProvider extends NmsHandle permits FloatProvider.Co
 
     @ApiStatus.Internal
     interface Factory {
-        @NotNull Object toNms(@NotNull FloatProvider provider);
+        Object toNms(FloatProvider provider);
     }
 
     @AsOf("2.3.0")
-    static @NotNull FloatProvider constant(float value) { return new Constant(value); }
+    static FloatProvider constant(float value) { return new Constant(value); }
 
     @AsOf("2.3.0")
-    static @NotNull FloatProvider uniform(float minInclusive, float maxExclusive) { return new Uniform(minInclusive, maxExclusive); }
+    static FloatProvider uniform(float minInclusive, float maxExclusive) { return new Uniform(minInclusive, maxExclusive); }
 
     @AsOf("2.3.0")
-    static @NotNull FloatProvider clampedNormal(float mean, float deviation, float min, float max) { return new ClampedNormal(mean, deviation, min, max); }
+    static FloatProvider clampedNormal(float mean, float deviation, float min, float max) { return new ClampedNormal(mean, deviation, min, max); }
 
     @AsOf("2.3.0")
-    static @NotNull FloatProvider trapezoid(float min, float max, float plateau) { return new Trapezoid(min, max, plateau); }
+    static FloatProvider trapezoid(float min, float max, float plateau) { return new Trapezoid(min, max, plateau); }
 
-    /** Smallest value this provider can yield. */
-    @AsOf("2.3.0") float minValue();
+    /**
+     * @return the smallest value this provider can yield.
+     * @since 2.3.0
+     */
+    @AsOf("2.3.0")
+    float minValue();
 
-    /** Largest value this provider can yield. */
-    @AsOf("2.3.0") float maxValue();
+    /**
+     * @return the largest value this provider can yield.
+     * @since 2.3.0
+     */
+    @AsOf("2.3.0")
+    float maxValue();
 
     @Override
     @AsOf("2.3.0")
-    default @NotNull Object toMinecraft() {
+    default Object toMinecraft() {
         return WIRE.get().toNms(this);
     }
 

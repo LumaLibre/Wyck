@@ -13,11 +13,12 @@ import me.outspending.biomesapi.wrapper.worldgen.BiomeGenerationSettings;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Biome;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
+@NullMarked
 @ApiStatus.Internal
 public class AbstractBiomeImpl implements AbstractBiome {
 
@@ -78,22 +79,22 @@ public class AbstractBiomeImpl implements AbstractBiome {
     }
 
     @Override
-    public @NotNull NamespacedKey getKey() {
+    public NamespacedKey getKey() {
         return new NamespacedKey(resourceKey.namespace(), resourceKey.path());
     }
 
     @Override
-    public @NotNull Biome toBukkitBiome() {
+    public Biome toBukkitBiome() {
         return RegistryAccess.registryAccess().getRegistry(RegistryKey.BIOME).getOrThrow(this.getKey());
     }
 
     @Override
-    public @NotNull BiomeResourceKey getResourceKey() {
+    public BiomeResourceKey getResourceKey() {
         return this.resourceKey;
     }
 
     @Override
-    public @NotNull BiomeSettings getSettings() {
+    public BiomeSettings getSettings() {
         return this.settings;
     }
 
@@ -132,17 +133,17 @@ public class AbstractBiomeImpl implements AbstractBiome {
     }
 
     @Override
-    public @NotNull GrassColorModifier getGrassColorModifier() {
+    public GrassColorModifier getGrassColorModifier() {
         return grassColorModifier;
     }
 
     @Override
-    public @NotNull ParticleCatalog getParticleCatalog() {
+    public ParticleCatalog getParticleCatalog() {
         return particleCatalog;
     }
 
     @Override
-    public @NotNull WrappedEnvironmentAttributeMap getAttributes() {
+    public WrappedEnvironmentAttributeMap getAttributes() {
         return attributes;
     }
 
@@ -157,7 +158,7 @@ public class AbstractBiomeImpl implements AbstractBiome {
     }
 
     @Override
-    public AbstractBiomeImpl setSettings(@NotNull BiomeSettings settings) {
+    public AbstractBiomeImpl setSettings(BiomeSettings settings) {
         this.settings = settings;
         return this;
     }
@@ -205,19 +206,19 @@ public class AbstractBiomeImpl implements AbstractBiome {
     }
 
     @Override
-    public AbstractBiomeImpl setGrassColorModifier(@NotNull GrassColorModifier grassColorModifier) {
+    public AbstractBiomeImpl setGrassColorModifier(GrassColorModifier grassColorModifier) {
         this.grassColorModifier = grassColorModifier;
         return this;
     }
 
     @Override
-    public AbstractBiomeImpl setParticleCatalog(@NotNull ParticleCatalog particleCatalog) {
+    public AbstractBiomeImpl setParticleCatalog(ParticleCatalog particleCatalog) {
         this.particleCatalog = particleCatalog;
         return this;
     }
 
     @Override
-    public AbstractBiomeImpl setAttributes(@NotNull WrappedEnvironmentAttributeMap attributes) {
+    public AbstractBiomeImpl setAttributes(WrappedEnvironmentAttributeMap attributes) {
         this.attributes = attributes;
         return this;
     }
@@ -236,7 +237,7 @@ public class AbstractBiomeImpl implements AbstractBiome {
 
 
     @Override
-    public boolean isSimilar(@NotNull AbstractBiome otherBiome) {
+    public boolean isSimilar(AbstractBiome otherBiome) {
         if (this == otherBiome) return true;
         if (!this.resourceKey.equals(otherBiome.getResourceKey())) return false;
         if (!this.settings.equals(otherBiome.getSettings())) return false;

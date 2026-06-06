@@ -3,15 +3,16 @@ package me.outspending.biomesapi.wrapper.worldgen.valueproviders;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.annotations.WireFactory;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 @WireFactory
 @AsOf("2.3.0")
 @ApiStatus.Internal
 public final class HeightProviderFactoryImpl implements HeightProvider.Factory {
 
     @Override
-    public @NotNull Object toNms(@NotNull HeightProvider provider) {
+    public Object toNms(HeightProvider provider) {
         return switch (provider) {
             case HeightProvider.Constant c -> {
                 net.minecraft.world.level.levelgen.VerticalAnchor value = nmsAnchor(c.value());
@@ -40,7 +41,7 @@ public final class HeightProviderFactoryImpl implements HeightProvider.Factory {
         };
     }
 
-    private net.minecraft.world.level.levelgen.VerticalAnchor nmsAnchor(@NotNull VerticalAnchor anchor) {
+    private net.minecraft.world.level.levelgen.VerticalAnchor nmsAnchor(VerticalAnchor anchor) {
         return (net.minecraft.world.level.levelgen.VerticalAnchor) anchor.toMinecraft();
     }
 }

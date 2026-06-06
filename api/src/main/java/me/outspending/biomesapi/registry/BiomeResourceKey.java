@@ -8,7 +8,7 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.KeyPattern;
 import net.kyori.adventure.key.Keyed;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * This interface represents a key for a biome resource in the game.
@@ -18,6 +18,7 @@ import org.jetbrains.annotations.NotNull;
  * @since 0.0.1
  * @author Outspending
  */
+@NullMarked
 @AsOf("2.3.0")
 @SuppressWarnings("PatternValidation")
 public interface BiomeResourceKey extends Key, Keyed, NmsHandle {
@@ -39,18 +40,18 @@ public interface BiomeResourceKey extends Key, Keyed, NmsHandle {
      */
     @AsOf("0.0.15")
     @KeyPattern.Namespace
-    @NotNull String namespace();
+    String namespace();
 
     /**
      * The path portion of this key.
      */
     @AsOf("0.0.15")
-    @NotNull String path();
+    String path();
 
     @Override
     @AsOf("2.2.1")
     @KeyPattern.Value
-    default @NotNull String value() {
+    default String value() {
         return path();
     }
 
@@ -60,7 +61,7 @@ public interface BiomeResourceKey extends Key, Keyed, NmsHandle {
      * @since 2.0.0
      */
     @AsOf("2.0.0")
-    @NotNull Object resourceLocation();
+    Object resourceLocation();
 
     /**
      * Creates a new BiomeResourceKey from the given namespace and path.
@@ -71,7 +72,7 @@ public interface BiomeResourceKey extends Key, Keyed, NmsHandle {
      * @since 0.0.1
      */
     @AsOf("0.0.1")
-    static @NotNull BiomeResourceKey of(@NotNull String namespace, @NotNull String path) {
+    static BiomeResourceKey of(String namespace, String path) {
         Preconditions.checkArgument(!namespace.isEmpty(), "namespace cannot be empty");
         Preconditions.checkArgument(!path.isEmpty(), "path cannot be empty");
         return WIRE.get().create(namespace.toLowerCase(), path.toLowerCase());
@@ -84,7 +85,7 @@ public interface BiomeResourceKey extends Key, Keyed, NmsHandle {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static @NotNull BiomeResourceKey of(@NotNull String string) {
+    static BiomeResourceKey of(String string) {
         return fromString(string);
     }
 
@@ -94,7 +95,7 @@ public interface BiomeResourceKey extends Key, Keyed, NmsHandle {
      * @return a new BiomeResourceKey with the "biomesapi" namespace and the given path
      */
     @AsOf("0.0.8")
-    static @NotNull BiomeResourceKey biomesapi(@NotNull String path) {
+    static BiomeResourceKey biomesapi(String path) {
         return of(BIOMESAPI_NAMESPACE, path);
     }
 
@@ -105,7 +106,7 @@ public interface BiomeResourceKey extends Key, Keyed, NmsHandle {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static @NotNull BiomeResourceKey minecraft(@NotNull String path) {
+    static BiomeResourceKey minecraft(String path) {
         return of(MINECRAFT_NAMESPACE, path);
     }
 
@@ -118,7 +119,7 @@ public interface BiomeResourceKey extends Key, Keyed, NmsHandle {
      * @since 0.0.15
      */
     @AsOf("0.0.15")
-    static @NotNull BiomeResourceKey fromString(@NotNull String keyString) {
+    static BiomeResourceKey fromString(String keyString) {
         Preconditions.checkArgument(!keyString.isEmpty(), "keyString cannot be empty");
         String[] parts = keyString.split(String.valueOf(NAMESPACE_SEPARATOR), 2);
         Preconditions.checkArgument(parts.length == 2, "keyString must be in the format 'namespace:path'");
@@ -127,19 +128,19 @@ public interface BiomeResourceKey extends Key, Keyed, NmsHandle {
 
     @AsOf("2.2.1")
     @Override
-    default @NotNull String asString() {
+    default String asString() {
         return namespace() + NAMESPACE_SEPARATOR + path();
     }
 
     @AsOf("0.0.6")
     @Override
-    default @NotNull Key key() {
+    default Key key() {
         return Key.key(namespace(), path());
     }
 
     @Override
     @AsOf("2.3.0")
-    default @NotNull Object toMinecraft() {
+    default Object toMinecraft() {
         return resourceLocation();
     }
 }

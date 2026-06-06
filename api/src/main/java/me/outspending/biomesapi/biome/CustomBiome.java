@@ -20,8 +20,8 @@ import me.outspending.biomesapi.wrapper.environment.particle.WrappedParticleType
 import me.outspending.biomesapi.wrapper.worldgen.BiomeGenerationSettings;
 import org.bukkit.Color;
 import org.bukkit.Material;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 
@@ -33,6 +33,7 @@ import java.util.Collection;
  * @version 2.3.0
  * @author Outspending
  */
+@NullMarked
 @AsOf("2.3.0")
 public interface CustomBiome extends AbstractBiome {
 
@@ -43,7 +44,7 @@ public interface CustomBiome extends AbstractBiome {
      * @since 0.0.6
      */
     @AsOf("0.0.6")
-    @NotNull BlockReplacement[] getBlockReplacements();
+    BlockReplacement[] getBlockReplacements();
 
     /**
      * Sets the BlockReplacements of the CustomBiome.
@@ -54,7 +55,7 @@ public interface CustomBiome extends AbstractBiome {
      * @return the CustomBiome with the updated BlockReplacements
      */
     @AsOf("0.0.6")
-    CustomBiome setBlockReplacements(@NotNull BlockReplacement[] blockReplacements);
+    CustomBiome setBlockReplacements(BlockReplacement[] blockReplacements);
 
     /**
      * Compares this CustomBiome to another CustomBiome to determine if they are similar.
@@ -65,7 +66,7 @@ public interface CustomBiome extends AbstractBiome {
      * @since 0.0.17
      */
     @AsOf("0.0.17")
-    boolean isSimilar(@NotNull CustomBiome otherBiome);
+    boolean isSimilar(CustomBiome otherBiome);
 
     /**
      * Registers the CustomBiome to the biome registry.
@@ -148,7 +149,7 @@ public interface CustomBiome extends AbstractBiome {
      * @since 0.0.1
      */
     @AsOf("0.0.1")
-    static @NotNull CustomBiome.Builder builder() {
+    static CustomBiome.Builder builder() {
         return new CustomBiome.Builder();
     }
 
@@ -159,7 +160,7 @@ public interface CustomBiome extends AbstractBiome {
      * @since 2.1.0
      */
     @AsOf("2.1.0")
-    static @NotNull CustomBiome.Builder builder(@NotNull BiomeResourceKey resourceKey) {
+    static CustomBiome.Builder builder(BiomeResourceKey resourceKey) {
         Preconditions.checkNotNull(resourceKey, "Resource key cannot be null.");
         return new CustomBiome.Builder().resourceKey(resourceKey);
     }
@@ -209,7 +210,7 @@ public interface CustomBiome extends AbstractBiome {
          * @since 0.0.5
          */
         @AsOf("0.0.5")
-        public Builder(@NotNull CustomBiome biome) {
+        public Builder(CustomBiome biome) {
             this.resourceKey = biome.getResourceKey();
             this.settings = biome.getSettings();
             this.fogColor = biome.getFogColor();
@@ -235,7 +236,7 @@ public interface CustomBiome extends AbstractBiome {
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("0.0.1")
-        public @NotNull Builder resourceKey(@NotNull BiomeResourceKey resourceKey) {
+        public Builder resourceKey(BiomeResourceKey resourceKey) {
             this.resourceKey = resourceKey;
             return this;
         }
@@ -248,7 +249,7 @@ public interface CustomBiome extends AbstractBiome {
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("0.0.1")
-        public @NotNull Builder settings(@NotNull BiomeSettings settings) {
+        public Builder settings(BiomeSettings settings) {
             this.settings = settings;
             return this;
         }
@@ -261,7 +262,7 @@ public interface CustomBiome extends AbstractBiome {
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("0.0.1")
-        public @NotNull Builder fogColor(@NotNull String fogColor) {
+        public Builder fogColor(String fogColor) {
             this.fogColor = AbstractBiome.parseHex(fogColor);
             return this;
         }
@@ -274,7 +275,7 @@ public interface CustomBiome extends AbstractBiome {
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("0.0.1")
-        public @NotNull Builder fogColor(@NotNull Color fogColor) {
+        public Builder fogColor(Color fogColor) {
             this.fogColor = fogColor.asRGB();
             return this;
         }
@@ -287,7 +288,7 @@ public interface CustomBiome extends AbstractBiome {
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("0.0.1")
-        public @NotNull Builder waterColor(@NotNull String waterColor) {
+        public Builder waterColor(String waterColor) {
             @Nullable Integer parsedColor = AbstractBiome.parseHex(waterColor);
             if (parsedColor != null) this.waterColor = parsedColor;
             return this;
@@ -301,7 +302,7 @@ public interface CustomBiome extends AbstractBiome {
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("0.0.1")
-        public @NotNull Builder waterColor(@NotNull Color waterColor) {
+        public Builder waterColor(Color waterColor) {
             this.waterColor = waterColor.asRGB();
             return this;
         }
@@ -314,7 +315,7 @@ public interface CustomBiome extends AbstractBiome {
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("0.0.1")
-        public @NotNull Builder waterFogColor(@NotNull String waterFogColor) {
+        public Builder waterFogColor(String waterFogColor) {
             this.waterFogColor = AbstractBiome.parseHex(waterFogColor);
             return this;
         }
@@ -327,7 +328,7 @@ public interface CustomBiome extends AbstractBiome {
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("0.0.1")
-        public @NotNull Builder waterFogColor(@NotNull Color waterFogColor) {
+        public Builder waterFogColor(Color waterFogColor) {
             this.waterFogColor = waterFogColor.asRGB();
             return this;
         }
@@ -340,7 +341,7 @@ public interface CustomBiome extends AbstractBiome {
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("0.0.1")
-        public @NotNull Builder skyColor(@NotNull String skyColor) {
+        public Builder skyColor(String skyColor) {
             this.skyColor = AbstractBiome.parseHex(skyColor);
             return this;
         }
@@ -353,7 +354,7 @@ public interface CustomBiome extends AbstractBiome {
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("0.0.1")
-        public @NotNull Builder skyColor(@NotNull Color skyColor) {
+        public Builder skyColor(Color skyColor) {
             this.skyColor = skyColor.asRGB();
             return this;
         }
@@ -366,7 +367,7 @@ public interface CustomBiome extends AbstractBiome {
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("0.0.1")
-        public @NotNull Builder foliageColor(@NotNull String foliageColor) {
+        public Builder foliageColor(String foliageColor) {
             this.foliageColor = AbstractBiome.parseHex(foliageColor);
             return this;
         }
@@ -379,7 +380,7 @@ public interface CustomBiome extends AbstractBiome {
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("0.0.1")
-        public @NotNull Builder foliageColor(@NotNull Color foliageColor) {
+        public Builder foliageColor(Color foliageColor) {
             this.foliageColor = foliageColor.asRGB();
             return this;
         }
@@ -392,7 +393,7 @@ public interface CustomBiome extends AbstractBiome {
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("0.0.1")
-        public @NotNull Builder grassColor(@NotNull String grassColor) {
+        public Builder grassColor(String grassColor) {
             this.grassColor = AbstractBiome.parseHex(grassColor);
             return this;
         }
@@ -405,7 +406,7 @@ public interface CustomBiome extends AbstractBiome {
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("0.0.1")
-        public @NotNull Builder grassColor(@NotNull Color grassColor) {
+        public Builder grassColor(Color grassColor) {
             this.grassColor = grassColor.asRGB();
             return this;
         }
@@ -418,7 +419,7 @@ public interface CustomBiome extends AbstractBiome {
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("1.2.0")
-        public @NotNull Builder dryFoliageColor(@NotNull String dryFoliageColor) {
+        public Builder dryFoliageColor(String dryFoliageColor) {
             this.dryFoliageColor = AbstractBiome.parseHex(dryFoliageColor);
             return this;
         }
@@ -431,7 +432,7 @@ public interface CustomBiome extends AbstractBiome {
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("1.2.0")
-        public @NotNull Builder dryFoliageColor(@NotNull Color dryFoliageColor) {
+        public Builder dryFoliageColor(Color dryFoliageColor) {
             this.dryFoliageColor = dryFoliageColor.asRGB();
             return this;
         }
@@ -444,7 +445,7 @@ public interface CustomBiome extends AbstractBiome {
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("0.0.24")
-        public @NotNull Builder grassColorModifier(@NotNull GrassColorModifier grassColorModifier) {
+        public Builder grassColorModifier(GrassColorModifier grassColorModifier) {
             this.grassColorModifier = grassColorModifier;
             return this;
         }
@@ -457,7 +458,7 @@ public interface CustomBiome extends AbstractBiome {
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("1.1.0")
-        public @NotNull Builder particleCatalog(@NotNull ParticleCatalog particleCatalog) {
+        public Builder particleCatalog(ParticleCatalog particleCatalog) {
             this.particleCatalog = particleCatalog;
             return this;
         }
@@ -470,7 +471,7 @@ public interface CustomBiome extends AbstractBiome {
          * @since 2.1.0
          */
         @AsOf("2.1.0")
-        public @NotNull Builder ambientParticle(@NotNull WrappedParticleTypes particleType, float probability) {
+        public Builder ambientParticle(WrappedParticleTypes particleType, float probability) {
             this.particleCatalog = this.particleCatalog.with(particleType, probability);
             return this;
         }
@@ -485,7 +486,7 @@ public interface CustomBiome extends AbstractBiome {
          * @since 2.1.0
          */
         @AsOf("2.1.0")
-        public @NotNull <T extends ParticleData<T>> Builder ambientParticle(@NotNull WrappedParticleTypes particleType, float probability, @Nullable T data) {
+        public <T extends ParticleData> Builder ambientParticle(WrappedParticleTypes particleType, float probability, @Nullable T data) {
             this.particleCatalog = this.particleCatalog.with(particleType, probability, data);
             return this;
         }
@@ -499,7 +500,7 @@ public interface CustomBiome extends AbstractBiome {
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("0.0.6")
-        public @NotNull Builder blockReplacements(@NotNull BlockReplacement... blockReplacements) {
+        public Builder blockReplacements(BlockReplacement... blockReplacements) {
             this.blockReplacements = blockReplacements;
             return this;
         }
@@ -513,7 +514,7 @@ public interface CustomBiome extends AbstractBiome {
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("2.1.0")
-        public @NotNull Builder blockReplacements(@NotNull Collection<BlockReplacement> blockReplacements) {
+        public Builder blockReplacements(Collection<BlockReplacement> blockReplacements) {
             this.blockReplacements = blockReplacements.toArray(new BlockReplacement[0]);
             return this;
         }
@@ -528,7 +529,7 @@ public interface CustomBiome extends AbstractBiome {
          * @since 2.1.0
          */
         @AsOf("2.1.0")
-        public @NotNull Builder replace(@NotNull Material from, @NotNull Material to) {
+        public Builder replace(Material from, Material to) {
             BlockReplacement newReplacement = new BlockReplacement(from, to);
             BlockReplacement[] newArray = new BlockReplacement[blockReplacements.length + 1];
             System.arraycopy(blockReplacements, 0, newArray, 0, blockReplacements.length);
@@ -545,7 +546,7 @@ public interface CustomBiome extends AbstractBiome {
          * @since 2.1.0
          */
         @AsOf("2.1.0")
-        public @NotNull Builder replace(@NotNull BlockReplacement replacement) {
+        public Builder replace(BlockReplacement replacement) {
             BlockReplacement[] newArray = new BlockReplacement[blockReplacements.length + 1];
             System.arraycopy(blockReplacements, 0, newArray, 0, blockReplacements.length);
             newArray[newArray.length - 1] = replacement;
@@ -564,7 +565,7 @@ public interface CustomBiome extends AbstractBiome {
          */
         @AsOf("1.1.0")
         @Deprecated(forRemoval = true, since = "2.1.0")
-        public @NotNull Builder environmentAttributeMap(@NotNull WrappedEnvironmentAttributeMap environmentAttributeMap) {
+        public Builder environmentAttributeMap(WrappedEnvironmentAttributeMap environmentAttributeMap) {
             setAttributes(environmentAttributeMap);
             return this;
         }
@@ -578,7 +579,7 @@ public interface CustomBiome extends AbstractBiome {
          * @since 2.1.0
          */
         @AsOf("2.1.0")
-        public @NotNull Builder setAttributes(@NotNull WrappedEnvironmentAttributeMap environmentAttributeMap) {
+        public Builder setAttributes(WrappedEnvironmentAttributeMap environmentAttributeMap) {
             this.attributeMap = environmentAttributeMap;
             return this;
         }
@@ -594,7 +595,7 @@ public interface CustomBiome extends AbstractBiome {
          * @since 2.1.0
          */
         @AsOf("2.1.0")
-        public @NotNull <T, K> Builder setAttribute(@NotNull WrappedEnvironmentAttributeSupplier<T, K> supplier, @NotNull K value) {
+        public <T, K> Builder setAttribute(WrappedEnvironmentAttributeSupplier<T, K> supplier, K value) {
             this.attributeMap = this.attributeMap.with(supplier, value);
             return this;
         }
@@ -608,7 +609,7 @@ public interface CustomBiome extends AbstractBiome {
          * @since 2.1.0
          */
         @AsOf("2.1.0")
-        public @NotNull Builder setAttribute(@NotNull IntColorSupplier supplier, @NotNull String hex) {
+        public Builder setAttribute(IntColorSupplier supplier, String hex) {
             this.attributeMap = this.attributeMap.with(supplier, hex);
             return this;
         }
@@ -619,7 +620,7 @@ public interface CustomBiome extends AbstractBiome {
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("2.3.0")
-        public @NotNull Builder setSpawner(@Nullable BiomeSpawner biomeSpawner) {
+        public Builder setSpawner(@Nullable BiomeSpawner biomeSpawner) {
             this.biomeSpawner = biomeSpawner;
             return this;
         }
@@ -632,7 +633,7 @@ public interface CustomBiome extends AbstractBiome {
          * @since 2.3.0
          */
         @AsOf("2.3.0")
-        public @NotNull Builder setGenerationSettings(@Nullable BiomeGenerationSettings generationSettings) {
+        public Builder setGenerationSettings(@Nullable BiomeGenerationSettings generationSettings) {
             this.generationSettings = generationSettings;
             return this;
         }
@@ -645,7 +646,7 @@ public interface CustomBiome extends AbstractBiome {
          * @return a new CustomBiome object.
          */
         @AsOf("1.1.0")
-        public @NotNull CustomBiome build() {
+        public CustomBiome build() {
             Preconditions.checkArgument(resourceKey != null, "Resource key must be set");
             Preconditions.checkArgument(settings != null, "Settings must be set");
 
@@ -675,7 +676,7 @@ public interface CustomBiome extends AbstractBiome {
          * @since 2.1.0
          */
         @AsOf("2.1.0")
-        public @NotNull CustomBiome register() {
+        public CustomBiome register() {
             return build().register();
         }
 

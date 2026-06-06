@@ -6,7 +6,7 @@ import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.factory.WireProvider;
 import me.outspending.biomesapi.util.ThrowingRunnable;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Registers custom biomes during the Paper bootstrap/registry-load phase, so they enter the
@@ -17,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
  * @version 2.3.0
  * @author Jsinco
  */
+@NullMarked
 @AsOf("2.3.0")
 @ApiStatus.Experimental
 @SuppressWarnings("UnstableApiUsage")
@@ -36,7 +37,7 @@ public interface BootstrapBiomeRegistry {
      * @see Composer
      */
     @AsOf("2.3.0")
-    static @NotNull BootstrapBiomeRegistry compose(BootstrapContext context, Composer type) {
+    static BootstrapBiomeRegistry compose(BootstrapContext context, Composer type) {
         BootstrapBiomeRegistry registry = type == Composer.INJECTOR ? injector() : datapack();
         registry.install(context);
         return registry;
@@ -49,7 +50,7 @@ public interface BootstrapBiomeRegistry {
      * @apiNote {@link #install(BootstrapContext)} must be called after this method.
      */
     @AsOf("2.3.0")
-    static @NotNull BootstrapBiomeRegistry injector() {
+    static BootstrapBiomeRegistry injector() {
         return UNSAFE.getNew();
     }
 
@@ -60,7 +61,7 @@ public interface BootstrapBiomeRegistry {
      * @apiNote {@link #install(BootstrapContext)} must be called after this method.
      */
     @AsOf("2.3.0")
-    static @NotNull BootstrapBiomeRegistry datapack() {
+    static BootstrapBiomeRegistry datapack() {
         return DATAPACK.getNew();
     }
 
@@ -70,7 +71,7 @@ public interface BootstrapBiomeRegistry {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    @NotNull BootstrapBiomeRegistry install(@NotNull BootstrapContext context);
+    BootstrapBiomeRegistry install(BootstrapContext context);
 
     /**
      * Queues a biome to be registered.
@@ -78,7 +79,7 @@ public interface BootstrapBiomeRegistry {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    @NotNull BootstrapBiomeRegistry queue(@NotNull CustomBiome biome);
+    BootstrapBiomeRegistry queue(CustomBiome biome);
 
     /**
      * Defers the execution of a runnable until the registry is installed.
@@ -87,5 +88,5 @@ public interface BootstrapBiomeRegistry {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    @NotNull BootstrapBiomeRegistry deferring(@NotNull ThrowingRunnable runnable);
+    BootstrapBiomeRegistry deferring(ThrowingRunnable runnable);
 }

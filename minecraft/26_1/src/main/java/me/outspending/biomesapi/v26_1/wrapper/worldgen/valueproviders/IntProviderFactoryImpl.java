@@ -10,15 +10,16 @@ import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.TrapezoidInt;
 import net.minecraft.util.valueproviders.UniformInt;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 @WireFactory
 @AsOf("2.3.0")
 @ApiStatus.Internal
 public final class IntProviderFactoryImpl implements IntProvider.Factory {
 
     @Override
-    public @NotNull Object toNms(@NotNull IntProvider provider) {
+    public Object toNms(IntProvider provider) {
         return switch (provider) {
             case IntProvider.Constant c -> ConstantInt.of(c.value());
             case IntProvider.Uniform u -> UniformInt.of(u.minInclusive(), u.maxInclusive());
@@ -30,13 +31,13 @@ public final class IntProviderFactoryImpl implements IntProvider.Factory {
         };
     }
 
-    private net.minecraft.util.valueproviders.IntProvider buildClamped(@NotNull IntProvider.Clamped clamped) {
+    private net.minecraft.util.valueproviders.IntProvider buildClamped(IntProvider.Clamped clamped) {
         net.minecraft.util.valueproviders.IntProvider source =
                 (net.minecraft.util.valueproviders.IntProvider) clamped.source().toMinecraft();
         return net.minecraft.util.valueproviders.ClampedInt.of(source, clamped.minInclusive(), clamped.maxInclusive());
     }
 
-    private net.minecraft.util.valueproviders.IntProvider buildWeightedList(@NotNull IntProvider.WeightedListInt weighted) {
+    private net.minecraft.util.valueproviders.IntProvider buildWeightedList(IntProvider.WeightedListInt weighted) {
         net.minecraft.util.random.WeightedList.Builder<net.minecraft.util.valueproviders.IntProvider> builder =
                 net.minecraft.util.random.WeightedList.builder();
         for (WeightedList.Weighted<IntProvider> entry : weighted.distribution().unwrap()) {

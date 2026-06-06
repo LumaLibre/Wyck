@@ -25,16 +25,19 @@ import org.bukkit.block.Biome;
 import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.craftbukkit.block.CraftBiome;
 import org.bukkit.craftbukkit.util.CraftMagicNumbers;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.NullMarked;
 
 import java.lang.reflect.Field;
 
+@NullMarked
 @WireFactory
 @AsOf("0.0.6")
+@ApiStatus.Internal
 public final class NmsNativeChunkPacketHandler implements NativeChunkPacketHandler {
 
     @Override
-    public void modifyChunkBiomes(@NotNull Object chunkDataObj, @NotNull ChunkLocation chunkLocation, @NotNull PhonyBiomeResolver resolver, @NotNull PacketHandler.DimensionSectionCount dimensionSectionCount) {
+    public void modifyChunkBiomes(Object chunkDataObj, ChunkLocation chunkLocation, PhonyBiomeResolver resolver, PacketHandler.DimensionSectionCount dimensionSectionCount) {
         ClientboundLevelChunkPacketData chunkData = (ClientboundLevelChunkPacketData) chunkDataObj;
 
 
@@ -47,7 +50,7 @@ public final class NmsNativeChunkPacketHandler implements NativeChunkPacketHandl
         }
 
         Biome bukkitBiome = customBiome.toBukkitBiome();
-        Holder<net.minecraft.world.level.biome.@NotNull Biome> minecraftBiome =
+        Holder<net.minecraft.world.level.biome.Biome> minecraftBiome =
                 CraftBiome.bukkitToMinecraftHolder(bukkitBiome);
 
         if (minecraftBiome == null) {

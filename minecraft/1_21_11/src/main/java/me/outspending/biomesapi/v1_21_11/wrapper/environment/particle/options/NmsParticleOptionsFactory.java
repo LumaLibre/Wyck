@@ -33,22 +33,25 @@ import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.util.CraftLocation;
 import org.bukkit.craftbukkit.util.CraftMagicNumbers;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 @WireFactory
+@ApiStatus.Internal
 @SuppressWarnings("unchecked")
 public final class NmsParticleOptionsFactory implements ParticleOptionsFactory {
 
     @Override
     public ParticleOptionsHandle block(ParticleTypeHandle type, Material material) {
-        ParticleType<@NotNull BlockParticleOption> nmsType = (ParticleType<@NotNull BlockParticleOption>) ((NmsParticleTypeHandle<?>) type).nms();
+        ParticleType<BlockParticleOption> nmsType = (ParticleType<BlockParticleOption>) ((NmsParticleTypeHandle<?>) type).nms();
         BlockState blockState = CraftMagicNumbers.getBlock(material).defaultBlockState();
         return new NmsParticleOptionsHandle(new BlockParticleOption(nmsType, blockState));
     }
 
     @Override
     public ParticleOptionsHandle color(ParticleTypeHandle type, int rgb) {
-        ParticleType<@NotNull ColorParticleOption> nmsType = (ParticleType<@NotNull ColorParticleOption>) ((NmsParticleTypeHandle<?>) type).nms();
+        ParticleType<ColorParticleOption> nmsType = (ParticleType<ColorParticleOption>) ((NmsParticleTypeHandle<?>) type).nms();
         return new NmsParticleOptionsHandle(ColorParticleOption.create(nmsType, rgb));
     }
 
@@ -64,14 +67,14 @@ public final class NmsParticleOptionsFactory implements ParticleOptionsFactory {
 
     @Override
     public ParticleOptionsHandle item(ParticleTypeHandle type, ItemStack bukkitItemStack) {
-        ParticleType<@NotNull ItemParticleOption> nmsType = (ParticleType<@NotNull ItemParticleOption>) ((NmsParticleTypeHandle<?>) type).nms();
+        ParticleType<ItemParticleOption> nmsType = (ParticleType<ItemParticleOption>) ((NmsParticleTypeHandle<?>) type).nms();
         net.minecraft.world.item.ItemStack nmsStack = CraftItemStack.asCraftCopy(bukkitItemStack).handle;
         return new NmsParticleOptionsHandle(new ItemParticleOption(nmsType, nmsStack));
     }
 
     @Override
     public ParticleOptionsHandle power(ParticleTypeHandle type, float power) {
-        ParticleType<@NotNull PowerParticleOption> nmsType = (ParticleType<@NotNull PowerParticleOption>) ((NmsParticleTypeHandle<?>) type).nms();
+        ParticleType<PowerParticleOption> nmsType = (ParticleType<PowerParticleOption>) ((NmsParticleTypeHandle<?>) type).nms();
         return new NmsParticleOptionsHandle(PowerParticleOption.create(nmsType, power));
     }
 
@@ -89,7 +92,7 @@ public final class NmsParticleOptionsFactory implements ParticleOptionsFactory {
 
     @Override
     public ParticleOptionsHandle spell(ParticleTypeHandle type, int rgb, float power) {
-        ParticleType<@NotNull SpellParticleOption> nmsType = (ParticleType<@NotNull SpellParticleOption>) ((NmsParticleTypeHandle<?>) type).nms();
+        ParticleType<SpellParticleOption> nmsType = (ParticleType<SpellParticleOption>) ((NmsParticleTypeHandle<?>) type).nms();
         return new NmsParticleOptionsHandle(SpellParticleOption.create(nmsType, rgb, power));
     }
 
@@ -118,7 +121,7 @@ public final class NmsParticleOptionsFactory implements ParticleOptionsFactory {
 
     @SuppressWarnings("unchecked")
     private static <O extends ParticleOptions> NmsParticleTypeHandle<O> wrap(ParticleType<?> nms) {
-        return new NmsParticleTypeHandle<>((ParticleType<@NotNull O>) nms);
+        return new NmsParticleTypeHandle<>((ParticleType<O>) nms);
     }
 
 

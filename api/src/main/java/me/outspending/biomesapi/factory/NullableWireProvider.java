@@ -1,7 +1,9 @@
 package me.outspending.biomesapi.factory;
 
 import me.outspending.biomesapi.annotations.AsOf;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullUnmarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Optional;
 
@@ -12,13 +14,14 @@ import java.util.Optional;
  * @version 2.1.0
  * @author Jsinco
  */
-public final class NullableWireProvider<F> extends WireProvider<F> {
+@NullUnmarked
+public final class NullableWireProvider<F> extends WireProvider<@NonNull F> {
 
     private final boolean reflectiveFallback;
     private boolean initialized;
 
     @AsOf("2.1.0")
-    private NullableWireProvider(String classNameTemplate, boolean reflectiveFallback) {
+    private NullableWireProvider(@Nullable String classNameTemplate, boolean reflectiveFallback) {
         super(classNameTemplate);
         this.reflectiveFallback = reflectiveFallback;
     }
@@ -28,7 +31,7 @@ public final class NullableWireProvider<F> extends WireProvider<F> {
      * if no provider has been explicitly set.
      */
     @AsOf("2.1.0")
-    public static <F> NullableWireProvider<F> create(String classNameTemplate) {
+    public static <F> @NonNull NullableWireProvider<@NonNull F> create(@NonNull String classNameTemplate) {
         return new NullableWireProvider<>(classNameTemplate, true);
     }
 
@@ -39,7 +42,7 @@ public final class NullableWireProvider<F> extends WireProvider<F> {
      * the host plugin has explicitly wired itself up.
      */
     @AsOf("2.1.0")
-    public static <F> NullableWireProvider<F> empty() {
+    public static <F> @NonNull NullableWireProvider<@NonNull F> empty() {
         return new NullableWireProvider<>(null, false);
     }
 
@@ -50,7 +53,7 @@ public final class NullableWireProvider<F> extends WireProvider<F> {
      */
     @Override
     @AsOf("2.1.0")
-    public @Nullable F get() {
+    public F get() {
         if (initialized) {
             return factory;
         }
@@ -67,7 +70,7 @@ public final class NullableWireProvider<F> extends WireProvider<F> {
         }
     }
 
-    public Optional<F> optional() {
+    public @NonNull Optional<F> optional() {
         return Optional.ofNullable(get());
     }
 }

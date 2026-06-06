@@ -6,6 +6,7 @@ import me.outspending.biomesapi.registry.BiomeResourceKey;
 import me.outspending.biomesapi.wrapper.NmsHandle;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 // TODO: Custom ConfiguredFeature implementations
 /**
@@ -15,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
  * @version 2.3.0
  * @author Jsinco
  */
+@NullMarked
 @AsOf("2.3.0")
 @ApiStatus.Experimental
 public sealed interface ConfiguredFeature extends NmsHandle permits ConfiguredFeature.Reference {
@@ -24,7 +26,7 @@ public sealed interface ConfiguredFeature extends NmsHandle permits ConfiguredFe
 
     @ApiStatus.Internal
     interface Factory {
-        @NotNull Object toNms(@NotNull ConfiguredFeature feature);
+        Object toNms(ConfiguredFeature feature);
     }
 
     /**
@@ -34,13 +36,13 @@ public sealed interface ConfiguredFeature extends NmsHandle permits ConfiguredFe
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static @NotNull ConfiguredFeature reference(@NotNull BiomeResourceKey key) {
+    static ConfiguredFeature reference(BiomeResourceKey key) {
         return new Reference(key);
     }
 
     @Override
     @AsOf("2.3.0")
-    default @NotNull Object toMinecraft() {
+    default Object toMinecraft() {
         return WIRE.get().toNms(this);
     }
 
@@ -49,5 +51,5 @@ public sealed interface ConfiguredFeature extends NmsHandle permits ConfiguredFe
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    record Reference(@NotNull BiomeResourceKey key) implements ConfiguredFeature {}
+    record Reference(BiomeResourceKey key) implements ConfiguredFeature {}
 }

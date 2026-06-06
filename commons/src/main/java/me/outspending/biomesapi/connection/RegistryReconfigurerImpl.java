@@ -25,8 +25,9 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -37,6 +38,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
+@NullMarked
+@ApiStatus.Internal
 @SuppressWarnings("UnstableApiUsage")
 public class RegistryReconfigurerImpl implements RegistryReconfigurer {
 
@@ -51,7 +54,7 @@ public class RegistryReconfigurerImpl implements RegistryReconfigurer {
     private final Map<Connection, PendingResync> pending = new ConcurrentHashMap<>();
     private final InternalListener listener = new InternalListener();
 
-    // I'm using a sort of lazy listener for right now
+    // TODO: Should this be a lazy listener?
     private volatile boolean listenerActive;
 
     public RegistryReconfigurerImpl(Plugin plugin) {
@@ -59,7 +62,7 @@ public class RegistryReconfigurerImpl implements RegistryReconfigurer {
     }
 
     @Override
-    public void resendRegistries(@NotNull Player player, @Nullable Consumer<PlayerConfigurationConnection> consumer) throws HorriblePlayerLoginEvent {
+    public void resendRegistries(Player player, @Nullable Consumer<PlayerConfigurationConnection> consumer) throws HorriblePlayerLoginEvent {
         var sp = ((CraftPlayer) player).getHandle();
         Connection netConn = sp.connection.connection;
 
@@ -133,7 +136,7 @@ public class RegistryReconfigurerImpl implements RegistryReconfigurer {
 
     private void drive(ServerConfigurationPacketListenerImpl packetListener, GameProfile profile) throws ReflectiveOperationException {
         MinecraftServer server = MinecraftServer.getServer();
-        LayeredRegistryAccess<@NotNull RegistryLayer> registries = server.registries();
+        LayeredRegistryAccess<RegistryLayer> registries = server.registries();
         List<KnownPack> knownPacks = server.getResourceManager().listPacks()
                 .flatMap(p -> p.location().knownPackInfo().stream())
                 .toList();

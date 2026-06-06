@@ -8,7 +8,7 @@ import me.outspending.biomesapi.wrapper.worldgen.valueproviders.HeightProvider;
 import me.outspending.biomesapi.wrapper.worldgen.valueproviders.VerticalAnchor;
 import org.bukkit.Material;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -23,16 +23,17 @@ import java.util.Objects;
  * @version 2.3.0
  * @author Jsinco
  */
+@NullMarked
 @AsOf("2.3.0")
 public record CanyonCarverConfiguration(
         float probability,
-        @NotNull HeightProvider y,
-        @NotNull FloatProvider yScale,
-        @NotNull VerticalAnchor lavaLevel,
-        @NotNull CarverDebugSettings debugSettings,
-        @NotNull Collection<Material> replaceable,
-        @NotNull FloatProvider verticalRotation,
-        @NotNull CanyonShapeConfiguration shape
+        HeightProvider y,
+        FloatProvider yScale,
+        VerticalAnchor lavaLevel,
+        CarverDebugSettings debugSettings,
+        Collection<Material> replaceable,
+        FloatProvider verticalRotation,
+        CanyonShapeConfiguration shape
 ) implements CarverConfiguration {
 
     @ApiStatus.Internal
@@ -40,7 +41,7 @@ public record CanyonCarverConfiguration(
 
     @ApiStatus.Internal
     interface Factory {
-        @NotNull Object toNms(@NotNull CanyonCarverConfiguration configuration);
+        Object toNms(CanyonCarverConfiguration configuration);
     }
 
     @AsOf("2.3.0")
@@ -60,7 +61,7 @@ public record CanyonCarverConfiguration(
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    public static @NotNull Builder builder() {
+    public static Builder builder() {
         return new Builder();
     }
 
@@ -71,7 +72,7 @@ public record CanyonCarverConfiguration(
      */
     @Override
     @AsOf("2.3.0")
-    public @NotNull Object toMinecraft() {
+    public Object toMinecraft() {
         return WIRE.get().toNms(this);
     }
 
@@ -102,7 +103,7 @@ public record CanyonCarverConfiguration(
          * @since 2.3.0
          */
         @AsOf("2.3.0")
-        public @NotNull Builder probability(float probability) {
+        public Builder probability(float probability) {
             this.probability = probability;
             return this;
         }
@@ -113,7 +114,7 @@ public record CanyonCarverConfiguration(
          * @return this builder, for chaining
          */
         @AsOf("2.3.0")
-        public @NotNull Builder y(@NotNull HeightProvider y) {
+        public Builder y(HeightProvider y) {
             this.y = y;
             return this;
         }
@@ -125,7 +126,7 @@ public record CanyonCarverConfiguration(
          * @since 2.3.0
          */
         @AsOf("2.3.0")
-        public @NotNull Builder yScale(@NotNull FloatProvider yScale) {
+        public Builder yScale(FloatProvider yScale) {
             this.yScale = yScale;
             return this;
         }
@@ -137,7 +138,7 @@ public record CanyonCarverConfiguration(
          * @since 2.3.0
          */
         @AsOf("2.3.0")
-        public @NotNull Builder lavaLevel(@NotNull VerticalAnchor lavaLevel) {
+        public Builder lavaLevel(VerticalAnchor lavaLevel) {
             this.lavaLevel = lavaLevel;
             return this;
         }
@@ -149,7 +150,7 @@ public record CanyonCarverConfiguration(
          * @since 2.3.0
          */
         @AsOf("2.3.0")
-        public @NotNull Builder debugSettings(@NotNull CarverDebugSettings debugSettings) {
+        public Builder debugSettings(CarverDebugSettings debugSettings) {
             this.debugSettings = debugSettings;
             return this;
         }
@@ -161,7 +162,7 @@ public record CanyonCarverConfiguration(
          * @since 2.3.0
          */
         @AsOf("2.3.0")
-        public @NotNull Builder replaceable(@NotNull Collection<Material> replaceable) {
+        public Builder replaceable(Collection<Material> replaceable) {
             this.replaceable = replaceable;
             return this;
         }
@@ -173,7 +174,7 @@ public record CanyonCarverConfiguration(
          * @since 2.3.0
          */
         @AsOf("2.3.0")
-        public @NotNull Builder verticalRotation(@NotNull FloatProvider verticalRotation) {
+        public Builder verticalRotation(FloatProvider verticalRotation) {
             this.verticalRotation = verticalRotation;
             return this;
         }
@@ -185,7 +186,7 @@ public record CanyonCarverConfiguration(
          * @since 2.3.0
          */
         @AsOf("2.3.0")
-        public @NotNull Builder shape(@NotNull CanyonShapeConfiguration shape) {
+        public Builder shape(CanyonShapeConfiguration shape) {
             this.shape = shape;
             return this;
         }
@@ -197,7 +198,7 @@ public record CanyonCarverConfiguration(
          * @since 2.3.0
          */
         @AsOf("2.3.0")
-        public @NotNull CanyonCarverConfiguration build() {
+        public CanyonCarverConfiguration build() {
             Preconditions.checkState(this.probability != null, "probability must be set");
             Preconditions.checkState(this.y != null, "y level must be set");
             Preconditions.checkState(this.yScale != null, "yScale must be set");

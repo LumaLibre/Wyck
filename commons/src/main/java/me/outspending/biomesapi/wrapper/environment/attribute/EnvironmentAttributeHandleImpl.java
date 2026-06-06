@@ -3,13 +3,16 @@ package me.outspending.biomesapi.wrapper.environment.attribute;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.attribute.EnvironmentAttribute;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.NullMarked;
 
-public record EnvironmentAttributeHandleImpl<T>(EnvironmentAttribute<@NotNull T> nms) implements EnvironmentAttributeHandle<T> {
+@NullMarked
+@ApiStatus.Internal
+public record EnvironmentAttributeHandleImpl<T>(EnvironmentAttribute<T> nms) implements EnvironmentAttributeHandle<T> {
 
 
     @Override
-    public @NotNull T defaultValue() {
+    public T defaultValue() {
         return nms.defaultValue();
     }
 
@@ -19,7 +22,7 @@ public record EnvironmentAttributeHandleImpl<T>(EnvironmentAttribute<@NotNull T>
     }
 
     @Override
-    public @NotNull String key() {
+    public String key() {
         Identifier id = BuiltInRegistries.ENVIRONMENT_ATTRIBUTE.getKey(nms);
         if (id == null) {
             return "unknown_attribute";
@@ -28,7 +31,7 @@ public record EnvironmentAttributeHandleImpl<T>(EnvironmentAttribute<@NotNull T>
     }
 
     @Override
-    public @NotNull String toString() {
+    public String toString() {
         return nms.toString();
     }
 }

@@ -10,17 +10,18 @@ import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironment
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleCatalog;
 import me.outspending.biomesapi.wrapper.worldgen.BiomeGenerationSettings;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
+@NullMarked
 @ApiStatus.Internal
 public class CustomBiomeImpl extends AbstractBiomeImpl implements CustomBiome {
 
     private BlockReplacement[] blockReplacements;
 
     public CustomBiomeImpl(
-        @NotNull BiomeResourceKey resourceKey,
-        @NotNull BiomeSettings settings,
+        BiomeResourceKey resourceKey,
+        BiomeSettings settings,
         int waterColor,
         @Nullable Integer fogColor,
         @Nullable Integer waterFogColor,
@@ -28,10 +29,10 @@ public class CustomBiomeImpl extends AbstractBiomeImpl implements CustomBiome {
         @Nullable Integer foliageColor,
         @Nullable Integer grassColor,
         @Nullable Integer dryFoliageColor,
-        @NotNull GrassColorModifier grassColorModifier,
-        @NotNull ParticleCatalog particleCatalog,
-        @NotNull BlockReplacement[] blockReplacements,
-        @NotNull WrappedEnvironmentAttributeMap attributes,
+        GrassColorModifier grassColorModifier,
+        ParticleCatalog particleCatalog,
+        BlockReplacement[] blockReplacements,
+        WrappedEnvironmentAttributeMap attributes,
         @Nullable BiomeSpawner biomeSpawner,
         @Nullable BiomeGenerationSettings generationSettings
     ) {
@@ -66,7 +67,7 @@ public class CustomBiomeImpl extends AbstractBiomeImpl implements CustomBiome {
     }
 
     @Override
-    public boolean isSimilar(@NotNull CustomBiome otherBiome) {
+    public boolean isSimilar(CustomBiome otherBiome) {
         if (this.blockReplacements.length != otherBiome.getBlockReplacements().length) return false;
         for (int i = 0; i < this.blockReplacements.length; i++) {
             if (!this.blockReplacements[i].equals(otherBiome.getBlockReplacements()[i])) {

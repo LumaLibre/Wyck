@@ -8,8 +8,8 @@ import me.outspending.biomesapi.factory.WireProvider;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.Consumer;
 
@@ -19,6 +19,7 @@ import java.util.function.Consumer;
  * @version 2.2.0
  * @author Jsinco
  */
+@NullMarked
 @AsOf("2.2.0")
 @ApiStatus.Experimental
 public interface RegistryReconfigurer {
@@ -29,7 +30,7 @@ public interface RegistryReconfigurer {
     @AsOf("2.2.0")
     @ApiStatus.Internal
     interface Factory {
-        RegistryReconfigurer create(@NotNull Plugin provider);
+        RegistryReconfigurer create(Plugin provider);
     }
 
     /**
@@ -48,7 +49,7 @@ public interface RegistryReconfigurer {
      * @return a new RegistryReconfigurer instance
      */
     @AsOf("2.2.0")
-    static RegistryReconfigurer newReconfigurer(@NotNull Plugin provider) {
+    static RegistryReconfigurer newReconfigurer(Plugin provider) {
         return WIRE.get().create(provider);
     }
 
@@ -58,7 +59,7 @@ public interface RegistryReconfigurer {
      * @throws HorriblePlayerLoginEvent if there are plugins on the server that use {@link org.bukkit.event.player.PlayerLoginEvent}
      */
     @AsOf("2.2.0")
-    default void resendRegistries(@NotNull Player player) throws HorriblePlayerLoginEvent {
+    default void resendRegistries(Player player) throws HorriblePlayerLoginEvent {
         resendRegistries(player, null);
     }
 
@@ -69,6 +70,6 @@ public interface RegistryReconfigurer {
      * @throws HorriblePlayerLoginEvent if there are plugins on the server that use {@link org.bukkit.event.player.PlayerLoginEvent}
      */
     @AsOf("2.2.0")
-    void resendRegistries(@NotNull Player player, @SuppressWarnings("UnstableApiUsage") @Nullable Consumer<PlayerConfigurationConnection> consumer) throws HorriblePlayerLoginEvent;
+    void resendRegistries(Player player, @SuppressWarnings("UnstableApiUsage") @Nullable Consumer<PlayerConfigurationConnection> consumer) throws HorriblePlayerLoginEvent;
 
 }

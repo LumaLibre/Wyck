@@ -10,8 +10,8 @@ import me.outspending.biomesapi.renderer.updater.BiomeUpdater;
 import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /**
  * An interface for handling packet manipulation related to biome injection.
@@ -26,6 +26,7 @@ import org.jetbrains.annotations.Nullable;
  * @since 0.0.6
  * @author Jsinco
  */
+@NullMarked
 @AsOf("2.1.0")
 public interface PacketHandler extends AbstractBiomeRenderer {
 
@@ -49,7 +50,7 @@ public interface PacketHandler extends AbstractBiomeRenderer {
          * @return A new PacketHandler instance
          * @throws MissingPacketManipulatorLibraryException if the manipulator library is not installed
          */
-        @NotNull PacketHandler create(@NotNull Plugin provider, @NotNull Injector manipulator, @NotNull Priority priority);
+        PacketHandler create(Plugin provider, Injector manipulator, Priority priority);
     }
 
     /**
@@ -61,7 +62,7 @@ public interface PacketHandler extends AbstractBiomeRenderer {
      * @throws MissingPacketManipulatorLibraryException if ProtocolLib is not installed
      */
     @AsOf("2.1.0")
-    static @NotNull PacketHandler of(@NotNull Plugin provider) {
+    static PacketHandler of(Plugin provider) {
         return of(provider, Injector.NETTY, Priority.NORMAL);
     }
 
@@ -76,7 +77,7 @@ public interface PacketHandler extends AbstractBiomeRenderer {
      * @throws MissingPacketManipulatorLibraryException if the specified manipulator library is not installed
      */
     @AsOf("2.1.0")
-    static @NotNull PacketHandler of(@NotNull Plugin provider, @NotNull Injector injector) {
+    static PacketHandler of(Plugin provider, Injector injector) {
         return of(provider, injector, Priority.NORMAL);
     }
 
@@ -91,7 +92,7 @@ public interface PacketHandler extends AbstractBiomeRenderer {
      */
     @AsOf("0.0.19")
     @Deprecated(since = "2.1.0", forRemoval = true)
-    static @NotNull PacketHandler of(@NotNull Plugin provider, @NotNull Manipulator manipulator) {
+    static PacketHandler of(Plugin provider, Manipulator manipulator) {
         return of(provider, manipulator.injector, Priority.NORMAL);
     }
 
@@ -105,7 +106,7 @@ public interface PacketHandler extends AbstractBiomeRenderer {
      * @throws MissingPacketManipulatorLibraryException if the specified injector library is not installed
      */
     @AsOf("2.1.0")
-    static @NotNull PacketHandler of(@NotNull Plugin provider, @NotNull Injector injector, @NotNull PacketHandler.Priority priority) {
+    static PacketHandler of(Plugin provider, Injector injector, PacketHandler.Priority priority) {
         return WIRE.get().create(provider, injector, priority);
     }
 
@@ -119,7 +120,7 @@ public interface PacketHandler extends AbstractBiomeRenderer {
      * @throws MissingPacketManipulatorLibraryException if the specified injector library is not installed
      */
     @AsOf("0.0.19")
-    static @NotNull PacketHandler of(@NotNull Plugin provider, @NotNull Manipulator manipulator, @NotNull PacketHandler.Priority priority) {
+    static PacketHandler of(Plugin provider, Manipulator manipulator, PacketHandler.Priority priority) {
         return WIRE.get().create(provider, manipulator.injector, priority);
     }
 
@@ -146,7 +147,7 @@ public interface PacketHandler extends AbstractBiomeRenderer {
      * @return the PacketHandler instance for chaining
      */
     @AsOf("0.0.6")
-    PacketHandler appendBiome(@NotNull PhonyCustomBiome biome);
+    PacketHandler appendBiome(PhonyCustomBiome biome);
 
     /**
      * Appends multiple custom biomes to the packet handler's list of biomes to inject.
@@ -154,7 +155,7 @@ public interface PacketHandler extends AbstractBiomeRenderer {
      * @return the PacketHandler instance for chaining
      */
     @AsOf("0.0.6")
-    default PacketHandler appendBiome(@NotNull PhonyCustomBiome... biomes) {
+    default PacketHandler appendBiome(PhonyCustomBiome... biomes) {
         for (PhonyCustomBiome biome : biomes) {
             appendBiome(biome);
         }
@@ -167,7 +168,7 @@ public interface PacketHandler extends AbstractBiomeRenderer {
      * @return true if the biome was removed, false if it was not found
      */
     @AsOf("0.0.6")
-    boolean removeBiome(@NotNull PhonyCustomBiome biome);
+    boolean removeBiome(PhonyCustomBiome biome);
 
     /**
      * Removes a custom biome from the packet handler's list of biomes to inject.
@@ -175,7 +176,7 @@ public interface PacketHandler extends AbstractBiomeRenderer {
      * @return the PacketHandler instance for chaining
      */
     @AsOf("2.1.0")
-    default PacketHandler dismissBiome(@NotNull PhonyCustomBiome biome) {
+    default PacketHandler dismissBiome(PhonyCustomBiome biome) {
         removeBiome(biome);
         return this;
     }
@@ -186,7 +187,7 @@ public interface PacketHandler extends AbstractBiomeRenderer {
      * @return true if the biome was removed, false if it was not found
      */
     @AsOf("0.0.6")
-    boolean removeBiome(@NotNull BiomeResourceKey biomeKey);
+    boolean removeBiome(BiomeResourceKey biomeKey);
 
     /**
      * Removes a custom biome from the packet handler's list of biomes to inject by its BiomeResourceKey.
@@ -194,7 +195,7 @@ public interface PacketHandler extends AbstractBiomeRenderer {
      * @return the PacketHandler instance for chaining
      */
     @AsOf("2.1.0")
-    default PacketHandler dismissBiome(@NotNull BiomeResourceKey biomeKey) {
+    default PacketHandler dismissBiome(BiomeResourceKey biomeKey) {
         removeBiome(biomeKey);
         return this;
     }
@@ -205,7 +206,7 @@ public interface PacketHandler extends AbstractBiomeRenderer {
      * @return true if the biome is present, false otherwise
      */
     @AsOf("0.0.10")
-    boolean hasBiome(@NotNull PhonyCustomBiome biome);
+    boolean hasBiome(PhonyCustomBiome biome);
 
     /**
      * Checks if a custom biome is in the packet handler's list of biomes to inject by its BiomeResourceKey.
@@ -213,7 +214,7 @@ public interface PacketHandler extends AbstractBiomeRenderer {
      * @return true if the biome is present, false otherwise
      */
     @AsOf("0.0.10")
-    boolean hasBiome(@NotNull BiomeResourceKey biomeKey);
+    boolean hasBiome(BiomeResourceKey biomeKey);
 
     /**
      * Clears all phony custom biomes from the packet handler's list of biomes to inject.
@@ -251,7 +252,7 @@ public interface PacketHandler extends AbstractBiomeRenderer {
          * @return The corresponding DimensionSectionCount
          */
         @AsOf("0.0.6")
-        public static @NotNull DimensionSectionCount fromBukkitEnvironment(@NotNull World.Environment environment) {
+        public static DimensionSectionCount fromBukkitEnvironment(World.Environment environment) {
             return switch (environment) {
                 case NORMAL, CUSTOM -> OVERWORLD;
                 case NETHER -> NETHER;
@@ -293,7 +294,7 @@ public interface PacketHandler extends AbstractBiomeRenderer {
          * @throws IllegalArgumentException if the enum class does not have a constant with the same name
          */
         @ApiStatus.Internal
-        public <E extends Enum<E>> @NotNull E getDelegatePriority(@NotNull Class<E> enumClass) {
+        public <E extends Enum<E>> E getDelegatePriority(Class<E> enumClass) {
             try {
                 return Enum.valueOf(enumClass, this.name());
             } catch (IllegalArgumentException e) {

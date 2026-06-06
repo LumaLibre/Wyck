@@ -5,16 +5,27 @@ import me.outspending.biomesapi.wrapper.environment.particle.ParticleData;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleOptionsHandle;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleTypeHandle;
 import org.bukkit.Material;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
+/**
+ * Particle data for particles that require a block type.
+ *
+ * @param type The block type.
+ * @since 2.0.0
+ * @version 2.0.0
+ * @author Jsinco
+ */
+@NullMarked
 @AsOf("2.0.0")
-public record BlockParticle(Material type) implements ParticleData<BlockParticle> {
+public record BlockParticle(Material type) implements ParticleData {
 
     @Override
-    public @NotNull ParticleOptionsHandle apply(@NotNull ParticleTypeHandle particleType) {
+    @AsOf("2.0.0")
+    public ParticleOptionsHandle apply(ParticleTypeHandle particleType) {
         return ParticleOptionsFactory.WIRE.get().block(particleType, type);
     }
 
+    @AsOf("2.0.0")
     public static BlockParticle of(Material material) {
         return new BlockParticle(material);
     }

@@ -3,8 +3,8 @@ package me.outspending.biomesapi.biome;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.exceptions.UnknownBiomeException;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
@@ -17,6 +17,7 @@ import java.util.List;
  * @author Outspending
  * @deprecated Use {@link RegisteredBiomes} instead.
  */
+@NullMarked
 @AsOf("0.0.1")
 @Deprecated(forRemoval = true, since = "2.3.0")
 public class BiomeHandler {
@@ -53,7 +54,7 @@ public class BiomeHandler {
      */
     @Deprecated
     @AsOf("0.0.18")
-    public static @Nullable CustomBiome getBiome(@NotNull BiomeResourceKey resourceKey) {
+    public static @Nullable CustomBiome getBiome(BiomeResourceKey resourceKey) {
         return RegisteredBiomes.get(resourceKey);
     }
 
@@ -70,7 +71,7 @@ public class BiomeHandler {
      */
     @Deprecated
     @AsOf("0.0.18")
-    public static boolean isBiome(@NotNull BiomeResourceKey resourceKey) {
+    public static boolean isBiome(BiomeResourceKey resourceKey) {
         return RegisteredBiomes.isRegistered(resourceKey);
     }
 
@@ -84,7 +85,7 @@ public class BiomeHandler {
      */
     @AsOf("0.0.8")
     @Deprecated
-    public static boolean replaceBiome(@NotNull BiomeResourceKey resourceKey, @NotNull CustomBiome newBiome) {
+    public static boolean replaceBiome(BiomeResourceKey resourceKey, CustomBiome newBiome) {
         throw new UnsupportedOperationException("Unsupported");
     }
 }

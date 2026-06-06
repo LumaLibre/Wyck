@@ -8,7 +8,9 @@ import net.minecraft.world.level.chunk.LevelChunkSection;
 import org.bukkit.ChunkSnapshot;
 import org.bukkit.block.Biome;
 import org.bukkit.craftbukkit.block.CraftBiome;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Optional;
 
@@ -24,7 +26,9 @@ import java.util.Optional;
  * @since 2.2.0
  * @author Jsinco
  */
+@NullMarked
 @AsOf("2.2.0")
+@ApiStatus.Internal
 public final class NmsSnapshotChunkData implements SnapshotChunkData {
 
     // Noise biomes are stored at 4x4x4 per section: a block coordinate maps to a noise
@@ -34,23 +38,23 @@ public final class NmsSnapshotChunkData implements SnapshotChunkData {
     private final ChunkLocation location;
     private final LevelChunkSection[] sections;
 
-    private Biome center; // memoized; null until first read
+    private @Nullable Biome center; // memoized; null until first read
 
-    public NmsSnapshotChunkData(@NotNull ChunkLocation location, @NotNull LevelChunkSection[] sections) {
+    public NmsSnapshotChunkData(ChunkLocation location, LevelChunkSection[] sections) {
         this.location = location;
         this.sections = sections;
     }
 
     @Override
-    public @NotNull ChunkLocation location() {
+    public ChunkLocation location() {
         return location;
     }
 
     @Override
-    public @NotNull Biome centerBiome() {
+    public Biome centerBiome() {
         Biome c = this.center;
         if (c == null) {
-            Holder<net.minecraft.world.level.biome.@NotNull Biome> holder =
+            Holder<net.minecraft.world.level.biome.Biome> holder =
                     sections[0].getNoiseBiome(CENTER_NOISE_XZ, 0, CENTER_NOISE_XZ);
             c = CraftBiome.minecraftHolderToBukkit(holder);
             this.center = c;
@@ -59,16 +63,16 @@ public final class NmsSnapshotChunkData implements SnapshotChunkData {
     }
 
     @Override
-    public @NotNull Biome biomeAt(int x, int y, int z) {
+    public Biome biomeAt(int x, int y, int z) {
         int sectionIdx = y >> 4;
         LevelChunkSection section = sections[sectionIdx];
-        Holder<net.minecraft.world.level.biome.@NotNull Biome> holder =
+        Holder<net.minecraft.world.level.biome.Biome> holder =
                 section.getNoiseBiome((x & 15) >> 2, (y & 15) >> 2, (z & 15) >> 2);
         return CraftBiome.minecraftHolderToBukkit(holder);
     }
 
     @Override
-    public @NotNull Optional<ChunkSnapshot> bukkitSnapshot() {
+    public Optional<ChunkSnapshot> bukkitSnapshot() {
         // No cheap, thread-safe snapshot is available from packet sections.
         return Optional.empty();
     }

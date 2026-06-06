@@ -3,8 +3,8 @@ package me.outspending.biomesapi.wrapper.environment.attribute;
 import me.outspending.biomesapi.annotations.AsOf;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * A wrapper for an environment attribute that allows for value conversion and storage.
@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
  * @since 1.1.0
  * @author Jsinco
  */
+@NullMarked
 @AsOf("1.1.0")
 public class WrappedEnvironmentAttribute<T, K> {
 
@@ -24,7 +25,7 @@ public class WrappedEnvironmentAttribute<T, K> {
     private @MonotonicNonNull K value;
 
     @AsOf("1.1.0")
-    public WrappedEnvironmentAttribute(@NotNull EnvironmentAttributeHandle<T> attribute, @Nullable Converter<T, K> converter, @Nullable K value) {
+    public WrappedEnvironmentAttribute(EnvironmentAttributeHandle<T> attribute, @Nullable Converter<T, K> converter, @Nullable K value) {
         this.attribute = attribute;
         this.converter = converter;
         this.value = value;
@@ -41,7 +42,7 @@ public class WrappedEnvironmentAttribute<T, K> {
     }
 
     @AsOf("1.1.0")
-    public void setValue(@NotNull K value) {
+    public void setValue(K value) {
         this.value = value;
     }
 
@@ -103,7 +104,7 @@ public class WrappedEnvironmentAttribute<T, K> {
 
     @AsOf("1.1.0")
     @ApiStatus.Internal
-    public static <T, K> WrappedEnvironmentAttribute<T, K> of(EnvironmentAttributeHandle<T> attribute, @NotNull K value) {
+    public static <T, K> WrappedEnvironmentAttribute<T, K> of(EnvironmentAttributeHandle<T> attribute, K value) {
         return new WrappedEnvironmentAttribute<>(attribute, null, value);
     }
 
@@ -118,7 +119,7 @@ public class WrappedEnvironmentAttribute<T, K> {
     }
 
     @AsOf("1.1.0")
-    public static <T, K> WrappedEnvironmentAttributeSupplier<T, K> ofSupplier(EnvironmentAttributeHandle<T> attribute, @NotNull K value) {
+    public static <T, K> WrappedEnvironmentAttributeSupplier<T, K> ofSupplier(EnvironmentAttributeHandle<T> attribute, K value) {
         return new WrappedEnvironmentAttributeSupplier<>(of(attribute, value));
     }
 
@@ -130,6 +131,6 @@ public class WrappedEnvironmentAttribute<T, K> {
     @AsOf("1.1.0")
     @FunctionalInterface
     public interface Converter<T, K> {
-        @NotNull T convert(@NotNull K value);
+        T convert(K value);
     }
 }

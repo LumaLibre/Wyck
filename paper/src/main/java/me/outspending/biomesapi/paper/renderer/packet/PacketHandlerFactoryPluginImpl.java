@@ -11,7 +11,7 @@ import me.outspending.biomesapi.renderer.packet.PacketHandler;
 import me.outspending.biomesapi.renderer.packet.PhonyCustomBiomeCollector;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@NullMarked
 @WireFactory
 @AsOf("2.1.0")
 @ApiStatus.Internal
@@ -36,7 +37,7 @@ public final class PacketHandlerFactoryPluginImpl implements PacketHandler.Facto
     }
 
     @Override
-    public @NotNull PacketHandler create(@NotNull Plugin provider, @NotNull PacketHandler.Injector injector, @NotNull PacketHandler.Priority priority) {
+    public PacketHandler create(Plugin provider, PacketHandler.Injector injector, PacketHandler.Priority priority) {
         PacketHandler.Injector effective = applyForcedOverride(injector);
 
         if (!effective.isAvailable()) {
@@ -91,7 +92,7 @@ public final class PacketHandlerFactoryPluginImpl implements PacketHandler.Facto
         return injectorMap.values();
     }
 
-    private @NotNull PacketHandler.Injector applyForcedOverride(@NotNull PacketHandler.Injector requested) {
+    private PacketHandler.Injector applyForcedOverride(PacketHandler.Injector requested) {
         PacketHandler.Injector override = plugin.getPluginConfig().forcedInjector().getInjector();
         return override != null ? override : requested;
     }

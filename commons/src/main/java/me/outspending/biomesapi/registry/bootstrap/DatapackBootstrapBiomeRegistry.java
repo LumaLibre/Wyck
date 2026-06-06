@@ -23,7 +23,9 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.world.level.biome.Biome;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -40,15 +42,15 @@ import java.util.Locale;
  * <p>Flow: collect biomes via {@link #queue}, then on the {@code DATAPACK_DISCOVERY} lifecycle
  * event (fires during load, before registries are built from packs) generate an in-memory datapack:
  * each queued biome is built to an NMS {@link Biome} via the existing programmatic builder, encoded
- * to JSON with the biome codec, and written to {@code data/<ns>/worldgen/biome/<name>.json}. Paper
- * then loads that pack like any other so biomes are present pre-freeze and client-synced, and a
- * malformed biome fails datapack load, which aborts server startup (fail-fast, as required).
+ * to JSON with the biome codec, and written to {@code data/<ns>/worldgen/biome/<name>.json}.
  *
  * @version 2.3.0
  * @since 2.3.0
  */
+@NullMarked
 @WireFactory
 @AsOf("2.3.0")
+@ApiStatus.Internal
 @SuppressWarnings("UnstableApiUsage")
 public final class DatapackBootstrapBiomeRegistry implements BootstrapBiomeRegistry {
 
@@ -59,19 +61,19 @@ public final class DatapackBootstrapBiomeRegistry implements BootstrapBiomeRegis
 
     private final List<CustomBiome> pending = new ArrayList<>();
     private boolean installed = false;
-    private String packId;
-    private Throwable deferred;
+    private @Nullable String packId;
+    private @Nullable Throwable deferred;
 
     @Override
     @AsOf("2.3.0")
-    public @NotNull BootstrapBiomeRegistry queue(@NotNull CustomBiome biome) {
+    public BootstrapBiomeRegistry queue(CustomBiome biome) {
         this.pending.add(biome);
         return this;
     }
 
     @Override
     @AsOf("2.3.0")
-    public @NotNull BootstrapBiomeRegistry install(@NotNull BootstrapContext context) {
+    public BootstrapBiomeRegistry install(BootstrapContext context) {
         Preconditions.checkState(!this.installed, "already installed");
         this.installed = true;
         this.packId = String.format(PACK_ID_FORMAT, context.getPluginMeta().getName().toLowerCase(Locale.ROOT).replace(' ', '-'));
@@ -83,7 +85,7 @@ public final class DatapackBootstrapBiomeRegistry implements BootstrapBiomeRegis
     }
 
     @AsOf("2.3.0")
-    public @NotNull BootstrapBiomeRegistry deferring(@NotNull ThrowingRunnable action) {
+    public BootstrapBiomeRegistry deferring(ThrowingRunnable action) {
         if (this.deferred == null) {
             try {
                 action.run();
@@ -102,7 +104,7 @@ public final class DatapackBootstrapBiomeRegistry implements BootstrapBiomeRegis
      * Generates the biome datapack and registers it with Paper. Rethrows on failure so datapack
      * load aborts and the server refuses to start.
      */
-    private void discover(RegistrarEvent<@NotNull DatapackRegistrar> event) {
+    private void discover(RegistrarEvent<DatapackRegistrar> event) {
         if (this.deferred != null) {
             throw new RuntimeException("Deferred custom biome failure; aborting startup", this.deferred);
         }
@@ -146,7 +148,7 @@ public final class DatapackBootstrapBiomeRegistry implements BootstrapBiomeRegis
         // Built-in registries are enough to encode biomes with EMPTY generation settings (sounds,
         // particles, entity spawns all live there). RegistryOps lets the codec resolve those refs.
         RegistryAccess access = RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY);
-        RegistryOps<@NotNull JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, access);
+        RegistryOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, access);
         BiomeRegistry builder = BiomeRegistry.registry();
 
         for (CustomBiome biome : this.pending) {

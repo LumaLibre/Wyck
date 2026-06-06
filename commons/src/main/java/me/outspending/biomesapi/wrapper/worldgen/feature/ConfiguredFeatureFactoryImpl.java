@@ -10,21 +10,22 @@ import net.minecraft.server.MinecraftServer;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.CraftServer;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 @WireFactory
 @AsOf("2.3.0")
 @ApiStatus.Internal
 public final class ConfiguredFeatureFactoryImpl implements ConfiguredFeature.Factory {
 
     @Override
-    public @NotNull Object toNms(@NotNull ConfiguredFeature feature) {
+    public Object toNms(ConfiguredFeature feature) {
         return switch (feature) {
             case ConfiguredFeature.Reference reference -> resolveReference(reference);
         };
     }
 
-    private Object resolveReference(@NotNull ConfiguredFeature.Reference reference) {
+    private Object resolveReference(ConfiguredFeature.Reference reference) {
         MinecraftServer server = ((CraftServer) Bukkit.getServer()).getServer();
         RegistryAccess access = server.registryAccess();
 

@@ -5,7 +5,7 @@ import me.outspending.biomesapi.biome.AbstractBiome;
 import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.factory.WireProvider;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * An interface for registering and modifying custom biomes on a Minecraft server.
@@ -17,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
  * @since 0.0.1
  * @author Outspending
  */
+@NullMarked
 @AsOf("0.0.1")
 public interface BiomeRegistry {
 
@@ -29,7 +30,7 @@ public interface BiomeRegistry {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static @NotNull BiomeRegistry registry() {
+    static BiomeRegistry registry() {
         return WIRE.get();
     }
 
@@ -43,7 +44,7 @@ public interface BiomeRegistry {
      */
     @Deprecated
     @AsOf("0.0.1")
-    static @NotNull BiomeRegistry newRegistry() {
+    static BiomeRegistry newRegistry() {
         return registry();
     }
 
@@ -53,7 +54,7 @@ public interface BiomeRegistry {
      * @return the built biome
      */
     @AsOf("2.3.0")
-    @NotNull Object buildDelegate(@NotNull AbstractBiome biome);
+    Object buildDelegate(AbstractBiome biome);
 
     /**
      * This method registers a custom biome to a Minecraft server.
@@ -63,7 +64,7 @@ public interface BiomeRegistry {
      * @param biome The CustomBiome object that should be registered to the server.
      */
     @AsOf("0.0.1")
-    void register(@NotNull CustomBiome biome);
+    void register(CustomBiome biome);
 
 
     /**
@@ -79,7 +80,7 @@ public interface BiomeRegistry {
      * @param biome The CustomBiome that should internally be used to modify the existing biome.
      */
     @AsOf("0.0.8")
-    void modify(@NotNull AbstractBiome biome);
+    void modify(AbstractBiome biome);
 
 
     /**

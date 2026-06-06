@@ -7,6 +7,7 @@ import me.outspending.biomesapi.util.WeightedList;
 import me.outspending.biomesapi.wrapper.NmsHandle;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
 
@@ -18,6 +19,7 @@ import java.util.Objects;
  * @version 2.3.0
  * @author Jsinco
  */
+@NullMarked
 @AsOf("2.3.0")
 public sealed interface IntProvider extends NmsHandle permits IntProvider.Constant, IntProvider.Uniform, IntProvider.BiasedToBottom, IntProvider.ClampedNormal, IntProvider.Trapezoid, IntProvider.Clamped, IntProvider.WeightedListInt {
 
@@ -26,47 +28,47 @@ public sealed interface IntProvider extends NmsHandle permits IntProvider.Consta
 
     @ApiStatus.Internal
     interface Factory {
-        @NotNull Object toNms(@NotNull IntProvider provider);
+        Object toNms(IntProvider provider);
     }
 
     @AsOf("2.3.0")
-    static @NotNull IntProvider constant(int value) {
+    static IntProvider constant(int value) {
         return new Constant(value);
     }
 
     @AsOf("2.3.0")
-    static @NotNull IntProvider uniform(int minInclusive, int maxInclusive) {
+    static IntProvider uniform(int minInclusive, int maxInclusive) {
         return new Uniform(minInclusive, maxInclusive);
     }
 
     @AsOf("2.3.0")
-    static @NotNull IntProvider biasedToBottom(int minInclusive, int maxInclusive) {
+    static IntProvider biasedToBottom(int minInclusive, int maxInclusive) {
         return new BiasedToBottom(minInclusive, maxInclusive);
     }
 
     @AsOf("2.3.0")
-    static @NotNull IntProvider clampedNormal(float mean, float deviation, int minInclusive, int maxInclusive) {
+    static IntProvider clampedNormal(float mean, float deviation, int minInclusive, int maxInclusive) {
         return new ClampedNormal(mean, deviation, minInclusive, maxInclusive);
     }
 
     @AsOf("2.3.0")
-    static @NotNull IntProvider trapezoid(int minInclusive, int maxInclusive, int plateau) {
+    static IntProvider trapezoid(int minInclusive, int maxInclusive, int plateau) {
         return new Trapezoid(minInclusive, maxInclusive, plateau);
     }
 
     /** A symmetric triangular distribution over [-range, range], matching TrapezoidInt.triangle. */
     @AsOf("2.3.0")
-    static @NotNull IntProvider triangle(int range) {
+    static IntProvider triangle(int range) {
         return new Trapezoid(-range, range, 0);
     }
 
     @AsOf("2.3.0")
-    static @NotNull IntProvider clamped(@NotNull IntProvider source, int minInclusive, int maxInclusive) {
+    static IntProvider clamped(IntProvider source, int minInclusive, int maxInclusive) {
         return new Clamped(source, minInclusive, maxInclusive);
     }
 
     @AsOf("2.3.0")
-    static @NotNull IntProvider weightedList(@NotNull WeightedList<IntProvider> distribution) {
+    static IntProvider weightedList(WeightedList<IntProvider> distribution) {
         return new WeightedListInt(distribution);
     }
 
@@ -78,7 +80,7 @@ public sealed interface IntProvider extends NmsHandle permits IntProvider.Consta
 
     @Override
     @AsOf("2.3.0")
-    default @NotNull Object toMinecraft() {
+    default Object toMinecraft() {
         return WIRE.get().toNms(this);
     }
 
@@ -110,7 +112,7 @@ public sealed interface IntProvider extends NmsHandle permits IntProvider.Consta
 
     // recursive - composes a source provider, narrowing its range
     @AsOf("2.3.0")
-    record Clamped(@NotNull IntProvider source, int minInclusive, int maxInclusive) implements IntProvider {
+    record Clamped(IntProvider source, int minInclusive, int maxInclusive) implements IntProvider {
 
         @AsOf("2.3.0")
         public Clamped {
@@ -120,7 +122,7 @@ public sealed interface IntProvider extends NmsHandle permits IntProvider.Consta
 
     // recursive - composes a weighted distribution of providers
     @AsOf("2.3.0")
-    record WeightedListInt(@NotNull WeightedList<IntProvider> distribution) implements IntProvider {
+    record WeightedListInt(WeightedList<IntProvider> distribution) implements IntProvider {
 
         @AsOf("2.3.0")
         public WeightedListInt {

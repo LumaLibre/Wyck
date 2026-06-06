@@ -7,8 +7,8 @@ import me.outspending.biomesapi.wrapper.environment.MoonPhase;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleCatalog;
 import me.outspending.biomesapi.wrapper.environment.particle.WrappedAmbientParticle;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -25,6 +25,7 @@ import java.util.Map;
  * @version 2.1.0
  * @author Jsinco
  */
+@NullMarked
 @AsOf("2.1.0")
 public final class WrappedEnvironmentAttributes {
 
@@ -300,7 +301,7 @@ public final class WrappedEnvironmentAttributes {
      * or null if none exists.
      */
     @AsOf("2.1.0")
-    public static @Nullable WrappedEnvironmentAttributeSupplier<?, ?> byId(@NotNull String id) {
+    public static @Nullable WrappedEnvironmentAttributeSupplier<?, ?> byId(String id) {
         return byIdMap().get(id);
     }
 
@@ -308,7 +309,7 @@ public final class WrappedEnvironmentAttributes {
      * Returns the supplier whose constant name matches (e.g. {@code "FOG_COLOR"}), or null if none exists.
      */
     @AsOf("2.1.0")
-    public static @Nullable WrappedEnvironmentAttributeSupplier<?, ?> byName(@NotNull String name) {
+    public static @Nullable WrappedEnvironmentAttributeSupplier<?, ?> byName(String name) {
         Map<String, WrappedEnvironmentAttributeSupplier<?, ?>> map = BY_NAME;
         if (map == null) {
             synchronized (WrappedEnvironmentAttributes.class) {
@@ -326,7 +327,7 @@ public final class WrappedEnvironmentAttributes {
      * All registered suppliers (excluding Unmapped). Iteration order matches declaration order.
      */
     @AsOf("2.1.0")
-    public static @NotNull Collection<WrappedEnvironmentAttributeSupplier<?, ?>> values() {
+    public static Collection<WrappedEnvironmentAttributeSupplier<?, ?>> values() {
         return Collections.unmodifiableCollection(byIdMap().values());
     }
 
@@ -334,7 +335,7 @@ public final class WrappedEnvironmentAttributes {
      * All registered ids (excluding Unmapped). Iteration order matches declaration order.
      */
     @AsOf("2.1.0")
-    public static @NotNull Collection<String> ids() {
+    public static Collection<String> ids() {
         return Collections.unmodifiableCollection(byIdMap().keySet());
     }
 
