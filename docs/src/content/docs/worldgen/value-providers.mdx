@@ -6,31 +6,29 @@ sidebar:
 ---
 
 import CodeBlock from "@/components/CodeBlock.astro";
-import SourceLink from "@/components/SourceLink.astro";
 
-Worldgen rarely uses plain numbers. Instead it uses **value providers**, small objects that produce a number, a height,
-or a vertical position, sometimes randomly. Carvers, placement modifiers, and feature configurations all take these
-rather than raw values, so it is worth knowing the four you will reach for most.
+World generation rarely uses plain numbers. Rather, we use **value providers**, small objects that produce a number, a height,
+or a vertical position, sometimes randomly.
 
 ## VerticalAnchor
 
 A <SourceLink path="wrapper/worldgen/valueproviders/VerticalAnchor.java">VerticalAnchor</SourceLink> describes a single Y
-position relative to the world. It is the building block for height ranges.
+position relative to the world.
 
 <CodeBlock
     lang="java"
     filename="ExamplePlugin.java"
     code={`import me.outspending.biomesapi.wrapper.worldgen.valueproviders.VerticalAnchor;
 
-    VerticalAnchor.absolute(64);      // exactly Y=64
-    VerticalAnchor.aboveBottom(8);    // 8 blocks above the world's minimum height
-    VerticalAnchor.belowTop(1);       // 1 block below the world's maximum height`}
+    VerticalAnchor.absolute(64); // exactly Y=64
+    VerticalAnchor.aboveBottom(8); // 8 blocks above the world's minimum height
+    VerticalAnchor.belowTop(1); // 1 block below the world's maximum height`}
 />
 
 ## IntProvider
 
 An <SourceLink path="wrapper/worldgen/valueproviders/IntProvider.java">IntProvider</SourceLink> produces an integer,
-either constant or sampled from a distribution. Counts and offsets use these.
+either constant or sampled from a distribution.
 
 <CodeBlock
     lang="java"
@@ -53,14 +51,14 @@ equivalent, used for radii, scales, and probabilities inside carvers and feature
     code={`import me.outspending.biomesapi.wrapper.worldgen.valueproviders.FloatProvider;
 
     FloatProvider.constant(3.0f); // always 3.0
-    FloatProvider.uniform(0.1f, 0.9f);  // evenly between 0.1 and 0.9
+    FloatProvider.uniform(0.1f, 0.9f); // evenly between 0.1 and 0.9
     FloatProvider.trapezoid(0.0f, 6.0f, 2.0f); // trapezoidal distribution`}
 />
 
 ## HeightProvider
 
 A <SourceLink path="wrapper/worldgen/valueproviders/HeightProvider.java">HeightProvider</SourceLink> produces a Y
-position by combining vertical anchors. Height ranges in carvers and placement use these.
+position by combining vertical anchors.
 
 <CodeBlock
     lang="java"
