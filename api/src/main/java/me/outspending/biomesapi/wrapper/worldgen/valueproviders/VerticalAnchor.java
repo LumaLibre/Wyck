@@ -25,34 +25,67 @@ public sealed interface VerticalAnchor extends NmsHandle permits VerticalAnchor.
         @NotNull Object toNms(@NotNull VerticalAnchor anchor);
     }
 
-    /** An absolute Y coordinate. */
+    /**
+     * Y measured from the bottom of the world.
+     * @param y Y measured from the bottom of the world
+     * @return a vertical anchor with the given absolute Y value
+     * @since 2.3.0
+     */
     @AsOf("2.3.0")
     static @NotNull VerticalAnchor absolute(int y) {
         return new Absolute(y);
     }
 
-    /** Y measured upward from the bottom of the generation range. */
+    /** Y measured upward from the bottom of the generation range.
+     *
+     * @param offset the offset from the bottom of the generation range
+     * @return a vertical anchor with the given offset from the bottom of the generation range
+     * @since 2.3.0
+     */
     @AsOf("2.3.0")
     static @NotNull VerticalAnchor aboveBottom(int offset) {
         return new AboveBottom(offset);
     }
 
-    /** Y measured downward from the top of the generation range. */
+    /**
+     * Y measured downward from the top of the generation range.
+     * @param offset the offset from the top of the generation range
+     * @return a vertical anchor with the given offset from the top of the generation range
+     * @since 2.3.0
+     */
     @AsOf("2.3.0")
     static @NotNull VerticalAnchor belowTop(int offset) {
         return new BelowTop(offset);
     }
 
+    /**
+     * Y measured from the bottom of the world.
+     *
+     * @return a vertical anchor with the Y value 0
+     * @since 2.3.0
+     */
     @AsOf("2.3.0")
     static @NotNull VerticalAnchor bottom() {
         return new AboveBottom(0);
     }
 
+    /**
+     * Y measured from the top of the world.
+     *
+     * @return a vertical anchor with the Y value 0
+     * @since 2.3.0
+     */
     @AsOf("2.3.0")
     static @NotNull VerticalAnchor top() {
         return new BelowTop(0);
     }
 
+    /**
+     * Converts this VerticalAnchor to an NMS VerticalAnchor.
+     *
+     * @return the NMS VerticalAnchor
+     * @since 2.3.0
+     */
     @Override
     @AsOf("2.3.0")
     default @NotNull Object toMinecraft() {
