@@ -10,6 +10,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("0.0.1")
+@SuppressWarnings("DeprecatedIsStillUsed")
 @Deprecated(forRemoval = true, since = "2.3.0")
 @ApiStatus.ScheduledForRemoval(inVersion = "2.4.0")
 public interface BiomeResourceKey extends ResourceKey {

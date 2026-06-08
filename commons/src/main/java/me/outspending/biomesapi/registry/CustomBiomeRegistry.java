@@ -15,6 +15,7 @@ import me.outspending.biomesapi.registry.handlers.MobSpawnSettingsHandler;
 import me.outspending.biomesapi.registry.handlers.ParticleCatalogHandler;
 import me.outspending.biomesapi.registry.handlers.SpecialEffectsHandler;
 import me.outspending.biomesapi.registry.internal.FrozenRegistry;
+import me.outspending.biomesapi.util.Lazy;
 import me.outspending.biomesapi.wrapper.BiomeSettings;
 import me.outspending.biomesapi.wrapper.entity.BiomeSpawner;
 import me.outspending.biomesapi.wrapper.entity.MobCategory;
@@ -64,7 +65,7 @@ public class CustomBiomeRegistry implements BiomeRegistry {
     private static final MobSpawnSettingsHandler MOB_SPAWN_SETTINGS_HANDLER = new MobSpawnSettingsHandler();
     private static final BiomeGenerationSettingsHandler BIOME_GENERATION_SETTINGS_HANDLER = new BiomeGenerationSettingsHandler();
 
-    private final FrozenRegistry biomeRegistry = FrozenRegistry.of("worldgen/biome");
+    private final Lazy<FrozenRegistry> biomeRegistry = FrozenRegistry.lazy("worldgen/biome");
 
     // TODO: Extract commons
 
@@ -139,8 +140,8 @@ public class CustomBiomeRegistry implements BiomeRegistry {
     public void register(CustomBiome biome) {
         Preconditions.checkNotNull(biome, "biome cannot be null");
 
-        this.biomeRegistry.whileUnfrozen(() -> {
-            Registry<Biome> registry = (Registry<@NotNull Biome>) biomeRegistry.toMinecraft();
+        this.biomeRegistry.get().whileUnfrozen(() -> {
+            Registry<Biome> registry = (Registry<@NotNull Biome>) biomeRegistry.get().toMinecraft();
             Identifier resourceLocation = ((ResourceKeyImpl) biome.getResourceKey()).resourceLocation();
 
             Biome createdBiome = buildDelegate(biome);
@@ -172,7 +173,7 @@ public class CustomBiomeRegistry implements BiomeRegistry {
         BiomeSettings settings = abstractBiome.getSettings();
 
 
-        Registry<net.minecraft.world.level.biome.Biome> biomeRegistry = (Registry<@NotNull Biome>) this.biomeRegistry.toMinecraft();
+        Registry<net.minecraft.world.level.biome.Biome> biomeRegistry = (Registry<@NotNull Biome>) this.biomeRegistry.get().toMinecraft();
         net.minecraft.world.level.biome.Biome biome = biomeRegistry.getOptional((Identifier) key.resourceLocation()).orElseThrow(
             () -> new IllegalStateException("Biome " + key + " is not registered in the internal biome registry")
         );
@@ -251,7 +252,7 @@ public class CustomBiomeRegistry implements BiomeRegistry {
             return RegisteredBiomes.getOrThrow(key);
         }
 
-        Registry<Biome> biomeRegistry = (Registry<@NotNull Biome>) this.biomeRegistry.toMinecraft();
+        Registry<Biome> biomeRegistry = (Registry<@NotNull Biome>) this.biomeRegistry.get().toMinecraft();
 
         Biome biome = biomeRegistry.getOptional((Identifier) key.resourceLocation()).orElse(null);
         if (biome == null) {

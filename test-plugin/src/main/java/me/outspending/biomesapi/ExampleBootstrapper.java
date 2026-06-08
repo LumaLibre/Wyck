@@ -21,7 +21,7 @@ public class ExampleBootstrapper implements PluginBootstrap {
             .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeatures.FALLEN_OAK_TREE)
             .build();
 
-        ResourceKey myBiomeKey = ResourceKey.of("example", "my_biome");
+        ResourceKey myBiomeKey = ResourceKey.of("example", "my_biome2");
         registry.queue(
             CustomBiome.builder(myBiomeKey)
                 .fogColor("#DB00FD")

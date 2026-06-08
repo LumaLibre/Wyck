@@ -4,6 +4,7 @@ import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.annotations.WireFactory;
 import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.registry.internal.FrozenRegistry;
+import me.outspending.biomesapi.util.Lazy;
 import me.outspending.biomesapi.wrapper.worldgen.feature.custom.CustomFeature;
 import me.outspending.biomesapi.wrapper.worldgen.feature.custom.CustomFeatureBridge;
 import net.minecraft.core.Registry;
@@ -18,7 +19,7 @@ import org.jspecify.annotations.NullMarked;
 @ApiStatus.Internal
 public final class CustomFeatureRegistryImpl implements CustomFeatureRegistry {
 
-    private final FrozenRegistry featureRegistry = FrozenRegistry.of("worldgen/feature");
+    private final Lazy<FrozenRegistry> featureRegistry = FrozenRegistry.lazy("worldgen/feature");
 
     @Override
     @SuppressWarnings({"unchecked", "rawtypes"})
@@ -26,6 +27,6 @@ public final class CustomFeatureRegistryImpl implements CustomFeatureRegistry {
         CustomFeatureBridge<?> bridge = new CustomFeatureBridge(feature, feature.configSupplier());
         Identifier id = (Identifier) key.resourceLocation();
 
-        this.featureRegistry.whileUnfrozen(() -> Registry.register(BuiltInRegistries.FEATURE, id, bridge));
+        this.featureRegistry.get().whileUnfrozen(() -> Registry.register(BuiltInRegistries.FEATURE, id, bridge));
     }
 }

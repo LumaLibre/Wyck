@@ -69,15 +69,12 @@ public final class BootstrapSafeMinecraftRegistries {
         return vanilla().lookupOrThrow(registry);
     }
 
-    @AsOf("2.3.0")
     public static <T> Registry<T> mappedRegistry(String registryId) {
         Identifier location = Identifier.parse(registryId);
         ResourceKey<? extends Registry<T>> registryKey = ResourceKey.createRegistryKey(location);
         return mappedRegistry(registryKey);
     }
 
-
-    @AsOf("2.3.0")
     @SuppressWarnings("ConstantValue")
     public static <T> Registry<T> mappedRegistry(ResourceKey<? extends Registry<T>> registry) {
         Server bukkit = Bukkit.getServer();

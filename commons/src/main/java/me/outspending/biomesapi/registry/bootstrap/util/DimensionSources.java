@@ -43,7 +43,7 @@ public final class DimensionSources {
         return switch (id) {
             case "minecraft:overworld" -> new DimensionDefaults("minecraft:overworld", "minecraft:overworld");
             case "minecraft:the_nether" -> new DimensionDefaults("minecraft:the_nether", "minecraft:nether");
-            default -> throw new UnsupportedOperationException("datapack dimension editing has no known defaults for " + id + ", use the unsafe runtime impl for custom or non multi_noise dimensions");
+            default -> throw new UnsupportedOperationException("datapack dimension editing has no known defaults for " + id + ", use the runtime impl for custom or non multi_noise dimensions");
         };
     }
 
@@ -53,7 +53,7 @@ public final class DimensionSources {
         return switch (id) {
             case "minecraft:overworld" -> overworldPairs();
             case "minecraft:the_nether" -> netherPairs();
-            default -> throw new UnsupportedOperationException("datapack dimension editing is only implemented for minecraft:overworld and minecraft:the_nether, got " + id + ", use the unsafe runtime impl for custom or non multi_noise dimensions");
+            default -> throw new UnsupportedOperationException("datapack dimension editing is only implemented for minecraft:overworld and minecraft:the_nether, got " + id + ", use the runtime impl for custom or non multi_noise dimensions");
         };
     }
 
