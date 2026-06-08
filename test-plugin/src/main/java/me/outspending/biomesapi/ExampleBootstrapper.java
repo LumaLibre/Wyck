@@ -6,13 +6,9 @@ import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
 import me.outspending.biomesapi.registry.bootstrap.BootstrapBiomeRegistry;
 import me.outspending.biomesapi.registry.bootstrap.Composer;
-import me.outspending.biomesapi.worldgen.PillarConfig;
-import me.outspending.biomesapi.worldgen.PillarFeature;
 import me.outspending.biomesapi.wrapper.worldgen.BiomeGenerationSettings;
 import me.outspending.biomesapi.wrapper.worldgen.GenerationStep;
-import me.outspending.biomesapi.wrapper.worldgen.feature.ConfiguredFeature;
 import me.outspending.biomesapi.wrapper.worldgen.placement.PlacedFeatures;
-import org.bukkit.Material;
 
 public class ExampleBootstrapper implements PluginBootstrap {
     @Override

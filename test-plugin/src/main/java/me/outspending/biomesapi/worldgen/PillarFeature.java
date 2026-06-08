@@ -2,13 +2,14 @@ package me.outspending.biomesapi.worldgen;
 
 import me.outspending.biomesapi.wrapper.worldgen.feature.custom.CustomFeature;
 import me.outspending.biomesapi.wrapper.worldgen.feature.custom.PlacementContext;
+import org.bukkit.Material;
 import org.bukkit.util.BlockVector;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Random;
 
 @NullMarked
-public class PillarFeature extends CustomFeature<PillarConfig> {
+public class PillarFeature extends CustomFeature<PillarFeature.PillarConfig> {
 
     public PillarFeature() {
         super(PillarConfig::defaults);
@@ -31,5 +32,11 @@ public class PillarFeature extends CustomFeature<PillarConfig> {
         context.setBlock(cap, config.capBlock().createBlockData());
 
         return true;
+    }
+
+    public record PillarConfig(Material pillarBlock, Material capBlock, int minHeight, int maxHeight) {
+        public static PillarConfig defaults() {
+            return new PillarConfig(Material.OBSIDIAN, Material.GLOWSTONE, 4, 9);
+        }
     }
 }

@@ -3,7 +3,6 @@ package me.outspending.biomesapi;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
-import me.outspending.biomesapi.worldgen.PillarConfig;
 import me.outspending.biomesapi.worldgen.PillarFeature;
 import me.outspending.biomesapi.wrapper.worldgen.BiomeGenerationSettings;
 import me.outspending.biomesapi.wrapper.worldgen.GenerationStep;
@@ -24,24 +23,25 @@ public class TestPluginBootstrapper implements PluginBootstrap {
     public void bootstrap(BootstrapContext context) {
 
         new PillarFeature().register(PILLAR_KEY);
-        ConfiguredFeature tallOne  = ConfiguredFeature.customFeature(PILLAR_KEY, new PillarConfig(Material.OBSIDIAN, Material.GLOWSTONE, 10, 15));
-        ConfiguredFeature shortOne = ConfiguredFeature.customFeature(PILLAR_KEY, new PillarConfig(Material.BLACKSTONE, Material.SHROOMLIGHT, 3, 5));
+        ConfiguredFeature tallFeature  = ConfiguredFeature.customFeature(PILLAR_KEY, new PillarFeature.PillarConfig(Material.OBSIDIAN, Material.GLOWSTONE, 10, 15));
+        ConfiguredFeature shortFeature = ConfiguredFeature.customFeature(PILLAR_KEY, new PillarFeature.PillarConfig(Material.BLACKSTONE, Material.SHROOMLIGHT, 3, 5));
 
 
-        PlacedFeature tallPlaced = PlacedFeature.of(
-            tallOne,
-            PlacementModifier.count(2),
-            PlacementModifier.inSquare(),
-            PlacementModifier.heightmap(HeightmapType.WORLD_SURFACE),
-            PlacementModifier.biomeFilter()
-        );
-        PlacedFeature shortPlaced = PlacedFeature.of(
-            shortOne,
-            PlacementModifier.count(4),
-            PlacementModifier.inSquare(),
-            PlacementModifier.heightmap(HeightmapType.WORLD_SURFACE),
-            PlacementModifier.biomeFilter()
-        );
+        PlacedFeature tallPlaced = PlacedFeature.builder()
+            .feature(tallFeature)
+            .modifier(PlacementModifier.count(2))
+            .modifier(PlacementModifier.inSquare())
+            .modifier(PlacementModifier.heightmap(HeightmapType.WORLD_SURFACE))
+            .modifier(PlacementModifier.biomeFilter())
+            .build();
+
+        PlacedFeature shortPlaced = PlacedFeature.builder()
+            .feature(shortFeature)
+            .modifier(PlacementModifier.count(4))
+            .modifier(PlacementModifier.inSquare())
+            .modifier(PlacementModifier.heightmap(HeightmapType.WORLD_SURFACE))
+            .modifier(PlacementModifier.biomeFilter())
+            .build();
 
 
         newGen = BiomeGenerationSettings.builder()
