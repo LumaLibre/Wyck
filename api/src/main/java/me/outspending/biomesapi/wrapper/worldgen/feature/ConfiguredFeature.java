@@ -4,12 +4,20 @@ import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
 import me.outspending.biomesapi.wrapper.NmsHandle;
+import me.outspending.biomesapi.wrapper.worldgen.feature.config.FeatureConfiguration;
+import me.outspending.biomesapi.wrapper.worldgen.feature.custom.CustomFeature;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
-// TODO: Custom ConfiguredFeature implementations
 /**
- * Wraps Minecraft's ConfiguredFeature, a feature paired with its configuration.
+ * Wraps Minecraft's ConfiguredFeature.
+ * <p>
+ *     <ul>
+ *         <li>{@link Reference} is a reference to an already-registered configured feature.</li>
+ *         <li>{@link VanillaConfigured} is a configured feature authored from a vanilla feature type and configuration.</li>
+ *         <li>{@link CustomConfigured} is a configured feature composed of a registered custom feature with a config instance. The feature must already be registered under featureKey via {@link CustomFeature#register(BiomeResourceKey)}.</li>
+ *     </ul>
+ * </p>
  *
  * @since 2.3.0
  * @version 2.3.0
@@ -17,8 +25,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.3.0")
-@ApiStatus.Experimental
-public sealed interface ConfiguredFeature extends NmsHandle permits ConfiguredFeature.Reference {
+public sealed interface ConfiguredFeature extends NmsHandle permits ConfiguredFeature.Reference, ConfiguredFeature.VanillaConfigured, ConfiguredFeature.CustomConfigured {
 
     @ApiStatus.Internal
     WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.worldgen.feature.ConfiguredFeatureFactoryImpl");
@@ -39,6 +46,32 @@ public sealed interface ConfiguredFeature extends NmsHandle permits ConfiguredFe
         return new Reference(key);
     }
 
+    /**
+     * Authors a configured feature from a vanilla feature type and configuration.
+     * @param featureType the vanilla feature algorithm
+     * @param configuration the vanilla configuration for it
+     * @return an authored configured feature
+     * @since 2.3.0
+     */
+    @AsOf("2.3.0")
+    static ConfiguredFeature custom(FeatureType featureType, FeatureConfiguration configuration) {
+        return new VanillaConfigured(featureType.resourceKey(), configuration);
+    }
+
+    /**
+     * Composes a registered custom feature with a config instance. The feature
+     * must already be registered under featureKey via CustomFeature.register(...).
+     * The same feature may be composed with different configs.
+     * @param featureKey the key the custom feature was registered under
+     * @param config the config instance to place with
+     * @return an authored configured feature
+     * @since 2.3.0
+     */
+    @AsOf("2.3.0")
+    static ConfiguredFeature customFeature(BiomeResourceKey featureKey, Object config) {
+        return new CustomConfigured(featureKey, config);
+    }
+
     @Override
     @AsOf("2.3.0")
     default Object toMinecraft() {
@@ -47,8 +80,28 @@ public sealed interface ConfiguredFeature extends NmsHandle permits ConfiguredFe
 
     /**
      * A reference to an already-registered configured feature.
+     * @param key the key of the configured feature
      * @since 2.3.0
      */
     @AsOf("2.3.0")
     record Reference(BiomeResourceKey key) implements ConfiguredFeature {}
+
+    /**
+     * A configured feature authored from a vanilla feature type and configuration.
+     * @param featureKey the vanilla feature type
+     * @param configuration the vanilla configuration
+     * @since 2.3.0
+     */
+    @AsOf("2.3.0")
+    record VanillaConfigured(BiomeResourceKey featureKey, FeatureConfiguration configuration) implements ConfiguredFeature {}
+
+    /**
+     * A configured feature composed of a registered custom feature with a config instance.
+     * The feature must already be registered under featureKey via {@link CustomFeature#register(BiomeResourceKey)}.
+     * @param featureKey the key the custom feature was registered under
+     * @param config the config instance to place with
+     * @since 2.3.0
+     */
+    @AsOf("2.3.0")
+    record CustomConfigured(BiomeResourceKey featureKey, Object config) implements ConfiguredFeature {}
 }

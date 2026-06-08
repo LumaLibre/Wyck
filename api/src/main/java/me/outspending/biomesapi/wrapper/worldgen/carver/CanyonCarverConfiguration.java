@@ -14,7 +14,6 @@ import org.jspecify.annotations.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Wraps Minecraft's CanyonCarverConfiguration, the configuration consumed by
@@ -47,12 +46,12 @@ public record CanyonCarverConfiguration(
 
     @AsOf("2.3.0")
     public CanyonCarverConfiguration {
-        Objects.requireNonNull(y, "y");
-        Objects.requireNonNull(yScale, "yScale");
-        Objects.requireNonNull(lavaLevel, "lavaLevel");
-        Objects.requireNonNull(debugSettings, "debugSettings");
-        Objects.requireNonNull(verticalRotation, "verticalRotation");
-        Objects.requireNonNull(shape, "shape");
+        Preconditions.checkNotNull(y, "y");
+        Preconditions.checkNotNull(yScale, "yScale");
+        Preconditions.checkNotNull(lavaLevel, "lavaLevel");
+        Preconditions.checkNotNull(debugSettings, "debugSettings");
+        Preconditions.checkNotNull(verticalRotation, "verticalRotation");
+        Preconditions.checkNotNull(shape, "shape");
         replaceable = List.copyOf(replaceable);
     }
 

@@ -1,5 +1,6 @@
 package me.outspending.biomesapi.wrapper.worldgen;
 
+import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
 import me.outspending.biomesapi.wrapper.NmsHandle;
@@ -12,7 +13,6 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * Wraps Minecraft's BiomeGenerationSettings, the carvers and placed features
@@ -91,7 +91,7 @@ public interface BiomeGenerationSettings extends NmsHandle {
          */
         @AsOf("2.3.0")
         public Builder addCarver(ConfiguredWorldCarver carver) {
-            Objects.requireNonNull(carver, "carver");
+            Preconditions.checkNotNull(carver, "carver");
             this.carvers.add(carver);
             return this;
         }
@@ -105,8 +105,8 @@ public interface BiomeGenerationSettings extends NmsHandle {
          */
         @AsOf("2.3.0")
         public Builder addFeature(GenerationStep step, PlacedFeature feature) {
-            Objects.requireNonNull(step, "step");
-            Objects.requireNonNull(feature, "feature");
+            Preconditions.checkNotNull(step, "step");
+            Preconditions.checkNotNull(feature, "feature");
             this.features.computeIfAbsent(step, s -> new ArrayList<>()).add(feature);
             return this;
         }

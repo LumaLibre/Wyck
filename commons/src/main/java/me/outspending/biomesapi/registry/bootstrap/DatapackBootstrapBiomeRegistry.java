@@ -185,7 +185,7 @@ public final class DatapackBootstrapBiomeRegistry implements BootstrapBiomeRegis
 
             promotion.buildProvider();
 
-            BootstrapSafeMinecraftRegistries.setACTIVE(promotion.provider());
+            BootstrapSafeMinecraftRegistries.setActive(promotion.provider());
             promotion.writeFiles(root, GSON);
 
             RegistryOps<JsonElement> ops = promotion.provider().createSerializationContext(JsonOps.INSTANCE);

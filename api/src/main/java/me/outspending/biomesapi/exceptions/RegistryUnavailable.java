@@ -4,6 +4,12 @@ import me.outspending.biomesapi.annotations.AsOf;
 
 import java.util.function.Supplier;
 
+/**
+ * Thrown when a registry is unavailable.
+ * @since 2.3.0
+ * @version 2.3.0
+ * @author Jsinco
+ */
 @AsOf("2.3.0")
 public class RegistryUnavailable extends RuntimeException {
     @AsOf("2.3.0")

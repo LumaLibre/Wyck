@@ -1,5 +1,5 @@
 name: TestPlugin
 version: 1.0
 main: me.outspending.biomesapi.BiomesAPITest
-#bootstrapper: me.outspending.biomesapi.TestPluginBootstrapper
+bootstrapper: me.outspending.biomesapi.TestPluginBootstrapper
 api-version: 1.21

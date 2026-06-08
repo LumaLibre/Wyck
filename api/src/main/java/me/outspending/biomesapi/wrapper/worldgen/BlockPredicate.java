@@ -1,5 +1,6 @@
 package me.outspending.biomesapi.wrapper.worldgen;
 
+import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
 import me.outspending.biomesapi.wrapper.NmsHandle;
@@ -12,7 +13,6 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Wraps the BlockPredicate family, the positional block tests used by
@@ -169,7 +169,7 @@ public sealed interface BlockPredicate extends NmsHandle permits BlockPredicate.
 
         @AsOf("2.3.0")
         public MatchingBlocks {
-            Objects.requireNonNull(offset, "offset");
+            Preconditions.checkNotNull(offset, "offset");
             blocks = List.copyOf(blocks);
         }
     }
@@ -179,8 +179,8 @@ public sealed interface BlockPredicate extends NmsHandle permits BlockPredicate.
 
         @AsOf("2.3.0")
         public MatchingBlockTag {
-            Objects.requireNonNull(offset, "offset");
-            Objects.requireNonNull(tag, "tag");
+            Preconditions.checkNotNull(offset, "offset");
+            Preconditions.checkNotNull(tag, "tag");
         }
     }
 
@@ -189,7 +189,7 @@ public sealed interface BlockPredicate extends NmsHandle permits BlockPredicate.
 
         @AsOf("2.3.0")
         public MatchingFluids {
-            Objects.requireNonNull(offset, "offset");
+            Preconditions.checkNotNull(offset, "offset");
             fluids = List.copyOf(fluids);
         }
     }
@@ -199,8 +199,8 @@ public sealed interface BlockPredicate extends NmsHandle permits BlockPredicate.
 
         @AsOf("2.3.0")
         public HasSturdyFace {
-            Objects.requireNonNull(offset, "offset");
-            Objects.requireNonNull(direction, "direction");
+            Preconditions.checkNotNull(offset, "offset");
+            Preconditions.checkNotNull(direction, "direction");
         }
     }
 
@@ -209,7 +209,7 @@ public sealed interface BlockPredicate extends NmsHandle permits BlockPredicate.
 
         @AsOf("2.3.0")
         public Replaceable {
-            Objects.requireNonNull(offset, "offset");
+            Preconditions.checkNotNull(offset, "offset");
         }
     }
 
@@ -218,8 +218,8 @@ public sealed interface BlockPredicate extends NmsHandle permits BlockPredicate.
 
         @AsOf("2.3.0")
         public WouldSurvive {
-            Objects.requireNonNull(offset, "offset");
-            Objects.requireNonNull(state, "state");
+            Preconditions.checkNotNull(offset, "offset");
+            Preconditions.checkNotNull(state, "state");
         }
     }
 
@@ -228,7 +228,7 @@ public sealed interface BlockPredicate extends NmsHandle permits BlockPredicate.
 
         @AsOf("2.3.0")
         public InsideWorldBounds {
-            Objects.requireNonNull(offset, "offset");
+            Preconditions.checkNotNull(offset, "offset");
         }
     }
 
@@ -237,7 +237,7 @@ public sealed interface BlockPredicate extends NmsHandle permits BlockPredicate.
 
         @AsOf("2.3.0")
         public Unobstructed {
-            Objects.requireNonNull(offset, "offset");
+            Preconditions.checkNotNull(offset, "offset");
         }
     }
 
@@ -267,7 +267,7 @@ public sealed interface BlockPredicate extends NmsHandle permits BlockPredicate.
 
         @AsOf("2.3.0")
         public Not {
-            Objects.requireNonNull(predicate, "predicate");
+            Preconditions.checkNotNull(predicate, "predicate");
         }
     }
 

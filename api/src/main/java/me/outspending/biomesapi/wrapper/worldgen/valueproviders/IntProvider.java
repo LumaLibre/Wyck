@@ -8,8 +8,6 @@ import me.outspending.biomesapi.wrapper.NmsHandle;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
-import java.util.Objects;
-
 /**
  * Wraps the IntProvider value-provider family. Sampling occurs NMS-side,
  * so this wrapper only carries the bounds/shape parameters.
@@ -115,7 +113,7 @@ public sealed interface IntProvider extends NmsHandle permits IntProvider.Consta
 
         @AsOf("2.3.0")
         public Clamped {
-            Objects.requireNonNull(source, "source");
+            Preconditions.checkNotNull(source, "source");
         }
     }
 
@@ -125,7 +123,7 @@ public sealed interface IntProvider extends NmsHandle permits IntProvider.Consta
 
         @AsOf("2.3.0")
         public WeightedListInt {
-            Objects.requireNonNull(distribution, "distribution");
+            Preconditions.checkNotNull(distribution, "distribution");
             Preconditions.checkArgument(!distribution.unwrap().isEmpty(), "distribution must not be empty");
         }
 

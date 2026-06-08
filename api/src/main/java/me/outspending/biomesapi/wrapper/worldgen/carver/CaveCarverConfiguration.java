@@ -12,7 +12,6 @@ import org.jspecify.annotations.NullMarked;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Wraps Minecraft's CaveCarverConfiguration, the configuration consumed by both
@@ -46,13 +45,13 @@ public record CaveCarverConfiguration(
 
     @AsOf("2.3.0")
     public CaveCarverConfiguration {
-        Objects.requireNonNull(y, "y");
-        Objects.requireNonNull(yScale, "yScale");
-        Objects.requireNonNull(lavaLevel, "lavaLevel");
-        Objects.requireNonNull(debugSettings, "debugSettings");
-        Objects.requireNonNull(horizontalRadiusMultiplier, "horizontalRadiusMultiplier");
-        Objects.requireNonNull(verticalRadiusMultiplier, "verticalRadiusMultiplier");
-        Objects.requireNonNull(floorLevel, "floorLevel");
+        Preconditions.checkNotNull(y, "y");
+        Preconditions.checkNotNull(yScale, "yScale");
+        Preconditions.checkNotNull(lavaLevel, "lavaLevel");
+        Preconditions.checkNotNull(debugSettings, "debugSettings");
+        Preconditions.checkNotNull(horizontalRadiusMultiplier, "horizontalRadiusMultiplier");
+        Preconditions.checkNotNull(verticalRadiusMultiplier, "verticalRadiusMultiplier");
+        Preconditions.checkNotNull(floorLevel, "floorLevel");
         replaceable = List.copyOf(replaceable);
     }
 

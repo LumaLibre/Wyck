@@ -100,6 +100,8 @@ public final class BiomesAPITest extends JavaPlugin implements Listener {
             .addFeature(GenerationStep.UNDERGROUND_ORES, PlacedFeatures.ORE_QUARTZ_NETHER)
             .build();
 
+
+
         var myBiomeKey = BiomeResourceKey.of("test", "mybiome");
         CustomBiome mybiome = CustomBiome.builder()
             .resourceKey(myBiomeKey)
@@ -109,7 +111,7 @@ public final class BiomesAPITest extends JavaPlugin implements Listener {
             .waterColor("#00FFD0")
             .grassColor("#D1D13A")
             .foliageColor("#FF6A00")
-            .setGenerationSettings(generation)
+            .setGenerationSettings(TestPluginBootstrapper.newGen)
             .register();
         this.customBiome = mybiome;
 

@@ -56,6 +56,7 @@ public sealed class WireProvider<F> permits NullableWireProvider {
      * @return the factory instance
      */
     @AsOf("2.0.0")
+    @SuppressWarnings("DataFlowIssue")
     public F get() {
         F f = factory;
         if (f != null) return f;

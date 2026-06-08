@@ -3,10 +3,15 @@ package me.outspending.biomesapi.wrapper.worldgen.feature;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.annotations.WireFactory;
 import me.outspending.biomesapi.registry.bootstrap.util.BootstrapSafeMinecraftRegistries;
+import me.outspending.biomesapi.wrapper.worldgen.feature.custom.CustomFeatureBridge;
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
@@ -20,7 +25,8 @@ public final class ConfiguredFeatureFactoryImpl implements ConfiguredFeature.Fac
     public Object toNms(ConfiguredFeature feature) {
         return switch (feature) {
             case ConfiguredFeature.Reference reference -> resolveReference(reference);
-            // TODO: Custom ConfiguredFeature
+            case ConfiguredFeature.VanillaConfigured vanilla -> resolveVanilla(vanilla);
+            case ConfiguredFeature.CustomConfigured custom -> resolveCustom(custom);
         };
     }
 
@@ -31,7 +37,34 @@ public final class ConfiguredFeatureFactoryImpl implements ConfiguredFeature.Fac
         Identifier location = (Identifier) reference.key().resourceLocation();
         ResourceKey<net.minecraft.world.level.levelgen.feature.ConfiguredFeature<?, ?>> resourceKey =
             ResourceKey.create(Registries.CONFIGURED_FEATURE, location);
-
         return getter.getOrThrow(resourceKey);
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private Object resolveVanilla(ConfiguredFeature.VanillaConfigured vanilla) {
+        Identifier featureId = (Identifier) vanilla.featureKey().resourceLocation();
+        Feature feature = BuiltInRegistries.FEATURE.getValue(featureId);
+
+        if (feature == null) {
+            throw new IllegalArgumentException("Unknown feature type: " + featureId);
+        }
+        FeatureConfiguration config = (FeatureConfiguration) vanilla.configuration().toMinecraft();
+        net.minecraft.world.level.levelgen.feature.ConfiguredFeature<?, ?> configured =
+            new net.minecraft.world.level.levelgen.feature.ConfiguredFeature(feature, config);
+        return Holder.direct(configured);
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private Object resolveCustom(ConfiguredFeature.CustomConfigured custom) {
+        Identifier featureId = (Identifier) custom.featureKey().resourceLocation();
+        net.minecraft.world.level.levelgen.feature.Feature feature = BuiltInRegistries.FEATURE.getValue(featureId);
+        if (feature == null) {
+            throw new IllegalArgumentException("Custom feature not registered: " + featureId + " (did you call #register() before building?)");
+        }
+        // full on custom features are backed by bridges
+        CustomFeatureBridge.Holder<Object> holder = new CustomFeatureBridge.Holder<>(custom.config());
+        net.minecraft.world.level.levelgen.feature.ConfiguredFeature<?, ?> configured =
+            new net.minecraft.world.level.levelgen.feature.ConfiguredFeature(feature, holder);
+        return Holder.direct(configured);
     }
 }

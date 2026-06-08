@@ -9,8 +9,6 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.util.Objects;
-
 /**
  * Wraps Minecraft's CanyonCarverConfiguration.CanyonShapeConfiguration. The
  * shape parameters that drive a canyon's length, thickness, and radius profile.
@@ -39,9 +37,9 @@ public record CanyonShapeConfiguration(
 
     @AsOf("2.3.0")
     public CanyonShapeConfiguration {
-        Objects.requireNonNull(distanceFactor, "distanceFactor");
-        Objects.requireNonNull(thickness, "thickness");
-        Objects.requireNonNull(horizontalRadiusFactor, "horizontalRadiusFactor");
+        Preconditions.checkNotNull(distanceFactor, "distanceFactor");
+        Preconditions.checkNotNull(thickness, "thickness");
+        Preconditions.checkNotNull(horizontalRadiusFactor, "horizontalRadiusFactor");
         Preconditions.checkArgument(widthSmoothness > 0, "widthSmoothness must be positive");
     }
 

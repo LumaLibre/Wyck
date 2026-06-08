@@ -1,5 +1,6 @@
 package me.outspending.biomesapi.wrapper.worldgen.placement;
 
+import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
@@ -9,7 +10,6 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Wraps Minecraft's PlacedFeature, a configured feature paired with the ordered
@@ -90,7 +90,7 @@ public sealed interface PlacedFeature extends NmsHandle permits PlacedFeature.Re
 
         @AsOf("2.3.0")
         public Custom {
-            Objects.requireNonNull(feature, "feature");
+            Preconditions.checkNotNull(feature, "feature");
             placement = List.copyOf(placement);
         }
     }

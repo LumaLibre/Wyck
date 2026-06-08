@@ -48,7 +48,7 @@ public final class BootstrapSafeMinecraftRegistries {
         return VANILLA;
     }
 
-    public static void setACTIVE(HolderLookup.Provider provider) {
+    public static void setActive(HolderLookup.Provider provider) {
         ACTIVE = provider;
     }
 

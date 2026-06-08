@@ -15,7 +15,6 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Wraps the PlacementModifier family, the ordered transforms applied to
@@ -316,7 +315,7 @@ public sealed interface PlacementModifier extends NmsHandle permits PlacementMod
 
         @AsOf("2.3.0")
         public BlockPredicateFilter {
-            Objects.requireNonNull(predicate, "predicate");
+            Preconditions.checkNotNull(predicate, "predicate");
         }
     }
 
@@ -325,7 +324,7 @@ public sealed interface PlacementModifier extends NmsHandle permits PlacementMod
 
         @AsOf("2.3.0")
         public CountPlacement {
-            Objects.requireNonNull(count, "count");
+            Preconditions.checkNotNull(count, "count");
         }
     }
 
@@ -339,9 +338,9 @@ public sealed interface PlacementModifier extends NmsHandle permits PlacementMod
 
         @AsOf("2.3.0")
         public EnvironmentScanPlacement {
-            Objects.requireNonNull(directionOfSearch, "directionOfSearch");
-            Objects.requireNonNull(targetCondition, "targetCondition");
-            Objects.requireNonNull(allowedSearchCondition, "allowedSearchCondition");
+            Preconditions.checkNotNull(directionOfSearch, "directionOfSearch");
+            Preconditions.checkNotNull(targetCondition, "targetCondition");
+            Preconditions.checkNotNull(allowedSearchCondition, "allowedSearchCondition");
             Preconditions.checkArgument(
                 directionOfSearch == BlockFace.UP || directionOfSearch == BlockFace.DOWN,
                 "directionOfSearch must be vertical (UP or DOWN)"
@@ -364,7 +363,7 @@ public sealed interface PlacementModifier extends NmsHandle permits PlacementMod
 
         @AsOf("2.3.0")
         public HeightRangePlacement {
-            Objects.requireNonNull(height, "height");
+            Preconditions.checkNotNull(height, "height");
         }
     }
 
@@ -373,7 +372,7 @@ public sealed interface PlacementModifier extends NmsHandle permits PlacementMod
 
         @AsOf("2.3.0")
         public HeightmapPlacement {
-            Objects.requireNonNull(heightmap, "heightmap");
+            Preconditions.checkNotNull(heightmap, "heightmap");
         }
     }
 
@@ -391,8 +390,8 @@ public sealed interface PlacementModifier extends NmsHandle permits PlacementMod
 
         @AsOf("2.3.0")
         public RandomOffsetPlacement {
-            Objects.requireNonNull(xzSpread, "xzSpread");
-            Objects.requireNonNull(ySpread, "ySpread");
+            Preconditions.checkNotNull(xzSpread, "xzSpread");
+            Preconditions.checkNotNull(ySpread, "ySpread");
         }
     }
 
@@ -410,7 +409,7 @@ public sealed interface PlacementModifier extends NmsHandle permits PlacementMod
 
         @AsOf("2.3.0")
         public SurfaceRelativeThresholdFilter {
-            Objects.requireNonNull(heightmap, "heightmap");
+            Preconditions.checkNotNull(heightmap, "heightmap");
         }
     }
 
