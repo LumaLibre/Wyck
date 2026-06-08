@@ -52,7 +52,9 @@ public interface NoiseParameters extends NmsHandle {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    Builder asBuilder();
+    default Builder asBuilder() {
+        return new Builder(this);
+    }
 
     /**
      * Creates a new builder for NoiseParameters.

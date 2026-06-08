@@ -8,7 +8,9 @@ import me.outspending.biomesapi.wrapper.NmsHandle;
 import me.outspending.biomesapi.wrapper.worldgen.feature.ConfiguredFeature;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -47,31 +49,36 @@ public sealed interface PlacedFeature extends NmsHandle permits PlacedFeature.Re
     /**
      * Authors a placed feature from a configured feature and a list of modifiers.
      * @param feature the configured feature to place
-     * @param placement the ordered placement modifiers
+     * @param placements the ordered placement modifiers
      * @return an authored placed feature
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static PlacedFeature of(ConfiguredFeature feature, List<PlacementModifier> placement) {
-        return new Custom(feature, placement);
+    static PlacedFeature of(ConfiguredFeature feature, List<PlacementModifier> placements) {
+        return new Custom(feature, placements);
     }
 
     /**
      * Authors a placed feature from a configured feature and a list of modifiers.
      * @param feature the configured feature to place
-     * @param placement the ordered placement modifiers
+     * @param placements the ordered placement modifiers
      * @return an authored placed feature
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static PlacedFeature of(ConfiguredFeature feature, PlacementModifier... placement) {
-        return new Custom(feature, List.of(placement));
+    static PlacedFeature of(ConfiguredFeature feature, PlacementModifier... placements) {
+        return new Custom(feature, List.of(placements));
     }
 
     @Override
     @AsOf("2.3.0")
     default Object toMinecraft() {
         return WIRE.get().toNms(this);
+    }
+
+    @AsOf("2.3.0")
+    static FeatureBuilder builder() {
+        return new FeatureBuilder();
     }
 
     /**
@@ -92,6 +99,37 @@ public sealed interface PlacedFeature extends NmsHandle permits PlacedFeature.Re
         public Custom {
             Preconditions.checkNotNull(feature, "feature");
             placement = List.copyOf(placement);
+        }
+    }
+
+    final class FeatureBuilder {
+        private @Nullable ConfiguredFeature feature;
+        private final List<PlacementModifier> placements = new ArrayList<>();
+
+
+        public FeatureBuilder feature(ConfiguredFeature feature) {
+            this.feature = feature;
+            return this;
+        }
+
+        public FeatureBuilder modifier(PlacementModifier placement) {
+            this.placements.add(placement);
+            return this;
+        }
+
+        public FeatureBuilder placements(List<PlacementModifier> placements) {
+            this.placements.addAll(placements);
+            return this;
+        }
+
+        public FeatureBuilder placements(PlacementModifier... placements) {
+            this.placements.addAll(List.of(placements));
+            return this;
+        }
+
+        public PlacedFeature build() {
+            Preconditions.checkNotNull(feature, "feature must be set");
+            return PlacedFeature.of(feature, placements);
         }
     }
 }
