@@ -6,6 +6,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 /**
  * Utility class to unfreeze and re-freeze built-in registries.
@@ -19,14 +20,24 @@ import java.lang.reflect.Field;
 @AsOf("2.3.0")
 @ApiStatus.Internal
 public final class BuiltInRegistryLocks {
+    // TODO: Duplicated code from UnsafeNMS
 
     private static final Field FROZEN_FIELD;
+    private static final Field ALL_TAGS_FIELD;
+    private static final Method UNBOUND_TAGSET;
 
     static {
         try {
             FROZEN_FIELD = MappedRegistry.class.getDeclaredField("frozen");
             FROZEN_FIELD.setAccessible(true);
-        } catch (NoSuchFieldException e) {
+
+            ALL_TAGS_FIELD = MappedRegistry.class.getDeclaredField("allTags");
+            ALL_TAGS_FIELD.setAccessible(true);
+
+            Class<?> tagSetClass = Class.forName("net.minecraft.core.MappedRegistry$TagSet");
+            UNBOUND_TAGSET = tagSetClass.getDeclaredMethod("unbound");
+            UNBOUND_TAGSET.setAccessible(true);
+        } catch (NoSuchFieldException | ClassNotFoundException | NoSuchMethodException e) {
             throw new ExceptionInInitializerError(e);
         }
     }
@@ -51,15 +62,25 @@ public final class BuiltInRegistryLocks {
         }
     }
 
+    private static void unbindTags(MappedRegistry<?> registry) {
+        try {
+            Object unbound = UNBOUND_TAGSET.invoke(null);
+            ALL_TAGS_FIELD.set(registry, unbound);
+        } catch (ReflectiveOperationException e) {
+            throw new RuntimeException("Failed to reset tags on registry " + registry.key(), e);
+        }
+    }
+
     @AsOf("2.3.0")
     public static void whileUnfrozen(MappedRegistry<?> registry, Runnable action) {
-        if (!isFrozen(registry)) { // assume bootstrapping
+        if (!isFrozen(registry)) { // assume bootstrapping, vanilla will freeze later
             action.run();
         } else {
             setFrozen(registry, false);
             try {
                 action.run();
             } finally {
+                unbindTags(registry);
                 registry.freeze();
             }
         }
