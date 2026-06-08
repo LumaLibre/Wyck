@@ -60,7 +60,7 @@ public final class Generators {
                 TreeFeatures.class,
                 VegetationFeatures.class
             ),
-            "Typed references that point to vanilla configured features."
+            "Typed references that point to vanilla's configured features."
         );
     }
 
@@ -83,7 +83,7 @@ public final class Generators {
                 VegetationPlacements.class,
                 VillagePlacements.class
             ),
-            "Typed references that point to vanilla placed features."
+            "Typed references that point to vanilla's placed features."
         );
     }
 

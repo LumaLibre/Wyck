@@ -3,21 +3,22 @@ package me.outspending.biomesapi.wrapper.worldgen.placement;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.annotations.Generated;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Auto-generated. Do not modify!
  * Run ./gradlew generateSources to regenerate.
  * <p>
- * Typed references that point to vanilla placed features.
+ * Typed references that point to vanilla's placed features.
  * </p>
  *
  * @since 2.3.0
  * @version 2.3.0
  * @author BiomesAPI codegen
  */
+@NullMarked
 @AsOf("2.3.0")
-@Generated("2026-06-06T19:27:06.389597Z")
+@Generated("2026-06-06T20:06:18.770458Z")
 public final class PlacedFeatures {
 
     // From: AquaticPlacements 
@@ -554,7 +555,7 @@ public final class PlacedFeatures {
     @AsOf("2.3.0")
     public static final PlacedFeature PATCH_BERRY_BUSH_VILLAGE = reference("patch_berry_bush");
 
-    private static @NonNull PlacedFeature reference(@NonNull String path) {
+    private static PlacedFeature reference(String path) {
         return PlacedFeature.reference(BiomeResourceKey.minecraft(path));
     }
 

@@ -3,7 +3,6 @@ package me.outspending.biomesapi.wrapper.worldgen.feature;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NullMarked;
 
 // TODO: Custom ConfiguredFeature implementations

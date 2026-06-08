@@ -7,6 +7,7 @@ import me.outspending.biomesapi.wrapper.NmsHandle;
 import me.outspending.biomesapi.wrapper.worldgen.valueproviders.FloatProvider;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -74,12 +75,12 @@ public record CanyonShapeConfiguration(
     @AsOf("2.3.0")
     public static final class Builder {
 
-        private FloatProvider distanceFactor;
-        private FloatProvider thickness;
-        private Integer widthSmoothness;
-        private FloatProvider horizontalRadiusFactor;
-        private Float verticalRadiusDefaultFactor;
-        private Float verticalRadiusCenterFactor;
+        private @Nullable FloatProvider distanceFactor;
+        private @Nullable FloatProvider thickness;
+        private @Nullable Integer widthSmoothness;
+        private @Nullable FloatProvider horizontalRadiusFactor;
+        private @Nullable Float verticalRadiusDefaultFactor;
+        private @Nullable Float verticalRadiusCenterFactor;
 
         /**
          * Sets the distance factor of the shape.

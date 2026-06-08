@@ -108,7 +108,7 @@ public class GlobalBiomeSetter implements BiomeSetter {
         }
 
         if (updateBiome) {
-            biomeUpdater.updateChunk(CompletableFuture.completedFuture(chunk));
+            biomeUpdater.updateChunkAsync(CompletableFuture.completedFuture(chunk));
         }
     }
 

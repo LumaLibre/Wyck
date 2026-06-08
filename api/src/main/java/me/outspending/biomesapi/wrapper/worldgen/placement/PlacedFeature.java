@@ -6,7 +6,6 @@ import me.outspending.biomesapi.registry.BiomeResourceKey;
 import me.outspending.biomesapi.wrapper.NmsHandle;
 import me.outspending.biomesapi.wrapper.worldgen.feature.ConfiguredFeature;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;

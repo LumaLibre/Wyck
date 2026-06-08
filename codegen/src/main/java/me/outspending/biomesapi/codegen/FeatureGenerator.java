@@ -19,6 +19,7 @@ import java.util.regex.Pattern;
 // AsOf 2.3.0
 public final class FeatureGenerator {
 
+    private static final String SINCE = "2.3.0";
     // matches: @AsOf("1.2.3") \n public static final SomeType FIELD_NAME =
     private static final Pattern EXISTING_FIELD = Pattern.compile(
         "@AsOf\\(\"([^\"]+)\"\\)\\s+public\\s+static\\s+final\\s+\\w+\\s+(\\w+)\\s*="
@@ -72,7 +73,7 @@ public final class FeatureGenerator {
         sb.append("import me.outspending.biomesapi.annotations.AsOf;\n");
         sb.append("import me.outspending.biomesapi.annotations.Generated;\n");
         sb.append("import me.outspending.biomesapi.registry.BiomeResourceKey;\n");
-        sb.append("import org.jspecify.annotations.NonNull;\n\n");
+        sb.append("import org.jspecify.annotations.NullMarked;\n\n");
         sb.append("/**\n");
         sb.append(" * Auto-generated. Do not modify!\n");
         sb.append(" * Run ./gradlew generateSources to regenerate.\n");
@@ -80,10 +81,11 @@ public final class FeatureGenerator {
         sb.append(" * ").append(spec.javadoc()).append("\n");
         sb.append(" * </p>\n");
         sb.append(" *\n");
-        sb.append(" * @since ").append("2.3.0").append("\n"); // always 2.3.0
+        sb.append(" * @since ").append(SINCE).append("\n");
         sb.append(" * @version ").append(version).append("\n");
         sb.append(" * @author BiomesAPI codegen\n");
         sb.append(" */\n");
+        sb.append("@NullMarked\n");
         sb.append("@AsOf(\"").append(version).append("\")\n");
         sb.append("@Generated(\"").append(Instant.now().toString()).append("\")\n");
         sb.append("public final class ").append(spec.outputClass()).append(" {\n\n");
@@ -132,8 +134,8 @@ public final class FeatureGenerator {
             sb.append("\n");
         }
 
-        sb.append("    private static @NonNull ").append(spec.typeSimpleName())
-            .append(" reference(@NonNull String path) {\n");
+        sb.append("    private static ").append(spec.typeSimpleName())
+            .append(" reference(String path) {\n");
         sb.append("        return ").append(spec.referenceCall()).append("(BiomeResourceKey.minecraft(path));\n");
         sb.append("    }\n\n");
         sb.append("    private ").append(spec.outputClass()).append("() {\n");

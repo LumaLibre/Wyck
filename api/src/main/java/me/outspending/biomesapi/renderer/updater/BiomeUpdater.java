@@ -125,7 +125,7 @@ public interface BiomeUpdater {
      *
      * @param from The starting location.
      * @param to The ending location.
-     * @version 0.0.1
+     * @since 0.0.1
      */
     @AsOf("0.0.1")
     @Contract("null, _ -> fail; _, null -> fail")

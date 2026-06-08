@@ -9,7 +9,6 @@ import net.minecraft.util.valueproviders.ClampedNormalInt;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.UniformInt;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.logging.Logger;

@@ -3,8 +3,10 @@ package me.outspending.biomesapi.registry.bootstrap;
 import com.google.common.base.Preconditions;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
 import io.papermc.paper.datapack.DatapackRegistrar;
@@ -17,12 +19,17 @@ import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.biome.RegisteredBiomes;
 import me.outspending.biomesapi.registry.BiomeRegistry;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
+import me.outspending.biomesapi.registry.bootstrap.util.BootstrapSafeMinecraftRegistries;
+import me.outspending.biomesapi.registry.bootstrap.util.DatapackPromotion;
+import me.outspending.biomesapi.registry.dimension.DimensionBiomeEdit;
+import me.outspending.biomesapi.registry.bootstrap.util.DimensionSources;
 import me.outspending.biomesapi.util.ThrowingRunnable;
+import me.outspending.biomesapi.wrapper.worldgen.climate.BiomeClimatePoint;
 import net.minecraft.SharedConstants;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.RegistryOps;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.Climate;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -30,8 +37,10 @@ import org.jspecify.annotations.Nullable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * Implementation of {@link BootstrapBiomeRegistry} that registers custom biomes through Paper's
@@ -58,10 +67,13 @@ public final class DatapackBootstrapBiomeRegistry implements BootstrapBiomeRegis
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final String PACK_ID_FORMAT = "biomesapi_%s";
+    private static final String FEATURE_NAMESPACE_FORMAT = "biomesapi_%s";
 
     private final List<CustomBiome> pending = new ArrayList<>();
+    private final List<DimensionBiomeEdit> dimensionEdits = new ArrayList<>();
     private boolean installed = false;
     private @Nullable String packId;
+    private @Nullable String featureNamespace;
     private @Nullable Throwable deferred;
 
     @Override
@@ -76,7 +88,9 @@ public final class DatapackBootstrapBiomeRegistry implements BootstrapBiomeRegis
     public BootstrapBiomeRegistry install(BootstrapContext context) {
         Preconditions.checkState(!this.installed, "already installed");
         this.installed = true;
-        this.packId = String.format(PACK_ID_FORMAT, context.getPluginMeta().getName().toLowerCase(Locale.ROOT).replace(' ', '-'));
+        String name = context.getPluginMeta().getName().toLowerCase(Locale.ROOT).replace(' ', '-');
+        this.packId = String.format(PACK_ID_FORMAT, name);
+        this.featureNamespace = String.format(FEATURE_NAMESPACE_FORMAT, name.replace('-', '_'));
 
         context.getLifecycleManager().registerEventHandler(
             LifecycleEvents.DATAPACK_DISCOVERY.newHandler(this::discover)
@@ -86,17 +100,32 @@ public final class DatapackBootstrapBiomeRegistry implements BootstrapBiomeRegis
 
     @AsOf("2.3.0")
     public BootstrapBiomeRegistry deferring(ThrowingRunnable action) {
-        if (this.deferred == null) {
-            try {
-                action.run();
-            } catch (Throwable t) {
-                if (this.deferred == null) {
-                    this.deferred = t;
-                } else {
-                    this.deferred.addSuppressed(t);
-                }
+        if (this.deferred != null) {
+           return this;
+        }
+        try {
+            action.run();
+        } catch (Throwable t) {
+            if (this.deferred == null) {
+                this.deferred = t;
+            } else {
+                this.deferred.addSuppressed(t);
             }
         }
+        return this;
+    }
+
+    @Override
+    @AsOf("2.3.0")
+    public BootstrapBiomeRegistry addToDimension(BiomeResourceKey dimension, BiomeResourceKey biome, BiomeClimatePoint placement) {
+        this.dimensionEdits.add(new DimensionBiomeEdit.Add(dimension, biome, placement));
+        return this;
+    }
+
+    @Override
+    @AsOf("2.3.0")
+    public BootstrapBiomeRegistry replaceInDimension(BiomeResourceKey dimension, BiomeResourceKey target, BiomeResourceKey replacement) {
+        this.dimensionEdits.add(new DimensionBiomeEdit.Replace(dimension, target, replacement));
         return this;
     }
 
@@ -108,7 +137,7 @@ public final class DatapackBootstrapBiomeRegistry implements BootstrapBiomeRegis
         if (this.deferred != null) {
             throw new RuntimeException("Deferred custom biome failure; aborting startup", this.deferred);
         }
-        if (this.pending.isEmpty()) {
+        if (this.pending.isEmpty() && this.dimensionEdits.isEmpty()) {
             return;
         }
         try {
@@ -116,6 +145,7 @@ public final class DatapackBootstrapBiomeRegistry implements BootstrapBiomeRegis
             Path packRoot = writePack();
             event.registrar().discoverPack(packRoot.toUri(), packId);
             this.pending.clear();
+            this.dimensionEdits.clear();
         } catch (Throwable t) {
             throw new RuntimeException("Failed to register custom biomes via datapack; aborting", t);
         }
@@ -145,34 +175,104 @@ public final class DatapackBootstrapBiomeRegistry implements BootstrapBiomeRegis
         meta.add("pack", pack);
         Files.writeString(root.resolve("pack.mcmeta"), GSON.toJson(meta));
 
-        // Built-in registries are enough to encode biomes with EMPTY generation settings (sounds,
-        // particles, entity spawns all live there). RegistryOps lets the codec resolve those refs.
-        RegistryAccess access = RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY);
-        RegistryOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, access);
         BiomeRegistry builder = BiomeRegistry.registry();
 
-        for (CustomBiome biome : this.pending) {
-            BiomeResourceKey rk = biome.getResourceKey();
-            Biome nms = (Biome) builder.buildDelegate(biome);
-
-            DataResult<JsonElement> result = Biome.DIRECT_CODEC.encodeStart(ops, nms);
-            if (result.error().isPresent()) {
-                throw new IllegalStateException("Biome codec encode failed for "
-                    + rk.namespace() + ":" + rk.path() + " -> " + result.error().get().message());
+        DatapackPromotion promotion = DatapackPromotion.beginCollect(this.featureNamespace);
+        try {
+            for (CustomBiome biome : this.pending) {
+                builder.buildDelegate(biome);
             }
-            JsonElement json = result.result().orElseThrow();
 
-            Path biomeFile = root.resolve("data")
-                .resolve(rk.namespace())
-                .resolve("worldgen")
-                .resolve("biome")
-                .resolve(rk.path() + ".json");
-            Files.createDirectories(biomeFile.getParent());
-            Files.writeString(biomeFile, GSON.toJson(json));
+            promotion.buildProvider();
 
-            RegisteredBiomes.appendBiome(biome);
+            BootstrapSafeMinecraftRegistries.setACTIVE(promotion.provider());
+            promotion.writeFiles(root, GSON);
+
+            RegistryOps<JsonElement> ops = promotion.provider().createSerializationContext(JsonOps.INSTANCE);
+
+            promotion.beginReference();
+            for (CustomBiome biome : this.pending) {
+                BiomeResourceKey rk = biome.getResourceKey();
+                Biome nms = (Biome) builder.buildDelegate(biome);
+
+                DataResult<JsonElement> result = Biome.DIRECT_CODEC.encodeStart(ops, nms);
+                if (result.error().isPresent()) {
+                    throw new IllegalStateException("Biome codec encode failed for "
+                        + rk.namespace() + ":" + rk.path() + " -> " + result.error().get().message());
+                }
+                JsonElement json = result.result().orElseThrow();
+
+                Path biomeFile = root.resolve("data")
+                    .resolve(rk.namespace())
+                    .resolve("worldgen")
+                    .resolve("biome")
+                    .resolve(rk.path() + ".json");
+                Files.createDirectories(biomeFile.getParent());
+                Files.writeString(biomeFile, GSON.toJson(json));
+
+                RegisteredBiomes.appendBiome(biome);
+            }
+        } finally {
+            BootstrapSafeMinecraftRegistries.clearActive();
+            DatapackPromotion.end();
         }
+
+        writeDimensionOverrides(root);
         return root;
+    }
+
+    private void writeDimensionOverrides(Path root) throws Exception {
+        if (this.dimensionEdits.isEmpty()) {
+            return;
+        }
+
+        Map<BiomeResourceKey, List<DimensionBiomeEdit>> byDimension = new LinkedHashMap<>();
+        for (DimensionBiomeEdit edit : this.dimensionEdits) {
+            byDimension.computeIfAbsent(edit.dimension(), k -> new ArrayList<>()).add(edit);
+        }
+
+        for (Map.Entry<BiomeResourceKey, List<DimensionBiomeEdit>> entry : byDimension.entrySet()) {
+            BiomeResourceKey dimension = entry.getKey();
+            JsonObject dimensionJson = buildDimensionJson(dimension, entry.getValue());
+
+            Path file = root.resolve("data")
+                .resolve(dimension.namespace())
+                .resolve("dimension")
+                .resolve(dimension.path() + ".json");
+            Files.createDirectories(file.getParent());
+            Files.writeString(file, GSON.toJson(dimensionJson));
+        }
+    }
+
+    private JsonObject buildDimensionJson(BiomeResourceKey dimension, List<DimensionBiomeEdit> edits) {
+        // start from the reconstructed vanilla source, then apply this dimension's edits
+        List<Pair<Climate.ParameterPoint, ResourceKey<Biome>>> base = DimensionSources.vanillaPairs(dimension);
+        List<Pair<Climate.ParameterPoint, ResourceKey<Biome>>> pairs = DimensionSources.applyEdits(base, edits);
+        DimensionSources.DimensionDefaults defaults = DimensionSources.defaultsFor(dimension);
+
+        JsonArray biomes = new JsonArray();
+        for (Pair<Climate.ParameterPoint, ResourceKey<Biome>> pair : pairs) {
+            JsonObject biomeEntry = new JsonObject();
+            biomeEntry.addProperty("biome", pair.getSecond().identifier().toString());
+
+            DataResult<JsonElement> encoded = Climate.ParameterPoint.CODEC.encodeStart(JsonOps.INSTANCE, pair.getFirst());
+            biomeEntry.add("parameters", encoded.result().orElseThrow());
+            biomes.add(biomeEntry);
+        }
+
+        JsonObject biomeSource = new JsonObject();
+        biomeSource.addProperty("type", "minecraft:multi_noise");
+        biomeSource.add("biomes", biomes);
+
+        JsonObject generator = new JsonObject();
+        generator.addProperty("type", "minecraft:noise");
+        generator.addProperty("settings", defaults.noiseSettings()); // per dimension noise settings
+        generator.add("biome_source", biomeSource);
+
+        JsonObject dimensionJson = new JsonObject();
+        dimensionJson.addProperty("type", defaults.dimensionType()); // per dimension dimension type
+        dimensionJson.add("generator", generator);
+        return dimensionJson;
     }
 
     /**
@@ -180,7 +280,7 @@ public final class DatapackBootstrapBiomeRegistry implements BootstrapBiomeRegis
      * {@code WorldVersion.datapackVersion()} returns a {@code PackFormat} object; we read its
      * (first no-arg) int accessor, which is the major/format number written into pack.mcmeta.
      */
-    private static int serverDataPackFormat() {
+    public static int serverDataPackFormat() {
         try {
             Object version = SharedConstants.getCurrentVersion();
             Object packFormat = version.getClass().getMethod("datapackVersion").invoke(version);

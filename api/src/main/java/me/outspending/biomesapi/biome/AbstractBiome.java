@@ -383,6 +383,7 @@ public interface AbstractBiome extends Keyed {
      * @return the AbstractBiome with the updated BiomeGenerationSettings
      * @since 2.3.0
      */
+    @AsOf("2.3.0")
     AbstractBiome setGenerationSettings(@Nullable BiomeGenerationSettings generationSettings);
 
     /**

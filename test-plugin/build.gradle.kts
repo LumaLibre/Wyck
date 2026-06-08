@@ -28,8 +28,9 @@ tasks {
         minecraftVersion("26.1.2")
         downloadPlugins {
             modrinth("gBIw3Gvy", "4.2.2")
-            // ProtocolLib has no direct downloads, maybe figure out how to unzip then add locally?
         }
+        //args("--safeMode")
+        //commandLine.add("--safeMode")
     }
 }
 

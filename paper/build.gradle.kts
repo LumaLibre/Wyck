@@ -1,5 +1,6 @@
 import net.minecrell.pluginyml.bukkit.BukkitPluginDescription
 import net.minecrell.pluginyml.paper.PaperPluginDescription
+import org.gradle.kotlin.dsl.project
 
 plugins {
     alias(libs.plugins.plugin.yml.paper)
@@ -9,6 +10,10 @@ plugins {
 }
 
 val supported = listOf("26.1.2", "1.21.11")
+val minecraft = ":minecraft"
+val minecraftProjects = project(minecraft)
+    .subprojects
+    .map { it.name }
 
 group = "me.outspending.biomesapi.paper"
 
@@ -22,6 +27,21 @@ dependencies {
 tasks {
     shadowJar {
         relocate("dev.faststats", "me.outspending.biomesapi.paper.metrics")
+        relocate("org.objectweb.asm", "me.outspending.biomesapi.asm")
+        exclude("com/google/**")
+
+        dependencies {
+            exclude(dependency("org.ow2.asm:asm"))
+        }
+        minimize {
+            exclude("dev.faststats")
+            exclude(project(":api"))
+            exclude(project(":commons"))
+            for (project in minecraftProjects) {
+                exclude(project("${minecraft}:${project}"))
+            }
+            exclude("META-INF/maven/**")
+        }
         archiveBaseName.set("BiomesAPI")
         archiveClassifier.set("")
     }

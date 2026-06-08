@@ -20,6 +20,7 @@ import me.outspending.biomesapi.biome.RegisteredBiomes;
 import me.outspending.biomesapi.registry.BiomeRegistry;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
 import me.outspending.biomesapi.util.ThrowingRunnable;
+import me.outspending.biomesapi.wrapper.worldgen.climate.BiomeClimatePoint;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.RegistrationInfo;
 import net.minecraft.core.Registry;
@@ -211,6 +212,15 @@ public final class UnsafePaperBootstrapBiomeRegistry implements BootstrapBiomeRe
     }
 
 
+    @Override
+    public BootstrapBiomeRegistry replaceInDimension(BiomeResourceKey dimension, BiomeResourceKey target, BiomeResourceKey replacement) {
+        throw new UnsupportedOperationException("Unsupported. me.outspending.biomesapi.registry.dimension.DimensionEditor.");
+    }
+
+    @Override
+    public BootstrapBiomeRegistry addToDimension(BiomeResourceKey dimension, BiomeResourceKey target, BiomeClimatePoint placement) {
+        throw new UnsupportedOperationException("Unsupported. me.outspending.biomesapi.registry.dimension.DimensionEditor.");
+    }
 
     private static ResourceKey<Biome> nmsKeyOf(CustomBiome cb) {
         BiomeResourceKey rk = cb.getResourceKey();

@@ -12,6 +12,7 @@ dependencies {
     compileOnly(libs.protocollib)
     compileOnly(libs.packetevents)
     api(project(":api"))
+    implementation(libs.org.ow2.asm)
 
     // NMS Implementations
     for (project in minecraftProjects) {
@@ -38,8 +39,29 @@ tasks.named<Jar>("sourcesJar") {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
+tasks.named<Jar>("jar") {
+    enabled = false
+}
+
+
+configurations {
+    apiElements { outgoing.artifacts.clear(); outgoing.artifact(tasks.shadowJar) }
+    runtimeElements { outgoing.artifacts.clear(); outgoing.artifact(tasks.shadowJar) }
+}
+
 tasks.shadowJar {
     relocate("dev.faststats", "me.outspending.biomesapi.metrics")
+    relocate("org.objectweb.asm", "me.outspending.biomesapi.asm")
+    exclude("com/google/**")
+    minimize {
+        exclude("dev.faststats")
+        exclude(project(":api"))
+        exclude(project(":commons"))
+        for (project in minecraftProjects) {
+            exclude(project("${minecraft}:${project}"))
+        }
+        exclude("META-INF/maven/**")
+    }
 }
 
 publishing {

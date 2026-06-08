@@ -9,6 +9,7 @@ import me.outspending.biomesapi.wrapper.worldgen.valueproviders.VerticalAnchor;
 import org.bukkit.Material;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -86,14 +87,14 @@ public record CanyonCarverConfiguration(
     @AsOf("2.3.0")
     public static final class Builder {
 
-        private Float probability;
-        private HeightProvider y;
-        private FloatProvider yScale;
-        private VerticalAnchor lavaLevel;
+        private @Nullable Float probability;
+        private @Nullable HeightProvider y;
+        private @Nullable FloatProvider yScale;
+        private @Nullable VerticalAnchor lavaLevel;
         private CarverDebugSettings debugSettings = CarverDebugSettings.defaultSettings();
         private Collection<Material> replaceable = Collections.emptyList();
-        private FloatProvider verticalRotation;
-        private CanyonShapeConfiguration shape;
+        private @Nullable FloatProvider verticalRotation;
+        private @Nullable CanyonShapeConfiguration shape;
 
 
         /**

@@ -191,7 +191,7 @@ public interface VanillaBiome extends AbstractBiome {
     @AsOf("2.3.0")
     final class Builder {
 
-        private BiomeResourceKey resourceKey = null;
+        private @Nullable BiomeResourceKey resourceKey = null;
         private BiomeSettings settings = BiomeSettings.defaultSettings();
 
         private int waterColor = 0x3F75C4;

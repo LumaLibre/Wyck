@@ -6,7 +6,6 @@ import me.outspending.biomesapi.factory.WireProvider;
 import me.outspending.biomesapi.util.WeightedList;
 import me.outspending.biomesapi.wrapper.NmsHandle;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;

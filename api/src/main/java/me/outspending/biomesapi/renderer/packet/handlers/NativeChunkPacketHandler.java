@@ -6,7 +6,6 @@ import me.outspending.biomesapi.misc.ChunkLocation;
 import me.outspending.biomesapi.renderer.packet.PacketHandler;
 import me.outspending.biomesapi.renderer.packet.PhonyBiomeResolver;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NullMarked;
 
 /**

@@ -4,7 +4,10 @@ import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.factory.WireProvider;
+import me.outspending.biomesapi.registry.BiomeResourceKey;
+import me.outspending.biomesapi.registry.dimension.DimensionEditor;
 import me.outspending.biomesapi.util.ThrowingRunnable;
+import me.outspending.biomesapi.wrapper.worldgen.climate.BiomeClimatePoint;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
@@ -89,4 +92,32 @@ public interface BootstrapBiomeRegistry {
      */
     @AsOf("2.3.0")
     BootstrapBiomeRegistry deferring(ThrowingRunnable runnable);
+
+
+    /**
+     * Adds a biome to a dimension's biome distribution.
+     * The biome will be added at the specified climate point and may replace an existing biome if the point overlaps with an existing one.
+     * @param dimension the dimension to add the biome to
+     * @param target the biome to add
+     * @param placement the climate point to place the biome at
+     * @return this registry instance
+     * @throws UnsupportedOperationException if the implementation does not support this operation
+     * @see DimensionEditor#addToDimension(BiomeResourceKey, BiomeResourceKey, BiomeClimatePoint)
+     * @since 2.3.0
+     */
+    @AsOf("2.3.0")
+    BootstrapBiomeRegistry addToDimension(BiomeResourceKey dimension, BiomeResourceKey target, BiomeClimatePoint placement) throws UnsupportedOperationException;
+
+    /**
+     * Replaces a biome in a dimension.
+     * @param dimension the dimension to replace the biome in
+     * @param target the biome to replace
+     * @param replacement the biome to replace with
+     * @return this registry instance
+     * @throws UnsupportedOperationException if the implementation does not support this operation
+     * @see DimensionEditor#replaceInDimension(BiomeResourceKey, BiomeResourceKey, BiomeResourceKey)
+     * @since 2.3.0
+     */
+    @AsOf("2.3.0")
+    BootstrapBiomeRegistry replaceInDimension(BiomeResourceKey dimension, BiomeResourceKey target, BiomeResourceKey replacement) throws UnsupportedOperationException;
 }

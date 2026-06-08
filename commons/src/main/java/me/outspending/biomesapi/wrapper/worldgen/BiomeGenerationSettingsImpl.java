@@ -5,7 +5,6 @@ import me.outspending.biomesapi.annotations.WireFactory;
 import me.outspending.biomesapi.wrapper.worldgen.carver.ConfiguredWorldCarver;
 import me.outspending.biomesapi.wrapper.worldgen.placement.PlacedFeature;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.EnumMap;

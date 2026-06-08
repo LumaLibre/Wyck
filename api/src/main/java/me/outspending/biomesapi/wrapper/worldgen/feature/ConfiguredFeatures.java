@@ -3,21 +3,22 @@ package me.outspending.biomesapi.wrapper.worldgen.feature;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.annotations.Generated;
 import me.outspending.biomesapi.registry.BiomeResourceKey;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Auto-generated. Do not modify!
  * Run ./gradlew generateSources to regenerate.
  * <p>
- * Typed references that point to vanilla configured features.
+ * Typed references that point to vanilla's configured features.
  * </p>
  *
  * @since 2.3.0
  * @version 2.3.0
  * @author BiomesAPI codegen
  */
+@NullMarked
 @AsOf("2.3.0")
-@Generated("2026-06-06T19:27:06.382526Z")
+@Generated("2026-06-06T20:06:18.765849Z")
 public final class ConfiguredFeatures {
 
     // From: AquaticFeatures 
@@ -480,7 +481,7 @@ public final class ConfiguredFeatures {
     @AsOf("2.3.0")
     public static final ConfiguredFeature MANGROVE_VEGETATION = reference("mangrove_vegetation");
 
-    private static @NonNull ConfiguredFeature reference(@NonNull String path) {
+    private static ConfiguredFeature reference(String path) {
         return ConfiguredFeature.reference(BiomeResourceKey.minecraft(path));
     }
 

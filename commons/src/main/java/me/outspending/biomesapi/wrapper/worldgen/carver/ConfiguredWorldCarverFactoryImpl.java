@@ -2,14 +2,13 @@ package me.outspending.biomesapi.wrapper.worldgen.carver;
 
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.annotations.WireFactory;
-import net.minecraft.core.RegistryAccess;
+import me.outspending.biomesapi.registry.bootstrap.util.BootstrapSafeMinecraftRegistries;
+import me.outspending.biomesapi.registry.bootstrap.util.DatapackPromotion;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.levelgen.carver.WorldCarver;
-import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.CraftServer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
@@ -29,28 +28,35 @@ public final class ConfiguredWorldCarverFactoryImpl implements ConfiguredWorldCa
     }
 
     private Object resolveReference(ConfiguredWorldCarver.Reference reference) {
-        MinecraftServer server = ((CraftServer) Bukkit.getServer()).getServer();
-        RegistryAccess access = server.registryAccess();
-
-        var registry = access.lookupOrThrow(Registries.CONFIGURED_CARVER);
+        HolderGetter<net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver<?>> getter =
+            BootstrapSafeMinecraftRegistries.getter(Registries.CONFIGURED_CARVER);
 
         Identifier location =
             (Identifier) reference.key().resourceLocation();
         ResourceKey<net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver<?>> resourceKey =
             ResourceKey.create(Registries.CONFIGURED_CARVER, location);
 
-        return registry.getOrThrow(resourceKey);
+        return getter.getOrThrow(resourceKey);
     }
 
     private Object buildCustom(ConfiguredWorldCarver.Custom custom) {
+        if (DatapackPromotion.isReferenceMode()) {
+            return DatapackPromotion.current().reference(custom, Registries.CONFIGURED_CARVER);
+        }
+
         net.minecraft.world.level.levelgen.carver.CarverConfiguration nmsConfig =
             (net.minecraft.world.level.levelgen.carver.CarverConfiguration) custom.config().toMinecraft();
 
-        return switch (custom.type()) {
+        net.minecraft.core.Holder<net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver<?>> holder = switch (custom.type()) {
             case CAVE -> directHolder(WorldCarver.CAVE, nmsConfig);
             case NETHER_CAVE -> directHolder(WorldCarver.NETHER_CAVE, nmsConfig);
             case CANYON -> directHolder(WorldCarver.CANYON, nmsConfig);
         };
+
+        if (DatapackPromotion.isCollectMode()) {
+            DatapackPromotion.current().collectCarver(custom, holder.value());
+        }
+        return holder;
     }
 
 

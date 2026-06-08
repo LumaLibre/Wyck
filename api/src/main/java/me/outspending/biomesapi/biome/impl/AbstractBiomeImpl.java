@@ -30,12 +30,12 @@ public class AbstractBiomeImpl implements AbstractBiome {
     private int waterColor;
 
     // Optional Colors
-    private Integer fogColor;
-    private Integer waterFogColor;
-    private Integer skyColor;
-    private Integer foliageColor;
-    private Integer grassColor;
-    private Integer dryFoliageColor;
+    private @Nullable Integer fogColor;
+    private @Nullable Integer waterFogColor;
+    private @Nullable Integer skyColor;
+    private @Nullable Integer foliageColor;
+    private @Nullable Integer grassColor;
+    private @Nullable Integer dryFoliageColor;
 
     // Optional Settings
     private GrassColorModifier grassColorModifier;
@@ -56,9 +56,9 @@ public class AbstractBiomeImpl implements AbstractBiome {
         @Nullable Integer foliageColor,
         @Nullable Integer grassColor,
         @Nullable Integer dryFoliageColor,
-        @Nullable GrassColorModifier grassColorModifier,
-        @Nullable ParticleCatalog particleCatalog,
-        @Nullable WrappedEnvironmentAttributeMap attributes,
+        GrassColorModifier grassColorModifier,
+        ParticleCatalog particleCatalog,
+        WrappedEnvironmentAttributeMap attributes,
         @Nullable BiomeSpawner biomeSpawner,
         @Nullable BiomeGenerationSettings generationSettings
     ) {
@@ -99,7 +99,7 @@ public class AbstractBiomeImpl implements AbstractBiome {
     }
 
     @Override
-    public Integer getFogColor() {
+    public @Nullable Integer getFogColor() {
         return fogColor;
     }
 
@@ -109,26 +109,26 @@ public class AbstractBiomeImpl implements AbstractBiome {
     }
 
     @Override
-    public Integer getWaterFogColor() {
+    public @Nullable Integer getWaterFogColor() {
         return waterFogColor;
     }
 
     @Override
-    public Integer getSkyColor() {
+    public @Nullable Integer getSkyColor() {
         return skyColor;
     }
 
     @Override
-    public Integer getFoliageColor() {
+    public @Nullable Integer getFoliageColor() {
         return foliageColor;
     }
 
     @Override
-    public Integer getGrassColor() {
+    public @Nullable Integer getGrassColor() {
         return grassColor;
     }
 
-    public Integer getDryFoliageColor() {
+    public @Nullable Integer getDryFoliageColor() {
         return dryFoliageColor;
     }
 

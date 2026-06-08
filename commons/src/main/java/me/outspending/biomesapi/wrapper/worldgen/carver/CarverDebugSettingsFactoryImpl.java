@@ -3,8 +3,8 @@ package me.outspending.biomesapi.wrapper.worldgen.carver;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.annotations.WireFactory;
 import net.minecraft.world.level.block.state.BlockState;
-import org.bukkit.block.data.BlockData;
-import org.bukkit.craftbukkit.block.data.CraftBlockData;
+import org.bukkit.Material;
+import org.bukkit.craftbukkit.util.CraftMagicNumbers;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
@@ -20,10 +20,12 @@ public final class CarverDebugSettingsFactoryImpl implements CarverDebugSettings
         BlockState water = toNmsState(settings.waterState());
         BlockState lava = toNmsState(settings.lavaState());
         BlockState barrier = toNmsState(settings.barrierState());
-        return net.minecraft.world.level.levelgen.carver.CarverDebugSettings.of(settings.debugMode(), air, water, lava, barrier);
+        return net.minecraft.world.level.levelgen.carver.CarverDebugSettings.of(
+            settings.debugMode(), air, water, lava, barrier
+        );
     }
 
-    private BlockState toNmsState(BlockData data) {
-        return ((CraftBlockData) data).getState();
+    private BlockState toNmsState(Material material) {
+        return CraftMagicNumbers.getBlock(material).defaultBlockState();
     }
 }

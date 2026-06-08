@@ -4,7 +4,6 @@ import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
 import me.outspending.biomesapi.wrapper.NmsHandle;
 import org.bukkit.Material;
-import org.bukkit.block.data.BlockData;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
@@ -20,10 +19,10 @@ import org.jspecify.annotations.NullMarked;
 @AsOf("2.3.0")
 public record CarverDebugSettings(
         boolean debugMode,
-        BlockData airState,
-        BlockData waterState,
-        BlockData lavaState,
-        BlockData barrierState
+        Material airState,
+        Material waterState,
+        Material lavaState,
+        Material barrierState
 ) implements NmsHandle {
 
     @ApiStatus.Internal
@@ -35,23 +34,23 @@ public record CarverDebugSettings(
     }
 
     @AsOf("2.3.0")
-    public static CarverDebugSettings of(boolean debugMode, BlockData airState, BlockData waterState, BlockData lavaState, BlockData barrierState) {
+    public static CarverDebugSettings of(boolean debugMode, Material airState, Material waterState, Material lavaState, Material barrierState) {
         return new CarverDebugSettings(debugMode, airState, waterState, lavaState, barrierState);
     }
 
     @AsOf("2.3.0")
-    public static CarverDebugSettings of(BlockData airState, BlockData waterState, BlockData lavaState, BlockData barrierState) {
+    public static CarverDebugSettings of(Material airState, Material waterState, Material lavaState, Material barrierState) {
         return new CarverDebugSettings(false, airState, waterState, lavaState, barrierState);
     }
 
     @AsOf("2.3.0")
     public static CarverDebugSettings defaultSettings() {
         return new CarverDebugSettings(
-                false,
-                Material.ACACIA_BUTTON.createBlockData(),
-                Material.CANDLE.createBlockData(),
-                Material.ORANGE_STAINED_GLASS.createBlockData(),
-                Material.GLASS.createBlockData()
+            false,
+            Material.ACACIA_BUTTON,
+            Material.CANDLE,
+            Material.ORANGE_STAINED_GLASS,
+            Material.GLASS
         );
     }
 
