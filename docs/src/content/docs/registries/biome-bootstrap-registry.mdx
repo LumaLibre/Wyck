@@ -57,7 +57,7 @@ public class ExampleBootstrapper implements PluginBootstrap {
 
         // #queue(CustomBiome) queues this biome for registration.
         registry.queue(CustomBiome.builder()
-            .resourceKey(BiomeResourceKey.of("test", "a"))
+            .resourceKey(ResourceKey.of("test", "a"))
             .settings(BiomeSettings.defaultSettings())
             .fogColor("#FFFFFF")
             .skyColor("#B99DFC")
@@ -68,7 +68,7 @@ public class ExampleBootstrapper implements PluginBootstrap {
         );
 
         registry.queue(CustomBiome.builder()
-            .resourceKey(BiomeResourceKey.of("test", "b"))
+            .resourceKey(ResourceKey.of("test", "b"))
             .settings(BiomeSettings.defaultSettings())
             .fogColor("#DB00FD")
             .skyColor("#2F46FF")

@@ -10,7 +10,7 @@ import SourceLink from "@/components/SourceLink.astro";
 
 In addition to being able to keep references to your <SourceLink path="biome/CustomBiome.java">CustomBiome</SourceLink>s
 in your own code, **BiomesAPI** also provides a built-in <SourceLink path="biome/RegisteredBiomes.java">RegisteredBiomes</SourceLink>
-that allows you to get a reference to your custom biomes just from a <SourceLink path="registry/BiomeResourceKey.java">BiomeResourceKey</SourceLink>.
+that allows you to get a reference to your custom biomes just from a <SourceLink path="keys/ResourceKey.java">BiomeResourceKey</SourceLink>.
 
 **RegisteredBiomes** exposes the following methods. The `*Lazily` variants return a <SourceLink path="util/Lazy.java">Lazy</SourceLink> that defers the lookup until first accessed.
 
@@ -38,14 +38,14 @@ public class ExamplePlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         CustomBiome.builder()
-            .resourceKey(BiomeResourceKey.of("test", "custombiome"))
+            .resourceKey(ResourceKey.of("test", "custombiome"))
             .settings(BiomeSettings.defaultSettings())
             .waterColor("#F5F2EB")
             .register();
     }
 
     private void example() {
-        CustomBiome reference = RegisteredBiomes.getOrThrow(BiomeResourceKey.of("test", "custombiome"));
+        CustomBiome reference = RegisteredBiomes.getOrThrow(ResourceKey.of("test", "custombiome"));
         // Do something with the reference!
     }
 }`}

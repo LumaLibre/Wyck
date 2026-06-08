@@ -45,7 +45,7 @@ public class ExamplePlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         CustomBiome customBiome = CustomBiome.builder()
-            .resourceKey(BiomeResourceKey.of("test", "custombiome"))
+            .resourceKey(ResourceKey.of("test", "custombiome"))
             .settings(BiomeSettings.defaultSettings())
             .waterColor("#F5F2EB")
             .register(); // Shorthand — builds and registers the biome
@@ -67,7 +67,7 @@ public class ExamplePlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         CustomBiome customBiome = CustomBiome.builder()
-            .resourceKey(BiomeResourceKey.of("test", "custombiome"))
+            .resourceKey(ResourceKey.of("test", "custombiome"))
             .settings(BiomeSettings.defaultSettings())
             .waterColor("#F5F2EB")
             .build();

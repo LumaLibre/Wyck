@@ -30,7 +30,7 @@ public class ExamplePlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         CustomBiome customBiome = CustomBiome.builder()
-            .resourceKey(BiomeResourceKey.of("test", "biome"))
+            .resourceKey(ResourceKey.of("test", "biome"))
             .waterColor("#DB00FD")
             .foliageColor("#2F46FF")
             .skyColor("#D13A71")
@@ -71,7 +71,7 @@ public class ExamplePlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         CustomBiome customBiome = CustomBiome.builder()
-            .resourceKey(BiomeResourceKey.of("test", "biome"))
+            .resourceKey(ResourceKey.of("test", "biome"))
             .waterColor("#DB00FD")
             .foliageColor("#2F46FF")
             .skyColor("#D13A71")
@@ -118,24 +118,24 @@ public class ExamplePlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         CustomBiome volcanoBiome = CustomBiome.builder()
-            .resourceKey(BiomeResourceKey.of("test", "volcano"))
+            .resourceKey(ResourceKey.of("test", "volcano"))
             .skyColor("#D13A71")
             .register();
 
         CustomBiome ashBiome = CustomBiome.builder()
-            .resourceKey(BiomeResourceKey.of("test", "ash"))
+            .resourceKey(ResourceKey.of("test", "ash"))
             .fogColor("#3A3A3A")
             .ambientParticle(WrappedParticleTypes.ASH, 0.0001f)
             .register();
 
         CustomBiome oceanBiome = CustomBiome.builder()
-            .resourceKey(BiomeResourceKey.of("test", "ocean"))
+            .resourceKey(ResourceKey.of("test", "ocean"))
             .waterColor("#1E90FF")
             .waterFogColor("#00BFFF")
             .register();
 
         CustomBiome plainsBiome = CustomBiome.builder()
-            .resourceKey(BiomeResourceKey.of("test", "plains"))
+            .resourceKey(ResourceKey.of("test", "plains"))
             .foliageColor("#2F46FF")
             .grassColor("#2F46FF")
             .register();

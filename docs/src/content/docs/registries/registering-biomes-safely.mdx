@@ -55,7 +55,7 @@ public class ExampleBootstrapper implements PluginBootstrap {
         // If an exception is thrown in this block, the server will not start.
         registry.deferring(() -> {
             registry.queue(CustomBiome.builder()
-                .resourceKey(BiomeResourceKey.of("test", "custombiome"))
+                .resourceKey(ResourceKey.of("test", "custombiome"))
                 .settings(BiomeSettings.defaultSettings())
                 .fogColor("#FFFFFF")
                 .skyColor("#B99DFC")
@@ -94,7 +94,7 @@ public class ExamplePlugin extends JavaPlugin {
     public void onLoad() {
         try {
             CustomBiome.builder()
-                .resourceKey(BiomeResourceKey.of("test", "custombiome"))
+                .resourceKey(ResourceKey.of("test", "custombiome"))
                 .settings(BiomeSettings.defaultSettings())
                 .fogColor("#FFFFFF")
                 .skyColor("#B99DFC")
