@@ -2,7 +2,9 @@ package me.outspending.biomesapi.renderer.updater;
 
 import me.outspending.biomesapi.BiomesAPI;
 import me.outspending.biomesapi.annotations.AsOf;
+import me.outspending.biomesapi.factory.WireProvider;
 import me.outspending.biomesapi.misc.PointRange2D;
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -30,6 +32,14 @@ import java.util.concurrent.CompletableFuture;
 @AsOf("1.2.0")
 public interface BiomeUpdater {
 
+    @ApiStatus.Internal
+    WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.renderer.updater.BiomeUpdaterFactoryImpl");
+
+    @ApiStatus.Internal
+    interface Factory {
+        BiomeUpdater create(Plugin plugin);
+    }
+
     /**
      * Returns an instance of BiomeUpdater.
      * This method returns an instance of BiomeUpdaterImpl.
@@ -39,7 +49,7 @@ public interface BiomeUpdater {
      */
     @AsOf("1.2.0")
     static BiomeUpdater of() {
-        return new BiomeUpdaterImpl(BiomesAPI.biomesapi().plugin());
+        return of(BiomesAPI.biomesapi().plugin());
     }
 
     /**
@@ -49,9 +59,8 @@ public interface BiomeUpdater {
      * @since 1.2.0
      */
     @AsOf("1.2.0")
-    @ApiStatus.Obsolete
     static BiomeUpdater of(Plugin plugin) {
-        return new BiomeUpdaterImpl(plugin);
+        return WIRE.get().create(plugin);
     }
 
     /**
@@ -102,7 +111,7 @@ public interface BiomeUpdater {
      */
     @AsOf("2.2.0")
     default void updateChunk(Chunk chunk) {
-        updateChunk(CompletableFuture.completedFuture(chunk));
+        updateChunkAsync(CompletableFuture.completedFuture(chunk));
     }
 
     /**
@@ -190,4 +199,45 @@ public interface BiomeUpdater {
      */
     @AsOf("0.0.15")
     void updateChunksForPlayer(Player player);
+
+
+    /**
+     * Checks if a player is within the view distance of a chunk.
+     * @param player the player
+     * @param chunk the chunk
+     * @return true if the player is within the view distance of the chunk, false otherwise
+     * @since 2.3.0
+     */
+    @AsOf("2.3.0")
+    default boolean inChunkViewDistance(Player player, Chunk chunk) {
+        Location playerLocation = player.getLocation();
+
+        int viewDistance = Bukkit.getViewDistance();
+        int playerChunkX = playerLocation.getBlockX() >> 4;
+        int playerChunkZ = playerLocation.getBlockZ() >> 4;
+
+        int targetChunkX = chunk.getX();
+        int targetChunkZ = chunk.getZ();
+
+        int deltaX = Math.abs(playerChunkX - targetChunkX);
+        int deltaZ = Math.abs(playerChunkZ - targetChunkZ);
+
+        return deltaX <= viewDistance && deltaZ <= viewDistance;
+    }
+
+    /**
+     * Gets a list of players who are within the view distance of a given chunk.
+     *
+     * @param chunk The chunk for which to get the players within its view distance.
+     * @return A list of players who are within the view distance of the chunk.
+     * @since 2.3.0
+     */
+    @AsOf("2.3.0")
+    default List<Player> getPlayersInDistance(Chunk chunk) {
+        World world = chunk.getWorld();
+
+        return world.getPlayers().stream()
+            .filter(player -> inChunkViewDistance(player, chunk))
+            .toList();
+    }
 }

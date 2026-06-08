@@ -4,6 +4,7 @@ import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.biome.AbstractBiome;
 import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.factory.WireProvider;
+import me.outspending.biomesapi.keys.ResourceKey;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
@@ -92,6 +93,6 @@ public interface BiomeRegistry {
      */
     @AsOf("2.3.0")
     @ApiStatus.Experimental
-    <T extends AbstractBiome> T getBiome(BiomeResourceKey key);
+    <T extends AbstractBiome> T getBiome(ResourceKey key);
 
 }

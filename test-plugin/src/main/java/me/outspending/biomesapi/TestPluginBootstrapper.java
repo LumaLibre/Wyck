@@ -2,7 +2,7 @@ package me.outspending.biomesapi;
 
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
-import me.outspending.biomesapi.registry.BiomeResourceKey;
+import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.worldgen.PillarFeature;
 import me.outspending.biomesapi.wrapper.worldgen.BiomeGenerationSettings;
 import me.outspending.biomesapi.wrapper.worldgen.GenerationStep;
@@ -15,7 +15,7 @@ import org.bukkit.Material;
 
 public class TestPluginBootstrapper implements PluginBootstrap {
 
-    public static BiomeResourceKey PILLAR_KEY = BiomeResourceKey.of("example", "pillar");
+    public static ResourceKey PILLAR_KEY = ResourceKey.of("example", "pillar");
 
     public static BiomeGenerationSettings newGen;
 

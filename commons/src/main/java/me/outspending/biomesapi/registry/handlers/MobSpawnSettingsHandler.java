@@ -2,7 +2,7 @@ package me.outspending.biomesapi.registry.handlers;
 
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.biome.AbstractBiome;
-import me.outspending.biomesapi.registry.BuilderHandler;
+import me.outspending.biomesapi.registry.internal.BuilderHandler;
 import me.outspending.biomesapi.wrapper.entity.BiomeSpawner;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.MobSpawnSettings;

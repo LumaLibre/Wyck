@@ -1,7 +1,7 @@
 package me.outspending.biomesapi.wrapper.worldgen.carver;
 
 import me.outspending.biomesapi.annotations.AsOf;
-import me.outspending.biomesapi.registry.BiomeResourceKey;
+import me.outspending.biomesapi.keys.ResourceKey;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -42,7 +42,7 @@ public final class Carvers {
     public static final ConfiguredWorldCarver NETHER_CAVE = reference("nether_cave");
 
     private static ConfiguredWorldCarver reference(String path) {
-        return ConfiguredWorldCarver.reference(BiomeResourceKey.minecraft(path));
+        return ConfiguredWorldCarver.reference(ResourceKey.minecraft(path));
     }
 
     private Carvers() {

@@ -4,7 +4,7 @@ import com.google.common.collect.Maps;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
 import me.outspending.biomesapi.util.WeightedList;
-import me.outspending.biomesapi.wrapper.NmsHandle;
+import me.outspending.biomesapi.wrapper.internal.NmsHandle;
 import me.outspending.biomesapi.wrapper.entity.data.SpawnCost;
 import me.outspending.biomesapi.wrapper.entity.data.NaturalSpawner;
 import org.bukkit.entity.EntityType;

@@ -3,7 +3,7 @@ package me.outspending.biomesapi.biome;
 import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.exceptions.UnknownBiomeException;
-import me.outspending.biomesapi.registry.BiomeResourceKey;
+import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.util.Lazy;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -35,7 +35,7 @@ public final class RegisteredBiomes implements Iterable<CustomBiome> {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    public static @Nullable CustomBiome get(BiomeResourceKey resourceKey) {
+    public static @Nullable CustomBiome get(ResourceKey resourceKey) {
         Preconditions.checkNotNull(resourceKey, "resourceKey cannot be null");
 
         return REGISTERED_BIOMES.stream()
@@ -52,7 +52,7 @@ public final class RegisteredBiomes implements Iterable<CustomBiome> {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    public static CustomBiome getOrThrow(BiomeResourceKey resourceKey) {
+    public static CustomBiome getOrThrow(ResourceKey resourceKey) {
         CustomBiome biome = get(resourceKey);
         if (biome == null) {
             throw new UnknownBiomeException("Unknown biome: " + resourceKey);
@@ -67,7 +67,7 @@ public final class RegisteredBiomes implements Iterable<CustomBiome> {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    public static Lazy<@Nullable CustomBiome> getLazily(BiomeResourceKey resourceKey) {
+    public static Lazy<@Nullable CustomBiome> getLazily(ResourceKey resourceKey) {
         return Lazy.of(() -> get(resourceKey));
     }
 
@@ -79,7 +79,7 @@ public final class RegisteredBiomes implements Iterable<CustomBiome> {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    public static Lazy<CustomBiome> getOrThrowLazily(BiomeResourceKey resourceKey) {
+    public static Lazy<CustomBiome> getOrThrowLazily(ResourceKey resourceKey) {
         return Lazy.of(() -> getOrThrow(resourceKey));
     }
 
@@ -90,7 +90,7 @@ public final class RegisteredBiomes implements Iterable<CustomBiome> {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    public static boolean isRegistered(BiomeResourceKey resourceKey) {
+    public static boolean isRegistered(ResourceKey resourceKey) {
         Preconditions.checkNotNull(resourceKey, "resourceKey cannot be null");
         return REGISTERED_BIOMES.stream().anyMatch(biome -> resourceKey.equals(biome.getResourceKey()));
     }
@@ -102,7 +102,7 @@ public final class RegisteredBiomes implements Iterable<CustomBiome> {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    public static Lazy<Boolean> isRegisteredLazily(BiomeResourceKey resourceKey) {
+    public static Lazy<Boolean> isRegisteredLazily(ResourceKey resourceKey) {
         return Lazy.of(() -> isRegistered(resourceKey));
     }
 
@@ -157,7 +157,7 @@ public final class RegisteredBiomes implements Iterable<CustomBiome> {
     }
 
     @ApiStatus.Internal
-    public static boolean replaceBiome(BiomeResourceKey resourceKey, CustomBiome newBiome) {
+    public static boolean replaceBiome(ResourceKey resourceKey, CustomBiome newBiome) {
         Preconditions.checkNotNull(resourceKey, "resourceKey cannot be null");
         Preconditions.checkNotNull(newBiome, "newBiome cannot be null");
 

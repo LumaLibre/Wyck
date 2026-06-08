@@ -1,11 +1,18 @@
 package me.outspending.biomesapi.renderer.updater;
 
+import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.BiomesAPI;
 import me.outspending.biomesapi.annotations.AsOf;
-import me.outspending.biomesapi.unsafe.UnsafeNMSHandler;
+import net.minecraft.network.protocol.game.ClientboundLevelChunkWithLightPacket;
+import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.level.chunk.status.ChunkStatus;
+import net.minecraft.world.level.lighting.LevelLightEngine;
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.craftbukkit.CraftChunk;
+import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.jspecify.annotations.NullMarked;
@@ -40,18 +47,28 @@ public class BiomeUpdaterImpl implements BiomeUpdater {
 
     @Override
     public void updateChunks(Location from, Location to) {
-        if (from == null || to == null) {
-            throw new IllegalArgumentException("Locations cannot be null.");
-        } else {
-            List<CompletableFuture<Chunk>> updateChunks = getChunksBetweenLocations(from, to);
-
-            updateChunksAsync(updateChunks);
-        }
+        Preconditions.checkNotNull(from, "from cannot be null");
+        Preconditions.checkNotNull(to, "to cannot be null");
+        List<CompletableFuture<Chunk>> updateChunks = getChunksBetweenLocations(from, to);
+        updateChunksAsync(updateChunks);
     }
 
     @Override
     public void updateChunksAsync(Collection<CompletableFuture<Chunk>> chunks) {
-        UnsafeNMSHandler.executeNMS(nms -> nms.updateChunks(List.copyOf(chunks), plugin));
+        for (CompletableFuture<Chunk> chunkFuture : chunks) {
+            chunkFuture.thenAccept(chunk -> {
+                if (plugin != null) {
+                    Bukkit.getRegionScheduler().run(plugin, chunk.getWorld(), chunk.getX(), chunk.getZ(), task -> {
+                        doUpdateChunk(chunk);
+                    });
+                } else {
+                    doUpdateChunk(chunk);
+                }
+            }).exceptionally(ex -> {
+                ex.printStackTrace();
+                return null;
+            });
+        }
     }
 
 
@@ -86,5 +103,15 @@ public class BiomeUpdaterImpl implements BiomeUpdater {
         }
 
         updateChunksAsync(chunksToUpdate);
+    }
+
+    private void doUpdateChunk(Chunk chunk) {
+        LevelChunk levelChunk = (LevelChunk) ((CraftChunk) chunk).getHandle(ChunkStatus.BIOMES);
+        LevelLightEngine levelLightEngine = levelChunk.getLevel().getLightEngine();
+
+        ClientboundLevelChunkWithLightPacket packet = new ClientboundLevelChunkWithLightPacket(levelChunk, levelLightEngine, null, null, true);
+        for (Player player : getPlayersInDistance(chunk)) {
+            ((CraftPlayer) player).getHandle().connection.send(packet);
+        }
     }
 }

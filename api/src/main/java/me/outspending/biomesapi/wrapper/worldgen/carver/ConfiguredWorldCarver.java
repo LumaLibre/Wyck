@@ -2,8 +2,8 @@ package me.outspending.biomesapi.wrapper.worldgen.carver;
 
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
-import me.outspending.biomesapi.registry.BiomeResourceKey;
-import me.outspending.biomesapi.wrapper.NmsHandle;
+import me.outspending.biomesapi.keys.ResourceKey;
+import me.outspending.biomesapi.wrapper.internal.NmsHandle;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
@@ -33,7 +33,7 @@ public sealed interface ConfiguredWorldCarver extends NmsHandle permits Configur
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static ConfiguredWorldCarver reference(BiomeResourceKey key) {
+    static ConfiguredWorldCarver reference(ResourceKey key) {
         return new Reference(key);
     }
 
@@ -81,7 +81,7 @@ public sealed interface ConfiguredWorldCarver extends NmsHandle permits Configur
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    record Reference(BiomeResourceKey key) implements ConfiguredWorldCarver {}
+    record Reference(ResourceKey key) implements ConfiguredWorldCarver {}
 
     /**
      * A configured carver authored from a vanilla algorithm and a custom config.

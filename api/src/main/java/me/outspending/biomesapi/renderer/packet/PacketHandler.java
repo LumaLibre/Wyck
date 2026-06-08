@@ -3,7 +3,7 @@ package me.outspending.biomesapi.renderer.packet;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.exceptions.MissingPacketManipulatorLibraryException;
 import me.outspending.biomesapi.factory.WireProvider;
-import me.outspending.biomesapi.registry.BiomeResourceKey;
+import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.renderer.AbstractBiomeRenderer;
 import me.outspending.biomesapi.renderer.packet.data.PhonyCustomBiome;
 import me.outspending.biomesapi.renderer.updater.BiomeUpdater;
@@ -182,20 +182,20 @@ public interface PacketHandler extends AbstractBiomeRenderer {
     }
 
     /**
-     * Removes a custom biome from the packet handler's list of biomes to inject by its BiomeResourceKey.
-     * @param biomeKey The BiomeResourceKey of the biome to remove
+     * Removes a custom biome from the packet handler's list of biomes to inject by its ResourceKey.
+     * @param biomeKey The ResourceKey of the biome to remove
      * @return true if the biome was removed, false if it was not found
      */
     @AsOf("0.0.6")
-    boolean removeBiome(BiomeResourceKey biomeKey);
+    boolean removeBiome(ResourceKey biomeKey);
 
     /**
-     * Removes a custom biome from the packet handler's list of biomes to inject by its BiomeResourceKey.
-     * @param biomeKey The BiomeResourceKey of the biome to remove
+     * Removes a custom biome from the packet handler's list of biomes to inject by its ResourceKey.
+     * @param biomeKey The ResourceKey of the biome to remove
      * @return the PacketHandler instance for chaining
      */
     @AsOf("2.1.0")
-    default PacketHandler dismissBiome(BiomeResourceKey biomeKey) {
+    default PacketHandler dismissBiome(ResourceKey biomeKey) {
         removeBiome(biomeKey);
         return this;
     }
@@ -209,12 +209,12 @@ public interface PacketHandler extends AbstractBiomeRenderer {
     boolean hasBiome(PhonyCustomBiome biome);
 
     /**
-     * Checks if a custom biome is in the packet handler's list of biomes to inject by its BiomeResourceKey.
-     * @param biomeKey The BiomeResourceKey of the biome to check
+     * Checks if a custom biome is in the packet handler's list of biomes to inject by its ResourceKey.
+     * @param biomeKey The ResourceKey of the biome to check
      * @return true if the biome is present, false otherwise
      */
     @AsOf("0.0.10")
-    boolean hasBiome(BiomeResourceKey biomeKey);
+    boolean hasBiome(ResourceKey biomeKey);
 
     /**
      * Clears all phony custom biomes from the packet handler's list of biomes to inject.

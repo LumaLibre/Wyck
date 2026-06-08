@@ -2,7 +2,7 @@ package me.outspending.biomesapi.registry.handlers;
 
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.biome.AbstractBiome;
-import me.outspending.biomesapi.registry.BuilderHandler;
+import me.outspending.biomesapi.registry.internal.BuilderHandler;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeSpecialEffects;
 import org.jetbrains.annotations.ApiStatus;

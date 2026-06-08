@@ -41,6 +41,7 @@ tasks {
                 exclude(project("${minecraft}:${project}"))
             }
             exclude("META-INF/maven/**")
+            exclude("META-INF/proguard/**")
         }
         archiveBaseName.set("BiomesAPI")
         archiveClassifier.set("")

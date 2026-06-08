@@ -22,7 +22,7 @@ from the ground-up rather than replacing biomes in existing worlds with the [`Bi
     filename="ExamplePlugin.java"
     code={`import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.providers.BasicBiomeProvider;
-import me.outspending.biomesapi.registry.BiomeResourceKey;
+import me.outspending.biomesapi.registry.ResourceKey;
 import org.bukkit.WorldCreator;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -62,7 +62,7 @@ Replaces vanilla biomes with custom biomes on a one-to-one basis. At each positi
     filename="ExamplePlugin.java"
     code={`import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.providers.ReplacementBiomeProvider;
-import me.outspending.biomesapi.registry.BiomeResourceKey;
+import me.outspending.biomesapi.registry.ResourceKey;
 import org.bukkit.WorldCreator;
 import org.bukkit.block.Biome;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -109,7 +109,7 @@ Steps are called concurrently during chunk generation, so each `BiomeStep` must 
     filename="ExamplePlugin.java"
     code={`import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.providers.StepsBiomeProvider;
-import me.outspending.biomesapi.registry.BiomeResourceKey;
+import me.outspending.biomesapi.registry.ResourceKey;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.plugin.java.JavaPlugin;

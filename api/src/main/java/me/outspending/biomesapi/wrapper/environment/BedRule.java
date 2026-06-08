@@ -1,8 +1,8 @@
 package me.outspending.biomesapi.wrapper.environment;
 
 import me.outspending.biomesapi.annotations.AsOf;
-import me.outspending.biomesapi.unsafe.KeyedEnumTranslator;
-import me.outspending.biomesapi.unsafe.NmsEnumTranslatable;
+import me.outspending.biomesapi.wrapper.internal.KeyedEnumTranslator;
+import me.outspending.biomesapi.wrapper.internal.NmsEnumTranslatable;
 import net.kyori.adventure.text.Component;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;

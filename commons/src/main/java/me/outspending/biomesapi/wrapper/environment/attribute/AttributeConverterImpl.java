@@ -2,7 +2,7 @@ package me.outspending.biomesapi.wrapper.environment.attribute;
 
 import io.papermc.paper.adventure.AdventureComponent;
 import me.outspending.biomesapi.annotations.WireFactory;
-import me.outspending.biomesapi.unsafe.NmsEnumTranslatable;
+import me.outspending.biomesapi.wrapper.internal.NmsEnumTranslatable;
 import me.outspending.biomesapi.wrapper.environment.BedRule;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleCatalog;
 import me.outspending.biomesapi.wrapper.environment.particle.ResolvedAmbientParticle;

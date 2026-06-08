@@ -32,7 +32,7 @@ and the server will always be able to load the Minecraft world without your biom
     filename="ExamplePlugin.java"
     code={
 `import me.outspending.biomesapi.biome.CustomBiome;
-import me.outspending.biomesapi.registry.BiomeResourceKey;
+import me.outspending.biomesapi.registry.ResourceKey;
 import me.outspending.biomesapi.registry.dimension.DimensionEditor;
 import me.outspending.biomesapi.wrapper.worldgen.BiomeGenerationSettings;
 import me.outspending.biomesapi.wrapper.worldgen.GenerationStep;
@@ -85,7 +85,7 @@ If you want BiomesAPI to mimic a normal datapack or you anticipate and *want* yo
 `import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
 import me.outspending.biomesapi.biome.CustomBiome;
-import me.outspending.biomesapi.registry.BiomeResourceKey;
+import me.outspending.biomesapi.registry.ResourceKey;
 import me.outspending.biomesapi.registry.bootstrap.BootstrapBiomeRegistry;
 import me.outspending.biomesapi.registry.bootstrap.Composer;
 import me.outspending.biomesapi.wrapper.worldgen.BiomeGenerationSettings;

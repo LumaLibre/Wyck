@@ -7,14 +7,14 @@ import me.outspending.biomesapi.biome.AbstractBiome;
 import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.biome.RegisteredBiomes;
 import me.outspending.biomesapi.biome.VanillaBiome;
+import me.outspending.biomesapi.keys.ResourceKey;
+import me.outspending.biomesapi.keys.ResourceKeyImpl;
 import me.outspending.biomesapi.registry.handlers.AttributeMapHandler;
 import me.outspending.biomesapi.registry.handlers.BiomeGenerationSettingsHandler;
 import me.outspending.biomesapi.registry.handlers.MobSpawnSettingsHandler;
 import me.outspending.biomesapi.registry.handlers.ParticleCatalogHandler;
 import me.outspending.biomesapi.registry.handlers.SpecialEffectsHandler;
-import me.outspending.biomesapi.unsafe.BiomeLock;
-import me.outspending.biomesapi.unsafe.UnsafeNMS;
-import me.outspending.biomesapi.unsafe.UnsafeNMSHandler;
+import me.outspending.biomesapi.registry.internal.FrozenRegistry;
 import me.outspending.biomesapi.wrapper.BiomeSettings;
 import me.outspending.biomesapi.wrapper.entity.BiomeSpawner;
 import me.outspending.biomesapi.wrapper.entity.MobCategory;
@@ -36,13 +36,13 @@ import net.minecraft.world.level.biome.MobSpawnSettings;
 import org.bukkit.Color;
 import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 
 /**
  * This class implements the BiomeRegistry interface and provides a method to register a custom biome to a Minecraft server.
@@ -63,6 +63,8 @@ public class CustomBiomeRegistry implements BiomeRegistry {
     private static final AttributeMapHandler ATTRIBUTE_MAP_HANDLER = new AttributeMapHandler();
     private static final MobSpawnSettingsHandler MOB_SPAWN_SETTINGS_HANDLER = new MobSpawnSettingsHandler();
     private static final BiomeGenerationSettingsHandler BIOME_GENERATION_SETTINGS_HANDLER = new BiomeGenerationSettingsHandler();
+
+    private final FrozenRegistry biomeRegistry = FrozenRegistry.of("worldgen/biome");
 
     // TODO: Extract commons
 
@@ -137,9 +139,9 @@ public class CustomBiomeRegistry implements BiomeRegistry {
     public void register(CustomBiome biome) {
         Preconditions.checkNotNull(biome, "biome cannot be null");
 
-        Consumer<UnsafeNMS> consumer = nms -> {
-            Registry<Biome> registry = (Registry<Biome>) nms.getRegistry();
-            Identifier resourceLocation = ((BiomeResourceKeyImpl) biome.getResourceKey()).resourceLocation();
+        this.biomeRegistry.whileUnfrozen(() -> {
+            Registry<Biome> registry = (Registry<@NotNull Biome>) biomeRegistry.toMinecraft();
+            Identifier resourceLocation = ((ResourceKeyImpl) biome.getResourceKey()).resourceLocation();
 
             Biome createdBiome = buildDelegate(biome);
 
@@ -148,17 +150,7 @@ public class CustomBiomeRegistry implements BiomeRegistry {
             }
 
             RegisteredBiomes.appendBiome(biome);
-        };
-
-        if (BiomeLock.isLocked()) {
-            BiomeLock.unlock(() -> {
-                UnsafeNMSHandler.executeNMS(consumer);
-                return null;
-            });
-        } else {
-            // Assume we're in the bootstrap phase
-            UnsafeNMSHandler.executeNMS(consumer);
-        }
+        });
     }
 
 
@@ -173,15 +165,14 @@ public class CustomBiomeRegistry implements BiomeRegistry {
     @Override
     @AsOf("0.0.8")
     public void modify(AbstractBiome abstractBiome) {
-        BiomeResourceKey key = abstractBiome.getResourceKey();
+        ResourceKey key = abstractBiome.getResourceKey();
         Preconditions.checkNotNull(key, "key cannot be null");
         Preconditions.checkNotNull(abstractBiome, "newData cannot be null");
 
         BiomeSettings settings = abstractBiome.getSettings();
 
-        UnsafeNMS nms = UnsafeNMSHandler.getNMS().orElseThrow();
 
-        Registry<net.minecraft.world.level.biome.Biome> biomeRegistry = (Registry<net.minecraft.world.level.biome.Biome>) nms.getRegistry();
+        Registry<net.minecraft.world.level.biome.Biome> biomeRegistry = (Registry<@NotNull Biome>) this.biomeRegistry.toMinecraft();
         net.minecraft.world.level.biome.Biome biome = biomeRegistry.getOptional((Identifier) key.resourceLocation()).orElseThrow(
             () -> new IllegalStateException("Biome " + key + " is not registered in the internal biome registry")
         );
@@ -253,15 +244,14 @@ public class CustomBiomeRegistry implements BiomeRegistry {
 
     @AsOf("2.3.0")
     @SuppressWarnings("unchecked")
-    public @Nullable AbstractBiome getBiome(BiomeResourceKey key) {
+    public @Nullable AbstractBiome getBiome(ResourceKey key) {
         Preconditions.checkNotNull(key, "key cannot be null");
 
         if (RegisteredBiomes.isRegistered(key)) {
             return RegisteredBiomes.getOrThrow(key);
         }
 
-        UnsafeNMS nms = UnsafeNMSHandler.getNMS().orElseThrow();
-        Registry<Biome> biomeRegistry = (Registry<Biome>) nms.getRegistry();
+        Registry<Biome> biomeRegistry = (Registry<@NotNull Biome>) this.biomeRegistry.toMinecraft();
 
         Biome biome = biomeRegistry.getOptional((Identifier) key.resourceLocation()).orElse(null);
         if (biome == null) {
@@ -316,7 +306,7 @@ public class CustomBiomeRegistry implements BiomeRegistry {
 
 
         AbstractBiome abstractBiome = builder.build();
-        if (key.namespace().equals(BiomeResourceKey.MINECRAFT_NAMESPACE)) {
+        if (key.namespace().equals(ResourceKey.MINECRAFT_NAMESPACE)) {
             return VanillaBiome.builder(abstractBiome).build();
         }
         return abstractBiome;

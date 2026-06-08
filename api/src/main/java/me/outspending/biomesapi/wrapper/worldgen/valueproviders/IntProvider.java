@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
 import me.outspending.biomesapi.util.WeightedList;
-import me.outspending.biomesapi.wrapper.NmsHandle;
+import me.outspending.biomesapi.wrapper.internal.NmsHandle;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 

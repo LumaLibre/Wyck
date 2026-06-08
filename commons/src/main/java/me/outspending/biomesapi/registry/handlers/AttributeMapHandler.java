@@ -1,7 +1,7 @@
 package me.outspending.biomesapi.registry.handlers;
 
 import me.outspending.biomesapi.biome.AbstractBiome;
-import me.outspending.biomesapi.registry.BuilderHandler;
+import me.outspending.biomesapi.registry.internal.BuilderHandler;
 import me.outspending.biomesapi.wrapper.environment.attribute.NmsEnvironmentAttributes;
 import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttributeMap;
 import net.minecraft.world.attribute.EnvironmentAttributeMap;

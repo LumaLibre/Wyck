@@ -1,7 +1,7 @@
 package me.outspending.biomesapi.biome.impl;
 
 import me.outspending.biomesapi.biome.CustomBiome;
-import me.outspending.biomesapi.registry.BiomeResourceKey;
+import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.renderer.packet.data.BlockReplacement;
 import me.outspending.biomesapi.wrapper.BiomeSettings;
 import me.outspending.biomesapi.wrapper.entity.BiomeSpawner;
@@ -20,7 +20,7 @@ public class CustomBiomeImpl extends AbstractBiomeImpl implements CustomBiome {
     private BlockReplacement[] blockReplacements;
 
     public CustomBiomeImpl(
-        BiomeResourceKey resourceKey,
+        ResourceKey resourceKey,
         BiomeSettings settings,
         int waterColor,
         @Nullable Integer fogColor,

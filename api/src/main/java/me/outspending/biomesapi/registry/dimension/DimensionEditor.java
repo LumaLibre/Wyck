@@ -2,7 +2,7 @@ package me.outspending.biomesapi.registry.dimension;
 
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
-import me.outspending.biomesapi.registry.BiomeResourceKey;
+import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.registry.bootstrap.BootstrapBiomeRegistry;
 import me.outspending.biomesapi.wrapper.worldgen.climate.BiomeClimatePoint;
 import org.bukkit.World;
@@ -14,8 +14,8 @@ import org.jspecify.annotations.NullMarked;
  * reads the live biome source off each world's generator and swaps in an edited one, so it works
  * for any dimension including the end and custom dimensions.
  *
- * @see BootstrapBiomeRegistry#addToDimension(BiomeResourceKey, BiomeResourceKey, BiomeClimatePoint)
- * @see BootstrapBiomeRegistry#replaceInDimension(BiomeResourceKey, BiomeResourceKey, BiomeResourceKey)
+ * @see BootstrapBiomeRegistry#addToDimension(ResourceKey, ResourceKey, BiomeClimatePoint)
+ * @see BootstrapBiomeRegistry#replaceInDimension(ResourceKey, ResourceKey, ResourceKey)
  * @since 2.3.0
  * @version 2.3.0
  * @author Jsinco
@@ -51,7 +51,7 @@ public interface DimensionEditor {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    DimensionEditor addToDimension(BiomeResourceKey dimension, BiomeResourceKey biome, BiomeClimatePoint point);
+    DimensionEditor addToDimension(ResourceKey dimension, ResourceKey biome, BiomeClimatePoint point);
 
     /**
      * Queues a biome replacement in a dimension.
@@ -63,7 +63,7 @@ public interface DimensionEditor {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    DimensionEditor replaceInDimension(BiomeResourceKey dimension, BiomeResourceKey target, BiomeResourceKey replacement);
+    DimensionEditor replaceInDimension(ResourceKey dimension, ResourceKey target, ResourceKey replacement);
 
     /**
      * Applies all queued edits to every loaded world whose dimension matches. Worlds loaded after

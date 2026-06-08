@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.biome.impl.CustomBiomeImpl;
 import me.outspending.biomesapi.registry.BiomeRegistry;
-import me.outspending.biomesapi.registry.BiomeResourceKey;
+import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.renderer.packet.PacketHandler;
 import me.outspending.biomesapi.renderer.packet.data.BlockReplacement;
 import me.outspending.biomesapi.renderer.packet.data.PhonyCustomBiome;
@@ -155,12 +155,12 @@ public interface CustomBiome extends AbstractBiome {
 
     /**
      * Returns a new instance of the Builder class with the provided resource key.
-     * @param resourceKey the BiomeResourceKey to set for the CustomBiome being built
+     * @param resourceKey the ResourceKey to set for the CustomBiome being built
      * @return a new Builder instance
      * @since 2.1.0
      */
     @AsOf("2.1.0")
-    static CustomBiome.Builder builder(BiomeResourceKey resourceKey) {
+    static CustomBiome.Builder builder(ResourceKey resourceKey) {
         Preconditions.checkNotNull(resourceKey, "Resource key cannot be null.");
         return new CustomBiome.Builder().resourceKey(resourceKey);
     }
@@ -176,7 +176,7 @@ public interface CustomBiome extends AbstractBiome {
     @AsOf("2.1.0")
     final class Builder {
 
-        private BiomeResourceKey resourceKey = null;
+        private ResourceKey resourceKey = null;
         private BiomeSettings settings = BiomeSettings.defaultSettings();
 
         private int waterColor = 0x3F75C4;
@@ -229,14 +229,14 @@ public interface CustomBiome extends AbstractBiome {
         }
 
         /**
-         * This method sets the BiomeResourceKey property of the CustomBiome.
+         * This method sets the ResourceKey property of the CustomBiome.
          *
-         * @param resourceKey The BiomeResourceKey of the custom biome.
+         * @param resourceKey The ResourceKey of the custom biome.
          * @since 0.0.1
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("0.0.1")
-        public Builder resourceKey(BiomeResourceKey resourceKey) {
+        public Builder resourceKey(ResourceKey resourceKey) {
             this.resourceKey = resourceKey;
             return this;
         }

@@ -1,7 +1,7 @@
 package me.outspending.biomesapi;
 
 import me.outspending.biomesapi.biome.CustomBiome;
-import me.outspending.biomesapi.registry.BiomeResourceKey;
+import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.providers.BasicBiomeProvider;
 import me.outspending.biomesapi.registry.dimension.DimensionEditor;
 import me.outspending.biomesapi.renderer.setter.BiomeSetter;
@@ -21,7 +21,6 @@ import me.outspending.biomesapi.wrapper.worldgen.valueproviders.FloatProvider;
 import me.outspending.biomesapi.wrapper.worldgen.valueproviders.HeightProvider;
 import me.outspending.biomesapi.wrapper.worldgen.valueproviders.VerticalAnchor;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.ChunkLoadEvent;
@@ -32,7 +31,7 @@ import java.util.List;
 public final class BiomesAPITest extends JavaPlugin implements Listener {
 
     //private BiomeSetter biomeSetter;
-    //private Lazy<CustomBiome> customBiome = RegisteredBiomes.getLazily(BiomeResourceKey.of("test", "custombiome"));
+    //private Lazy<CustomBiome> customBiome = RegisteredBiomes.getLazily(ResourceKey.of("test", "custombiome"));
     private CustomBiome customBiome;
     private BiomeSetter biomeSetter = BiomeSetter.of(this);
 
@@ -102,7 +101,7 @@ public final class BiomesAPITest extends JavaPlugin implements Listener {
 
 
 
-        var myBiomeKey = BiomeResourceKey.of("test", "mybiome");
+        var myBiomeKey = ResourceKey.of("test", "mybiome");
         CustomBiome mybiome = CustomBiome.builder()
             .resourceKey(myBiomeKey)
             .settings(BiomeSettings.defaultSettings())
@@ -115,7 +114,7 @@ public final class BiomesAPITest extends JavaPlugin implements Listener {
             .register();
         this.customBiome = mybiome;
 
-        var netherBiomeKey = BiomeResourceKey.of("test", "netherbiome");
+        var netherBiomeKey = ResourceKey.of("test", "netherbiome");
 
         CustomBiome.builder()
             .resourceKey(netherBiomeKey)
@@ -131,15 +130,15 @@ public final class BiomesAPITest extends JavaPlugin implements Listener {
         //World
 
         DimensionEditor dimensionEditor = DimensionEditor.create();
-        var overworldKey = BiomeResourceKey.of("minecraft", "overworld");
-        var netherKey = BiomeResourceKey.of("minecraft", "the_nether");
+        var overworldKey = ResourceKey.of("minecraft", "overworld");
+        var netherKey = ResourceKey.of("minecraft", "the_nether");
         dimensionEditor.addToDimension(overworldKey, myBiomeKey, BiomeClimatePoint.builder().build());
         dimensionEditor.addToDimension(netherKey, netherBiomeKey, BiomeClimatePoint.builder().build());
         dimensionEditor.apply();
 
         new WorldCreator("cute2")
             .biomeProvider(BasicBiomeProvider.of(CustomBiome.builder()
-                    .resourceKey(BiomeResourceKey.biomesapi("testing"))
+                    .resourceKey(ResourceKey.biomesapi("testing"))
                     .settings(BiomeSettings.defaultSettings())
                     .waterColor("#00FFD0")
                     .register()

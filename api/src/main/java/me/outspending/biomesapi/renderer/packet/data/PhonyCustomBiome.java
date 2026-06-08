@@ -5,7 +5,7 @@ import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.biome.RegisteredBiomes;
 import me.outspending.biomesapi.misc.ChunkLocation;
-import me.outspending.biomesapi.registry.BiomeResourceKey;
+import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.renderer.packet.PacketHandler;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
@@ -36,7 +36,7 @@ import java.util.function.BiPredicate;
 @NullMarked
 @AsOf("2.2.0")
 public record PhonyCustomBiome(
-    BiomeResourceKey biomeResourceKey,
+    ResourceKey biomeResourceKey,
     BiPredicate<Player, ChunkLocation> conditional,
     @Nullable BiPredicate<Player, SnapshotChunkData> biomeCondition,
     PacketHandler.Priority priority
@@ -75,7 +75,7 @@ public record PhonyCustomBiome(
      */
     @AsOf("0.0.10")
     public static class Builder {
-        private BiomeResourceKey biomeResourceKey;
+        private ResourceKey biomeResourceKey;
         private BiPredicate<Player, ChunkLocation> conditional = (player, chunkLocation) -> true;
         private BiPredicate<Player, SnapshotChunkData> biomeCondition = null;
         private PacketHandler.Priority priority = PacketHandler.Priority.NORMAL;
@@ -87,7 +87,7 @@ public record PhonyCustomBiome(
         }
 
         @AsOf("0.0.10")
-        public Builder setCustomBiome(BiomeResourceKey biomeResourceKey) {
+        public Builder setCustomBiome(ResourceKey biomeResourceKey) {
             this.biomeResourceKey = biomeResourceKey;
             return this;
         }

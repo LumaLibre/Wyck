@@ -18,7 +18,7 @@ import me.outspending.biomesapi.annotations.WireFactory;
 import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.biome.RegisteredBiomes;
 import me.outspending.biomesapi.registry.BiomeRegistry;
-import me.outspending.biomesapi.registry.BiomeResourceKey;
+import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.util.ThrowingRunnable;
 import me.outspending.biomesapi.wrapper.worldgen.climate.BiomeClimatePoint;
 import net.minecraft.core.MappedRegistry;
@@ -27,7 +27,6 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.WritableRegistry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -198,7 +197,7 @@ public final class UnsafePaperBootstrapBiomeRegistry implements BootstrapBiomeRe
 
                 for (CustomBiome cb : this.pending) {
                     Biome built = (Biome) biomesAPIRegistry.buildDelegate(cb);
-                    ResourceKey<Biome> key = nmsKeyOf(cb);
+                    net.minecraft.resources.ResourceKey<Biome> key = nmsKeyOf(cb);
                     if (!nms.containsKey(key)) {
                         nms.register(key, built, RegistrationInfo.BUILT_IN);
                     }
@@ -213,18 +212,18 @@ public final class UnsafePaperBootstrapBiomeRegistry implements BootstrapBiomeRe
 
 
     @Override
-    public BootstrapBiomeRegistry replaceInDimension(BiomeResourceKey dimension, BiomeResourceKey target, BiomeResourceKey replacement) {
+    public BootstrapBiomeRegistry replaceInDimension(ResourceKey dimension, ResourceKey target, ResourceKey replacement) {
         throw new UnsupportedOperationException("Unsupported. me.outspending.biomesapi.registry.dimension.DimensionEditor.");
     }
 
     @Override
-    public BootstrapBiomeRegistry addToDimension(BiomeResourceKey dimension, BiomeResourceKey target, BiomeClimatePoint placement) {
+    public BootstrapBiomeRegistry addToDimension(ResourceKey dimension, ResourceKey target, BiomeClimatePoint placement) {
         throw new UnsupportedOperationException("Unsupported. me.outspending.biomesapi.registry.dimension.DimensionEditor.");
     }
 
-    private static ResourceKey<Biome> nmsKeyOf(CustomBiome cb) {
-        BiomeResourceKey rk = cb.getResourceKey();
-        return ResourceKey.create(Registries.BIOME, Identifier.fromNamespaceAndPath(rk.namespace(), rk.path()));
+    private static net.minecraft.resources.ResourceKey<Biome> nmsKeyOf(CustomBiome cb) {
+        ResourceKey rk = cb.getResourceKey();
+        return net.minecraft.resources.ResourceKey.create(Registries.BIOME, Identifier.fromNamespaceAndPath(rk.namespace(), rk.path()));
     }
 
     /**

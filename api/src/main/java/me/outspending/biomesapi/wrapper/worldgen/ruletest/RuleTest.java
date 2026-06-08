@@ -3,7 +3,7 @@ package me.outspending.biomesapi.wrapper.worldgen.ruletest;
 import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
-import me.outspending.biomesapi.wrapper.NmsHandle;
+import me.outspending.biomesapi.wrapper.internal.NmsHandle;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.data.BlockData;

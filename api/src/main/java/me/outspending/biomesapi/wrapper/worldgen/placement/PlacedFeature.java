@@ -3,8 +3,8 @@ package me.outspending.biomesapi.wrapper.worldgen.placement;
 import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
-import me.outspending.biomesapi.registry.BiomeResourceKey;
-import me.outspending.biomesapi.wrapper.NmsHandle;
+import me.outspending.biomesapi.keys.ResourceKey;
+import me.outspending.biomesapi.wrapper.internal.NmsHandle;
 import me.outspending.biomesapi.wrapper.worldgen.feature.ConfiguredFeature;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -42,7 +42,7 @@ public sealed interface PlacedFeature extends NmsHandle permits PlacedFeature.Re
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static PlacedFeature reference(BiomeResourceKey key) {
+    static PlacedFeature reference(ResourceKey key) {
         return new Reference(key);
     }
 
@@ -86,7 +86,7 @@ public sealed interface PlacedFeature extends NmsHandle permits PlacedFeature.Re
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    record Reference(BiomeResourceKey key) implements PlacedFeature {}
+    record Reference(ResourceKey key) implements PlacedFeature {}
 
     /**
      * A placed feature authored from a configured feature and a modifier list.

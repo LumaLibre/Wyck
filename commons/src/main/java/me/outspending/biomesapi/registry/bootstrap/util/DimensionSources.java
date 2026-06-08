@@ -2,10 +2,9 @@ package me.outspending.biomesapi.registry.bootstrap.util;
 
 import com.mojang.datafixers.util.Pair;
 import me.outspending.biomesapi.annotations.AsOf;
-import me.outspending.biomesapi.registry.BiomeResourceKey;
+import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.registry.dimension.DimensionBiomeEdit;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Climate;
@@ -39,7 +38,7 @@ public final class DimensionSources {
     private DimensionSources() {
     }
 
-    public static DimensionDefaults defaultsFor(BiomeResourceKey dimension) {
+    public static DimensionDefaults defaultsFor(ResourceKey dimension) {
         String id = idOf(dimension);
         return switch (id) {
             case "minecraft:overworld" -> new DimensionDefaults("minecraft:overworld", "minecraft:overworld");
@@ -49,7 +48,7 @@ public final class DimensionSources {
     }
 
 
-    public static List<Pair<Climate.ParameterPoint, ResourceKey<Biome>>> vanillaPairs(BiomeResourceKey dimension) {
+    public static List<Pair<Climate.ParameterPoint, net.minecraft.resources.ResourceKey<Biome>>> vanillaPairs(ResourceKey dimension) {
         String id = idOf(dimension);
         return switch (id) {
             case "minecraft:overworld" -> overworldPairs();
@@ -59,13 +58,13 @@ public final class DimensionSources {
     }
 
 
-    private static List<Pair<Climate.ParameterPoint, ResourceKey<Biome>>> overworldPairs() {
-        List<Pair<Climate.ParameterPoint, ResourceKey<Biome>>> pairs = new ArrayList<>();
+    private static List<Pair<Climate.ParameterPoint, net.minecraft.resources.ResourceKey<Biome>>> overworldPairs() {
+        List<Pair<Climate.ParameterPoint, net.minecraft.resources.ResourceKey<Biome>>> pairs = new ArrayList<>();
         try {
             OverworldBiomeBuilder builder = new OverworldBiomeBuilder();
             Method addBiomes = OverworldBiomeBuilder.class.getDeclaredMethod("addBiomes", Consumer.class);
             addBiomes.setAccessible(true);
-            Consumer<Pair<Climate.ParameterPoint, ResourceKey<Biome>>> sink = pairs::add;
+            Consumer<Pair<Climate.ParameterPoint, net.minecraft.resources.ResourceKey<Biome>>> sink = pairs::add;
             addBiomes.invoke(builder, sink);
         } catch (Exception e) {
             throw new IllegalStateException("failed to enumerate overworld biomes via OverworldBiomeBuilder", e);
@@ -74,15 +73,15 @@ public final class DimensionSources {
     }
 
     @SuppressWarnings("unchecked")
-    private static List<Pair<Climate.ParameterPoint, ResourceKey<Biome>>> netherPairs() {
+    private static List<Pair<Climate.ParameterPoint, net.minecraft.resources.ResourceKey<Biome>>> netherPairs() {
         try {
             Object preset = MultiNoiseBiomeSourceParameterList.Preset.NETHER;
             Object provider = preset.getClass().getMethod("provider").invoke(preset);
 
             Method apply = provider.getClass().getMethod("apply", Function.class);
             apply.setAccessible(true);
-            Climate.ParameterList<ResourceKey<Biome>> list =
-                (Climate.ParameterList<ResourceKey<Biome>>) apply.invoke(provider, Function.identity());
+            Climate.ParameterList<net.minecraft.resources.ResourceKey<Biome>> list =
+                (Climate.ParameterList<net.minecraft.resources.ResourceKey<Biome>>) apply.invoke(provider, Function.identity());
 
             return new ArrayList<>(list.values());
         } catch (Exception e) {
@@ -91,17 +90,17 @@ public final class DimensionSources {
     }
 
     // apply replace then add over a key based pair list
-    public static List<Pair<Climate.ParameterPoint, ResourceKey<Biome>>> applyEdits(
-        List<Pair<Climate.ParameterPoint, ResourceKey<Biome>>> base,
+    public static List<Pair<Climate.ParameterPoint, net.minecraft.resources.ResourceKey<Biome>>> applyEdits(
+        List<Pair<Climate.ParameterPoint, net.minecraft.resources.ResourceKey<Biome>>> base,
         List<DimensionBiomeEdit> edits
     ) {
-        List<Pair<Climate.ParameterPoint, ResourceKey<Biome>>> pairs = new ArrayList<>(base);
+        List<Pair<Climate.ParameterPoint, net.minecraft.resources.ResourceKey<Biome>>> pairs = new ArrayList<>(base);
 
         // replacements keep the original point, just swap the key
         for (DimensionBiomeEdit edit : edits) {
             if (edit instanceof DimensionBiomeEdit.Replace replace) {
-                ResourceKey<Biome> target = nmsBiomeKey(replace.target());
-                ResourceKey<Biome> replacement = nmsBiomeKey(replace.replacement());
+                net.minecraft.resources.ResourceKey<Biome> target = nmsBiomeKey(replace.target());
+                net.minecraft.resources.ResourceKey<Biome> replacement = nmsBiomeKey(replace.replacement());
                 for (int i = 0; i < pairs.size(); i++) {
                     if (pairs.get(i).getSecond().equals(target)) {
                         pairs.set(i, Pair.of(pairs.get(i).getFirst(), replacement));
@@ -121,11 +120,11 @@ public final class DimensionSources {
         return pairs;
     }
 
-    static ResourceKey<Biome> nmsBiomeKey(BiomeResourceKey key) {
-        return ResourceKey.create(Registries.BIOME, Identifier.fromNamespaceAndPath(key.namespace(), key.path()));
+    static net.minecraft.resources.ResourceKey<Biome> nmsBiomeKey(ResourceKey key) {
+        return net.minecraft.resources.ResourceKey.create(Registries.BIOME, Identifier.fromNamespaceAndPath(key.namespace(), key.path()));
     }
 
-    static String idOf(BiomeResourceKey key) {
+    static String idOf(ResourceKey key) {
         return key.namespace() + ":" + key.path();
     }
 

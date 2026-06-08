@@ -1,4 +1,4 @@
-package me.outspending.biomesapi.wrapper;
+package me.outspending.biomesapi.wrapper.internal;
 
 import me.outspending.biomesapi.annotations.AsOf;
 import org.jspecify.annotations.NullMarked;

@@ -3,7 +3,7 @@ package me.outspending.biomesapi.wrapper.worldgen.placement;
 import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
-import me.outspending.biomesapi.wrapper.NmsHandle;
+import me.outspending.biomesapi.wrapper.internal.NmsHandle;
 import me.outspending.biomesapi.wrapper.worldgen.BlockPredicate;
 import me.outspending.biomesapi.wrapper.worldgen.HeightmapType;
 import me.outspending.biomesapi.wrapper.worldgen.valueproviders.HeightProvider;

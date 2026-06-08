@@ -1,7 +1,7 @@
 package me.outspending.biomesapi.biome.impl;
 
 import me.outspending.biomesapi.biome.VanillaBiome;
-import me.outspending.biomesapi.registry.BiomeResourceKey;
+import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.wrapper.BiomeSettings;
 import me.outspending.biomesapi.wrapper.entity.BiomeSpawner;
 import me.outspending.biomesapi.wrapper.environment.GrassColorModifier;
@@ -14,7 +14,7 @@ import org.jspecify.annotations.Nullable;
 @NullMarked
 public class VanillaBiomeImpl extends AbstractBiomeImpl implements VanillaBiome {
     public VanillaBiomeImpl(
-        BiomeResourceKey resourceKey,
+        ResourceKey resourceKey,
         BiomeSettings settings,
         int waterColor,
         @Nullable Integer fogColor,

@@ -3,7 +3,7 @@ package me.outspending.biomesapi.renderer.packet;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.misc.ChunkLocation;
-import me.outspending.biomesapi.registry.BiomeResourceKey;
+import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.renderer.packet.data.PhonyCustomBiome;
 import me.outspending.biomesapi.renderer.packet.data.SnapshotChunkData;
 import org.bukkit.entity.Player;
@@ -54,13 +54,13 @@ public class PhonyCustomBiomeCollector {
     }
 
     /**
-     * Checks if the collector has a phony custom biome with the given BiomeResourceKey.
-     * @param biomeKey the BiomeResourceKey of the biome to check
+     * Checks if the collector has a phony custom biome with the given ResourceKey.
+     * @param biomeKey the ResourceKey of the biome to check
      * @return true if the collector has the biome, false otherwise
      * @version 0.0.8
      */
     @AsOf("0.0.6")
-    public boolean hasBiome(BiomeResourceKey biomeKey) {
+    public boolean hasBiome(ResourceKey biomeKey) {
         return backing.stream().anyMatch((PhonyCustomBiome biome) -> biome.biomeResourceKey().equals(biomeKey));
     }
 
@@ -76,13 +76,13 @@ public class PhonyCustomBiomeCollector {
 
 
     /**
-     * Removes a phony custom biome with the given BiomeResourceKey from the collector.
-     * @param biomeKey the BiomeResourceKey of the biome to remove
+     * Removes a phony custom biome with the given ResourceKey from the collector.
+     * @param biomeKey the ResourceKey of the biome to remove
      * @return true if the biome was removed, false if it was not found
      * @version 0.0.8
      */
     @AsOf("0.0.6")
-    public boolean removeBiome(BiomeResourceKey biomeKey) {
+    public boolean removeBiome(ResourceKey biomeKey) {
         return backing.removeIf((PhonyCustomBiome biome) -> biome.biomeResourceKey().equals(biomeKey));
     }
 

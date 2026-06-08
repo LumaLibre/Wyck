@@ -1,7 +1,7 @@
 package me.outspending.biomesapi.registry.worldgen;
 
 import me.outspending.biomesapi.annotations.AsOf;
-import me.outspending.biomesapi.registry.BiomeResourceKey;
+import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.wrapper.worldgen.feature.custom.CustomFeature;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -17,5 +17,5 @@ import org.jspecify.annotations.NullMarked;
 @ApiStatus.Internal
 public interface CustomFeatureRegistry {
     @AsOf("2.3.0")
-    void register(BiomeResourceKey key, CustomFeature<?> feature);
+    void register(ResourceKey key, CustomFeature<?> feature);
 }

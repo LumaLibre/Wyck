@@ -3,7 +3,7 @@ package me.outspending.biomesapi.biome;
 import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.biome.impl.VanillaBiomeImpl;
-import me.outspending.biomesapi.registry.BiomeResourceKey;
+import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.wrapper.BiomeSettings;
 import me.outspending.biomesapi.wrapper.entity.BiomeSpawner;
 import me.outspending.biomesapi.wrapper.environment.GrassColorModifier;
@@ -191,7 +191,7 @@ public interface VanillaBiome extends AbstractBiome {
     @AsOf("2.3.0")
     final class Builder {
 
-        private @Nullable BiomeResourceKey resourceKey = null;
+        private @Nullable ResourceKey resourceKey = null;
         private BiomeSettings settings = BiomeSettings.defaultSettings();
 
         private int waterColor = 0x3F75C4;
@@ -238,12 +238,12 @@ public interface VanillaBiome extends AbstractBiome {
         }
 
         /**
-         * @param resourceKey the BiomeResourceKey of the biome
+         * @param resourceKey the ResourceKey of the biome
          * @return this builder, for chaining
          * @since 2.3.0
          */
         @AsOf("2.3.0")
-        public Builder resourceKey(BiomeResourceKey resourceKey) {
+        public Builder resourceKey(ResourceKey resourceKey) {
             this.resourceKey = resourceKey;
             return this;
         }

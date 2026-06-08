@@ -1,7 +1,7 @@
 package me.outspending.biomesapi.wrapper.environment.particle;
 
 import me.outspending.biomesapi.annotations.AsOf;
-import me.outspending.biomesapi.wrapper.NmsHandle;
+import me.outspending.biomesapi.wrapper.internal.NmsHandle;
 import org.jspecify.annotations.NullMarked;
 
 /**

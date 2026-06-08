@@ -2,7 +2,8 @@ package me.outspending.biomesapi.biome;
 
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.exceptions.UnknownBiomeException;
-import me.outspending.biomesapi.registry.BiomeResourceKey;
+import me.outspending.biomesapi.keys.ResourceKey;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -20,6 +21,7 @@ import java.util.List;
 @NullMarked
 @AsOf("0.0.1")
 @Deprecated(forRemoval = true, since = "2.3.0")
+@ApiStatus.ScheduledForRemoval(inVersion = "2.4.0")
 public class BiomeHandler {
 
     private BiomeHandler() {
@@ -42,36 +44,36 @@ public class BiomeHandler {
     /**
      * This method retrieves a Biome object from the Minecraft server's biome registry.
      * It uses the Bukkit API to get the server instance and then accesses the server's biome registry.
-     * If the biome registry exists, it retrieves the Biome object corresponding to the provided BiomeResourceKey.
+     * If the biome registry exists, it retrieves the Biome object corresponding to the provided ResourceKey.
      * If the biome registry does not exist or the Biome object does not exist in the registry, it returns null.
      *
-     * @param resourceKey The BiomeResourceKey for the biome that needs to be retrieved.
-     * @return Biome object corresponding to the provided BiomeResourceKey, or null if the biome does not exist.
+     * @param resourceKey The ResourceKey for the biome that needs to be retrieved.
+     * @return Biome object corresponding to the provided ResourceKey, or null if the biome does not exist.
      *
      * @throws UnknownBiomeException if the biome does not exist in the registry.
      * @since 0.0.1
-     * @deprecated Use {@link RegisteredBiomes#getOrThrow(BiomeResourceKey)} instead.
+     * @deprecated Use {@link RegisteredBiomes#getOrThrow(ResourceKey)} instead.
      */
     @Deprecated
     @AsOf("0.0.18")
-    public static @Nullable CustomBiome getBiome(BiomeResourceKey resourceKey) {
+    public static @Nullable CustomBiome getBiome(ResourceKey resourceKey) {
         return RegisteredBiomes.get(resourceKey);
     }
 
     /**
      * This method checks if a biome exists in the Minecraft server's biome registry.
-     * It uses the getBiome method to retrieve the Biome object corresponding to the provided BiomeResourceKey.
+     * It uses the getBiome method to retrieve the Biome object corresponding to the provided ResourceKey.
      * If the Biome object exists, it returns true. Otherwise, it returns false.
      *
-     * @param resourceKey The BiomeResourceKey for the biome that needs to be checked.
+     * @param resourceKey The ResourceKey for the biome that needs to be checked.
      * @return true if the biome exists in the registry, false otherwise.
      *
      * @since 0.0.1
-     * @deprecated Use {@link RegisteredBiomes#isRegistered(BiomeResourceKey)} instead.
+     * @deprecated Use {@link RegisteredBiomes#isRegistered(ResourceKey)} instead.
      */
     @Deprecated
     @AsOf("0.0.18")
-    public static boolean isBiome(BiomeResourceKey resourceKey) {
+    public static boolean isBiome(ResourceKey resourceKey) {
         return RegisteredBiomes.isRegistered(resourceKey);
     }
 
@@ -85,7 +87,7 @@ public class BiomeHandler {
      */
     @AsOf("0.0.8")
     @Deprecated
-    public static boolean replaceBiome(BiomeResourceKey resourceKey, CustomBiome newBiome) {
+    public static boolean replaceBiome(ResourceKey resourceKey, CustomBiome newBiome) {
         throw new UnsupportedOperationException("Unsupported");
     }
 }

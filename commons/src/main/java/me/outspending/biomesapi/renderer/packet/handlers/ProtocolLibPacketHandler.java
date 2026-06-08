@@ -12,7 +12,7 @@ import com.comphenix.protocol.wrappers.BlockPosition;
 import com.comphenix.protocol.wrappers.WrappedBlockData;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.misc.ChunkLocation;
-import me.outspending.biomesapi.registry.BiomeResourceKey;
+import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.renderer.packet.PacketHandler;
 import me.outspending.biomesapi.renderer.packet.PhonyBiomeResolver;
 import me.outspending.biomesapi.renderer.packet.PhonyCustomBiomeCollector;
@@ -89,7 +89,7 @@ public class ProtocolLibPacketHandler implements PacketHandler {
     }
 
     @Override
-    public boolean removeBiome(BiomeResourceKey biomeKey) {
+    public boolean removeBiome(ResourceKey biomeKey) {
         return collector.removeBiome(biomeKey);
     }
 
@@ -99,7 +99,7 @@ public class ProtocolLibPacketHandler implements PacketHandler {
     }
 
     @Override
-    public boolean hasBiome(BiomeResourceKey biomeKey) {
+    public boolean hasBiome(ResourceKey biomeKey) {
         return collector.hasBiome(biomeKey);
     }
 

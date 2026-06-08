@@ -41,7 +41,7 @@ because no chunks can be loaded before the bootstrap phase completes. If a biome
     code={`import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
 import me.outspending.biomesapi.biome.CustomBiome;
-import me.outspending.biomesapi.registry.BiomeResourceKey;
+import me.outspending.biomesapi.registry.ResourceKey;
 import me.outspending.biomesapi.registry.bootstrap.BootstrapBiomeRegistry;
 import me.outspending.biomesapi.registry.bootstrap.Composer;
 import me.outspending.biomesapi.wrapper.BiomeSettings;
@@ -83,7 +83,7 @@ A simple way to do this is by simply shutting down the server if a biome fails t
     lang="java"
     filename="ExamplePlugin.java"
     code={`import me.outspending.biomesapi.biome.CustomBiome;
-import me.outspending.biomesapi.registry.BiomeResourceKey;
+import me.outspending.biomesapi.registry.ResourceKey;
 import me.outspending.biomesapi.wrapper.BiomeSettings;
 import org.bukkit.plugin.java.JavaPlugin;
 

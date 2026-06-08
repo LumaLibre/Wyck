@@ -4,7 +4,7 @@ import com.google.common.base.Suppliers;
 import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
 import me.outspending.biomesapi.annotations.AsOf;
-import me.outspending.biomesapi.registry.BiomeResourceKey;
+import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.wrapper.worldgen.climate.BiomeClimatePoint;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
@@ -12,7 +12,6 @@ import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.biome.Biome;
@@ -90,14 +89,14 @@ public final class RuntimeDimensionEditor implements DimensionEditor {
 
     @Override
     @AsOf("2.3.0")
-    public DimensionEditor addToDimension(BiomeResourceKey dimension, BiomeResourceKey biome, BiomeClimatePoint point) {
+    public DimensionEditor addToDimension(ResourceKey dimension, ResourceKey biome, BiomeClimatePoint point) {
         this.edits.add(new DimensionBiomeEdit.Add(dimension, biome, point));
         return this;
     }
 
     @Override
     @AsOf("2.3.0")
-    public DimensionEditor replaceInDimension(BiomeResourceKey dimension, BiomeResourceKey target, BiomeResourceKey replacement) {
+    public DimensionEditor replaceInDimension(ResourceKey dimension, ResourceKey target, ResourceKey replacement) {
         this.edits.add(new DimensionBiomeEdit.Replace(dimension, target, replacement));
         return this;
     }
@@ -119,7 +118,7 @@ public final class RuntimeDimensionEditor implements DimensionEditor {
 
         List<DimensionBiomeEdit> matching = new ArrayList<>();
         for (DimensionBiomeEdit edit : this.edits) {
-            BiomeResourceKey d = edit.dimension();
+            ResourceKey d = edit.dimension();
             if (d.namespace().equals(dimId.getNamespace()) && d.path().equals(dimId.getPath())) {
                 matching.add(edit);
             }
@@ -134,7 +133,7 @@ public final class RuntimeDimensionEditor implements DimensionEditor {
 
 
         List<DimensionBiomeEdit.Add> adds = new ArrayList<>();
-        Map<ResourceKey<Biome>, Holder<Biome>> replacements = new LinkedHashMap<>();
+        Map<net.minecraft.resources.ResourceKey<Biome>, Holder<Biome>> replacements = new LinkedHashMap<>();
         for (DimensionBiomeEdit edit : matching) {
             if (edit instanceof DimensionBiomeEdit.Add add) {
                 adds.add(add);
@@ -161,7 +160,7 @@ public final class RuntimeDimensionEditor implements DimensionEditor {
     }
 
 
-    private static BiomeSource buildEditedSource(BiomeSource current, Registry<Biome> biomes, List<DimensionBiomeEdit.Add> adds, Map<ResourceKey<Biome>, Holder<Biome>> replacements, Identifier dimId) {
+    private static BiomeSource buildEditedSource(BiomeSource current, Registry<Biome> biomes, List<DimensionBiomeEdit.Add> adds, Map<net.minecraft.resources.ResourceKey<Biome>, Holder<Biome>> replacements, Identifier dimId) {
         if (current instanceof MultiNoiseBiomeSource multiNoise) {
             return buildMultiNoise(multiNoise, biomes, adds, replacements);
         }
@@ -172,13 +171,13 @@ public final class RuntimeDimensionEditor implements DimensionEditor {
     }
 
 
-    private static BiomeSource buildMultiNoise(MultiNoiseBiomeSource multiNoise, Registry<Biome> biomes, List<DimensionBiomeEdit.Add> adds, Map<ResourceKey<Biome>, Holder<Biome>> replacements) {
+    private static BiomeSource buildMultiNoise(MultiNoiseBiomeSource multiNoise, Registry<Biome> biomes, List<DimensionBiomeEdit.Add> adds, Map<net.minecraft.resources.ResourceKey<Biome>, Holder<Biome>> replacements) {
         List<Pair<Climate.ParameterPoint, Holder<Biome>>> entries = new ArrayList<>(liveParameters(multiNoise).values());
 
         // replaces swap the holder at every entry whose biome matches a target, point is preserved
         for (int i = 0; i < entries.size(); i++) {
             Holder<Biome> holder = entries.get(i).getSecond();
-            ResourceKey<Biome> key = holder.unwrapKey().orElse(null);
+            net.minecraft.resources.ResourceKey<Biome> key = holder.unwrapKey().orElse(null);
             if (key != null) {
                 Holder<Biome> replacement = replacements.get(key);
                 if (replacement != null) {
@@ -202,7 +201,7 @@ public final class RuntimeDimensionEditor implements DimensionEditor {
     }
 
 
-    private static BiomeSource buildEnd(Registry<Biome> biomes, Map<ResourceKey<Biome>, Holder<Biome>> replacements) {
+    private static BiomeSource buildEnd(Registry<Biome> biomes, Map<net.minecraft.resources.ResourceKey<Biome>, Holder<Biome>> replacements) {
         HolderGetter<Biome> substituting = new SubstitutingHolderGetter(biomes, replacements);
         return TheEndBiomeSource.create(substituting);
     }
@@ -218,7 +217,7 @@ public final class RuntimeDimensionEditor implements DimensionEditor {
     private static void reorderIntroducedBiomes(
         Registry<Biome> biomeRegistry,
         List<DimensionBiomeEdit.Add> adds,
-        Map<ResourceKey<Biome>, Holder<Biome>> replacements
+        Map<net.minecraft.resources.ResourceKey<Biome>, Holder<Biome>> replacements
     ) {
         Set<Biome> introduced = java.util.Collections.newSetFromMap(new java.util.IdentityHashMap<>());
         for (DimensionBiomeEdit.Add add : adds) {
@@ -290,24 +289,24 @@ public final class RuntimeDimensionEditor implements DimensionEditor {
         }
     }
 
-    private static ResourceKey<Biome> nmsBiomeKey(BiomeResourceKey key) {
+    private static net.minecraft.resources.ResourceKey<Biome> nmsBiomeKey(ResourceKey key) {
         // FIXME: Use resourceLocation()
-        return ResourceKey.create(Registries.BIOME, Identifier.fromNamespaceAndPath(key.namespace(), key.path()));
+        return net.minecraft.resources.ResourceKey.create(Registries.BIOME, Identifier.fromNamespaceAndPath(key.namespace(), key.path()));
     }
 
 
     private record Snapshot(BiomeSource originalSource, Object originalFeaturesPerStep) {
     }
 
-    private record SubstitutingHolderGetter(HolderGetter<Biome> delegate, Map<ResourceKey<Biome>, Holder<Biome>> replacements) implements HolderGetter<Biome> {
+    private record SubstitutingHolderGetter(HolderGetter<Biome> delegate, Map<net.minecraft.resources.ResourceKey<Biome>, Holder<Biome>> replacements) implements HolderGetter<Biome> {
 
         @Override
-        public Optional<Holder.Reference<Biome>> get(ResourceKey<Biome> key) {
+        public Optional<Holder.Reference<Biome>> get(net.minecraft.resources.ResourceKey<Biome> key) {
             return this.delegate.get(key);
         }
 
         @Override
-        public Holder.Reference<Biome> getOrThrow(ResourceKey<Biome> key) {
+        public Holder.Reference<Biome> getOrThrow(net.minecraft.resources.ResourceKey<Biome> key) {
             Holder<Biome> replacement = this.replacements.get(key);
             if (replacement != null) {
                 if (replacement instanceof Holder.Reference<Biome> reference) {

@@ -3,7 +3,7 @@ package me.outspending.biomesapi;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
 import me.outspending.biomesapi.biome.CustomBiome;
-import me.outspending.biomesapi.registry.BiomeResourceKey;
+import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.registry.bootstrap.BootstrapBiomeRegistry;
 import me.outspending.biomesapi.registry.bootstrap.Composer;
 import me.outspending.biomesapi.wrapper.worldgen.BiomeGenerationSettings;
@@ -21,7 +21,7 @@ public class ExampleBootstrapper implements PluginBootstrap {
             .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeatures.FALLEN_OAK_TREE)
             .build();
 
-        BiomeResourceKey myBiomeKey = BiomeResourceKey.of("example", "my_biome");
+        ResourceKey myBiomeKey = ResourceKey.of("example", "my_biome");
         registry.queue(
             CustomBiome.builder(myBiomeKey)
                 .fogColor("#DB00FD")
@@ -33,8 +33,8 @@ public class ExampleBootstrapper implements PluginBootstrap {
                 .build()
         );
 
-        BiomeResourceKey overworldKey = BiomeResourceKey.of("minecraft", "overworld");
-        BiomeResourceKey plainsKey = BiomeResourceKey.of("minecraft", "plains");
+        ResourceKey overworldKey = ResourceKey.of("minecraft", "overworld");
+        ResourceKey plainsKey = ResourceKey.of("minecraft", "plains");
         registry.replaceInDimension(overworldKey, plainsKey, myBiomeKey);
     }
 }

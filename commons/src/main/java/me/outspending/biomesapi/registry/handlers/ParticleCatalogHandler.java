@@ -1,7 +1,7 @@
 package me.outspending.biomesapi.registry.handlers;
 
 import me.outspending.biomesapi.biome.AbstractBiome;
-import me.outspending.biomesapi.registry.BuilderHandler;
+import me.outspending.biomesapi.registry.internal.BuilderHandler;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleCatalog;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleOptionsHandle;
 import me.outspending.biomesapi.wrapper.environment.particle.ResolvedAmbientParticle;

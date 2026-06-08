@@ -5,7 +5,9 @@ import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.registries.VanillaRegistries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
@@ -65,5 +67,26 @@ public final class BootstrapSafeMinecraftRegistries {
             return access.lookupOrThrow(registry);
         }
         return vanilla().lookupOrThrow(registry);
+    }
+
+    @AsOf("2.3.0")
+    public static <T> Registry<T> mappedRegistry(String registryId) {
+        Identifier location = Identifier.parse(registryId);
+        ResourceKey<? extends Registry<T>> registryKey = ResourceKey.createRegistryKey(location);
+        return mappedRegistry(registryKey);
+    }
+
+
+    @AsOf("2.3.0")
+    @SuppressWarnings("ConstantValue")
+    public static <T> Registry<T> mappedRegistry(ResourceKey<? extends Registry<T>> registry) {
+        Server bukkit = Bukkit.getServer();
+        if (bukkit != null) {
+            RegistryAccess access = ((CraftServer) bukkit).getServer().registryAccess();
+            return access.lookupOrThrow(registry);
+        }
+
+        RegistryAccess vanillaAccess = RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY);
+        return vanillaAccess.lookupOrThrow(registry);
     }
 }

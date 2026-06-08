@@ -1,7 +1,7 @@
 package me.outspending.biomesapi.wrapper.worldgen.feature;
 
 import me.outspending.biomesapi.annotations.AsOf;
-import me.outspending.biomesapi.registry.BiomeResourceKey;
+import me.outspending.biomesapi.keys.ResourceKey;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -99,7 +99,7 @@ public enum FeatureType {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    public BiomeResourceKey resourceKey() {
-        return BiomeResourceKey.minecraft(this.key);
+    public ResourceKey resourceKey() {
+        return ResourceKey.minecraft(this.key);
     }
 }

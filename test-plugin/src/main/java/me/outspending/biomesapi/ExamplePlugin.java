@@ -1,7 +1,7 @@
 package me.outspending.biomesapi;
 
 import me.outspending.biomesapi.biome.CustomBiome;
-import me.outspending.biomesapi.registry.BiomeResourceKey;
+import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.registry.dimension.DimensionEditor;
 import me.outspending.biomesapi.worldgen.PillarFeature;
 import me.outspending.biomesapi.wrapper.worldgen.BiomeGenerationSettings;
@@ -18,7 +18,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class ExamplePlugin extends JavaPlugin {
     @Override
     public void onEnable() {
-        BiomeResourceKey pillar = BiomeResourceKey.of("example", "pillar");
+        ResourceKey pillar = ResourceKey.of("example", "pillar");
 
         CustomFeature.register(pillar, new PillarFeature());
         ConfiguredFeature tallFeature  = ConfiguredFeature.customFeature(pillar, new PillarFeature.PillarConfig(Material.OBSIDIAN, Material.GLOWSTONE, 10, 15));
@@ -47,7 +47,7 @@ public class ExamplePlugin extends JavaPlugin {
             .addFeature(GenerationStep.VEGETAL_DECORATION, tallPlaced)
             .addFeature(GenerationStep.VEGETAL_DECORATION, shortPlaced)
             .build();
-        BiomeResourceKey myBiomeKey = BiomeResourceKey.of("example", "my_biome");
+        ResourceKey myBiomeKey = ResourceKey.of("example", "my_biome");
         CustomBiome.builder(myBiomeKey)
             .fogColor("#DB00FD")
             .skyColor("#2F46FF")
@@ -58,8 +58,8 @@ public class ExamplePlugin extends JavaPlugin {
             .register();
 
         DimensionEditor dimensionEditor = DimensionEditor.create();
-        BiomeResourceKey overworldKey = BiomeResourceKey.of("minecraft", "overworld");
-        BiomeResourceKey plains = BiomeResourceKey.of("minecraft", "plains");
+        ResourceKey overworldKey = ResourceKey.of("minecraft", "overworld");
+        ResourceKey plains = ResourceKey.of("minecraft", "plains");
         dimensionEditor.replaceInDimension(overworldKey, plains, myBiomeKey);
         dimensionEditor.apply(); // Applies to all loaded worlds
     }

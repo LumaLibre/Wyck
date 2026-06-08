@@ -3,7 +3,7 @@ package me.outspending.biomesapi.biome.impl;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
 import me.outspending.biomesapi.biome.AbstractBiome;
-import me.outspending.biomesapi.registry.BiomeResourceKey;
+import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.wrapper.BiomeSettings;
 import me.outspending.biomesapi.wrapper.entity.BiomeSpawner;
 import me.outspending.biomesapi.wrapper.environment.GrassColorModifier;
@@ -23,7 +23,7 @@ import java.util.Objects;
 public class AbstractBiomeImpl implements AbstractBiome {
 
     // Required Settings
-    private final BiomeResourceKey resourceKey;
+    private final ResourceKey resourceKey;
     private BiomeSettings settings;
 
     // Required Colors
@@ -47,7 +47,7 @@ public class AbstractBiomeImpl implements AbstractBiome {
     private @Nullable BiomeGenerationSettings generationSettings;
 
     public AbstractBiomeImpl(
-        BiomeResourceKey resourceKey,
+        ResourceKey resourceKey,
         BiomeSettings settings,
         int waterColor,
         @Nullable Integer fogColor,
@@ -89,7 +89,7 @@ public class AbstractBiomeImpl implements AbstractBiome {
     }
 
     @Override
-    public BiomeResourceKey getResourceKey() {
+    public ResourceKey getResourceKey() {
         return this.resourceKey;
     }
 

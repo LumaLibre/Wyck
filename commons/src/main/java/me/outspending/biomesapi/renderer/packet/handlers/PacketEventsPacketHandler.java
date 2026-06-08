@@ -21,7 +21,7 @@ import io.github.retrooper.packetevents.util.SpigotConversionUtil;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.misc.ChunkLocation;
-import me.outspending.biomesapi.registry.BiomeResourceKey;
+import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.renderer.packet.PacketHandler;
 import me.outspending.biomesapi.renderer.packet.PhonyCustomBiomeCollector;
 import me.outspending.biomesapi.renderer.packet.data.BlockReplacement;
@@ -105,7 +105,7 @@ public class PacketEventsPacketHandler implements PacketHandler {
     }
 
     @Override
-    public boolean removeBiome(BiomeResourceKey biomeKey) {
+    public boolean removeBiome(ResourceKey biomeKey) {
         return collector.removeBiome(biomeKey);
     }
 
@@ -115,7 +115,7 @@ public class PacketEventsPacketHandler implements PacketHandler {
     }
 
     @Override
-    public boolean hasBiome(BiomeResourceKey biomeKey) {
+    public boolean hasBiome(ResourceKey biomeKey) {
         return collector.hasBiome(biomeKey);
     }
 
@@ -178,7 +178,7 @@ public class PacketEventsPacketHandler implements PacketHandler {
             }
 
             CustomBiome customBiome = phonyCustomBiome.customBiome();
-            BiomeResourceKey biomeResourceKey = phonyCustomBiome.biomeResourceKey();
+            ResourceKey biomeResourceKey = phonyCustomBiome.biomeResourceKey();
             BlockReplacement[] blockReplacements = customBiome.getBlockReplacements();
 
 

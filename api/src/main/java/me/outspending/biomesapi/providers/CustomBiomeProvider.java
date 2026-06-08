@@ -2,7 +2,7 @@ package me.outspending.biomesapi.providers;
 
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.biome.CustomBiome;
-import me.outspending.biomesapi.registry.BiomeResourceKey;
+import me.outspending.biomesapi.keys.ResourceKey;
 import org.bukkit.block.Biome;
 import org.bukkit.generator.BiomeProvider;
 import org.bukkit.generator.WorldInfo;
@@ -25,7 +25,7 @@ import java.util.Map;
 @ApiStatus.Experimental
 public abstract class CustomBiomeProvider extends BiomeProvider {
 
-    protected final Map<BiomeResourceKey, CustomBiome> biomeMap;
+    protected final Map<ResourceKey, CustomBiome> biomeMap;
 
     @AsOf("2.3.0")
     public CustomBiomeProvider(Collection<CustomBiome> biomes) {
@@ -42,7 +42,7 @@ public abstract class CustomBiomeProvider extends BiomeProvider {
     }
 
     @AsOf("2.3.0")
-    public Map<BiomeResourceKey, CustomBiome> getBiomeMap() {
+    public Map<ResourceKey, CustomBiome> getBiomeMap() {
         return biomeMap;
     }
 }

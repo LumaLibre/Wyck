@@ -2,7 +2,7 @@ package me.outspending.biomesapi.wrapper.worldgen.feature;
 
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.annotations.Generated;
-import me.outspending.biomesapi.registry.BiomeResourceKey;
+import me.outspending.biomesapi.keys.ResourceKey;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -482,7 +482,7 @@ public final class ConfiguredFeatures {
     public static final ConfiguredFeature MANGROVE_VEGETATION = reference("mangrove_vegetation");
 
     private static ConfiguredFeature reference(String path) {
-        return ConfiguredFeature.reference(BiomeResourceKey.minecraft(path));
+        return ConfiguredFeature.reference(ResourceKey.minecraft(path));
     }
 
     private ConfiguredFeatures() {

@@ -4,7 +4,7 @@ import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.factory.WireProvider;
-import me.outspending.biomesapi.registry.BiomeResourceKey;
+import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.registry.dimension.DimensionEditor;
 import me.outspending.biomesapi.util.ThrowingRunnable;
 import me.outspending.biomesapi.wrapper.worldgen.climate.BiomeClimatePoint;
@@ -102,11 +102,11 @@ public interface BootstrapBiomeRegistry {
      * @param placement the climate point to place the biome at
      * @return this registry instance
      * @throws UnsupportedOperationException if the implementation does not support this operation
-     * @see DimensionEditor#addToDimension(BiomeResourceKey, BiomeResourceKey, BiomeClimatePoint)
+     * @see DimensionEditor#addToDimension(ResourceKey, ResourceKey, BiomeClimatePoint)
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    BootstrapBiomeRegistry addToDimension(BiomeResourceKey dimension, BiomeResourceKey target, BiomeClimatePoint placement) throws UnsupportedOperationException;
+    BootstrapBiomeRegistry addToDimension(ResourceKey dimension, ResourceKey target, BiomeClimatePoint placement) throws UnsupportedOperationException;
 
     /**
      * Replaces a biome in a dimension.
@@ -115,9 +115,9 @@ public interface BootstrapBiomeRegistry {
      * @param replacement the biome to replace with
      * @return this registry instance
      * @throws UnsupportedOperationException if the implementation does not support this operation
-     * @see DimensionEditor#replaceInDimension(BiomeResourceKey, BiomeResourceKey, BiomeResourceKey)
+     * @see DimensionEditor#replaceInDimension(ResourceKey, ResourceKey, ResourceKey)
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    BootstrapBiomeRegistry replaceInDimension(BiomeResourceKey dimension, BiomeResourceKey target, BiomeResourceKey replacement) throws UnsupportedOperationException;
+    BootstrapBiomeRegistry replaceInDimension(ResourceKey dimension, ResourceKey target, ResourceKey replacement) throws UnsupportedOperationException;
 }

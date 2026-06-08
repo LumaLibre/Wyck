@@ -2,8 +2,8 @@ package me.outspending.biomesapi.wrapper.worldgen.feature;
 
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
-import me.outspending.biomesapi.registry.BiomeResourceKey;
-import me.outspending.biomesapi.wrapper.NmsHandle;
+import me.outspending.biomesapi.keys.ResourceKey;
+import me.outspending.biomesapi.wrapper.internal.NmsHandle;
 import me.outspending.biomesapi.wrapper.worldgen.feature.config.FeatureConfiguration;
 import me.outspending.biomesapi.wrapper.worldgen.feature.custom.CustomFeature;
 import org.jetbrains.annotations.ApiStatus;
@@ -15,7 +15,7 @@ import org.jspecify.annotations.NullMarked;
  *     <ul>
  *         <li>{@link Reference} is a reference to an already-registered configured feature.</li>
  *         <li>{@link VanillaConfigured} is a configured feature authored from a vanilla feature type and configuration.</li>
- *         <li>{@link CustomConfigured} is a configured feature composed of a registered custom feature with a config instance. The feature must already be registered under featureKey via {@link CustomFeature#register(BiomeResourceKey)}.</li>
+ *         <li>{@link CustomConfigured} is a configured feature composed of a registered custom feature with a config instance. The feature must already be registered under featureKey via {@link CustomFeature#register(ResourceKey)}.</li>
  *     </ul>
  * </p>
  *
@@ -42,7 +42,7 @@ public sealed interface ConfiguredFeature extends NmsHandle permits ConfiguredFe
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static ConfiguredFeature reference(BiomeResourceKey key) {
+    static ConfiguredFeature reference(ResourceKey key) {
         return new Reference(key);
     }
 
@@ -68,7 +68,7 @@ public sealed interface ConfiguredFeature extends NmsHandle permits ConfiguredFe
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static ConfiguredFeature customFeature(BiomeResourceKey featureKey, Object config) {
+    static ConfiguredFeature customFeature(ResourceKey featureKey, Object config) {
         return new CustomConfigured(featureKey, config);
     }
 
@@ -84,7 +84,7 @@ public sealed interface ConfiguredFeature extends NmsHandle permits ConfiguredFe
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    record Reference(BiomeResourceKey key) implements ConfiguredFeature {}
+    record Reference(ResourceKey key) implements ConfiguredFeature {}
 
     /**
      * A configured feature authored from a vanilla feature type and configuration.
@@ -93,15 +93,15 @@ public sealed interface ConfiguredFeature extends NmsHandle permits ConfiguredFe
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    record VanillaConfigured(BiomeResourceKey featureKey, FeatureConfiguration configuration) implements ConfiguredFeature {}
+    record VanillaConfigured(ResourceKey featureKey, FeatureConfiguration configuration) implements ConfiguredFeature {}
 
     /**
      * A configured feature composed of a registered custom feature with a config instance.
-     * The feature must already be registered under featureKey via {@link CustomFeature#register(BiomeResourceKey)}.
+     * The feature must already be registered under featureKey via {@link CustomFeature#register(ResourceKey)}.
      * @param featureKey the key the custom feature was registered under
      * @param config the config instance to place with
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    record CustomConfigured(BiomeResourceKey featureKey, Object config) implements ConfiguredFeature {}
+    record CustomConfigured(ResourceKey featureKey, Object config) implements ConfiguredFeature {}
 }

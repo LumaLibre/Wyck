@@ -2,7 +2,7 @@ package me.outspending.biomesapi.wrapper.worldgen.placement;
 
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.annotations.Generated;
-import me.outspending.biomesapi.registry.BiomeResourceKey;
+import me.outspending.biomesapi.keys.ResourceKey;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -556,7 +556,7 @@ public final class PlacedFeatures {
     public static final PlacedFeature PATCH_BERRY_BUSH_VILLAGE = reference("patch_berry_bush");
 
     private static PlacedFeature reference(String path) {
-        return PlacedFeature.reference(BiomeResourceKey.minecraft(path));
+        return PlacedFeature.reference(ResourceKey.minecraft(path));
     }
 
     private PlacedFeatures() {
