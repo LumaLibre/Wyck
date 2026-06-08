@@ -196,14 +196,9 @@ public final class RuntimeDimensionEditor implements DimensionEditor {
 
         Climate.ParameterList<Holder<Biome>> editedList = new Climate.ParameterList<>(entries);
 
-        // carry the current source's own preset onto the serialization side, so a save writes that
-        // preset and the edited list stays runtime only, this is what makes the swap transient
-        Optional<Holder<MultiNoiseBiomeSourceParameterList>> preset = liveEither(multiNoise).right();
-        if (preset.isPresent()) {
-            return TransientMultiNoiseBiomeSource.create(preset.get(), editedList);
-        }
 
-        throw new IllegalStateException("multi_noise source has no preset binding, cannot edit transiently, only preset based dimensions like the overworld and nether are supported");
+        Either<Climate.ParameterList<Holder<Biome>>, Holder<MultiNoiseBiomeSourceParameterList>> codecSide = liveEither(multiNoise);
+        return TransientMultiNoiseBiomeSource.create(codecSide, editedList);
     }
 
 

@@ -12,6 +12,7 @@ import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Deque;
 import java.util.IdentityHashMap;
@@ -28,32 +29,53 @@ final class FeatureOrderResolver {
     }
 
     static BiomeGenerationSettings reorder(Registry<Biome> biomeRegistry, Biome target, Set<Biome> exclude) {
-        Map<PlacedFeature, Integer> rank = buildGlobalRank(biomeRegistry, exclude);
-
         BiomeGenerationSettings settings = target.getGenerationSettings();
         List<HolderSet<PlacedFeature>> steps = settings.features();
 
         BiomeGenerationSettings.PlainBuilder builder = new BiomeGenerationSettings.PlainBuilder();
-
-        // carvers carry over unchanged, they are not part of the feature order graph
         copyCarvers(settings, builder);
 
         for (int step = 0; step < steps.size(); step++) {
+            Map<PlacedFeature, Integer> rank = buildStepRank(biomeRegistry, exclude, step);
+
             List<Holder<PlacedFeature>> ordered = new ArrayList<>();
             for (Holder<PlacedFeature> holder : steps.get(step)) {
                 ordered.add(holder);
             }
-
             // stable sort by global rank, unranked features sort last keeping their existing order
-            int finalStep = step;
             ordered.sort(Comparator.comparingInt(holder -> rankOf(rank, holder)));
 
             for (Holder<PlacedFeature> holder : ordered) {
-                builder.addFeature(finalStep, holder);
+                builder.addFeature(step, holder);
             }
         }
 
         return builder.build();
+    }
+
+    private static Map<PlacedFeature, Integer> buildStepRank(Registry<Biome> biomeRegistry, Set<Biome> exclude, int step) {
+        Map<PlacedFeature, Set<PlacedFeature>> edges = new IdentityHashMap<>();
+        for (Biome biome : biomeRegistry) {
+            if (exclude.contains(biome)) {
+                continue;
+            }
+            List<HolderSet<PlacedFeature>> biomeSteps = biome.getGenerationSettings().features();
+            if (step >= biomeSteps.size()) {
+                continue;
+            }
+            List<PlacedFeature> inStep = new ArrayList<>();
+            for (Holder<PlacedFeature> holder : biomeSteps.get(step)) {
+                inStep.add(holder.value());
+            }
+            for (int i = 0; i < inStep.size(); i++) {
+                PlacedFeature feature = inStep.get(i);
+                edges.computeIfAbsent(feature, k -> newIdentitySet());
+                if (i < inStep.size() - 1) {
+                    edges.get(feature).add(inStep.get(i + 1));
+                }
+            }
+        }
+        return topologicalRank(edges);
     }
 
 
@@ -135,6 +157,6 @@ final class FeatureOrderResolver {
     }
 
     private static Set<PlacedFeature> newIdentitySet() {
-        return java.util.Collections.newSetFromMap(new IdentityHashMap<>());
+        return Collections.newSetFromMap(new IdentityHashMap<>());
     }
 }

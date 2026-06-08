@@ -88,22 +88,23 @@ public final class TransientMultiNoiseBiomeSource {
      * {@code codec()} is the registered multi_noise codec and whose {@code parameters} field is the
      * preset, so a save writes the preset form and a missing custom biome can never brick the world.
      *
-     * @param overworldPreset the registered overworld parameter list holder, drives serialization
+     * @param codecSide the registered overworld parameter list holder, drives serialization
      * @param editedParameters the full list including the custom biome, drives generation
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    public static MultiNoiseBiomeSource create(Holder<MultiNoiseBiomeSourceParameterList> overworldPreset, Climate.ParameterList<Holder<Biome>> editedParameters) {
+    public static MultiNoiseBiomeSource create(
+        Either<Climate.ParameterList<Holder<Biome>>, Holder<MultiNoiseBiomeSourceParameterList>> codecSide,
+        Climate.ParameterList<Holder<Biome>> editedParameters
+    ) {
         try {
             MultiNoiseBiomeSource instance = (MultiNoiseBiomeSource) UNSAFE.allocateInstance(GENERATED);
-
-            PARAMETERS_FIELD.set(instance, Either.right(overworldPreset));
+            PARAMETERS_FIELD.set(instance, codecSide);
             EDITED_PARAMETERS_FIELD.set(instance, editedParameters);
-
             setPossibleBiomes(instance, editedParameters);
             return instance;
         } catch (Throwable t) {
-            throw new IllegalStateException("failed to build transient multi_noise source", t);
+            throw new RuntimeException("failed to create transient multi_noise biome source", t);
         }
     }
 

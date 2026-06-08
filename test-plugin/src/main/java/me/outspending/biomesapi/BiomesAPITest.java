@@ -21,6 +21,7 @@ import me.outspending.biomesapi.wrapper.worldgen.valueproviders.FloatProvider;
 import me.outspending.biomesapi.wrapper.worldgen.valueproviders.HeightProvider;
 import me.outspending.biomesapi.wrapper.worldgen.valueproviders.VerticalAnchor;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.ChunkLoadEvent;
@@ -55,6 +56,7 @@ public final class BiomesAPITest extends JavaPlugin implements Listener {
             .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeatures.PATCH_FIREFLY_BUSH_NEAR_WATER)
             .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeatures.OAK_BEES_002)
             .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeatures.FANCY_OAK_BEES_002)
+            //.addFeature(GenerationStep.RAW_GENERATION, PlacedFeatures.ORE_EMERALD)
             .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeature.of(
                 ConfiguredFeatures.FLOWER_DEFAULT,
                 PlacementModifier.count(18),
@@ -84,6 +86,20 @@ public final class BiomesAPITest extends JavaPlugin implements Listener {
             ))
             .build();
 
+        BiomeGenerationSettings netherGen = BiomeGenerationSettings.builder()
+            .addFeature(GenerationStep.UNDERGROUND_DECORATION, PlacedFeatures.SPRING_LAVA)
+            .addFeature(GenerationStep.UNDERGROUND_DECORATION, PlacedFeatures.PATCH_FIRE)
+            .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeatures.WEEPING_VINES)
+            .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeatures.PATCH_CRIMSON_ROOTS)
+            .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeatures.NETHER_SPROUTS)
+            .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeatures.CRIMSON_FOREST_VEGETATION)
+            .addFeature(GenerationStep.UNDERGROUND_DECORATION, PlacedFeatures.GLOWSTONE_EXTRA)
+            .addFeature(GenerationStep.UNDERGROUND_DECORATION, PlacedFeatures.GLOWSTONE)
+            .addFeature(GenerationStep.UNDERGROUND_ORES, PlacedFeatures.ORE_MAGMA)
+            .addFeature(GenerationStep.UNDERGROUND_ORES, PlacedFeatures.ORE_GOLD_NETHER)
+            .addFeature(GenerationStep.UNDERGROUND_ORES, PlacedFeatures.ORE_QUARTZ_NETHER)
+            .build();
+
         var myBiomeKey = BiomeResourceKey.of("test", "mybiome");
         CustomBiome mybiome = CustomBiome.builder()
             .resourceKey(myBiomeKey)
@@ -97,10 +113,26 @@ public final class BiomesAPITest extends JavaPlugin implements Listener {
             .register();
         this.customBiome = mybiome;
 
+        var netherBiomeKey = BiomeResourceKey.of("test", "netherbiome");
+
+        CustomBiome.builder()
+            .resourceKey(netherBiomeKey)
+            .settings(BiomeSettings.defaultSettings())
+            .fogColor("#DB00FD")
+            .skyColor("#2F46FF")
+            .waterColor("#00FFD0")
+            .grassColor("#D1D13A")
+            .foliageColor("#FF6A00")
+            .setGenerationSettings(netherGen)
+            .register();
+
+        //World
 
         DimensionEditor dimensionEditor = DimensionEditor.create();
         var overworldKey = BiomeResourceKey.of("minecraft", "overworld");
+        var netherKey = BiomeResourceKey.of("minecraft", "the_nether");
         dimensionEditor.addToDimension(overworldKey, myBiomeKey, BiomeClimatePoint.builder().build());
+        dimensionEditor.addToDimension(netherKey, netherBiomeKey, BiomeClimatePoint.builder().build());
         dimensionEditor.apply();
 
         new WorldCreator("cute2")
