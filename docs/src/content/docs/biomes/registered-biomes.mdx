@@ -10,16 +10,16 @@ import SourceLink from "@/components/SourceLink.astro";
 
 In addition to being able to keep references to your <SourceLink path="biome/CustomBiome.java">CustomBiome</SourceLink>s
 in your own code, **BiomesAPI** also provides a built-in <SourceLink path="biome/RegisteredBiomes.java">RegisteredBiomes</SourceLink>
-that allows you to get a reference to your custom biomes just from a <SourceLink path="keys/ResourceKey.java">BiomeResourceKey</SourceLink>.
+that allows you to get a reference to your custom biomes just from a <SourceLink path="keys/ResourceKey.java">ResourceKey</SourceLink>.
 
 **RegisteredBiomes** exposes the following methods. The `*Lazily` variants return a <SourceLink path="util/Lazy.java">Lazy</SourceLink> that defers the lookup until first accessed.
 
-* <SourceLink path="biome/RegisteredBiomes.java" line={35}>get(BiomeResourceKey)</SourceLink>: Returns the custom biome for the given resource key, or `null` if none is registered.
-* <SourceLink path="biome/RegisteredBiomes.java" line={52}>getOrThrow(BiomeResourceKey)</SourceLink>: Returns the custom biome for the given resource key, or throws <SourceLink path="exceptions/UnknownBiomeException.java">UnknownBiomeException</SourceLink> if none is registered.
-* <SourceLink path="biome/RegisteredBiomes.java" line={67}>getLazily(BiomeResourceKey)</SourceLink>: A lazy version of `get` — the lookup runs on first access and may resolve to `null`.
-* <SourceLink path="biome/RegisteredBiomes.java" line={79}>getOrThrowLazily(BiomeResourceKey)</SourceLink>: A lazy version of `getOrThrow`. The `UnknownBiomeException` is thrown on first access if the biome is not registered.
-* <SourceLink path="biome/RegisteredBiomes.java" line={90}>isRegistered(BiomeResourceKey)</SourceLink>: Returns `true` if a biome with the given resource key is registered.
-* <SourceLink path="biome/RegisteredBiomes.java" line={102}>isRegisteredLazily(BiomeResourceKey)</SourceLink>: A lazy version of `isRegistered`.
+* <SourceLink path="biome/RegisteredBiomes.java" line={35}>get(ResourceKey)</SourceLink>: Returns the custom biome for the given resource key, or `null` if none is registered.
+* <SourceLink path="biome/RegisteredBiomes.java" line={52}>getOrThrow(ResourceKey)</SourceLink>: Returns the custom biome for the given resource key, or throws <SourceLink path="exceptions/UnknownBiomeException.java">UnknownBiomeException</SourceLink> if none is registered.
+* <SourceLink path="biome/RegisteredBiomes.java" line={67}>getLazily(ResourceKey)</SourceLink>: A lazy version of `get` — the lookup runs on first access and may resolve to `null`.
+* <SourceLink path="biome/RegisteredBiomes.java" line={79}>getOrThrowLazily(ResourceKey)</SourceLink>: A lazy version of `getOrThrow`. The `UnknownBiomeException` is thrown on first access if the biome is not registered.
+* <SourceLink path="biome/RegisteredBiomes.java" line={90}>isRegistered(ResourceKey)</SourceLink>: Returns `true` if a biome with the given resource key is registered.
+* <SourceLink path="biome/RegisteredBiomes.java" line={102}>isRegisteredLazily(ResourceKey)</SourceLink>: A lazy version of `isRegistered`.
 * <SourceLink path="biome/RegisteredBiomes.java" line={113}>iterator()</SourceLink>: Returns an iterator over all registered custom biomes (`RegisteredBiomes` implements `Iterable<CustomBiome>`).
 * <SourceLink path="biome/RegisteredBiomes.java" line={123}>size()</SourceLink>: Returns the number of registered custom biomes.
 * <SourceLink path="biome/RegisteredBiomes.java" line={133}>isEmpty()</SourceLink>: Returns `true` if no custom biomes are registered.
