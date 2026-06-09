@@ -25,7 +25,8 @@ export default defineConfig({
         replacesTitle: true,
       },
       social: [
-        { icon: 'github', label: 'GitHub', href: 'https://github.com/LumaLibre/BiomesAPI' }
+        { icon: 'github', label: 'GitHub', href: 'https://github.com/LumaLibre/BiomesAPI' },
+        { icon:  'discord', label: 'Discord', href: 'https://discord.gg/CCZGFg85jM' },
       ],
       sidebar: [
         {
