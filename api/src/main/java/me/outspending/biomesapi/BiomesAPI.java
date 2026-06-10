@@ -83,7 +83,7 @@ public interface BiomesAPI {
      */
     @AsOf("2.1.0")
     default boolean isShaded() {
-        return WIRE.optional().map(api -> api instanceof ShadedBiomesAPI).orElse(true);
+        return WIRE.optional().map(api -> api instanceof ShadedBiomesAPI).orElse(false);
     }
 
     /**
@@ -138,7 +138,7 @@ public interface BiomesAPI {
 
         private static final long ENABLE_WAIT_TIMEOUT_SECONDS = 10;
 
-        private static ShadedBiomesAPI INSTANCE;
+        private static @Nullable ShadedBiomesAPI INSTANCE;
         private volatile @Nullable Metrics metrics;
         private volatile boolean disableMetrics;
 
