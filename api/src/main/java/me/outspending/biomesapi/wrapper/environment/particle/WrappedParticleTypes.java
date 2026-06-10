@@ -12,7 +12,6 @@ import me.outspending.biomesapi.wrapper.environment.particle.options.SculkCharge
 import me.outspending.biomesapi.wrapper.environment.particle.options.SpellParticle;
 import me.outspending.biomesapi.wrapper.environment.particle.options.TrailParticle;
 import me.outspending.biomesapi.wrapper.environment.particle.options.VibrationParticle;
-import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.Nullable;
 import org.jspecify.annotations.NullMarked;
@@ -140,8 +139,8 @@ public enum WrappedParticleTypes {
     SHRIEK("shriek"),
     EGG_CRACK("egg_crack"),
     DUST_PLUME("dust_plume"),
-    TRIAL_SPAWNER_DETECTED_PLAYER("trial_spawner_detected_player"),
-    TRIAL_SPAWNER_DETECTED_PLAYER_OMINOUS("trial_spawner_detected_player_ominous"),
+    TRIAL_SPAWNER_DETECTED_PLAYER("trial_spawner_detection"),
+    TRIAL_SPAWNER_DETECTED_PLAYER_OMINOUS("trial_spawner_detection_ominous"),
     VAULT_CONNECTION("vault_connection"),
     DUST_PILLAR("dust_pillar", BlockParticle.class),
     OMINOUS_SPAWNING("ominous_spawning"),
