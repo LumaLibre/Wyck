@@ -46,6 +46,7 @@ public interface ResourceKey extends Key, Keyed, NmsHandle {
      * The path portion of this key.
      */
     @AsOf("0.0.15")
+    @KeyPattern.Value
     String path();
 
     /**

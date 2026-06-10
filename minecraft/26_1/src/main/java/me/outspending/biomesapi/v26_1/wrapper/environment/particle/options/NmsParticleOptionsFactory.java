@@ -109,7 +109,7 @@ public final class NmsParticleOptionsFactory implements ParticleOptionsFactory {
 
 
     @Override
-    public <T> ParticleTypeHandle typeByKey(String key) {
+    public ParticleTypeHandle typeByKey(String key) {
         Identifier id = Identifier.withDefaultNamespace(key);
         ParticleType<?> nms = BuiltInRegistries.PARTICLE_TYPE.getValue(id);
         if (nms == null) {
