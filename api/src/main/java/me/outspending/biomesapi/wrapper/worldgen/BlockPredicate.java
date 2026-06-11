@@ -6,6 +6,7 @@ import me.outspending.biomesapi.factory.WireProvider;
 import me.outspending.biomesapi.wrapper.internal.NmsHandle;
 import org.bukkit.Material;
 import org.bukkit.Tag;
+import org.bukkit.block.Biome;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.util.BlockVector;
@@ -24,10 +25,10 @@ import java.util.List;
  */
 @NullMarked
 @AsOf("2.3.0")
-public sealed interface BlockPredicate extends NmsHandle permits BlockPredicate.MatchingBlocks, BlockPredicate.MatchingBlockTag, BlockPredicate.MatchingFluids, BlockPredicate.HasSturdyFace, BlockPredicate.Replaceable, BlockPredicate.WouldSurvive, BlockPredicate.InsideWorldBounds, BlockPredicate.Unobstructed, BlockPredicate.AnyOf, BlockPredicate.AllOf, BlockPredicate.Not, BlockPredicate.True {
+public sealed interface BlockPredicate extends NmsHandle permits BlockPredicate.AllOf, BlockPredicate.AnyOf, BlockPredicate.HasSturdyFace, BlockPredicate.InsideWorldBounds, BlockPredicate.MatchingBiomes, BlockPredicate.MatchingBlockTag, BlockPredicate.MatchingBlocks, BlockPredicate.MatchingFluids, BlockPredicate.Not, BlockPredicate.Replaceable, BlockPredicate.True, BlockPredicate.Unobstructed, BlockPredicate.WouldSurvive {
 
     @ApiStatus.Internal
-    WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.worldgen.BlockPredicateFactoryImpl");
+    WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.*?.wrapper.worldgen.BlockPredicateFactoryImpl");
 
     @ApiStatus.Internal
     interface Factory {
@@ -273,4 +274,13 @@ public sealed interface BlockPredicate extends NmsHandle permits BlockPredicate.
 
     @AsOf("2.3.0")
     record True() implements BlockPredicate {}
+
+    @AsOf("2.3.0")
+    record MatchingBiomes(List<Biome> biomes) implements BlockPredicate {
+
+        @AsOf("2.3.0")
+        public MatchingBiomes {
+            biomes = List.copyOf(biomes);
+        }
+    }
 }

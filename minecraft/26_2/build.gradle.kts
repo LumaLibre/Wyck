@@ -2,11 +2,12 @@ plugins {
     alias(libs.plugins.paperweight.userdev)
 }
 
-group = "me.outspending.biomesapi.v26_1"
+group = "me.outspending.biomesapi.v26_2"
 
 dependencies {
     compileOnly(project(":api"))
-    paperweight.paperDevBundle(libs.versions.minecraft.v26.m1.r2)
+    compileOnly(project(":commons"))
+    paperweight.paperDevBundle(libs.versions.minecraft.v26.m2)
 }
 
 java {

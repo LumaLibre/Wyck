@@ -17,8 +17,10 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 @AsOf("2.0.0")
 public enum Versions {
-    V1_21_11(Version.of(Version.Type.SUPPORTED, "v1_21_11", "1.21.10", "1.21.11")),
-    V26_1(Version.of(Version.Type.SUPPORTED, "v26_1", "26.1", "26.1.1", "26.1.2"));
+    V1_21_10(Version.of(Version.Type.UNSUPPORTED, "v1_21_10", "1.21.9", "1.21.10")),
+    V1_21_11(Version.of(Version.Type.SUPPORTED, "v1_21_11", "1.21.11")),
+    V26_1(Version.of(Version.Type.SUPPORTED, "v26_1", "26.1", "26.1.1", "26.1.2")),
+    V26_2(Version.of(Version.Type.SUPPORTED, "v26_2", "26.2"));
 
     public static final Version ACTIVE = getActive();
 
@@ -54,6 +56,6 @@ public enum Versions {
             }
         }
 
-        throw new UnknownNMSVersionException(Version.of(Version.Type.UNKNOWN, "").getMessage());
+        throw new UnknownNMSVersionException(Version.of(me.outspending.biomesapi.factory.Version.Type.UNKNOWN, "").getMessage());
     }
 }
