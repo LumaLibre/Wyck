@@ -42,10 +42,7 @@ public class BlockPredicateFactoryImpl implements BlockPredicate.Factory {
                     net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate.not(toNmsPredicate(not.predicate()));
             case BlockPredicate.True _ ->
                     net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate.alwaysTrue();
-            case BlockPredicate.MatchingBiomes _ -> {
-                LOGGER.warning("BlockPredicate.MatchingBiomes is not supported in this version, defaulting to alwaysTrue()");
-                yield net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate.alwaysTrue();
-            }
+            case BlockPredicate.MatchingBiomes matchingBiomes -> matchingBiomes(matchingBiomes);
         };
     }
 
@@ -111,5 +108,10 @@ public class BlockPredicateFactoryImpl implements BlockPredicate.Factory {
 
     private net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate toNmsPredicate(BlockPredicate predicate) {
         return (net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate) predicate.toMinecraft();
+    }
+
+    protected Object matchingBiomes(BlockPredicate.MatchingBiomes matching) {
+        LOGGER.warning("BlockPredicate.MatchingBiomes is not supported in this version, defaulting to alwaysTrue()");
+        return net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate.alwaysTrue();
     }
 }

@@ -13,29 +13,14 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Optional;
 
-/**
- * A {@link SnapshotChunkData} backed by the chunk sections already decoded from the outgoing
- * packet. Construction is free (it only holds the section array); biome reads are computed on
- * demand and the center biome is memoized.
- *
- * <p>This is single-threaded by contract: the sections are local to one packet on one Netty
- * thread, so no synchronization is needed.
- *
- * @since 2.2.0
- * @author Jsinco
- */
 @NullMarked
 @ApiStatus.Internal
 public final class NmsSnapshotChunkData implements SnapshotChunkData {
 
-    // Noise biomes are stored at 4x4x4 per section: a block coordinate maps to a noise
-    // cell by >>2. Block 7 -> noise cell 1 (the legacy center sample at block 7,0,7).
-    private static final int CENTER_NOISE_XZ = 1;
-
     private final ChunkLocation location;
     private final LevelChunkSection[] sections;
 
-    private @Nullable Biome center; // memoized; null until first read
+    private @Nullable Biome center;
 
     public NmsSnapshotChunkData(ChunkLocation location, LevelChunkSection[] sections) {
         this.location = location;
@@ -70,7 +55,6 @@ public final class NmsSnapshotChunkData implements SnapshotChunkData {
 
     @Override
     public Optional<ChunkSnapshot> bukkitSnapshot() {
-        // No cheap, thread-safe snapshot is available from packet sections.
         return Optional.empty();
     }
 }

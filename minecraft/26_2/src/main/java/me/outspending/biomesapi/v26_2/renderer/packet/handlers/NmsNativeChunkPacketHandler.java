@@ -2,7 +2,6 @@ package me.outspending.biomesapi.v26_2.renderer.packet.handlers;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.annotations.WireFactory;
 import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.misc.ChunkLocation;

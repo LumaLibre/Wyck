@@ -9,7 +9,7 @@ plugins {
     alias(libs.plugins.modrinth.minotaur)
 }
 
-val supported = listOf("26.1.2", "1.21.11")
+val supported = listOf("26.2", "26.1.2", "1.21.11")
 val minecraft = ":minecraft"
 val minecraftProjects = project(minecraft)
     .subprojects
@@ -22,19 +22,19 @@ dependencies {
     compileOnly(libs.spongepowered.configurate.yaml)
     implementation(libs.faststats.metrics)
     implementation(project(":commons"))
+
+    for (project in minecraftProjects) {
+        implementation(project(path = "${minecraft}:${project}"))
+    }
 }
 
 tasks {
     shadowJar {
-        relocate("dev.faststats", "me.outspending.biomesapi.paper.metrics")
+        relocate("dev.faststats", "me.outspending.biomesapi.metrics")
         relocate("org.objectweb.asm", "me.outspending.biomesapi.asm")
         exclude("com/google/**")
 
-        dependencies {
-            exclude(dependency("org.ow2.asm:asm"))
-        }
         minimize {
-            exclude("dev.faststats")
             exclude(project(":api"))
             exclude(project(":commons"))
             for (project in minecraftProjects) {
