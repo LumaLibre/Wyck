@@ -1,6 +1,5 @@
 package me.outspending.biomesapi.v26_2.renderer.packet.handlers.data;
 
-import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.misc.ChunkLocation;
 import me.outspending.biomesapi.renderer.packet.data.SnapshotChunkData;
 import net.minecraft.core.Holder;
@@ -22,12 +21,10 @@ import java.util.Optional;
  * <p>This is single-threaded by contract: the sections are local to one packet on one Netty
  * thread, so no synchronization is needed.
  *
- * @version 2.2.0
  * @since 2.2.0
  * @author Jsinco
  */
 @NullMarked
-@AsOf("2.2.0")
 @ApiStatus.Internal
 public final class NmsSnapshotChunkData implements SnapshotChunkData {
 

@@ -14,7 +14,6 @@ import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 @WireFactory
-@AsOf("2.3.0")
 @ApiStatus.Internal
 public final class IntProviderFactoryImpl implements IntProvider.Factory {
 

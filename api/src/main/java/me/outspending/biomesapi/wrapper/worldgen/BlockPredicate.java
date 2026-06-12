@@ -275,10 +275,10 @@ public sealed interface BlockPredicate extends NmsHandle permits BlockPredicate.
     @AsOf("2.3.0")
     record True() implements BlockPredicate {}
 
-    @AsOf("2.3.0")
+    @AsOf("2.3.1")
     record MatchingBiomes(List<Biome> biomes) implements BlockPredicate {
 
-        @AsOf("2.3.0")
+        @AsOf("2.3.1")
         public MatchingBiomes {
             biomes = List.copyOf(biomes);
         }

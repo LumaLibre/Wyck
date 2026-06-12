@@ -32,7 +32,6 @@ import java.lang.reflect.Field;
 
 @NullMarked
 @WireFactory
-@AsOf("0.0.6")
 @ApiStatus.Internal
 public final class NmsNativeChunkPacketHandler implements NativeChunkPacketHandler {
 
