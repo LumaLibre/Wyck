@@ -42,6 +42,36 @@ public record PhonyCustomBiome(
     PacketHandler.Priority priority
 ) {
 
+    /**
+     * Gets the {@link CustomBiome} associated with this phony biome.
+     * If the custom biome does not exist, it will be created without being registered.
+     *
+     * @return the CustomBiome associated with this phony biome.
+     * @since 0.0.10
+     */
+    @AsOf("0.0.10")
+    public CustomBiome customBiome() {
+        CustomBiome customBiome = RegisteredBiomes.get(biomeResourceKey);
+        if (customBiome != null) {
+            return customBiome;
+        }
+        CustomBiome other = CustomBiome.builder(biomeResourceKey).build();
+        RegisteredBiomes.appendBiome(other);
+        return other;
+    }
+
+    /**
+     * Alias for {@link #customBiome()}.
+     * @return the CustomBiome associated with this phony biome.
+     * @since 0.0.10
+     * @deprecated Use {@link #customBiome()} instead.
+     */
+    @Deprecated
+    @AsOf("0.0.10")
+    public CustomBiome toCustomBiome() {
+        return customBiome();
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -55,14 +85,12 @@ public record PhonyCustomBiome(
         return Objects.hash(biomeResourceKey);
     }
 
-    public CustomBiome toCustomBiome() {
-        return RegisteredBiomes.getOrThrow(biomeResourceKey);
-    }
-
-    public CustomBiome customBiome() {
-        return toCustomBiome();
-    }
-
+    /**
+     * Creates a new Builder instance.
+     * @return a new Builder instance
+     * @since 0.0.10
+     */
+    @AsOf("0.0.10")
     public static Builder builder() {
         return new Builder();
     }
@@ -75,9 +103,9 @@ public record PhonyCustomBiome(
      */
     @AsOf("0.0.10")
     public static class Builder {
-        private ResourceKey biomeResourceKey;
+        private @Nullable ResourceKey biomeResourceKey;
         private BiPredicate<Player, ChunkLocation> conditional = (player, chunkLocation) -> true;
-        private BiPredicate<Player, SnapshotChunkData> biomeCondition = null;
+        private @Nullable BiPredicate<Player, SnapshotChunkData> biomeCondition = null;
         private PacketHandler.Priority priority = PacketHandler.Priority.NORMAL;
 
         @AsOf("0.0.6")

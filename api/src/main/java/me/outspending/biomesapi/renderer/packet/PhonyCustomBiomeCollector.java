@@ -127,7 +127,7 @@ public class PhonyCustomBiomeCollector {
     @AsOf("0.0.8")
     public @Nullable CustomBiome bestCustomBiomeFor(Player player, ChunkLocation chunkLocation) {
         PhonyCustomBiome phony = bestBiomeFor(player, chunkLocation);
-        return phony != null ? phony.toCustomBiome() : null;
+        return phony != null ? phony.customBiome() : null;
     }
 
     /**
@@ -150,7 +150,7 @@ public class PhonyCustomBiomeCollector {
         }
         return snapshot -> {
             PhonyCustomBiome best = bestMatching(candidates, player, snapshot);
-            return best == null ? null : best.toCustomBiome();
+            return best == null ? null : best.customBiome();
         };
     }
 
