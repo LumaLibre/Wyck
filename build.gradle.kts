@@ -29,7 +29,7 @@ allprojects {
 
     dependencies {
         val libs = rootProject.libs
-        implementation(libs.google.guava)
+        compileOnly(libs.google.guava)
         compileOnly(libs.kyori.adventure)
         compileOnly(libs.kyori.minimessage)
     }
