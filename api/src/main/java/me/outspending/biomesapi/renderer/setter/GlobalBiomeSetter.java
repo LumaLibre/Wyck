@@ -2,7 +2,7 @@ package me.outspending.biomesapi.renderer.setter;
 
 import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.annotations.AsOf;
-import me.outspending.biomesapi.biome.CustomBiome;
+import me.outspending.biomesapi.biome.AbstractBiome;
 import me.outspending.biomesapi.misc.PointRange3D;
 import me.outspending.biomesapi.renderer.updater.BiomeUpdater;
 import org.bukkit.Chunk;
@@ -44,19 +44,19 @@ public class GlobalBiomeSetter implements BiomeSetter {
     }
 
     @Override
-    public void setBlockBiome(Block block, CustomBiome customBiome) {
-        setBlockBiome(block, customBiome, false);
+    public void setBlockBiome(Block block, AbstractBiome abstractBiome) {
+        setBlockBiome(block, abstractBiome, false);
     }
 
     @Override
-    public void setBlockBiome(Block block, CustomBiome customBiome, boolean updateBiome) {
+    public void setBlockBiome(Block block, AbstractBiome abstractBiome, boolean updateBiome) {
         Preconditions.checkNotNull(block, "block cannot be null");
-        Preconditions.checkNotNull(customBiome, "customBiome cannot be null");
+        Preconditions.checkNotNull(abstractBiome, "abstractBiome cannot be null");
 
         Location location = block.getLocation();
         RegionAccessor accessor = getRegionAccessor(location);
 
-        accessor.setBiome(location.getBlockX(), location.getBlockY(), location.getBlockZ(), customBiome.toBukkitBiome());
+        accessor.setBiome(location.getBlockX(), location.getBlockY(), location.getBlockZ(), abstractBiome.toBukkitBiome());
 
         if (updateBiome) {
             biomeUpdater.updateChunkAsync(location.getWorld().getChunkAtAsync(location));
@@ -64,33 +64,33 @@ public class GlobalBiomeSetter implements BiomeSetter {
     }
 
     @Override
-    public void setChunkBiome(Chunk chunk, CustomBiome customBiome) {
+    public void setChunkBiome(Chunk chunk, AbstractBiome abstractBiome) {
         World.Environment env = chunk.getWorld().getEnvironment();
         int minHeight = getMinHeight(env);
         int maxHeight = getMaxHeight(env);
-        setChunkBiome(chunk, minHeight, maxHeight, customBiome);
+        setChunkBiome(chunk, minHeight, maxHeight, abstractBiome);
     }
 
     @Override
-    public void setChunkBiome(Chunk chunk, CustomBiome customBiome, boolean updateBiome) {
+    public void setChunkBiome(Chunk chunk, AbstractBiome abstractBiome, boolean updateBiome) {
         World.Environment env = chunk.getWorld().getEnvironment();
         int minHeight = getMinHeight(env);
         int maxHeight = getMaxHeight(env);
-        setChunkBiome(chunk, minHeight, maxHeight, customBiome, updateBiome);
+        setChunkBiome(chunk, minHeight, maxHeight, abstractBiome, updateBiome);
     }
 
     @Override
-    public void setChunkBiome(Chunk chunk, int minHeight, int maxHeight, CustomBiome customBiome) {
-        setChunkBiome(chunk, minHeight, maxHeight, customBiome, false);
+    public void setChunkBiome(Chunk chunk, int minHeight, int maxHeight, AbstractBiome abstractBiome) {
+        setChunkBiome(chunk, minHeight, maxHeight, abstractBiome, false);
     }
 
     @Override
-    public void setChunkBiome(Chunk chunk, int minHeight, int maxHeight, CustomBiome customBiome, boolean updateBiome) {
+    public void setChunkBiome(Chunk chunk, int minHeight, int maxHeight, AbstractBiome abstractBiome, boolean updateBiome) {
         Preconditions.checkNotNull(chunk, "chunk cannot be null");
-        Preconditions.checkNotNull(customBiome, "customBiome cannot be null");
+        Preconditions.checkNotNull(abstractBiome, "abstractBiome cannot be null");
 
         RegionAccessor accessor = chunk.getWorld();
-        Biome biome = customBiome.toBukkitBiome();
+        Biome biome = abstractBiome.toBukkitBiome();
 
         int minX = chunk.getX() << 4;
         int maxX = minX + 16;
@@ -113,50 +113,50 @@ public class GlobalBiomeSetter implements BiomeSetter {
     }
 
     @Override
-    public void setBoundingBoxBiome(World world, BoundingBox boundingBox, CustomBiome customBiome) {
-        setRegionBiome(world, boundingBox.getMin(), boundingBox.getMax(), customBiome);
+    public void setBoundingBoxBiome(World world, BoundingBox boundingBox, AbstractBiome abstractBiome) {
+        setRegionBiome(world, boundingBox.getMin(), boundingBox.getMax(), abstractBiome);
     }
 
     @Override
-    public void setRegionBiome(Location from, Location to, CustomBiome customBiome) {
+    public void setRegionBiome(Location from, Location to, AbstractBiome abstractBiome) {
         World world = from.getWorld();
         if (!world.equals(to.getWorld())) {
             throw new IllegalArgumentException("Locations must be in the same world!");
         }
 
-        setRegionBiome(world, from, to, customBiome, false);
+        setRegionBiome(world, from, to, abstractBiome, false);
     }
 
     @Override
-    public void setRegionBiome(Location from, Location to, CustomBiome customBiome, boolean updateBiome) {
+    public void setRegionBiome(Location from, Location to, AbstractBiome abstractBiome, boolean updateBiome) {
         World world = from.getWorld();
         if (!world.equals(to.getWorld())) {
             throw new IllegalArgumentException("Locations must be in the same world!");
         }
 
-        setRegionBiome(world, from, to, customBiome, updateBiome);
+        setRegionBiome(world, from, to, abstractBiome, updateBiome);
     }
 
     @Override
-    public void setRegionBiome(World world, Vector from, Vector to, CustomBiome customBiome) {
-        setRegionBiome(world, from, to, customBiome, false);
+    public void setRegionBiome(World world, Vector from, Vector to, AbstractBiome abstractBiome) {
+        setRegionBiome(world, from, to, abstractBiome, false);
     }
 
     @Override
-    public void setRegionBiome(World world, Vector from, Vector to, CustomBiome customBiome, boolean updateBiome) {
-        setRegionBiome(world, from.toLocation(world), to.toLocation(world), customBiome, updateBiome);
+    public void setRegionBiome(World world, Vector from, Vector to, AbstractBiome abstractBiome, boolean updateBiome) {
+        setRegionBiome(world, from.toLocation(world), to.toLocation(world), abstractBiome, updateBiome);
     }
 
     @Override
-    public void setRegionBiome(World world, Location from, Location to, CustomBiome customBiome, boolean updateBiome) {
+    public void setRegionBiome(World world, Location from, Location to, AbstractBiome abstractBiome, boolean updateBiome) {
         Preconditions.checkNotNull(world, "world cannot be null");
         Preconditions.checkNotNull(from, "from cannot be null");
         Preconditions.checkNotNull(to, "to cannot be null");
-        Preconditions.checkNotNull(customBiome, "customBiome cannot be null");
+        Preconditions.checkNotNull(abstractBiome, "abstractBiome cannot be null");
 
         Preconditions.checkArgument(!from.getWorld().equals(to.getWorld()), "Locations must be in the same world!");
 
-        Biome biome = customBiome.toBukkitBiome();
+        Biome biome = abstractBiome.toBukkitBiome();
         PointRange3D range = PointRange3D.of(from, to);
 
         for (int x = range.minX(); x <= range.maxX(); x++) {
