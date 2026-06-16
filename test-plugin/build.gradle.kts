@@ -5,7 +5,7 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":commons"))
+    implementation(project(":bundle"))
     paperweight.paperDevBundle(libs.versions.minecraft.v1.m21.r11)
 }
 
@@ -25,10 +25,10 @@ tasks {
     }
 
     runServer {
-        minecraftVersion("26.1.2")
-        downloadPlugins {
-            modrinth("gBIw3Gvy", "4.2.2")
-        }
+        minecraftVersion("26.2")
+//        downloadPlugins {
+//            modrinth("gBIw3Gvy", "4.2.2")
+//        }
         //args("--safeMode")
         //commandLine.add("--safeMode")
     }

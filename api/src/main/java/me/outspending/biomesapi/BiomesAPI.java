@@ -1,9 +1,8 @@
 package me.outspending.biomesapi;
 
 import com.google.common.base.Preconditions;
-import dev.faststats.bukkit.BukkitMetrics;
-import dev.faststats.core.Metrics;
-import dev.faststats.core.data.Metric;
+import dev.faststats.bukkit.BukkitContext;
+import dev.faststats.data.Metric;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.biome.RegisteredBiomes;
 import me.outspending.biomesapi.factory.BuildInfo;
@@ -101,14 +100,14 @@ public interface BiomesAPI {
      * @since 2.1.0
      */
     @AsOf("2.1.0")
-    @Nullable Metrics metrics();
+    @Nullable BukkitContext metrics();
 
 
     /**
-     * Disables metrics for BiomesAPI when shaded into a consumer plugin.
-     * @since 2.2.0
+     * Disables metrics for BiomesAPI when running as a shaded library.
      * @throws UnsupportedOperationException if BiomesAPI is running as a standalone plugin.
      * @throws IllegalStateException if metrics are already enabled.
+     * @since 2.2.0
      */
     @AsOf("2.2.0")
     default void disableMetrics() {
@@ -116,11 +115,9 @@ public interface BiomesAPI {
             throw new UnsupportedOperationException("Cannot disable metrics for BiomesAPI as an external plugin.");
         }
         ShadedBiomesAPI shaded = (ShadedBiomesAPI) biomesapi();
-        if (shaded.metrics == null) {
-            shaded.disableMetrics = true;
-        } else {
-            throw new IllegalStateException("Metrics already enabled, call this method in onLoad() or onEnable().");
-        }
+        Preconditions.checkState(!shaded.disableMetrics, "Metrics already disabled.");
+        Preconditions.checkState(shaded.metrics == null, "Metrics already enabled, call this method in onLoad() or onEnable().");
+        shaded.disableMetrics = true;
     }
 
     /**
@@ -139,7 +136,7 @@ public interface BiomesAPI {
         private static final long ENABLE_WAIT_TIMEOUT_SECONDS = 10;
 
         private static @Nullable ShadedBiomesAPI INSTANCE;
-        private volatile @Nullable Metrics metrics;
+        private volatile @Nullable BukkitContext metrics;
         private volatile boolean disableMetrics;
 
         private static synchronized ShadedBiomesAPI get() {
@@ -150,7 +147,7 @@ public interface BiomesAPI {
         }
 
         @Override
-        public @Nullable Metrics metrics() {
+        public @Nullable BukkitContext metrics() {
             return metrics;
         }
 
@@ -208,12 +205,13 @@ public interface BiomesAPI {
         }
 
         private void setupMetrics(JavaPlugin plugin) {
-            Metrics built = BukkitMetrics.factory()
-                    .token(BuildInfo.METRICS_TOKEN)
-                    .addMetric(Metric.number("registered_biomes", RegisteredBiomes::size))
-                    .addMetric(Metric.bool("is_external", this::isExternal))
-                    .addMetric(Metric.string("plugin_name", plugin::getName))
-                    .create(plugin);
+            BukkitContext built = new BukkitContext.Factory(plugin, BuildInfo.METRICS_TOKEN)
+                .metrics(factory ->
+                    factory.addMetric(Metric.number("registered_biomes", RegisteredBiomes::size))
+                        .addMetric(Metric.bool("is_external", this::isExternal))
+                        .addMetric(Metric.string("plugin_name", plugin::getName))
+                        .create())
+                    .create();
 
             this.metrics = built;
 

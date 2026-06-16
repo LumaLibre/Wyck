@@ -1,9 +1,7 @@
 package me.outspending.biomesapi.paper;
 
-import dev.faststats.bukkit.BukkitMetrics;
-import dev.faststats.core.ErrorTracker;
-import dev.faststats.core.Metrics;
-import dev.faststats.core.data.Metric;
+import dev.faststats.bukkit.BukkitContext;
+import dev.faststats.data.Metric;
 import me.outspending.biomesapi.BiomesAPI;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.annotations.WireFactory;
@@ -28,11 +26,10 @@ public final class BiomesAPIPlugin extends JavaPlugin implements BiomesAPI {
 
     public static boolean STOPPING = false;
     private static final String CONFIG_FILE = "settings.yml";
-    private static final ErrorTracker ERROR_TRACKER = ErrorTracker.contextAware();
 
     private final PacketHandlerFactoryPluginImpl handlerFactory;
     private final BiomesAPIPluginConfig config;
-    private Metrics metrics;
+    private BukkitContext metrics;
 
     public BiomesAPIPlugin() {
         BiomesAPIPluginConfig loaded;
@@ -64,14 +61,15 @@ public final class BiomesAPIPlugin extends JavaPlugin implements BiomesAPI {
         handlerFactory.enableDeferredHandlers();
 
         if (config.metrics()) {
-            metrics = BukkitMetrics.factory()
-                    .token(BuildInfo.METRICS_TOKEN)
-                    .errorTracker(ERROR_TRACKER)
-                    .addMetric(Metric.string("forced_injector", () -> config.forcedInjector().toString()))
-                    .addMetric(Metric.number("registered_biomes", RegisteredBiomes::size))
-                    .addMetric(Metric.bool("is_external", this::isExternal))
-                    .addMetric(Metric.string("plugin_name", () -> "BiomesAPI (Standalone)"))
-                    .create(this);
+            metrics = new BukkitContext.Factory(this, BuildInfo.METRICS_TOKEN)
+                .metrics(factory ->
+                    factory.addMetric(Metric.string("forced_injector", () -> config.forcedInjector().toString()))
+                        .addMetric(Metric.number("registered_biomes", RegisteredBiomes::size))
+                        .addMetric(Metric.bool("is_external", this::isExternal))
+                        .addMetric(Metric.string("plugin_name", () -> "BiomesAPI (Standalone)"))
+                        .create())
+                .create();
+
 
             metrics.ready();
             getComponentLogger().info("Metrics enabled");
@@ -97,7 +95,7 @@ public final class BiomesAPIPlugin extends JavaPlugin implements BiomesAPI {
     }
 
     @Override
-    public @Nullable Metrics metrics() {
+    public @Nullable BukkitContext metrics() {
         return metrics;
     }
 

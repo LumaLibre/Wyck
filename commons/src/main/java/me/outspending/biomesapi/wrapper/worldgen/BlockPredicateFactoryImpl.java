@@ -1,5 +1,6 @@
 package me.outspending.biomesapi.wrapper.worldgen;
 
+import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.annotations.WireFactory;
 import org.bukkit.NamespacedKey;
@@ -9,12 +10,15 @@ import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 @NullMarked
 @WireFactory
 @AsOf("2.3.0")
 @ApiStatus.Internal
-public final class BlockPredicateFactoryImpl implements BlockPredicate.Factory {
+public class BlockPredicateFactoryImpl implements BlockPredicate.Factory {
+
+    private static final Logger LOGGER = Logger.getLogger(BlockPredicateFactoryImpl.class.getName());
 
     @Override
     public Object toNms(BlockPredicate predicate) {
@@ -36,8 +40,9 @@ public final class BlockPredicateFactoryImpl implements BlockPredicate.Factory {
                     net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate.allOf(toNmsList(allOf.predicates()));
             case BlockPredicate.Not not ->
                     net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate.not(toNmsPredicate(not.predicate()));
-            case BlockPredicate.True ignored ->
+            case BlockPredicate.True _ ->
                     net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate.alwaysTrue();
+            case BlockPredicate.MatchingBiomes matchingBiomes -> matchingBiomes(matchingBiomes);
         };
     }
 
@@ -88,9 +93,8 @@ public final class BlockPredicateFactoryImpl implements BlockPredicate.Factory {
                 net.minecraft.resources.Identifier.withDefaultNamespace(fluid.key());
         net.minecraft.world.level.material.Fluid resolved =
                 net.minecraft.core.registries.BuiltInRegistries.FLUID.getValue(location);
-        if (resolved == null) {
-            throw new IllegalArgumentException("Fluid " + fluid.key() + " does not resolve in the fluid registry");
-        }
+
+        Preconditions.checkNotNull(resolved, "Fluid " + fluid.key() + " does not resolve in the fluid registry");
         return resolved;
     }
 
@@ -104,5 +108,10 @@ public final class BlockPredicateFactoryImpl implements BlockPredicate.Factory {
 
     private net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate toNmsPredicate(BlockPredicate predicate) {
         return (net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate) predicate.toMinecraft();
+    }
+
+    protected Object matchingBiomes(BlockPredicate.MatchingBiomes matching) {
+        LOGGER.warning("BlockPredicate.MatchingBiomes is not supported in this version, defaulting to alwaysTrue()");
+        return net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate.alwaysTrue();
     }
 }

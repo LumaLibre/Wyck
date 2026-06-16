@@ -6,8 +6,10 @@ rootProject.name = "BiomesAPI"
 
 include(":api")
 include(":commons")
+include(":bundle")
+include(":codegen")
+include(":paper")
+include(":test-plugin")
 include(":minecraft:1_21_11")
 include(":minecraft:26_1")
-include(":test-plugin")
-include("paper")
-include("codegen")
+include(":minecraft:26_2")

@@ -1,6 +1,5 @@
-package me.outspending.biomesapi.v1_21_11.renderer.packet.data;
+package me.outspending.biomesapi.v26_2.renderer.packet.handlers.data;
 
-import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.misc.ChunkLocation;
 import me.outspending.biomesapi.renderer.packet.data.SnapshotChunkData;
 import net.minecraft.core.Holder;
@@ -15,14 +14,13 @@ import org.jspecify.annotations.Nullable;
 import java.util.Optional;
 
 @NullMarked
-@AsOf("2.2.0")
 @ApiStatus.Internal
 public final class NmsSnapshotChunkData implements SnapshotChunkData {
 
     private final ChunkLocation location;
     private final LevelChunkSection[] sections;
 
-    private @Nullable Biome center; // memoized; null until first read
+    private @Nullable Biome center;
 
     public NmsSnapshotChunkData(ChunkLocation location, LevelChunkSection[] sections) {
         this.location = location;
@@ -57,7 +55,6 @@ public final class NmsSnapshotChunkData implements SnapshotChunkData {
 
     @Override
     public Optional<ChunkSnapshot> bukkitSnapshot() {
-        // No cheap, thread-safe snapshot is available from packet sections.
         return Optional.empty();
     }
 }

@@ -35,6 +35,8 @@ import java.util.Optional;
 @AsOf("2.2.0")
 public interface SnapshotChunkData {
 
+    int CENTER_NOISE_XZ = 1;
+
     /**
      * @return the chunk this data belongs to
      */

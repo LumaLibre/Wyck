@@ -10,7 +10,7 @@ import java.lang.reflect.Constructor;
 /**
  * A provider for lazily loading factory instances based on the active Minecraft version.
  * @param <F> the type of the factory
- * @version 2.2.0
+ * @version 2.3.0
  * @since 2.0.0
  * @author Jsinco
  */
@@ -20,6 +20,8 @@ import java.lang.reflect.Constructor;
 public sealed class WireProvider<F> permits NullableWireProvider {
 
     private static final String ALLOWED_PACKAGE = "me.outspending.biomesapi";
+    private static final String VERSION_EXPECTED = "*";
+    private static final String VERSION_AVAILABLE = "*?";
 
     private final String classNameTemplate;
     protected volatile @Nullable F factory;
@@ -80,21 +82,19 @@ public sealed class WireProvider<F> permits NullableWireProvider {
     }
 
     @AsOf("2.2.0")
-    @SuppressWarnings("unchecked")
     private F newInstance() {
         Constructor<? extends F> ctor = cachedCtor;
         if (ctor == null) {
             synchronized (this) {
                 ctor = cachedCtor;
                 if (ctor == null) {
-                    String resolved = classNameTemplate.replace("*", Versions.ACTIVE.id());
                     try {
-                        Class<? extends F> cls = (Class<? extends F>) Class.forName(resolved);
+                        Class<? extends F> cls = resolveClass();
                         ctor = cls.getDeclaredConstructor();
                         ctor.setAccessible(true);
                         cachedCtor = ctor;
-                    } catch (ReflectiveOperationException e) {
-                        throw new IllegalStateException("Failed to load wire factory: " + resolved, e);
+                    } catch (NoSuchMethodException e) {
+                        throw new IllegalStateException("Failed to load wire factory constructor for: " + classNameTemplate, e);
                     }
                 }
             }
@@ -103,6 +103,37 @@ public sealed class WireProvider<F> permits NullableWireProvider {
             return ctor.newInstance();
         } catch (ReflectiveOperationException e) {
             throw new IllegalStateException("Failed to instantiate wire factory", e);
+        }
+    }
+
+    /**
+     * Resolves the backing factory class from {@link #classNameTemplate}, applying
+     * whichever version operator the template uses.
+     * @return the resolved factory class
+     */
+    @AsOf("2.3.0")
+    @SuppressWarnings("unchecked")
+    private Class<? extends F> resolveClass() {
+        if (classNameTemplate.contains(VERSION_AVAILABLE)) {
+            String versioned = classNameTemplate.replace(VERSION_AVAILABLE, Versions.ACTIVE.id());
+            try {
+                return (Class<? extends F>) Class.forName(versioned);
+            } catch (ClassNotFoundException ignored) {
+                String fallback = classNameTemplate.replace(VERSION_AVAILABLE + ".", "");
+                try {
+                    return (Class<? extends F>) Class.forName(fallback);
+                } catch (ClassNotFoundException e) {
+                    throw new IllegalStateException(
+                        "Failed to load wire factory: tried '" + versioned + "' then '" + fallback + "'", e);
+                }
+            }
+        }
+
+        String resolved = classNameTemplate.replace(VERSION_EXPECTED, Versions.ACTIVE.id());
+        try {
+            return (Class<? extends F>) Class.forName(resolved);
+        } catch (ClassNotFoundException e) {
+            throw new IllegalStateException("Failed to load wire factory: " + resolved, e);
         }
     }
 
