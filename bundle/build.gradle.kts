@@ -6,12 +6,12 @@ val minecraftProjects = project(minecraft)
 
 dependencies {
     val libs = rootProject.libs
-    implementation(project(":api"))
-    implementation(project(":commons"))
+    api(project(":api"))
+    api(project(":commons"))
 
     // NMS Implementations
     for (project in minecraftProjects) {
-        implementation(project(path = "${minecraft}:${project}"))
+        api(project(path = "${minecraft}:${project}"))
     }
 }
 
