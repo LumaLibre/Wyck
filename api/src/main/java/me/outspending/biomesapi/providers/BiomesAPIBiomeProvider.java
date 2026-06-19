@@ -1,6 +1,7 @@
 package me.outspending.biomesapi.providers;
 
 import me.outspending.biomesapi.annotations.AsOf;
+import me.outspending.biomesapi.biome.AbstractBiome;
 import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.keys.ResourceKey;
 import org.bukkit.block.Biome;
@@ -21,16 +22,15 @@ import java.util.Map;
  * @author Jsinco
  */
 @NullMarked
-@AsOf("2.3.0")
-@ApiStatus.Experimental
-public abstract class CustomBiomeProvider extends BiomeProvider {
+@AsOf("2.3.1")
+public abstract class BiomesAPIBiomeProvider extends BiomeProvider {
 
-    protected final Map<ResourceKey, CustomBiome> biomeMap;
+    protected final Map<ResourceKey, AbstractBiome> biomeMap;
 
-    @AsOf("2.3.0")
-    public CustomBiomeProvider(Collection<CustomBiome> biomes) {
+    @AsOf("2.3.1")
+    public BiomesAPIBiomeProvider(Collection<AbstractBiome> biomes) {
         this.biomeMap = new HashMap<>();
-        for (CustomBiome biome : biomes) {
+        for (AbstractBiome biome : biomes) {
             biomeMap.put(biome.getResourceKey(), biome);
         }
     }
@@ -38,11 +38,11 @@ public abstract class CustomBiomeProvider extends BiomeProvider {
     @Override
     @AsOf("2.3.0")
     public List<Biome> getBiomes(WorldInfo worldInfo) {
-        return biomeMap.values().stream().map(CustomBiome::toBukkitBiome).toList();
+        return biomeMap.values().stream().map(AbstractBiome::toBukkitBiome).toList();
     }
 
-    @AsOf("2.3.0")
-    public Map<ResourceKey, CustomBiome> getBiomeMap() {
+    @AsOf("2.3.1")
+    public Map<ResourceKey, AbstractBiome> getBiomeMap() {
         return biomeMap;
     }
 }

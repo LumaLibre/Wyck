@@ -110,7 +110,7 @@ public final class BiomesAPITest extends JavaPlugin implements Listener {
             .waterColor("#00FFD0")
             .grassColor("#D1D13A")
             .foliageColor("#FF6A00")
-            .setGenerationSettings(TestPluginBootstrapper.newGen)
+            .setGenerationSettings(generation)
             .register();
         this.customBiome = mybiome;
 

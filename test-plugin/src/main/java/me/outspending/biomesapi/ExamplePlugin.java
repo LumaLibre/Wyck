@@ -1,5 +1,6 @@
 package me.outspending.biomesapi;
 
+import io.papermc.paper.dialog.Dialog;
 import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.renderer.packet.PacketHandler;
 import me.outspending.biomesapi.renderer.packet.data.PhonyCustomBiome;
@@ -10,6 +11,7 @@ public class ExamplePlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        Dialog
         ResourceKey key = ResourceKey.minecraft("plains");
         PhonyCustomBiome phonyCustomBiome = PhonyCustomBiome.builder()
             .setCustomBiome(key)

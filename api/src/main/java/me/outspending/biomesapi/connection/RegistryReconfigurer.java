@@ -21,7 +21,6 @@ import java.util.function.Consumer;
  */
 @NullMarked
 @AsOf("2.2.0")
-@ApiStatus.Experimental
 public interface RegistryReconfigurer {
 
     @ApiStatus.Internal

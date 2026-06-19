@@ -2,10 +2,9 @@ package me.outspending.biomesapi.providers;
 
 import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.annotations.AsOf;
-import me.outspending.biomesapi.biome.CustomBiome;
+import me.outspending.biomesapi.biome.AbstractBiome;
 import org.bukkit.block.Biome;
 import org.bukkit.generator.WorldInfo;
-import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.HashMap;
@@ -19,13 +18,12 @@ import java.util.Map;
  */
 @NullMarked
 @AsOf("2.3.0")
-@ApiStatus.Experimental
-public final class ReplacementBiomeProvider extends CustomBiomeProvider {
+public final class ReplacementBiomeProvider extends BiomesAPIBiomeProvider {
 
-    private final Map<Biome, CustomBiome> replacements;
+    private final Map<Biome, AbstractBiome> replacements;
 
     @AsOf("2.3.0")
-    public ReplacementBiomeProvider(Map<Biome, CustomBiome> replacements) {
+    public ReplacementBiomeProvider(Map<Biome, AbstractBiome> replacements) {
         this.replacements = replacements;
         super(replacements.values());
     }
@@ -34,7 +32,7 @@ public final class ReplacementBiomeProvider extends CustomBiomeProvider {
     @AsOf("2.3.0")
     public Biome getBiome(WorldInfo worldInfo, int x, int y, int z) {
         Biome vanilla = worldInfo.vanillaBiomeProvider().getBiome(worldInfo, x, y, z);
-        CustomBiome replacement = replacements.get(vanilla);
+        AbstractBiome replacement = replacements.get(vanilla);
         return replacement != null ? replacement.toBukkitBiome() : vanilla;
     }
 
@@ -51,10 +49,10 @@ public final class ReplacementBiomeProvider extends CustomBiomeProvider {
      */
     @AsOf("2.3.0")
     public static class Builder {
-        private final Map<Biome, CustomBiome> replacements = new HashMap<>();
+        private final Map<Biome, AbstractBiome> replacements = new HashMap<>();
 
         @AsOf("2.3.0")
-        public Builder replace(Biome original, CustomBiome replacement) {
+        public Builder replace(Biome original, AbstractBiome replacement) {
             Preconditions.checkNotNull(original, "original cannot be null");
             Preconditions.checkNotNull(replacement, "replacement cannot be null");
             replacements.put(original, replacement);

@@ -9,7 +9,3 @@ dependencies {
     compileOnly(project(":commons"))
     paperweight.paperDevBundle(libs.versions.minecraft.v26.m2)
 }
-
-java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(25))
-}

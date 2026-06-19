@@ -2,10 +2,9 @@ package me.outspending.biomesapi.providers;
 
 import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.annotations.AsOf;
-import me.outspending.biomesapi.biome.CustomBiome;
+import me.outspending.biomesapi.biome.AbstractBiome;
 import org.bukkit.block.Biome;
 import org.bukkit.generator.WorldInfo;
-import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -39,15 +38,14 @@ import java.util.Set;
  */
 @NullMarked
 @AsOf("2.3.0")
-@ApiStatus.Experimental
-public final class StepsBiomeProvider extends CustomBiomeProvider {
+public final class StepsBiomeProvider extends BiomesAPIBiomeProvider {
 
     private final List<BiomeStep> steps;
     @Nullable
-    private final CustomBiome fallback;
+    private final AbstractBiome fallback;
 
     @AsOf("2.3.0")
-    private StepsBiomeProvider(Set<CustomBiome> biomes, List<BiomeStep> steps, @Nullable CustomBiome fallback) {
+    private StepsBiomeProvider(Set<AbstractBiome> biomes, List<BiomeStep> steps, @Nullable AbstractBiome fallback) {
         super(biomes);
         this.steps = steps;
         this.fallback = fallback;
@@ -58,7 +56,7 @@ public final class StepsBiomeProvider extends CustomBiomeProvider {
     public Biome getBiome(WorldInfo worldInfo, int x, int y, int z) {
         // TODO: Cache bukkit biomes maybe?
         for (BiomeStep step : steps) {
-            CustomBiome biome = step.apply(worldInfo, x, y, z);
+            AbstractBiome biome = step.apply(worldInfo, x, y, z);
             if (biome != null) {
                 return biome.toBukkitBiome();
             }
@@ -80,8 +78,8 @@ public final class StepsBiomeProvider extends CustomBiomeProvider {
     @AsOf("2.3.0")
     public static final class Builder {
         private final List<BiomeStep> steps = new ArrayList<>();
-        private final Set<CustomBiome> biomes = new LinkedHashSet<>();
-        private CustomBiome fallback;
+        private final Set<AbstractBiome> biomes = new LinkedHashSet<>();
+        private AbstractBiome fallback;
 
         /**
          * Full-control step. The lambda receives the position and returns a biome to place,
@@ -89,7 +87,7 @@ public final class StepsBiomeProvider extends CustomBiomeProvider {
          * via {@code produces} so the provider can advertise it from {@code getBiomes(...)}.
          */
         @AsOf("2.3.0")
-        public Builder step(BiomeStep step, CustomBiome... produces) {
+        public Builder step(BiomeStep step, AbstractBiome... produces) {
             Preconditions.checkNotNull(step, "step cannot be null");
             Preconditions.checkNotNull(produces, "produces cannot be null");
             steps.add(step);
@@ -105,7 +103,7 @@ public final class StepsBiomeProvider extends CustomBiomeProvider {
          * @return this builder
          */
         @AsOf("2.3.0")
-        public Builder step(CustomBiome biome, BiomeCondition condition) {
+        public Builder step(AbstractBiome biome, BiomeCondition condition) {
             Preconditions.checkNotNull(biome, "biome cannot be null");
             Preconditions.checkNotNull(condition, "condition cannot be null");
             biomes.add(biome);
@@ -120,7 +118,7 @@ public final class StepsBiomeProvider extends CustomBiomeProvider {
          * @since 2.3.0
          */
         @AsOf("2.3.0")
-        public Builder fallback(CustomBiome biome) {
+        public Builder fallback(AbstractBiome biome) {
             Preconditions.checkNotNull(biome, "fallback biome cannot be null");
             this.fallback = biome;
             this.biomes.add(biome);
@@ -141,7 +139,7 @@ public final class StepsBiomeProvider extends CustomBiomeProvider {
     @AsOf("2.3.0")
     @FunctionalInterface
     public interface BiomeStep {
-        @Nullable CustomBiome apply(WorldInfo worldInfo, int x, int y, int z);
+        @Nullable AbstractBiome apply(WorldInfo worldInfo, int x, int y, int z);
     }
 
     /**

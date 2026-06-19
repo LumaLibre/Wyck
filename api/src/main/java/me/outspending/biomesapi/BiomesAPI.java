@@ -31,7 +31,6 @@ import java.util.concurrent.TimeUnit;
  */
 @NullMarked
 @AsOf("2.1.0")
-@ApiStatus.Experimental
 @ApiStatus.NonExtendable
 public interface BiomesAPI {
 
@@ -98,8 +97,10 @@ public interface BiomesAPI {
      * Returns the metrics instance for BiomesAPI, if available.
      * @return the metrics instance, or null if metrics is not available.
      * @since 2.1.0
+     * @apiNote Unstable API, FastStats is in Beta and may change the object returned by this method at any point.
      */
     @AsOf("2.1.0")
+    @ApiStatus.Experimental
     @Nullable BukkitContext metrics();
 
 

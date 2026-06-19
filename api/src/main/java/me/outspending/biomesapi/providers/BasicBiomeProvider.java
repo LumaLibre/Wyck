@@ -2,11 +2,10 @@ package me.outspending.biomesapi.providers;
 
 import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.annotations.AsOf;
-import me.outspending.biomesapi.biome.CustomBiome;
+import me.outspending.biomesapi.biome.AbstractBiome;
 import me.outspending.biomesapi.util.Lazy;
 import org.bukkit.block.Biome;
 import org.bukkit.generator.WorldInfo;
-import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
@@ -19,16 +18,15 @@ import java.util.List;
  */
 @NullMarked
 @AsOf("2.3.0")
-@ApiStatus.Experimental
-public final class BasicBiomeProvider extends CustomBiomeProvider {
+public final class BasicBiomeProvider extends BiomesAPIBiomeProvider {
 
     private final Lazy<Biome> biome;
 
     @AsOf("2.3.0")
-    public BasicBiomeProvider(CustomBiome customBiome) {
-        Preconditions.checkNotNull(customBiome, "customBiome cannot be null");
-        this.biome = Lazy.of(customBiome::toBukkitBiome);
-        super(List.of(customBiome));
+    public BasicBiomeProvider(AbstractBiome abstractBiome) {
+        Preconditions.checkNotNull(abstractBiome, "abstractBiome cannot be null");
+        this.biome = Lazy.of(abstractBiome::toBukkitBiome);
+        super(List.of(abstractBiome));
     }
 
     @Override
@@ -38,7 +36,7 @@ public final class BasicBiomeProvider extends CustomBiomeProvider {
     }
 
     @AsOf("2.3.0")
-    public static BasicBiomeProvider of(CustomBiome biome) {
+    public static BasicBiomeProvider of(AbstractBiome biome) {
         return new BasicBiomeProvider(biome);
     }
 }
