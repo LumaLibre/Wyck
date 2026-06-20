@@ -8,11 +8,14 @@ import me.outspending.biomesapi.keys.ResourceKey;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
+import java.util.Collection;
+import java.util.List;
+
 /**
  * An interface for registering and modifying custom biomes on a Minecraft server.
  *
  * @apiNote Biomes cannot be removed from the Minecraft registry once they have been added.
- * You may {@link #modify(AbstractBiome) modify} existing biomes to reduce memory footprint.
+ * You may {@link #modify(AbstractBiome...) modify} existing biomes to reduce memory footprint.
  *
  * @version 0.0.1
  * @since 0.0.1
@@ -62,10 +65,22 @@ public interface BiomeRegistry {
      * It takes a CustomBiome object as an argument.
      *
      * @since 0.0.1
-     * @param biome The CustomBiome object that should be registered to the server.
+     * @param biomes The CustomBiome objects that should be registered to the server.
      */
     @AsOf("0.0.1")
-    void register(CustomBiome biome);
+    default void register(CustomBiome... biomes) {
+        register(List.of(biomes));
+    }
+
+
+    /**
+     * Registers a collection of custom biomes to a Minecraft server.
+     *
+     * @param biomes The collection of CustomBiome objects that should be registered to the server.
+     * @since 2.3.1
+     */
+    @AsOf("2.3.1")
+    void register(Collection<CustomBiome> biomes);
 
 
     /**
@@ -77,11 +92,22 @@ public interface BiomeRegistry {
      * @apiNote This method can only change the properties of an existing biome on the <b>server</b>.
      * Clients which have already received the biome will not see any changes until they enter the reconfiguration phase
      * (e.g., by rejoining the server.)
-     * @version 0.0.8
-     * @param biome The CustomBiome that should internally be used to modify the existing biome.
+     * @since 0.0.8
+     * @param biomes The AbstractBiomes that should internally be used to modify the existing biome.
      */
     @AsOf("0.0.8")
-    void modify(AbstractBiome biome);
+    default void modify(AbstractBiome... biomes) {
+        modify(List.of(biomes));
+    }
+
+    /**
+     * Modifies a collection of existing biomes on the Minecraft server.
+     *
+     * @param biomes The collection of AbstractBiomes that should internally be used to modify the existing biomes.
+     * @since 2.3.1
+     */
+    @AsOf("2.3.1")
+    void modify(Collection<AbstractBiome> biomes);
 
 
     /**

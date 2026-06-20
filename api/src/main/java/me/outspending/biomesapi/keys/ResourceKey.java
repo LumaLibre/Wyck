@@ -20,7 +20,6 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.3.0")
-@SuppressWarnings("PatternValidation")
 public interface ResourceKey extends Key, Keyed, NmsHandle {
 
     String MINECRAFT_NAMESPACE = "minecraft";

@@ -42,6 +42,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Field;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -131,26 +132,28 @@ public class CustomBiomeRegistry implements BiomeRegistry {
      * Unlocks the registry, builds the biome via {@link #buildDelegate(AbstractBiome)}, registers it
      * if absent, and re-freezes the registry.
      *
-     * @param biome The CustomBiome object that should be registered to the server.
-     * @since 0.0.1
+     * @param biomes The CustomBiome objects that should be registered to the server.
+     * @since 2.3.1
      */
     @Override
-    @AsOf("0.0.1")
+    @AsOf("2.3.1")
     @SuppressWarnings("unchecked")
-    public void register(CustomBiome biome) {
-        Preconditions.checkNotNull(biome, "biome cannot be null");
+    public void register(Collection<CustomBiome> biomes) {
+        Preconditions.checkNotNull(biomes, "biomes cannot be null");
 
         this.biomeRegistry.get().whileUnfrozen(() -> {
             Registry<Biome> registry = (Registry<@NotNull Biome>) biomeRegistry.get().toMinecraft();
-            Identifier resourceLocation = ((ResourceKeyImpl) biome.getResourceKey()).resourceLocation();
+            for (CustomBiome biome : biomes) {
+                Identifier resourceLocation = ((ResourceKeyImpl) biome.getResourceKey()).resourceLocation();
 
-            Biome createdBiome = buildDelegate(biome);
+                Biome createdBiome = buildDelegate(biome);
 
-            if (!registry.containsKey(resourceLocation)) {
-                Registry.register(registry, resourceLocation, createdBiome);
+                if (!registry.containsKey(resourceLocation)) {
+                    Registry.register(registry, resourceLocation, createdBiome);
+                }
+
+                RegisteredBiomes.appendBiome(biome);
             }
-
-            RegisteredBiomes.appendBiome(biome);
         });
     }
 
@@ -160,86 +163,88 @@ public class CustomBiomeRegistry implements BiomeRegistry {
      * Another biome must already exist with the same ResourceKey.
      * It takes a CustomBiome object as an argument.
      *
-     * @param abstractBiome The CustomBiome that should internally be used to modify the existing biome.
+     * @param abstractBiomes The CustomBiome objects containing the modifications to apply to the server's biomes.
      * @since 0.0.8
      */
     @Override
     @AsOf("0.0.8")
-    public void modify(AbstractBiome abstractBiome) {
-        ResourceKey key = abstractBiome.getResourceKey();
-        Preconditions.checkNotNull(key, "key cannot be null");
-        Preconditions.checkNotNull(abstractBiome, "newData cannot be null");
+    public void modify(Collection<AbstractBiome> abstractBiomes) {
+        for (AbstractBiome abstractBiome : abstractBiomes) {
+            ResourceKey key = abstractBiome.getResourceKey();
+            Preconditions.checkNotNull(key, "key cannot be null");
+            Preconditions.checkNotNull(abstractBiome, "newData cannot be null");
 
-        BiomeSettings settings = abstractBiome.getSettings();
+            BiomeSettings settings = abstractBiome.getSettings();
 
 
-        Registry<net.minecraft.world.level.biome.Biome> biomeRegistry = (Registry<@NotNull Biome>) this.biomeRegistry.get().toMinecraft();
-        net.minecraft.world.level.biome.Biome biome = biomeRegistry.getOptional((Identifier) key.resourceLocation()).orElseThrow(
-            () -> new IllegalStateException("Biome " + key + " is not registered in the internal biome registry")
-        );
+            Registry<net.minecraft.world.level.biome.Biome> biomeRegistry = (Registry<@NotNull Biome>) this.biomeRegistry.get().toMinecraft();
+            net.minecraft.world.level.biome.Biome biome = biomeRegistry.getOptional((Identifier) key.resourceLocation()).orElseThrow(
+                () -> new IllegalStateException("Biome " + key + " is not registered in the internal biome registry")
+            );
 
-        // Rebuild biome components
-        Biome.ClimateSettings climateSettings = new Biome.ClimateSettings(
-            settings.hasPrecipitation(), settings.temperature(),
-            settings.modifier().toNms(Biome.TemperatureModifier.class), settings.downfall());
-        ParticleCatalog particleCatalog = abstractBiome.getParticleCatalog();
-        List<net.minecraft.world.attribute.AmbientParticle> particles = PARTICLE_CATALOG_HANDLER.create(particleCatalog);
+            // Rebuild biome components
+            Biome.ClimateSettings climateSettings = new Biome.ClimateSettings(
+                settings.hasPrecipitation(), settings.temperature(),
+                settings.modifier().toNms(Biome.TemperatureModifier.class), settings.downfall());
+            ParticleCatalog particleCatalog = abstractBiome.getParticleCatalog();
+            List<net.minecraft.world.attribute.AmbientParticle> particles = PARTICLE_CATALOG_HANDLER.create(particleCatalog);
 
-        EnvironmentAttributeMap.Builder environmentAttributeMapBuilder = EnvironmentAttributeMap.builder()
-            .set(EnvironmentAttributes.AMBIENT_PARTICLES, particles);
+            EnvironmentAttributeMap.Builder environmentAttributeMapBuilder = EnvironmentAttributeMap.builder()
+                .set(EnvironmentAttributes.AMBIENT_PARTICLES, particles);
 
-        // TODO: Replace with WrappedEnvironmentAttributeMap in the future
-        if (abstractBiome.getFogColor() != null) {
-            environmentAttributeMapBuilder.set(EnvironmentAttributes.FOG_COLOR, abstractBiome.getFogColor());
-        }
-        if (abstractBiome.getSkyColor() != null) {
-            environmentAttributeMapBuilder.set(EnvironmentAttributes.SKY_COLOR, abstractBiome.getSkyColor());
-        }
-        if (abstractBiome.getWaterFogColor() != null) {
-            environmentAttributeMapBuilder.set(EnvironmentAttributes.WATER_FOG_COLOR, abstractBiome.getWaterFogColor());
-        }
-        WrappedEnvironmentAttributeMap wrappedAttributeMap = abstractBiome.getAttributes();
-        NmsEnvironmentAttributes.applyTo(environmentAttributeMapBuilder, wrappedAttributeMap);
+            // TODO: Replace with WrappedEnvironmentAttributeMap in the future
+            if (abstractBiome.getFogColor() != null) {
+                environmentAttributeMapBuilder.set(EnvironmentAttributes.FOG_COLOR, abstractBiome.getFogColor());
+            }
+            if (abstractBiome.getSkyColor() != null) {
+                environmentAttributeMapBuilder.set(EnvironmentAttributes.SKY_COLOR, abstractBiome.getSkyColor());
+            }
+            if (abstractBiome.getWaterFogColor() != null) {
+                environmentAttributeMapBuilder.set(EnvironmentAttributes.WATER_FOG_COLOR, abstractBiome.getWaterFogColor());
+            }
+            WrappedEnvironmentAttributeMap wrappedAttributeMap = abstractBiome.getAttributes();
+            NmsEnvironmentAttributes.applyTo(environmentAttributeMapBuilder, wrappedAttributeMap);
 
-        EnvironmentAttributeMap environmentAttributeMap = environmentAttributeMapBuilder.build();
+            EnvironmentAttributeMap environmentAttributeMap = environmentAttributeMapBuilder.build();
 
-        BiomeSpecialEffects specialEffects = SPECIAL_EFFECTS_HANDLER.build(abstractBiome);
+            BiomeSpecialEffects specialEffects = SPECIAL_EFFECTS_HANDLER.build(abstractBiome);
 
-        BiomeSpawner spawner = abstractBiome.getBiomeSpawner();
+            BiomeSpawner spawner = abstractBiome.getBiomeSpawner();
 
-        BiomeGenerationSettings generationSettings = abstractBiome.getGenerationSettings();
+            BiomeGenerationSettings generationSettings = abstractBiome.getGenerationSettings();
 
-        // Time to reflect
-        try {
-            Field climateSettingsField = Biome.class.getDeclaredField("climateSettings");
-            Field environmentAttributesField = Biome.class.getDeclaredField("attributes");
-            Field specialEffectsField = Biome.class.getDeclaredField("specialEffects");
+            // Time to reflect
+            try {
+                Field climateSettingsField = Biome.class.getDeclaredField("climateSettings");
+                Field environmentAttributesField = Biome.class.getDeclaredField("attributes");
+                Field specialEffectsField = Biome.class.getDeclaredField("specialEffects");
 
-            climateSettingsField.setAccessible(true);
-            environmentAttributesField.setAccessible(true);
-            specialEffectsField.setAccessible(true);
+                climateSettingsField.setAccessible(true);
+                environmentAttributesField.setAccessible(true);
+                specialEffectsField.setAccessible(true);
 
-            climateSettingsField.set(biome, climateSettings);
-            environmentAttributesField.set(biome, environmentAttributeMap);
-            specialEffectsField.set(biome, specialEffects);
+                climateSettingsField.set(biome, climateSettings);
+                environmentAttributesField.set(biome, environmentAttributeMap);
+                specialEffectsField.set(biome, specialEffects);
 
-            if (spawner != null) {
-                Field mobSpawnSettingsField = Biome.class.getDeclaredField("mobSettings");
-                mobSpawnSettingsField.setAccessible(true);
-                mobSpawnSettingsField.set(biome, spawner.toMinecraft());
+                if (spawner != null) {
+                    Field mobSpawnSettingsField = Biome.class.getDeclaredField("mobSettings");
+                    mobSpawnSettingsField.setAccessible(true);
+                    mobSpawnSettingsField.set(biome, spawner.toMinecraft());
+                }
+
+                if (generationSettings != null) {
+                    Field generationSettingsField = Biome.class.getDeclaredField("generationSettings");
+                    generationSettingsField.setAccessible(true);
+                    generationSettingsField.set(biome, generationSettings.toMinecraft());
+                }
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                throw new RuntimeException("Failed to modify biome settings", e);
             }
 
-            if (generationSettings != null) {
-                Field generationSettingsField = Biome.class.getDeclaredField("generationSettings");
-                generationSettingsField.setAccessible(true);
-                generationSettingsField.set(biome, generationSettings.toMinecraft());
+            if (abstractBiome instanceof CustomBiome customBiome) {
+                RegisteredBiomes.replaceBiome(key, customBiome);
             }
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            throw new RuntimeException("Failed to modify biome settings", e);
-        }
-
-        if (abstractBiome instanceof CustomBiome customBiome) {
-            RegisteredBiomes.replaceBiome(key, customBiome);
         }
     }
 
