@@ -6,5 +6,6 @@ group = "me.outspending.biomesapi.v1_21_11"
 
 dependencies {
     compileOnly(project(":api"))
+    compileOnly(project(":commons"))
     paperweight.paperDevBundle(libs.versions.minecraft.v1.m21.r11)
 }

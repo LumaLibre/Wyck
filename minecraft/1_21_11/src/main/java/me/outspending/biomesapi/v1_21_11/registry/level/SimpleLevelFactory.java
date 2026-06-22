@@ -3,6 +3,7 @@ package me.outspending.biomesapi.v1_21_11.registry.level;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonObject;
+import com.mojang.serialization.Lifecycle;
 import io.papermc.paper.FeatureHooks;
 import me.outspending.biomesapi.annotations.WireFactory;
 import me.outspending.biomesapi.keys.KeyChains;
@@ -16,22 +17,27 @@ import me.outspending.biomesapi.util.Lazy;
 import me.outspending.biomesapi.wrapper.level.spawner.LevelSpawner;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.WorldLoader;
 import net.minecraft.server.dedicated.DedicatedServerProperties;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.level.CustomSpawner;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelSettings;
 import net.minecraft.world.level.biome.BiomeManager;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.dimension.LevelStem;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.levelgen.WorldDimensions;
-import net.minecraft.world.level.levelgen.WorldGenSettings;
 import net.minecraft.world.level.levelgen.WorldOptions;
+import net.minecraft.world.level.storage.LevelStorageSource;
 import net.minecraft.world.level.storage.PrimaryLevelData;
+import net.minecraft.world.level.validation.ContentValidationException;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
@@ -40,6 +46,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,6 +78,8 @@ public final class SimpleLevelFactory implements LevelFactory {
 
         ResourceKey levelKey = world.getLevelKey();
         Identifier levelId = (Identifier) levelKey.toMinecraft();
+        String name = levelId.getPath();
+
         net.minecraft.resources.ResourceKey<LevelStem> stemKey = net.minecraft.resources.ResourceKey.create(Registries.LEVEL_STEM, levelId);
         net.minecraft.resources.ResourceKey<Level> dimensionKey = net.minecraft.resources.ResourceKey.create(Registries.DIMENSION, stemKey.identifier());
 
@@ -87,10 +96,22 @@ public final class SimpleLevelFactory implements LevelFactory {
 
         NamespacedKey bukkitKey = new NamespacedKey(levelKey.namespace(), levelKey.path());
         Preconditions.checkArgument(
-            Bukkit.getWorld(bukkitKey) == null && Bukkit.getWorld(levelId.getPath()) == null,
+            Bukkit.getWorld(bukkitKey) == null && Bukkit.getWorld(name) == null,
             "world already loaded under %s", levelKey);
 
-        PrimaryLevelData primaryLevelData = (PrimaryLevelData) minecraftServer.getWorldData();
+        net.minecraft.resources.ResourceKey<LevelStem> storageDimension = switch (world.getEnvironment()) {
+            case NETHER -> LevelStem.NETHER;
+            case THE_END -> LevelStem.END;
+            default -> LevelStem.OVERWORLD;
+        };
+
+        LevelStorageSource.LevelStorageAccess levelStorageAccess;
+        try {
+            levelStorageAccess = LevelStorageSource.createDefault(server.getWorldContainer().toPath())
+                .validateAndCreateAccess(name, storageDimension);
+        } catch (IOException | ContentValidationException e) {
+            throw new RuntimeException(e);
+        }
 
         WorldLoader.DataLoadContext context = minecraftServer.worldLoaderContext;
         WorldOptions worldOptions = new WorldOptions(world.getSeed(), world.generateStructures(), world.bonusChest());
@@ -100,8 +121,28 @@ public final class SimpleLevelFactory implements LevelFactory {
         WorldDimensions baseDimensions = properties.create(context.datapackWorldgen());
         WorldDimensions worldDimensions = withStem(baseDimensions, stemKey, stem);
 
-        WorldGenSettings genSettings = new WorldGenSettings(worldOptions, worldDimensions);
-        long biomeZoomSeed = BiomeManager.obfuscateSeed(genSettings.options().seed());
+        WorldDimensions.Complete complete = worldDimensions.bake(
+            context.datapackDimensions().lookupOrThrow(Registries.LEVEL_STEM));
+        Lifecycle lifecycle = complete.lifecycle().add(context.datapackWorldgen().allRegistriesLifecycle());
+
+        LevelSettings levelSettings = new LevelSettings(
+            name,
+            minecraftServer.getDefaultGameType(),
+            false,
+            Difficulty.NORMAL,
+            false,
+            new GameRules(context.dataConfiguration().enabledFeatures()),
+            context.dataConfiguration());
+
+        PrimaryLevelData primaryLevelData = new PrimaryLevelData(
+            levelSettings, worldOptions, complete.specialWorldProperty(), lifecycle);
+
+        RegistryAccess.Frozen dimensionsRegistryAccess = complete.dimensionsRegistryAccess();
+        primaryLevelData.customDimensions = dimensionsRegistryAccess.lookupOrThrow(Registries.LEVEL_STEM);
+        primaryLevelData.checkName(name);
+        primaryLevelData.setModdedInfo(minecraftServer.getServerModName(), minecraftServer.getModdedStatus().shouldReportAsModified());
+
+        long biomeZoomSeed = BiomeManager.obfuscateSeed(primaryLevelData.worldGenOptions().seed());
 
         List<CustomSpawner> spawners = new ArrayList<>();
         for (LevelSpawner spawner : world.getSpawners()) {
@@ -112,7 +153,7 @@ public final class SimpleLevelFactory implements LevelFactory {
         ServerLevel serverLevel = new ServerLevel(
             minecraftServer,
             minecraftServer.executor,
-            minecraftServer.storageSource,
+            levelStorageAccess,
             primaryLevelData,
             dimensionKey,
             stem,
@@ -127,7 +168,7 @@ public final class SimpleLevelFactory implements LevelFactory {
         );
 
         minecraftServer.addLevel(serverLevel);
-        minecraftServer.initWorld(serverLevel, serverLevel.serverLevelData, worldOptions);
+        minecraftServer.initWorld(serverLevel, primaryLevelData, worldOptions);
         serverLevel.setSpawnSettings(true);
         FeatureHooks.tickEntityManager(serverLevel);
         minecraftServer.prepareLevel(serverLevel);
