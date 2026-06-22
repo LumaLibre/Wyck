@@ -54,7 +54,37 @@ public interface LevelChunkGenerator extends NmsHandle {
      */
     @AsOf("2.4.0")
     static ResourceKey endNoise() {
-        return ResourceKey.minecraft("the_end");
+        return ResourceKey.minecraft("end");
+    }
+
+    /**
+     * The default noise settings for floating islands.
+     * @return the default noise settings for floating islands
+     * @since 2.4.0
+     */
+    @AsOf("2.4.0")
+    static ResourceKey floatingIslandsNoise() {
+        return ResourceKey.minecraft("floating_islands");
+    }
+
+    /**
+     * The default noise settings for amplified noise.
+     * @return the default noise settings for amplified noise
+     * @since 2.4.0
+     */
+    @AsOf("2.4.0")
+    static ResourceKey amplifiedNoise() {
+        return ResourceKey.minecraft("amplified");
+    }
+
+    /**
+     * The default noise settings for caves.
+     * @return the default noise settings for caves
+     * @since 2.4.0
+     */
+    @AsOf("2.4.0")
+    static ResourceKey cavesNoise() {
+        return ResourceKey.minecraft("caves");
     }
 
     /**
