@@ -16,12 +16,12 @@ import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.annotations.WireFactory;
 import me.outspending.biomesapi.biome.CustomBiome;
-import me.outspending.biomesapi.biome.RegisteredBiomes;
+import me.outspending.biomesapi.keys.KeyChains;
 import me.outspending.biomesapi.registry.BiomeRegistry;
 import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.registry.bootstrap.util.BootstrapSafeMinecraftRegistries;
 import me.outspending.biomesapi.registry.bootstrap.util.DatapackPromotion;
-import me.outspending.biomesapi.registry.dimension.DimensionBiomeEdit;
+import me.outspending.biomesapi.registry.level.dimension.DimensionBiomeEdit;
 import me.outspending.biomesapi.registry.bootstrap.util.DimensionSources;
 import me.outspending.biomesapi.util.ThrowingRunnable;
 import me.outspending.biomesapi.wrapper.worldgen.climate.BiomeClimatePoint;
@@ -209,7 +209,7 @@ public final class DatapackBootstrapBiomeRegistry implements BootstrapBiomeRegis
                 Files.createDirectories(biomeFile.getParent());
                 Files.writeString(biomeFile, GSON.toJson(json));
 
-                RegisteredBiomes.appendBiome(biome);
+                KeyChains.BIOMES.append(biome);
             }
         } finally {
             BootstrapSafeMinecraftRegistries.clearActive();

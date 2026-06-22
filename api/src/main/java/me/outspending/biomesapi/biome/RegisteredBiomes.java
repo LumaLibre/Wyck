@@ -1,8 +1,8 @@
 package me.outspending.biomesapi.biome;
 
-import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.exceptions.UnknownBiomeException;
+import me.outspending.biomesapi.keys.KeyChains;
 import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.util.Lazy;
 import org.jetbrains.annotations.ApiStatus;
@@ -10,11 +10,12 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
  * A collection of all registered custom biomes.
+ * <p>
+ * Obsolete. Use {@link KeyChains#BIOMES} instead.
  *
  * @since 2.3.0
  * @version 2.3.0
@@ -22,9 +23,8 @@ import java.util.Set;
  */
 @NullMarked
 @AsOf("2.3.0")
+@ApiStatus.Obsolete
 public final class RegisteredBiomes implements Iterable<CustomBiome> {
-
-    private static final Set<CustomBiome> REGISTERED_BIOMES = new LinkedHashSet<>();
 
     private RegisteredBiomes() {}
 
@@ -36,12 +36,7 @@ public final class RegisteredBiomes implements Iterable<CustomBiome> {
      */
     @AsOf("2.3.0")
     public static @Nullable CustomBiome get(ResourceKey resourceKey) {
-        Preconditions.checkNotNull(resourceKey, "resourceKey cannot be null");
-
-        return REGISTERED_BIOMES.stream()
-            .filter(biome -> resourceKey.equals(biome.getResourceKey()))
-            .findFirst()
-            .orElse(null);
+        return KeyChains.BIOMES.get(resourceKey);
     }
 
     /**
@@ -53,11 +48,7 @@ public final class RegisteredBiomes implements Iterable<CustomBiome> {
      */
     @AsOf("2.3.0")
     public static CustomBiome getOrThrow(ResourceKey resourceKey) {
-        CustomBiome biome = get(resourceKey);
-        if (biome == null) {
-            throw new UnknownBiomeException("Unknown biome: " + resourceKey);
-        }
-        return biome;
+        return KeyChains.BIOMES.getOrThrow(resourceKey);
     }
 
     /**
@@ -68,7 +59,7 @@ public final class RegisteredBiomes implements Iterable<CustomBiome> {
      */
     @AsOf("2.3.0")
     public static Lazy<@Nullable CustomBiome> getLazily(ResourceKey resourceKey) {
-        return Lazy.of(() -> get(resourceKey));
+        return KeyChains.BIOMES.getLazily(resourceKey);
     }
 
     /**
@@ -80,7 +71,7 @@ public final class RegisteredBiomes implements Iterable<CustomBiome> {
      */
     @AsOf("2.3.0")
     public static Lazy<CustomBiome> getOrThrowLazily(ResourceKey resourceKey) {
-        return Lazy.of(() -> getOrThrow(resourceKey));
+        return KeyChains.BIOMES.getOrThrowLazily(resourceKey);
     }
 
     /**
@@ -91,8 +82,7 @@ public final class RegisteredBiomes implements Iterable<CustomBiome> {
      */
     @AsOf("2.3.0")
     public static boolean isRegistered(ResourceKey resourceKey) {
-        Preconditions.checkNotNull(resourceKey, "resourceKey cannot be null");
-        return REGISTERED_BIOMES.stream().anyMatch(biome -> resourceKey.equals(biome.getResourceKey()));
+        return KeyChains.BIOMES.isRegistered(resourceKey);
     }
 
     /**
@@ -103,7 +93,7 @@ public final class RegisteredBiomes implements Iterable<CustomBiome> {
      */
     @AsOf("2.3.0")
     public static Lazy<Boolean> isRegisteredLazily(ResourceKey resourceKey) {
-        return Lazy.of(() -> isRegistered(resourceKey));
+        return KeyChains.BIOMES.isRegisteredLazily(resourceKey);
     }
 
     /**
@@ -114,7 +104,7 @@ public final class RegisteredBiomes implements Iterable<CustomBiome> {
     @Override
     @AsOf("2.3.0")
     public Iterator<CustomBiome> iterator() {
-        return REGISTERED_BIOMES.iterator();
+        return KeyChains.BIOMES.iterator();
     }
 
     /**
@@ -124,7 +114,7 @@ public final class RegisteredBiomes implements Iterable<CustomBiome> {
      */
     @AsOf("2.3.0")
     public static int size() {
-        return REGISTERED_BIOMES.size();
+        return KeyChains.BIOMES.size();
     }
 
     /**
@@ -134,7 +124,7 @@ public final class RegisteredBiomes implements Iterable<CustomBiome> {
      */
     @AsOf("2.3.0")
     public static boolean isEmpty() {
-        return REGISTERED_BIOMES.isEmpty();
+        return KeyChains.BIOMES.isEmpty();
     }
 
     /**
@@ -144,29 +134,16 @@ public final class RegisteredBiomes implements Iterable<CustomBiome> {
      */
     @AsOf("2.3.0")
     public static Set<CustomBiome> registeredBiomes() {
-        return Set.copyOf(REGISTERED_BIOMES);
+        return KeyChains.BIOMES.items();
     }
 
     @ApiStatus.Internal
     public static void appendBiome(CustomBiome biome) {
-        Preconditions.checkNotNull(biome, "biome cannot be null");
-        if (isRegistered(biome.getResourceKey())) {
-            throw new IllegalArgumentException("Biome is already appended: " + biome.getResourceKey());
-        }
-        REGISTERED_BIOMES.add(biome);
+        KeyChains.BIOMES.append(biome);
     }
 
     @ApiStatus.Internal
     public static boolean replaceBiome(ResourceKey resourceKey, CustomBiome newBiome) {
-        Preconditions.checkNotNull(resourceKey, "resourceKey cannot be null");
-        Preconditions.checkNotNull(newBiome, "newBiome cannot be null");
-
-        CustomBiome existing = get(resourceKey);
-        if (existing == null) {
-            return false;
-        }
-        REGISTERED_BIOMES.remove(existing);
-        REGISTERED_BIOMES.add(newBiome);
-        return true;
+        return KeyChains.BIOMES.replace(resourceKey, newBiome);
     }
 }

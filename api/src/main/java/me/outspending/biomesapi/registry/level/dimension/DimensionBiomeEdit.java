@@ -1,4 +1,4 @@
-package me.outspending.biomesapi.registry.dimension;
+package me.outspending.biomesapi.registry.level.dimension;
 
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.keys.ResourceKey;

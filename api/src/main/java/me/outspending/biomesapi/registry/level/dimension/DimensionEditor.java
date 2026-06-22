@@ -1,4 +1,4 @@
-package me.outspending.biomesapi.registry.dimension;
+package me.outspending.biomesapi.registry.level.dimension;
 
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
@@ -26,7 +26,7 @@ import org.jspecify.annotations.NullMarked;
 public interface DimensionEditor {
 
     @ApiStatus.Internal
-    WireProvider<DimensionEditor> RUNTIME = WireProvider.create("me.outspending.biomesapi.registry.dimension.RuntimeDimensionEditor");
+    WireProvider<DimensionEditor> RUNTIME = WireProvider.create("me.outspending.biomesapi.registry.level.dimension.RuntimeDimensionEditor");
 
     // TODO: DATAPACK editor for bootstrap should eventually be merged into this?
 

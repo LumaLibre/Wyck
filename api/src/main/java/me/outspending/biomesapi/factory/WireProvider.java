@@ -41,7 +41,7 @@ public sealed class WireProvider<F> permits NullableWireProvider {
      */
     @AsOf("2.0.0")
     public static <F> WireProvider<F> create(String classNameTemplate) {
-        return new WireProvider<F>(classNameTemplate);
+        return new WireProvider<>(classNameTemplate);
     }
 
     /**

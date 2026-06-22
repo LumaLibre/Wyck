@@ -27,16 +27,24 @@ public sealed interface FloatProvider extends NmsHandle permits FloatProvider.Co
     }
 
     @AsOf("2.3.0")
-    static FloatProvider constant(float value) { return new Constant(value); }
+    static FloatProvider constant(float value) {
+        return new Constant(value);
+    }
 
     @AsOf("2.3.0")
-    static FloatProvider uniform(float minInclusive, float maxExclusive) { return new Uniform(minInclusive, maxExclusive); }
+    static FloatProvider uniform(float minInclusive, float maxExclusive) {
+        return new Uniform(minInclusive, maxExclusive);
+    }
 
     @AsOf("2.3.0")
-    static FloatProvider clampedNormal(float mean, float deviation, float min, float max) { return new ClampedNormal(mean, deviation, min, max); }
+    static FloatProvider clampedNormal(float mean, float deviation, float min, float max) {
+        return new ClampedNormal(mean, deviation, min, max);
+    }
 
     @AsOf("2.3.0")
-    static FloatProvider trapezoid(float min, float max, float plateau) { return new Trapezoid(min, max, plateau); }
+    static FloatProvider trapezoid(float min, float max, float plateau) {
+        return new Trapezoid(min, max, plateau);
+    }
 
     /**
      * @return the smallest value this provider can yield.

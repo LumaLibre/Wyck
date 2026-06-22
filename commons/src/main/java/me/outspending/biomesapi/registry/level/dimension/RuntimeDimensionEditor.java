@@ -1,10 +1,11 @@
-package me.outspending.biomesapi.registry.dimension;
+package me.outspending.biomesapi.registry.level.dimension;
 
 import com.google.common.base.Suppliers;
 import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.keys.ResourceKey;
+import me.outspending.biomesapi.wrapper.worldgen.TransientMultiNoiseBiomeSource;
 import me.outspending.biomesapi.wrapper.worldgen.climate.BiomeClimatePoint;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;

@@ -3,6 +3,7 @@ package me.outspending.biomesapi.biome;
 import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.biome.impl.CustomBiomeImpl;
+import me.outspending.biomesapi.keys.KeyChains;
 import me.outspending.biomesapi.registry.BiomeRegistry;
 import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.renderer.packet.PacketHandler;
@@ -139,7 +140,7 @@ public interface CustomBiome extends AbstractBiome {
      */
     @AsOf("2.1.0")
     default boolean isRegistered() {
-        return RegisteredBiomes.isRegistered(this.getResourceKey());
+        return KeyChains.BIOMES.isRegistered(this.getResourceKey());
     }
 
     /**

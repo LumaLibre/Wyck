@@ -5,7 +5,7 @@ import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.factory.WireProvider;
 import me.outspending.biomesapi.keys.ResourceKey;
-import me.outspending.biomesapi.registry.dimension.DimensionEditor;
+import me.outspending.biomesapi.registry.level.dimension.DimensionEditor;
 import me.outspending.biomesapi.util.ThrowingRunnable;
 import me.outspending.biomesapi.wrapper.worldgen.climate.BiomeClimatePoint;
 import org.jetbrains.annotations.ApiStatus;

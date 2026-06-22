@@ -69,11 +69,23 @@ public sealed interface IntProvider extends NmsHandle permits IntProvider.Consta
         return new WeightedListInt(distribution);
     }
 
-    /** Smallest value this provider can yield. */
-    @AsOf("2.3.0") int minInclusive();
+    /**
+     * The smallest value this provider can yield.
+     *
+     * @return the smallest value this provider can yield.
+     * @since 2.3.0
+     */
+    @AsOf("2.3.0")
+    int minInclusive();
 
-    /** Largest value this provider can yield. */
-    @AsOf("2.3.0") int maxInclusive();
+    /**
+     * The largest value this provider can yield.
+     *
+     * @return the largest value this provider can yield.
+     * @since 2.3.0
+     */
+    @AsOf("2.3.0")
+    int maxInclusive();
 
     @Override
     @AsOf("2.3.0")

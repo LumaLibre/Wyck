@@ -3,7 +3,7 @@ package me.outspending.biomesapi.renderer.packet.data;
 import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.biome.CustomBiome;
-import me.outspending.biomesapi.biome.RegisteredBiomes;
+import me.outspending.biomesapi.keys.KeyChains;
 import me.outspending.biomesapi.misc.ChunkLocation;
 import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.renderer.packet.PacketHandler;
@@ -51,12 +51,12 @@ public record PhonyCustomBiome(
      */
     @AsOf("0.0.10")
     public CustomBiome customBiome() {
-        CustomBiome customBiome = RegisteredBiomes.get(biomeResourceKey);
+        CustomBiome customBiome = KeyChains.BIOMES.get(biomeResourceKey);
         if (customBiome != null) {
             return customBiome;
         }
         CustomBiome other = CustomBiome.builder(biomeResourceKey).build();
-        RegisteredBiomes.appendBiome(other);
+        KeyChains.BIOMES.append(other);
         return other;
     }
 

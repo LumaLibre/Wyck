@@ -3,7 +3,7 @@ package me.outspending.biomesapi;
 import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.providers.BasicBiomeProvider;
-import me.outspending.biomesapi.registry.dimension.DimensionEditor;
+import me.outspending.biomesapi.registry.level.dimension.DimensionEditor;
 import me.outspending.biomesapi.renderer.setter.BiomeSetter;
 import me.outspending.biomesapi.wrapper.BiomeSettings;
 import me.outspending.biomesapi.wrapper.worldgen.BiomeGenerationSettings;

@@ -1,0 +1,191 @@
+package me.outspending.biomesapi.wrapper.level.noise;
+
+import com.google.common.base.Preconditions;
+import me.outspending.biomesapi.annotations.AsOf;
+import me.outspending.biomesapi.factory.WireProvider;
+import me.outspending.biomesapi.wrapper.internal.NmsHandle;
+import me.outspending.biomesapi.wrapper.level.noise.settings.LevelNoiseSettings;
+import me.outspending.biomesapi.wrapper.worldgen.climate.BiomeClimatePoint;
+import me.outspending.biomesapi.wrapper.worldgen.surface.WrappedSurfaceRule;
+import org.bukkit.Material;
+import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+
+import java.util.List;
+
+/**
+ * Wraps {@code NoiseGeneratorSettings}.
+ *
+ * @version 2.4.0
+ * @since 2.4.0
+ * @author Jsinco
+ */
+@NullMarked
+@AsOf("2.4.0")
+@ApiStatus.Experimental
+public interface LevelNoiseGeneratorSettings extends NmsHandle {
+
+    @ApiStatus.Internal
+    WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.level.noise.LevelNoiseGeneratorSettingsFactoryImpl");
+
+    @ApiStatus.Internal
+    interface Factory {
+        LevelNoiseGeneratorSettings create(Data data);
+    }
+
+    /**
+     * The data backing these settings.
+     *
+     * @return the data
+     * @since 2.4.0
+     */
+    @AsOf("2.4.0")
+    Data data();
+
+    /**
+     * Creates a new builder for noise generator settings.
+     *
+     * @return a new builder
+     * @since 2.4.0
+     */
+    @AsOf("2.4.0")
+    static Builder builder() {
+        return new Builder();
+    }
+
+    /**
+     * @since 2.4.0
+     * @version 2.4.0
+     * @author Jsinco
+     */
+    @AsOf("2.4.0")
+    record Data(
+        LevelNoiseSettings noiseSettings,
+        Material defaultBlock,
+        Material defaultFluid,
+        LevelNoiseRouter noiseRouter,
+        WrappedSurfaceRule surfaceRule,
+        List<BiomeClimatePoint> spawnTarget,
+        int seaLevel,
+        @Deprecated boolean disableMobGeneration,
+        boolean aquifersEnabled,
+        boolean oreVeinsEnabled,
+        boolean useLegacyRandomSource
+    ) {}
+
+    /**
+     * Builder for noise generator settings.
+     * @since 2.4.0
+     * @version 2.4.0
+     * @author Jsinco
+     */
+    @AsOf("2.4.0")
+    final class Builder {
+
+        private LevelNoiseSettings noiseSettings = LevelNoiseSettings.OVERWORLD;
+        private Material defaultBlock = Material.STONE;
+        private Material defaultFluid = Material.WATER;
+        private @Nullable LevelNoiseRouter noiseRouter = null;
+        private @Nullable WrappedSurfaceRule surfaceRule = null;
+        private List<BiomeClimatePoint> spawnTarget = List.of();
+        private int seaLevel = 63;
+        private boolean disableMobGeneration = false;
+        private boolean aquifersEnabled = true;
+        private boolean oreVeinsEnabled = true;
+        private boolean useLegacyRandomSource = false;
+
+        @AsOf("2.4.0")
+        public Builder noiseSettings(LevelNoiseSettings noiseSettings) {
+            this.noiseSettings = noiseSettings;
+            return this;
+        }
+
+        @AsOf("2.4.0")
+        public Builder defaultBlock(Material defaultBlock) {
+            this.defaultBlock = defaultBlock;
+            return this;
+        }
+
+        @AsOf("2.4.0")
+        public Builder defaultFluid(Material defaultFluid) {
+            this.defaultFluid = defaultFluid;
+            return this;
+        }
+
+        @AsOf("2.4.0")
+        public Builder noiseRouter(LevelNoiseRouter noiseRouter) {
+            this.noiseRouter = noiseRouter;
+            return this;
+        }
+
+        @AsOf("2.4.0")
+        public Builder surfaceRule(WrappedSurfaceRule surfaceRule) {
+            this.surfaceRule = surfaceRule;
+            return this;
+        }
+
+        @AsOf("2.4.0")
+        public Builder spawnTarget(List<BiomeClimatePoint> spawnTarget) {
+            this.spawnTarget = List.copyOf(spawnTarget);
+            return this;
+        }
+
+        @AsOf("2.4.0")
+        public Builder seaLevel(int seaLevel) {
+            this.seaLevel = seaLevel;
+            return this;
+        }
+
+        /**
+         * @param disableMobGeneration whether to disable mob generation
+         * @return this builder, for chaining
+         * @since 2.4.0
+         * @deprecated deprecated as it in Minecraft.
+         */
+        @Deprecated
+        @AsOf("2.4.0")
+        public Builder disableMobGeneration(boolean disableMobGeneration) {
+            this.disableMobGeneration = disableMobGeneration;
+            return this;
+        }
+
+        @AsOf("2.4.0")
+        public Builder aquifersEnabled(boolean aquifersEnabled) {
+            this.aquifersEnabled = aquifersEnabled;
+            return this;
+        }
+
+        @AsOf("2.4.0")
+        public Builder oreVeinsEnabled(boolean oreVeinsEnabled) {
+            this.oreVeinsEnabled = oreVeinsEnabled;
+            return this;
+        }
+
+        @AsOf("2.4.0")
+        public Builder useLegacyRandomSource(boolean useLegacyRandomSource) {
+            this.useLegacyRandomSource = useLegacyRandomSource;
+            return this;
+        }
+
+        @AsOf("2.4.0")
+        public LevelNoiseGeneratorSettings build() {
+            Preconditions.checkArgument(this.noiseRouter != null, "noiseRouter must be set");
+            Preconditions.checkArgument(this.surfaceRule != null, "surfaceRule must be set");
+            Data data = new Data(
+                this.noiseSettings,
+                this.defaultBlock,
+                this.defaultFluid,
+                this.noiseRouter,
+                this.surfaceRule,
+                this.spawnTarget,
+                this.seaLevel,
+                this.disableMobGeneration,
+                this.aquifersEnabled,
+                this.oreVeinsEnabled,
+                this.useLegacyRandomSource
+            );
+            return WIRE.get().create(data);
+        }
+    }
+}

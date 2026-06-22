@@ -3,7 +3,8 @@ package me.outspending.biomesapi.registry.bootstrap.util;
 import com.mojang.datafixers.util.Pair;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.keys.ResourceKey;
-import me.outspending.biomesapi.registry.dimension.DimensionBiomeEdit;
+import me.outspending.biomesapi.registry.level.dimension.DimensionBiomeEdit;
+import me.outspending.biomesapi.registry.level.dimension.RuntimeDimensionEditor;
 import net.minecraft.resources.Identifier;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.biome.Biome;
@@ -28,7 +29,7 @@ import java.util.function.Function;
  * <p>
  * Only dimensions with a defined preset source can be reconstructed here. The overworld and
  * nether qualify. Custom dimensions defined by other datapacks cannot be known at discovery and
- * must use {@link me.outspending.biomesapi.registry.dimension.RuntimeDimensionEditor}.
+ * must use {@link RuntimeDimensionEditor}.
  */
 @NullMarked
 @AsOf("2.3.0")

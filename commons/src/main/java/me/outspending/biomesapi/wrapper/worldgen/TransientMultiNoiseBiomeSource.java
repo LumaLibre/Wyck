@@ -1,10 +1,11 @@
-package me.outspending.biomesapi.registry.dimension;
+package me.outspending.biomesapi.wrapper.worldgen;
 
 import com.google.common.base.Suppliers;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
 import me.outspending.biomesapi.annotations.AsOf;
+import me.outspending.biomesapi.registry.level.dimension.RuntimeDimensionEditor;
 import net.minecraft.core.Holder;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeSource;

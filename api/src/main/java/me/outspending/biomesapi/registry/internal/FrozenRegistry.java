@@ -8,6 +8,8 @@ import me.outspending.biomesapi.wrapper.internal.NmsHandle;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
+import java.util.function.Consumer;
+
 /**
  * Frozen utilities for Minecraft registries.
  * @since 2.3.0
@@ -70,6 +72,16 @@ public interface FrozenRegistry extends NmsHandle {
      */
     @AsOf("2.3.0")
     void whileUnfrozen(Runnable action);
+
+    /**
+     * Runs the given consumer with the registry while it is unfrozen.
+     * @param consumer the consumer to run
+     * @since 2.4.0
+     */
+    @AsOf("2.4.0")
+    default void whileUnfrozen(Consumer<FrozenRegistry> consumer) {
+        whileUnfrozen(() -> consumer.accept(this));
+    }
 
     /**
      * Returns the registry itself.

@@ -25,10 +25,10 @@ tasks {
     }
 
     runServer {
-        minecraftVersion("26.2")
-//        downloadPlugins {
-//            modrinth("gBIw3Gvy", "4.2.2")
-//        }
+        minecraftVersion("26.1.2")
+        downloadPlugins {
+            modrinth("gBIw3Gvy", "4.2.2")
+        }
         //args("--safeMode")
         //commandLine.add("--safeMode")
     }

@@ -16,7 +16,7 @@ import io.papermc.paper.registry.event.type.RegistryEntryAddEventType;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.annotations.WireFactory;
 import me.outspending.biomesapi.biome.CustomBiome;
-import me.outspending.biomesapi.biome.RegisteredBiomes;
+import me.outspending.biomesapi.keys.KeyChains;
 import me.outspending.biomesapi.registry.BiomeRegistry;
 import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.util.ThrowingRunnable;
@@ -201,7 +201,7 @@ public final class UnsafePaperBootstrapBiomeRegistry implements BootstrapBiomeRe
                     if (!nms.containsKey(key)) {
                         nms.register(key, built, RegistrationInfo.BUILT_IN);
                     }
-                    RegisteredBiomes.appendBiome(cb);
+                    KeyChains.BIOMES.append(cb);
                 }
                 this.pending.clear();
             } catch (Throwable t) {
