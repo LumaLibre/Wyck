@@ -154,7 +154,7 @@ public class GlobalBiomeSetter implements BiomeSetter {
         Preconditions.checkNotNull(to, "to cannot be null");
         Preconditions.checkNotNull(abstractBiome, "abstractBiome cannot be null");
 
-        Preconditions.checkArgument(!from.getWorld().equals(to.getWorld()), "Locations must be in the same world!");
+        Preconditions.checkArgument(from.getWorld().equals(to.getWorld()), "Locations must be in the same world!");
 
         Biome biome = abstractBiome.toBukkitBiome();
         PointRange3D range = PointRange3D.of(from, to);
