@@ -9,8 +9,7 @@ import java.util.Objects;
 
 @NullMarked
 @ApiStatus.Internal
-@SuppressWarnings("removal")
-public record ResourceKeyImpl(Identifier identifier) implements ResourceKey, me.outspending.biomesapi.registry.BiomeResourceKey {
+public record ResourceKeyImpl(Identifier identifier) implements ResourceKey {
 
     public ResourceKeyImpl(String namespace, String path) {
         this(Identifier.fromNamespaceAndPath(namespace, path));
