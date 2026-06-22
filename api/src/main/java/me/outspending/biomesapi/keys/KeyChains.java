@@ -27,7 +27,7 @@ public interface KeyChains {
      * @since 2.4.0
      */
     @AsOf("2.4.0")
-    default KeyChain<CustomBiome> biomes() {
+    static KeyChain<CustomBiome> biomes() {
         return BIOMES;
     }
 
@@ -36,7 +36,7 @@ public interface KeyChains {
      * @since 2.4.0
      */
     @AsOf("2.4.0")
-    default KeyChain<Dimension> dimensions() {
+    static KeyChain<Dimension> dimensions() {
         return DIMENSIONS;
     }
 }
