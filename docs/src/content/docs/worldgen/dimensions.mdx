@@ -1,6 +1,69 @@
-package me.outspending.biomesapi;
+---
+title: Dimensions & LevelCreators
+description: An introduction to custom dimensions and level creators with BiomesAPI.
+---
 
-import me.outspending.biomesapi.biome.CustomBiome;
+import CodeBlock from "@/components/CodeBlock.astro";
+import SourceLink from "@/components/SourceLink.astro";
+
+## What is a Dimension?
+
+A <SourceLink path="level/dimension/Dimension.java">Dimension</SourceLink> in BiomesAPI directly references
+a `DimensionType` in Minecraft, which is the blueprint for how levels (worlds) are created.
+
+Dimensions hold a variety of attributes such as build height, [environment attributes](/wrappers/environment-attributes),
+and more. Building and registering custom dimensions are just as easy as creating custom Biomes within BiomesAPI.
+
+### Example Usage
+<CodeBlock
+    lang="java"
+    filename="ExamplePlugin.java"
+    code={
+`import me.outspending.biomesapi.keys.ResourceKey;
+import me.outspending.biomesapi.level.dimension.Dimension;
+import me.outspending.biomesapi.wrapper.environment.BedRule;
+import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttributes;
+import me.outspending.biomesapi.wrapper.level.dimension.Skybox;
+import net.kyori.adventure.text.Component;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class ExamplePlugin extends JavaPlugin {
+    @Override
+    public void onEnable() {
+        Dimension dimension = Dimension.builder()
+            .resourceKey(ResourceKey.of("biomesapi:example"))
+            .hasSkyLight(true)
+            // Set the height of the dimension to 512 blocks
+            .height(512)
+            .logicalHeight(512)
+            .skybox(Skybox.OVERWORLD)
+            .attribute(WrappedEnvironmentAttributes.FOG_COLOR, "#FFFFFF")
+            // Make beds always explode in this dimension
+            .attribute(WrappedEnvironmentAttributes.BED_RULE,
+                BedRule.builder()
+                    .setExplodes(true)
+                    .setErrorMessage(Component.text("Kaboom!"))
+                    .build()
+            )
+            .register(); // All done!
+    }
+}`}
+/>
+
+
+## LevelCreators
+
+LevelCreators are BiomesAPI's in-house implementation of Bukkit's [`WorldCreator`](https://jd.papermc.io/paper/26.2/org/bukkit/WorldCreator.html)
+that are specifically suited for custom dimensions and custom biomes.
+
+* Here's a quick example on how to generate an entire level with a custom dimension and biome start to finish.
+
+### Example Usage
+<CodeBlock
+    lang="java"
+    filename="ExamplePlugin.java"
+    code={
+`import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.level.LevelCreator;
 import me.outspending.biomesapi.level.dimension.Dimension;
@@ -19,7 +82,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class ExamplePlugin extends JavaPlugin {
     @Override
     public void onEnable() {
-        ResourceKey exampleKey = ResourceKey.of("biomesapi:example");
+        ResourceKey exampleKey = ResourceKey.of("biomesapi", "example");
 
         Dimension dimension = Dimension.builder(exampleKey)
             .hasSkyLight(true)
@@ -64,4 +127,5 @@ public class ExamplePlugin extends JavaPlugin {
         World world = LevelFactory.factory().createWorld(levelCreator);
         // All done!
     }
-}
+}`}
+/>

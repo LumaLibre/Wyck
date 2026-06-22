@@ -40,6 +40,16 @@ public interface BiomeSource extends NmsHandle {
     }
 
     @AsOf("2.4.0")
+    static BiomeSource fixed(AbstractBiome biome) {
+        return fixed(biome.getResourceKey());
+    }
+
+    @AsOf("2.4.0")
+    static BiomeSource fixed(Biome biome) {
+        return fixed(ResourceKey.of(biome.getKey().asString()));
+    }
+
+    @AsOf("2.4.0")
     static MultiNoiseBuilder multiNoise() {
         return new MultiNoiseBuilder();
     }

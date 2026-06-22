@@ -3,6 +3,7 @@ package me.outspending.biomesapi.level.dimension;
 import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.keys.ResourceKey;
+import me.outspending.biomesapi.registry.level.dimension.DimensionRegistry;
 import me.outspending.biomesapi.wrapper.environment.attribute.IntColorSupplier;
 import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttributeSupplier;
 import me.outspending.biomesapi.wrapper.level.dimension.CardinalLightType;
@@ -171,6 +172,17 @@ public interface Dimension extends Keyed {
      * @since 2.4.0
      */
     boolean isSimilar(Dimension other);
+
+    /**
+     * Registers this dimension type to the dimension registry.
+     * @return this dimension type
+     * @since 2.4.0
+     */
+    @AsOf("2.4.0")
+    default Dimension register() {
+        DimensionRegistry.registry().register(this);
+        return this;
+    }
 
     /**
      * Creates a new {@link Builder} with the same properties as this dimension type.
@@ -400,6 +412,11 @@ public interface Dimension extends Keyed {
                 timelines,
                 defaultClock
             );
+        }
+
+        @AsOf("2.4.0")
+        public Dimension register() {
+            return this.build().register();
         }
     }
 }
