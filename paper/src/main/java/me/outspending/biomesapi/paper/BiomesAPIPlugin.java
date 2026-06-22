@@ -14,7 +14,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.yaml.NodeStyle;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
@@ -92,11 +91,6 @@ public final class BiomesAPIPlugin extends JavaPlugin implements BiomesAPI {
 
     public BiomesAPIPluginConfig getPluginConfig() {
         return config;
-    }
-
-    @Override
-    public @Nullable BukkitContext metrics() {
-        return metrics;
     }
 
     @Override

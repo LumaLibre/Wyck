@@ -42,7 +42,6 @@ configurations {
 }
 
 tasks.shadowJar {
-    relocate("dev.faststats", "me.outspending.biomesapi.metrics")
     relocate("org.objectweb.asm", "me.outspending.biomesapi.asm")
     exclude("com/google/**")
     minimize {
@@ -51,8 +50,7 @@ tasks.shadowJar {
         for (project in minecraftProjects) {
             exclude(project("${minecraft}:${project}"))
         }
-        exclude("META-INF/maven/**")
-        exclude("META-INF/proguard/**")
+        exclude("META-INF/**")
     }
 }
 

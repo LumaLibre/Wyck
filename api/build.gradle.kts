@@ -1,7 +1,6 @@
 dependencies {
     val libs = rootProject.libs
     compileOnly(libs.paper.api)
-    implementation(libs.faststats.metrics)
 }
 
 val injectBuildInfo by tasks.registering(Copy::class) {
@@ -17,10 +16,6 @@ sourceSets["main"].java.srcDir(
 
 tasks.compileJava {
     dependsOn(injectBuildInfo)
-}
-
-tasks.shadowJar {
-    relocate("dev.faststats", "$group.metrics")
 }
 
 tasks.build {

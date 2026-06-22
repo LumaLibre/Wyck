@@ -28,6 +28,7 @@ tasks {
         minecraftVersion("26.1.2")
         downloadPlugins {
             modrinth("gBIw3Gvy", "4.2.2")
+            //modrinth("gBIw3Gvy", "3.12.4")
         }
         //args("--safeMode")
         //commandLine.add("--safeMode")

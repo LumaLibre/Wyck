@@ -4,6 +4,7 @@ import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.level.dimension.Dimension;
 import me.outspending.biomesapi.level.LevelCreator;
 import me.outspending.biomesapi.keys.ResourceKey;
+import me.outspending.biomesapi.registry.bootstrap.util.BootstrapSafeMinecraftRegistries;
 import me.outspending.biomesapi.registry.level.LevelFactory;
 import me.outspending.biomesapi.wrapper.BiomeSettings;
 import me.outspending.biomesapi.wrapper.level.LevelChunkGenerator;
@@ -11,8 +12,14 @@ import me.outspending.biomesapi.wrapper.level.dimension.Skybox;
 import me.outspending.biomesapi.wrapper.environment.BedRule;
 import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttributes;
 import me.outspending.biomesapi.wrapper.level.BiomeSource;
+import me.outspending.biomesapi.wrapper.level.noise.LevelNoiseGeneratorSettings;
+import me.outspending.biomesapi.wrapper.level.noise.LevelNoiseRouter;
+import me.outspending.biomesapi.wrapper.level.noise.settings.LevelNoiseSettings;
 import me.outspending.biomesapi.wrapper.worldgen.climate.BiomeClimatePoint;
+import me.outspending.biomesapi.wrapper.worldgen.surface.WrappedSurfaceRule;
 import net.kyori.adventure.text.Component;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.world.level.dimension.LevelStem;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -41,19 +48,19 @@ public class TestPlugin extends JavaPlugin {
             .setCanSetSpawn(BedRule.Rule.NEVER)
             .build();
 
+        //LevelStem
 
         Dimension dimension = Dimension.builder(dimKey)
             .hasSkyLight(true)
-            .skybox(Skybox.OVERWORLD)
+            .skybox(Skybox.NONE)
             .attribute(WrappedEnvironmentAttributes.FAST_LAVA, true)
             .attribute(WrappedEnvironmentAttributes.BED_RULE, bedrule)
             .attribute(WrappedEnvironmentAttributes.FOG_COLOR, "#FFFFFF")
             .build();
 
         BiomeSource biomeSource = BiomeSource.multiNoise()
-            .add(ResourceKey.minecraft("stony_shore"), BiomeClimatePoint.builder().build())
+            .add(ResourceKey.minecraft("cherry_grove"), BiomeClimatePoint.builder().build())
             .build();
-
 
         LevelChunkGenerator generator = LevelChunkGenerator.noise(
             biomeSource,

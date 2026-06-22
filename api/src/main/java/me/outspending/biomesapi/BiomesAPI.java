@@ -1,24 +1,13 @@
 package me.outspending.biomesapi;
 
 import com.google.common.base.Preconditions;
-import dev.faststats.bukkit.BukkitContext;
-import dev.faststats.data.Metric;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.BuildInfo;
 import me.outspending.biomesapi.factory.NullableWireProvider;
-import me.outspending.biomesapi.keys.KeyChains;
-import org.bukkit.Bukkit;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
-
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Common interface for miscellaneous BiomesAPI methods and utilities.
@@ -94,34 +83,6 @@ public interface BiomesAPI {
     }
 
     /**
-     * Returns the metrics instance for BiomesAPI, if available.
-     * @return the metrics instance, or null if metrics is not available.
-     * @since 2.1.0
-     * @apiNote Unstable API, FastStats is in Beta and may change the object returned by this method at any point.
-     */
-    @AsOf("2.1.0")
-    @ApiStatus.Experimental
-    @Nullable BukkitContext metrics();
-
-
-    /**
-     * Disables metrics for BiomesAPI when running as a shaded library.
-     * @throws UnsupportedOperationException if BiomesAPI is running as a standalone plugin.
-     * @throws IllegalStateException if metrics are already enabled.
-     * @since 2.2.0
-     */
-    @AsOf("2.2.0")
-    default void disableMetrics() {
-        if (isExternal()) {
-            throw new UnsupportedOperationException("Cannot disable metrics for BiomesAPI as an external plugin.");
-        }
-        ShadedBiomesAPI shaded = (ShadedBiomesAPI) biomesapi();
-        Preconditions.checkState(!shaded.disableMetrics, "Metrics already disabled.");
-        Preconditions.checkState(shaded.metrics == null, "Metrics already enabled, call this method in onLoad() or onEnable().");
-        shaded.disableMetrics = true;
-    }
-
-    /**
      * Default implementation of BiomesAPI when shaded into a consumer plugin.
      * Constructed reflectively by the wire as a fallback when no standalone plugin
      * has registered itself.
@@ -134,11 +95,7 @@ public interface BiomesAPI {
     @ApiStatus.Internal
     final class ShadedBiomesAPI implements BiomesAPI {
 
-        private static final long ENABLE_WAIT_TIMEOUT_SECONDS = 10;
-
         private static @Nullable ShadedBiomesAPI INSTANCE;
-        private volatile @Nullable BukkitContext metrics;
-        private volatile boolean disableMetrics;
 
         private static synchronized ShadedBiomesAPI get() {
             if (INSTANCE == null) {
@@ -147,83 +104,9 @@ public interface BiomesAPI {
             return INSTANCE;
         }
 
-        @Override
-        public @Nullable BukkitContext metrics() {
-            return metrics;
-        }
 
         private ShadedBiomesAPI() {
             Preconditions.checkState(INSTANCE == null, "Already initialized");
-            if (!disableMetrics || isExternal()) { // Nothing can reach this early enough, but oh well
-                registerWhenReady();
-            }
-        }
-
-        private void registerWhenReady() {
-            JavaPlugin plugin = tryResolvePlugin();
-            if (plugin != null && plugin.isEnabled()) {
-                setupMetrics(plugin);
-                return;
-            }
-
-            ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor(r -> {
-                Thread t = new Thread(r, "BiomesAPI-Metrics");
-                t.setDaemon(true);
-                return t;
-            });
-
-            long startMillis = System.currentTimeMillis();
-            long timeoutMillis = TimeUnit.SECONDS.toMillis(ENABLE_WAIT_TIMEOUT_SECONDS);
-
-            executor.scheduleAtFixedRate(() -> {
-                if (disableMetrics || isExternal()) {
-                    executor.shutdown();
-                    return;
-                }
-
-                JavaPlugin resolved = tryResolvePlugin();
-                if (resolved != null && resolved.isEnabled()) {
-                    Bukkit.getGlobalRegionScheduler().run(resolved, _ -> {
-                        if (disableMetrics || isExternal()) return;
-                        setupMetrics(resolved);
-                    });
-                    executor.shutdown();
-                    return;
-                }
-                if (System.currentTimeMillis() - startMillis > timeoutMillis) {
-                    executor.shutdown();
-                }
-            }, 100, 100, TimeUnit.MILLISECONDS);
-        }
-
-
-        private @Nullable JavaPlugin tryResolvePlugin() {
-            try {
-                return plugin();
-            } catch (IllegalStateException _) {
-                return null;
-            }
-        }
-
-        private void setupMetrics(JavaPlugin plugin) {
-            BukkitContext built = new BukkitContext.Factory(plugin, BuildInfo.METRICS_TOKEN)
-                .metrics(factory ->
-                    factory.addMetric(Metric.number("registered_biomes", KeyChains.BIOMES::size))
-                        .addMetric(Metric.bool("is_external", this::isExternal))
-                        .addMetric(Metric.string("plugin_name", plugin::getName))
-                        .create())
-                    .create();
-
-            this.metrics = built;
-
-            Bukkit.getPluginManager().registerEvents(new Listener() {
-                @EventHandler
-                public void onDisable(PluginDisableEvent event) {
-                    if (event.getPlugin().equals(plugin)) {
-                        built.shutdown();
-                    }
-                }
-            }, plugin);
         }
     }
 }
