@@ -24,6 +24,7 @@ import net.minecraft.world.clock.WorldClock;
 import net.minecraft.world.level.CardinalLighting;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.timeline.Timeline;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NonNull;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NullMarked;
@@ -34,14 +35,13 @@ import java.util.Optional;
 
 @NullMarked
 @WireFactory
-@AsOf("2.4.0")
+@ApiStatus.Internal
 @SuppressWarnings("unchecked")
 public class DimensionTypeRegistry implements DimensionRegistry {
 
     private final Lazy<FrozenRegistry> dimensionTypeRegistry = FrozenRegistry.lazy("dimension_type");
 
     @Override
-    @AsOf("2.4.0")
     public DimensionType buildDelegate(Dimension dimension) {
         Preconditions.checkNotNull(dimension, "dimension cannot be null");
 
@@ -78,7 +78,6 @@ public class DimensionTypeRegistry implements DimensionRegistry {
     }
 
     @Override
-    @AsOf("2.4.0")
     @SuppressWarnings("unchecked")
     public void register(Dimension dimension) {
         Preconditions.checkNotNull(dimension, "dimension cannot be null");
@@ -106,7 +105,6 @@ public class DimensionTypeRegistry implements DimensionRegistry {
     }
 
     //@Override
-    @AsOf("2.4.0")
     public void modify(ResourceKey key, Dimension newData) {
         Preconditions.checkNotNull(key, "key cannot be null");
         Preconditions.checkNotNull(newData, "newData cannot be null");
