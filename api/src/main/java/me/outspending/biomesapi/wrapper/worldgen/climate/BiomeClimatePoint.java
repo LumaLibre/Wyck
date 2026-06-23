@@ -90,6 +90,11 @@ public interface BiomeClimatePoint extends NmsHandle {
         return new Builder();
     }
 
+    @AsOf("2.4.0")
+    static Builder zero() {
+        return new Builder(true);
+    }
+
     /**
      * Creates a climate point pinned to a single value on every axis.
      * @param temperature the temperature value
@@ -136,6 +141,16 @@ public interface BiomeClimatePoint extends NmsHandle {
         private float offset = 0.0f;
 
         private Builder() {
+        }
+
+        private Builder(boolean empty) {
+            this.temperature = BiomeParameter.point(0.0f);
+            this.humidity = BiomeParameter.point(0.0f);
+            this.continentalness = BiomeParameter.point(0.0f);
+            this.erosion = BiomeParameter.point(0.0f);
+            this.depth = BiomeParameter.point(0.0f);
+            this.weirdness = BiomeParameter.point(0.0f);
+            this.offset = 0.0f;
         }
 
         @AsOf("2.3.0")

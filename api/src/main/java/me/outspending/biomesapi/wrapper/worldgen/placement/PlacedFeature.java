@@ -6,6 +6,8 @@ import me.outspending.biomesapi.factory.WireProvider;
 import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.wrapper.internal.NmsHandle;
 import me.outspending.biomesapi.wrapper.worldgen.feature.ConfiguredFeature;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.Keyed;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -25,7 +27,7 @@ import java.util.List;
  */
 @NullMarked
 @AsOf("2.3.0")
-public sealed interface PlacedFeature extends NmsHandle permits PlacedFeature.Reference, PlacedFeature.Custom {
+public sealed interface PlacedFeature extends NmsHandle, Keyed permits PlacedFeature.Reference, PlacedFeature.Custom {
 
     @ApiStatus.Internal
     WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.worldgen.placement.PlacedFeatureFactoryImpl");
@@ -99,6 +101,11 @@ public sealed interface PlacedFeature extends NmsHandle permits PlacedFeature.Re
         public Custom {
             Preconditions.checkNotNull(feature, "feature");
             placement = List.copyOf(placement);
+        }
+
+        @Override
+        public Key key() {
+            return this.feature.key();
         }
     }
 

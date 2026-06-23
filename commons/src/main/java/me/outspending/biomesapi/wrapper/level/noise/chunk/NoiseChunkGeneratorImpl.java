@@ -3,7 +3,6 @@ package me.outspending.biomesapi.wrapper.level.noise.chunk;
 import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.registry.bootstrap.util.BootstrapSafeMinecraftRegistries;
 import me.outspending.biomesapi.wrapper.level.BiomeSource;
-import me.outspending.biomesapi.wrapper.level.LevelChunkGenerator;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;

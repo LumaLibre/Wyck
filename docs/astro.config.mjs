@@ -18,6 +18,9 @@ export default defineConfig({
   },
   integrations: [
     starlight({
+      components: {
+        Sidebar: './src/components/Sidebar.astro',
+      },
       plugins: [starlightThemeVintage()],
       title: 'BiomesAPI',
       logo: {

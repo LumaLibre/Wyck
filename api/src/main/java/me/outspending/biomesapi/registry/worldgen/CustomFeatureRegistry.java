@@ -1,6 +1,7 @@
 package me.outspending.biomesapi.registry.worldgen;
 
 import me.outspending.biomesapi.annotations.AsOf;
+import me.outspending.biomesapi.factory.WireProvider;
 import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.wrapper.worldgen.feature.custom.CustomFeature;
 import org.jetbrains.annotations.ApiStatus;
@@ -16,6 +17,15 @@ import org.jspecify.annotations.NullMarked;
 @AsOf("2.3.0")
 @ApiStatus.Internal
 public interface CustomFeatureRegistry {
+
+    @ApiStatus.Internal
+    WireProvider<CustomFeatureRegistry> WIRE = WireProvider.create("me.outspending.biomesapi.registry.worldgen.CustomFeatureRegistryImpl");
+
     @AsOf("2.3.0")
     void register(ResourceKey key, CustomFeature<?> feature);
+
+    @AsOf("2.4.0")
+    static CustomFeatureRegistry registry() {
+        return WIRE.get();
+    }
 }

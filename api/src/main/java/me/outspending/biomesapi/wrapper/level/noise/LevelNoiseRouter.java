@@ -2,20 +2,14 @@ package me.outspending.biomesapi.wrapper.level.noise;
 
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
-import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.wrapper.internal.NmsHandle;
+import me.outspending.biomesapi.wrapper.level.noise.function.DensityFunction;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.NullUnmarked;
 
-// TODO: Add support for authoring custom density functions
 /**
- * Wraps a {@code NoiseRouter} by referencing registered density functions by key. Each slot points at
- * a density function in the {@code worldgen/density_function} registry.
- *
- * @apiNote These references registered density functions only. Authoring density functions from
- * scratch is not yet supported, point at vanilla functions (e.g. {@code minecraft:overworld/final_density})
- * or your own datapack-registered ones.
+ * Wraps a {@code NoiseRouter} by referencing registered density functions by key.
  *
  * @version 2.4.0
  * @since 2.4.0
@@ -61,21 +55,21 @@ public interface LevelNoiseRouter extends NmsHandle {
     @NullUnmarked
     @AsOf("2.4.0")
     record Slots(
-        ResourceKey barrier,
-        ResourceKey fluidLevelFloodedness,
-        ResourceKey fluidLevelSpread,
-        ResourceKey lava,
-        ResourceKey temperature,
-        ResourceKey vegetation,
-        ResourceKey continents,
-        ResourceKey erosion,
-        ResourceKey depth,
-        ResourceKey ridges,
-        ResourceKey preliminarySurfaceLevel,
-        ResourceKey finalDensity,
-        ResourceKey veinToggle,
-        ResourceKey veinRidged,
-        ResourceKey veinGap
+        DensityFunction barrier,
+        DensityFunction fluidLevelFloodedness,
+        DensityFunction fluidLevelSpread,
+        DensityFunction lava,
+        DensityFunction temperature,
+        DensityFunction vegetation,
+        DensityFunction continents,
+        DensityFunction erosion,
+        DensityFunction depth,
+        DensityFunction ridges,
+        DensityFunction preliminarySurfaceLevel,
+        DensityFunction finalDensity,
+        DensityFunction veinToggle,
+        DensityFunction veinRidged,
+        DensityFunction veinGap
     ) {}
 
     /**
@@ -87,108 +81,108 @@ public interface LevelNoiseRouter extends NmsHandle {
     @AsOf("2.4.0")
     final class Builder {
 
-        private ResourceKey barrier;
-        private ResourceKey fluidLevelFloodedness;
-        private ResourceKey fluidLevelSpread;
-        private ResourceKey lava;
-        private ResourceKey temperature;
-        private ResourceKey vegetation;
-        private ResourceKey continents;
-        private ResourceKey erosion;
-        private ResourceKey depth;
-        private ResourceKey ridges;
-        private ResourceKey preliminarySurfaceLevel;
-        private ResourceKey finalDensity;
-        private ResourceKey veinToggle;
-        private ResourceKey veinRidged;
-        private ResourceKey veinGap;
+        private DensityFunction barrier;
+        private DensityFunction fluidLevelFloodedness;
+        private DensityFunction fluidLevelSpread;
+        private DensityFunction lava;
+        private DensityFunction temperature;
+        private DensityFunction vegetation;
+        private DensityFunction continents;
+        private DensityFunction erosion;
+        private DensityFunction depth;
+        private DensityFunction ridges;
+        private DensityFunction preliminarySurfaceLevel;
+        private DensityFunction finalDensity;
+        private DensityFunction veinToggle;
+        private DensityFunction veinRidged;
+        private DensityFunction veinGap;
 
         @AsOf("2.4.0")
-        public Builder barrier(ResourceKey barrier) {
+        public Builder barrier(DensityFunction barrier) {
             this.barrier = barrier;
             return this;
         }
 
         @AsOf("2.4.0")
-        public Builder fluidLevelFloodedness(ResourceKey fluidLevelFloodedness) {
+        public Builder fluidLevelFloodedness(DensityFunction fluidLevelFloodedness) {
             this.fluidLevelFloodedness = fluidLevelFloodedness;
             return this;
         }
 
         @AsOf("2.4.0")
-        public Builder fluidLevelSpread(ResourceKey fluidLevelSpread) {
+        public Builder fluidLevelSpread(DensityFunction fluidLevelSpread) {
             this.fluidLevelSpread = fluidLevelSpread;
             return this;
         }
 
         @AsOf("2.4.0")
-        public Builder lava(ResourceKey lava) {
+        public Builder lava(DensityFunction lava) {
             this.lava = lava;
             return this;
         }
 
         @AsOf("2.4.0")
-        public Builder temperature(ResourceKey temperature) {
+        public Builder temperature(DensityFunction temperature) {
             this.temperature = temperature;
             return this;
         }
 
         @AsOf("2.4.0")
-        public Builder vegetation(ResourceKey vegetation) {
+        public Builder vegetation(DensityFunction vegetation) {
             this.vegetation = vegetation;
             return this;
         }
 
         @AsOf("2.4.0")
-        public Builder continents(ResourceKey continents) {
+        public Builder continents(DensityFunction continents) {
             this.continents = continents;
             return this;
         }
 
         @AsOf("2.4.0")
-        public Builder erosion(ResourceKey erosion) {
+        public Builder erosion(DensityFunction erosion) {
             this.erosion = erosion;
             return this;
         }
 
         @AsOf("2.4.0")
-        public Builder depth(ResourceKey depth) {
+        public Builder depth(DensityFunction depth) {
             this.depth = depth;
             return this;
         }
 
         @AsOf("2.4.0")
-        public Builder ridges(ResourceKey ridges) {
+        public Builder ridges(DensityFunction ridges) {
             this.ridges = ridges;
             return this;
         }
 
         @AsOf("2.4.0")
-        public Builder preliminarySurfaceLevel(ResourceKey preliminarySurfaceLevel) {
+        public Builder preliminarySurfaceLevel(DensityFunction preliminarySurfaceLevel) {
             this.preliminarySurfaceLevel = preliminarySurfaceLevel;
             return this;
         }
 
         @AsOf("2.4.0")
-        public Builder finalDensity(ResourceKey finalDensity) {
+        public Builder finalDensity(DensityFunction finalDensity) {
             this.finalDensity = finalDensity;
             return this;
         }
 
         @AsOf("2.4.0")
-        public Builder veinToggle(ResourceKey veinToggle) {
+        public Builder veinToggle(DensityFunction veinToggle) {
             this.veinToggle = veinToggle;
             return this;
         }
 
         @AsOf("2.4.0")
-        public Builder veinRidged(ResourceKey veinRidged) {
+        public Builder veinRidged(DensityFunction veinRidged) {
             this.veinRidged = veinRidged;
             return this;
         }
 
         @AsOf("2.4.0")
-        public Builder veinGap(ResourceKey veinGap) {
+        public Builder veinGap(DensityFunction veinGap) {
             this.veinGap = veinGap;
             return this;
         }

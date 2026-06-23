@@ -4,7 +4,8 @@ import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.level.dimension.Dimension;
 import me.outspending.biomesapi.keys.ResourceKey;
-import me.outspending.biomesapi.wrapper.level.LevelChunkGenerator;
+import me.outspending.biomesapi.registry.level.LevelFactory;
+import me.outspending.biomesapi.wrapper.level.noise.chunk.LevelChunkGenerator;
 import me.outspending.biomesapi.wrapper.level.spawner.LevelSpawner;
 import org.bukkit.World;
 import org.jetbrains.annotations.ApiStatus;
@@ -116,6 +117,17 @@ public interface LevelCreator {
      */
     @AsOf("2.4.0")
     @Nullable World asBukkitWorld();
+
+
+    /**
+     * Creates a new {@link World} from this {@link LevelCreator}.
+     * @return a new {@link World} from this {@link LevelCreator}
+     * @since 2.4.0
+     */
+    @AsOf("2.4.0")
+    default World create() {
+        return LevelFactory.factory().createWorld(this);
+    }
 
     /**
      * @return a new {@link Builder} instance
@@ -241,6 +253,11 @@ public interface LevelCreator {
                 persistence,
                 spawners
             );
+        }
+
+        @AsOf("2.4.0")
+        public World create() {
+            return build().create();
         }
     }
 }

@@ -1,7 +1,6 @@
 package me.outspending.biomesapi.wrapper.level.noise.chunk;
 
 import me.outspending.biomesapi.wrapper.level.BiomeSource;
-import me.outspending.biomesapi.wrapper.level.LevelChunkGenerator;
 import me.outspending.biomesapi.wrapper.level.noise.LevelNoiseGeneratorSettings;
 import net.minecraft.core.Holder;
 import net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator;

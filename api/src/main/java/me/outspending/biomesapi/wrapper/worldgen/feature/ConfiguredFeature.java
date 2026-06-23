@@ -6,6 +6,8 @@ import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.wrapper.internal.NmsHandle;
 import me.outspending.biomesapi.wrapper.worldgen.feature.config.FeatureConfiguration;
 import me.outspending.biomesapi.wrapper.worldgen.feature.custom.CustomFeature;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.Keyed;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
@@ -25,7 +27,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.3.0")
-public sealed interface ConfiguredFeature extends NmsHandle permits ConfiguredFeature.Reference, ConfiguredFeature.VanillaConfigured, ConfiguredFeature.CustomConfigured {
+public sealed interface ConfiguredFeature extends NmsHandle, Keyed permits ConfiguredFeature.Reference, ConfiguredFeature.VanillaConfigured, ConfiguredFeature.CustomConfigured {
 
     @ApiStatus.Internal
     WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.worldgen.feature.ConfiguredFeatureFactoryImpl");
@@ -93,7 +95,12 @@ public sealed interface ConfiguredFeature extends NmsHandle permits ConfiguredFe
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    record VanillaConfigured(ResourceKey featureKey, FeatureConfiguration configuration) implements ConfiguredFeature {}
+    record VanillaConfigured(ResourceKey featureKey, FeatureConfiguration configuration) implements ConfiguredFeature {
+        @Override
+        public Key key() {
+            return this.featureKey;
+        }
+    }
 
     /**
      * A configured feature composed of a registered custom feature with a config instance.
@@ -103,5 +110,10 @@ public sealed interface ConfiguredFeature extends NmsHandle permits ConfiguredFe
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    record CustomConfigured(ResourceKey featureKey, Object config) implements ConfiguredFeature {}
+    record CustomConfigured(ResourceKey featureKey, Object config) implements ConfiguredFeature {
+        @Override
+        public Key key() {
+            return this.featureKey;
+        }
+    }
 }

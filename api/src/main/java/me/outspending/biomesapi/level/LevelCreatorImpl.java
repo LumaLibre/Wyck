@@ -3,7 +3,7 @@ package me.outspending.biomesapi.level;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.level.dimension.Dimension;
 import me.outspending.biomesapi.keys.ResourceKey;
-import me.outspending.biomesapi.wrapper.level.LevelChunkGenerator;
+import me.outspending.biomesapi.wrapper.level.noise.chunk.LevelChunkGenerator;
 import me.outspending.biomesapi.wrapper.level.spawner.LevelSpawner;
 import org.bukkit.Bukkit;
 import org.bukkit.World;

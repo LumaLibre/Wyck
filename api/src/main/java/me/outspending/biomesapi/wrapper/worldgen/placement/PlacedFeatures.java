@@ -13,12 +13,12 @@ import org.jspecify.annotations.NullMarked;
  * </p>
  *
  * @since 2.3.0
- * @version 2.3.0
+ * @version 2.4.0
  * @author BiomesAPI codegen
  */
 @NullMarked
-@AsOf("2.3.0")
-@Generated("2026-06-06T20:06:18.770458Z")
+@AsOf("2.4.0")
+@Generated("2026-06-22T20:13:03.073162Z")
 public final class PlacedFeatures {
 
     // From: AquaticPlacements 
@@ -556,7 +556,9 @@ public final class PlacedFeatures {
     public static final PlacedFeature PATCH_BERRY_BUSH_VILLAGE = reference("patch_berry_bush");
 
     private static PlacedFeature reference(String path) {
-        return PlacedFeature.reference(ResourceKey.minecraft(path));
+        PlacedFeature keyed = PlacedFeature.reference(ResourceKey.minecraft(path));
+        me.outspending.biomesapi.keys.KeyChains.PLACED_FEATURES.append(keyed);
+        return keyed;
     }
 
     private PlacedFeatures() {

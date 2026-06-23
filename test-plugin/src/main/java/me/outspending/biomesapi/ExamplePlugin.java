@@ -1,67 +1,33 @@
 package me.outspending.biomesapi;
 
-import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.level.LevelCreator;
-import me.outspending.biomesapi.level.dimension.Dimension;
-import me.outspending.biomesapi.registry.level.LevelFactory;
-import me.outspending.biomesapi.wrapper.environment.BedRule;
-import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttributes;
-import me.outspending.biomesapi.wrapper.level.BiomeSource;
-import me.outspending.biomesapi.wrapper.level.LevelChunkGenerator;
-import me.outspending.biomesapi.wrapper.level.dimension.Skybox;
-import me.outspending.biomesapi.wrapper.worldgen.climate.BiomeClimatePoint;
-import me.outspending.biomesapi.wrapper.worldgen.climate.BiomeParameter;
-import net.kyori.adventure.text.Component;
-import org.bukkit.World;
+import me.outspending.biomesapi.wrapper.level.spawner.LevelSpawner;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ExamplePlugin extends JavaPlugin {
     @Override
     public void onEnable() {
-        ResourceKey exampleKey = ResourceKey.of("biomesapi:example");
+        // Referencing an existing LevelSpawner
+        LevelSpawner phantomSpawner = LevelSpawner.phantom();
 
-        Dimension dimension = Dimension.builder(exampleKey)
-            .hasSkyLight(true)
-            .skybox(Skybox.OVERWORLD)
-            .attribute(WrappedEnvironmentAttributes.FOG_COLOR, "#FFFFFF")
-            .attribute(WrappedEnvironmentAttributes.BED_RULE,
-                BedRule.builder()
-                    .setExplodes(true)
-                    .setErrorMessage(Component.text("Kaboom!"))
-                    .build()
-            )
-            .register();
-        CustomBiome biome = CustomBiome.builder(exampleKey)
-            .fogColor("#DB00FD")
-            .skyColor("#2F46FF")
-            .waterColor("#00FFD0")
-            .grassColor("#D1D13A")
-            .foliageColor("#FF6A00")
-            .register();
+        // Creating a custom LevelSpawner
+        LevelSpawner customSpawner = LevelSpawner.custom((world, spawnEnemies) -> {
+            for (Player player : world.getPlayers()) {
+                player.getScheduler().run(this, _ -> {
+                    EntityType type = spawnEnemies ? EntityType.ZOMBIE : EntityType.PIG;
+                    world.spawnEntity(player.getLocation(), type);
+                }, null);
+            }
+        });
 
-        // Create a biome source! This can be fixed or multi noise
-        BiomeParameter span = BiomeParameter.span(1.0f, 1.5f);
-        BiomeParameter point = BiomeParameter.point(0.9f);
-
-        // For this example, we'll use a custom biome and a desert and have them span different temperatures and humidity
-        BiomeSource biomeSource = BiomeSource.multiNoise()
-            .add(biome, BiomeClimatePoint.builder().temperature(span).humidity(span).build())
-            .add(ResourceKey.minecraft("desert"), BiomeClimatePoint.builder().temperature(point).humidity(point).build())
+        // Adding the spawners to a LevelCreator
+        LevelCreator level = LevelCreator.builder()
+            .levelKey(ResourceKey.of("test", "example"))
+            .addSpawner(phantomSpawner)
+            .addSpawner(customSpawner)
             .build();
-
-        // For this example, we'll use the overworld noise generator. You can also create your own!
-        LevelChunkGenerator generator = LevelChunkGenerator.noise(
-            biomeSource,
-            LevelChunkGenerator.overworldNoise()
-        );
-
-        LevelCreator levelCreator = LevelCreator.builder(exampleKey)
-            .dimension(dimension)
-            .generator(generator)
-            .build();
-
-        World world = LevelFactory.factory().createWorld(levelCreator);
-        // All done!
     }
 }

@@ -1,5 +1,7 @@
 package me.outspending.biomesapi.wrapper.level.noise;
 
+import com.google.common.base.Preconditions;
+import me.outspending.biomesapi.util.Lazy;
 import me.outspending.biomesapi.wrapper.worldgen.climate.BiomeClimatePoint;
 import net.minecraft.world.level.biome.Climate;
 import net.minecraft.world.level.block.Block;
@@ -18,11 +20,26 @@ import java.util.List;
 
 @NullMarked
 @ApiStatus.Internal
-public record LevelNoiseGeneratorSettingsImpl(
-    LevelNoiseGeneratorSettings.Data data) implements LevelNoiseGeneratorSettings {
+public final class LevelNoiseGeneratorSettingsImpl implements LevelNoiseGeneratorSettings {
+
+    private final Data data;
+    private final Lazy<NoiseGeneratorSettings> cached = Lazy.of(this::build);
+
+    public LevelNoiseGeneratorSettingsImpl(Data data) {
+        this.data = data;
+    }
+
+    @Override
+    public Data data() {
+        return this.data;
+    }
 
     @Override
     public Object toMinecraft() {
+        return this.cached.get();
+    }
+
+    private NoiseGeneratorSettings build() {
         NoiseSettings noiseSettings = (NoiseSettings) this.data.noiseSettings().toMinecraft();
         BlockState defaultBlock = blockState(this.data.defaultBlock());
         BlockState defaultFluid = blockState(this.data.defaultFluid());
@@ -46,9 +63,8 @@ public record LevelNoiseGeneratorSettingsImpl(
 
     private static BlockState blockState(Material material) {
         Block block = CraftMagicNumbers.getBlock(material);
-        if (block == null) {
-            throw new IllegalArgumentException("Material " + material + " does not map to a block");
-        }
+        Preconditions.checkNotNull(block, "Material '%s' is not a block", material);
+
         return block.defaultBlockState();
     }
 

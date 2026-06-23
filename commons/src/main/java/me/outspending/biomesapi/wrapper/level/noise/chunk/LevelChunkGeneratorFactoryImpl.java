@@ -3,7 +3,6 @@ package me.outspending.biomesapi.wrapper.level.noise.chunk;
 import me.outspending.biomesapi.annotations.WireFactory;
 import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.wrapper.level.BiomeSource;
-import me.outspending.biomesapi.wrapper.level.LevelChunkGenerator;
 import me.outspending.biomesapi.wrapper.level.noise.LevelNoiseGeneratorSettings;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;

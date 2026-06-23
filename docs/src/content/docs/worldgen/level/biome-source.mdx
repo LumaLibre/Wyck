@@ -1,0 +1,114 @@
+---
+title: Biome Sources
+description: Learn how biome sources decide which biome occupies each region of a dimension in BiomesAPI.
+---
+
+import CodeBlock from "@/components/CodeBlock.astro";
+import SourceLink from "@/components/SourceLink.astro";
+
+A <SourceLink path="wrapper/level/BiomeSource.java">BiomeSource</SourceLink>
+dictates how biomes occupy regions of a world. These work in tandem with <SourceLink path="wrapper/level/noise/chunk/LevelChunkGenerator.java">LevelChunkGenerator</SourceLink>s
+to produce a dimension's terrain.
+
+## Fixed
+
+A fixed source places the same biome across the entire world. It's the simplest source to build and a fine
+fit for flat worlds, void worlds, or any dimension where biome variety does not matter.
+
+<CodeBlock
+    lang="java"
+    filename="Examples.java"
+    code={
+        `import me.outspending.biomesapi.biome.CustomBiome;
+import me.outspending.biomesapi.keys.ResourceKey;
+import me.outspending.biomesapi.wrapper.level.BiomeSource;
+import org.bukkit.block.Biome;
+
+// a registered custom biome
+CustomBiome biome = CustomBiome.builder()
+    .resourceKey(ResourceKey.of("test", "biome"))
+    .fogColor("#DB00FD")
+    .skyColor("#2F46FF")
+    .register();
+
+// fixed over a custom biome
+BiomeSource custom = BiomeSource.fixed(biome);
+
+// or a vanilla biome
+BiomeSource vanilla = BiomeSource.fixed(Biome.PLAINS);
+
+// or by key
+BiomeSource byKey = BiomeSource.fixed(ResourceKey.of("minecraft", "desert"));
+`}
+/>
+
+## Multi-Noise
+
+A multi-noise source distributes biomes the way the vanilla overworld does: each biome is placed at a point
+in a six-axis climate space (temperature, humidity, continentalness, erosion, depth, weirdness) plus a fitness
+offset, and the generator picks whichever biome's point is closest for a given location.
+
+:::note
+
+Any axis you leave unset in the builder spans its full range.
+This lets a biome 'win' across a broad band of the climate space while still being pinned on the axes you care
+about.
+
+:::
+
+<CodeBlock
+    lang="java"
+    filename="ExamplePlugin.java"
+    code={
+`import me.outspending.biomesapi.biome.CustomBiome;
+import me.outspending.biomesapi.keys.ResourceKey;
+import me.outspending.biomesapi.wrapper.level.BiomeSource;
+import me.outspending.biomesapi.wrapper.worldgen.climate.BiomeClimatePoint;
+import me.outspending.biomesapi.wrapper.worldgen.climate.BiomeParameter;
+import org.bukkit.block.Biome;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class ExamplePlugin extends JavaPlugin {
+    @Override
+    public void onEnable() {
+        CustomBiome biome = CustomBiome.builder()
+            .resourceKey(ResourceKey.of("test", "biome"))
+            .fogColor("#DB00FD")
+            .skyColor("#2F46FF")
+            .register();
+
+        BiomeClimatePoint withArgsClimate = BiomeClimatePoint.of(1.8f, 1.2f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+
+        BiomeClimatePoint zeroBuilderClimate = BiomeClimatePoint.zero()
+            .temperature(BiomeParameter.point(-0.8f))
+            .humidity(BiomeParameter.point(-0.5f))
+            .build();
+
+        BiomeClimatePoint builderClimate = BiomeClimatePoint.builder()
+            .temperature(BiomeParameter.point(0.0f))
+            .humidity(BiomeParameter.point(0.0f))
+            .build();
+
+        BiomeSource source = BiomeSource.multiNoise()
+            .add(ResourceKey.of("minecraft", "plains"), withArgsClimate) // wins in hot, wet regions
+            .add(biome, zeroBuilderClimate) // wins in cold, dry regions
+            .add(Biome.JUNGLE, builderClimate) // fills everywhere else
+            .build(); // Done!
+    }
+}`}
+/>
+
+Once built, you can pass the biome source to a generator and the generator to a <SourceLink path="level/LevelCreator.java">LevelCreator</SourceLink>.
+
+<CodeBlock
+    lang="java"
+    filename="ExamplePlugin.java"
+    code={
+`LevelChunkGenerator generator = LevelChunkGenerator.noise(source, Noise.overworld());
+
+World world = LevelCreator.builder()
+    .levelKey(ResourceKey.of("test", "example"))
+    .generator(generator)
+    .create();
+`}
+/>

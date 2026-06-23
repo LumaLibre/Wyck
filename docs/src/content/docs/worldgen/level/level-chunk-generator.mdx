@@ -1,0 +1,64 @@
+---
+title: Chunk Generators
+description: Learn how chunk generators pair a biome source with noise settings to produce a dimension's terrain in BiomesAPI.
+---
+
+import CodeBlock from "@/components/CodeBlock.astro";
+import SourceLink from "@/components/SourceLink.astro";
+
+A <SourceLink path="wrapper/level/noise/chunk/LevelChunkGenerator.java">LevelChunkGenerator</SourceLink> is
+what a dimension's level stem uses to generate chunks. It combines a <SourceLink path="wrapper/level/BiomeSource.java">BiomeSource</SourceLink>,
+which decides which biome occupies each region, along with a set of noise settings which decide how terrain is
+shaped and which blocks fill to the world with.
+
+
+## Noise Settings
+
+The generator needs noise settings, and there are two ways to supply them:
+
+- **By reference**: pass a <SourceLink path="keys/ResourceKey.java">ResourceKey</SourceLink> pointing at an
+existing settings entry, such as `minecraft:overworld`, `minecraft:the_nether`, or `minecraft:end`.
+- **Authored**: pass a <SourceLink path="wrapper/level/noise/LevelNoiseGeneratorSettings.java">LevelNoiseGeneratorSettings</SourceLink>,
+which bundles a `LevelNoiseRouter` (see the [Noise Routers](/wrapper/level/noise-routers) page) together with
+the rest of the generator's configuration.
+
+### Example Usage
+<CodeBlock
+    lang="java"
+    filename="ExamplePlugin.java"
+    code={
+`import me.outspending.biomesapi.biome.CustomBiome;
+import me.outspending.biomesapi.keys.ResourceKey;
+import me.outspending.biomesapi.level.LevelCreator;
+import me.outspending.biomesapi.wrapper.level.BiomeSource;
+import me.outspending.biomesapi.wrapper.level.noise.Noise;
+import me.outspending.biomesapi.wrapper.level.noise.chunk.LevelChunkGenerator;
+import org.bukkit.World;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class ExamplePlugin extends JavaPlugin {
+    @Override
+    public void onEnable() {
+        CustomBiome biome = CustomBiome.builder()
+            .resourceKey(ResourceKey.of("test", "biome"))
+            .fogColor("#DB00FD")
+            .skyColor("#2F46FF")
+            .waterColor("#00FFD0")
+            .grassColor("#D1D13A")
+            .foliageColor("#FF6A00")
+            .register();
+
+
+        // Floating islands with a single fixed custom biome
+        LevelChunkGenerator generator = LevelChunkGenerator.noise(
+            BiomeSource.fixed(biome),
+            Noise.floatingIslands()
+        );
+
+        World world = LevelCreator.builder()
+            .levelKey(ResourceKey.of("test", "example"))
+            .generator(generator)
+            .create(); // Done!
+    }
+}`}
+/>

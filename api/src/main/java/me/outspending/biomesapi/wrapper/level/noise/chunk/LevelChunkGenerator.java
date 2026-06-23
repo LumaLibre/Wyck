@@ -1,11 +1,13 @@
-package me.outspending.biomesapi.wrapper.level;
+package me.outspending.biomesapi.wrapper.level.noise.chunk;
 
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
 import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.level.LevelCreator;
 import me.outspending.biomesapi.wrapper.internal.NmsHandle;
+import me.outspending.biomesapi.wrapper.level.BiomeSource;
 import me.outspending.biomesapi.wrapper.level.noise.LevelNoiseGeneratorSettings;
+import me.outspending.biomesapi.wrapper.level.noise.Noise;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
@@ -27,64 +29,8 @@ public interface LevelChunkGenerator extends NmsHandle {
     @ApiStatus.Internal
     interface Factory {
         LevelChunkGenerator noise(BiomeSource biomeSource, ResourceKey noiseSettings);
+
         LevelChunkGenerator noise(BiomeSource biomeSource, LevelNoiseGeneratorSettings settings);
-    }
-
-    /**
-     * @return the default noise settings for the overworld
-     * @since 2.4.0
-     */
-    @AsOf("2.4.0")
-    static ResourceKey overworldNoise() {
-        return ResourceKey.minecraft("overworld");
-    }
-
-    /**
-     * @return the default noise settings for the nether
-     * @since 2.4.0
-     */
-    @AsOf("2.4.0")
-    static ResourceKey netherNoise() {
-        return ResourceKey.minecraft("nether");
-    }
-
-    /**
-     * @return the default noise settings for the end
-     * @since 2.4.0
-     */
-    @AsOf("2.4.0")
-    static ResourceKey endNoise() {
-        return ResourceKey.minecraft("end");
-    }
-
-    /**
-     * The default noise settings for floating islands.
-     * @return the default noise settings for floating islands
-     * @since 2.4.0
-     */
-    @AsOf("2.4.0")
-    static ResourceKey floatingIslandsNoise() {
-        return ResourceKey.minecraft("floating_islands");
-    }
-
-    /**
-     * The default noise settings for amplified noise.
-     * @return the default noise settings for amplified noise
-     * @since 2.4.0
-     */
-    @AsOf("2.4.0")
-    static ResourceKey amplifiedNoise() {
-        return ResourceKey.minecraft("amplified");
-    }
-
-    /**
-     * The default noise settings for caves.
-     * @return the default noise settings for caves
-     * @since 2.4.0
-     */
-    @AsOf("2.4.0")
-    static ResourceKey cavesNoise() {
-        return ResourceKey.minecraft("caves");
     }
 
     /**
@@ -111,5 +57,22 @@ public interface LevelChunkGenerator extends NmsHandle {
     @AsOf("2.4.0")
     static LevelChunkGenerator noise(BiomeSource biomeSource, LevelNoiseGeneratorSettings settings) {
         return WIRE.get().noise(biomeSource, settings);
+    }
+
+    /**
+     * Builds a noise generator over the given biome source, referencing the given settings.
+     * @param biomeSource the biome source the generator draws from
+     * @param abstractNoise the noise generator settings
+     * @return a wrapped chunk generator
+     * @since 2.4.0
+     */
+    @AsOf("2.4.0")
+    static LevelChunkGenerator noise(BiomeSource biomeSource, Noise abstractNoise) {
+        if (abstractNoise instanceof Noise.Reference(ResourceKey key)) {
+            return noise(biomeSource, key);
+        } else if (abstractNoise instanceof LevelNoiseGeneratorSettings settings) {
+            return noise(biomeSource, settings);
+        }
+        throw new IllegalArgumentException("Unknown noise type: " + abstractNoise.getClass().getName());
     }
 }

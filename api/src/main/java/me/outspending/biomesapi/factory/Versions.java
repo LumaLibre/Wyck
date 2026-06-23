@@ -36,9 +36,6 @@ public enum Versions {
 
     @AsOf("2.0.0")
     public static Version getActive() {
-        // This is here to prevent lazy loading of the BiomesAPI interface
-        BiomesAPI.biomesapi();
-
         String mc;
         try {
             mc = ServerBuildInfo.buildInfo().minecraftVersionId();
@@ -56,6 +53,6 @@ public enum Versions {
             }
         }
 
-        throw new UnknownNMSVersionException(Version.of(me.outspending.biomesapi.factory.Version.Type.UNKNOWN, "").getMessage());
+        throw new UnknownNMSVersionException(Version.of(Version.Type.UNKNOWN, mc).getMessage());
     }
 }

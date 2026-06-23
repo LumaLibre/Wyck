@@ -3,6 +3,8 @@ package me.outspending.biomesapi.wrapper.level.noise;
 import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
+import me.outspending.biomesapi.keys.ResourceKey;
+import me.outspending.biomesapi.registry.worldgen.LevelNoiseGeneratorSettingsRegistry;
 import me.outspending.biomesapi.wrapper.internal.NmsHandle;
 import me.outspending.biomesapi.wrapper.level.noise.settings.LevelNoiseSettings;
 import me.outspending.biomesapi.wrapper.worldgen.climate.BiomeClimatePoint;
@@ -14,6 +16,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
+// TODO: Allow registering custom noise generators
 /**
  * Wraps {@code NoiseGeneratorSettings}.
  *
@@ -24,7 +27,7 @@ import java.util.List;
 @NullMarked
 @AsOf("2.4.0")
 @ApiStatus.Experimental
-public interface LevelNoiseGeneratorSettings extends NmsHandle {
+public interface LevelNoiseGeneratorSettings extends NmsHandle, Noise {
 
     @ApiStatus.Internal
     WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.level.noise.LevelNoiseGeneratorSettingsFactoryImpl");
@@ -44,6 +47,29 @@ public interface LevelNoiseGeneratorSettings extends NmsHandle {
     Data data();
 
     /**
+     * The key of this noise generator setting.
+     * @return the key of this noise generator setting, if present
+     * @since 2.4.0
+     */
+    @Override
+    default @Nullable ResourceKey key() {
+        return this.data().resourceKey();
+    }
+
+    /**
+     * Registers this noise generator setting.
+     * @return this noise generator setting
+     * @since 2.4.0
+     */
+    @AsOf("2.4.0")
+    default LevelNoiseGeneratorSettings register() {
+        ResourceKey key = this.data().resourceKey();
+        Preconditions.checkState(key != null, "resourceKey must set in order to be registered");
+        LevelNoiseGeneratorSettingsRegistry.registry().register(key, this);
+        return this;
+    }
+
+    /**
      * Creates a new builder for noise generator settings.
      *
      * @return a new builder
@@ -61,6 +87,7 @@ public interface LevelNoiseGeneratorSettings extends NmsHandle {
      */
     @AsOf("2.4.0")
     record Data(
+        @Nullable ResourceKey resourceKey,
         LevelNoiseSettings noiseSettings,
         Material defaultBlock,
         Material defaultFluid,
@@ -83,6 +110,7 @@ public interface LevelNoiseGeneratorSettings extends NmsHandle {
     @AsOf("2.4.0")
     final class Builder {
 
+        private @Nullable ResourceKey resourceKey = null;
         private LevelNoiseSettings noiseSettings = LevelNoiseSettings.OVERWORLD;
         private Material defaultBlock = Material.STONE;
         private Material defaultFluid = Material.WATER;
@@ -90,10 +118,17 @@ public interface LevelNoiseGeneratorSettings extends NmsHandle {
         private @Nullable WrappedSurfaceRule surfaceRule = null;
         private List<BiomeClimatePoint> spawnTarget = List.of();
         private int seaLevel = 63;
-        private boolean disableMobGeneration = false;
+        private @Deprecated boolean disableMobGeneration = false;
         private boolean aquifersEnabled = true;
         private boolean oreVeinsEnabled = true;
         private boolean useLegacyRandomSource = false;
+
+
+        @AsOf("2.4.0")
+        public Builder resourceKey(@Nullable ResourceKey resourceKey) {
+            this.resourceKey = resourceKey;
+            return this;
+        }
 
         @AsOf("2.4.0")
         public Builder noiseSettings(LevelNoiseSettings noiseSettings) {
@@ -173,6 +208,7 @@ public interface LevelNoiseGeneratorSettings extends NmsHandle {
             Preconditions.checkArgument(this.noiseRouter != null, "noiseRouter must be set");
             Preconditions.checkArgument(this.surfaceRule != null, "surfaceRule must be set");
             Data data = new Data(
+                this.resourceKey,
                 this.noiseSettings,
                 this.defaultBlock,
                 this.defaultFluid,
@@ -185,7 +221,13 @@ public interface LevelNoiseGeneratorSettings extends NmsHandle {
                 this.oreVeinsEnabled,
                 this.useLegacyRandomSource
             );
+
             return WIRE.get().create(data);
+        }
+
+        @AsOf("2.4.0")
+        public LevelNoiseGeneratorSettings register() {
+            return this.build().register();
         }
     }
 }

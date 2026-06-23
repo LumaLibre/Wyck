@@ -13,12 +13,12 @@ import org.jspecify.annotations.NullMarked;
  * </p>
  *
  * @since 2.3.0
- * @version 2.3.0
+ * @version 2.4.0
  * @author BiomesAPI codegen
  */
 @NullMarked
-@AsOf("2.3.0")
-@Generated("2026-06-06T20:06:18.765849Z")
+@AsOf("2.4.0")
+@Generated("2026-06-22T20:13:03.067352Z")
 public final class ConfiguredFeatures {
 
     // From: AquaticFeatures 
@@ -482,7 +482,9 @@ public final class ConfiguredFeatures {
     public static final ConfiguredFeature MANGROVE_VEGETATION = reference("mangrove_vegetation");
 
     private static ConfiguredFeature reference(String path) {
-        return ConfiguredFeature.reference(ResourceKey.minecraft(path));
+        ConfiguredFeature keyed = ConfiguredFeature.reference(ResourceKey.minecraft(path));
+        me.outspending.biomesapi.keys.KeyChains.CONFIGURED_FEATURES.append(keyed);
+        return keyed;
     }
 
     private ConfiguredFeatures() {

@@ -13,6 +13,8 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+// TODO: javadoc
+@AsOf("2.4.0")
 public final class KeyChain<T extends Keyed> {
 
     private final Set<T> backing;
@@ -35,6 +37,7 @@ public final class KeyChain<T extends Keyed> {
     public T getOrThrow(Key key) {
         T obj = get(key);
         if (obj == null) {
+            // TODO: Needs to be refactored
             throw new UnknownBiomeException("Unknown biome: " + key);
         }
         return obj;

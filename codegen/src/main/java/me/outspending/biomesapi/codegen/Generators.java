@@ -20,16 +20,17 @@ import net.minecraft.data.worldgen.placement.OrePlacements;
 import net.minecraft.data.worldgen.placement.TreePlacements;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.data.worldgen.placement.VillagePlacements;
+import net.minecraft.world.level.levelgen.NoiseRouterData;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
-// AsOf 2.3.0
 public final class Generators {
 
     public static final List<GeneratorSpec> ALL = List.of(
         configuredFeatures(),
-        placedFeatures()
+        placedFeatures(),
+        densityFunctions()
     );
 
     private static @Nullable Identifier keyLocation(Object entry) {
@@ -60,7 +61,9 @@ public final class Generators {
                 TreeFeatures.class,
                 VegetationFeatures.class
             ),
-            "Typed references that point to vanilla's configured features."
+            "Typed references that point to vanilla's configured features.",
+            "2.3.0",
+            "CONFIGURED_FEATURES"
         );
     }
 
@@ -83,7 +86,26 @@ public final class Generators {
                 VegetationPlacements.class,
                 VillagePlacements.class
             ),
-            "Typed references that point to vanilla's placed features."
+            "Typed references that point to vanilla's placed features.",
+            "2.3.0",
+            "PLACED_FEATURES"
+        );
+    }
+
+    private static GeneratorSpec densityFunctions() {
+        return new GeneratorSpec(
+            "me.outspending.biomesapi.wrapper.level.noise.function",
+            "DensityFunctions",
+            "DensityFunction",
+            "DensityFunction.reference",
+            ResourceKey.class,
+            Generators::keyLocation,
+            List.of(
+                NoiseRouterData.class
+            ),
+            "Typed references that point to vanilla's density functions.",
+            "2.4.0",
+            "DENSITY_FUNCTIONS"
         );
     }
 
