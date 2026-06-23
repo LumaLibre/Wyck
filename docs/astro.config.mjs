@@ -9,7 +9,7 @@ import yaml from '@rollup/plugin-yaml';
 export default defineConfig({
   site: "https://biomes.lumas.dev",
   redirects: {
-    '/javadoc': '/javadoc/index.html',
+    '/jd': '/javadoc/index.html',
   },
   vite: {
     plugins: [yaml()],
