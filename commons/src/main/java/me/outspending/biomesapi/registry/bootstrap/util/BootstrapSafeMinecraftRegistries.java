@@ -75,15 +75,29 @@ public final class BootstrapSafeMinecraftRegistries {
         return mappedRegistry(registryKey);
     }
 
-    @SuppressWarnings("ConstantValue")
     public static <T> Registry<T> mappedRegistry(ResourceKey<? extends Registry<T>> registry) {
+        Registry<T> access = mappedRegistryOrNull(registry);
+        if (access == null) {
+            throw new IllegalStateException("Missing registry: " + registry);
+        }
+        return access;
+    }
+
+    public static <T> @Nullable Registry<T> mappedRegistryOrNull(String registryId) {
+        Identifier location = Identifier.parse(registryId);
+        ResourceKey<? extends Registry<T>> registryKey = ResourceKey.createRegistryKey(location);
+        return mappedRegistryOrNull(registryKey);
+    }
+
+    @SuppressWarnings("ConstantValue")
+    public static <T> @Nullable Registry<T> mappedRegistryOrNull(ResourceKey<? extends Registry<T>> registry) {
         Server bukkit = Bukkit.getServer();
         if (bukkit != null) {
             RegistryAccess access = ((CraftServer) bukkit).getServer().registryAccess();
-            return access.lookupOrThrow(registry);
+            return access.lookup(registry).orElse(null);
         }
 
         RegistryAccess vanillaAccess = RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY);
-        return vanillaAccess.lookupOrThrow(registry);
+        return vanillaAccess.lookup(registry).orElse(null);
     }
 }

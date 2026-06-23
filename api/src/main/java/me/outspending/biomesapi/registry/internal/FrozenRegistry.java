@@ -8,6 +8,7 @@ import me.outspending.biomesapi.wrapper.internal.NmsHandle;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
+import java.util.Collection;
 import java.util.function.Consumer;
 
 /**
@@ -27,6 +28,8 @@ public interface FrozenRegistry extends NmsHandle {
     @ApiStatus.Internal
     interface Factory {
         FrozenRegistry create(ResourceKey key);
+
+        FrozenRegistry create(Collection<ResourceKey> keys);
     }
 
     /**
@@ -117,6 +120,17 @@ public interface FrozenRegistry extends NmsHandle {
     }
 
     /**
+     * Creates a FrozenRegistry from a RegistryReference.
+     * @param reference the registry reference
+     * @return a FrozenRegistry instance
+     * @since 2.4.0
+     */
+    @AsOf("2.4.0")
+    static FrozenRegistry of(RegistryReference reference) {
+        return WIRE.get().create(reference.getRegistryKeys());
+    }
+
+    /**
      * Creates a lazy FrozenRegistry.
      * @param key the key of the registry
      * @return a lazy FrozenRegistry instance
@@ -136,5 +150,16 @@ public interface FrozenRegistry extends NmsHandle {
     @AsOf("2.3.0")
     static Lazy<FrozenRegistry> lazy(String path) {
         return Lazy.of(() -> of(path));
+    }
+
+    /**
+     * Creates a lazy FrozenRegistry.
+     * @param reference the registry reference
+     * @return a lazy FrozenRegistry instance
+     * @since 2.4.0
+     */
+    @AsOf("2.4.0")
+    static Lazy<FrozenRegistry> lazy(RegistryReference reference) {
+        return Lazy.of(() -> of(reference));
     }
 }

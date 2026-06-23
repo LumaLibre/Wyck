@@ -9,6 +9,7 @@ import java.util.Objects;
 
 @NullMarked
 @ApiStatus.Internal
+@SuppressWarnings("PatternValidation")
 public record ResourceKeyImpl(Identifier identifier) implements ResourceKey {
 
     public ResourceKeyImpl(String namespace, String path) {
@@ -17,12 +18,12 @@ public record ResourceKeyImpl(Identifier identifier) implements ResourceKey {
 
     @Override
     @KeyPattern.Namespace
-    @SuppressWarnings("PatternValidation")
     public String namespace() {
         return identifier.getNamespace();
     }
 
     @Override
+    @KeyPattern.Value
     public String path() {
         return identifier.getPath();
     }
@@ -46,6 +47,6 @@ public record ResourceKeyImpl(Identifier identifier) implements ResourceKey {
 
     @Override
     public String toString() {
-        return namespace() + ResourceKey.NAMESPACE_SEPARATOR + path();
+        return namespace() + NAMESPACE_SEPARATOR + path();
     }
 }

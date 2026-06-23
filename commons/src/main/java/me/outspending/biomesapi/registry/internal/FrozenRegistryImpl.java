@@ -8,10 +8,13 @@ import me.outspending.biomesapi.util.ThrowingRunnable;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,6 +49,23 @@ public class FrozenRegistryImpl<U> implements FrozenRegistry {
 
         Registry<U> resolved = getRegistry(key);
         this.registry = Preconditions.checkNotNull(resolved, "Failed to resolve registry for " + key);
+    }
+
+    public FrozenRegistryImpl(Collection<ResourceKey> keys) {
+        ResourceKey resolvedKey = null;
+        Registry<U> resolvedRegistry = null;
+
+        for (ResourceKey key : keys) {
+            Registry<U> candidate = getRegistryOrNull(key);
+            if (candidate != null) {
+                resolvedKey = key;
+                resolvedRegistry = candidate;
+                break;
+            }
+        }
+
+        this.key = Preconditions.checkNotNull(resolvedKey, "Failed to resolve any registry from " + keys);
+        this.registry = Preconditions.checkNotNull(resolvedRegistry, "resolvedRegistry was null");
     }
 
     @Override
@@ -106,6 +126,11 @@ public class FrozenRegistryImpl<U> implements FrozenRegistry {
     private static <U> Registry<U> getRegistry(ResourceKey key) {
         String id = key.asString();
         return BootstrapSafeMinecraftRegistries.mappedRegistry(id);
+    }
+
+    private static <U> @Nullable Registry<U> getRegistryOrNull(ResourceKey key) {
+        String id = key.asString();
+        return BootstrapSafeMinecraftRegistries.mappedRegistryOrNull(id);
     }
 
     private static Map<String, RegistryKey<?>> indexPaperRegistryKeys() {

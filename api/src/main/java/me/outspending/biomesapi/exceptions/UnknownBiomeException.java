@@ -10,8 +10,10 @@ import me.outspending.biomesapi.annotations.AsOf;
  * @version 0.0.1
  * @since 0.0.1
  * @author Outspending
+ * @deprecated Obsolete
  */
 @AsOf("0.0.1")
+@Deprecated(since = "2.4.0")
 public class UnknownBiomeException extends RuntimeException {
 
     /**
