@@ -8,6 +8,9 @@ import yaml from '@rollup/plugin-yaml';
 // https://astro.build/config
 export default defineConfig({
   site: "https://biomes.lumas.dev",
+  redirects: {
+    '/javadoc': '/javadoc/index.html',
+  },
   vite: {
     plugins: [yaml()],
     resolve: {

@@ -17,6 +17,25 @@ jobs:
     steps:
       - name: Checkout your repository using git
         uses: actions/checkout@v6
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 25
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Generate API javadoc
+        run: ./gradlew :api:javadoc
+
+      - name: Copy javadoc into Astro public dir
+        run: |
+          rm -rf docs/public/javadoc
+          mkdir -p docs/public/javadoc
+          cp -r api/build/docs/javadoc/. docs/public/javadoc/
+
       - name: Install, build, and upload your site
         uses: withastro/action@v6
         with:

@@ -28,6 +28,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.List;
+
 public class TestPlugin extends JavaPlugin implements Listener {
 
     ResourceKey dimKey = ResourceKey.of("test", "awesome");
@@ -69,38 +71,58 @@ public class TestPlugin extends JavaPlugin implements Listener {
             .add(ResourceKey.minecraft("cherry_grove"), BiomeClimatePoint.builder().build())
             .build();
 
-        DensityFunction zero = DensityFunction.zero();
+//        DensityFunction zero = DensityFunction.zero();
+//
+//        DensityFunction finalDensity = DensityFunction.add(
+//                DensityFunction.yClampedGradient(0, 128, 1.0, -1.0),
+//                DensityFunction.constant(0.05)
+//            )
+//            .clamp(-1.0, 1.0);
 
-        DensityFunction finalDensity = DensityFunction.add(
-                DensityFunction.yClampedGradient(0, 128, 1.0, -1.0),
-                DensityFunction.constant(0.05)
-            )
-            .clamp(-1.0, 1.0);
+        DensityFunction temperature = DensityFunctions.ZERO;
+        DensityFunction vegetation = DensityFunctions.ZERO;
+        DensityFunction continents = DensityFunctions.CONTINENTS_LARGE;
+        DensityFunction erosion = DensityFunctions.EROSION_LARGE;
+        DensityFunction depth = DensityFunctions.DEPTH_AMPLIFIED;
+        DensityFunction ridges = DensityFunctions.RIDGES_FOLDED;
+
+        // Actual terrain shape
+        DensityFunction finalDensity = DensityFunctions.SLOPED_CHEESE;
 
         LevelNoiseRouter router = LevelNoiseRouter.builder()
-            .barrier(zero)
-            .fluidLevelFloodedness(zero)
-            .fluidLevelSpread(zero)
-            .lava(zero)
-            .temperature(zero)
-            .vegetation(zero)
-            .continents(DensityFunctions.CONTINENTS)
-            .erosion(DensityFunctions.EROSION)
-            .depth(zero)
-            .ridges(DensityFunctions.RIDGES)
-            .preliminarySurfaceLevel(zero)
+            // Aquifers and fluids
+            .barrier(DensityFunction.constant(0.0))
+            .fluidLevelFloodedness(DensityFunction.constant(0.0))
+            .fluidLevelSpread(DensityFunction.constant(0.0))
+            .lava(DensityFunction.constant(0.0))
+
+            // Climate parameters
+            .temperature(temperature)
+            .vegetation(vegetation)
+            .continents(continents)
+            .erosion(erosion)
+            .depth(depth)
+            .ridges(ridges)
+
+            // Terrain shape
+            .preliminarySurfaceLevel(DensityFunction.constant(0.0))
             .finalDensity(finalDensity)
-            .veinToggle(zero)
-            .veinRidged(zero)
-            .veinGap(zero)
+
+            // Ore veins (disabled)
+            .veinToggle(DensityFunction.constant(-1.0))
+            .veinRidged(DensityFunction.constant(0.0))
+            .veinGap(DensityFunction.constant(0.0))
+            // All done!
             .build();
 
         LevelNoiseGeneratorSettings noiseSettings = LevelNoiseGeneratorSettings.builder()
-            .noiseSettings(LevelNoiseSettings.OVERWORLD)
+            .noiseSettings(LevelNoiseSettings.CAVES)
             .defaultBlock(Material.STONE)
             .defaultFluid(Material.WATER)
             .noiseRouter(router)
-            .surfaceRule(WrappedSurfaceRule.block(Material.GRASS_BLOCK))
+            .surfaceRule(
+                WrappedSurfaceRule.block(Material.MAGMA_BLOCK)
+            )
             .seaLevel(63)
             .aquifersEnabled(false)
             .oreVeinsEnabled(false)
@@ -108,7 +130,7 @@ public class TestPlugin extends JavaPlugin implements Listener {
 
         LevelChunkGenerator generator = LevelChunkGenerator.noise(
             biomeSource,
-            Noise.amplified()
+            noiseSettings
         );
 
         LevelCreator spec = LevelCreator.builder(levelKey)
