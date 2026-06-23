@@ -6,6 +6,7 @@ import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.registry.level.dimension.DimensionRegistry;
 import me.outspending.biomesapi.wrapper.environment.attribute.IntColorSupplier;
 import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttributeSupplier;
+import me.outspending.biomesapi.wrapper.level.clock.WorldClock;
 import me.outspending.biomesapi.wrapper.level.dimension.CardinalLightType;
 import me.outspending.biomesapi.wrapper.level.dimension.Infiniburn;
 import me.outspending.biomesapi.wrapper.level.dimension.Skybox;
@@ -16,6 +17,8 @@ import net.kyori.adventure.key.Keyed;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
+
+import java.util.Optional;
 
 
 /**
@@ -163,7 +166,151 @@ public interface Dimension extends Keyed {
      * @since 2.4.0
      */
     @AsOf("2.4.0")
-    @Nullable ResourceKey getDefaultClock();
+    Optional<WorldClock> getDefaultClock();
+
+    /**
+     * Sets the fixed time of this dimension type.
+     * @param fixedTime the fixed time of this dimension type.
+     * @return this dimension type.
+     * @since 2.4.0
+     */
+    @AsOf("2.4.0")
+    Dimension setFixedTime(boolean fixedTime);
+
+    /**
+     * Sets whether this dimension type has sky light.
+     * @param hasSkyLight whether this dimension type has sky light.
+     * @return this dimension type.
+     * @since 2.4.0
+     */
+    @AsOf("2.4.0")
+    Dimension setSkyLight(boolean hasSkyLight);
+
+    /**
+     * Sets whether this dimension type has a ceiling.
+     * @param hasCeiling whether this dimension type has a ceiling.
+     * @return this dimension type.
+     * @since 2.4.0
+     */
+    @AsOf("2.4.0")
+    Dimension setCeiling(boolean hasCeiling);
+
+    /**
+     * Sets whether this dimension type has an ender dragon fight.
+     * @param hasEnderDragonFight whether this dimension type has an ender dragon fight.
+     * @return this dimension type.
+     * @since 2.4.0
+     */
+    @AsOf("2.4.0")
+    Dimension setEnderDragonFight(boolean hasEnderDragonFight);
+
+    /**
+     * Sets the coordinate scale of this dimension type.
+     * @param coordinateScale the coordinate scale of this dimension type.
+     * @return this dimension type.
+     * @since 2.4.0
+     */
+    @AsOf("2.4.0")
+    Dimension setCoordinateScale(double coordinateScale);
+
+    /**
+     * Sets the minimum Y of this dimension type.
+     * @param minY the minimum Y of this dimension type.
+     * @return this dimension type.
+     * @since 2.4.0
+     */
+    @AsOf("2.4.0")
+    Dimension setMinY(int minY);
+
+    /**
+     * Sets the height of this dimension type.
+     * @param height the height of this dimension type.
+     * @return this dimension type.
+     * @since 2.4.0
+     */
+    @AsOf("2.4.0")
+    Dimension setHeight(int height);
+
+    /**
+     * Sets the logical height of this dimension type.
+     * @param logicalHeight the logical height of this dimension type.
+     * @return this dimension type.
+     * @since 2.4.0
+     */
+    @AsOf("2.4.0")
+    Dimension setLogicalHeight(int logicalHeight);
+
+    /**
+     * Sets the infiniburn of this dimension type.
+     * @param infiniburn the infiniburn of this dimension type.
+     * @return this dimension type.
+     * @since 2.4.0
+     */
+    @AsOf("2.4.0")
+    Dimension setInfiniburn(Infiniburn infiniburn);
+
+    /**
+     * Sets the ambient light of this dimension type.
+     * @param ambientLight the ambient light level of this dimension type.
+     * @return this dimension type.
+     * @since 2.4.0
+     */
+    @AsOf("2.4.0")
+    Dimension setAmbientLight(float ambientLight);
+
+    /**
+     * Sets the monster settings of this dimension type.
+     * @param monsterSettings the monster settings of this dimension type.
+     * @return this dimension type.
+     * @since 2.4.0
+     */
+    @AsOf("2.4.0")
+    Dimension setMonsterSettings(MonsterSettings monsterSettings);
+
+    /**
+     * Sets the skybox of this dimension type.
+     * @param skybox the skybox of this dimension type.
+     * @return this dimension type.
+     * @since 2.4.0
+     */
+    @AsOf("2.4.0")
+    Dimension setSkybox(Skybox skybox);
+
+    /**
+     * Sets the cardinal light type of this dimension type.
+     * @param cardinalLightType the cardinal light type of this dimension type.
+     * @return this dimension type.
+     * @since 2.4.0
+     */
+    @AsOf("2.4.0")
+    Dimension setCardinalLightType(CardinalLightType cardinalLightType);
+
+    /**
+     * Sets the attributes of this dimension type.
+     * @param attributes the attributes of this dimension type.
+     * @return this dimension type.
+     * @since 2.4.0
+     */
+    @AsOf("2.4.0")
+    Dimension setAttributes(WrappedEnvironmentAttributeMap attributes);
+
+    /**
+     * Sets the timelines of this dimension type.
+     * @param timelines the timelines of this dimension type.
+     * @return this dimension type.
+     * @since 2.4.0
+     */
+    @AsOf("2.4.0")
+    Dimension setTimelines(TimelineSet timelines);
+
+    /**
+     * Sets the default clock of this dimension type.
+     * @param defaultClock the default clock of this dimension type, or null to clear it.
+     * @return this dimension type.
+     * @since 2.4.0
+     */
+    @AsOf("2.4.0")
+    Dimension setDefaultClock(@Nullable WorldClock defaultClock);
 
     /**
      * Checks if this dimension type is similar to another.
@@ -181,6 +328,17 @@ public interface Dimension extends Keyed {
     @AsOf("2.4.0")
     default Dimension register() {
         DimensionRegistry.registry().register(this);
+        return this;
+    }
+
+    /**
+     * Modifies this dimension type in the dimension registry.
+     * @return this dimension type
+     * @since 2.4.0
+     */
+    @AsOf("2.4.0")
+    default Dimension modify() {
+        DimensionRegistry.registry().modify(this);
         return this;
     }
 
@@ -243,7 +401,7 @@ public interface Dimension extends Keyed {
         private CardinalLightType cardinalLightType = CardinalLightType.DEFAULT;
         private WrappedEnvironmentAttributeMap attributes = WrappedEnvironmentAttributeMap.EMPTY;
         private TimelineSet timelines = TimelineSet.EMPTY;
-        private @Nullable ResourceKey defaultClock = null;
+        private Optional<WorldClock> defaultClock = Optional.empty();
 
         @AsOf("2.4.0")
         public Builder() {}
@@ -379,8 +537,8 @@ public interface Dimension extends Keyed {
         }
 
         @AsOf("2.4.0")
-        public Builder defaultClock(ResourceKey defaultClock) {
-            this.defaultClock = defaultClock;
+        public Builder defaultClock(@Nullable WorldClock defaultClock) {
+            this.defaultClock = Optional.ofNullable(defaultClock);
             return this;
         }
 

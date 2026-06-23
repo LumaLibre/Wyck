@@ -3,7 +3,7 @@ package me.outspending.biomesapi;
 import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.providers.BasicBiomeProvider;
-import me.outspending.biomesapi.registry.level.dimension.DimensionEditor;
+import me.outspending.biomesapi.registry.level.LevelStemEditor;
 import me.outspending.biomesapi.renderer.setter.BiomeSetter;
 import me.outspending.biomesapi.wrapper.BiomeSettings;
 import me.outspending.biomesapi.wrapper.worldgen.BiomeGenerationSettings;
@@ -129,7 +129,7 @@ public final class BiomesAPITest extends JavaPlugin implements Listener {
 
         //World
 
-        DimensionEditor dimensionEditor = DimensionEditor.create();
+        LevelStemEditor dimensionEditor = LevelStemEditor.create();
         var overworldKey = ResourceKey.of("minecraft", "overworld");
         var netherKey = ResourceKey.of("minecraft", "the_nether");
         dimensionEditor.addToDimension(overworldKey, myBiomeKey, BiomeClimatePoint.builder().build());

@@ -18,7 +18,7 @@ public enum CardinalLightType implements NmsEnumTranslatable<CardinalLightType> 
     DEFAULT("default"),
     NETHER("nether");
 
-    private static final KeyedEnumTranslator<CardinalLightType> TRANSLATOR = KeyedEnumTranslator.byKey(CardinalLightType::getKey, CardinalLightType.values());
+    public static final KeyedEnumTranslator<CardinalLightType> TRANSLATOR = KeyedEnumTranslator.byKey(CardinalLightType::getKey, CardinalLightType.values());
 
     private final String key;
 

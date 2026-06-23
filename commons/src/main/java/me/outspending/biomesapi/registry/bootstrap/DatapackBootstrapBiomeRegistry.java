@@ -21,7 +21,7 @@ import me.outspending.biomesapi.registry.BiomeRegistry;
 import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.registry.bootstrap.util.BootstrapSafeMinecraftRegistries;
 import me.outspending.biomesapi.registry.bootstrap.util.DatapackPromotion;
-import me.outspending.biomesapi.registry.level.dimension.DimensionBiomeEdit;
+import me.outspending.biomesapi.registry.level.LevelBiomeEdit;
 import me.outspending.biomesapi.registry.bootstrap.util.DimensionSources;
 import me.outspending.biomesapi.util.ThrowingRunnable;
 import me.outspending.biomesapi.wrapper.worldgen.climate.BiomeClimatePoint;
@@ -69,7 +69,7 @@ public final class DatapackBootstrapBiomeRegistry implements BootstrapBiomeRegis
     private static final String FEATURE_NAMESPACE_FORMAT = "biomesapi_%s";
 
     private final List<CustomBiome> pending = new ArrayList<>();
-    private final List<DimensionBiomeEdit> dimensionEdits = new ArrayList<>();
+    private final List<LevelBiomeEdit> dimensionEdits = new ArrayList<>();
     private boolean installed = false;
     private @Nullable String packId;
     private @Nullable String featureNamespace;
@@ -117,14 +117,14 @@ public final class DatapackBootstrapBiomeRegistry implements BootstrapBiomeRegis
     @Override
     @AsOf("2.3.0")
     public BootstrapBiomeRegistry addToDimension(ResourceKey dimension, ResourceKey biome, BiomeClimatePoint placement) {
-        this.dimensionEdits.add(new DimensionBiomeEdit.Add(dimension, biome, placement));
+        this.dimensionEdits.add(new LevelBiomeEdit.Add(dimension, biome, placement));
         return this;
     }
 
     @Override
     @AsOf("2.3.0")
     public BootstrapBiomeRegistry replaceInDimension(ResourceKey dimension, ResourceKey target, ResourceKey replacement) {
-        this.dimensionEdits.add(new DimensionBiomeEdit.Replace(dimension, target, replacement));
+        this.dimensionEdits.add(new LevelBiomeEdit.Replace(dimension, target, replacement));
         return this;
     }
 
@@ -225,12 +225,12 @@ public final class DatapackBootstrapBiomeRegistry implements BootstrapBiomeRegis
             return;
         }
 
-        Map<ResourceKey, List<DimensionBiomeEdit>> byDimension = new LinkedHashMap<>();
-        for (DimensionBiomeEdit edit : this.dimensionEdits) {
+        Map<ResourceKey, List<LevelBiomeEdit>> byDimension = new LinkedHashMap<>();
+        for (LevelBiomeEdit edit : this.dimensionEdits) {
             byDimension.computeIfAbsent(edit.dimension(), k -> new ArrayList<>()).add(edit);
         }
 
-        for (Map.Entry<ResourceKey, List<DimensionBiomeEdit>> entry : byDimension.entrySet()) {
+        for (Map.Entry<ResourceKey, List<LevelBiomeEdit>> entry : byDimension.entrySet()) {
             ResourceKey dimension = entry.getKey();
             JsonObject dimensionJson = buildDimensionJson(dimension, entry.getValue());
 
@@ -243,7 +243,7 @@ public final class DatapackBootstrapBiomeRegistry implements BootstrapBiomeRegis
         }
     }
 
-    private JsonObject buildDimensionJson(ResourceKey dimension, List<DimensionBiomeEdit> edits) {
+    private JsonObject buildDimensionJson(ResourceKey dimension, List<LevelBiomeEdit> edits) {
         // start from the reconstructed vanilla source, then apply this dimension's edits
         List<Pair<Climate.ParameterPoint, net.minecraft.resources.ResourceKey<Biome>>> base = DimensionSources.vanillaPairs(dimension);
         List<Pair<Climate.ParameterPoint, net.minecraft.resources.ResourceKey<Biome>>> pairs = DimensionSources.applyEdits(base, edits);

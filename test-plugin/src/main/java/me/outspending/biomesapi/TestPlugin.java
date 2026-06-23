@@ -5,6 +5,7 @@ import me.outspending.biomesapi.level.dimension.Dimension;
 import me.outspending.biomesapi.level.LevelCreator;
 import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.registry.level.LevelFactory;
+import me.outspending.biomesapi.registry.level.dimension.DimensionRegistry;
 import me.outspending.biomesapi.wrapper.BiomeSettings;
 import me.outspending.biomesapi.wrapper.level.BiomeSource;
 import me.outspending.biomesapi.wrapper.level.dimension.Skybox;
@@ -22,9 +23,22 @@ import me.outspending.biomesapi.wrapper.worldgen.surface.WrappedSurfaceRule;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class TestPlugin extends JavaPlugin {
+public class TestPlugin extends JavaPlugin implements Listener {
+
+    ResourceKey dimKey = ResourceKey.of("test", "awesome");
+    Dimension dimension = Dimension.builder(dimKey)
+        .hasSkyLight(true)
+        .skybox(Skybox.NONE)
+        .attribute(WrappedEnvironmentAttributes.FAST_LAVA, true)
+        //.attribute(WrappedEnvironmentAttributes.BED_RULE, bedrule)
+        .attribute(WrappedEnvironmentAttributes.FOG_COLOR, "#FFFFFF")
+        .attribute(WrappedEnvironmentAttributes.SKY_COLOR, "#FFFFFF")
+        .build();
 
     @Override
     public void onEnable() {
@@ -39,7 +53,7 @@ public class TestPlugin extends JavaPlugin {
             .build()
             .register();
 
-        ResourceKey dimKey = ResourceKey.of("test", "awesome");
+
         ResourceKey levelKey = ResourceKey.of("test", "awesome");
 
         BedRule bedrule = BedRule.builder()
@@ -49,14 +63,7 @@ public class TestPlugin extends JavaPlugin {
             .setCanSetSpawn(BedRule.Rule.NEVER)
             .build();
 
-        Dimension dimension = Dimension.builder(dimKey)
-            .hasSkyLight(true)
-            .skybox(Skybox.NONE)
-            .attribute(WrappedEnvironmentAttributes.FAST_LAVA, true)
-            .attribute(WrappedEnvironmentAttributes.BED_RULE, bedrule)
-            .attribute(WrappedEnvironmentAttributes.FOG_COLOR, "#FFFFFF")
-            .attribute(WrappedEnvironmentAttributes.SKY_COLOR, "#FFFFFF")
-            .build();
+
 
         BiomeSource biomeSource = BiomeSource.multiNoise()
             .add(ResourceKey.minecraft("cherry_grove"), BiomeClimatePoint.builder().build())
@@ -111,5 +118,18 @@ public class TestPlugin extends JavaPlugin {
 
         World world = LevelFactory.factory().createWorld(spec);
         System.out.println("Created world: " + world.getName());
+
+        getServer().getPluginManager().registerEvents(this, this);
+    }
+
+    @EventHandler
+    public void onBreakBlock(BlockBreakEvent event) {
+        DimensionRegistry registry = DimensionRegistry.registry();
+
+        Skybox randomSkybox = Skybox.values()[(int) (Math.random() * Skybox.values().length)];
+        dimension.setSkybox(randomSkybox);
+        registry.modify(dimension);
+
+        event.getPlayer().sendMessage("Skybox changed to " + randomSkybox);
     }
 }

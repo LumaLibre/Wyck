@@ -5,7 +5,7 @@ import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
 import me.outspending.biomesapi.annotations.AsOf;
-import me.outspending.biomesapi.registry.level.dimension.RuntimeDimensionEditor;
+import me.outspending.biomesapi.registry.level.RuntimeLevelStemEditor;
 import net.minecraft.core.Holder;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeSource;
@@ -35,7 +35,7 @@ import static org.objectweb.asm.Opcodes.V17;
 
 /**
  * Builds a transient {@link MultiNoiseBiomeSource} subclass used to place a custom biome through a
- * {@link RuntimeDimensionEditor}. The generated subclass keeps the original preset in the inherited
+ * {@link RuntimeLevelStemEditor}. The generated subclass keeps the original preset in the inherited
  * {@code parameters} field, which is the only field the codec serializes, while a separate
  * {@code editedParameters} field holds the full list that generation reads. A save therefore writes
  * only the vanilla preset.

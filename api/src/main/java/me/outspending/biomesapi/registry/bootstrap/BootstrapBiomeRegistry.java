@@ -5,7 +5,7 @@ import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.factory.WireProvider;
 import me.outspending.biomesapi.keys.ResourceKey;
-import me.outspending.biomesapi.registry.level.dimension.DimensionEditor;
+import me.outspending.biomesapi.registry.level.LevelStemEditor;
 import me.outspending.biomesapi.util.ThrowingRunnable;
 import me.outspending.biomesapi.wrapper.worldgen.climate.BiomeClimatePoint;
 import org.jetbrains.annotations.ApiStatus;
@@ -102,7 +102,7 @@ public interface BootstrapBiomeRegistry {
      * @param placement the climate point to place the biome at
      * @return this registry instance
      * @throws UnsupportedOperationException if the implementation does not support this operation
-     * @see DimensionEditor#addToDimension(ResourceKey, ResourceKey, BiomeClimatePoint)
+     * @see LevelStemEditor#addToDimension(ResourceKey, ResourceKey, BiomeClimatePoint)
      * @since 2.3.0
      */
     @AsOf("2.3.0")
@@ -115,7 +115,7 @@ public interface BootstrapBiomeRegistry {
      * @param replacement the biome to replace with
      * @return this registry instance
      * @throws UnsupportedOperationException if the implementation does not support this operation
-     * @see DimensionEditor#replaceInDimension(ResourceKey, ResourceKey, ResourceKey)
+     * @see LevelStemEditor#replaceInDimension(ResourceKey, ResourceKey, ResourceKey)
      * @since 2.3.0
      */
     @AsOf("2.3.0")

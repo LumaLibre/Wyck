@@ -1,4 +1,4 @@
-package me.outspending.biomesapi.registry.level.dimension;
+package me.outspending.biomesapi.registry.level;
 
 import com.google.common.base.Suppliers;
 import com.mojang.datafixers.util.Either;
@@ -43,7 +43,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
- * A runtime implementation of {@link DimensionEditor} that can be used to edit biomes in a
+ * A runtime implementation of {@link LevelStemEditor} that can be used to edit biomes in a
  * {@link World} at runtime.
  *
  * @since 2.3.0
@@ -53,7 +53,7 @@ import java.util.function.Supplier;
 @NullMarked
 @AsOf("2.3.0")
 @ApiStatus.Internal
-public final class RuntimeDimensionEditor implements DimensionEditor {
+public final class RuntimeLevelStemEditor implements LevelStemEditor {
 
     private static final Field BIOME_SOURCE_FIELD;
     private static final Field FEATURES_PER_STEP_FIELD;
@@ -83,22 +83,22 @@ public final class RuntimeDimensionEditor implements DimensionEditor {
         }
     }
 
-    private final List<DimensionBiomeEdit> edits = new ArrayList<>();
+    private final List<LevelBiomeEdit> edits = new ArrayList<>();
     private final Map<ChunkGenerator, Snapshot> snapshots = new IdentityHashMap<>();
 
 
 
     @Override
     @AsOf("2.3.0")
-    public DimensionEditor addToDimension(ResourceKey dimension, ResourceKey biome, BiomeClimatePoint point) {
-        this.edits.add(new DimensionBiomeEdit.Add(dimension, biome, point));
+    public LevelStemEditor addToDimension(ResourceKey dimension, ResourceKey biome, BiomeClimatePoint point) {
+        this.edits.add(new LevelBiomeEdit.Add(dimension, biome, point));
         return this;
     }
 
     @Override
     @AsOf("2.3.0")
-    public DimensionEditor replaceInDimension(ResourceKey dimension, ResourceKey target, ResourceKey replacement) {
-        this.edits.add(new DimensionBiomeEdit.Replace(dimension, target, replacement));
+    public LevelStemEditor replaceInDimension(ResourceKey dimension, ResourceKey target, ResourceKey replacement) {
+        this.edits.add(new LevelBiomeEdit.Replace(dimension, target, replacement));
         return this;
     }
 
@@ -117,8 +117,8 @@ public final class RuntimeDimensionEditor implements DimensionEditor {
         ServerLevel level = ((CraftWorld) world).getHandle();
         Identifier dimId = level.dimension().identifier();
 
-        List<DimensionBiomeEdit> matching = new ArrayList<>();
-        for (DimensionBiomeEdit edit : this.edits) {
+        List<LevelBiomeEdit> matching = new ArrayList<>();
+        for (LevelBiomeEdit edit : this.edits) {
             ResourceKey d = edit.dimension();
             if (d.namespace().equals(dimId.getNamespace()) && d.path().equals(dimId.getPath())) {
                 matching.add(edit);
@@ -133,12 +133,12 @@ public final class RuntimeDimensionEditor implements DimensionEditor {
         BiomeSource current = generator.getBiomeSource();
 
 
-        List<DimensionBiomeEdit.Add> adds = new ArrayList<>();
+        List<LevelBiomeEdit.Add> adds = new ArrayList<>();
         Map<net.minecraft.resources.ResourceKey<Biome>, Holder<Biome>> replacements = new LinkedHashMap<>();
-        for (DimensionBiomeEdit edit : matching) {
-            if (edit instanceof DimensionBiomeEdit.Add add) {
+        for (LevelBiomeEdit edit : matching) {
+            if (edit instanceof LevelBiomeEdit.Add add) {
                 adds.add(add);
-            } else if (edit instanceof DimensionBiomeEdit.Replace replace) {
+            } else if (edit instanceof LevelBiomeEdit.Replace replace) {
                 replacements.put(nmsBiomeKey(replace.target()), biomes.getOrThrow(nmsBiomeKey(replace.replacement())));
             }
         }
@@ -161,7 +161,7 @@ public final class RuntimeDimensionEditor implements DimensionEditor {
     }
 
 
-    private static BiomeSource buildEditedSource(BiomeSource current, Registry<Biome> biomes, List<DimensionBiomeEdit.Add> adds, Map<net.minecraft.resources.ResourceKey<Biome>, Holder<Biome>> replacements, Identifier dimId) {
+    private static BiomeSource buildEditedSource(BiomeSource current, Registry<Biome> biomes, List<LevelBiomeEdit.Add> adds, Map<net.minecraft.resources.ResourceKey<Biome>, Holder<Biome>> replacements, Identifier dimId) {
         if (current instanceof MultiNoiseBiomeSource multiNoise) {
             return buildMultiNoise(multiNoise, biomes, adds, replacements);
         }
@@ -172,7 +172,7 @@ public final class RuntimeDimensionEditor implements DimensionEditor {
     }
 
 
-    private static BiomeSource buildMultiNoise(MultiNoiseBiomeSource multiNoise, Registry<Biome> biomes, List<DimensionBiomeEdit.Add> adds, Map<net.minecraft.resources.ResourceKey<Biome>, Holder<Biome>> replacements) {
+    private static BiomeSource buildMultiNoise(MultiNoiseBiomeSource multiNoise, Registry<Biome> biomes, List<LevelBiomeEdit.Add> adds, Map<net.minecraft.resources.ResourceKey<Biome>, Holder<Biome>> replacements) {
         List<Pair<Climate.ParameterPoint, Holder<Biome>>> entries = new ArrayList<>(liveParameters(multiNoise).values());
 
         // replaces swap the holder at every entry whose biome matches a target, point is preserved
@@ -188,7 +188,7 @@ public final class RuntimeDimensionEditor implements DimensionEditor {
         }
 
         // adds append the new biome at its explicit climate point
-        for (DimensionBiomeEdit.Add add : adds) {
+        for (LevelBiomeEdit.Add add : adds) {
             Holder<Biome> holder = biomes.getOrThrow(nmsBiomeKey(add.biome()));
             Climate.ParameterPoint point = (Climate.ParameterPoint) add.point().toMinecraft();
             entries.add(Pair.of(point, holder));
@@ -217,11 +217,11 @@ public final class RuntimeDimensionEditor implements DimensionEditor {
 
     private static void reorderIntroducedBiomes(
         Registry<Biome> biomeRegistry,
-        List<DimensionBiomeEdit.Add> adds,
+        List<LevelBiomeEdit.Add> adds,
         Map<net.minecraft.resources.ResourceKey<Biome>, Holder<Biome>> replacements
     ) {
         Set<Biome> introduced = java.util.Collections.newSetFromMap(new java.util.IdentityHashMap<>());
-        for (DimensionBiomeEdit.Add add : adds) {
+        for (LevelBiomeEdit.Add add : adds) {
             introduced.add(biomeRegistry.getOrThrow(nmsBiomeKey(add.biome())).value());
         }
         for (Holder<Biome> replacement : replacements.values()) {

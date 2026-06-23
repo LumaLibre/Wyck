@@ -1,4 +1,4 @@
-package me.outspending.biomesapi.registry.level.dimension;
+package me.outspending.biomesapi.registry.level;
 
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
@@ -23,10 +23,10 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 @AsOf("2.3.0")
 @ApiStatus.Experimental
-public interface DimensionEditor {
+public interface LevelStemEditor {
 
     @ApiStatus.Internal
-    WireProvider<DimensionEditor> RUNTIME = WireProvider.create("me.outspending.biomesapi.registry.level.dimension.RuntimeDimensionEditor");
+    WireProvider<LevelStemEditor> RUNTIME = WireProvider.create("me.outspending.biomesapi.registry.level.RuntimeLevelStemEditor");
 
     // TODO: DATAPACK editor for bootstrap should eventually be merged into this?
 
@@ -37,7 +37,7 @@ public interface DimensionEditor {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static DimensionEditor create() {
+    static LevelStemEditor create() {
         return RUNTIME.getNew();
     }
 
@@ -51,7 +51,7 @@ public interface DimensionEditor {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    DimensionEditor addToDimension(ResourceKey dimension, ResourceKey biome, BiomeClimatePoint point);
+    LevelStemEditor addToDimension(ResourceKey dimension, ResourceKey biome, BiomeClimatePoint point);
 
     /**
      * Queues a biome replacement in a dimension.
@@ -63,7 +63,7 @@ public interface DimensionEditor {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    DimensionEditor replaceInDimension(ResourceKey dimension, ResourceKey target, ResourceKey replacement);
+    LevelStemEditor replaceInDimension(ResourceKey dimension, ResourceKey target, ResourceKey replacement);
 
     /**
      * Applies all queued edits to every loaded world whose dimension matches. Worlds loaded after

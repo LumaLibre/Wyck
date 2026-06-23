@@ -2,6 +2,7 @@ package me.outspending.biomesapi.level.dimension;
 
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.keys.ResourceKey;
+import me.outspending.biomesapi.wrapper.level.clock.WorldClock;
 import me.outspending.biomesapi.wrapper.level.dimension.CardinalLightType;
 import me.outspending.biomesapi.wrapper.level.dimension.Infiniburn;
 import me.outspending.biomesapi.wrapper.level.dimension.Skybox;
@@ -14,6 +15,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * This class represents a custom dimension type implementation.
@@ -29,22 +31,22 @@ public final class DimensionImpl implements Dimension {
 
     private final ResourceKey resourceKey;
 
-    private final boolean hasFixedTime;
-    private final boolean hasSkyLight;
-    private final boolean hasCeiling;
-    private final boolean hasEnderDragonFight;
-    private final double coordinateScale;
-    private final int minY;
-    private final int height;
-    private final int logicalHeight;
-    private final Infiniburn infiniburn;
-    private final float ambientLight;
-    private final MonsterSettings monsterSettings;
-    private final Skybox skybox;
-    private final CardinalLightType cardinalLightType;
-    private final WrappedEnvironmentAttributeMap attributes;
-    private final TimelineSet timelines;
-    private final ResourceKey defaultClock;
+    private boolean hasFixedTime;
+    private boolean hasSkyLight;
+    private boolean hasCeiling;
+    private boolean hasEnderDragonFight;
+    private double coordinateScale;
+    private int minY;
+    private int height;
+    private int logicalHeight;
+    private Infiniburn infiniburn;
+    private float ambientLight;
+    private MonsterSettings monsterSettings;
+    private Skybox skybox;
+    private CardinalLightType cardinalLightType;
+    private WrappedEnvironmentAttributeMap attributes;
+    private TimelineSet timelines;
+    private Optional<WorldClock> defaultClock;
 
     @AsOf("2.4.0")
     public DimensionImpl(
@@ -64,7 +66,7 @@ public final class DimensionImpl implements Dimension {
             CardinalLightType cardinalLightType,
             WrappedEnvironmentAttributeMap attributes,
             TimelineSet timelines,
-            @Nullable ResourceKey defaultClock
+            Optional<WorldClock> defaultClock
     ) {
         this.resourceKey = resourceKey;
         this.hasFixedTime = hasFixedTime;
@@ -166,8 +168,104 @@ public final class DimensionImpl implements Dimension {
     }
 
     @Override
-    public @Nullable ResourceKey getDefaultClock() {
+    public Optional<WorldClock> getDefaultClock() {
         return defaultClock;
+    }
+
+    @Override
+    public Dimension setFixedTime(boolean hasFixedTime) {
+        this.hasFixedTime = hasFixedTime;
+        return this;
+    }
+
+    @Override
+    public Dimension setSkyLight(boolean hasSkyLight) {
+        this.hasSkyLight = hasSkyLight;
+        return this;
+    }
+
+    @Override
+    public Dimension setCeiling(boolean hasCeiling) {
+        this.hasCeiling = hasCeiling;
+        return this;
+    }
+
+    @Override
+    public Dimension setEnderDragonFight(boolean hasEnderDragonFight) {
+        this.hasEnderDragonFight = hasEnderDragonFight;
+        return this;
+    }
+
+    @Override
+    public Dimension setCoordinateScale(double coordinateScale) {
+        this.coordinateScale = coordinateScale;
+        return this;
+    }
+
+    @Override
+    public Dimension setMinY(int minY) {
+        this.minY = minY;
+        return this;
+    }
+
+    @Override
+    public Dimension setHeight(int height) {
+        this.height = height;
+        return this;
+    }
+
+    @Override
+    public Dimension setLogicalHeight(int logicalHeight) {
+        this.logicalHeight = logicalHeight;
+        return this;
+    }
+
+    @Override
+    public Dimension setInfiniburn(Infiniburn infiniburn) {
+        this.infiniburn = infiniburn;
+        return this;
+    }
+
+    @Override
+    public Dimension setAmbientLight(float ambientLight) {
+        this.ambientLight = ambientLight;
+        return this;
+    }
+
+    @Override
+    public Dimension setMonsterSettings(MonsterSettings monsterSettings) {
+        this.monsterSettings = monsterSettings;
+        return this;
+    }
+
+    @Override
+    public Dimension setSkybox(Skybox skybox) {
+        this.skybox = skybox;
+        return this;
+    }
+
+    @Override
+    public Dimension setCardinalLightType(CardinalLightType cardinalLightType) {
+        this.cardinalLightType = cardinalLightType;
+        return this;
+    }
+
+    @Override
+    public Dimension setAttributes(WrappedEnvironmentAttributeMap attributes) {
+        this.attributes = attributes;
+        return this;
+    }
+
+    @Override
+    public Dimension setTimelines(TimelineSet timelines) {
+        this.timelines = timelines;
+        return this;
+    }
+
+    @Override
+    public Dimension setDefaultClock(@Nullable WorldClock defaultClock) {
+        this.defaultClock = Optional.ofNullable(defaultClock);
+        return this;
     }
 
     @AsOf("2.4.0")

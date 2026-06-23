@@ -1,4 +1,4 @@
-package me.outspending.biomesapi.registry.level.dimension;
+package me.outspending.biomesapi.registry.level;
 
 import me.outspending.biomesapi.annotations.AsOf;
 import net.minecraft.core.Holder;

@@ -3,8 +3,8 @@ package me.outspending.biomesapi.registry.bootstrap.util;
 import com.mojang.datafixers.util.Pair;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.keys.ResourceKey;
-import me.outspending.biomesapi.registry.level.dimension.DimensionBiomeEdit;
-import me.outspending.biomesapi.registry.level.dimension.RuntimeDimensionEditor;
+import me.outspending.biomesapi.registry.level.LevelBiomeEdit;
+import me.outspending.biomesapi.registry.level.RuntimeLevelStemEditor;
 import net.minecraft.resources.Identifier;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.biome.Biome;
@@ -22,14 +22,14 @@ import java.util.function.Function;
 
 /**
  * Reconstructs the vanilla multi_noise biome list for a dimension at datapack discovery time and
- * applies a set of {@link DimensionBiomeEdit}s to it. Works without a populated biome registry
+ * applies a set of {@link LevelBiomeEdit}s to it. Works without a populated biome registry
  * because it operates on {@code ResourceKey<Biome>} ids, not holders, and the vanilla climate
  * points are defined.
  *
  * <p>
  * Only dimensions with a defined preset source can be reconstructed here. The overworld and
  * nether qualify. Custom dimensions defined by other datapacks cannot be known at discovery and
- * must use {@link RuntimeDimensionEditor}.
+ * must use {@link RuntimeLevelStemEditor}.
  */
 @NullMarked
 @AsOf("2.3.0")
@@ -93,13 +93,13 @@ public final class DimensionSources {
     // apply replace then add over a key based pair list
     public static List<Pair<Climate.ParameterPoint, net.minecraft.resources.ResourceKey<Biome>>> applyEdits(
         List<Pair<Climate.ParameterPoint, net.minecraft.resources.ResourceKey<Biome>>> base,
-        List<DimensionBiomeEdit> edits
+        List<LevelBiomeEdit> edits
     ) {
         List<Pair<Climate.ParameterPoint, net.minecraft.resources.ResourceKey<Biome>>> pairs = new ArrayList<>(base);
 
         // replacements keep the original point, just swap the key
-        for (DimensionBiomeEdit edit : edits) {
-            if (edit instanceof DimensionBiomeEdit.Replace replace) {
+        for (LevelBiomeEdit edit : edits) {
+            if (edit instanceof LevelBiomeEdit.Replace replace) {
                 net.minecraft.resources.ResourceKey<Biome> target = nmsBiomeKey(replace.target());
                 net.minecraft.resources.ResourceKey<Biome> replacement = nmsBiomeKey(replace.replacement());
                 for (int i = 0; i < pairs.size(); i++) {
@@ -111,8 +111,8 @@ public final class DimensionSources {
         }
 
         // additions append at their explicit point
-        for (DimensionBiomeEdit edit : edits) {
-            if (edit instanceof DimensionBiomeEdit.Add add) {
+        for (LevelBiomeEdit edit : edits) {
+            if (edit instanceof LevelBiomeEdit.Add add) {
                 Climate.ParameterPoint point = (Climate.ParameterPoint) add.point().toMinecraft();
                 pairs.add(Pair.of(point, nmsBiomeKey(add.biome())));
             }

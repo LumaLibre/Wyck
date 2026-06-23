@@ -1,4 +1,4 @@
-package me.outspending.biomesapi.registry.level.dimension;
+package me.outspending.biomesapi.registry.level;
 
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.keys.ResourceKey;
@@ -12,7 +12,7 @@ import me.outspending.biomesapi.wrapper.worldgen.climate.BiomeClimatePoint;
  * @author Jsinco
  */
 @AsOf("2.3.0")
-public sealed interface DimensionBiomeEdit permits DimensionBiomeEdit.Add, DimensionBiomeEdit.Replace {
+public sealed interface LevelBiomeEdit permits LevelBiomeEdit.Add, LevelBiomeEdit.Replace {
 
     /**
      * The key of the dimension to edit.
@@ -31,7 +31,7 @@ public sealed interface DimensionBiomeEdit permits DimensionBiomeEdit.Add, Dimen
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    record Add(ResourceKey dimension, ResourceKey biome, BiomeClimatePoint point) implements DimensionBiomeEdit {
+    record Add(ResourceKey dimension, ResourceKey biome, BiomeClimatePoint point) implements LevelBiomeEdit {
     }
 
     /**
@@ -42,6 +42,6 @@ public sealed interface DimensionBiomeEdit permits DimensionBiomeEdit.Add, Dimen
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    record Replace(ResourceKey dimension, ResourceKey target, ResourceKey replacement) implements DimensionBiomeEdit {
+    record Replace(ResourceKey dimension, ResourceKey target, ResourceKey replacement) implements LevelBiomeEdit {
     }
 }

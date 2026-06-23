@@ -19,7 +19,7 @@ public enum Skybox implements NmsEnumTranslatable<Skybox> {
     OVERWORLD("overworld"),
     END("end");
 
-    private static final KeyedEnumTranslator<Skybox> TRANSLATOR = KeyedEnumTranslator.byKey(Skybox::getKey, Skybox.values());
+    public static final KeyedEnumTranslator<Skybox> TRANSLATOR = KeyedEnumTranslator.byKey(Skybox::getKey, Skybox.values());
 
     private final String key;
 

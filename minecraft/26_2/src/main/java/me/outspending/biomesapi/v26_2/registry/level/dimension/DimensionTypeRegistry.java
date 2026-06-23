@@ -3,6 +3,7 @@ package me.outspending.biomesapi.v26_2.registry.level.dimension;
 import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.annotations.WireFactory;
+import me.outspending.biomesapi.keys.KeyChains;
 import me.outspending.biomesapi.level.dimension.Dimension;
 import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.registry.bootstrap.util.BootstrapSafeMinecraftRegistries;
@@ -15,6 +16,7 @@ import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironment
 import me.outspending.biomesapi.wrapper.level.dimension.InfiniburnImpl;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
+import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
@@ -28,7 +30,9 @@ import org.jspecify.annotations.NonNull;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NullMarked;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -56,6 +60,8 @@ public class DimensionTypeRegistry implements DimensionRegistry {
         NmsEnvironmentAttributes.applyTo(attributeBuilder, attributes);
 
         InfiniburnImpl infiniburn = (InfiniburnImpl) dimension.getInfiniburn();
+        Optional<Holder<WorldClock>> clockHolder = dimension.getDefaultClock()
+            .map(clock -> (Holder<@NonNull WorldClock>) clock.toMinecraft());
 
         return new DimensionType(
             dimension.hasFixedTime(),
@@ -73,7 +79,7 @@ public class DimensionTypeRegistry implements DimensionRegistry {
             dimension.getCardinalLightType().toNms(CardinalLighting.Type.class),
             attributeBuilder.build(),
             (HolderSet<@NonNull Timeline>) dimension.getTimelines().toMinecraft(),
-            toNmsDefaultClock(dimension.getDefaultClock())
+            clockHolder
         );
     }
 
@@ -92,43 +98,39 @@ public class DimensionTypeRegistry implements DimensionRegistry {
                 Registry.register(registry, location, built);
             }
         });
+        KeyChains.DIMENSIONS.append(dimension);
     }
 
-    //@Override
-    @AsOf("2.4.0")
+    @Override
     public void modify(Dimension dimension) {
         Preconditions.checkNotNull(dimension, "dimension cannot be null");
         ResourceKey key = dimension.getResourceKey();
-        Registry<net.minecraft.world.level.dimension.DimensionType> registry = (Registry<net.minecraft.world.level.dimension.DimensionType>) dimensionTypeRegistry.get().toMinecraft();
-        Preconditions.checkArgument(registry.containsKey((Identifier) key.resourceLocation()),
-                "Dimension type %s is not registered", key);
+
         modify(key, dimension);
     }
 
-    //@Override
-    @AsOf("2.4.0")
+    @Override
     public void modify(ResourceKey key, Dimension newData) {
         Preconditions.checkNotNull(key, "key cannot be null");
         Preconditions.checkNotNull(newData, "newData cannot be null");
 
-        throw new UnsupportedOperationException("Not yet implemented");
-        //TODO
-//        RegistryHandle handle = RegistryHandle.dimensionType();
-//        Identifier location = (Identifier) key.toMinecraft();
-//        DimensionType rebuilt = buildDelegate(newData);
-//
-//        handle.modify(() -> {
-//            Registry<DimensionType> registry = (Registry<@NonNull DimensionType>) handle.toMinecraft();
-//            Holder.Reference<DimensionType> reference = registry.get(location).orElseThrow(
-//                    () -> new IllegalStateException("Dimension type " + key + " is not registered"));
-//            // DimensionType is an immutable record, so unlike a Biome we cannot reflect into
-//            // its fields in place, instead we rebind the holder to the freshly-built value.
-//            rebindHolder(reference, rebuilt);
-//        });
+        Identifier id = (Identifier) key.toMinecraft();
+        DimensionType rebuilt = buildDelegate(newData);
+
+        Registry<DimensionType> registry = BootstrapSafeMinecraftRegistries.mappedRegistry(Registries.DIMENSION_TYPE);
+        Holder.Reference<DimensionType> reference = registry.get(id).orElseThrow(
+            () -> new IllegalStateException("Dimension type " + key + " is not registered"));
+
+        DimensionType old = reference.value();
+        rebindHolder(reference, rebuilt);
+        repairValueMaps(registry, old, rebuilt, reference);
+
+        if (KeyChains.DIMENSIONS.isRegistered(key)) {
+            KeyChains.DIMENSIONS.replace(key, newData);
+        }
     }
 
-
-    private static void rebindHolder(Holder.Reference<net.minecraft.world.level.dimension.DimensionType> reference, net.minecraft.world.level.dimension.DimensionType value) {
+    private static void rebindHolder(Holder.Reference<DimensionType> reference, DimensionType value) {
         try {
             Method bindValue = Holder.Reference.class.getDeclaredMethod("bindValue", Object.class);
             bindValue.setAccessible(true);
@@ -138,13 +140,30 @@ public class DimensionTypeRegistry implements DimensionRegistry {
         }
     }
 
-    // TODO: this sucks — needs to be moved to NMSHandle/wrapper
-    private static Optional<Holder<WorldClock>> toNmsDefaultClock(@Nullable ResourceKey key) {
-        if (key == null) {
-            return Optional.empty();
+    private static void repairValueMaps(Registry<DimensionType> registry, DimensionType oldValue, DimensionType newValue, Holder.Reference<DimensionType> reference) {
+        int id = registry.getId(oldValue);
+        if (id == -1) {
+            throw new IllegalStateException("Dimension type value has no id in registry " + registry.key());
         }
-        Registry<WorldClock> registry = BootstrapSafeMinecraftRegistries.mappedRegistry(Registries.WORLD_CLOCK);
-        Identifier id = (Identifier) key.resourceLocation();
-        return Optional.of(registry.get(id).orElseThrow(() -> new IllegalArgumentException("Unknown world clock: " + id)));
+
+        try {
+            Field toIdField = MappedRegistry.class.getDeclaredField("toId");
+            toIdField.setAccessible(true);
+            Map<Object, Integer> toId = (Map<Object, Integer>) toIdField.get(registry);
+            toId.remove(oldValue);
+            toId.put(newValue, id);
+        } catch (ReflectiveOperationException e) {
+            throw new RuntimeException("Failed to repair dimension type toId map", e);
+        }
+
+        try {
+            Field byValueField = MappedRegistry.class.getDeclaredField("byValue");
+            byValueField.setAccessible(true);
+            Map<Object, Holder.Reference<DimensionType>> byValue = (Map<Object, Holder.Reference<DimensionType>>) byValueField.get(registry);
+            byValue.remove(oldValue);
+            byValue.put(newValue, reference);
+        } catch (ReflectiveOperationException e) {
+            throw new RuntimeException("Failed to repair dimension type byValue map", e);
+        }
     }
 }

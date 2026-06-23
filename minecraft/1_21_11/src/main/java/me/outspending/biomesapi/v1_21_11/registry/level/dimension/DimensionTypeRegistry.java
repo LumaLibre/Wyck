@@ -2,8 +2,10 @@ package me.outspending.biomesapi.v1_21_11.registry.level.dimension;
 
 import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.annotations.WireFactory;
+import me.outspending.biomesapi.keys.KeyChains;
 import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.level.dimension.Dimension;
+import me.outspending.biomesapi.registry.bootstrap.util.BootstrapSafeMinecraftRegistries;
 import me.outspending.biomesapi.registry.internal.FrozenRegistry;
 import me.outspending.biomesapi.registry.level.dimension.DimensionRegistry;
 import me.outspending.biomesapi.util.Lazy;
@@ -13,7 +15,9 @@ import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironment
 import me.outspending.biomesapi.wrapper.level.dimension.InfiniburnImpl;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
+import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.attribute.EnvironmentAttributeMap;
@@ -23,7 +27,9 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Map;
 
 
 @NullMarked
@@ -82,39 +88,37 @@ public class DimensionTypeRegistry implements DimensionRegistry {
                 Registry.register(registry, location, built);
             }
         });
+        KeyChains.DIMENSIONS.append(dimension);
     }
 
-    //@Override
+    @Override
     public void modify(Dimension dimension) {
         Preconditions.checkNotNull(dimension, "dimension cannot be null");
         ResourceKey key = dimension.getResourceKey();
-        Registry<DimensionType> registry = (Registry<DimensionType>) dimensionTypeRegistry.get().toMinecraft();
-        Preconditions.checkArgument(registry.containsKey((Identifier) key.resourceLocation()),
-                "Dimension type %s is not registered", key);
+
         modify(key, dimension);
     }
 
-    //@Override
+    @Override
     public void modify(ResourceKey key, Dimension newData) {
         Preconditions.checkNotNull(key, "key cannot be null");
         Preconditions.checkNotNull(newData, "newData cannot be null");
 
-        throw new UnsupportedOperationException("Not yet implemented");
-        //TODO
-//        RegistryHandle handle = RegistryHandle.dimensionType();
-//        Identifier location = (Identifier) key.toMinecraft();
-//        DimensionType rebuilt = buildDelegate(newData);
-//
-//        handle.modify(() -> {
-//            Registry<DimensionType> registry = (Registry<@NonNull DimensionType>) handle.toMinecraft();
-//            Holder.Reference<DimensionType> reference = registry.get(location).orElseThrow(
-//                    () -> new IllegalStateException("Dimension type " + key + " is not registered"));
-//            // DimensionType is an immutable record, so unlike a Biome we cannot reflect into
-//            // its fields in place, instead we rebind the holder to the freshly-built value.
-//            rebindHolder(reference, rebuilt);
-//        });
-    }
+        Identifier id = (Identifier) key.toMinecraft();
+        DimensionType rebuilt = buildDelegate(newData);
 
+        Registry<DimensionType> registry = BootstrapSafeMinecraftRegistries.mappedRegistry(Registries.DIMENSION_TYPE);
+        Holder.Reference<DimensionType> reference = registry.get(id).orElseThrow(
+            () -> new IllegalStateException("Dimension type " + key + " is not registered"));
+
+        DimensionType old = reference.value();
+        rebindHolder(reference, rebuilt);
+        repairValueMaps(registry, old, rebuilt, reference);
+
+        if (KeyChains.DIMENSIONS.isRegistered(key)) {
+            KeyChains.DIMENSIONS.replace(key, newData);
+        }
+    }
 
     private static void rebindHolder(Holder.Reference<DimensionType> reference, DimensionType value) {
         try {
@@ -126,4 +130,30 @@ public class DimensionTypeRegistry implements DimensionRegistry {
         }
     }
 
+    private static void repairValueMaps(Registry<DimensionType> registry, DimensionType oldValue, DimensionType newValue, Holder.Reference<DimensionType> reference) {
+        int id = registry.getId(oldValue);
+        if (id == -1) {
+            throw new IllegalStateException("Dimension type value has no id in registry " + registry.key());
+        }
+
+        try {
+            Field toIdField = MappedRegistry.class.getDeclaredField("toId");
+            toIdField.setAccessible(true);
+            Map<Object, Integer> toId = (Map<Object, Integer>) toIdField.get(registry);
+            toId.remove(oldValue);
+            toId.put(newValue, id);
+        } catch (ReflectiveOperationException e) {
+            throw new RuntimeException("Failed to repair dimension type toId map", e);
+        }
+
+        try {
+            Field byValueField = MappedRegistry.class.getDeclaredField("byValue");
+            byValueField.setAccessible(true);
+            Map<Object, Holder.Reference<DimensionType>> byValue = (Map<Object, Holder.Reference<DimensionType>>) byValueField.get(registry);
+            byValue.remove(oldValue);
+            byValue.put(newValue, reference);
+        } catch (ReflectiveOperationException e) {
+            throw new RuntimeException("Failed to repair dimension type byValue map", e);
+        }
+    }
 }

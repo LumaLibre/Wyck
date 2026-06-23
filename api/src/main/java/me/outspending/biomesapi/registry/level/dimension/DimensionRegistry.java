@@ -1,6 +1,7 @@
 package me.outspending.biomesapi.registry.level.dimension;
 
 import me.outspending.biomesapi.annotations.AsOf;
+import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.level.dimension.Dimension;
 import me.outspending.biomesapi.factory.WireProvider;
 import org.jetbrains.annotations.ApiStatus;
@@ -50,11 +51,20 @@ public interface DimensionRegistry {
     @AsOf("2.4.0")
     void register(Dimension dimension);
 
-    // TODO: Not yet exposed
+    /**
+     * Modifies a dimension type.
+     * @param dimension the dimension to modify
+     * @since 2.4.0
+     */
+    @AsOf("2.4.0")
+    void modify(Dimension dimension);
 
-    //@AsOf("2.4.0")
-    //void modify(DimensionType dimension);
-
-    //@AsOf("2.4.0")
-    //void modify(ResourceKey key, DimensionType newData);
+    /**
+     * Modifies a dimension type.
+     * @param key the key of the dimension to modify
+     * @param newData the new data for the dimension
+     * @since 2.4.0
+     */
+    @AsOf("2.4.0")
+    void modify(ResourceKey key, Dimension newData);
 }
