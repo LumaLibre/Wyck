@@ -28,7 +28,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Generate API javadoc
-        run: ./gradlew :api:javadoc
+        run: "./gradlew :api:javadoc -Psnapshot"
 
       - name: Copy javadoc into Astro public dir
         run: |
