@@ -24,15 +24,15 @@ import java.util.List;
 @NullMarked
 @AsOf("2.3.0")
 public record CaveCarverConfiguration(
-        float probability,
-        HeightProvider y,
-        FloatProvider yScale,
-        VerticalAnchor lavaLevel,
-        CarverDebugSettings debugSettings,
-        Collection<Material> replaceable,
-        FloatProvider horizontalRadiusMultiplier,
-        FloatProvider verticalRadiusMultiplier,
-        FloatProvider floorLevel
+    float probability,
+    HeightProvider y,
+    FloatProvider yScale,
+    VerticalAnchor lavaLevel,
+    CarverDebugSettings debugSettings,
+    Collection<Material> replaceable,
+    FloatProvider horizontalRadiusMultiplier,
+    FloatProvider verticalRadiusMultiplier,
+    FloatProvider floorLevel
 ) implements CarverConfiguration {
 
     @ApiStatus.Internal

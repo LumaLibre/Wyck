@@ -26,14 +26,14 @@ import java.util.List;
 @NullMarked
 @AsOf("2.3.0")
 public record CanyonCarverConfiguration(
-        float probability,
-        HeightProvider y,
-        FloatProvider yScale,
-        VerticalAnchor lavaLevel,
-        CarverDebugSettings debugSettings,
-        Collection<Material> replaceable,
-        FloatProvider verticalRotation,
-        CanyonShapeConfiguration shape
+    float probability,
+    HeightProvider y,
+    FloatProvider yScale,
+    VerticalAnchor lavaLevel,
+    CarverDebugSettings debugSettings,
+    Collection<Material> replaceable,
+    FloatProvider verticalRotation,
+    CanyonShapeConfiguration shape
 ) implements CarverConfiguration {
 
     @ApiStatus.Internal

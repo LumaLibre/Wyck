@@ -352,6 +352,7 @@ public interface PacketHandler extends AbstractBiomeRenderer {
      * @deprecated Use {@link Injector} instead.
      */
     @AsOf("0.0.19")
+    @ApiStatus.ScheduledForRemoval(inVersion = "2.5.0")
     @Deprecated(since = "2.1.0", forRemoval = true)
     enum Manipulator {
         PROTOCOLLIB(Injector.PROTOCOLLIB),

@@ -17,6 +17,7 @@ val generatedCatalogFiles = listOf(
     "me/outspending/biomesapi/wrapper/worldgen/feature/ConfiguredFeatures.java",
     "me/outspending/biomesapi/wrapper/worldgen/placement/PlacedFeatures.java",
     "me/outspending/biomesapi/wrapper/level/noise/function/DensityFunctions.java",
+    "me/outspending/biomesapi/wrapper/level/noise/Noises.java",
 ).map { rootProject.file("api/src/main/java/$it") }
 
 tasks.register<JavaExec>("generateSources") {

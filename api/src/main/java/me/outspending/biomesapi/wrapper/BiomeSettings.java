@@ -17,12 +17,12 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 @AsOf("0.0.8")
 public record BiomeSettings(
-        @Range(from = 0, to = 25) float depth,
-        @Range(from = 0, to = 25) float scale,
-        @Range(from = 0, to = 25) float temperature,
-        @Range(from = 0, to = 25) float downfall,
-        BiomeTempModifier modifier,
-        boolean hasPrecipitation
+    @Range(from = 0, to = 25) float depth,
+    @Range(from = 0, to = 25) float scale,
+    @Range(from = 0, to = 25) float temperature,
+    @Range(from = 0, to = 25) float downfall,
+    BiomeTempModifier modifier,
+    boolean hasPrecipitation
 ) {
 
     /**

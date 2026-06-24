@@ -60,7 +60,7 @@ public final class NullableWireProvider<F> extends WireProvider<@NonNull F> {
         initialized = true;
 
         if (!reflectiveFallback) {
-            return factory;  // remains null until setProvider is called
+            return factory; // remains null until setProvider is called
         }
 
         try {

@@ -35,7 +35,8 @@ tasks.javadoc {
         links(
             "https://docs.oracle.com/en/java/javase/25/docs/api/",
             "https://jd.papermc.io/paper/26.2/",
-            "https://jd.papermc.io/adventure/5.1.1/"
+            "https://jd.papermc.io/adventure/5.1.1/",
+            "https://jspecify.dev/docs/api/",
         )
         addBooleanOption("html5", true)
         use(true)

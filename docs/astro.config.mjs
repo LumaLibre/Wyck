@@ -39,6 +39,10 @@ export default defineConfig({
           label: "Getting Started",
           link: "/setup/",
         },
+        // {
+        //   label: "Introduction",
+        //   link: "/intro/",
+        // },
         {
           label: "Biomes",
           autogenerate: { directory: "biomes" },

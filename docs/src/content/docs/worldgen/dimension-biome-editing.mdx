@@ -1,5 +1,5 @@
 ---
-title: Adding Biomes to Dimensions
+title: Adding Biomes to Existing Dimensions
 description: Learn how to inject or add your own biomes into dimensions.
 sidebar:
     order: 7
@@ -11,14 +11,14 @@ import SourceLink from "@/components/SourceLink.astro";
 Adding your biomes to dimensions is an important step in bringing together your custom world generation.
 If you want to use your world generation in an existing world such as `minecraft:overworld`, then this is a necessary step.
 
-The <SourceLink path="registry/dimension/DimensionEditor.java">DimensionEditor</SourceLink> and the
+The <SourceLink path="registry/dimension/LevelStemEditor.java">LevelStemEditor</SourceLink> and the
 <SourceLink path="registry/bootstrap/Composer.java" line={28}>Composer.DATAPACK</SourceLink> version of the
 <SourceLink path="registry/bootstrap/BootstrapBiomeRegistry.java">BootstrapBiomeRegistry</SourceLink> both have the
 ability to add or replace biomes in dimensions.
 
-## Using the DimensionEditor
+## Using the LevelStemEditor
 
-The <SourceLink path="registry/dimension/DimensionEditor.java">DimensionEditor</SourceLink>, in its current state,
+The <SourceLink path="registry/dimension/LevelStemEditor.java">LevelStemEditor</SourceLink>, in its current state,
 injects and adds biomes to dimensions entirely transiently. This means that if your biome is never saved to the dimension
 and the server will always be able to load the Minecraft world without your biome being registered.
 
@@ -35,7 +35,7 @@ and the server will always be able to load the Minecraft world without your biom
     code={
 `import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.registry.ResourceKey;
-import me.outspending.biomesapi.registry.dimension.DimensionEditor;
+import me.outspending.biomesapi.registry.dimension.LevelStemEditor;
 import me.outspending.biomesapi.wrapper.worldgen.BiomeGenerationSettings;
 import me.outspending.biomesapi.wrapper.worldgen.GenerationStep;
 import me.outspending.biomesapi.wrapper.worldgen.placement.PlacedFeatures;
@@ -59,7 +59,7 @@ public class ExamplePlugin extends JavaPlugin {
             .setGenerationSettings(generation)
             .register();
 
-        DimensionEditor dimensionEditor = DimensionEditor.create();
+        LevelStemEditor dimensionEditor = LevelStemEditor.create();
         ResourceKey overworldKey = ResourceKey.of("minecraft", "overworld");
         ResourceKey plainsKey = ResourceKey.of("minecraft", "plains");
         dimensionEditor.replaceInDimension(overworldKey, plainsKey, myBiomeKey);

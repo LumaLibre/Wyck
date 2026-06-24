@@ -19,12 +19,12 @@ import org.jspecify.annotations.Nullable;
 @NullMarked
 @AsOf("2.3.0")
 public record CanyonShapeConfiguration(
-        FloatProvider distanceFactor,
-        FloatProvider thickness,
-        int widthSmoothness,
-        FloatProvider horizontalRadiusFactor,
-        float verticalRadiusDefaultFactor,
-        float verticalRadiusCenterFactor
+    FloatProvider distanceFactor,
+    FloatProvider thickness,
+    int widthSmoothness,
+    FloatProvider horizontalRadiusFactor,
+    float verticalRadiusDefaultFactor,
+    float verticalRadiusCenterFactor
 ) implements NmsHandle {
 
     @ApiStatus.Internal

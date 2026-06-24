@@ -34,6 +34,9 @@ public interface KeyChains {
     @AsOf("2.4.0")
     KeyChain<DensityFunction> DENSITY_FUNCTIONS = KeyChain.mutable();
 
+    @AsOf("2.4.0")
+    KeyChain<ResourceKey> NOISE = KeyChain.mutable();
+
     /**
      * @return {@link #BIOMES}
      * @since 2.4.0
@@ -77,5 +80,14 @@ public interface KeyChains {
     @AsOf("2.4.0")
     static KeyChain<DensityFunction> densityFunctions() {
         return DENSITY_FUNCTIONS;
+    }
+
+    /**
+     * @return {@link #NOISE}
+     * @since 2.4.0
+     */
+    @AsOf("2.4.0")
+    static KeyChain<ResourceKey> noise() {
+        return NOISE;
     }
 }

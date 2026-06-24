@@ -21,6 +21,7 @@ import net.minecraft.data.worldgen.placement.TreePlacements;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.data.worldgen.placement.VillagePlacements;
 import net.minecraft.world.level.levelgen.NoiseRouterData;
+import net.minecraft.world.level.levelgen.Noises;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
@@ -30,7 +31,8 @@ public final class Generators {
     public static final List<GeneratorSpec> ALL = List.of(
         configuredFeatures(),
         placedFeatures(),
-        densityFunctions()
+        densityFunctions(),
+        noiseParameters()
     );
 
     private static @Nullable Identifier keyLocation(Object entry) {
@@ -106,6 +108,23 @@ public final class Generators {
             "Typed references that point to vanilla's density functions.",
             "2.4.0",
             "DENSITY_FUNCTIONS"
+        );
+    }
+
+    private static GeneratorSpec noiseParameters() {
+        return new GeneratorSpec(
+            "me.outspending.biomesapi.wrapper.level.noise",
+            "Noises",
+            "ResourceKey",
+            "",
+            ResourceKey.class,
+            Generators::keyLocation,
+            List.of(
+                Noises.class
+            ),
+            "Typed references that point to vanilla's noise parameters.",
+            "2.4.0",
+            "NOISE"
         );
     }
 

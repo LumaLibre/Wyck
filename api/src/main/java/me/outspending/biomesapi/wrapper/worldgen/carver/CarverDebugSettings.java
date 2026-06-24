@@ -18,11 +18,11 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 @AsOf("2.3.0")
 public record CarverDebugSettings(
-        boolean debugMode,
-        Material airState,
-        Material waterState,
-        Material lavaState,
-        Material barrierState
+    boolean debugMode,
+    Material airState,
+    Material waterState,
+    Material lavaState,
+    Material barrierState
 ) implements NmsHandle {
 
     @ApiStatus.Internal

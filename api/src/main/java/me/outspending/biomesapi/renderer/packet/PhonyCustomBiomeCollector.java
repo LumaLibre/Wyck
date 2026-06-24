@@ -57,7 +57,7 @@ public class PhonyCustomBiomeCollector {
      * Checks if the collector has a phony custom biome with the given ResourceKey.
      * @param biomeKey the ResourceKey of the biome to check
      * @return true if the collector has the biome, false otherwise
-     * @version 0.0.8
+     * @since 0.0.8
      */
     @AsOf("0.0.6")
     public boolean hasBiome(ResourceKey biomeKey) {
@@ -79,7 +79,7 @@ public class PhonyCustomBiomeCollector {
      * Removes a phony custom biome with the given ResourceKey from the collector.
      * @param biomeKey the ResourceKey of the biome to remove
      * @return true if the biome was removed, false if it was not found
-     * @version 0.0.8
+     * @since 0.0.8
      */
     @AsOf("0.0.6")
     public boolean removeBiome(ResourceKey biomeKey) {

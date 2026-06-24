@@ -162,7 +162,7 @@ public interface BiomeUpdater {
      */
     @AsOf("2.0.0")
     default void updateChunks(Collection<Chunk> chunks) {
-        updateChunks(chunks.stream().map(CompletableFuture::completedFuture).toList());
+        updateChunksAsync(chunks.stream().map(CompletableFuture::completedFuture).toList());
     }
 
     /**
@@ -176,6 +176,7 @@ public interface BiomeUpdater {
      */
     @AsOf("1.2.0")
     @Deprecated(forRemoval = true, since = "2.2.0")
+    @ApiStatus.ScheduledForRemoval(inVersion = "2.5.0")
     default void updateChunks(List<CompletableFuture<Chunk>> chunks) {
         updateChunksAsync(chunks);
     }
