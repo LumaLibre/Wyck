@@ -7,17 +7,10 @@ import net.minecraft.world.level.levelgen.PatrolSpawner;
 import net.minecraft.world.level.levelgen.PhantomSpawner;
 import net.minecraft.world.level.storage.SavedDataStorage;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 @NullMarked
 public record VanillaLevelSpawnerImpl(Kind kind) implements LevelSpawner {
-
-    public enum Kind {
-        PHANTOM,
-        PATROL,
-        CAT,
-        VILLAGE_SIEGE,
-        WANDERING_TRADER
-    }
 
     @Override
     public Object toMinecraft(Object savedDataStorage) {
@@ -28,5 +21,10 @@ public record VanillaLevelSpawnerImpl(Kind kind) implements LevelSpawner {
             case VILLAGE_SIEGE -> new VillageSiege();
             case WANDERING_TRADER -> new WanderingTraderSpawner((SavedDataStorage) savedDataStorage);
         };
+    }
+
+    @Override
+    public @Nullable KeyedSpawnTick keyedTick() {
+        return null;
     }
 }

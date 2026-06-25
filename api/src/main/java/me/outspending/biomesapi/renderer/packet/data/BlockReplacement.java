@@ -1,6 +1,8 @@
 package me.outspending.biomesapi.renderer.packet.data;
 
 import com.google.common.base.Preconditions;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.outspending.biomesapi.annotations.AsOf;
 import org.bukkit.Material;
 import org.jspecify.annotations.NullMarked;
@@ -10,6 +12,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import static me.outspending.biomesapi.serialization.Codecs.MATERIAL_CODEC;
 
 /**
  * A data class representing a block replacement rule.
@@ -21,6 +25,11 @@ import java.util.Map;
 @NullMarked
 @AsOf("0.0.6")
 public record BlockReplacement(Material original, Material replacement) {
+
+    public static final Codec<BlockReplacement> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+        MATERIAL_CODEC.fieldOf("original").forGetter(BlockReplacement::originalBlock),
+        MATERIAL_CODEC.fieldOf("replacement").forGetter(BlockReplacement::replacementBlock
+    )).apply(instance, BlockReplacement::new));
 
     /**
      * Returns the original block material.

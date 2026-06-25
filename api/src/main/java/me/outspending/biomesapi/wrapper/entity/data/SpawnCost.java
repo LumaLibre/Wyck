@@ -1,5 +1,7 @@
 package me.outspending.biomesapi.wrapper.entity.data;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.outspending.biomesapi.annotations.AsOf;
 import org.jspecify.annotations.NullMarked;
 
@@ -13,6 +15,12 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 @AsOf("2.3.0")
 public record SpawnCost(double charge, double energyBudget) {
+
+    public static final Codec<SpawnCost> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+        Codec.DOUBLE.fieldOf("charge").forGetter(SpawnCost::charge),
+        Codec.DOUBLE.fieldOf("energy_budget").forGetter(SpawnCost::energyBudget)
+    ).apply(instance, SpawnCost::new));
+
     @AsOf("2.3.0")
     public static SpawnCost of(double charge, double energyBudget) {
         return new SpawnCost(charge, energyBudget);

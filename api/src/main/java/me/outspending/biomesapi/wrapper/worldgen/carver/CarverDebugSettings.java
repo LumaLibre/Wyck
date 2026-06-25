@@ -1,7 +1,10 @@
 package me.outspending.biomesapi.wrapper.worldgen.carver;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
+import me.outspending.biomesapi.serialization.Codecs;
 import me.outspending.biomesapi.wrapper.internal.NmsHandle;
 import org.bukkit.Material;
 import org.jetbrains.annotations.ApiStatus;
@@ -24,6 +27,15 @@ public record CarverDebugSettings(
     Material lavaState,
     Material barrierState
 ) implements NmsHandle {
+
+    public static final Codec<CarverDebugSettings> CODEC = RecordCodecBuilder.create(i -> i.group(
+        Codec.BOOL.fieldOf("debug_mode").forGetter(CarverDebugSettings::debugMode),
+        Codecs.MATERIAL_CODEC.fieldOf("air_state").forGetter(CarverDebugSettings::airState),
+        Codecs.MATERIAL_CODEC.fieldOf("water_state").forGetter(CarverDebugSettings::waterState),
+        Codecs.MATERIAL_CODEC.fieldOf("lava_state").forGetter(CarverDebugSettings::lavaState),
+        Codecs.MATERIAL_CODEC.fieldOf("barrier_state").forGetter(CarverDebugSettings::barrierState)
+    ).apply(i, CarverDebugSettings::new));
+
 
     @ApiStatus.Internal
     private static final WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.worldgen.carver.CarverDebugSettingsFactoryImpl");

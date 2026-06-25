@@ -1,6 +1,8 @@
 package me.outspending.biomesapi.wrapper.worldgen.stateproviders;
 
 import com.google.common.base.Preconditions;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
 import me.outspending.biomesapi.wrapper.internal.NmsHandle;
@@ -21,6 +23,12 @@ import java.util.List;
 @NullMarked
 @AsOf("2.3.0")
 public interface NoiseParameters extends NmsHandle {
+
+    Codec<NoiseParameters> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+        Codec.INT.fieldOf("first_octave").forGetter(NoiseParameters::firstOctave),
+        Codec.DOUBLE.listOf().fieldOf("amplitudes").forGetter(NoiseParameters::amplitudes)
+    ).apply(instance, NoiseParameters::fromCodec));
+
 
     @ApiStatus.Internal
     WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.worldgen.stateproviders.NoiseParametersFactoryImpl");
@@ -64,6 +72,11 @@ public interface NoiseParameters extends NmsHandle {
     @AsOf("2.3.0")
     static Builder builder() {
         return new Builder();
+    }
+
+    @ApiStatus.Internal
+    private static NoiseParameters fromCodec(int firstOctave, List<Double> amplitudes) {
+        return builder().firstOctave(firstOctave).amplitudes(amplitudes).build();
     }
 
     /**

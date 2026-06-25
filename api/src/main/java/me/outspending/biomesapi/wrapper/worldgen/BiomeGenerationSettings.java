@@ -1,6 +1,8 @@
 package me.outspending.biomesapi.wrapper.worldgen;
 
 import com.google.common.base.Preconditions;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
 import me.outspending.biomesapi.wrapper.internal.NmsHandle;
@@ -25,6 +27,14 @@ import java.util.Map;
 @NullMarked
 @AsOf("2.3.0")
 public interface BiomeGenerationSettings extends NmsHandle {
+
+    Codec<BiomeGenerationSettings> CODEC = RecordCodecBuilder.create(i -> i.group(
+        Codec.list(ConfiguredWorldCarver.CODEC).optionalFieldOf("carvers", List.of())
+            .forGetter(BiomeGenerationSettings::carvers),
+        Codec.unboundedMap(GenerationStep.CODEC, Codec.list(PlacedFeature.CODEC))
+            .optionalFieldOf("features", Map.of())
+            .forGetter(BiomeGenerationSettings::features)
+    ).apply(i, BiomeGenerationSettings::fromCodec));
 
     @ApiStatus.Internal
     WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.worldgen.BiomeGenerationSettingsFactoryImpl");
@@ -63,6 +73,14 @@ public interface BiomeGenerationSettings extends NmsHandle {
     @AsOf("2.3.0")
     static BiomeGenerationSettings empty() {
         return new Builder().build();
+    }
+
+    @ApiStatus.Internal
+    private static BiomeGenerationSettings fromCodec(List<ConfiguredWorldCarver> carvers, Map<GenerationStep, List<PlacedFeature>> features) {
+        Builder builder = builder();
+        carvers.forEach(builder::addCarver);
+        features.forEach((step, list) -> list.forEach(feature -> builder.addFeature(step, feature)));
+        return builder.build();
     }
 
     /**

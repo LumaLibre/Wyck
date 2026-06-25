@@ -9,7 +9,7 @@ import org.jspecify.annotations.NullMarked;
  * Auto-generated. Do not modify!
  * Run ./gradlew generateSources to regenerate.
  * <p>
- * Typed references that point to vanilla's noise parameters.
+ * Typed references that climatePoint to vanilla's noise parameters.
  * </p>
  *
  * @since 2.4.0

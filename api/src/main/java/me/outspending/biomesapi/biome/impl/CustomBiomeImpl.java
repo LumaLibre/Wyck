@@ -1,5 +1,7 @@
 package me.outspending.biomesapi.biome.impl;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.renderer.packet.data.BlockReplacement;
@@ -13,9 +15,34 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.List;
+
 @NullMarked
 @ApiStatus.Internal
 public class CustomBiomeImpl extends AbstractBiomeImpl implements CustomBiome {
+
+    public static final Codec<CustomBiomeImpl> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+        AbstractBiomeImpl.MAP_CODEC.forGetter(b -> b),
+        Codec.list(BlockReplacement.CODEC).optionalFieldOf("block_replacements", List.of())
+            .forGetter(b -> List.of(b.getBlockReplacements()))
+    ).apply(instance, (base, replacements) ->
+        new CustomBiomeImpl(
+            base.getResourceKey(),
+            base.getSettings(),
+            base.getWaterColor(),
+            base.getFogColor(),
+            base.getWaterFogColor(),
+            base.getSkyColor(),
+            base.getFoliageColor(),
+            base.getGrassColor(),
+            base.getDryFoliageColor(),
+            base.getGrassColorModifier(),
+            base.getParticleCatalog(),
+            replacements.toArray(new BlockReplacement[0]),
+            base.getAttributes(),
+            base.getBiomeSpawner(),
+            base.getGenerationSettings())
+    ));
 
     private BlockReplacement[] blockReplacements;
 

@@ -1,8 +1,13 @@
 package me.outspending.biomesapi.wrapper.worldgen.placement;
 
 import com.google.common.base.Preconditions;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
+import me.outspending.biomesapi.serialization.Codecs;
+import me.outspending.biomesapi.serialization.StringRepresentable;
 import me.outspending.biomesapi.wrapper.internal.NmsHandle;
 import me.outspending.biomesapi.wrapper.worldgen.BlockPredicate;
 import me.outspending.biomesapi.wrapper.worldgen.HeightmapType;
@@ -15,6 +20,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Wraps the PlacementModifier family, the ordered transforms applied to
@@ -26,7 +32,34 @@ import java.util.List;
  */
 @NullMarked
 @AsOf("2.3.0")
-public sealed interface PlacementModifier extends NmsHandle permits PlacementModifier.BiomeFilter, PlacementModifier.BlockPredicateFilter, PlacementModifier.CountPlacement, PlacementModifier.EnvironmentScanPlacement, PlacementModifier.FixedPlacement, PlacementModifier.HeightRangePlacement, PlacementModifier.HeightmapPlacement, PlacementModifier.InSquarePlacement, PlacementModifier.NoiseBasedCountPlacement, PlacementModifier.NoiseThresholdCountPlacement, PlacementModifier.RandomOffsetPlacement, PlacementModifier.RarityFilter, PlacementModifier.SurfaceRelativeThresholdFilter, PlacementModifier.SurfaceWaterDepthFilter {
+public sealed interface PlacementModifier extends NmsHandle, StringRepresentable permits PlacementModifier.BiomeFilter, PlacementModifier.BlockPredicateFilter, PlacementModifier.CountPlacement, PlacementModifier.EnvironmentScanPlacement, PlacementModifier.FixedPlacement, PlacementModifier.HeightRangePlacement, PlacementModifier.HeightmapPlacement, PlacementModifier.InSquarePlacement, PlacementModifier.NoiseBasedCountPlacement, PlacementModifier.NoiseThresholdCountPlacement, PlacementModifier.RandomOffsetPlacement, PlacementModifier.RarityFilter, PlacementModifier.SurfaceRelativeThresholdFilter, PlacementModifier.SurfaceWaterDepthFilter {
+
+    Codec<PlacementModifier> CODEC = Codec.lazyInitialized(() -> {
+        Map<String, MapCodec<? extends PlacementModifier>> byType = Map.ofEntries(
+            Map.entry("biome", BiomeFilter.MAP_CODEC),
+            Map.entry("block_predicate", BlockPredicateFilter.MAP_CODEC),
+            Map.entry("count", CountPlacement.MAP_CODEC),
+            Map.entry("environment_scan", EnvironmentScanPlacement.MAP_CODEC),
+            Map.entry("fixed", FixedPlacement.MAP_CODEC),
+            Map.entry("height_range", HeightRangePlacement.MAP_CODEC),
+            Map.entry("heightmap", HeightmapPlacement.MAP_CODEC),
+            Map.entry("in_square", InSquarePlacement.MAP_CODEC),
+            Map.entry("noise_based_count", NoiseBasedCountPlacement.MAP_CODEC),
+            Map.entry("noise_threshold_count", NoiseThresholdCountPlacement.MAP_CODEC),
+            Map.entry("random_offset", RandomOffsetPlacement.MAP_CODEC),
+            Map.entry("rarity", RarityFilter.MAP_CODEC),
+            Map.entry("surface_relative_threshold", SurfaceRelativeThresholdFilter.MAP_CODEC),
+            Map.entry("surface_water_depth", SurfaceWaterDepthFilter.MAP_CODEC)
+        );
+        return Codec.STRING.dispatch("type", modifier -> {
+            String key = modifier.type();
+            if (!byType.containsKey(key)) {
+                throw new IllegalStateException("PlacementModifier " + modifier.getClass().getSimpleName()
+                    + " type()=\"" + key + "\" has no entry in dispatch map " + byType.keySet());
+            }
+            return key;
+        }, byType::get);
+    });
 
     @ApiStatus.Internal
     WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.worldgen.placement.PlacementModifierFactoryImpl");
@@ -34,6 +67,12 @@ public sealed interface PlacementModifier extends NmsHandle permits PlacementMod
     @ApiStatus.Internal
     interface Factory {
         Object toNms(PlacementModifier modifier);
+    }
+
+    @Override
+    default String postProcess(String processedClassName) {
+        return processedClassName.replace("_placement", "")
+            .replace("_filter", "");
     }
 
     /**
@@ -308,10 +347,14 @@ public sealed interface PlacementModifier extends NmsHandle permits PlacementMod
     }
 
     @AsOf("2.3.0")
-    record BiomeFilter() implements PlacementModifier {}
+    record BiomeFilter() implements PlacementModifier {
+        public static final MapCodec<BiomeFilter> MAP_CODEC = MapCodec.unit(BiomeFilter::new);
+    }
 
     @AsOf("2.3.0")
     record BlockPredicateFilter(BlockPredicate predicate) implements PlacementModifier {
+        public static final MapCodec<BlockPredicateFilter> MAP_CODEC = BlockPredicate.CODEC.fieldOf("predicate")
+            .xmap(BlockPredicateFilter::new, BlockPredicateFilter::predicate);
 
         @AsOf("2.3.0")
         public BlockPredicateFilter {
@@ -321,6 +364,8 @@ public sealed interface PlacementModifier extends NmsHandle permits PlacementMod
 
     @AsOf("2.3.0")
     record CountPlacement(IntProvider count) implements PlacementModifier {
+        public static final MapCodec<CountPlacement> MAP_CODEC = IntProvider.CODEC.fieldOf("count")
+            .xmap(CountPlacement::new, CountPlacement::count);
 
         @AsOf("2.3.0")
         public CountPlacement {
@@ -335,6 +380,12 @@ public sealed interface PlacementModifier extends NmsHandle permits PlacementMod
         BlockPredicate allowedSearchCondition,
         int maxSteps
     ) implements PlacementModifier {
+        public static final MapCodec<EnvironmentScanPlacement> MAP_CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
+            Codecs.BLOCK_FACE_CODEC.fieldOf("direction").forGetter(EnvironmentScanPlacement::directionOfSearch),
+            BlockPredicate.CODEC.fieldOf("target_condition").forGetter(EnvironmentScanPlacement::targetCondition),
+            BlockPredicate.CODEC.fieldOf("allowed_search_condition").forGetter(EnvironmentScanPlacement::allowedSearchCondition),
+            Codec.INT.fieldOf("max_steps").forGetter(EnvironmentScanPlacement::maxSteps)
+        ).apply(i, EnvironmentScanPlacement::new));
 
         @AsOf("2.3.0")
         public EnvironmentScanPlacement {
@@ -351,6 +402,8 @@ public sealed interface PlacementModifier extends NmsHandle permits PlacementMod
 
     @AsOf("2.3.0")
     record FixedPlacement(List<BlockVector> positions) implements PlacementModifier {
+        public static final MapCodec<FixedPlacement> MAP_CODEC = Codec.list(Codecs.BLOCK_VECTOR_CODEC).fieldOf("positions")
+            .xmap(FixedPlacement::new, FixedPlacement::positions);
 
         @AsOf("2.3.0")
         public FixedPlacement {
@@ -360,6 +413,8 @@ public sealed interface PlacementModifier extends NmsHandle permits PlacementMod
 
     @AsOf("2.3.0")
     record HeightRangePlacement(HeightProvider height) implements PlacementModifier {
+        public static final MapCodec<HeightRangePlacement> MAP_CODEC = HeightProvider.CODEC.fieldOf("height")
+            .xmap(HeightRangePlacement::new, HeightRangePlacement::height);
 
         @AsOf("2.3.0")
         public HeightRangePlacement {
@@ -369,6 +424,8 @@ public sealed interface PlacementModifier extends NmsHandle permits PlacementMod
 
     @AsOf("2.3.0")
     record HeightmapPlacement(HeightmapType heightmap) implements PlacementModifier {
+        public static final MapCodec<HeightmapPlacement> MAP_CODEC = HeightmapType.CODEC.fieldOf("heightmap")
+            .xmap(HeightmapPlacement::new, HeightmapPlacement::heightmap);
 
         @AsOf("2.3.0")
         public HeightmapPlacement {
@@ -377,16 +434,34 @@ public sealed interface PlacementModifier extends NmsHandle permits PlacementMod
     }
 
     @AsOf("2.3.0")
-    record InSquarePlacement() implements PlacementModifier {}
+    record InSquarePlacement() implements PlacementModifier {
+        public static final MapCodec<InSquarePlacement> MAP_CODEC = MapCodec.unit(InSquarePlacement::new);
+    }
 
     @AsOf("2.3.0")
-    record NoiseBasedCountPlacement(int noiseToCountRatio, double noiseFactor, double noiseOffset) implements PlacementModifier {}
+    record NoiseBasedCountPlacement(int noiseToCountRatio, double noiseFactor, double noiseOffset) implements PlacementModifier {
+        public static final MapCodec<NoiseBasedCountPlacement> MAP_CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
+            Codec.INT.fieldOf("noise_to_count_ratio").forGetter(NoiseBasedCountPlacement::noiseToCountRatio),
+            Codec.DOUBLE.fieldOf("noise_factor").forGetter(NoiseBasedCountPlacement::noiseFactor),
+            Codec.DOUBLE.fieldOf("noise_offset").forGetter(NoiseBasedCountPlacement::noiseOffset)
+        ).apply(i, NoiseBasedCountPlacement::new));
+    }
 
     @AsOf("2.3.0")
-    record NoiseThresholdCountPlacement(double noiseLevel, int belowNoise, int aboveNoise) implements PlacementModifier {}
+    record NoiseThresholdCountPlacement(double noiseLevel, int belowNoise, int aboveNoise) implements PlacementModifier {
+        public static final MapCodec<NoiseThresholdCountPlacement> MAP_CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
+            Codec.DOUBLE.fieldOf("noise_level").forGetter(NoiseThresholdCountPlacement::noiseLevel),
+            Codec.INT.fieldOf("below_noise").forGetter(NoiseThresholdCountPlacement::belowNoise),
+            Codec.INT.fieldOf("above_noise").forGetter(NoiseThresholdCountPlacement::aboveNoise)
+        ).apply(i, NoiseThresholdCountPlacement::new));
+    }
 
     @AsOf("2.3.0")
     record RandomOffsetPlacement(IntProvider xzSpread, IntProvider ySpread) implements PlacementModifier {
+        public static final MapCodec<RandomOffsetPlacement> MAP_CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
+            IntProvider.CODEC.fieldOf("xz_spread").forGetter(RandomOffsetPlacement::xzSpread),
+            IntProvider.CODEC.fieldOf("y_spread").forGetter(RandomOffsetPlacement::ySpread)
+        ).apply(i, RandomOffsetPlacement::new));
 
         @AsOf("2.3.0")
         public RandomOffsetPlacement {
@@ -397,6 +472,8 @@ public sealed interface PlacementModifier extends NmsHandle permits PlacementMod
 
     @AsOf("2.3.0")
     record RarityFilter(int chance) implements PlacementModifier {
+        public static final MapCodec<RarityFilter> MAP_CODEC = Codec.INT.fieldOf("chance")
+            .xmap(RarityFilter::new, RarityFilter::chance);
 
         @AsOf("2.3.0")
         public RarityFilter {
@@ -406,6 +483,11 @@ public sealed interface PlacementModifier extends NmsHandle permits PlacementMod
 
     @AsOf("2.3.0")
     record SurfaceRelativeThresholdFilter(HeightmapType heightmap, int minInclusive, int maxInclusive) implements PlacementModifier {
+        public static final MapCodec<SurfaceRelativeThresholdFilter> MAP_CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
+            HeightmapType.CODEC.fieldOf("heightmap").forGetter(SurfaceRelativeThresholdFilter::heightmap),
+            Codec.INT.fieldOf("min_inclusive").forGetter(SurfaceRelativeThresholdFilter::minInclusive),
+            Codec.INT.fieldOf("max_inclusive").forGetter(SurfaceRelativeThresholdFilter::maxInclusive)
+        ).apply(i, SurfaceRelativeThresholdFilter::new));
 
         @AsOf("2.3.0")
         public SurfaceRelativeThresholdFilter {
@@ -414,5 +496,8 @@ public sealed interface PlacementModifier extends NmsHandle permits PlacementMod
     }
 
     @AsOf("2.3.0")
-    record SurfaceWaterDepthFilter(int maxWaterDepth) implements PlacementModifier {}
+    record SurfaceWaterDepthFilter(int maxWaterDepth) implements PlacementModifier {
+        public static final MapCodec<SurfaceWaterDepthFilter> MAP_CODEC = Codec.INT.fieldOf("max_water_depth")
+            .xmap(SurfaceWaterDepthFilter::new, SurfaceWaterDepthFilter::maxWaterDepth);
+    }
 }

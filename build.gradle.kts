@@ -8,7 +8,8 @@ plugins {
 }
 
 val isSnapshot: Boolean = project.hasProperty("snapshot") || System.getProperty("snapshot")?.toBoolean() == true
-val stable = "2.4.0"
+val isExperimental: Boolean = project.hasProperty("experimental") || System.getProperty("experimental")?.toBoolean() == true
+val stable = "2.4.0${if (isExperimental) "-exp" else ""}"
 
 allprojects {
     apply(plugin = "java-library")
@@ -25,6 +26,7 @@ allprojects {
         maven("https://oss.sonatype.org/content/groups/public/")
         maven("https://repo.codemc.io/repository/maven-releases/")
         maven("https://repo.faststats.dev/releases")
+        maven("https://libraries.minecraft.net")
     }
 
     dependencies {
@@ -32,6 +34,7 @@ allprojects {
         compileOnly(libs.google.guava)
         compileOnly(libs.kyori.adventure)
         compileOnly(libs.kyori.minimessage)
+        compileOnly(libs.mojang.datafixerupper)
     }
 
     tasks.withType<JavaCompile> {

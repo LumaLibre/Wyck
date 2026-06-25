@@ -1,5 +1,8 @@
 package me.outspending.biomesapi.level.dimension;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.wrapper.level.clock.WorldClock;
@@ -28,6 +31,31 @@ import java.util.Optional;
 @AsOf("2.4.0")
 @ApiStatus.Internal
 public final class DimensionImpl implements Dimension {
+
+    public static final MapCodec<DimensionImpl> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+        Head.MAP_CODEC.forGetter(DimensionImpl::toHead),
+        Tail.MAP_CODEC.forGetter(DimensionImpl::toTail)
+    ).apply(instance, (head, tail) ->
+        new DimensionImpl(
+            head.resourceKey(),
+            head.hasFixedTime(),
+            head.hasSkyLight(),
+            head.hasCeiling(),
+            head.hasEnderDragonFight(),
+            head.coordinateScale(),
+            head.minY(),
+            head.height(),
+            tail.logicalHeight(),
+            tail.infiniburn(),
+            tail.ambientLight(),
+            tail.monsterSettings(),
+            tail.skybox(),
+            tail.cardinalLightType(),
+            tail.attributes(),
+            tail.timelines(),
+            tail.defaultClock()
+        )
+    ));
 
     private final ResourceKey resourceKey;
 
@@ -312,5 +340,42 @@ public final class DimensionImpl implements Dimension {
     @Override
     public String toString() {
         return "CustomDimensionImpl[" + resourceKey + "]";
+    }
+
+    // DFU caps out at 16 args
+
+    private Head toHead() {
+        return new Head(resourceKey, hasFixedTime, hasSkyLight, hasCeiling, hasEnderDragonFight, coordinateScale, minY, height);
+    }
+
+    private Tail toTail() {
+        return new Tail(logicalHeight, infiniburn, ambientLight, monsterSettings, skybox, cardinalLightType, attributes, timelines, defaultClock);
+    }
+
+    private record Head(ResourceKey resourceKey, boolean hasFixedTime, boolean hasSkyLight, boolean hasCeiling, boolean hasEnderDragonFight, double coordinateScale, int minY, int height) {
+        static final MapCodec<Head> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            ResourceKey.CODEC.fieldOf("resource_key").forGetter(Head::resourceKey),
+            Codec.BOOL.fieldOf("has_fixed_time").forGetter(Head::hasFixedTime),
+            Codec.BOOL.fieldOf("has_sky_light").forGetter(Head::hasSkyLight),
+            Codec.BOOL.fieldOf("has_ceiling").forGetter(Head::hasCeiling),
+            Codec.BOOL.fieldOf("has_ender_dragon_fight").forGetter(Head::hasEnderDragonFight),
+            Codec.DOUBLE.fieldOf("coordinate_scale").forGetter(Head::coordinateScale),
+            Codec.INT.fieldOf("min_y").forGetter(Head::minY),
+            Codec.INT.fieldOf("height").forGetter(Head::height)
+        ).apply(instance, Head::new));
+    }
+
+    private record Tail(int logicalHeight, Infiniburn infiniburn, float ambientLight, MonsterSettings monsterSettings, Skybox skybox, CardinalLightType cardinalLightType, WrappedEnvironmentAttributeMap attributes, TimelineSet timelines, Optional<WorldClock> defaultClock) {
+        static final MapCodec<Tail> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            Codec.INT.fieldOf("logical_height").forGetter(Tail::logicalHeight),
+            Infiniburn.CODEC.fieldOf("infiniburn").forGetter(Tail::infiniburn),
+            Codec.FLOAT.fieldOf("ambient_light").forGetter(Tail::ambientLight),
+            MonsterSettings.CODEC.fieldOf("monster_settings").forGetter(Tail::monsterSettings),
+            Skybox.CODEC.fieldOf("skybox").forGetter(Tail::skybox),
+            CardinalLightType.CODEC.fieldOf("cardinal_light_type").forGetter(Tail::cardinalLightType),
+            WrappedEnvironmentAttributeMap.CODEC.fieldOf("attributes").forGetter(Tail::attributes),
+            TimelineSet.CODEC.fieldOf("timelines").forGetter(Tail::timelines),
+            WorldClock.CODEC.optionalFieldOf("default_clock").forGetter(Tail::defaultClock)
+        ).apply(instance, Tail::new));
     }
 }

@@ -1,5 +1,6 @@
 package me.outspending.biomesapi.wrapper.environment;
 
+import com.mojang.serialization.Codec;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.wrapper.internal.KeyedEnumTranslator;
 import me.outspending.biomesapi.wrapper.internal.NmsEnumTranslatable;
@@ -45,6 +46,7 @@ public enum Activity implements NmsEnumTranslatable<Activity> {
     DIG("dig");
 
     public static final KeyedEnumTranslator<Activity> TRANSLATOR = KeyedEnumTranslator.byKey(Activity::getKey, Activity.values());
+    public static final Codec<Activity> CODEC = TRANSLATOR.codec();
 
     private final String key;
 

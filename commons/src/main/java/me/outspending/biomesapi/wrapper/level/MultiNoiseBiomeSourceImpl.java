@@ -2,6 +2,7 @@ package me.outspending.biomesapi.wrapper.level;
 
 import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
+import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.registry.bootstrap.util.BootstrapSafeMinecraftRegistries;
 import me.outspending.biomesapi.wrapper.worldgen.TransientMultiNoiseBiomeSource;
 import net.minecraft.core.Holder;
@@ -12,13 +13,14 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Climate;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @NullMarked
 @ApiStatus.Internal
-public record MultiNoiseBiomeSourceImpl(List<BiomeSource.MultiNoiseEntry> entries) implements BiomeSource {
+public record MultiNoiseBiomeSourceImpl(@Override List<BiomeSource.MultiNoiseEntry> entries) implements BiomeSource {
 
     @Override
     public Object toMinecraft() {
@@ -28,11 +30,15 @@ public record MultiNoiseBiomeSourceImpl(List<BiomeSource.MultiNoiseEntry> entrie
         for (BiomeSource.MultiNoiseEntry entry : this.entries) {
             Identifier id = (Identifier) entry.biome().resourceLocation();
             Holder<Biome> holder = biomes.getOrThrow(net.minecraft.resources.ResourceKey.create(Registries.BIOME, id));
-            Climate.ParameterPoint point = (Climate.ParameterPoint) entry.point().toMinecraft();
+            Climate.ParameterPoint point = (Climate.ParameterPoint) entry.climatePoint().toMinecraft();
             list.add(Pair.of(point, holder));
         }
         Climate.ParameterList<Holder<Biome>> parameterList = new Climate.ParameterList<>(list);
-        // TODO: review this
         return TransientMultiNoiseBiomeSource.create(Either.left(parameterList), parameterList);
+    }
+
+    @Override
+    public @Nullable ResourceKey fixedBiome() {
+        return null;
     }
 }

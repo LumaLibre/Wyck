@@ -1,8 +1,11 @@
 package me.outspending.biomesapi.wrapper.entity;
 
 import com.google.common.collect.Maps;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
+import me.outspending.biomesapi.serialization.Codecs;
 import me.outspending.biomesapi.util.WeightedList;
 import me.outspending.biomesapi.wrapper.internal.NmsHandle;
 import me.outspending.biomesapi.wrapper.entity.data.SpawnCost;
@@ -25,6 +28,17 @@ import java.util.Map;
 public interface BiomeSpawner extends NmsHandle {
 
     float DEFAULT_CREATURE_GENERATION_PROBABILITY = 0.1F;
+
+    Codec<BiomeSpawner> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+        Codec.unboundedMap(MobCategory.CODEC, WeightedList.codec(NaturalSpawner.CODEC))
+            .optionalFieldOf("spawners", Map.of())
+            .forGetter(BiomeSpawner::spawners),
+        Codec.unboundedMap(Codecs.ENTITY_TYPE_CODEC, SpawnCost.CODEC)
+            .optionalFieldOf("mob_spawn_costs", Map.of())
+            .forGetter(BiomeSpawner::mobSpawnCosts),
+        Codec.FLOAT.optionalFieldOf("creature_generation_probability", DEFAULT_CREATURE_GENERATION_PROBABILITY)
+            .forGetter(BiomeSpawner::creatureGenerationProbability)
+    ).apply(instance, BiomeSpawner::fromCodec));
 
     @ApiStatus.Internal
     WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.entity.BiomeSpawnerFactoryImpl");
@@ -84,6 +98,15 @@ public interface BiomeSpawner extends NmsHandle {
     @AsOf("2.3.0")
     static BiomeSpawner empty() {
         return builder().build();
+    }
+
+    @ApiStatus.Internal
+    private static BiomeSpawner fromCodec(Map<MobCategory, WeightedList<NaturalSpawner>> spawners, Map<EntityType, SpawnCost> costs, float probability) {
+        Builder builder = builder();
+        spawners.forEach(builder::addSpawners);
+        builder.addMobSpawnCosts(costs);
+        builder.setCreatureGenerationProbability(probability);
+        return builder.build();
     }
 
     /**

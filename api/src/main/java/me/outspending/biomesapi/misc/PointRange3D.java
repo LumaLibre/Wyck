@@ -1,5 +1,7 @@
 package me.outspending.biomesapi.misc;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.outspending.biomesapi.annotations.AsOf;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -16,6 +18,15 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 @AsOf("0.0.1")
 public record PointRange3D(int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+
+    public static final Codec<PointRange3D> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+        Codec.INT.fieldOf("minX").forGetter(PointRange3D::minX),
+        Codec.INT.fieldOf("maxX").forGetter(PointRange3D::maxX),
+        Codec.INT.fieldOf("minY").forGetter(PointRange3D::minY),
+        Codec.INT.fieldOf("maxY").forGetter(PointRange3D::maxY),
+        Codec.INT.fieldOf("minZ").forGetter(PointRange3D::minZ),
+        Codec.INT.fieldOf("maxZ").forGetter(PointRange3D::maxZ)
+    ).apply(instance, PointRange3D::new));
 
     /**
      * Creates a new PointRange3D object based on two given locations.

@@ -6,7 +6,7 @@ import com.mojang.datafixers.util.Pair;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.wrapper.worldgen.TransientMultiNoiseBiomeSource;
-import me.outspending.biomesapi.wrapper.worldgen.climate.BiomeClimatePoint;
+import me.outspending.biomesapi.wrapper.worldgen.climate.ClimatePoint;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
@@ -90,7 +90,7 @@ public final class RuntimeLevelStemEditor implements LevelStemEditor {
 
     @Override
     @AsOf("2.3.0")
-    public LevelStemEditor addToDimension(ResourceKey dimension, ResourceKey biome, BiomeClimatePoint point) {
+    public LevelStemEditor addToDimension(ResourceKey dimension, ResourceKey biome, ClimatePoint point) {
         this.edits.add(new LevelBiomeEdit.Add(dimension, biome, point));
         return this;
     }
@@ -175,7 +175,7 @@ public final class RuntimeLevelStemEditor implements LevelStemEditor {
     private static BiomeSource buildMultiNoise(MultiNoiseBiomeSource multiNoise, Registry<Biome> biomes, List<LevelBiomeEdit.Add> adds, Map<net.minecraft.resources.ResourceKey<Biome>, Holder<Biome>> replacements) {
         List<Pair<Climate.ParameterPoint, Holder<Biome>>> entries = new ArrayList<>(liveParameters(multiNoise).values());
 
-        // replaces swap the holder at every entry whose biome matches a target, point is preserved
+        // replaces swap the holder at every entry whose biome matches a target, climatePoint is preserved
         for (int i = 0; i < entries.size(); i++) {
             Holder<Biome> holder = entries.get(i).getSecond();
             net.minecraft.resources.ResourceKey<Biome> key = holder.unwrapKey().orElse(null);
@@ -187,7 +187,7 @@ public final class RuntimeLevelStemEditor implements LevelStemEditor {
             }
         }
 
-        // adds append the new biome at its explicit climate point
+        // adds append the new biome at its explicit climate climatePoint
         for (LevelBiomeEdit.Add add : adds) {
             Holder<Biome> holder = biomes.getOrThrow(nmsBiomeKey(add.biome()));
             Climate.ParameterPoint point = (Climate.ParameterPoint) add.point().toMinecraft();

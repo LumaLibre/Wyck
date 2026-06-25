@@ -1,16 +1,22 @@
 package me.outspending.biomesapi.wrapper.environment;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.outspending.biomesapi.annotations.AsOf;
+import me.outspending.biomesapi.serialization.Codecs;
 import me.outspending.biomesapi.wrapper.internal.KeyedEnumTranslator;
 import me.outspending.biomesapi.wrapper.internal.NmsEnumTranslatable;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
+
+import java.util.Optional;
 
 /**
  * A record representing bed rules in a biome environment.
  * @param canSleep if players can sleep in the bed
- * @param canSetSpawn if players can set their spawn point using the bed
+ * @param canSetSpawn if players can set their spawn climatePoint using the bed
  * @param explodes if the bed explodes when used in this environment
  * @param errorMessage an optional error message displayed when a player tries to use the bed inappropriately
  * @version 1.1.0
@@ -20,6 +26,16 @@ import org.jspecify.annotations.Nullable;
 @NullMarked
 @AsOf("1.1.0")
 public record BedRule(Rule canSleep, Rule canSetSpawn, boolean explodes, @Nullable Component errorMessage) {
+
+    public static final Codec<BedRule> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+        Rule.CODEC.fieldOf("can_sleep").forGetter(BedRule::canSleep),
+        Rule.CODEC.fieldOf("can_set_spawn").forGetter(BedRule::canSetSpawn),
+        Codec.BOOL.fieldOf("explodes").forGetter(BedRule::explodes),
+        Codecs.COMPONENT_CODEC.optionalFieldOf("error_message").forGetter(rule ->
+            Optional.ofNullable(rule.errorMessage()))
+    ).apply(instance, (canSleep, canSetSpawn, explodes, errorMessage) ->
+        new BedRule(canSleep, canSetSpawn, explodes, errorMessage.orElse(null))));
+
 
     /**
      * An enum representing the rules for bed usage in a biome environment.
@@ -40,6 +56,7 @@ public record BedRule(Rule canSleep, Rule canSetSpawn, boolean explodes, @Nullab
         NEVER("never");
 
         public static final KeyedEnumTranslator<Rule> TRANSLATOR = KeyedEnumTranslator.byKey(Rule::getKey, Rule.values());
+        public static final Codec<Rule> CODEC = TRANSLATOR.codec();
 
         private final String key;
 

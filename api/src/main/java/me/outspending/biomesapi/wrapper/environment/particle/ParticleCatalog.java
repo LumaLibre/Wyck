@@ -1,6 +1,7 @@
 package me.outspending.biomesapi.wrapper.environment.particle;
 
 import com.google.common.base.Preconditions;
+import com.mojang.serialization.Codec;
 import me.outspending.biomesapi.annotations.AsOf;
 import org.jspecify.annotations.Nullable;
 import org.jspecify.annotations.NullMarked;
@@ -19,6 +20,9 @@ import java.util.List;
 @NullMarked
 @AsOf("2.1.0")
 public record ParticleCatalog(List<WrappedAmbientParticle<?>> particles) {
+
+    public static final Codec<ParticleCatalog> CODEC = WrappedAmbientParticle.CODEC.listOf()
+        .xmap(ParticleCatalog::new, ParticleCatalog::particles);
 
     public static final ParticleCatalog EMPTY = new ParticleCatalog(List.of());
 

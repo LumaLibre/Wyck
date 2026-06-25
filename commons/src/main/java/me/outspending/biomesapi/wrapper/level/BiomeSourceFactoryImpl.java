@@ -11,7 +11,6 @@ import java.util.List;
 @WireFactory
 @ApiStatus.Internal
 public class BiomeSourceFactoryImpl implements BiomeSource.Factory {
-
     @Override
     public BiomeSource fixed(ResourceKey biome) {
         return new FixedBiomeSourceImpl(biome);

@@ -7,7 +7,7 @@ import me.outspending.biomesapi.factory.WireProvider;
 import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.registry.level.LevelStemEditor;
 import me.outspending.biomesapi.util.ThrowingRunnable;
-import me.outspending.biomesapi.wrapper.worldgen.climate.BiomeClimatePoint;
+import me.outspending.biomesapi.wrapper.worldgen.climate.ClimatePoint;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
@@ -96,17 +96,17 @@ public interface BootstrapBiomeRegistry {
 
     /**
      * Adds a biome to a dimension's biome distribution.
-     * The biome will be added at the specified climate point and may replace an existing biome if the point overlaps with an existing one.
+     * The biome will be added at the specified climate climatePoint and may replace an existing biome if the climatePoint overlaps with an existing one.
      * @param dimension the dimension to add the biome to
      * @param target the biome to add
-     * @param placement the climate point to place the biome at
+     * @param placement the climate climatePoint to place the biome at
      * @return this registry instance
      * @throws UnsupportedOperationException if the implementation does not support this operation
-     * @see LevelStemEditor#addToDimension(ResourceKey, ResourceKey, BiomeClimatePoint)
+     * @see LevelStemEditor#addToDimension(ResourceKey, ResourceKey, ClimatePoint)
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    BootstrapBiomeRegistry addToDimension(ResourceKey dimension, ResourceKey target, BiomeClimatePoint placement) throws UnsupportedOperationException;
+    BootstrapBiomeRegistry addToDimension(ResourceKey dimension, ResourceKey target, ClimatePoint placement) throws UnsupportedOperationException;
 
     /**
      * Replaces a biome in a dimension.

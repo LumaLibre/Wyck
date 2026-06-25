@@ -1,6 +1,7 @@
 package me.outspending.biomesapi.biome;
 
 import com.google.common.base.Preconditions;
+import com.mojang.serialization.Codec;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.biome.impl.VanillaBiomeImpl;
 import me.outspending.biomesapi.keys.ResourceKey;
@@ -27,6 +28,8 @@ import org.jspecify.annotations.Nullable;
 @NullMarked
 @AsOf("2.3.0")
 public interface VanillaBiome extends AbstractBiome {
+
+    Codec<VanillaBiome> CODEC = Codec.lazyInitialized(() -> VanillaBiomeImpl.CODEC.xmap(biome -> biome, biome -> (VanillaBiomeImpl) biome));
 
     @Override
     @AsOf("2.3.0")

@@ -1,10 +1,12 @@
 package me.outspending.biomesapi.wrapper.environment.attribute;
 
+import com.mojang.serialization.Codec;
 import me.outspending.biomesapi.annotations.AsOf;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -19,6 +21,11 @@ import java.util.Map;
 @NullMarked
 @AsOf("2.1.0")
 public record WrappedEnvironmentAttributeMap(Map<EnvironmentAttributeHandle<?>, WrappedEnvironmentAttribute<?, ?>> attributes) {
+
+    public static final Codec<WrappedEnvironmentAttributeMap> CODEC = WrappedEnvironmentAttribute.CODEC.listOf().xmap(
+        list -> WrappedEnvironmentAttributeMap.of(list.toArray(WrappedEnvironmentAttribute[]::new)),
+        map -> List.copyOf(map.values())
+    );
 
     public static final WrappedEnvironmentAttributeMap EMPTY = new WrappedEnvironmentAttributeMap(Map.of());
 

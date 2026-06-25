@@ -1,5 +1,6 @@
 package me.outspending.biomesapi.wrapper.internal;
 
+import com.mojang.serialization.Codec;
 import me.outspending.biomesapi.annotations.AsOf;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
@@ -18,6 +19,12 @@ public interface KeyedEnumTranslator<W> {
 
     @AsOf("2.1.0")
     <N extends Enum<N>> W fromNms(N nmsEnum);
+
+    /**
+     * A string codec over this wrapper type, using the same key mapping as the translator.
+     */
+    @AsOf("2.4.0")
+    Codec<W> codec();
 
     /**
      * Translator that maps wrapper to NMS by uppercasing a key extracted from the wrapper,
@@ -52,6 +59,18 @@ public interface KeyedEnumTranslator<W> {
                 }
                 throw new IllegalArgumentException("No wrapper constant maps to NMS enum '" + nmsName + "'");
             }
+
+            @Override
+            public Codec<W> codec() {
+                return Codec.stringResolver(keyExtractor, key -> {
+                    for (W wrapper : wrapperValues) {
+                        if (keyExtractor.apply(wrapper).equals(key)) {
+                            return wrapper;
+                        }
+                    }
+                    throw new IllegalArgumentException("No wrapper constant maps to key '" + key + "'");
+                });
+            }
         };
     }
 
@@ -82,6 +101,17 @@ public interface KeyedEnumTranslator<W> {
                 } catch (IllegalArgumentException e) {
                     throw new IllegalArgumentException("No wrapper constant '" + nmsEnum.name() + "' on " + wrapperClass.getName(), e);
                 }
+            }
+
+            @Override
+            public Codec<W> codec() {
+                return Codec.stringResolver(Enum::name, key -> {
+                    try {
+                        return Enum.valueOf(wrapperClass, key.toUpperCase(Locale.ROOT));
+                    } catch (IllegalArgumentException e) {
+                        throw new IllegalArgumentException("No wrapper constant '" + key + "' on " + wrapperClass.getName(), e);
+                    }
+                });
             }
         };
     }

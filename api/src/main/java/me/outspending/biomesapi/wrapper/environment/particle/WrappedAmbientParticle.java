@@ -1,10 +1,25 @@
 package me.outspending.biomesapi.wrapper.environment.particle;
 
 import com.google.common.base.Preconditions;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.outspending.biomesapi.annotations.AsOf;
+import me.outspending.biomesapi.wrapper.environment.particle.options.BlockParticle;
+import me.outspending.biomesapi.wrapper.environment.particle.options.ColorParticle;
+import me.outspending.biomesapi.wrapper.environment.particle.options.DustParticle;
+import me.outspending.biomesapi.wrapper.environment.particle.options.DustTransitionParticle;
+import me.outspending.biomesapi.wrapper.environment.particle.options.ItemParticle;
 import me.outspending.biomesapi.wrapper.environment.particle.options.ParticleOptionsFactory;
+import me.outspending.biomesapi.wrapper.environment.particle.options.PowerParticle;
+import me.outspending.biomesapi.wrapper.environment.particle.options.SculkChargeParticle;
+import me.outspending.biomesapi.wrapper.environment.particle.options.SpellParticle;
+import me.outspending.biomesapi.wrapper.environment.particle.options.TrailParticle;
+import me.outspending.biomesapi.wrapper.environment.particle.options.VibrationParticle;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
+
+import java.util.Map;
 
 /**
  * A wrapper for ambient particles in a biome, including their type, probability, and optional data.
@@ -17,6 +32,39 @@ import org.jspecify.annotations.Nullable;
 @NullMarked
 @AsOf("1.1.0")
 public class WrappedAmbientParticle<T> {
+
+    public static final Codec<WrappedAmbientParticle<?>> CODEC = WrappedParticleTypes.CODEC.dispatch(
+        "type",
+        WrappedAmbientParticle::getType,
+        type -> {
+            if (type.isSimple()) {
+                return RecordCodecBuilder.mapCodec(instance -> instance.group(
+                    Codec.FLOAT.fieldOf("probability").forGetter(WrappedAmbientParticle::getProbability)
+                ).apply(instance, probability -> WrappedAmbientParticle.of(type, probability)));
+            }
+
+            @SuppressWarnings("unchecked")
+            Codec<ParticleData> dataCodec = (Codec<ParticleData>) codecFor(type);
+            return RecordCodecBuilder.mapCodec(instance -> instance.group(
+                Codec.FLOAT.fieldOf("probability").forGetter(WrappedAmbientParticle::getProbability),
+                dataCodec.fieldOf("data").forGetter(WrappedAmbientParticle::getParticleData)
+            ).apply(instance, (probability, data) -> WrappedAmbientParticle.of(type, probability, data)));
+        }
+    );
+
+    // TODO: Replace this with some lazy reflection
+    private static final Map<Class<? extends ParticleData>, Codec<? extends ParticleData>> CODECS_BY_CLASS = Map.of(
+        BlockParticle.class, BlockParticle.CODEC,
+        ColorParticle.class, ColorParticle.CODEC,
+        DustParticle.class, DustParticle.CODEC,
+        DustTransitionParticle.class, DustTransitionParticle.CODEC,
+        ItemParticle.class, ItemParticle.CODEC,
+        PowerParticle.class, PowerParticle.CODEC,
+        SculkChargeParticle.class, SculkChargeParticle.CODEC,
+        SpellParticle.class, SpellParticle.CODEC,
+        TrailParticle.class, TrailParticle.CODEC,
+        VibrationParticle.class, VibrationParticle.CODEC
+    );
 
     private final WrappedParticleTypes ambientParticle;
     private final float probability;
@@ -76,6 +124,26 @@ public class WrappedAmbientParticle<T> {
     }
 
     /**
+     * Gets the wrapped ambient particle type.
+     * @return The wrapped ambient particle type.
+     * @since 2.4.0
+     */
+    @AsOf("2.4.0")
+    public WrappedParticleTypes getType() {
+        return ambientParticle;
+    }
+
+    /**
+     * Gets the particle data, if any.
+     * @return The particle data, or null if none.
+     * @since 2.4.0
+     */
+    @AsOf("2.4.0")
+    public @Nullable ParticleData getParticleData() {
+        return particleData;
+    }
+
+    /**
      * Constructs a new WrappedAmbientParticle instance.
      * @param ambientParticle The ambient particle type.
      * @param probability The probability of the particle.
@@ -98,5 +166,16 @@ public class WrappedAmbientParticle<T> {
     @AsOf("2.1.0")
     public static WrappedAmbientParticle<?> of(WrappedParticleTypes ambientParticle, float probability) {
         return new WrappedAmbientParticle<>(ambientParticle, probability);
+    }
+
+
+    private static Codec<? extends ParticleData> codecFor(WrappedParticleTypes type) {
+        Class<? extends ParticleData> dataClass = type.getParticleDataClass();
+        Preconditions.checkArgument(dataClass != null, "simple particle type has no data codec: " + type);
+
+        Codec<? extends ParticleData> codec = CODECS_BY_CLASS.get(dataClass);
+        Preconditions.checkArgument(codec != null, "no codec registered for particle data " + dataClass.getName());
+
+        return codec;
     }
 }

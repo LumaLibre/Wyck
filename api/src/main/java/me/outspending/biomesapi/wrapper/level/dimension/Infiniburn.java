@@ -1,6 +1,7 @@
 package me.outspending.biomesapi.wrapper.level.dimension;
 
 import com.google.common.base.Preconditions;
+import com.mojang.serialization.Codec;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
 import me.outspending.biomesapi.keys.ResourceKey;
@@ -20,6 +21,8 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public interface Infiniburn extends NmsHandle {
 
+    Codec<Infiniburn> CODEC = ResourceKey.CODEC.xmap(Infiniburn::of, Infiniburn::tag);
+
     @ApiStatus.Internal
     WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.level.dimension.InfiniburnFactoryImpl");
 
@@ -33,7 +36,7 @@ public interface Infiniburn extends NmsHandle {
     Infiniburn END = of(ResourceKey.minecraft("infiniburn_end"));
 
     /**
-     * The tag of blocks that can burn infinitely in this dimension. This should point at a tag in the {@code tags/blocks} registry.
+     * The tag of blocks that can burn infinitely in this dimension. This should climatePoint at a tag in the {@code tags/blocks} registry.
      * @return the tag of blocks that can burn in this dimension
      * @since 2.4.0
      */

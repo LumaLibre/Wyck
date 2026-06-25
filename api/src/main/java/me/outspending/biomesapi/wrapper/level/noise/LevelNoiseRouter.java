@@ -1,5 +1,7 @@
 package me.outspending.biomesapi.wrapper.level.noise;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
 import me.outspending.biomesapi.wrapper.internal.NmsHandle;
@@ -19,6 +21,24 @@ import org.jspecify.annotations.NullUnmarked;
 @AsOf("2.4.0")
 @ApiStatus.Experimental
 public interface LevelNoiseRouter extends NmsHandle {
+
+    Codec<LevelNoiseRouter> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+        DensityFunction.CODEC.optionalFieldOf("barrier", DensityFunction.zero()).forGetter(r -> r.slots().barrier()),
+        DensityFunction.CODEC.optionalFieldOf("fluid_level_floodedness", DensityFunction.zero()).forGetter(r -> r.slots().fluidLevelFloodedness()),
+        DensityFunction.CODEC.optionalFieldOf("fluid_level_spread", DensityFunction.zero()).forGetter(r -> r.slots().fluidLevelSpread()),
+        DensityFunction.CODEC.optionalFieldOf("lava", DensityFunction.zero()).forGetter(r -> r.slots().lava()),
+        DensityFunction.CODEC.optionalFieldOf("temperature", DensityFunction.zero()).forGetter(r -> r.slots().temperature()),
+        DensityFunction.CODEC.optionalFieldOf("vegetation", DensityFunction.zero()).forGetter(r -> r.slots().vegetation()),
+        DensityFunction.CODEC.optionalFieldOf("continents", DensityFunction.zero()).forGetter(r -> r.slots().continents()),
+        DensityFunction.CODEC.optionalFieldOf("erosion", DensityFunction.zero()).forGetter(r -> r.slots().erosion()),
+        DensityFunction.CODEC.optionalFieldOf("depth", DensityFunction.zero()).forGetter(r -> r.slots().depth()),
+        DensityFunction.CODEC.optionalFieldOf("ridges", DensityFunction.zero()).forGetter(r -> r.slots().ridges()),
+        DensityFunction.CODEC.optionalFieldOf("preliminary_surface_level", DensityFunction.zero()).forGetter(r -> r.slots().preliminarySurfaceLevel()),
+        DensityFunction.CODEC.optionalFieldOf("final_density", DensityFunction.zero()).forGetter(r -> r.slots().finalDensity()),
+        DensityFunction.CODEC.optionalFieldOf("vein_toggle", DensityFunction.zero()).forGetter(r -> r.slots().veinToggle()),
+        DensityFunction.CODEC.optionalFieldOf("vein_ridged", DensityFunction.zero()).forGetter(r -> r.slots().veinRidged()),
+        DensityFunction.CODEC.optionalFieldOf("vein_gap", DensityFunction.zero()).forGetter(r -> r.slots().veinGap())
+    ).apply(instance, LevelNoiseRouter::fromCodec));
 
     @ApiStatus.Internal
     WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.level.noise.LevelNoiseRouterFactoryImpl");
@@ -72,30 +92,43 @@ public interface LevelNoiseRouter extends NmsHandle {
         DensityFunction veinGap
     ) {}
 
+    private static LevelNoiseRouter fromCodec(DensityFunction barrier, DensityFunction fluidLevelFloodedness, DensityFunction fluidLevelSpread, DensityFunction lava, DensityFunction temperature, DensityFunction vegetation, DensityFunction continents, DensityFunction erosion, DensityFunction depth, DensityFunction ridges, DensityFunction preliminarySurfaceLevel, DensityFunction finalDensity, DensityFunction veinToggle, DensityFunction veinRidged, DensityFunction veinGap) {
+        return builder().barrier(barrier).fluidLevelFloodedness(fluidLevelFloodedness)
+            .fluidLevelSpread(fluidLevelSpread).lava(lava).temperature(temperature)
+            .vegetation(vegetation).continents(continents).erosion(erosion).depth(depth)
+            .ridges(ridges).preliminarySurfaceLevel(preliminarySurfaceLevel).finalDensity(finalDensity)
+            .veinToggle(veinToggle).veinRidged(veinRidged).veinGap(veinGap).build();
+    }
+
     /**
-     * Builder for a noise router. Every slot must be set before {@link #build()}.
+     * Builder for a noise router.
+     * Defaults to zero density functions for all slots.
      *
      * @since 2.4.0
+     * @version 2.4.0
+     * @author Jsinco
      */
     @NullUnmarked
     @AsOf("2.4.0")
     final class Builder {
 
-        private DensityFunction barrier;
-        private DensityFunction fluidLevelFloodedness;
-        private DensityFunction fluidLevelSpread;
-        private DensityFunction lava;
-        private DensityFunction temperature;
-        private DensityFunction vegetation;
-        private DensityFunction continents;
-        private DensityFunction erosion;
-        private DensityFunction depth;
-        private DensityFunction ridges;
-        private DensityFunction preliminarySurfaceLevel;
-        private DensityFunction finalDensity;
-        private DensityFunction veinToggle;
-        private DensityFunction veinRidged;
-        private DensityFunction veinGap;
+        private static final DensityFunction ZERO = DensityFunction.zero();
+
+        private DensityFunction barrier = ZERO;
+        private DensityFunction fluidLevelFloodedness = ZERO;
+        private DensityFunction fluidLevelSpread = ZERO;
+        private DensityFunction lava = ZERO;
+        private DensityFunction temperature = ZERO;
+        private DensityFunction vegetation = ZERO;
+        private DensityFunction continents = ZERO;
+        private DensityFunction erosion = ZERO;
+        private DensityFunction depth = ZERO;
+        private DensityFunction ridges = ZERO;
+        private DensityFunction preliminarySurfaceLevel = ZERO;
+        private DensityFunction finalDensity = ZERO;
+        private DensityFunction veinToggle = ZERO;
+        private DensityFunction veinRidged = ZERO;
+        private DensityFunction veinGap = ZERO;
 
         @AsOf("2.4.0")
         public Builder barrier(DensityFunction barrier) {

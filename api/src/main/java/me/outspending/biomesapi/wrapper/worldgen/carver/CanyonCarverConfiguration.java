@@ -1,8 +1,11 @@
 package me.outspending.biomesapi.wrapper.worldgen.carver;
 
 import com.google.common.base.Preconditions;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
+import me.outspending.biomesapi.serialization.Codecs;
 import me.outspending.biomesapi.wrapper.worldgen.valueproviders.FloatProvider;
 import me.outspending.biomesapi.wrapper.worldgen.valueproviders.HeightProvider;
 import me.outspending.biomesapi.wrapper.worldgen.valueproviders.VerticalAnchor;
@@ -35,6 +38,17 @@ public record CanyonCarverConfiguration(
     FloatProvider verticalRotation,
     CanyonShapeConfiguration shape
 ) implements CarverConfiguration {
+
+    public static final Codec<CanyonCarverConfiguration> CODEC = RecordCodecBuilder.create(i -> i.group(
+        Codec.FLOAT.fieldOf("probability").forGetter(CanyonCarverConfiguration::probability),
+        HeightProvider.CODEC.fieldOf("y").forGetter(CanyonCarverConfiguration::y),
+        FloatProvider.CODEC.fieldOf("y_scale").forGetter(CanyonCarverConfiguration::yScale),
+        VerticalAnchor.CODEC.fieldOf("lava_level").forGetter(CanyonCarverConfiguration::lavaLevel),
+        CarverDebugSettings.CODEC.fieldOf("debug_settings").forGetter(CanyonCarverConfiguration::debugSettings),
+        Codec.list(Codecs.MATERIAL_CODEC).fieldOf("replaceable").forGetter(c -> List.copyOf(c.replaceable())),
+        FloatProvider.CODEC.fieldOf("vertical_rotation").forGetter(CanyonCarverConfiguration::verticalRotation),
+        CanyonShapeConfiguration.CODEC.fieldOf("shape").forGetter(CanyonCarverConfiguration::shape)
+    ).apply(i, CanyonCarverConfiguration::new));
 
     @ApiStatus.Internal
     static final WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.worldgen.carver.CanyonCarverConfigurationFactoryImpl");

@@ -1,5 +1,6 @@
 package me.outspending.biomesapi.wrapper.level.clock;
 
+import com.mojang.serialization.Codec;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
 import me.outspending.biomesapi.keys.ResourceKey;
@@ -18,6 +19,8 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 @AsOf("2.4.0")
 public interface WorldClock extends NmsHandle, Keyed {
+
+    Codec<WorldClock> CODEC = ResourceKey.CODEC.xmap(WorldClock::reference, WorldClock::key);
 
     @ApiStatus.Internal
     WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.level.clock.WorldClockFactoryImpl");

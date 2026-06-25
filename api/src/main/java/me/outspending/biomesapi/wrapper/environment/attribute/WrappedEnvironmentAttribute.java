@@ -1,5 +1,8 @@
 package me.outspending.biomesapi.wrapper.environment.attribute;
 
+import com.google.common.base.Preconditions;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import me.outspending.biomesapi.annotations.AsOf;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.jetbrains.annotations.ApiStatus;
@@ -20,8 +23,14 @@ import org.jspecify.annotations.NullMarked;
 @AsOf("1.1.0")
 public class WrappedEnvironmentAttribute<T, K> {
 
+    public static final Codec<WrappedEnvironmentAttribute<?, ?>> CODEC = EnvironmentAttributeHandle.CODEC.dispatch(
+        "attribute",
+        WrappedEnvironmentAttribute::getAttribute,
+        WrappedEnvironmentAttribute::valueCodecFor
+    );
+
     private final EnvironmentAttributeHandle<T> attribute;
-    private final Converter<T, K> converter;
+    private final @Nullable Converter<T, K> converter;
     private @MonotonicNonNull K value;
 
     @AsOf("1.1.0")
@@ -95,9 +104,7 @@ public class WrappedEnvironmentAttribute<T, K> {
     @ApiStatus.Internal
     @SuppressWarnings("unchecked")
     public static <T, K> WrappedEnvironmentAttribute<T, K> of(@Nullable EnvironmentAttributeHandle<T> attribute) {
-        if (attribute == null) {
-            return null;
-        }
+        Preconditions.checkNotNull(attribute, "attribute cannot be null");
         T defaultValue = EnvironmentAttributeFactory.WIRE.get().defaultValue(attribute);
         return new WrappedEnvironmentAttribute<>(attribute, null, (K) defaultValue);
     }
@@ -132,5 +139,17 @@ public class WrappedEnvironmentAttribute<T, K> {
     @FunctionalInterface
     public interface Converter<T, K> {
         T convert(K value);
+    }
+
+    private static <V> MapCodec<WrappedEnvironmentAttribute<?, ?>> valueCodecFor(EnvironmentAttributeHandle<V> handle) {
+        return handle.valueCodec().fieldOf("value").xmap(
+            value -> WrappedEnvironmentAttribute.of(handle, value),
+            attr -> castValue(attr, handle)
+        );
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <V> V castValue(WrappedEnvironmentAttribute<?, ?> attr, EnvironmentAttributeHandle<V> handle) {
+        return (V) attr.getConvertedValue();
     }
 }

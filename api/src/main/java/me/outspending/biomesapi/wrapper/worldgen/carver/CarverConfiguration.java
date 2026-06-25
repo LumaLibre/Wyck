@@ -1,5 +1,6 @@
 package me.outspending.biomesapi.wrapper.worldgen.carver;
 
+import com.mojang.serialization.Codec;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.wrapper.internal.NmsHandle;
 import me.outspending.biomesapi.wrapper.worldgen.valueproviders.FloatProvider;
@@ -20,6 +21,16 @@ import java.util.Collection;
 @NullMarked
 @AsOf("2.3.0")
 public sealed interface CarverConfiguration extends NmsHandle permits CanyonCarverConfiguration, CaveCarverConfiguration {
+
+    Codec<CarverConfiguration> CODEC = Codec.STRING.dispatch(
+        "type",
+        config -> config instanceof CaveCarverConfiguration ? "cave" : "canyon",
+        type -> switch (type) {
+            case "cave" -> CaveCarverConfiguration.CODEC.fieldOf("config");
+            case "canyon" -> CanyonCarverConfiguration.CODEC.fieldOf("config");
+            default -> throw new IllegalStateException("unknown carver configuration: " + type);
+        }
+    );
 
     /**
      * @return the probability of this carver being generated

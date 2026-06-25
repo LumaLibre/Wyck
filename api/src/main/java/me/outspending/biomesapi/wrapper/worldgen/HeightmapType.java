@@ -1,5 +1,6 @@
 package me.outspending.biomesapi.wrapper.worldgen;
 
+import com.mojang.serialization.Codec;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.wrapper.internal.KeyedEnumTranslator;
 import me.outspending.biomesapi.wrapper.internal.NmsEnumTranslatable;
@@ -24,6 +25,7 @@ public enum HeightmapType implements NmsEnumTranslatable<HeightmapType> {
     MOTION_BLOCKING_NO_LEAVES("MOTION_BLOCKING_NO_LEAVES");
 
     public static final KeyedEnumTranslator<HeightmapType> TRANSLATOR = KeyedEnumTranslator.byKey(HeightmapType::getKey, HeightmapType.values());
+    public static final Codec<HeightmapType> CODEC = TRANSLATOR.codec();
 
     private final String key;
 

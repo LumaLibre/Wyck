@@ -1,6 +1,7 @@
 package me.outspending.biomesapi.level.dimension;
 
 import com.google.common.base.Preconditions;
+import com.mojang.serialization.Codec;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.registry.level.dimension.DimensionRegistry;
@@ -32,6 +33,8 @@ import java.util.Optional;
 @AsOf("2.4.0")
 @ApiStatus.Experimental
 public interface Dimension extends Keyed {
+
+    Codec<Dimension> CODEC = DimensionImpl.MAP_CODEC.codec().xmap(dimension -> dimension, dimension -> (DimensionImpl) dimension);
 
     /**
      * The key of this dimension type.

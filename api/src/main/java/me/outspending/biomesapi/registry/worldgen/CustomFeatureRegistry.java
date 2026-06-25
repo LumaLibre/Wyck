@@ -25,6 +25,9 @@ public interface CustomFeatureRegistry {
     void register(ResourceKey key, CustomFeature<?> feature);
 
     @AsOf("2.4.0")
+    CustomFeature<?> get(ResourceKey key);
+
+    @AsOf("2.4.0")
     static CustomFeatureRegistry registry() {
         return WIRE.get();
     }

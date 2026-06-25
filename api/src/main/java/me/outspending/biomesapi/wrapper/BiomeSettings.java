@@ -1,5 +1,7 @@
 package me.outspending.biomesapi.wrapper;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.wrapper.environment.BiomeTempModifier;
 import org.jetbrains.annotations.Range;
@@ -24,6 +26,15 @@ public record BiomeSettings(
     BiomeTempModifier modifier,
     boolean hasPrecipitation
 ) {
+
+    public static final Codec<BiomeSettings> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+        Codec.FLOAT.fieldOf("depth").forGetter(BiomeSettings::depth),
+        Codec.FLOAT.fieldOf("scale").forGetter(BiomeSettings::scale),
+        Codec.FLOAT.fieldOf("temperature").forGetter(BiomeSettings::temperature),
+        Codec.FLOAT.fieldOf("downfall").forGetter(BiomeSettings::downfall),
+        BiomeTempModifier.CODEC.fieldOf("modifier").forGetter(BiomeSettings::modifier),
+        Codec.BOOL.fieldOf("has_precipitation").forGetter(BiomeSettings::hasPrecipitation)
+    ).apply(instance, BiomeSettings::new));
 
     /**
      * This method creates a new Builder object for creating instances of BiomeSettings.

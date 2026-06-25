@@ -9,7 +9,7 @@ import me.outspending.biomesapi.wrapper.BiomeSettings;
 import me.outspending.biomesapi.wrapper.worldgen.BiomeGenerationSettings;
 import me.outspending.biomesapi.wrapper.worldgen.GenerationStep;
 import me.outspending.biomesapi.wrapper.worldgen.HeightmapType;
-import me.outspending.biomesapi.wrapper.worldgen.climate.BiomeClimatePoint;
+import me.outspending.biomesapi.wrapper.worldgen.climate.ClimatePoint;
 import me.outspending.biomesapi.wrapper.worldgen.feature.ConfiguredFeatures;
 import me.outspending.biomesapi.wrapper.worldgen.placement.PlacedFeatures;
 import me.outspending.biomesapi.wrapper.worldgen.placement.PlacementModifier;
@@ -132,8 +132,8 @@ public final class BiomesAPITest extends JavaPlugin implements Listener {
         LevelStemEditor dimensionEditor = LevelStemEditor.create();
         var overworldKey = ResourceKey.of("minecraft", "overworld");
         var netherKey = ResourceKey.of("minecraft", "the_nether");
-        dimensionEditor.addToDimension(overworldKey, myBiomeKey, BiomeClimatePoint.builder().build());
-        dimensionEditor.addToDimension(netherKey, netherBiomeKey, BiomeClimatePoint.builder().build());
+        dimensionEditor.addToDimension(overworldKey, myBiomeKey, ClimatePoint.builder().build());
+        dimensionEditor.addToDimension(netherKey, netherBiomeKey, ClimatePoint.builder().build());
         dimensionEditor.apply();
 
         new WorldCreator("cute2")

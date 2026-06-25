@@ -1,6 +1,7 @@
 package me.outspending.biomesapi.level;
 
 import com.google.common.base.Preconditions;
+import com.mojang.serialization.Codec;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.level.dimension.Dimension;
 import me.outspending.biomesapi.keys.ResourceKey;
@@ -27,6 +28,8 @@ import java.util.concurrent.ThreadLocalRandom;
 @AsOf("2.4.0")
 @ApiStatus.Experimental
 public interface LevelCreator {
+
+    Codec<LevelCreator> CODEC = LevelCreatorImpl.MAP_CODEC.codec().xmap(levelCreator -> levelCreator, levelCreator -> (LevelCreatorImpl) levelCreator);
 
     /**
      * The key the world and its level stem are registered under.

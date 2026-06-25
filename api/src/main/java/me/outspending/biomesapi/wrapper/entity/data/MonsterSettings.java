@@ -1,6 +1,8 @@
 package me.outspending.biomesapi.wrapper.entity.data;
 
 import com.google.common.base.Preconditions;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.wrapper.worldgen.valueproviders.IntProvider;
 import org.jspecify.annotations.NullMarked;
@@ -15,6 +17,11 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 @AsOf("2.4.0")
 public record MonsterSettings(IntProvider monsterSpawnLightTest, int monsterSpawnBlockLightLimit) {
+
+    public static final Codec<MonsterSettings> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+        IntProvider.CODEC.fieldOf("monster_spawn_light_test").forGetter(MonsterSettings::monsterSpawnLightTest),
+        Codec.INT.fieldOf("monster_spawn_block_light_limit").forGetter(MonsterSettings::monsterSpawnBlockLightLimit)
+    ).apply(instance, MonsterSettings::new));
 
     public static final int MIN_LIGHT = 0;
     public static final int MAX_LIGHT = 15;

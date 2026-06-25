@@ -11,27 +11,27 @@ public class LevelSpawnerFactoryImpl implements LevelSpawner.Factory {
 
     @Override
     public LevelSpawner phantom() {
-        return new VanillaLevelSpawnerImpl(VanillaLevelSpawnerImpl.Kind.PHANTOM);
+        return new VanillaLevelSpawnerImpl(LevelSpawner.Kind.PHANTOM);
     }
 
     @Override
     public LevelSpawner patrol() {
-        return new VanillaLevelSpawnerImpl(VanillaLevelSpawnerImpl.Kind.PATROL);
+        return new VanillaLevelSpawnerImpl(LevelSpawner.Kind.PATROL);
     }
 
     @Override
     public LevelSpawner cat() {
-        return new VanillaLevelSpawnerImpl(VanillaLevelSpawnerImpl.Kind.CAT);
+        return new VanillaLevelSpawnerImpl(LevelSpawner.Kind.CAT);
     }
 
     @Override
     public LevelSpawner villageSiege() {
-        return new VanillaLevelSpawnerImpl(VanillaLevelSpawnerImpl.Kind.VILLAGE_SIEGE);
+        return new VanillaLevelSpawnerImpl(LevelSpawner.Kind.VILLAGE_SIEGE);
     }
 
     @Override
     public LevelSpawner wanderingTrader() {
-        return new VanillaLevelSpawnerImpl(VanillaLevelSpawnerImpl.Kind.WANDERING_TRADER);
+        return new VanillaLevelSpawnerImpl(LevelSpawner.Kind.WANDERING_TRADER);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package me.outspending.biomesapi.wrapper.entity;
 
+import com.mojang.serialization.Codec;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.wrapper.internal.KeyedEnumTranslator;
 import me.outspending.biomesapi.wrapper.internal.NmsEnumTranslatable;
@@ -24,6 +25,7 @@ public enum MobCategory implements NmsEnumTranslatable<MobCategory> {
     MISC("misc");
 
     public static final KeyedEnumTranslator<MobCategory> TRANSLATOR = KeyedEnumTranslator.byKey(MobCategory::getKey, MobCategory.values());
+    public static final Codec<MobCategory> CODEC = TRANSLATOR.codec();
 
     private final String key;
 

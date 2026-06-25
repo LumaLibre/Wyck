@@ -9,7 +9,7 @@ import org.jspecify.annotations.NullMarked;
  * Auto-generated. Do not modify!
  * Run ./gradlew generateSources to regenerate.
  * <p>
- * Typed references that point to vanilla's configured features.
+ * Typed references that climatePoint to vanilla's configured features.
  * </p>
  *
  * @since 2.3.0

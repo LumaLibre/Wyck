@@ -1,5 +1,7 @@
 package me.outspending.biomesapi.wrapper.worldgen.climate;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
 import me.outspending.biomesapi.wrapper.internal.NmsHandle;
@@ -15,17 +17,22 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.3.0")
-public interface BiomeParameter extends NmsHandle {
+public interface ClimateParameter extends NmsHandle {
 
     float MAX_BOUNDARY = 2.0f;
     float MIN_BOUNDARY = -2.0f;
 
+    Codec<ClimateParameter> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+        Codec.floatRange(MIN_BOUNDARY, MAX_BOUNDARY).fieldOf("min").forGetter(ClimateParameter::min),
+        Codec.floatRange(MIN_BOUNDARY, MAX_BOUNDARY).fieldOf("max").forGetter(ClimateParameter::max)
+    ).apply(instance, ClimateParameter::span));
+
     @ApiStatus.Internal
-    WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.worldgen.climate.BiomeParameterFactoryImpl");
+    WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.worldgen.climate.ClimateParameterFactoryImpl");
 
     @ApiStatus.Internal
     interface Factory {
-        BiomeParameter create(float min, float max);
+        ClimateParameter create(float min, float max);
     }
 
     /**
@@ -52,7 +59,7 @@ public interface BiomeParameter extends NmsHandle {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static BiomeParameter point(float value) {
+    static ClimateParameter point(float value) {
         return WIRE.get().create(value, value);
     }
 
@@ -65,7 +72,7 @@ public interface BiomeParameter extends NmsHandle {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static BiomeParameter span(float min, float max) {
+    static ClimateParameter span(float min, float max) {
         return WIRE.get().create(min, max);
     }
 

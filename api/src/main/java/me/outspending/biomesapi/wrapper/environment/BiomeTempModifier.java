@@ -1,5 +1,6 @@
 package me.outspending.biomesapi.wrapper.environment;
 
+import com.mojang.serialization.Codec;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.wrapper.internal.KeyedEnumTranslator;
 import me.outspending.biomesapi.wrapper.internal.NmsEnumTranslatable;
@@ -22,6 +23,7 @@ public enum BiomeTempModifier implements NmsEnumTranslatable<BiomeTempModifier> 
     FROZEN("frozen");
 
     public static final KeyedEnumTranslator<BiomeTempModifier> TRANSLATOR = KeyedEnumTranslator.byKey(BiomeTempModifier::getKey, BiomeTempModifier.values());
+    public static final Codec<BiomeTempModifier> CODEC = TRANSLATOR.codec();
 
     private final String key;
 

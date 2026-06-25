@@ -1,5 +1,6 @@
 package me.outspending.biomesapi.wrapper.level.dimension;
 
+import com.mojang.serialization.Codec;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.wrapper.internal.KeyedEnumTranslator;
 import me.outspending.biomesapi.wrapper.internal.NmsEnumTranslatable;
@@ -20,6 +21,7 @@ public enum Skybox implements NmsEnumTranslatable<Skybox> {
     END("end");
 
     public static final KeyedEnumTranslator<Skybox> TRANSLATOR = KeyedEnumTranslator.byKey(Skybox::getKey, Skybox.values());
+    public static final Codec<Skybox> CODEC = TRANSLATOR.codec();
 
     private final String key;
 

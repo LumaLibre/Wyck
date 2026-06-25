@@ -1,7 +1,11 @@
 package me.outspending.biomesapi.biome.impl;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
+import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.biome.AbstractBiome;
 import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.wrapper.BiomeSettings;
@@ -17,10 +21,47 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
+import java.util.Optional;
 
 @NullMarked
 @ApiStatus.Internal
 public class AbstractBiomeImpl implements AbstractBiome {
+
+    public static final MapCodec<AbstractBiomeImpl> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+        ResourceKey.CODEC.fieldOf("resource_key").forGetter(AbstractBiomeImpl::getResourceKey),
+        BiomeSettings.CODEC.fieldOf("settings").forGetter(AbstractBiomeImpl::getSettings),
+        Codec.INT.fieldOf("water_color").forGetter(AbstractBiomeImpl::getWaterColor),
+        Codec.INT.optionalFieldOf("fog_color").forGetter(b -> Optional.ofNullable(b.getFogColor())),
+        Codec.INT.optionalFieldOf("water_fog_color").forGetter(b -> Optional.ofNullable(b.getWaterFogColor())),
+        Codec.INT.optionalFieldOf("sky_color").forGetter(b -> Optional.ofNullable(b.getSkyColor())),
+        Codec.INT.optionalFieldOf("foliage_color").forGetter(b -> Optional.ofNullable(b.getFoliageColor())),
+        Codec.INT.optionalFieldOf("grass_color").forGetter(b -> Optional.ofNullable(b.getGrassColor())),
+        Codec.INT.optionalFieldOf("dry_foliage_color").forGetter(b -> Optional.ofNullable(b.getDryFoliageColor())),
+        GrassColorModifier.CODEC.fieldOf("grass_color_modifier").forGetter(AbstractBiomeImpl::getGrassColorModifier),
+        ParticleCatalog.CODEC.fieldOf("particle_catalog").forGetter(AbstractBiomeImpl::getParticleCatalog),
+        WrappedEnvironmentAttributeMap.CODEC.fieldOf("attributes").forGetter(AbstractBiomeImpl::getAttributes),
+        BiomeSpawner.CODEC.optionalFieldOf("biome_spawner").forGetter(b -> Optional.ofNullable(b.getBiomeSpawner())),
+        BiomeGenerationSettings.CODEC.optionalFieldOf("generation_settings").forGetter(b -> Optional.ofNullable(b.getGenerationSettings()))
+    ).apply(instance, (resourceKey, settings, water, fog, waterFog, sky, foliage, grass, dryFoliage, mod, particles, attrs, spawner, gen) ->
+        new AbstractBiomeImpl(
+            resourceKey,
+            settings,
+            water,
+            fog.orElse(null),
+            waterFog.orElse(null),
+            sky.orElse(null),
+            foliage.orElse(null),
+            grass.orElse(null),
+            dryFoliage.orElse(null),
+            mod,
+            particles,
+            attrs,
+            spawner.orElse(null),
+            gen.orElse(null)
+        )
+    ));
+
+    public static final Codec<AbstractBiomeImpl> CODEC = MAP_CODEC.codec();
 
     // Required Settings
     private final ResourceKey resourceKey;

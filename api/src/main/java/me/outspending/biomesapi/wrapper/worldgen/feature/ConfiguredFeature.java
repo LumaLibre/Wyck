@@ -1,8 +1,16 @@
 package me.outspending.biomesapi.wrapper.worldgen.feature;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.DynamicOps;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.MapLike;
+import com.mojang.serialization.RecordBuilder;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
 import me.outspending.biomesapi.keys.ResourceKey;
+import me.outspending.biomesapi.registry.worldgen.CustomFeatureRegistry;
+import me.outspending.biomesapi.serialization.StringRepresentable;
 import me.outspending.biomesapi.wrapper.internal.NmsHandle;
 import me.outspending.biomesapi.wrapper.worldgen.feature.config.FeatureConfiguration;
 import me.outspending.biomesapi.wrapper.worldgen.feature.custom.CustomFeature;
@@ -10,6 +18,8 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
+
+import java.util.stream.Stream;
 
 /**
  * Wraps Minecraft's ConfiguredFeature.
@@ -27,7 +37,18 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.3.0")
-public sealed interface ConfiguredFeature extends NmsHandle, Keyed permits ConfiguredFeature.Reference, ConfiguredFeature.VanillaConfigured, ConfiguredFeature.CustomConfigured {
+public sealed interface ConfiguredFeature extends NmsHandle, Keyed, StringRepresentable permits ConfiguredFeature.Reference, ConfiguredFeature.VanillaConfigured, ConfiguredFeature.CustomConfigured {
+
+    Codec<ConfiguredFeature> CODEC = Codec.STRING.dispatch(
+        "type",
+        ConfiguredFeature::type,
+        type -> switch (type) {
+            case "reference" -> Reference.MAP_CODEC;
+            case "vanilla" -> VanillaConfigured.MAP_CODEC;
+            case "custom" -> CustomConfigured.MAP_CODEC;
+            default -> throw new IllegalStateException("unknown configured feature: " + type);
+        }
+    );
 
     @ApiStatus.Internal
     WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.worldgen.feature.ConfiguredFeatureFactoryImpl");
@@ -80,13 +101,34 @@ public sealed interface ConfiguredFeature extends NmsHandle, Keyed permits Confi
         return WIRE.get().toNms(this);
     }
 
+    @ApiStatus.Internal
+    private static <T extends ConfiguredFeature> MapCodec<T> unsupported(String reason) {
+        return new MapCodec<>() {
+            @Override
+            public <O> DataResult<T> decode(DynamicOps<O> ops, MapLike<O> input) {
+                return DataResult.error(() -> reason);
+            }
+            @Override
+            public <O> RecordBuilder<O> encode(T value, DynamicOps<O> ops, RecordBuilder<O> prefix) {
+                return prefix.withErrorsFrom(DataResult.error(() -> reason));
+            }
+            @Override
+            public <O> Stream<O> keys(DynamicOps<O> ops) {
+                return Stream.empty();
+            }
+        };
+    }
+
     /**
      * A reference to an already-registered configured feature.
      * @param key the key of the configured feature
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    record Reference(ResourceKey key) implements ConfiguredFeature {}
+    record Reference(ResourceKey key) implements ConfiguredFeature {
+        public static final MapCodec<Reference> MAP_CODEC =
+            ResourceKey.CODEC.fieldOf("key").xmap(Reference::new, Reference::key);
+    }
 
     /**
      * A configured feature authored from a vanilla feature type and configuration.
@@ -96,6 +138,7 @@ public sealed interface ConfiguredFeature extends NmsHandle, Keyed permits Confi
      */
     @AsOf("2.3.0")
     record VanillaConfigured(ResourceKey featureKey, FeatureConfiguration configuration) implements ConfiguredFeature {
+        public static final MapCodec<VanillaConfigured> MAP_CODEC = unsupported("vanilla configured features are not supported; use a reference instead");
         @Override
         public Key key() {
             return this.featureKey;
@@ -111,6 +154,21 @@ public sealed interface ConfiguredFeature extends NmsHandle, Keyed permits Confi
      */
     @AsOf("2.3.0")
     record CustomConfigured(ResourceKey featureKey, Object config) implements ConfiguredFeature {
+        @SuppressWarnings({"unchecked", "rawtypes"})
+        public static final MapCodec<CustomConfigured> MAP_CODEC = ResourceKey.CODEC.dispatchMap(
+            "feature_key",
+            CustomConfigured::featureKey,
+            key -> {
+                CustomFeature feature = CustomFeatureRegistry.registry().get(key);
+                Codec codec = feature.configCodec();
+                if (codec == null) {
+                    return unsupported("custom feature " + key + " has no config codec; pass one to its constructor");
+                }
+                return ((Codec<Object>) codec).fieldOf("config")
+                    .xmap(cfg -> new CustomConfigured(key, cfg), CustomConfigured::config);
+            }
+        );
+
         @Override
         public Key key() {
             return this.featureKey;

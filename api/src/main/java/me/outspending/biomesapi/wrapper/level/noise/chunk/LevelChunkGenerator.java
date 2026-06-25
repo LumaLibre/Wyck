@@ -1,5 +1,7 @@
 package me.outspending.biomesapi.wrapper.level.noise.chunk;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
 import me.outspending.biomesapi.keys.ResourceKey;
@@ -23,6 +25,11 @@ import org.jspecify.annotations.NullMarked;
 @ApiStatus.Experimental
 public interface LevelChunkGenerator extends NmsHandle {
 
+    Codec<LevelChunkGenerator> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+        BiomeSource.CODEC.fieldOf("biome_source").forGetter(LevelChunkGenerator::biomeSource),
+        Noise.CODEC.fieldOf("noise").forGetter(LevelChunkGenerator::noise)
+    ).apply(instance, LevelChunkGenerator::noise));
+
     @ApiStatus.Internal
     WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.level.noise.chunk.LevelChunkGeneratorFactoryImpl");
 
@@ -32,6 +39,22 @@ public interface LevelChunkGenerator extends NmsHandle {
 
         LevelChunkGenerator noise(BiomeSource biomeSource, LevelNoiseGeneratorSettings settings);
     }
+
+    /**
+     * The biome source this generator draws from.
+     * @return the biome source
+     * @since 2.4.0
+     */
+    @AsOf("2.4.0")
+    BiomeSource biomeSource();
+
+    /**
+     * The noise generator used by this generator.
+     * @return the noise generator
+     * @since 2.4.0
+     */
+    @AsOf("2.4.0")
+    Noise noise();
 
     /**
      * Builds a noise generator over the given biome source, referencing the given settings.

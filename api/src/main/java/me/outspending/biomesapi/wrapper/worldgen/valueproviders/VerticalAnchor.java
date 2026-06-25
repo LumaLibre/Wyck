@@ -1,10 +1,14 @@
 package me.outspending.biomesapi.wrapper.worldgen.valueproviders;
 
+import com.mojang.datafixers.util.Either;
+import com.mojang.serialization.Codec;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
 import me.outspending.biomesapi.wrapper.internal.NmsHandle;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
+
+import java.util.function.Function;
 
 /**
  * Wraps the VerticalAnchor value-provider family. Sampling occurs
@@ -17,6 +21,9 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 @AsOf("2.3.0")
 public sealed interface VerticalAnchor extends NmsHandle permits VerticalAnchor.Absolute, VerticalAnchor.AboveBottom, VerticalAnchor.BelowTop {
+
+    Codec<VerticalAnchor> CODEC = Codec.xor(Absolute.CODEC, Codec.xor(AboveBottom.CODEC, BelowTop.CODEC))
+        .xmap(VerticalAnchor::merge, VerticalAnchor::split);
 
     @ApiStatus.Internal
     WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.worldgen.valueproviders.VerticalAnchorFactoryImpl");
@@ -93,12 +100,31 @@ public sealed interface VerticalAnchor extends NmsHandle permits VerticalAnchor.
         return WIRE.get().toNms(this);
     }
 
-    @AsOf("2.3.0")
-    record Absolute(int y) implements VerticalAnchor {}
+    private static VerticalAnchor merge(Either<Absolute, Either<AboveBottom, BelowTop>> either) {
+        return either.map(Function.identity(), Either::unwrap);
+    }
+
+    private static Either<Absolute, Either<AboveBottom, BelowTop>> split(VerticalAnchor anchor) {
+        return anchor instanceof Absolute a
+            ? Either.left(a)
+            : Either.right(anchor instanceof AboveBottom ab ? Either.left(ab) : Either.right((BelowTop) anchor));
+    }
 
     @AsOf("2.3.0")
-    record AboveBottom(int offset) implements VerticalAnchor {}
+    record Absolute(int y) implements VerticalAnchor {
+        public static final Codec<Absolute> CODEC = Codec.INT.fieldOf("absolute")
+            .xmap(Absolute::new, Absolute::y).codec();
+    }
 
     @AsOf("2.3.0")
-    record BelowTop(int offset) implements VerticalAnchor {}
+    record AboveBottom(int offset) implements VerticalAnchor {
+        public static final Codec<AboveBottom> CODEC = Codec.INT.fieldOf("above_bottom")
+            .xmap(AboveBottom::new, AboveBottom::offset).codec();
+    }
+
+    @AsOf("2.3.0")
+    record BelowTop(int offset) implements VerticalAnchor {
+        public static final Codec<BelowTop> CODEC = Codec.INT.fieldOf("below_top")
+            .xmap(BelowTop::new, BelowTop::offset).codec();
+    }
 }

@@ -1,5 +1,6 @@
 package me.outspending.biomesapi.wrapper.environment;
 
+import com.mojang.serialization.Codec;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.wrapper.internal.KeyedEnumTranslator;
 import me.outspending.biomesapi.wrapper.internal.NmsEnumTranslatable;
@@ -27,6 +28,7 @@ public enum MoonPhase implements NmsEnumTranslatable<MoonPhase> {
     WAXING_GIBBOUS("waxing_gibbous");
 
     public static final KeyedEnumTranslator<MoonPhase> TRANSLATOR = KeyedEnumTranslator.byKey(MoonPhase::getKey, MoonPhase.values());
+    public static final Codec<MoonPhase> CODEC = TRANSLATOR.codec(); // TODO: unused, using mc codec
 
     private final String key;
 

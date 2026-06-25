@@ -1,6 +1,8 @@
 package me.outspending.biomesapi.wrapper.worldgen.placement;
 
 import com.google.common.base.Preconditions;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
 import me.outspending.biomesapi.keys.ResourceKey;
@@ -28,6 +30,20 @@ import java.util.List;
 @NullMarked
 @AsOf("2.3.0")
 public sealed interface PlacedFeature extends NmsHandle, Keyed permits PlacedFeature.Reference, PlacedFeature.Custom {
+
+    Codec<PlacedFeature> CODEC = Codec.STRING.dispatch(
+        "type",
+        feature -> feature instanceof Reference ? "reference" : "custom",
+        type -> switch (type) {
+            case "reference" -> ResourceKey.CODEC.fieldOf("key")
+                .xmap(PlacedFeature::reference, f -> ((Reference) f).key());
+            case "custom" -> RecordCodecBuilder.mapCodec(i -> i.group(
+                ConfiguredFeature.CODEC.fieldOf("feature").forGetter(f -> ((Custom) f).feature()),
+                Codec.list(PlacementModifier.CODEC).fieldOf("placement").forGetter(f -> ((Custom) f).placement())
+            ).apply(i, (feat, mods) -> new Custom(feat, mods)));
+            default -> throw new IllegalStateException("unknown placed feature: " + type);
+        }
+    );
 
     @ApiStatus.Internal
     WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.worldgen.placement.PlacedFeatureFactoryImpl");

@@ -1,5 +1,6 @@
 package me.outspending.biomesapi.wrapper.level.dimension;
 
+import com.mojang.serialization.Codec;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.wrapper.internal.KeyedEnumTranslator;
 import me.outspending.biomesapi.wrapper.internal.NmsEnumTranslatable;
@@ -19,6 +20,7 @@ public enum CardinalLightType implements NmsEnumTranslatable<CardinalLightType> 
     NETHER("nether");
 
     public static final KeyedEnumTranslator<CardinalLightType> TRANSLATOR = KeyedEnumTranslator.byKey(CardinalLightType::getKey, CardinalLightType.values());
+    public static final Codec<CardinalLightType> CODEC = TRANSLATOR.codec();
 
     private final String key;
 

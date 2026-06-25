@@ -1,8 +1,11 @@
 package me.outspending.biomesapi.wrapper.worldgen.carver;
 
 import com.google.common.base.Preconditions;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
+import me.outspending.biomesapi.serialization.Codecs;
 import me.outspending.biomesapi.wrapper.worldgen.valueproviders.FloatProvider;
 import me.outspending.biomesapi.wrapper.worldgen.valueproviders.HeightProvider;
 import me.outspending.biomesapi.wrapper.worldgen.valueproviders.VerticalAnchor;
@@ -34,6 +37,18 @@ public record CaveCarverConfiguration(
     FloatProvider verticalRadiusMultiplier,
     FloatProvider floorLevel
 ) implements CarverConfiguration {
+
+    public static final Codec<CaveCarverConfiguration> CODEC = RecordCodecBuilder.create(i -> i.group(
+        Codec.FLOAT.fieldOf("probability").forGetter(CaveCarverConfiguration::probability),
+        HeightProvider.CODEC.fieldOf("y").forGetter(CaveCarverConfiguration::y),
+        FloatProvider.CODEC.fieldOf("y_scale").forGetter(CaveCarverConfiguration::yScale),
+        VerticalAnchor.CODEC.fieldOf("lava_level").forGetter(CaveCarverConfiguration::lavaLevel),
+        CarverDebugSettings.CODEC.fieldOf("debug_settings").forGetter(CaveCarverConfiguration::debugSettings),
+        Codec.list(Codecs.MATERIAL_CODEC).fieldOf("replaceable").xmap(java.util.ArrayList::new, List::copyOf).forGetter(c -> new java.util.ArrayList<>(c.replaceable())),
+        FloatProvider.CODEC.fieldOf("horizontal_radius_multiplier").forGetter(CaveCarverConfiguration::horizontalRadiusMultiplier),
+        FloatProvider.CODEC.fieldOf("vertical_radius_multiplier").forGetter(CaveCarverConfiguration::verticalRadiusMultiplier),
+        FloatProvider.CODEC.fieldOf("floor_level").forGetter(CaveCarverConfiguration::floorLevel)
+    ).apply(i, CaveCarverConfiguration::new));
 
     @ApiStatus.Internal
     private static final WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.worldgen.carver.CaveCarverConfigurationFactoryImpl");

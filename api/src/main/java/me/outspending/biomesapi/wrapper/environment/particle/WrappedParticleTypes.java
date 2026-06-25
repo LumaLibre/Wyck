@@ -1,5 +1,7 @@
 package me.outspending.biomesapi.wrapper.environment.particle;
 
+import com.google.common.base.Preconditions;
+import com.mojang.serialization.Codec;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.wrapper.environment.particle.options.BlockParticle;
 import me.outspending.biomesapi.wrapper.environment.particle.options.ColorParticle;
@@ -155,6 +157,8 @@ public enum WrappedParticleTypes {
     private final String key;
     private final @Nullable Class<? extends ParticleData> particleDataClass;
     private volatile @Nullable ParticleTypeHandle cachedHandle;
+
+    public static final Codec<WrappedParticleTypes> CODEC = Codec.stringResolver(WrappedParticleTypes::getKey, key -> Preconditions.checkNotNull(byKey(key)));
 
     WrappedParticleTypes(String key) {
         this(key, null);

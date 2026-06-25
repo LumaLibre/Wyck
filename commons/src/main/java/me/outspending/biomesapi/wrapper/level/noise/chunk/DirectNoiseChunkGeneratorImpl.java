@@ -2,6 +2,7 @@ package me.outspending.biomesapi.wrapper.level.noise.chunk;
 
 import me.outspending.biomesapi.wrapper.level.BiomeSource;
 import me.outspending.biomesapi.wrapper.level.noise.LevelNoiseGeneratorSettings;
+import me.outspending.biomesapi.wrapper.level.noise.Noise;
 import net.minecraft.core.Holder;
 import net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator;
 import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
@@ -18,5 +19,10 @@ public record DirectNoiseChunkGeneratorImpl(BiomeSource biomeSource, LevelNoiseG
         NoiseGeneratorSettings nmsSettings = (NoiseGeneratorSettings) this.settings.toMinecraft();
         Holder<NoiseGeneratorSettings> holder = Holder.direct(nmsSettings);
         return new NoiseBasedChunkGenerator(source, holder);
+    }
+
+    @Override
+    public Noise noise() {
+        return this.settings;
     }
 }

@@ -1,5 +1,6 @@
 package me.outspending.biomesapi.wrapper.environment;
 
+import com.mojang.serialization.Codec;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.wrapper.internal.KeyedEnumTranslator;
 import me.outspending.biomesapi.wrapper.internal.NmsEnumTranslatable;
@@ -23,6 +24,7 @@ public enum GrassColorModifier implements NmsEnumTranslatable<GrassColorModifier
     DARK_FOREST("dark_forest");
 
     public static final KeyedEnumTranslator<GrassColorModifier> TRANSLATOR = KeyedEnumTranslator.byKey(GrassColorModifier::getKey, GrassColorModifier.values());
+    public static final Codec<GrassColorModifier> CODEC = TRANSLATOR.codec();
 
     private final String key;
 

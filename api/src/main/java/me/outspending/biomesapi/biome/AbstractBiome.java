@@ -1,6 +1,7 @@
 package me.outspending.biomesapi.biome;
 
 import com.google.common.base.Preconditions;
+import com.mojang.serialization.Codec;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.biome.impl.AbstractBiomeImpl;
 import me.outspending.biomesapi.registry.BiomeRegistry;
@@ -33,6 +34,8 @@ import org.jspecify.annotations.Nullable;
 @NullMarked
 @AsOf("2.3.0")
 public interface AbstractBiome extends Keyed {
+
+    Codec<AbstractBiome> CODEC = Codec.lazyInitialized(() -> AbstractBiomeImpl.CODEC.xmap(biome -> biome, biome -> (AbstractBiomeImpl) biome));
 
     /**
      * @return the NamespacedKey of the AbstractBiome.

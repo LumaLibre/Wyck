@@ -1,6 +1,7 @@
 package me.outspending.biomesapi.biome;
 
 import com.google.common.base.Preconditions;
+import com.mojang.serialization.Codec;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.biome.impl.CustomBiomeImpl;
 import me.outspending.biomesapi.keys.KeyChains;
@@ -37,6 +38,8 @@ import java.util.Collection;
 @NullMarked
 @AsOf("2.3.0")
 public interface CustomBiome extends AbstractBiome {
+
+    Codec<CustomBiome> CODEC = Codec.lazyInitialized(() -> CustomBiomeImpl.CODEC.xmap(biome -> biome, biome -> (CustomBiomeImpl) biome));
 
     /**
      * Returns the BlockReplacements of the CustomBiome.

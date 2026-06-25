@@ -97,7 +97,7 @@ public final class DimensionSources {
     ) {
         List<Pair<Climate.ParameterPoint, net.minecraft.resources.ResourceKey<Biome>>> pairs = new ArrayList<>(base);
 
-        // replacements keep the original point, just swap the key
+        // replacements keep the original climatePoint, just swap the key
         for (LevelBiomeEdit edit : edits) {
             if (edit instanceof LevelBiomeEdit.Replace replace) {
                 net.minecraft.resources.ResourceKey<Biome> target = nmsBiomeKey(replace.target());
@@ -110,7 +110,7 @@ public final class DimensionSources {
             }
         }
 
-        // additions append at their explicit point
+        // additions append at their explicit climatePoint
         for (LevelBiomeEdit edit : edits) {
             if (edit instanceof LevelBiomeEdit.Add add) {
                 Climate.ParameterPoint point = (Climate.ParameterPoint) add.point().toMinecraft();

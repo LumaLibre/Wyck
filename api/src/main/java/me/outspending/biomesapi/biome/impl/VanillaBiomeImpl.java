@@ -1,5 +1,7 @@
 package me.outspending.biomesapi.biome.impl;
 
+import com.mojang.serialization.Codec;
+import me.outspending.biomesapi.biome.AbstractBiome;
 import me.outspending.biomesapi.biome.VanillaBiome;
 import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.wrapper.BiomeSettings;
@@ -13,6 +15,26 @@ import org.jspecify.annotations.Nullable;
 
 @NullMarked
 public class VanillaBiomeImpl extends AbstractBiomeImpl implements VanillaBiome {
+
+    public static final Codec<VanillaBiomeImpl> CODEC = AbstractBiomeImpl.MAP_CODEC.xmap(
+        base -> new VanillaBiomeImpl(
+            base.getResourceKey(),
+            base.getSettings(),
+            base.getWaterColor(),
+            base.getFogColor(),
+            base.getWaterFogColor(),
+            base.getSkyColor(),
+            base.getFoliageColor(),
+            base.getGrassColor(),
+            base.getDryFoliageColor(),
+            base.getGrassColorModifier(),
+            base.getParticleCatalog(),
+            base.getAttributes(),
+            base.getBiomeSpawner(),
+            base.getGenerationSettings()),
+        b -> b
+    ).codec();
+
     public VanillaBiomeImpl(
         ResourceKey resourceKey,
         BiomeSettings settings,

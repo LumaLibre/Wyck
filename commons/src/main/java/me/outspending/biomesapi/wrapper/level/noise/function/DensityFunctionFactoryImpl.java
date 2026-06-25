@@ -18,93 +18,65 @@ import org.jspecify.annotations.NullMarked;
 public final class DensityFunctionFactoryImpl implements DensityFunction.Factory {
 
     @Override
-    public DensityFunction reference(ResourceKey key) {
-        return new ReferenceImpl(key);
-    }
-
-    @Override
-    public DensityFunction constant(double value) {
-        return new ConstantImpl(value);
-    }
-
-    @Override
-    public DensityFunction zero() {
-        return new ZeroImpl();
-    }
-
-    @Override
-    public DensityFunction operation(DensityFunction.Operation operation, DensityFunction first, DensityFunction second) {
-        return new OperationImpl(operation, first, second);
-    }
-
-    @Override
-    public DensityFunction transform(DensityFunction.Transform transform, DensityFunction input) {
-        return new TransformImpl(transform, input);
-    }
-
-    @Override
-    public DensityFunction clamp(DensityFunction input, double min, double max) {
-        return new ClampImpl(input, min, max);
-    }
-
-    @Override
-    public DensityFunction cache(DensityFunction.Cache cache, DensityFunction input) {
-        return new CacheImpl(cache, input);
-    }
-
-    @Override
-    public DensityFunction noise(ResourceKey noiseParameters, double xzScale, double yScale) {
-        return new NoiseImpl(noiseParameters, xzScale, yScale);
-    }
-
-    @Override
-    public DensityFunction mappedNoise(ResourceKey noiseParameters, double xzScale, double yScale, double minTarget, double maxTarget) {
-        return new MappedNoiseImpl(noiseParameters, xzScale, yScale, minTarget, maxTarget);
-    }
-
-    @Override
-    public DensityFunction shift(DensityFunction.ShiftKind kind, ResourceKey noiseParameters) {
-        return new ShiftImpl(kind, noiseParameters);
-    }
-
-    @Override
-    public DensityFunction shiftedNoise2d(DensityFunction shiftX, DensityFunction shiftZ, double xzScale, ResourceKey noiseParameters) {
-        return new ShiftedNoise2dImpl(shiftX, shiftZ, xzScale, noiseParameters);
-    }
-
-    @Override
-    public DensityFunction rangeChoice(DensityFunction input, double minInclusive, double maxExclusive, DensityFunction whenInRange, DensityFunction whenOutOfRange) {
-        return new RangeChoiceImpl(input, minInclusive, maxExclusive, whenInRange, whenOutOfRange);
-    }
-
-    @Override
-    public DensityFunction yClampedGradient(int fromY, int toY, double fromValue, double toValue) {
-        return new YClampedGradientImpl(fromY, toY, fromValue, toValue);
-    }
-
-    @Override
-    public DensityFunction endIslands(long seed) {
-        return new EndIslandsImpl(seed);
-    }
-
-    @Override
-    public DensityFunction blendDensity(DensityFunction input) {
-        return new BlendDensityImpl(input);
-    }
-
-    @Override
-    public DensityFunction blendAlpha() {
-        return new BlendAlphaImpl();
-    }
-
-    @Override
-    public DensityFunction blendOffset() {
-        return new BlendOffsetImpl();
-    }
-
-    @Override
-    public DensityFunction findTopSurface(DensityFunction density, DensityFunction upperBound, int lowerBound, int cellHeight) {
-        return new FindTopSurfaceImpl(density, upperBound, lowerBound, cellHeight);
+    public Object toNms(DensityFunction function) {
+        return switch (function) {
+            case DensityFunction.Keyed k -> toNms(k.delegate());
+            case DensityFunction.Reference r -> new DensityFunctions.HolderHolder(densityHolder(r.reference()));
+            case DensityFunction.Constant c -> DensityFunctions.constant(c.value());
+            case DensityFunction.Zero ignored -> DensityFunctions.zero();
+            case DensityFunction.Operation o -> {
+                net.minecraft.world.level.levelgen.DensityFunction a = unwrap(o.first());
+                net.minecraft.world.level.levelgen.DensityFunction b = unwrap(o.second());
+                yield switch (o.op()) {
+                    case ADD -> DensityFunctions.add(a, b);
+                    case MUL -> DensityFunctions.mul(a, b);
+                    case MIN -> DensityFunctions.min(a, b);
+                    case MAX -> DensityFunctions.max(a, b);
+                };
+            }
+            case DensityFunction.Transform t -> {
+                net.minecraft.world.level.levelgen.DensityFunction in = unwrap(t.input());
+                yield switch (t.transform()) {
+                    case ABS -> in.abs();
+                    case SQUARE -> in.square();
+                    case CUBE -> in.cube();
+                    case HALF_NEGATIVE -> in.halfNegative();
+                    case QUARTER_NEGATIVE -> in.quarterNegative();
+                    case INVERT -> in.invert();
+                    case SQUEEZE -> in.squeeze();
+                };
+            }
+            case DensityFunction.Clamp c -> unwrap(c.input()).clamp(c.min(), c.max());
+            case DensityFunction.Cache c -> {
+                net.minecraft.world.level.levelgen.DensityFunction in = unwrap(c.input());
+                yield switch (c.cache()) {
+                    case INTERPOLATED -> DensityFunctions.interpolated(in);
+                    case FLAT_CACHE -> DensityFunctions.flatCache(in);
+                    case CACHE_2D -> DensityFunctions.cache2d(in);
+                    case CACHE_ONCE -> DensityFunctions.cacheOnce(in);
+                    case CACHE_ALL_IN_CELL -> DensityFunctions.cacheAllInCell(in);
+                };
+            }
+            case DensityFunction.Noise n -> DensityFunctions.noise(noiseHolder(n.noiseParameters()), n.xzScale(), n.yScale());
+            case DensityFunction.MappedNoise n -> DensityFunctions.mappedNoise(noiseHolder(n.noiseParameters()), n.xzScale(), n.yScale(), n.minTarget(), n.maxTarget());
+            case DensityFunction.Shift s -> {
+                Holder<NormalNoise.NoiseParameters> holder = noiseHolder(s.noiseParameters());
+                yield switch (s.kind()) {
+                    case SHIFT -> DensityFunctions.shift(holder);
+                    case SHIFT_A -> DensityFunctions.shiftA(holder);
+                    case SHIFT_B -> DensityFunctions.shiftB(holder);
+                };
+            }
+            case DensityFunction.ShiftedNoise2d s -> DensityFunctions.shiftedNoise2d(unwrap(s.shiftX()), unwrap(s.shiftZ()), s.xzScale(), noiseHolder(s.noiseParameters()));
+            case DensityFunction.RangeChoice r -> DensityFunctions.rangeChoice(
+                unwrap(r.input()), r.minInclusive(), r.maxExclusive(), unwrap(r.whenInRange()), unwrap(r.whenOutOfRange()));
+            case DensityFunction.YClampedGradient g -> DensityFunctions.yClampedGradient(g.fromY(), g.toY(), g.fromValue(), g.toValue());
+            case DensityFunction.EndIslands e -> DensityFunctions.endIslands(e.seed());
+            case DensityFunction.BlendDensity b -> DensityFunctions.blendDensity(unwrap(b.input()));
+            case DensityFunction.BlendAlpha ignored -> DensityFunctions.blendAlpha();
+            case DensityFunction.BlendOffset ignored -> DensityFunctions.blendOffset();
+            case DensityFunction.FindTopSurface f -> DensityFunctions.findTopSurface(unwrap(f.density()), unwrap(f.upperBound()), f.lowerBound(), f.cellHeight());
+        };
     }
 
     static net.minecraft.world.level.levelgen.DensityFunction unwrap(DensityFunction function) {
@@ -121,166 +93,5 @@ public final class DensityFunctionFactoryImpl implements DensityFunction.Factory
         Identifier id = (Identifier) key.resourceLocation();
         Registry<net.minecraft.world.level.levelgen.DensityFunction> registry = BootstrapSafeMinecraftRegistries.mappedRegistry(Registries.DENSITY_FUNCTION);
         return registry.getOrThrow(net.minecraft.resources.ResourceKey.create(Registries.DENSITY_FUNCTION, id));
-    }
-
-    // NOT AUTOGENERATED KEY
-    private record ReferenceImpl(ResourceKey key) implements DensityFunction {
-        @Override
-        public Object toMinecraft() {
-            return new DensityFunctions.HolderHolder(densityHolder(this.key));
-        }
-    }
-
-    private record ConstantImpl(double value) implements DensityFunction {
-        @Override
-        public Object toMinecraft() {
-            return DensityFunctions.constant(this.value);
-        }
-    }
-
-    private record ZeroImpl() implements DensityFunction {
-        @Override
-        public Object toMinecraft() {
-            return DensityFunctions.zero();
-        }
-    }
-
-    private record OperationImpl(DensityFunction.Operation operation, DensityFunction first, DensityFunction second) implements DensityFunction {
-        @Override
-        public Object toMinecraft() {
-            net.minecraft.world.level.levelgen.DensityFunction a = unwrap(this.first);
-            net.minecraft.world.level.levelgen.DensityFunction b = unwrap(this.second);
-            return switch (this.operation) {
-                case ADD -> DensityFunctions.add(a, b);
-                case MUL -> DensityFunctions.mul(a, b);
-                case MIN -> DensityFunctions.min(a, b);
-                case MAX -> DensityFunctions.max(a, b);
-            };
-        }
-    }
-
-    private record TransformImpl(DensityFunction.Transform transform, DensityFunction input) implements DensityFunction {
-        @Override
-        public Object toMinecraft() {
-            net.minecraft.world.level.levelgen.DensityFunction in = unwrap(this.input);
-            return switch (this.transform) {
-                case ABS -> in.abs();
-                case SQUARE -> in.square();
-                case CUBE -> in.cube();
-                case HALF_NEGATIVE -> in.halfNegative();
-                case QUARTER_NEGATIVE -> in.quarterNegative();
-                case INVERT -> in.invert();
-                case SQUEEZE -> in.squeeze();
-            };
-        }
-    }
-
-    private record ClampImpl(DensityFunction input, double min, double max) implements DensityFunction {
-        @Override
-        public Object toMinecraft() {
-            return unwrap(this.input).clamp(this.min, this.max);
-        }
-    }
-
-    private record CacheImpl(DensityFunction.Cache cache, DensityFunction input) implements DensityFunction {
-        @Override
-        public Object toMinecraft() {
-            net.minecraft.world.level.levelgen.DensityFunction in = unwrap(this.input);
-            return switch (this.cache) {
-                case INTERPOLATED -> DensityFunctions.interpolated(in);
-                case FLAT_CACHE -> DensityFunctions.flatCache(in);
-                case CACHE_2D -> DensityFunctions.cache2d(in);
-                case CACHE_ONCE -> DensityFunctions.cacheOnce(in);
-                case CACHE_ALL_IN_CELL -> DensityFunctions.cacheAllInCell(in);
-            };
-        }
-    }
-
-    private record NoiseImpl(ResourceKey noiseParameters, double xzScale, double yScale) implements DensityFunction {
-        @Override
-        public Object toMinecraft() {
-            return DensityFunctions.noise(noiseHolder(this.noiseParameters), this.xzScale, this.yScale);
-        }
-    }
-
-    private record MappedNoiseImpl(ResourceKey noiseParameters, double xzScale, double yScale, double minTarget, double maxTarget) implements DensityFunction {
-        @Override
-        public Object toMinecraft() {
-            return DensityFunctions.mappedNoise(noiseHolder(this.noiseParameters), this.xzScale, this.yScale, this.minTarget, this.maxTarget);
-        }
-    }
-
-    private record ShiftImpl(DensityFunction.ShiftKind kind, ResourceKey noiseParameters) implements DensityFunction {
-        @Override
-        public Object toMinecraft() {
-            Holder<NormalNoise.NoiseParameters> holder = noiseHolder(this.noiseParameters);
-            return switch (this.kind) {
-                case SHIFT -> DensityFunctions.shift(holder);
-                case SHIFT_A -> DensityFunctions.shiftA(holder);
-                case SHIFT_B -> DensityFunctions.shiftB(holder);
-            };
-        }
-    }
-
-    private record ShiftedNoise2dImpl(DensityFunction shiftX, DensityFunction shiftZ, double xzScale, ResourceKey noiseParameters) implements DensityFunction {
-        @Override
-        public Object toMinecraft() {
-            return DensityFunctions.shiftedNoise2d(unwrap(this.shiftX), unwrap(this.shiftZ), this.xzScale, noiseHolder(this.noiseParameters));
-        }
-    }
-
-    private record RangeChoiceImpl(DensityFunction input, double minInclusive, double maxExclusive, DensityFunction whenInRange, DensityFunction whenOutOfRange) implements DensityFunction {
-        @Override
-        public Object toMinecraft() {
-            return DensityFunctions.rangeChoice(
-                unwrap(this.input),
-                this.minInclusive,
-                this.maxExclusive,
-                unwrap(this.whenInRange),
-                unwrap(this.whenOutOfRange)
-            );
-        }
-    }
-
-    private record YClampedGradientImpl(int fromY, int toY, double fromValue, double toValue) implements DensityFunction {
-        @Override
-        public Object toMinecraft() {
-            return DensityFunctions.yClampedGradient(this.fromY, this.toY, this.fromValue, this.toValue);
-        }
-    }
-
-    private record EndIslandsImpl(long seed) implements DensityFunction {
-        @Override
-        public Object toMinecraft() {
-            return DensityFunctions.endIslands(this.seed);
-        }
-    }
-
-    private record BlendDensityImpl(DensityFunction input) implements DensityFunction {
-        @Override
-        public Object toMinecraft() {
-            return DensityFunctions.blendDensity(unwrap(this.input));
-        }
-    }
-
-    private record BlendAlphaImpl() implements DensityFunction {
-        @Override
-        public Object toMinecraft() {
-            return DensityFunctions.blendAlpha();
-        }
-    }
-
-    private record BlendOffsetImpl() implements DensityFunction {
-        @Override
-        public Object toMinecraft() {
-            return DensityFunctions.blendOffset();
-        }
-    }
-
-    private record FindTopSurfaceImpl(DensityFunction density, DensityFunction upperBound, int lowerBound, int cellHeight) implements DensityFunction {
-        @Override
-        public Object toMinecraft() {
-            return DensityFunctions.findTopSurface(unwrap(this.density), unwrap(this.upperBound), this.lowerBound, this.cellHeight);
-        }
     }
 }

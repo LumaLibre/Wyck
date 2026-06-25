@@ -1,6 +1,8 @@
 package me.outspending.biomesapi.wrapper.level.noise.settings;
 
 import com.google.common.base.Preconditions;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
 import me.outspending.biomesapi.wrapper.internal.NmsHandle;
@@ -18,6 +20,13 @@ import org.jspecify.annotations.NullMarked;
 @AsOf("2.4.0")
 @ApiStatus.Experimental
 public interface LevelNoiseSettings extends NmsHandle {
+
+    Codec<LevelNoiseSettings> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+        Codec.INT.fieldOf("min_y").forGetter(LevelNoiseSettings::minY),
+        Codec.INT.fieldOf("height").forGetter(LevelNoiseSettings::height),
+        Codec.INT.fieldOf("size_horizontal").forGetter(LevelNoiseSettings::sizeHorizontal),
+        Codec.INT.fieldOf("size_vertical").forGetter(LevelNoiseSettings::sizeVertical)
+    ).apply(instance, LevelNoiseSettings::of));
 
     @ApiStatus.Internal
     WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.level.noise.settings.LevelNoiseSettingsFactoryImpl");

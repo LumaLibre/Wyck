@@ -1,6 +1,7 @@
 package me.outspending.biomesapi.wrapper.environment.particle;
 
 import me.outspending.biomesapi.annotations.AsOf;
+import me.outspending.biomesapi.serialization.Serdes;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -13,7 +14,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.0.0")
-public interface ParticleData {
+public interface ParticleData extends Serdes<ParticleData> {
 
     /**
      * Parses a hexadecimal color string and returns its integer representation.

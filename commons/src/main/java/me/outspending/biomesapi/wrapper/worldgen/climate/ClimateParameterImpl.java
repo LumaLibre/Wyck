@@ -6,12 +6,12 @@ import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 @ApiStatus.Internal
-public class BiomeParameterImpl implements BiomeParameter {
+public class ClimateParameterImpl implements ClimateParameter {
 
     private final float min;
     private final float max;
 
-    public BiomeParameterImpl(float min, float max) {
+    public ClimateParameterImpl(float min, float max) {
         // TODO: google Preconditions
         if (min > max) {
             throw new IllegalArgumentException("min > max: " + min + " " + max);

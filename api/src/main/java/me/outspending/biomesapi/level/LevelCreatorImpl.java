@@ -1,8 +1,12 @@
 package me.outspending.biomesapi.level;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.level.dimension.Dimension;
 import me.outspending.biomesapi.keys.ResourceKey;
+import me.outspending.biomesapi.serialization.Codecs;
 import me.outspending.biomesapi.wrapper.level.noise.chunk.LevelChunkGenerator;
 import me.outspending.biomesapi.wrapper.level.spawner.LevelSpawner;
 import org.bukkit.Bukkit;
@@ -11,10 +15,37 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.Optional;
 
 @NullMarked
 @AsOf("2.4.0")
 public final class LevelCreatorImpl implements LevelCreator {
+
+    public static final MapCodec<LevelCreatorImpl> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+        ResourceKey.CODEC.fieldOf("level_key").forGetter(LevelCreatorImpl::getLevelKey),
+        Dimension.CODEC.optionalFieldOf("dimension").forGetter(c -> Optional.ofNullable(c.getDimension())),
+        ResourceKey.CODEC.fieldOf("dimension_type").forGetter(LevelCreatorImpl::getDimensionType),
+        LevelChunkGenerator.CODEC.fieldOf("generator").forGetter(LevelCreatorImpl::getGenerator),
+        Codec.LONG.fieldOf("seed").forGetter(LevelCreatorImpl::getSeed),
+        Codec.BOOL.optionalFieldOf("generate_structures", true).forGetter(LevelCreatorImpl::generateStructures),
+        Codec.BOOL.optionalFieldOf("bonus_chest", false).forGetter(LevelCreatorImpl::bonusChest),
+        Codecs.WORLD_ENVIRONMENT_CODEC.fieldOf("environment").forGetter(LevelCreatorImpl::getEnvironment),
+        StemPersistence.CODEC.fieldOf("persistence").forGetter(LevelCreatorImpl::getPersistence),
+        Codec.list(LevelSpawner.CODEC).optionalFieldOf("spawners", List.of()).forGetter(LevelCreatorImpl::getSpawners)
+    ).apply(instance, (levelKey, dimension, dimensionType, generator, seed, generateStructures, bonusChest, environment, persistence, spawners) ->
+        new LevelCreatorImpl(
+            levelKey,
+            dimension.orElse(null),
+            dimensionType,
+            generator,
+            seed,
+            generateStructures,
+            bonusChest,
+            environment,
+            persistence,
+            spawners
+        )
+    ));
 
     private final ResourceKey levelKey;
     private final @Nullable Dimension dimension;

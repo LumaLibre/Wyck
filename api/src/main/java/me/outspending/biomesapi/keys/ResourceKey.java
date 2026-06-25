@@ -1,6 +1,8 @@
 package me.outspending.biomesapi.keys;
 
 import com.google.common.base.Preconditions;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
 import me.outspending.biomesapi.wrapper.internal.NmsHandle;
@@ -25,6 +27,17 @@ public interface ResourceKey extends Key, Keyed, NmsHandle {
     String MINECRAFT_NAMESPACE = "minecraft";
     String BIOMESAPI_NAMESPACE = "biomesapi";
     char NAMESPACE_SEPARATOR = ':';
+
+    Codec<ResourceKey> CODEC = Codec.STRING.comapFlatMap(
+        string -> {
+            try {
+                return DataResult.success(of(string));
+            } catch (IllegalArgumentException e) {
+                return DataResult.error(() -> "not a valid resource key '" + string + "': " + e.getMessage());
+            }
+        },
+        ResourceKey::asString
+    );
 
     @ApiStatus.Internal
     WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.keys.ResourceKeyFactoryImpl");
@@ -105,6 +118,20 @@ public interface ResourceKey extends Key, Keyed, NmsHandle {
     @AsOf("2.3.0")
     static ResourceKey of(String string) {
         return fromString(string);
+    }
+
+    /**
+     * Creates a new ResourceKey from the given string.
+     * @param key the Key to create the ResourceKey from
+     * @return a new ResourceKey with the given string
+     * @since 2.3.0
+     */
+    @AsOf("2.3.0")
+    static ResourceKey of(Key key) {
+        if (key instanceof ResourceKey resourceKey) {
+            return resourceKey;
+        }
+        return fromString(key.asString());
     }
 
     /**

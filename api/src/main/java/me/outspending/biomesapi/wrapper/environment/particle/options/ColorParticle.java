@@ -1,5 +1,6 @@
 package me.outspending.biomesapi.wrapper.environment.particle.options;
 
+import com.mojang.serialization.Codec;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleData;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleOptionsHandle;
@@ -18,6 +19,8 @@ import org.jspecify.annotations.NullMarked;
 @AsOf("2.0.0")
 public record ColorParticle(int color) implements ParticleData {
 
+    public static final Codec<ColorParticle> CODEC = Codec.INT.xmap(ColorParticle::new, ColorParticle::color);
+
     @Override
     @AsOf("2.0.0")
     public ParticleOptionsHandle apply(ParticleTypeHandle particleType) {
@@ -27,5 +30,11 @@ public record ColorParticle(int color) implements ParticleData {
     @AsOf("2.0.0")
     public static ColorParticle of(String hexColor) {
         return new ColorParticle(ParticleData.parseHex(hexColor));
+    }
+
+    @Override
+    @AsOf("2.4.0")
+    public Codec<ColorParticle> codec() {
+        return CODEC;
     }
 }

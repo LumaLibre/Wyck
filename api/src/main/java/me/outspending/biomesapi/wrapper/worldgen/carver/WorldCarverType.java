@@ -1,6 +1,8 @@
 package me.outspending.biomesapi.wrapper.worldgen.carver;
 
+import com.mojang.serialization.Codec;
 import me.outspending.biomesapi.annotations.AsOf;
+import me.outspending.biomesapi.serialization.ConstantRepresentable;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -12,13 +14,14 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.3.0")
-public enum WorldCarverType {
+public enum WorldCarverType implements ConstantRepresentable {
 
     CAVE("cave"),
     NETHER_CAVE("nether_cave"),
     CANYON("canyon");
 
     // No translator because this isn't an enum in underlying Minecraft code
+    public static final Codec<WorldCarverType> CODEC = ConstantRepresentable.codec(WorldCarverType.values());
 
     private final String key;
 
@@ -33,7 +36,7 @@ public enum WorldCarverType {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    public String key() {
+    public String getKey() {
         return this.key;
     }
 }

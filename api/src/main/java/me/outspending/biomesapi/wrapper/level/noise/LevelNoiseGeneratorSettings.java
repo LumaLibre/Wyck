@@ -1,13 +1,16 @@
 package me.outspending.biomesapi.wrapper.level.noise;
 
 import com.google.common.base.Preconditions;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
 import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.registry.worldgen.LevelNoiseGeneratorSettingsRegistry;
+import me.outspending.biomesapi.serialization.Codecs;
 import me.outspending.biomesapi.wrapper.internal.NmsHandle;
 import me.outspending.biomesapi.wrapper.level.noise.settings.LevelNoiseSettings;
-import me.outspending.biomesapi.wrapper.worldgen.climate.BiomeClimatePoint;
+import me.outspending.biomesapi.wrapper.worldgen.climate.ClimatePoint;
 import me.outspending.biomesapi.wrapper.worldgen.surface.SurfaceRule;
 import org.bukkit.Material;
 import org.jetbrains.annotations.ApiStatus;
@@ -15,6 +18,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.Optional;
 
 // TODO: Allow registering custom noise generators
 /**
@@ -28,6 +32,22 @@ import java.util.List;
 @AsOf("2.4.0")
 @ApiStatus.Experimental
 public interface LevelNoiseGeneratorSettings extends NmsHandle, Noise {
+
+    Codec<LevelNoiseGeneratorSettings> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+        ResourceKey.CODEC.optionalFieldOf("resource_key").forGetter(s -> Optional.ofNullable(s.data().resourceKey())),
+        LevelNoiseSettings.CODEC.fieldOf("noise_settings").forGetter(s -> s.data().noiseSettings()),
+        Codecs.MATERIAL_CODEC.fieldOf("default_block").forGetter(s -> s.data().defaultBlock()),
+        Codecs.MATERIAL_CODEC.fieldOf("default_fluid").forGetter(s -> s.data().defaultFluid()),
+        LevelNoiseRouter.CODEC.fieldOf("noise_router").forGetter(s -> s.data().noiseRouter()),
+        SurfaceRule.CODEC.fieldOf("surface_rule").forGetter(s -> s.data().surfaceRule()),
+        Codec.list(ClimatePoint.CODEC).optionalFieldOf("spawn_target", List.of()).forGetter(s -> s.data().spawnTarget()),
+        Codec.INT.optionalFieldOf("sea_level", 63).forGetter(s -> s.data().seaLevel()),
+        Codec.BOOL.optionalFieldOf("disable_mob_generation", false).forGetter(s -> s.data().disableMobGeneration()),
+        Codec.BOOL.optionalFieldOf("aquifers_enabled", true).forGetter(s -> s.data().aquifersEnabled()),
+        Codec.BOOL.optionalFieldOf("ore_veins_enabled", true).forGetter(s -> s.data().oreVeinsEnabled()),
+        Codec.BOOL.optionalFieldOf("use_legacy_random_source", false).forGetter(s -> s.data().useLegacyRandomSource())
+    ).apply(instance, LevelNoiseGeneratorSettings::fromCodec));
+
 
     @ApiStatus.Internal
     WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.level.noise.LevelNoiseGeneratorSettingsFactoryImpl");
@@ -93,13 +113,23 @@ public interface LevelNoiseGeneratorSettings extends NmsHandle, Noise {
         Material defaultFluid,
         LevelNoiseRouter noiseRouter,
         SurfaceRule surfaceRule,
-        List<BiomeClimatePoint> spawnTarget,
+        List<ClimatePoint> spawnTarget,
         int seaLevel,
         @Deprecated boolean disableMobGeneration,
         boolean aquifersEnabled,
         boolean oreVeinsEnabled,
         boolean useLegacyRandomSource
     ) {}
+
+    @ApiStatus.Internal
+    private static LevelNoiseGeneratorSettings fromCodec(Optional<ResourceKey> resourceKey, LevelNoiseSettings noiseSettings, Material defaultBlock, Material defaultFluid, LevelNoiseRouter noiseRouter, SurfaceRule surfaceRule, List<ClimatePoint> spawnTarget, int seaLevel, boolean disableMobGeneration, boolean aquifersEnabled, boolean oreVeinsEnabled, boolean useLegacyRandomSource) {
+        Builder b = builder().noiseSettings(noiseSettings).defaultBlock(defaultBlock).defaultFluid(defaultFluid)
+            .noiseRouter(noiseRouter).surfaceRule(surfaceRule).spawnTarget(spawnTarget).seaLevel(seaLevel)
+            .disableMobGeneration(disableMobGeneration).aquifersEnabled(aquifersEnabled)
+            .oreVeinsEnabled(oreVeinsEnabled).useLegacyRandomSource(useLegacyRandomSource);
+        resourceKey.ifPresent(b::resourceKey);
+        return b.build();
+    }
 
     /**
      * Builder for noise generator settings.
@@ -116,7 +146,7 @@ public interface LevelNoiseGeneratorSettings extends NmsHandle, Noise {
         private Material defaultFluid = Material.WATER;
         private @Nullable LevelNoiseRouter noiseRouter = null;
         private @Nullable SurfaceRule surfaceRule = null;
-        private List<BiomeClimatePoint> spawnTarget = List.of();
+        private List<ClimatePoint> spawnTarget = List.of();
         private int seaLevel = 63;
         private @Deprecated boolean disableMobGeneration = false;
         private boolean aquifersEnabled = true;
@@ -161,7 +191,7 @@ public interface LevelNoiseGeneratorSettings extends NmsHandle, Noise {
         }
 
         @AsOf("2.4.0")
-        public Builder spawnTarget(List<BiomeClimatePoint> spawnTarget) {
+        public Builder spawnTarget(List<ClimatePoint> spawnTarget) {
             this.spawnTarget = List.copyOf(spawnTarget);
             return this;
         }

@@ -1,8 +1,13 @@
 package me.outspending.biomesapi.wrapper.worldgen;
 
 import com.google.common.base.Preconditions;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
+import me.outspending.biomesapi.serialization.Codecs;
+import me.outspending.biomesapi.serialization.StringRepresentable;
 import me.outspending.biomesapi.wrapper.internal.NmsHandle;
 import org.bukkit.Material;
 import org.bukkit.Tag;
@@ -14,6 +19,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Wraps the BlockPredicate family, the positional block tests used by
@@ -25,7 +31,26 @@ import java.util.List;
  */
 @NullMarked
 @AsOf("2.3.0")
-public sealed interface BlockPredicate extends NmsHandle permits BlockPredicate.AllOf, BlockPredicate.AnyOf, BlockPredicate.HasSturdyFace, BlockPredicate.InsideWorldBounds, BlockPredicate.MatchingBiomes, BlockPredicate.MatchingBlockTag, BlockPredicate.MatchingBlocks, BlockPredicate.MatchingFluids, BlockPredicate.Not, BlockPredicate.Replaceable, BlockPredicate.True, BlockPredicate.Unobstructed, BlockPredicate.WouldSurvive {
+public sealed interface BlockPredicate extends NmsHandle, StringRepresentable permits BlockPredicate.AllOf, BlockPredicate.AnyOf, BlockPredicate.HasSturdyFace, BlockPredicate.InsideWorldBounds, BlockPredicate.MatchingBiomes, BlockPredicate.MatchingBlockTag, BlockPredicate.MatchingBlocks, BlockPredicate.MatchingFluids, BlockPredicate.Not, BlockPredicate.Replaceable, BlockPredicate.True, BlockPredicate.Unobstructed, BlockPredicate.WouldSurvive {
+
+    Codec<BlockPredicate> CODEC = Codec.recursive("BlockPredicate", self -> {
+        Map<String, MapCodec<? extends BlockPredicate>> byType = Map.ofEntries(
+            Map.entry("true", MapCodec.unit(True::new)),
+            Map.entry("matching_blocks", MatchingBlocks.MAP_CODEC),
+            Map.entry("matching_block_tag", MatchingBlockTag.MAP_CODEC),
+            Map.entry("matching_fluids", MatchingFluids.MAP_CODEC),
+            Map.entry("matching_biomes", MatchingBiomes.MAP_CODEC),
+            Map.entry("has_sturdy_face", HasSturdyFace.MAP_CODEC),
+            Map.entry("replaceable", Replaceable.MAP_CODEC),
+            Map.entry("would_survive", WouldSurvive.MAP_CODEC),
+            Map.entry("inside_world", InsideWorldBounds.MAP_CODEC),
+            Map.entry("unobstructed", Unobstructed.MAP_CODEC),
+            Map.entry("any_of", AnyOf.mapCodec(self)),
+            Map.entry("all_of", AllOf.mapCodec(self)),
+            Map.entry("not", Not.mapCodec(self))
+        );
+        return Codec.STRING.dispatch("type", BlockPredicate::type, byType::get);
+    });
 
     @ApiStatus.Internal
     WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.*?.wrapper.worldgen.BlockPredicateFactoryImpl");
@@ -168,6 +193,11 @@ public sealed interface BlockPredicate extends NmsHandle permits BlockPredicate.
     @AsOf("2.3.0")
     record MatchingBlocks(BlockVector offset, List<Material> blocks) implements BlockPredicate {
 
+        public static final MapCodec<MatchingBlocks> MAP_CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
+            Codecs.BLOCK_VECTOR_CODEC.fieldOf("offset").forGetter(MatchingBlocks::offset),
+            Codec.list(Codecs.MATERIAL_CODEC).fieldOf("blocks").forGetter(MatchingBlocks::blocks)
+        ).apply(i, MatchingBlocks::new));
+
         @AsOf("2.3.0")
         public MatchingBlocks {
             Preconditions.checkNotNull(offset, "offset");
@@ -177,6 +207,11 @@ public sealed interface BlockPredicate extends NmsHandle permits BlockPredicate.
 
     @AsOf("2.3.0")
     record MatchingBlockTag(BlockVector offset, Tag<Material> tag) implements BlockPredicate {
+
+        public static final MapCodec<MatchingBlockTag> MAP_CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
+            Codecs.BLOCK_VECTOR_CODEC.fieldOf("offset").forGetter(MatchingBlockTag::offset),
+            Codecs.MATERIAL_TAG_CODEC.fieldOf("tag").forGetter(MatchingBlockTag::tag)
+        ).apply(i, MatchingBlockTag::new));
 
         @AsOf("2.3.0")
         public MatchingBlockTag {
@@ -188,6 +223,11 @@ public sealed interface BlockPredicate extends NmsHandle permits BlockPredicate.
     @AsOf("2.3.0")
     record MatchingFluids(BlockVector offset, List<FluidType> fluids) implements BlockPredicate {
 
+        public static final MapCodec<MatchingFluids> MAP_CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
+            Codecs.BLOCK_VECTOR_CODEC.fieldOf("offset").forGetter(MatchingFluids::offset),
+            Codec.list(Codecs.FLUID_TYPE_CODEC).fieldOf("fluids").forGetter(MatchingFluids::fluids)
+        ).apply(i, MatchingFluids::new));
+
         @AsOf("2.3.0")
         public MatchingFluids {
             Preconditions.checkNotNull(offset, "offset");
@@ -197,6 +237,11 @@ public sealed interface BlockPredicate extends NmsHandle permits BlockPredicate.
 
     @AsOf("2.3.0")
     record HasSturdyFace(BlockVector offset, BlockFace direction) implements BlockPredicate {
+
+        public static final MapCodec<HasSturdyFace> MAP_CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
+            Codecs.BLOCK_VECTOR_CODEC.fieldOf("offset").forGetter(HasSturdyFace::offset),
+            Codecs.BLOCK_FACE_CODEC.fieldOf("direction").forGetter(HasSturdyFace::direction)
+        ).apply(i, HasSturdyFace::new));
 
         @AsOf("2.3.0")
         public HasSturdyFace {
@@ -208,6 +253,9 @@ public sealed interface BlockPredicate extends NmsHandle permits BlockPredicate.
     @AsOf("2.3.0")
     record Replaceable(BlockVector offset) implements BlockPredicate {
 
+        public static final MapCodec<Replaceable> MAP_CODEC =
+            Codecs.BLOCK_VECTOR_CODEC.fieldOf("offset").xmap(Replaceable::new, Replaceable::offset);
+
         @AsOf("2.3.0")
         public Replaceable {
             Preconditions.checkNotNull(offset, "offset");
@@ -216,6 +264,11 @@ public sealed interface BlockPredicate extends NmsHandle permits BlockPredicate.
 
     @AsOf("2.3.0")
     record WouldSurvive(BlockVector offset, BlockData state) implements BlockPredicate {
+
+        public static final MapCodec<WouldSurvive> MAP_CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
+            Codecs.BLOCK_VECTOR_CODEC.fieldOf("offset").forGetter(WouldSurvive::offset),
+            Codecs.BLOCK_DATA_CODEC.fieldOf("state").forGetter(WouldSurvive::state)
+        ).apply(i, WouldSurvive::new));
 
         @AsOf("2.3.0")
         public WouldSurvive {
@@ -227,6 +280,9 @@ public sealed interface BlockPredicate extends NmsHandle permits BlockPredicate.
     @AsOf("2.3.0")
     record InsideWorldBounds(BlockVector offset) implements BlockPredicate {
 
+        public static final MapCodec<InsideWorldBounds> MAP_CODEC =
+            Codecs.BLOCK_VECTOR_CODEC.fieldOf("offset").xmap(InsideWorldBounds::new, InsideWorldBounds::offset);
+
         @AsOf("2.3.0")
         public InsideWorldBounds {
             Preconditions.checkNotNull(offset, "offset");
@@ -235,6 +291,9 @@ public sealed interface BlockPredicate extends NmsHandle permits BlockPredicate.
 
     @AsOf("2.3.0")
     record Unobstructed(BlockVector offset) implements BlockPredicate {
+
+        public static final MapCodec<Unobstructed> MAP_CODEC =
+            Codecs.BLOCK_VECTOR_CODEC.fieldOf("offset").xmap(Unobstructed::new, Unobstructed::offset);
 
         @AsOf("2.3.0")
         public Unobstructed {
@@ -250,6 +309,10 @@ public sealed interface BlockPredicate extends NmsHandle permits BlockPredicate.
         public AnyOf {
             predicates = List.copyOf(predicates);
         }
+
+        public static MapCodec<AnyOf> mapCodec(Codec<BlockPredicate> self) {
+            return Codec.list(self).fieldOf("predicates").xmap(AnyOf::new, AnyOf::predicates);
+        }
     }
 
     // recursive
@@ -259,6 +322,10 @@ public sealed interface BlockPredicate extends NmsHandle permits BlockPredicate.
         @AsOf("2.3.0")
         public AllOf {
             predicates = List.copyOf(predicates);
+        }
+
+        public static MapCodec<AllOf> mapCodec(Codec<BlockPredicate> self) {
+            return Codec.list(self).fieldOf("predicates").xmap(AllOf::new, AllOf::predicates);
         }
     }
 
@@ -270,6 +337,10 @@ public sealed interface BlockPredicate extends NmsHandle permits BlockPredicate.
         public Not {
             Preconditions.checkNotNull(predicate, "predicate");
         }
+
+        public static MapCodec<Not> mapCodec(Codec<BlockPredicate> self) {
+            return self.fieldOf("predicate").xmap(Not::new, Not::predicate);
+        }
     }
 
     @AsOf("2.3.0")
@@ -277,6 +348,9 @@ public sealed interface BlockPredicate extends NmsHandle permits BlockPredicate.
 
     @AsOf("2.3.0")
     record MatchingBiomes(List<Biome> biomes) implements BlockPredicate {
+
+        public static final MapCodec<MatchingBiomes> MAP_CODEC =
+            Codec.list(Codecs.BIOME_CODEC).fieldOf("biomes").xmap(MatchingBiomes::new, MatchingBiomes::biomes);
 
         @AsOf("2.3.0")
         public MatchingBiomes {

@@ -1,5 +1,6 @@
 package me.outspending.biomesapi.wrapper.environment.attribute;
 
+import com.mojang.serialization.Codec;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.attribute.EnvironmentAttribute;
@@ -9,7 +10,6 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 @ApiStatus.Internal
 public record EnvironmentAttributeHandleImpl<T>(EnvironmentAttribute<T> nms) implements EnvironmentAttributeHandle<T> {
-
 
     @Override
     public T defaultValue() {
@@ -33,5 +33,15 @@ public record EnvironmentAttributeHandleImpl<T>(EnvironmentAttribute<T> nms) imp
     @Override
     public String toString() {
         return nms.toString();
+    }
+
+    @Override
+    public Codec<T> valueCodec() {
+        return nms.valueCodec();
+    }
+
+    @Override
+    public Object toMinecraft() {
+        return nms;
     }
 }

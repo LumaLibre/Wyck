@@ -1,7 +1,9 @@
 package me.outspending.biomesapi.wrapper.worldgen.feature;
 
+import com.mojang.serialization.Codec;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.keys.ResourceKey;
+import me.outspending.biomesapi.serialization.ConstantRepresentable;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -13,7 +15,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.3.0")
-public enum FeatureType {
+public enum FeatureType implements ConstantRepresentable {
 
     NO_OP("no_op"),
     TREE("tree"),
@@ -75,6 +77,8 @@ public enum FeatureType {
     LARGE_DRIPSTONE("large_dripstone"),
     POINTED_DRIPSTONE("pointed_dripstone"),
     SCULK_PATCH("sculk_patch");
+
+    public static final Codec<FeatureType> CODEC = ConstantRepresentable.codec(FeatureType.values());
 
     private final String key;
 

@@ -1,5 +1,6 @@
 package me.outspending.biomesapi.wrapper.worldgen;
 
+import com.mojang.serialization.Codec;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.wrapper.internal.KeyedEnumTranslator;
 import me.outspending.biomesapi.wrapper.internal.NmsEnumTranslatable;
@@ -29,6 +30,7 @@ public enum GenerationStep implements NmsEnumTranslatable<GenerationStep> {
     TOP_LAYER_MODIFICATION("TOP_LAYER_MODIFICATION");
 
     public static final KeyedEnumTranslator<GenerationStep> TRANSLATOR = KeyedEnumTranslator.byKey(GenerationStep::getKey, GenerationStep.values());
+    public static final Codec<GenerationStep> CODEC = TRANSLATOR.codec();
 
     private final String key;
 

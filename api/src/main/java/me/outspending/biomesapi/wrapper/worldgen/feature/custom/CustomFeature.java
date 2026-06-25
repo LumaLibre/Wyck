@@ -1,11 +1,13 @@
 package me.outspending.biomesapi.wrapper.worldgen.feature.custom;
 
+import com.mojang.serialization.Codec;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.registry.worldgen.CustomFeatureRegistry;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.Supplier;
 
@@ -23,10 +25,17 @@ import java.util.function.Supplier;
 public abstract class CustomFeature<C> {
 
     private final Supplier<C> configSupplier;
+    private final @Nullable Codec<C> configCodec;
 
     @AsOf("2.3.0")
     protected CustomFeature(Supplier<C> configSupplier) {
+        this(configSupplier, null);
+    }
+
+    @AsOf("2.4.0")
+    protected CustomFeature(Supplier<C> configSupplier, @Nullable Codec<C> configCodec) {
         this.configSupplier = configSupplier;
+        this.configCodec = configCodec;
     }
 
     /**
@@ -51,6 +60,17 @@ public abstract class CustomFeature<C> {
     @ApiStatus.Internal
     public Supplier<C> configSupplier() {
         return this.configSupplier;
+    }
+
+    /**
+     * Internal method to get the configuration codec.
+     * @return the configuration codec
+     * @since 2.4.0
+     */
+    @AsOf("2.4.0")
+    @ApiStatus.Internal
+    public @Nullable Codec<C> configCodec() {
+        return this.configCodec;
     }
 
     /**

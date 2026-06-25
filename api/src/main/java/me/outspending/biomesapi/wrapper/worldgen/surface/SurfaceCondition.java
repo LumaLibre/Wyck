@@ -1,14 +1,20 @@
 package me.outspending.biomesapi.wrapper.worldgen.surface;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
 import me.outspending.biomesapi.keys.ResourceKey;
+import me.outspending.biomesapi.serialization.ConstantRepresentable;
+import me.outspending.biomesapi.serialization.StringRepresentable;
 import me.outspending.biomesapi.wrapper.internal.NmsHandle;
 import me.outspending.biomesapi.wrapper.worldgen.valueproviders.VerticalAnchor;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Wraps the surface rule condition family ({@code SurfaceRules.ConditionSource}), the predicates that
@@ -21,7 +27,24 @@ import java.util.List;
 @NullMarked
 @AsOf("2.4.0")
 @ApiStatus.Experimental
-public sealed interface SurfaceCondition extends NmsHandle permits SurfaceCondition.StoneDepth, SurfaceCondition.Not, SurfaceCondition.Water, SurfaceCondition.Biome, SurfaceCondition.Noise, SurfaceCondition.YCheck, SurfaceCondition.VerticalGradient, SurfaceCondition.Steep, SurfaceCondition.Hole, SurfaceCondition.AbovePreliminarySurface, SurfaceCondition.Temperature {
+public sealed interface SurfaceCondition extends NmsHandle, StringRepresentable permits SurfaceCondition.StoneDepth, SurfaceCondition.Not, SurfaceCondition.Water, SurfaceCondition.Biome, SurfaceCondition.Noise, SurfaceCondition.YCheck, SurfaceCondition.VerticalGradient, SurfaceCondition.Steep, SurfaceCondition.Hole, SurfaceCondition.AbovePreliminarySurface, SurfaceCondition.Temperature {
+
+    Codec<SurfaceCondition> CODEC = Codec.recursive("SurfaceCondition", self -> {
+        Map<String, MapCodec<? extends SurfaceCondition>> byType = Map.ofEntries(
+            Map.entry("stone_depth", StoneDepth.MAP_CODEC),
+            Map.entry("not", Not.mapCodec(self)),
+            Map.entry("water", Water.MAP_CODEC),
+            Map.entry("biome", Biome.MAP_CODEC),
+            Map.entry("noise", Noise.MAP_CODEC),
+            Map.entry("y_check", YCheck.MAP_CODEC),
+            Map.entry("vertical_gradient", VerticalGradient.MAP_CODEC),
+            Map.entry("steep", Steep.MAP_CODEC),
+            Map.entry("hole", Hole.MAP_CODEC),
+            Map.entry("above_preliminary_surface", AbovePreliminarySurface.MAP_CODEC),
+            Map.entry("temperature", Temperature.MAP_CODEC)
+        );
+        return Codec.STRING.dispatch("type", SurfaceCondition::type, byType::get);
+    });
 
     @ApiStatus.Internal
     WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.*.wrapper.worldgen.surface.SurfaceConditionFactoryImpl");
@@ -31,16 +54,6 @@ public sealed interface SurfaceCondition extends NmsHandle permits SurfaceCondit
         Object toNms(SurfaceCondition condition);
     }
 
-    /**
-     * Which face of the stone column a depth check measures from.
-     *
-     * @since 2.4.0
-     */
-    @AsOf("2.4.0")
-    enum CaveSurface {
-        FLOOR,
-        CEILING
-    }
 
     @Override
     @AsOf("2.4.0")
@@ -239,43 +252,85 @@ public sealed interface SurfaceCondition extends NmsHandle permits SurfaceCondit
     }
 
     @AsOf("2.4.0")
-    record StoneDepth(int offset, boolean addSurfaceDepth, int secondaryDepthRange, CaveSurface surfaceType) implements SurfaceCondition {}
+    record StoneDepth(int offset, boolean addSurfaceDepth, int secondaryDepthRange, CaveSurface surfaceType) implements SurfaceCondition {
+        public static final MapCodec<StoneDepth> MAP_CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
+            Codec.INT.fieldOf("offset").forGetter(StoneDepth::offset),
+            Codec.BOOL.fieldOf("add_surface_depth").forGetter(StoneDepth::addSurfaceDepth),
+            Codec.INT.fieldOf("secondary_depth_range").forGetter(StoneDepth::secondaryDepthRange),
+            CaveSurface.CODEC.fieldOf("surface_type").forGetter(StoneDepth::surfaceType)
+        ).apply(i, StoneDepth::new));
+    }
 
     @AsOf("2.4.0")
-    record Not(SurfaceCondition target) implements SurfaceCondition {}
+    record Not(SurfaceCondition target) implements SurfaceCondition {
+        public static MapCodec<Not> mapCodec(Codec<SurfaceCondition> self) {
+            return self.fieldOf("target").xmap(Not::new, Not::target);
+        }
+    }
 
     @AsOf("2.4.0")
-    record Water(int offset, int surfaceDepthMultiplier, boolean addStoneDepth) implements SurfaceCondition {}
+    record Water(int offset, int surfaceDepthMultiplier, boolean addStoneDepth) implements SurfaceCondition {
+        public static final MapCodec<Water> MAP_CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
+            Codec.INT.fieldOf("offset").forGetter(Water::offset),
+            Codec.INT.fieldOf("surface_depth_multiplier").forGetter(Water::surfaceDepthMultiplier),
+            Codec.BOOL.fieldOf("add_stone_depth").forGetter(Water::addStoneDepth)
+        ).apply(i, Water::new));
+    }
 
     @AsOf("2.4.0")
-    record Biome(List<ResourceKey> biomes) implements SurfaceCondition {}
+    record Biome(List<ResourceKey> biomes) implements SurfaceCondition {
+        public static final MapCodec<Biome> MAP_CODEC = Codec.list(ResourceKey.CODEC).fieldOf("biomes")
+            .xmap(Biome::new, Biome::biomes);
+    }
 
     @AsOf("2.4.0")
-    record Noise(ResourceKey noise, double minThreshold, double maxThreshold) implements SurfaceCondition {}
+    record Noise(ResourceKey noise, double minThreshold, double maxThreshold) implements SurfaceCondition {
+        public static final MapCodec<Noise> MAP_CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
+            ResourceKey.CODEC.fieldOf("noise").forGetter(Noise::noise),
+            Codec.DOUBLE.fieldOf("min_threshold").forGetter(Noise::minThreshold),
+            Codec.DOUBLE.fieldOf("max_threshold").forGetter(Noise::maxThreshold)
+        ).apply(i, Noise::new));
+    }
 
     @AsOf("2.4.0")
-    record YCheck(VerticalAnchor anchor, int surfaceDepthMultiplier, boolean addStoneDepth) implements SurfaceCondition {}
+    record YCheck(VerticalAnchor anchor, int surfaceDepthMultiplier, boolean addStoneDepth) implements SurfaceCondition {
+        public static final MapCodec<YCheck> MAP_CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
+            VerticalAnchor.CODEC.fieldOf("anchor").forGetter(YCheck::anchor),
+            Codec.INT.fieldOf("surface_depth_multiplier").forGetter(YCheck::surfaceDepthMultiplier),
+            Codec.BOOL.fieldOf("add_stone_depth").forGetter(YCheck::addStoneDepth)
+        ).apply(i, YCheck::new));
+    }
 
     @AsOf("2.4.0")
-    record VerticalGradient(String randomName, VerticalAnchor trueAtAndBelow, VerticalAnchor falseAtAndAbove) implements SurfaceCondition {}
+    record VerticalGradient(String randomName, VerticalAnchor trueAtAndBelow, VerticalAnchor falseAtAndAbove) implements SurfaceCondition {
+        public static final MapCodec<VerticalGradient> MAP_CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
+            Codec.STRING.fieldOf("random_name").forGetter(VerticalGradient::randomName),
+            VerticalAnchor.CODEC.fieldOf("true_at_and_below").forGetter(VerticalGradient::trueAtAndBelow),
+            VerticalAnchor.CODEC.fieldOf("false_at_and_above").forGetter(VerticalGradient::falseAtAndAbove)
+        ).apply(i, VerticalGradient::new));
+    }
 
     @AsOf("2.4.0")
     record Steep() implements SurfaceCondition {
         static final Steep INSTANCE = new Steep();
+        public static final MapCodec<Steep> MAP_CODEC = MapCodec.unit(INSTANCE);
     }
 
     @AsOf("2.4.0")
     record Hole() implements SurfaceCondition {
         static final Hole INSTANCE = new Hole();
+        public static final MapCodec<Hole> MAP_CODEC = MapCodec.unit(INSTANCE);
     }
 
     @AsOf("2.4.0")
     record AbovePreliminarySurface() implements SurfaceCondition {
         static final AbovePreliminarySurface INSTANCE = new AbovePreliminarySurface();
+        public static final MapCodec<AbovePreliminarySurface> MAP_CODEC = MapCodec.unit(INSTANCE);
     }
 
     @AsOf("2.4.0")
     record Temperature() implements SurfaceCondition {
         static final Temperature INSTANCE = new Temperature();
+        public static final MapCodec<Temperature> MAP_CODEC = MapCodec.unit(INSTANCE);
     }
 }

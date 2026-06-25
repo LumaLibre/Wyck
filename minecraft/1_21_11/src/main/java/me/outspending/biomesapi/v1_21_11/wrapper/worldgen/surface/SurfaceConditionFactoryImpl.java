@@ -87,7 +87,7 @@ public class SurfaceConditionFactoryImpl implements SurfaceCondition.Factory {
         return SurfaceRules.verticalGradient(verticalGradient.randomName(), trueAtAndBelow, falseAtAndAbove);
     }
 
-    private CaveSurface caveSurface(SurfaceCondition.CaveSurface surface) {
+    private CaveSurface caveSurface(me.outspending.biomesapi.wrapper.worldgen.surface.CaveSurface surface) {
         return switch (surface) {
             case FLOOR -> CaveSurface.FLOOR;
             case CEILING -> CaveSurface.CEILING;

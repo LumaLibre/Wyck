@@ -8,17 +8,17 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 @AsOf("2.3.0")
 @ApiStatus.Internal
-public final class BiomeClimatePointImpl implements BiomeClimatePoint {
+public final class ClimatePointImpl implements ClimatePoint {
 
-    private final BiomeParameter temperature;
-    private final BiomeParameter humidity;
-    private final BiomeParameter continentalness;
-    private final BiomeParameter erosion;
-    private final BiomeParameter depth;
-    private final BiomeParameter weirdness;
+    private final ClimateParameter temperature;
+    private final ClimateParameter humidity;
+    private final ClimateParameter continentalness;
+    private final ClimateParameter erosion;
+    private final ClimateParameter depth;
+    private final ClimateParameter weirdness;
     private final float offset;
 
-    public BiomeClimatePointImpl(BiomeParameter temperature, BiomeParameter humidity, BiomeParameter continentalness, BiomeParameter erosion, BiomeParameter depth, BiomeParameter weirdness, float offset) {
+    public ClimatePointImpl(ClimateParameter temperature, ClimateParameter humidity, ClimateParameter continentalness, ClimateParameter erosion, ClimateParameter depth, ClimateParameter weirdness, float offset) {
         // TODO: google Preconditions
         if (offset < 0.0f || offset > 1.0f) {
             throw new IllegalArgumentException("offset must be within [0.0, 1.0]: " + offset);
@@ -33,32 +33,32 @@ public final class BiomeClimatePointImpl implements BiomeClimatePoint {
     }
 
     @Override
-    public BiomeParameter temperature() {
+    public ClimateParameter temperature() {
         return this.temperature;
     }
 
     @Override
-    public BiomeParameter humidity() {
+    public ClimateParameter humidity() {
         return this.humidity;
     }
 
     @Override
-    public BiomeParameter continentalness() {
+    public ClimateParameter continentalness() {
         return this.continentalness;
     }
 
     @Override
-    public BiomeParameter erosion() {
+    public ClimateParameter erosion() {
         return this.erosion;
     }
 
     @Override
-    public BiomeParameter depth() {
+    public ClimateParameter depth() {
         return this.depth;
     }
 
     @Override
-    public BiomeParameter weirdness() {
+    public ClimateParameter weirdness() {
         return this.weirdness;
     }
 

@@ -1,5 +1,7 @@
 package me.outspending.biomesapi.misc;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.outspending.biomesapi.annotations.AsOf;
 import org.bukkit.Chunk;
 import org.bukkit.World;
@@ -21,6 +23,11 @@ import java.util.concurrent.CompletableFuture;
 @NullMarked
 @AsOf("2.0.0")
 public record ChunkLocation(int x, int z) {
+
+    public static final Codec<ChunkLocation> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+        Codec.INT.fieldOf("x").forGetter(ChunkLocation::x),
+        Codec.INT.fieldOf("z").forGetter(ChunkLocation::z)
+    ).apply(instance, ChunkLocation::new));
 
     /**
      * Creates a ChunkLocation from chunk coordinates.

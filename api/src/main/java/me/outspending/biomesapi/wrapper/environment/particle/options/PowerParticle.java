@@ -1,5 +1,6 @@
 package me.outspending.biomesapi.wrapper.environment.particle.options;
 
+import com.mojang.serialization.Codec;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleData;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleOptionsHandle;
@@ -18,6 +19,8 @@ import org.jspecify.annotations.NullMarked;
 @AsOf("2.0.0")
 public record PowerParticle(float power) implements ParticleData {
 
+    public static final Codec<PowerParticle> CODEC = Codec.FLOAT.fieldOf("power").xmap(PowerParticle::new, PowerParticle::power).codec();
+
     @Override
     @AsOf("2.0.0")
     public ParticleOptionsHandle apply(ParticleTypeHandle particleType) {
@@ -27,5 +30,11 @@ public record PowerParticle(float power) implements ParticleData {
     @AsOf("2.0.0")
     public static PowerParticle of(float power) {
         return new PowerParticle(power);
+    }
+
+    @Override
+    @AsOf("2.4.0")
+    public Codec<PowerParticle> codec() {
+        return CODEC;
     }
 }

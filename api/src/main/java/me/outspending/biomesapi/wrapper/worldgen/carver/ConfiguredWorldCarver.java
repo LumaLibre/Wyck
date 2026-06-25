@@ -1,5 +1,7 @@
 package me.outspending.biomesapi.wrapper.worldgen.carver;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
 import me.outspending.biomesapi.keys.ResourceKey;
@@ -17,6 +19,20 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 @AsOf("2.3.0")
 public sealed interface ConfiguredWorldCarver extends NmsHandle permits ConfiguredWorldCarver.Reference, ConfiguredWorldCarver.Custom {
+
+    Codec<ConfiguredWorldCarver> CODEC = Codec.STRING.dispatch(
+        "type",
+        carver -> carver instanceof Reference ? "reference" : "custom",
+        type -> switch (type) {
+            case "reference" -> ResourceKey.CODEC.fieldOf("key")
+                .xmap(ConfiguredWorldCarver::reference, c -> ((Reference) c).key());
+            case "custom" -> RecordCodecBuilder.mapCodec(i -> i.group(
+                WorldCarverType.CODEC.fieldOf("carver").forGetter(c -> ((Custom) c).type()),
+                CarverConfiguration.CODEC.fieldOf("config").forGetter(c -> ((Custom) c).config())
+            ).apply(i, Custom::new));
+            default -> throw new IllegalStateException("unknown configured carver: " + type);
+        }
+    );
 
     @ApiStatus.Internal
     WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.worldgen.carver.ConfiguredWorldCarverFactoryImpl");

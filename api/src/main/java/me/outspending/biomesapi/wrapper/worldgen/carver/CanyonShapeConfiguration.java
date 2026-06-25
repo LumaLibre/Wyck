@@ -1,6 +1,8 @@
 package me.outspending.biomesapi.wrapper.worldgen.carver;
 
 import com.google.common.base.Preconditions;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
 import me.outspending.biomesapi.wrapper.internal.NmsHandle;
@@ -26,6 +28,15 @@ public record CanyonShapeConfiguration(
     float verticalRadiusDefaultFactor,
     float verticalRadiusCenterFactor
 ) implements NmsHandle {
+
+    public static final Codec<CanyonShapeConfiguration> CODEC = RecordCodecBuilder.create(i -> i.group(
+        FloatProvider.CODEC.fieldOf("distance_factor").forGetter(CanyonShapeConfiguration::distanceFactor),
+        FloatProvider.CODEC.fieldOf("thickness").forGetter(CanyonShapeConfiguration::thickness),
+        Codec.INT.fieldOf("width_smoothness").forGetter(CanyonShapeConfiguration::widthSmoothness),
+        FloatProvider.CODEC.fieldOf("horizontal_radius_factor").forGetter(CanyonShapeConfiguration::horizontalRadiusFactor),
+        Codec.FLOAT.fieldOf("vertical_radius_default_factor").forGetter(CanyonShapeConfiguration::verticalRadiusDefaultFactor),
+        Codec.FLOAT.fieldOf("vertical_radius_center_factor").forGetter(CanyonShapeConfiguration::verticalRadiusCenterFactor)
+    ).apply(i, CanyonShapeConfiguration::new));
 
     @ApiStatus.Internal
     static final WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.worldgen.carver.CanyonShapeConfigurationFactoryImpl");

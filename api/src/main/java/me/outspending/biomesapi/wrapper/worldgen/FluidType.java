@@ -1,6 +1,8 @@
 package me.outspending.biomesapi.wrapper.worldgen;
 
+import com.mojang.serialization.Codec;
 import me.outspending.biomesapi.annotations.AsOf;
+import me.outspending.biomesapi.serialization.ConstantRepresentable;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -12,7 +14,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.3.0")
-public enum FluidType {
+public enum FluidType implements ConstantRepresentable {
 
     EMPTY("empty"),
     WATER("water"),
@@ -21,6 +23,7 @@ public enum FluidType {
     FLOWING_LAVA("flowing_lava");
 
     // No translator, not an enum
+    public static final Codec<FluidType> CODEC = ConstantRepresentable.codec(FluidType.values());
 
     private final String key;
 
@@ -35,7 +38,7 @@ public enum FluidType {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    public String key() {
+    public String getKey() {
         return this.key;
     }
 }

@@ -1,5 +1,7 @@
 package me.outspending.biomesapi.util;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.outspending.biomesapi.annotations.AsOf;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -171,5 +173,18 @@ public final class WeightedList<E> {
         public E get(int index) {
             return (E) this.entries[index];
         }
+    }
+
+    @AsOf("2.4.0")
+    public static <E> Codec<Weighted<E>> weightedCodec(Codec<E> elementCodec) {
+        return RecordCodecBuilder.create(instance -> instance.group(
+            elementCodec.fieldOf("value").forGetter(Weighted::value),
+            Codec.intRange(0, Integer.MAX_VALUE).fieldOf("weight").forGetter(Weighted::weight)
+        ).apply(instance, Weighted::new));
+    }
+
+    @AsOf("2.4.0")
+    public static <E> Codec<WeightedList<E>> codec(Codec<E> elementCodec) {
+        return weightedCodec(elementCodec).listOf().xmap(WeightedList::of, WeightedList::unwrap);
     }
 }

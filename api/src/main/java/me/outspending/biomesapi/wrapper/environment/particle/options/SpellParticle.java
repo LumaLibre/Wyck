@@ -1,5 +1,7 @@
 package me.outspending.biomesapi.wrapper.environment.particle.options;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleData;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleOptionsHandle;
@@ -19,6 +21,11 @@ import org.jspecify.annotations.NullMarked;
 @AsOf("2.0.0")
 public record SpellParticle(int color, float power) implements ParticleData {
 
+    public static final Codec<SpellParticle> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+        Codec.INT.fieldOf("color").forGetter(SpellParticle::color),
+        Codec.FLOAT.fieldOf("power").forGetter(SpellParticle::power)
+    ).apply(instance, SpellParticle::new));
+
     @Override
     @AsOf("2.0.0")
     public ParticleOptionsHandle apply(ParticleTypeHandle particleType) {
@@ -33,5 +40,11 @@ public record SpellParticle(int color, float power) implements ParticleData {
     @AsOf("2.0.0")
     public static SpellParticle of(String hexColor) {
         return of(hexColor, 1.0f);
+    }
+
+    @Override
+    @AsOf("2.4.0")
+    public Codec<SpellParticle> codec() {
+        return CODEC;
     }
 }

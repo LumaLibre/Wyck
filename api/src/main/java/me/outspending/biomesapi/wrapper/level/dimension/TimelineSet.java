@@ -1,5 +1,6 @@
 package me.outspending.biomesapi.wrapper.level.dimension;
 
+import com.mojang.serialization.Codec;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
 import me.outspending.biomesapi.keys.ResourceKey;
@@ -19,6 +20,11 @@ import java.util.List;
 @NullMarked
 @AsOf("2.4.0")
 public interface TimelineSet extends NmsHandle {
+
+    Codec<TimelineSet> CODEC = Codec.list(ResourceKey.CODEC).xmap(
+        keys -> TimelineSet.of(keys.toArray(new ResourceKey[0])),
+        TimelineSet::timelines
+    );
 
     @ApiStatus.Internal
     WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.level.dimension.TimelineSetFactoryImpl");

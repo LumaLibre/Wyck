@@ -3,6 +3,7 @@ package me.outspending.biomesapi.wrapper.level.noise.chunk;
 import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.registry.bootstrap.util.BootstrapSafeMinecraftRegistries;
 import me.outspending.biomesapi.wrapper.level.BiomeSource;
+import me.outspending.biomesapi.wrapper.level.noise.Noise;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
@@ -22,5 +23,10 @@ public record NoiseChunkGeneratorImpl(BiomeSource biomeSource, ResourceKey noise
         Holder<NoiseGeneratorSettings> settings = BootstrapSafeMinecraftRegistries.mappedRegistry(Registries.NOISE_SETTINGS)
             .getOrThrow(net.minecraft.resources.ResourceKey.create(Registries.NOISE_SETTINGS, id));
         return new NoiseBasedChunkGenerator(source, settings);
+    }
+
+    @Override
+    public Noise noise() {
+        return Noise.reference(this.noiseSettings);
     }
 }

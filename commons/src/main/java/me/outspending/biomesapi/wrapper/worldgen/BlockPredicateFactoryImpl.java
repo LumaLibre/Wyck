@@ -90,11 +90,11 @@ public class BlockPredicateFactoryImpl implements BlockPredicate.Factory {
     private net.minecraft.world.level.material.Fluid toNmsFluid(FluidType fluid) {
         // mapping-sensitive: registry value lookup
         net.minecraft.resources.Identifier location =
-                net.minecraft.resources.Identifier.withDefaultNamespace(fluid.key());
+                net.minecraft.resources.Identifier.withDefaultNamespace(fluid.getKey());
         net.minecraft.world.level.material.Fluid resolved =
                 net.minecraft.core.registries.BuiltInRegistries.FLUID.getValue(location);
 
-        Preconditions.checkNotNull(resolved, "Fluid " + fluid.key() + " does not resolve in the fluid registry");
+        Preconditions.checkNotNull(resolved, "Fluid " + fluid.getKey() + " does not resolve in the fluid registry");
         return resolved;
     }
 

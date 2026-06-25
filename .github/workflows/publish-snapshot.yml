@@ -1,7 +1,9 @@
 name: Publish Snapshot
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+      - "experimental/**"
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -17,10 +19,18 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
+      - name: Set experimental flag
+        id: flags
+        run: |
+          if [[ "${{ github.ref_name }}" == *experimental* ]]; then
+            echo "experimental=-Pexperimental" >> "$GITHUB_OUTPUT"
+          else
+            echo "experimental=" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Publish API
-        run: "./gradlew :bundle:publish -Psnapshot"
+        run: "./gradlew :bundle:publish -Psnapshot ${{ steps.flags.outputs.experimental }}"
         env:
           REPO_URL: ${{ secrets.REPO_URL }}
           REPO_USERNAME: ${{ secrets.REPO_USERNAME }}
           REPO_PASSWORD: ${{ secrets.REPO_PASSWORD }}
-

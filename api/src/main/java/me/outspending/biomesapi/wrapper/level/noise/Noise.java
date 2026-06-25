@@ -1,5 +1,8 @@
 package me.outspending.biomesapi.wrapper.level.noise;
 
+import com.google.common.base.Preconditions;
+import com.mojang.datafixers.util.Either;
+import com.mojang.serialization.Codec;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.wrapper.level.noise.chunk.LevelChunkGenerator;
@@ -16,6 +19,22 @@ import org.jspecify.annotations.Nullable;
  */
 @AsOf("2.4.0")
 public interface Noise {
+
+    Codec<Noise> CODEC = Codec.either(
+        ResourceKey.CODEC,
+        LevelNoiseGeneratorSettings.CODEC
+    ).xmap(
+        either -> either.map(Noise::reference, settings -> (Noise) settings),
+        noise -> {
+            if (noise instanceof Reference(ResourceKey key)) {
+                return Either.left(key);
+            }
+            if (noise instanceof LevelNoiseGeneratorSettings settings) {
+                return Either.right(settings);
+            }
+            throw new IllegalStateException("unknown noise type: " + noise.getClass().getName());
+        }
+    );
 
     ResourceKey OVERWORLD = ResourceKey.minecraft("overworld");
     ResourceKey NETHER = ResourceKey.minecraft("the_nether");
