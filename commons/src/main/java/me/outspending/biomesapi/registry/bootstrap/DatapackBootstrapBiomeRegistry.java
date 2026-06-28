@@ -24,7 +24,7 @@ import me.outspending.biomesapi.registry.bootstrap.util.DatapackPromotion;
 import me.outspending.biomesapi.registry.level.LevelBiomeEdit;
 import me.outspending.biomesapi.registry.bootstrap.util.DimensionSources;
 import me.outspending.biomesapi.util.ThrowingRunnable;
-import me.outspending.biomesapi.wrapper.worldgen.climate.BiomeClimatePoint;
+import me.outspending.biomesapi.wrapper.worldgen.climate.ClimatePoint;
 import net.minecraft.SharedConstants;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.world.level.biome.Biome;
@@ -116,7 +116,7 @@ public final class DatapackBootstrapBiomeRegistry implements BootstrapBiomeRegis
 
     @Override
     @AsOf("2.3.0")
-    public BootstrapBiomeRegistry addToDimension(ResourceKey dimension, ResourceKey biome, BiomeClimatePoint placement) {
+    public BootstrapBiomeRegistry addToDimension(ResourceKey dimension, ResourceKey biome, ClimatePoint placement) {
         this.dimensionEdits.add(new LevelBiomeEdit.Add(dimension, biome, placement));
         return this;
     }

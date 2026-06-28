@@ -2,7 +2,7 @@ package me.outspending.biomesapi.wrapper.level.noise;
 
 import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.util.Lazy;
-import me.outspending.biomesapi.wrapper.worldgen.climate.BiomeClimatePoint;
+import me.outspending.biomesapi.wrapper.worldgen.climate.ClimatePoint;
 import net.minecraft.world.level.biome.Climate;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -68,9 +68,9 @@ public final class LevelNoiseGeneratorSettingsImpl implements LevelNoiseGenerato
         return block.defaultBlockState();
     }
 
-    private static List<Climate.ParameterPoint> spawnTarget(List<BiomeClimatePoint> points) {
+    private static List<Climate.ParameterPoint> spawnTarget(List<ClimatePoint> points) {
         List<Climate.ParameterPoint> result = new ArrayList<>();
-        for (BiomeClimatePoint point : points) {
+        for (ClimatePoint point : points) {
             result.add((Climate.ParameterPoint) point.toMinecraft());
         }
         return result;

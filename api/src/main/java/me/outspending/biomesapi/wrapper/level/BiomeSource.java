@@ -5,10 +5,11 @@ import me.outspending.biomesapi.biome.AbstractBiome;
 import me.outspending.biomesapi.factory.WireProvider;
 import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.wrapper.internal.NmsHandle;
-import me.outspending.biomesapi.wrapper.worldgen.climate.BiomeClimatePoint;
+import me.outspending.biomesapi.wrapper.worldgen.climate.ClimatePoint;
 import org.bukkit.block.Biome;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +32,24 @@ public interface BiomeSource extends NmsHandle {
     @ApiStatus.Internal
     interface Factory {
         BiomeSource fixed(ResourceKey biome);
+
         BiomeSource multiNoise(List<MultiNoiseEntry> entries);
+
+        BiomeSource preset(ResourceKey preset);
+
+        // TODO: Do when decoders are available
+        //List<MultiNoiseEntry> presetEntries(ResourceKey preset);
     }
+
+    // TODO: Decoders
+    @ApiStatus.Internal
+    @Nullable ResourceKey fixedBiome();
+
+    @ApiStatus.Internal
+    @Nullable List<MultiNoiseEntry> entries();
+
+    @ApiStatus.Internal
+    @Nullable ResourceKey preset();
 
     @AsOf("2.4.0")
     static BiomeSource fixed(ResourceKey biome) {
@@ -55,26 +72,58 @@ public interface BiomeSource extends NmsHandle {
     }
 
     @AsOf("2.4.0")
-    record MultiNoiseEntry(ResourceKey biome, BiomeClimatePoint point) {}
+    static BiomeSource preset(ResourceKey preset) {
+        return WIRE.get().preset(preset);
+    }
+
+    /**
+     * Biome source preset for the overworld.
+     * @return the overworld biome source preset
+     * @since 2.4.0
+     */
+    @AsOf("2.4.0")
+    static BiomeSource overworld() {
+        return preset(ResourceKey.minecraft("overworld"));
+    }
+
+    /**
+     * Biome source preset for the nether.
+     * @return the nether biome source preset
+     * @since 2.4.0
+     */
+    @AsOf("2.4.0")
+    static BiomeSource nether() {
+        return preset(ResourceKey.minecraft("nether"));
+    }
+
+
+    @AsOf("2.4.0")
+    record MultiNoiseEntry(ResourceKey biome, ClimatePoint climatePoint) {}
 
     @AsOf("2.4.0")
     final class MultiNoiseBuilder {
 
         private final List<MultiNoiseEntry> entries = new ArrayList<>();
 
+        private MultiNoiseBuilder() {}
+
+        private MultiNoiseBuilder(MultiNoiseBuilder builder) {
+            this.entries.addAll(builder.entries);
+        }
+
         @AsOf("2.4.0")
-        public MultiNoiseBuilder add(ResourceKey biome, BiomeClimatePoint point) {
+        public MultiNoiseBuilder add(ResourceKey biome, ClimatePoint point) {
             this.entries.add(new MultiNoiseEntry(biome, point));
             return this;
         }
 
         @AsOf("2.4.0")
-        public MultiNoiseBuilder add(AbstractBiome biome, BiomeClimatePoint point) {
+        public MultiNoiseBuilder add(AbstractBiome biome, ClimatePoint point) {
             return this.add(biome.getResourceKey(), point);
         }
 
         @AsOf("2.4.0")
-        public MultiNoiseBuilder add(Biome biome, BiomeClimatePoint point) {
+        public MultiNoiseBuilder add(Biome biome, ClimatePoint point) {
             return this.add(ResourceKey.of(biome.getKey().asString()), point);
         }
 

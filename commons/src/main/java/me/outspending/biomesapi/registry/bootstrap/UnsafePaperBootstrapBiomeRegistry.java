@@ -20,7 +20,7 @@ import me.outspending.biomesapi.keys.KeyChains;
 import me.outspending.biomesapi.registry.BiomeRegistry;
 import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.util.ThrowingRunnable;
-import me.outspending.biomesapi.wrapper.worldgen.climate.BiomeClimatePoint;
+import me.outspending.biomesapi.wrapper.worldgen.climate.ClimatePoint;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.RegistrationInfo;
 import net.minecraft.core.Registry;
@@ -217,7 +217,7 @@ public final class UnsafePaperBootstrapBiomeRegistry implements BootstrapBiomeRe
     }
 
     @Override
-    public BootstrapBiomeRegistry addToDimension(ResourceKey dimension, ResourceKey target, BiomeClimatePoint placement) {
+    public BootstrapBiomeRegistry addToDimension(ResourceKey dimension, ResourceKey target, ClimatePoint placement) {
         throw new UnsupportedOperationException("Unsupported. me.outspending.biomesapi.registry.dimension.DimensionEditor.");
     }
 

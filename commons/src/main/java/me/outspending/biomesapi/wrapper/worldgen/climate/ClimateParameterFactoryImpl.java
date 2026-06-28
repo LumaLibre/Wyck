@@ -7,9 +7,9 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 @WireFactory
 @ApiStatus.Internal
-public final class BiomeParameterFactoryImpl implements BiomeParameter.Factory {
+public final class ClimateParameterFactoryImpl implements ClimateParameter.Factory {
     @Override
-    public BiomeParameter create(float min, float max) {
-        return new BiomeParameterImpl(min, max);
+    public ClimateParameter create(float min, float max) {
+        return new ClimateParameterImpl(min, max);
     }
 }

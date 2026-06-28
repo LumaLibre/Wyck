@@ -14,14 +14,14 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.3.0")
-public interface BiomeClimatePoint extends NmsHandle {
+public interface ClimatePoint extends NmsHandle {
 
     @ApiStatus.Internal
-    WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.worldgen.climate.BiomeClimatePointFactoryImpl");
+    WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.worldgen.climate.ClimatePointFactoryImpl");
 
     @ApiStatus.Internal
     interface Factory {
-        BiomeClimatePoint create(BiomeParameter temperature, BiomeParameter humidity, BiomeParameter continentalness, BiomeParameter erosion, BiomeParameter depth, BiomeParameter weirdness, float offset);
+        ClimatePoint create(ClimateParameter temperature, ClimateParameter humidity, ClimateParameter continentalness, ClimateParameter erosion, ClimateParameter depth, ClimateParameter weirdness, float offset);
     }
 
     /**
@@ -30,7 +30,7 @@ public interface BiomeClimatePoint extends NmsHandle {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    BiomeParameter temperature();
+    ClimateParameter temperature();
 
     /**
      * The humidity axis span.
@@ -38,7 +38,7 @@ public interface BiomeClimatePoint extends NmsHandle {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    BiomeParameter humidity();
+    ClimateParameter humidity();
 
     /**
      * The continentalness axis span.
@@ -46,7 +46,7 @@ public interface BiomeClimatePoint extends NmsHandle {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    BiomeParameter continentalness();
+    ClimateParameter continentalness();
 
     /**
      * The erosion axis span.
@@ -54,7 +54,7 @@ public interface BiomeClimatePoint extends NmsHandle {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    BiomeParameter erosion();
+    ClimateParameter erosion();
 
     /**
      * The depth axis span.
@@ -62,7 +62,7 @@ public interface BiomeClimatePoint extends NmsHandle {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    BiomeParameter depth();
+    ClimateParameter depth();
 
     /**
      * The weirdness axis span.
@@ -70,7 +70,7 @@ public interface BiomeClimatePoint extends NmsHandle {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    BiomeParameter weirdness();
+    ClimateParameter weirdness();
 
     /**
      * The constant fitness offset between 0.0 and 1.0.
@@ -108,14 +108,14 @@ public interface BiomeClimatePoint extends NmsHandle {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static BiomeClimatePoint of(float temperature, float humidity, float continentalness, float erosion, float depth, float weirdness, float offset) {
+    static ClimatePoint of(float temperature, float humidity, float continentalness, float erosion, float depth, float weirdness, float offset) {
         return WIRE.get().create(
-            BiomeParameter.point(temperature),
-            BiomeParameter.point(humidity),
-            BiomeParameter.point(continentalness),
-            BiomeParameter.point(erosion),
-            BiomeParameter.point(depth),
-            BiomeParameter.point(weirdness),
+            ClimateParameter.point(temperature),
+            ClimateParameter.point(humidity),
+            ClimateParameter.point(continentalness),
+            ClimateParameter.point(erosion),
+            ClimateParameter.point(depth),
+            ClimateParameter.point(weirdness),
             offset
         );
     }
@@ -132,59 +132,59 @@ public interface BiomeClimatePoint extends NmsHandle {
     @AsOf("2.3.0")
     final class Builder {
 
-        private BiomeParameter temperature = BiomeParameter.span(BiomeParameter.MIN_BOUNDARY, BiomeParameter.MAX_BOUNDARY);
-        private BiomeParameter humidity = BiomeParameter.span(BiomeParameter.MIN_BOUNDARY, BiomeParameter.MAX_BOUNDARY);
-        private BiomeParameter continentalness = BiomeParameter.span(BiomeParameter.MIN_BOUNDARY, BiomeParameter.MAX_BOUNDARY);
-        private BiomeParameter erosion = BiomeParameter.span(BiomeParameter.MIN_BOUNDARY, BiomeParameter.MAX_BOUNDARY);
-        private BiomeParameter depth = BiomeParameter.span(BiomeParameter.MIN_BOUNDARY, BiomeParameter.MAX_BOUNDARY);
-        private BiomeParameter weirdness = BiomeParameter.span(BiomeParameter.MIN_BOUNDARY, BiomeParameter.MAX_BOUNDARY);
+        private ClimateParameter temperature = ClimateParameter.span(ClimateParameter.MIN_BOUNDARY, ClimateParameter.MAX_BOUNDARY);
+        private ClimateParameter humidity = ClimateParameter.span(ClimateParameter.MIN_BOUNDARY, ClimateParameter.MAX_BOUNDARY);
+        private ClimateParameter continentalness = ClimateParameter.span(ClimateParameter.MIN_BOUNDARY, ClimateParameter.MAX_BOUNDARY);
+        private ClimateParameter erosion = ClimateParameter.span(ClimateParameter.MIN_BOUNDARY, ClimateParameter.MAX_BOUNDARY);
+        private ClimateParameter depth = ClimateParameter.span(ClimateParameter.MIN_BOUNDARY, ClimateParameter.MAX_BOUNDARY);
+        private ClimateParameter weirdness = ClimateParameter.span(ClimateParameter.MIN_BOUNDARY, ClimateParameter.MAX_BOUNDARY);
         private float offset = 0.0f;
 
         private Builder() {
         }
 
         private Builder(boolean empty) {
-            this.temperature = BiomeParameter.point(0.0f);
-            this.humidity = BiomeParameter.point(0.0f);
-            this.continentalness = BiomeParameter.point(0.0f);
-            this.erosion = BiomeParameter.point(0.0f);
-            this.depth = BiomeParameter.point(0.0f);
-            this.weirdness = BiomeParameter.point(0.0f);
+            this.temperature = ClimateParameter.point(0.0f);
+            this.humidity = ClimateParameter.point(0.0f);
+            this.continentalness = ClimateParameter.point(0.0f);
+            this.erosion = ClimateParameter.point(0.0f);
+            this.depth = ClimateParameter.point(0.0f);
+            this.weirdness = ClimateParameter.point(0.0f);
             this.offset = 0.0f;
         }
 
         @AsOf("2.3.0")
-        public Builder temperature(BiomeParameter temperature) {
+        public Builder temperature(ClimateParameter temperature) {
             this.temperature = temperature;
             return this;
         }
 
         @AsOf("2.3.0")
-        public Builder humidity(BiomeParameter humidity) {
+        public Builder humidity(ClimateParameter humidity) {
             this.humidity = humidity;
             return this;
         }
 
         @AsOf("2.3.0")
-        public Builder continentalness(BiomeParameter continentalness) {
+        public Builder continentalness(ClimateParameter continentalness) {
             this.continentalness = continentalness;
             return this;
         }
 
         @AsOf("2.3.0")
-        public Builder erosion(BiomeParameter erosion) {
+        public Builder erosion(ClimateParameter erosion) {
             this.erosion = erosion;
             return this;
         }
 
         @AsOf("2.3.0")
-        public Builder depth(BiomeParameter depth) {
+        public Builder depth(ClimateParameter depth) {
             this.depth = depth;
             return this;
         }
 
         @AsOf("2.3.0")
-        public Builder weirdness(BiomeParameter weirdness) {
+        public Builder weirdness(ClimateParameter weirdness) {
             this.weirdness = weirdness;
             return this;
         }
@@ -196,7 +196,7 @@ public interface BiomeClimatePoint extends NmsHandle {
         }
 
         @AsOf("2.3.0")
-        public BiomeClimatePoint build() {
+        public ClimatePoint build() {
             return WIRE.get().create(this.temperature, this.humidity, this.continentalness, this.erosion, this.depth, this.weirdness, this.offset);
         }
     }

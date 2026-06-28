@@ -16,7 +16,7 @@ import me.outspending.biomesapi.wrapper.level.noise.chunk.LevelChunkGenerator;
 import me.outspending.biomesapi.wrapper.level.noise.function.DensityFunction;
 import me.outspending.biomesapi.wrapper.level.noise.function.DensityFunctions;
 import me.outspending.biomesapi.wrapper.level.noise.settings.LevelNoiseSettings;
-import me.outspending.biomesapi.wrapper.worldgen.climate.BiomeClimatePoint;
+import me.outspending.biomesapi.wrapper.worldgen.climate.ClimatePoint;
 import me.outspending.biomesapi.wrapper.worldgen.surface.SurfaceCondition;
 import me.outspending.biomesapi.wrapper.worldgen.surface.SurfaceRule;
 import org.bukkit.Material;
@@ -47,12 +47,12 @@ public class TestPlugin extends JavaPlugin implements Listener {
         ResourceKey levelKey = ResourceKey.of("test", "wobbleworld");
 
         BiomeSource biomeSource = BiomeSource.multiNoise()
-            .add(ResourceKey.minecraft("snowy_taiga"), BiomeClimatePoint.of(-0.7f, -0.2f, 0f, 0f, 0f, 0f, 0f))
-            .add(ResourceKey.minecraft("taiga"), BiomeClimatePoint.of(-0.3f, 0.4f, 0f, 0f, 0f, 0f, 0f))
-            .add(ResourceKey.minecraft("plains"), BiomeClimatePoint.of(0.1f, -0.4f, 0f, 0f, 0f, 0f, 0f))
-            .add(ResourceKey.minecraft("forest"), BiomeClimatePoint.of(0.2f, 0.3f, 0f, 0f, 0f, 0f, 0f))
-            .add(ResourceKey.minecraft("desert"), BiomeClimatePoint.of(0.8f, -0.6f, 0f, 0f, 0f, 0f, 0f))
-            .add(ResourceKey.minecraft("jungle"), BiomeClimatePoint.of(0.8f, 0.7f, 0f, 0f, 0f, 0f, 0f))
+            .add(ResourceKey.minecraft("snowy_taiga"), ClimatePoint.of(-0.7f, -0.2f, 0f, 0f, 0f, 0f, 0f))
+            .add(ResourceKey.minecraft("taiga"), ClimatePoint.of(-0.3f, 0.4f, 0f, 0f, 0f, 0f, 0f))
+            .add(ResourceKey.minecraft("plains"), ClimatePoint.of(0.1f, -0.4f, 0f, 0f, 0f, 0f, 0f))
+            .add(ResourceKey.minecraft("forest"), ClimatePoint.of(0.2f, 0.3f, 0f, 0f, 0f, 0f, 0f))
+            .add(ResourceKey.minecraft("desert"), ClimatePoint.of(0.8f, -0.6f, 0f, 0f, 0f, 0f, 0f))
+            .add(ResourceKey.minecraft("jungle"), ClimatePoint.of(0.8f, 0.7f, 0f, 0f, 0f, 0f, 0f))
             .build();
 
         DensityFunction wobble = DensityFunction.noise(Noises.SPAGHETTI_3D_1, 0.4, 0.9)

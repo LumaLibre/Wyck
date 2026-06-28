@@ -7,7 +7,7 @@ import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.registry.worldgen.LevelNoiseGeneratorSettingsRegistry;
 import me.outspending.biomesapi.wrapper.internal.NmsHandle;
 import me.outspending.biomesapi.wrapper.level.noise.settings.LevelNoiseSettings;
-import me.outspending.biomesapi.wrapper.worldgen.climate.BiomeClimatePoint;
+import me.outspending.biomesapi.wrapper.worldgen.climate.ClimatePoint;
 import me.outspending.biomesapi.wrapper.worldgen.surface.SurfaceRule;
 import org.bukkit.Material;
 import org.jetbrains.annotations.ApiStatus;
@@ -93,7 +93,7 @@ public interface LevelNoiseGeneratorSettings extends NmsHandle, Noise {
         Material defaultFluid,
         LevelNoiseRouter noiseRouter,
         SurfaceRule surfaceRule,
-        List<BiomeClimatePoint> spawnTarget,
+        List<ClimatePoint> spawnTarget,
         int seaLevel,
         @Deprecated boolean disableMobGeneration,
         boolean aquifersEnabled,
@@ -116,7 +116,7 @@ public interface LevelNoiseGeneratorSettings extends NmsHandle, Noise {
         private Material defaultFluid = Material.WATER;
         private @Nullable LevelNoiseRouter noiseRouter = null;
         private @Nullable SurfaceRule surfaceRule = null;
-        private List<BiomeClimatePoint> spawnTarget = List.of();
+        private List<ClimatePoint> spawnTarget = List.of();
         private int seaLevel = 63;
         private @Deprecated boolean disableMobGeneration = false;
         private boolean aquifersEnabled = true;
@@ -161,7 +161,7 @@ public interface LevelNoiseGeneratorSettings extends NmsHandle, Noise {
         }
 
         @AsOf("2.4.0")
-        public Builder spawnTarget(List<BiomeClimatePoint> spawnTarget) {
+        public Builder spawnTarget(List<ClimatePoint> spawnTarget) {
             this.spawnTarget = List.copyOf(spawnTarget);
             return this;
         }

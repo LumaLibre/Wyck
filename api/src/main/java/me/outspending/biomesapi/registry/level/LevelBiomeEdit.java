@@ -2,7 +2,7 @@ package me.outspending.biomesapi.registry.level;
 
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.keys.ResourceKey;
-import me.outspending.biomesapi.wrapper.worldgen.climate.BiomeClimatePoint;
+import me.outspending.biomesapi.wrapper.worldgen.climate.ClimatePoint;
 
 /**
  * Represents an edit to a dimension's biome distribution, either adding a biome at a climate point or replacing one biome with another.
@@ -31,7 +31,7 @@ public sealed interface LevelBiomeEdit permits LevelBiomeEdit.Add, LevelBiomeEdi
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    record Add(ResourceKey dimension, ResourceKey biome, BiomeClimatePoint point) implements LevelBiomeEdit {
+    record Add(ResourceKey dimension, ResourceKey biome, ClimatePoint point) implements LevelBiomeEdit {
     }
 
     /**

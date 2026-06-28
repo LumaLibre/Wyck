@@ -4,7 +4,7 @@ import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
 import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.registry.bootstrap.BootstrapBiomeRegistry;
-import me.outspending.biomesapi.wrapper.worldgen.climate.BiomeClimatePoint;
+import me.outspending.biomesapi.wrapper.worldgen.climate.ClimatePoint;
 import org.bukkit.World;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -14,7 +14,7 @@ import org.jspecify.annotations.NullMarked;
  * reads the live biome source off each world's generator and swaps in an edited one, so it works
  * for any dimension including the end and custom dimensions.
  *
- * @see BootstrapBiomeRegistry#addToDimension(ResourceKey, ResourceKey, BiomeClimatePoint)
+ * @see BootstrapBiomeRegistry#addToDimension(ResourceKey, ResourceKey, ClimatePoint)
  * @see BootstrapBiomeRegistry#replaceInDimension(ResourceKey, ResourceKey, ResourceKey)
  * @since 2.3.0
  * @version 2.3.0
@@ -51,7 +51,7 @@ public interface LevelStemEditor {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    LevelStemEditor addToDimension(ResourceKey dimension, ResourceKey biome, BiomeClimatePoint point);
+    LevelStemEditor addToDimension(ResourceKey dimension, ResourceKey biome, ClimatePoint point);
 
     /**
      * Queues a biome replacement in a dimension.
