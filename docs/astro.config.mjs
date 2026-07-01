@@ -10,6 +10,7 @@ export default defineConfig({
   site: "https://biomes.lumas.dev",
   redirects: {
     '/jd': '/javadoc/index.html',
+    '/discord': 'https://discord.gg/CCZGFg85jM'
   },
   vite: {
     plugins: [yaml()],
