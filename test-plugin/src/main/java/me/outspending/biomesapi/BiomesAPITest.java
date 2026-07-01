@@ -8,6 +8,8 @@ import me.outspending.biomesapi.registry.bootstrap.util.BootstrapSafeMinecraftRe
 import me.outspending.biomesapi.registry.level.LevelFactory;
 import me.outspending.biomesapi.wrapper.environment.TriState;
 import me.outspending.biomesapi.wrapper.environment.attribute.EnvironmentAttributes;
+import me.outspending.biomesapi.wrapper.environment.sounds.AmbientAdditionsSettings;
+import me.outspending.biomesapi.wrapper.environment.sounds.AmbientMoodSettings;
 import me.outspending.biomesapi.wrapper.environment.sounds.AmbientSounds;
 import me.outspending.biomesapi.wrapper.environment.sounds.BackgroundMusic;
 import me.outspending.biomesapi.wrapper.environment.sounds.Music;
@@ -43,10 +45,24 @@ public final class BiomesAPITest extends JavaPlugin implements Listener {
             .creativeMusic(Music.of(SoundEvents.COD_FLOP, 0, 1, true))
             .underwaterMusic(Music.of(SoundEvents.CREEPER_HURT, 0, 1, true))
             .build();
+
+        AmbientSounds ambientSounds = AmbientSounds.builder()
+            .loop(SoundEvents.CREEPER_DEATH)
+            .mood(
+                AmbientMoodSettings.builder()
+                .soundEvent(SoundEvents.CROP_BREAK)
+                .tickDelay(1)
+                .blockSearchExtent(10)
+                .soundPositionOffset(0.0f)
+                .build()
+            )
+            .addition(AmbientAdditionsSettings.of(SoundEvents.CREEPER_DEATH, 100.0))
+            .build();
+
         ResourceKey dimKey = ResourceKey.of("test", "example");
         Dimension dimension = Dimension.builder(dimKey)
             .attribute(EnvironmentAttributes.BACKGROUND_MUSIC, backgroundMusic)
-            .attribute(EnvironmentAttributes.EYEBLOSSOM_OPEN, TriState.TRUE)
+            .attribute(EnvironmentAttributes.AMBIENT_SOUNDS, ambientSounds)
             .build();
 
 
