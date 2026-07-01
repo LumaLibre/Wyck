@@ -12,9 +12,9 @@ public record BackgroundMusicImpl(@Override Optional<Music> defaultMusic, @Overr
     @Override
     public Object toMinecraft() {
         return new net.minecraft.world.attribute.BackgroundMusic(
-            this.defaultMusic.map(Music::toMinecraft).map(net.minecraft.sounds.Music.class::cast),
-            this.creativeMusic.map(Music::toMinecraft).map(net.minecraft.sounds.Music.class::cast),
-            this.underwaterMusic.map(Music::toMinecraft).map(net.minecraft.sounds.Music.class::cast)
+            this.defaultMusic.map(Music::asHandle),
+            this.creativeMusic.map(Music::asHandle),
+            this.underwaterMusic.map(Music::asHandle)
         );
     }
 }

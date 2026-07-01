@@ -1,6 +1,5 @@
 package me.outspending.biomesapi.wrapper.environment.sounds;
 
-import net.minecraft.core.Holder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
@@ -14,7 +13,7 @@ public record AmbientSoundsImpl(@Override Optional<SoundEvent> loop, @Override O
     @Override
     public Object toMinecraft() {
         return new net.minecraft.world.attribute.AmbientSounds(
-            this.loop.map(SoundEvent::<net.minecraft.sounds.SoundEvent>asHandle).map(Holder::direct),
+            this.loop.map(SoundEvent::<net.minecraft.sounds.SoundEvent>asHandle).map(net.minecraft.core.Holder::direct),
             this.mood.map(AmbientMoodSettings::asHandle),
             this.additions.stream().map(AmbientAdditionsSettings::<net.minecraft.world.attribute.AmbientAdditionsSettings>asHandle).toList()
         );

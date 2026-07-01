@@ -7,8 +7,6 @@ import me.outspending.biomesapi.wrapper.environment.MoonPhase;
 import me.outspending.biomesapi.wrapper.environment.TriState;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleCatalog;
 import me.outspending.biomesapi.wrapper.environment.particle.AmbientParticle;
-import me.outspending.biomesapi.wrapper.environment.sounds.BackgroundMusic;
-import me.outspending.biomesapi.wrapper.internal.NmsHandle;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
