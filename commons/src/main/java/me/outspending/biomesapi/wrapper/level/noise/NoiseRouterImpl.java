@@ -2,17 +2,16 @@ package me.outspending.biomesapi.wrapper.level.noise;
 
 import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.wrapper.level.noise.function.DensityFunction;
-import net.minecraft.world.level.levelgen.NoiseRouter;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 @ApiStatus.Internal
-public record LevelNoiseRouterImpl(LevelNoiseRouter.Slots slots) implements LevelNoiseRouter {
+public record NoiseRouterImpl(NoiseRouter.Slots slots) implements NoiseRouter {
 
     @Override
     public Object toMinecraft() {
-        return new NoiseRouter(
+        return new net.minecraft.world.level.levelgen.NoiseRouter(
             resolve(this.slots.barrier()),
             resolve(this.slots.fluidLevelFloodedness()),
             resolve(this.slots.fluidLevelSpread()),

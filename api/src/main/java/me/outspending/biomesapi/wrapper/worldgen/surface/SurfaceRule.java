@@ -19,7 +19,6 @@ import java.util.List;
  */
 @NullMarked
 @AsOf("2.4.0")
-@ApiStatus.Experimental
 public sealed interface SurfaceRule extends NmsHandle permits SurfaceRule.Bandlands, SurfaceRule.Block, SurfaceRule.Sequence, SurfaceRule.Condition {
 
     @ApiStatus.Internal

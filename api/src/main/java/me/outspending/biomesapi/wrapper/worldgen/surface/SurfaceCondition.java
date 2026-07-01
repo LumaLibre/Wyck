@@ -20,7 +20,6 @@ import java.util.List;
  */
 @NullMarked
 @AsOf("2.4.0")
-@ApiStatus.Experimental
 public sealed interface SurfaceCondition extends NmsHandle permits SurfaceCondition.StoneDepth, SurfaceCondition.Not, SurfaceCondition.Water, SurfaceCondition.Biome, SurfaceCondition.Noise, SurfaceCondition.YCheck, SurfaceCondition.VerticalGradient, SurfaceCondition.Steep, SurfaceCondition.Hole, SurfaceCondition.AbovePreliminarySurface, SurfaceCondition.Temperature {
 
     @ApiStatus.Internal

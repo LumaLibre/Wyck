@@ -16,9 +16,9 @@ import org.jspecify.annotations.Nullable;
  */
 @NullMarked
 @AsOf("1.1.0")
-public class WrappedAmbientParticle<T> {
+public class AmbientParticle<T> {
 
-    private final WrappedParticleTypes ambientParticle;
+    private final ParticleTypes ambientParticle;
     private final float probability;
     private final @Nullable ParticleData particleData;
 
@@ -29,7 +29,7 @@ public class WrappedAmbientParticle<T> {
      * @param particleData The optional particle data.
      */
     @AsOf("1.1.0")
-    public WrappedAmbientParticle(WrappedParticleTypes ambientParticle, float probability, @Nullable ParticleData particleData) {
+    public AmbientParticle(ParticleTypes ambientParticle, float probability, @Nullable ParticleData particleData) {
         Preconditions.checkArgument(ambientParticle.isSimple() == (particleData == null), "Simple particles must not have particle data; complex particles must have particle data.");
 
         this.ambientParticle = ambientParticle;
@@ -43,7 +43,7 @@ public class WrappedAmbientParticle<T> {
      * @param probability The probability of the particle.
      */
     @AsOf("1.1.0")
-    public WrappedAmbientParticle(WrappedParticleTypes ambientParticle, float probability) {
+    public AmbientParticle(ParticleTypes ambientParticle, float probability) {
         Preconditions.checkArgument(ambientParticle.isSimple(), "Particle data must be provided for complex particle types.");
 
         this.ambientParticle = ambientParticle;
@@ -84,8 +84,8 @@ public class WrappedAmbientParticle<T> {
      * @since 2.1.0
      */
     @AsOf("2.1.0")
-    public static WrappedAmbientParticle<?> of(WrappedParticleTypes ambientParticle, float probability, @Nullable ParticleData particleData) {
-        return new WrappedAmbientParticle<>(ambientParticle, probability, (ParticleData) particleData);
+    public static AmbientParticle<?> of(ParticleTypes ambientParticle, float probability, @Nullable ParticleData particleData) {
+        return new AmbientParticle<>(ambientParticle, probability, (ParticleData) particleData);
     }
 
     /**
@@ -96,7 +96,7 @@ public class WrappedAmbientParticle<T> {
      * @since 2.1.0
      */
     @AsOf("2.1.0")
-    public static WrappedAmbientParticle<?> of(WrappedParticleTypes ambientParticle, float probability) {
-        return new WrappedAmbientParticle<>(ambientParticle, probability);
+    public static AmbientParticle<?> of(ParticleTypes ambientParticle, float probability) {
+        return new AmbientParticle<>(ambientParticle, probability);
     }
 }

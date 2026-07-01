@@ -22,12 +22,11 @@ import me.outspending.biomesapi.wrapper.entity.MobCategory;
 import me.outspending.biomesapi.wrapper.environment.BiomeTempModifier;
 import me.outspending.biomesapi.wrapper.environment.GrassColorModifier;
 import me.outspending.biomesapi.wrapper.environment.attribute.NmsEnvironmentAttributes;
-import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttributeMap;
+import me.outspending.biomesapi.wrapper.environment.attribute.EnvironmentAttributeMap;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleCatalog;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.random.Weighted;
-import net.minecraft.world.attribute.EnvironmentAttributeMap;
 import net.minecraft.world.attribute.EnvironmentAttributes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.biome.Biome;
@@ -115,7 +114,7 @@ public class CustomBiomeRegistry implements BiomeRegistry {
         ParticleCatalog particleCatalog = biome.getParticleCatalog();
         PARTICLE_CATALOG_HANDLER.handle(particleCatalog, biomeBuilder);
 
-        WrappedEnvironmentAttributeMap wrappedAttributeMap = biome.getAttributes();
+        EnvironmentAttributeMap wrappedAttributeMap = biome.getAttributes();
         ATTRIBUTE_MAP_HANDLER.handle(wrappedAttributeMap, biomeBuilder);
 
         BiomeSpawner spawner = biome.getBiomeSpawner();
@@ -189,7 +188,7 @@ public class CustomBiomeRegistry implements BiomeRegistry {
             ParticleCatalog particleCatalog = abstractBiome.getParticleCatalog();
             List<net.minecraft.world.attribute.AmbientParticle> particles = PARTICLE_CATALOG_HANDLER.create(particleCatalog);
 
-            EnvironmentAttributeMap.Builder environmentAttributeMapBuilder = EnvironmentAttributeMap.builder()
+            net.minecraft.world.attribute.EnvironmentAttributeMap.Builder environmentAttributeMapBuilder = net.minecraft.world.attribute.EnvironmentAttributeMap.builder()
                 .set(EnvironmentAttributes.AMBIENT_PARTICLES, particles);
 
             // TODO: Replace with WrappedEnvironmentAttributeMap in the future
@@ -202,10 +201,10 @@ public class CustomBiomeRegistry implements BiomeRegistry {
             if (abstractBiome.getWaterFogColor() != null) {
                 environmentAttributeMapBuilder.set(EnvironmentAttributes.WATER_FOG_COLOR, abstractBiome.getWaterFogColor());
             }
-            WrappedEnvironmentAttributeMap wrappedAttributeMap = abstractBiome.getAttributes();
+            EnvironmentAttributeMap wrappedAttributeMap = abstractBiome.getAttributes();
             NmsEnvironmentAttributes.applyTo(environmentAttributeMapBuilder, wrappedAttributeMap);
 
-            EnvironmentAttributeMap environmentAttributeMap = environmentAttributeMapBuilder.build();
+            net.minecraft.world.attribute.EnvironmentAttributeMap environmentAttributeMap = environmentAttributeMapBuilder.build();
 
             BiomeSpecialEffects specialEffects = SPECIAL_EFFECTS_HANDLER.build(abstractBiome);
 
@@ -271,7 +270,7 @@ public class CustomBiomeRegistry implements BiomeRegistry {
             climateSettingsField.setAccessible(true);
 
             Biome.ClimateSettings climate = (Biome.ClimateSettings) climateSettingsField.get(biome);
-            EnvironmentAttributeMap attributeMap = biome.getAttributes();
+            net.minecraft.world.attribute.EnvironmentAttributeMap attributeMap = biome.getAttributes();
             MobSpawnSettings mobSettings = biome.getMobSettings();
             BiomeSpecialEffects specialEffects = biome.getSpecialEffects();
 

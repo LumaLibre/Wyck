@@ -13,17 +13,17 @@ import java.util.Map;
  *
  * @author Jsinco
  * @version 2.1.0
- * @see WrappedEnvironmentAttributes
+ * @see EnvironmentAttributes
  * @since 1.1.0
  */
 @NullMarked
 @AsOf("2.1.0")
-public record WrappedEnvironmentAttributeMap(Map<EnvironmentAttributeHandle<?>, WrappedEnvironmentAttribute<?, ?>> attributes) {
+public record EnvironmentAttributeMap(Map<EnvironmentAttributeHandle<?>, EnvironmentAttribute<?, ?>> attributes) {
 
-    public static final WrappedEnvironmentAttributeMap EMPTY = new WrappedEnvironmentAttributeMap(Map.of());
+    public static final EnvironmentAttributeMap EMPTY = new EnvironmentAttributeMap(Map.of());
 
     @AsOf("2.1.0")
-    public WrappedEnvironmentAttributeMap {
+    public EnvironmentAttributeMap {
         attributes = Map.copyOf(attributes);
     }
 
@@ -33,7 +33,7 @@ public record WrappedEnvironmentAttributeMap(Map<EnvironmentAttributeHandle<?>, 
      * @since 2.1.0
      */
     @AsOf("2.1.0")
-    public Collection<WrappedEnvironmentAttribute<?, ?>> values() {
+    public Collection<EnvironmentAttribute<?, ?>> values() {
         return attributes.values();
     }
 
@@ -67,11 +67,11 @@ public record WrappedEnvironmentAttributeMap(Map<EnvironmentAttributeHandle<?>, 
      * @since 2.1.0
      */
     @AsOf("2.1.0")
-    public <T, K> WrappedEnvironmentAttributeMap with(WrappedEnvironmentAttributeSupplier<T, K> supplier, K value) {
-        WrappedEnvironmentAttribute<T, K> attr = supplier.unbox(value);
-        Map<EnvironmentAttributeHandle<?>, WrappedEnvironmentAttribute<?, ?>> newAttrs = new LinkedHashMap<>(attributes);
+    public <T, K> EnvironmentAttributeMap with(EnvironmentAttributeSupplier<T, K> supplier, K value) {
+        EnvironmentAttribute<T, K> attr = supplier.unbox(value);
+        Map<EnvironmentAttributeHandle<?>, EnvironmentAttribute<?, ?>> newAttrs = new LinkedHashMap<>(attributes);
         newAttrs.put(attr.getAttribute(), attr);
-        return new WrappedEnvironmentAttributeMap(newAttrs);
+        return new EnvironmentAttributeMap(newAttrs);
     }
 
     /**
@@ -82,7 +82,7 @@ public record WrappedEnvironmentAttributeMap(Map<EnvironmentAttributeHandle<?>, 
      * @since 2.1.0
      */
     @AsOf("2.1.0")
-    public WrappedEnvironmentAttributeMap with(IntColorSupplier supplier, String hex) {
+    public EnvironmentAttributeMap with(IntColorSupplier supplier, String hex) {
         return with(supplier, IntColorSupplier.parseHex(hex));
     }
 
@@ -103,16 +103,16 @@ public record WrappedEnvironmentAttributeMap(Map<EnvironmentAttributeHandle<?>, 
      * @since 2.1.0
      */
     @AsOf("2.1.0")
-    public static WrappedEnvironmentAttributeMap of(WrappedEnvironmentAttribute<?, ?>... attributes) {
-        Map<EnvironmentAttributeHandle<?>, WrappedEnvironmentAttribute<?, ?>> map = new LinkedHashMap<>();
-        for (WrappedEnvironmentAttribute<?, ?> attribute : attributes) {
+    public static EnvironmentAttributeMap of(EnvironmentAttribute<?, ?>... attributes) {
+        Map<EnvironmentAttributeHandle<?>, EnvironmentAttribute<?, ?>> map = new LinkedHashMap<>();
+        for (EnvironmentAttribute<?, ?> attribute : attributes) {
             EnvironmentAttributeHandle<?> key = attribute.getAttribute();
             if (map.containsKey(key)) {
                 throw new IllegalArgumentException("Duplicate attribute: " + key);
             }
             map.put(key, attribute);
         }
-        return new WrappedEnvironmentAttributeMap(map);
+        return new EnvironmentAttributeMap(map);
     }
 
     /**
@@ -125,7 +125,7 @@ public record WrappedEnvironmentAttributeMap(Map<EnvironmentAttributeHandle<?>, 
     @AsOf("2.1.0")
     public static class Builder {
 
-        private final Map<EnvironmentAttributeHandle<?>, WrappedEnvironmentAttribute<?, ?>> attributes = new LinkedHashMap<>();
+        private final Map<EnvironmentAttributeHandle<?>, EnvironmentAttribute<?, ?>> attributes = new LinkedHashMap<>();
 
         /**
          * Sets an attribute in the builder.
@@ -141,9 +141,9 @@ public record WrappedEnvironmentAttributeMap(Map<EnvironmentAttributeHandle<?>, 
          */
         @AsOf("1.1.0")
         public <T, K> Builder setAttribute(
-                WrappedEnvironmentAttributeSupplier<T, K> supplier,
+                EnvironmentAttributeSupplier<T, K> supplier,
                 K value) {
-            WrappedEnvironmentAttribute<T, K> wrappedEnvironmentAttribute = supplier.get();
+            EnvironmentAttribute<T, K> wrappedEnvironmentAttribute = supplier.get();
             wrappedEnvironmentAttribute.setValue(value);
 
             EnvironmentAttributeHandle<?> key = wrappedEnvironmentAttribute.getAttribute();
@@ -185,7 +185,7 @@ public record WrappedEnvironmentAttributeMap(Map<EnvironmentAttributeHandle<?>, 
          * @since 2.1.0
          */
         @AsOf("2.1.0")
-        public Builder putAll(WrappedEnvironmentAttributeMap source) {
+        public Builder putAll(EnvironmentAttributeMap source) {
             for (var entry : source.attributes().entrySet()) {
                 if (attributes.containsKey(entry.getKey())) {
                     throw new IllegalArgumentException("Attribute: " + entry.getKey() + " is already present.");
@@ -202,8 +202,8 @@ public record WrappedEnvironmentAttributeMap(Map<EnvironmentAttributeHandle<?>, 
          * @since 1.1.0
          */
         @AsOf("1.1.0")
-        public WrappedEnvironmentAttributeMap build() {
-            return new WrappedEnvironmentAttributeMap(attributes);
+        public EnvironmentAttributeMap build() {
+            return new EnvironmentAttributeMap(attributes);
         }
     }
 }

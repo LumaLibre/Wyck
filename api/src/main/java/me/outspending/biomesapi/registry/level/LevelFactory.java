@@ -19,7 +19,6 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.4.0")
-@ApiStatus.Experimental
 public interface LevelFactory {
 
     @ApiStatus.Internal

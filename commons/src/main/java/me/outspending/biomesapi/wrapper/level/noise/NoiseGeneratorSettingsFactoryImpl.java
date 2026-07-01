@@ -7,10 +7,10 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 @WireFactory
 @ApiStatus.Internal
-public class LevelNoiseRouterFactoryImpl implements LevelNoiseRouter.Factory {
+public class NoiseGeneratorSettingsFactoryImpl implements NoiseGeneratorSettings.Factory {
 
     @Override
-    public LevelNoiseRouter create(LevelNoiseRouter.Slots slots) {
-        return new LevelNoiseRouterImpl(slots);
+    public NoiseGeneratorSettings create(NoiseGeneratorSettings.Data data) {
+        return new NoiseGeneratorSettingsImpl(data);
     }
 }

@@ -7,7 +7,7 @@ import me.outspending.biomesapi.registry.bootstrap.util.BootstrapSafeMinecraftRe
 import me.outspending.biomesapi.registry.level.LevelFactory;
 import me.outspending.biomesapi.wrapper.level.BiomeSource;
 import me.outspending.biomesapi.wrapper.level.noise.Noise;
-import me.outspending.biomesapi.wrapper.level.noise.chunk.LevelChunkGenerator;
+import me.outspending.biomesapi.wrapper.level.noise.chunk.ChunkGenerator;
 import net.minecraft.core.registries.Registries;
 import org.bukkit.World;
 import org.bukkit.event.Listener;
@@ -28,7 +28,7 @@ public final class BiomesAPITest extends JavaPlugin implements Listener {
 
         BiomeSource src = BiomeSource.overworld();
         getLogger().info("preset src = " + src);
-        LevelChunkGenerator generator = LevelChunkGenerator.noise(src, Noise.overworld());
+        ChunkGenerator generator = ChunkGenerator.noise(src, Noise.overworld());
 
         ResourceKey dimKey = ResourceKey.of("test", "example");
         Dimension dimension = Dimension.builder(dimKey)

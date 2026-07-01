@@ -7,10 +7,10 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 @WireFactory
 @ApiStatus.Internal
-public class LevelNoiseSettingsFactoryImpl implements LevelNoiseSettings.Factory {
+public class NoiseSettingsFactoryImpl implements NoiseSettings.Factory {
 
     @Override
-    public LevelNoiseSettings create(int minY, int height, int sizeHorizontal, int sizeVertical) {
-        return new LevelNoiseSettingsImpl(minY, height, sizeHorizontal, sizeVertical);
+    public NoiseSettings create(int minY, int height, int sizeHorizontal, int sizeVertical) {
+        return new NoiseSettingsImpl(minY, height, sizeHorizontal, sizeVertical);
     }
 }

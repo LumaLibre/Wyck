@@ -23,7 +23,7 @@ import java.util.Map;
  * An enum that wraps around Minecraft's ParticleTypes, providing additional metadata and functionality.
  * Each enum constant corresponds to a specific particle type in Minecraft.
  *
- * @see WrappedAmbientParticle
+ * @see AmbientParticle
  * @see ParticleCatalog
  * @see ParticleData
  * @since 2.0.0
@@ -31,7 +31,7 @@ import java.util.Map;
  */
 @NullMarked
 @AsOf("2.0.0")
-public enum WrappedParticleTypes {
+public enum ParticleTypes {
 
     ANGRY_VILLAGER("angry_villager"),
     BLOCK("block", BlockParticle.class),
@@ -150,17 +150,17 @@ public enum WrappedParticleTypes {
     FIREFLY("firefly");
 
     @ApiStatus.Internal
-    private static volatile @Nullable Map<String, WrappedParticleTypes> BY_KEY;
+    private static volatile @Nullable Map<String, ParticleTypes> BY_KEY;
 
     private final String key;
     private final @Nullable Class<? extends ParticleData> particleDataClass;
     private volatile @Nullable ParticleTypeHandle cachedHandle;
 
-    WrappedParticleTypes(String key) {
+    ParticleTypes(String key) {
         this(key, null);
     }
 
-    WrappedParticleTypes(String key, @Nullable Class<? extends ParticleData> particleDataClass) {
+    ParticleTypes(String key, @Nullable Class<? extends ParticleData> particleDataClass) {
         this.key = key;
         this.particleDataClass = particleDataClass;
     }
@@ -204,8 +204,8 @@ public enum WrappedParticleTypes {
      * @since 2.1.0
      */
     @AsOf("2.1.0")
-    public WrappedAmbientParticle<?> create(float probability, @Nullable ParticleData data) {
-        return WrappedAmbientParticle.of(this, probability, data);
+    public AmbientParticle<?> create(float probability, @Nullable ParticleData data) {
+        return AmbientParticle.of(this, probability, data);
     }
 
     /**
@@ -215,8 +215,8 @@ public enum WrappedParticleTypes {
      * @since 2.1.0
      */
     @AsOf("2.1.0")
-    public WrappedAmbientParticle<?> create(float probability) {
-        return WrappedAmbientParticle.of(this, probability);
+    public AmbientParticle<?> create(float probability) {
+        return AmbientParticle.of(this, probability);
     }
 
     /**
@@ -224,14 +224,14 @@ public enum WrappedParticleTypes {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    public static @Nullable WrappedParticleTypes byKey(String key) {
-        Map<String, WrappedParticleTypes> map = BY_KEY;
+    public static @Nullable ParticleTypes byKey(String key) {
+        Map<String, ParticleTypes> map = BY_KEY;
         if (map == null) {
-            synchronized (WrappedParticleTypes.class) {
+            synchronized (ParticleTypes.class) {
                 map = BY_KEY;
                 if (map == null) {
-                    Map<String, WrappedParticleTypes> built = new HashMap<>();
-                    for (WrappedParticleTypes type : values()) {
+                    Map<String, ParticleTypes> built = new HashMap<>();
+                    for (ParticleTypes type : values()) {
                         built.put(type.key, type);
                     }
                     BY_KEY = map = built;

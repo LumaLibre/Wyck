@@ -3,7 +3,7 @@ package me.outspending.biomesapi.level;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.level.dimension.Dimension;
 import me.outspending.biomesapi.keys.ResourceKey;
-import me.outspending.biomesapi.wrapper.level.noise.chunk.LevelChunkGenerator;
+import me.outspending.biomesapi.wrapper.level.noise.chunk.ChunkGenerator;
 import me.outspending.biomesapi.wrapper.level.spawner.LevelSpawner;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -19,7 +19,7 @@ public final class LevelCreatorImpl implements LevelCreator {
     private final ResourceKey levelKey;
     private final @Nullable Dimension dimension;
     private final ResourceKey dimensionType;
-    private final LevelChunkGenerator generator;
+    private final ChunkGenerator generator;
     private final long seed;
     private final boolean generateStructures;
     private final boolean bonusChest;
@@ -31,7 +31,7 @@ public final class LevelCreatorImpl implements LevelCreator {
         ResourceKey levelKey,
         @Nullable Dimension dimension,
         ResourceKey dimensionType,
-        LevelChunkGenerator generator,
+        ChunkGenerator generator,
         long seed,
         boolean generateStructures,
         boolean bonusChest,
@@ -67,7 +67,7 @@ public final class LevelCreatorImpl implements LevelCreator {
     }
 
     @Override
-    public LevelChunkGenerator getGenerator() {
+    public ChunkGenerator getGenerator() {
         return generator;
     }
 

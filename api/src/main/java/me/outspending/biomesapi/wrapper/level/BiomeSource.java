@@ -23,7 +23,6 @@ import java.util.List;
  */
 @NullMarked
 @AsOf("2.4.0")
-@ApiStatus.Experimental
 public interface BiomeSource extends NmsHandle {
 
     @ApiStatus.Internal

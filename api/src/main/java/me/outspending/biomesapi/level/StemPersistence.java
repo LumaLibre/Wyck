@@ -11,7 +11,6 @@ import org.jetbrains.annotations.ApiStatus;
  * @author Jsinco
  */
 @AsOf("2.4.0")
-@ApiStatus.Experimental
 public enum StemPersistence {
     /**
      * The level stem lives only for the session and is injected straight into the world's dimensions.

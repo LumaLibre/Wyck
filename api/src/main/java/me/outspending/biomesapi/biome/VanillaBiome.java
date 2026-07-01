@@ -7,7 +7,7 @@ import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.wrapper.BiomeSettings;
 import me.outspending.biomesapi.wrapper.entity.BiomeSpawner;
 import me.outspending.biomesapi.wrapper.environment.GrassColorModifier;
-import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttributeMap;
+import me.outspending.biomesapi.wrapper.environment.attribute.EnvironmentAttributeMap;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleCatalog;
 import me.outspending.biomesapi.wrapper.worldgen.BiomeGenerationSettings;
 import org.jetbrains.annotations.ApiStatus;
@@ -132,7 +132,7 @@ public interface VanillaBiome extends AbstractBiome {
 
     @Override
     @AsOf("2.3.0")
-    default VanillaBiome setAttributes(WrappedEnvironmentAttributeMap attributes) {
+    default VanillaBiome setAttributes(EnvironmentAttributeMap attributes) {
         throw new UnsupportedOperationException("Cannot set attributes of vanilla biomes.");
     }
 
@@ -205,7 +205,7 @@ public interface VanillaBiome extends AbstractBiome {
 
         private GrassColorModifier grassColorModifier = GrassColorModifier.NONE;
         private ParticleCatalog particleCatalog = ParticleCatalog.EMPTY;
-        private WrappedEnvironmentAttributeMap attributeMap = WrappedEnvironmentAttributeMap.EMPTY;
+        private EnvironmentAttributeMap attributeMap = EnvironmentAttributeMap.EMPTY;
         private @Nullable BiomeSpawner biomeSpawner = null;
         private @Nullable BiomeGenerationSettings generationSettings = null;
 

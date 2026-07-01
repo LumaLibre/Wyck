@@ -13,7 +13,7 @@ import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 @ApiStatus.Internal
-public record NoiseChunkGeneratorImpl(BiomeSource biomeSource, ResourceKey noiseSettings) implements LevelChunkGenerator {
+public record NoiseChunkGeneratorImpl(BiomeSource biomeSource, ResourceKey noiseSettings) implements ChunkGenerator {
 
     @Override
     public Object toMinecraft() {

@@ -9,11 +9,11 @@ import me.outspending.biomesapi.wrapper.BiomeSettings;
 import me.outspending.biomesapi.wrapper.entity.BiomeSpawner;
 import me.outspending.biomesapi.wrapper.environment.GrassColorModifier;
 import me.outspending.biomesapi.wrapper.environment.attribute.IntColorSupplier;
-import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttributeMap;
-import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttributeSupplier;
+import me.outspending.biomesapi.wrapper.environment.attribute.EnvironmentAttributeMap;
+import me.outspending.biomesapi.wrapper.environment.attribute.EnvironmentAttributeSupplier;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleCatalog;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleData;
-import me.outspending.biomesapi.wrapper.environment.particle.WrappedParticleTypes;
+import me.outspending.biomesapi.wrapper.environment.particle.ParticleTypes;
 import me.outspending.biomesapi.wrapper.worldgen.BiomeGenerationSettings;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
@@ -156,7 +156,7 @@ public interface AbstractBiome extends Keyed {
      * @since 1.1.0
      */
     @AsOf("1.1.0")
-    WrappedEnvironmentAttributeMap getAttributes();
+    EnvironmentAttributeMap getAttributes();
 
     /**
      * Returns the BiomeSpawner of the AbstractBiome.
@@ -364,7 +364,7 @@ public interface AbstractBiome extends Keyed {
      * @since 2.2.0
      */
     @AsOf("2.2.0")
-    AbstractBiome setAttributes(WrappedEnvironmentAttributeMap attributes);
+    AbstractBiome setAttributes(EnvironmentAttributeMap attributes);
 
     /**
      * Sets the BiomeSpawner of the AbstractBiome.
@@ -474,7 +474,7 @@ public interface AbstractBiome extends Keyed {
 
         private GrassColorModifier grassColorModifier = GrassColorModifier.NONE;
         private ParticleCatalog particleCatalog = ParticleCatalog.EMPTY;
-        private WrappedEnvironmentAttributeMap attributeMap = WrappedEnvironmentAttributeMap.EMPTY;
+        private EnvironmentAttributeMap attributeMap = EnvironmentAttributeMap.EMPTY;
         private @Nullable BiomeSpawner biomeSpawner = null;
         private @Nullable BiomeGenerationSettings generationSettings = null;
 
@@ -625,25 +625,25 @@ public interface AbstractBiome extends Keyed {
         }
 
         @AsOf("2.3.0")
-        public Builder ambientParticle(WrappedParticleTypes particleType, float probability) {
+        public Builder ambientParticle(ParticleTypes particleType, float probability) {
             this.particleCatalog = this.particleCatalog.with(particleType, probability);
             return this;
         }
 
         @AsOf("2.3.0")
-        public <T extends ParticleData> Builder ambientParticle(WrappedParticleTypes particleType, float probability, @Nullable T data) {
+        public <T extends ParticleData> Builder ambientParticle(ParticleTypes particleType, float probability, @Nullable T data) {
             this.particleCatalog = this.particleCatalog.with(particleType, probability, data);
             return this;
         }
 
         @AsOf("2.3.0")
-        public Builder setAttributes(WrappedEnvironmentAttributeMap environmentAttributeMap) {
+        public Builder setAttributes(EnvironmentAttributeMap environmentAttributeMap) {
             this.attributeMap = environmentAttributeMap;
             return this;
         }
 
         @AsOf("2.3.0")
-        public <T, K> Builder setAttribute(WrappedEnvironmentAttributeSupplier<T, K> supplier, K value) {
+        public <T, K> Builder setAttribute(EnvironmentAttributeSupplier<T, K> supplier, K value) {
             this.attributeMap = this.attributeMap.with(supplier, value);
             return this;
         }

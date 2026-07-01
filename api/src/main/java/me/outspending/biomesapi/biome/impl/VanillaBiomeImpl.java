@@ -5,7 +5,7 @@ import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.wrapper.BiomeSettings;
 import me.outspending.biomesapi.wrapper.entity.BiomeSpawner;
 import me.outspending.biomesapi.wrapper.environment.GrassColorModifier;
-import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttributeMap;
+import me.outspending.biomesapi.wrapper.environment.attribute.EnvironmentAttributeMap;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleCatalog;
 import me.outspending.biomesapi.wrapper.worldgen.BiomeGenerationSettings;
 import org.jspecify.annotations.NullMarked;
@@ -25,7 +25,7 @@ public class VanillaBiomeImpl extends AbstractBiomeImpl implements VanillaBiome 
         @Nullable Integer dryFoliageColor,
         GrassColorModifier grassColorModifier,
         ParticleCatalog particleCatalog,
-        WrappedEnvironmentAttributeMap attributes,
+        EnvironmentAttributeMap attributes,
         @Nullable BiomeSpawner biomeSpawner,
         @Nullable BiomeGenerationSettings generationSettings
     ) {
@@ -98,7 +98,7 @@ public class VanillaBiomeImpl extends AbstractBiomeImpl implements VanillaBiome 
     }
 
     @Override
-    public VanillaBiomeImpl setAttributes(WrappedEnvironmentAttributeMap attributes) {
+    public VanillaBiomeImpl setAttributes(EnvironmentAttributeMap attributes) {
         throw new UnsupportedOperationException("Cannot set attributes of vanilla biomes.");
     }
 

@@ -15,16 +15,16 @@ import java.util.function.Supplier;
  */
 @NullMarked
 @AsOf("2.1.0")
-public class WrappedEnvironmentAttributeSupplier<T, K> {
+public class EnvironmentAttributeSupplier<T, K> {
 
-    private final Supplier<WrappedEnvironmentAttribute<T, K>> supplier;
+    private final Supplier<EnvironmentAttribute<T, K>> supplier;
 
     /**
      * Creates a new WrappedEnvironmentAttributeSupplier with the given supplier.
      * @param supplier the supplier that provides the WrappedEnvironmentAttribute
      */
     @AsOf("2.1.0")
-    public WrappedEnvironmentAttributeSupplier(Supplier<WrappedEnvironmentAttribute<T, K>> supplier) {
+    public EnvironmentAttributeSupplier(Supplier<EnvironmentAttribute<T, K>> supplier) {
         this.supplier = supplier;
     }
 
@@ -34,7 +34,7 @@ public class WrappedEnvironmentAttributeSupplier<T, K> {
      * @param wrappedEnvironmentAttribute the WrappedEnvironmentAttribute to supply
      */
     @AsOf("1.1.0")
-    public WrappedEnvironmentAttributeSupplier(WrappedEnvironmentAttribute<T, K> wrappedEnvironmentAttribute) {
+    public EnvironmentAttributeSupplier(EnvironmentAttribute<T, K> wrappedEnvironmentAttribute) {
         this(() -> wrappedEnvironmentAttribute);
     }
 
@@ -43,7 +43,7 @@ public class WrappedEnvironmentAttributeSupplier<T, K> {
      * @return the WrappedEnvironmentAttribute
      */
     @AsOf("1.1.0")
-    public WrappedEnvironmentAttribute<T, K> get() {
+    public EnvironmentAttribute<T, K> get() {
         return supplier.get();
     }
 
@@ -54,8 +54,8 @@ public class WrappedEnvironmentAttributeSupplier<T, K> {
      * @since 2.1.0
      */
     @AsOf("2.1.0")
-    public WrappedEnvironmentAttribute<T, K> unbox(K value) {
-        WrappedEnvironmentAttribute<T, K> attribute = supplier.get();
+    public EnvironmentAttribute<T, K> unbox(K value) {
+        EnvironmentAttribute<T, K> attribute = supplier.get();
         attribute.setValue(value);
         return attribute;
     }

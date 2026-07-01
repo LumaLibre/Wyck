@@ -6,7 +6,7 @@ import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.level.LevelCreator;
 import me.outspending.biomesapi.wrapper.internal.NmsHandle;
 import me.outspending.biomesapi.wrapper.level.BiomeSource;
-import me.outspending.biomesapi.wrapper.level.noise.LevelNoiseGeneratorSettings;
+import me.outspending.biomesapi.wrapper.level.noise.NoiseGeneratorSettings;
 import me.outspending.biomesapi.wrapper.level.noise.Noise;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -20,17 +20,16 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.4.0")
-@ApiStatus.Experimental
-public interface LevelChunkGenerator extends NmsHandle {
+public interface ChunkGenerator extends NmsHandle {
 
     @ApiStatus.Internal
-    WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.level.noise.chunk.LevelChunkGeneratorFactoryImpl");
+    WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.level.noise.chunk.ChunkGeneratorFactoryImpl");
 
     @ApiStatus.Internal
     interface Factory {
-        LevelChunkGenerator noise(BiomeSource biomeSource, ResourceKey noiseSettings);
+        ChunkGenerator noise(BiomeSource biomeSource, ResourceKey noiseSettings);
 
-        LevelChunkGenerator noise(BiomeSource biomeSource, LevelNoiseGeneratorSettings settings);
+        ChunkGenerator noise(BiomeSource biomeSource, NoiseGeneratorSettings settings);
     }
 
     /**
@@ -42,7 +41,7 @@ public interface LevelChunkGenerator extends NmsHandle {
      * @since 2.4.0
      */
     @AsOf("2.4.0")
-    static LevelChunkGenerator noise(BiomeSource biomeSource, ResourceKey noiseSettings) {
+    static ChunkGenerator noise(BiomeSource biomeSource, ResourceKey noiseSettings) {
         return WIRE.get().noise(biomeSource, noiseSettings);
     }
 
@@ -55,7 +54,7 @@ public interface LevelChunkGenerator extends NmsHandle {
      * @since 2.4.0
      */
     @AsOf("2.4.0")
-    static LevelChunkGenerator noise(BiomeSource biomeSource, LevelNoiseGeneratorSettings settings) {
+    static ChunkGenerator noise(BiomeSource biomeSource, NoiseGeneratorSettings settings) {
         return WIRE.get().noise(biomeSource, settings);
     }
 
@@ -67,10 +66,10 @@ public interface LevelChunkGenerator extends NmsHandle {
      * @since 2.4.0
      */
     @AsOf("2.4.0")
-    static LevelChunkGenerator noise(BiomeSource biomeSource, Noise abstractNoise) {
+    static ChunkGenerator noise(BiomeSource biomeSource, Noise abstractNoise) {
         if (abstractNoise instanceof Noise.Reference(ResourceKey key)) {
             return noise(biomeSource, key);
-        } else if (abstractNoise instanceof LevelNoiseGeneratorSettings settings) {
+        } else if (abstractNoise instanceof NoiseGeneratorSettings settings) {
             return noise(biomeSource, settings);
         }
         throw new IllegalArgumentException("Unknown noise type: " + abstractNoise.getClass().getName());

@@ -8,7 +8,7 @@ import me.outspending.biomesapi.wrapper.level.dimension.Infiniburn;
 import me.outspending.biomesapi.wrapper.level.dimension.Skybox;
 import me.outspending.biomesapi.wrapper.level.dimension.TimelineSet;
 import me.outspending.biomesapi.wrapper.entity.data.MonsterSettings;
-import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttributeMap;
+import me.outspending.biomesapi.wrapper.environment.attribute.EnvironmentAttributeMap;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -44,7 +44,7 @@ public final class DimensionImpl implements Dimension {
     private MonsterSettings monsterSettings;
     private Skybox skybox;
     private CardinalLightType cardinalLightType;
-    private WrappedEnvironmentAttributeMap attributes;
+    private EnvironmentAttributeMap attributes;
     private TimelineSet timelines;
     private Optional<WorldClock> defaultClock;
 
@@ -64,7 +64,7 @@ public final class DimensionImpl implements Dimension {
             MonsterSettings monsterSettings,
             Skybox skybox,
             CardinalLightType cardinalLightType,
-            WrappedEnvironmentAttributeMap attributes,
+            EnvironmentAttributeMap attributes,
             TimelineSet timelines,
             Optional<WorldClock> defaultClock
     ) {
@@ -158,7 +158,7 @@ public final class DimensionImpl implements Dimension {
     }
 
     @Override
-    public WrappedEnvironmentAttributeMap getAttributes() {
+    public EnvironmentAttributeMap getAttributes() {
         return attributes;
     }
 
@@ -251,7 +251,7 @@ public final class DimensionImpl implements Dimension {
     }
 
     @Override
-    public Dimension setAttributes(WrappedEnvironmentAttributeMap attributes) {
+    public Dimension setAttributes(EnvironmentAttributeMap attributes) {
         this.attributes = attributes;
         return this;
     }

@@ -16,22 +16,21 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.4.0")
-@ApiStatus.Experimental
-public interface LevelNoiseSettings extends NmsHandle {
+public interface NoiseSettings extends NmsHandle {
 
     @ApiStatus.Internal
-    WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.level.noise.settings.LevelNoiseSettingsFactoryImpl");
+    WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.level.noise.settings.NoiseSettingsFactoryImpl");
 
     @ApiStatus.Internal
     interface Factory {
-        LevelNoiseSettings create(int minY, int height, int sizeHorizontal, int sizeVertical);
+        NoiseSettings create(int minY, int height, int sizeHorizontal, int sizeVertical);
     }
 
-    LevelNoiseSettings OVERWORLD = of(-64, 384, 1, 2);
-    LevelNoiseSettings NETHER = of(0, 128, 1, 2);
-    LevelNoiseSettings END = of(0, 128, 2, 1);
-    LevelNoiseSettings CAVES = of(-64, 192, 1, 2);
-    LevelNoiseSettings FLOATING_ISLANDS = of(0, 256, 2, 1);
+    NoiseSettings OVERWORLD = of(-64, 384, 1, 2);
+    NoiseSettings NETHER = of(0, 128, 1, 2);
+    NoiseSettings END = of(0, 128, 2, 1);
+    NoiseSettings CAVES = of(-64, 192, 1, 2);
+    NoiseSettings FLOATING_ISLANDS = of(0, 256, 2, 1);
 
     /**
      * The lowest Y level the noise generates at.
@@ -83,7 +82,7 @@ public interface LevelNoiseSettings extends NmsHandle {
      * @since 2.4.0
      */
     @AsOf("2.4.0")
-    static LevelNoiseSettings of(int minY, int height, int sizeHorizontal, int sizeVertical) {
+    static NoiseSettings of(int minY, int height, int sizeHorizontal, int sizeVertical) {
         Preconditions.checkArgument(height % 16 == 0, "height must be a multiple of 16");
         Preconditions.checkArgument(minY + height <= 2032, "minY + height must be <= 2032");
         Preconditions.checkArgument(minY % 16 == 0, "minY must be a multiple of 16");

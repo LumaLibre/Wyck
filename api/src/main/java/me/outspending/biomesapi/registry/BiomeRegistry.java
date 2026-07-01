@@ -118,7 +118,6 @@ public interface BiomeRegistry {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    @ApiStatus.Experimental
     <T extends AbstractBiome> T getBiome(ResourceKey key);
 
 }

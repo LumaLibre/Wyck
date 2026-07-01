@@ -5,14 +5,14 @@ import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.registry.level.dimension.DimensionRegistry;
 import me.outspending.biomesapi.wrapper.environment.attribute.IntColorSupplier;
-import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttributeSupplier;
+import me.outspending.biomesapi.wrapper.environment.attribute.EnvironmentAttributeSupplier;
 import me.outspending.biomesapi.wrapper.level.clock.WorldClock;
 import me.outspending.biomesapi.wrapper.level.dimension.CardinalLightType;
 import me.outspending.biomesapi.wrapper.level.dimension.Infiniburn;
 import me.outspending.biomesapi.wrapper.level.dimension.Skybox;
 import me.outspending.biomesapi.wrapper.level.dimension.TimelineSet;
 import me.outspending.biomesapi.wrapper.entity.data.MonsterSettings;
-import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttributeMap;
+import me.outspending.biomesapi.wrapper.environment.attribute.EnvironmentAttributeMap;
 import net.kyori.adventure.key.Keyed;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -30,7 +30,6 @@ import java.util.Optional;
  */
 @NullMarked
 @AsOf("2.4.0")
-@ApiStatus.Experimental
 public interface Dimension extends Keyed {
 
     /**
@@ -150,7 +149,7 @@ public interface Dimension extends Keyed {
      * @since 2.4.0
      */
     @AsOf("2.4.0")
-    WrappedEnvironmentAttributeMap getAttributes();
+    EnvironmentAttributeMap getAttributes();
 
     /**
      * The timelines of this dimension type.
@@ -292,7 +291,7 @@ public interface Dimension extends Keyed {
      * @since 2.4.0
      */
     @AsOf("2.4.0")
-    Dimension setAttributes(WrappedEnvironmentAttributeMap attributes);
+    Dimension setAttributes(EnvironmentAttributeMap attributes);
 
     /**
      * Sets the timelines of this dimension type.
@@ -399,7 +398,7 @@ public interface Dimension extends Keyed {
         private MonsterSettings monsterSettings = MonsterSettings.overworld();
         private Skybox skybox = Skybox.OVERWORLD;
         private CardinalLightType cardinalLightType = CardinalLightType.DEFAULT;
-        private WrappedEnvironmentAttributeMap attributes = WrappedEnvironmentAttributeMap.EMPTY;
+        private EnvironmentAttributeMap attributes = EnvironmentAttributeMap.EMPTY;
         private TimelineSet timelines = TimelineSet.EMPTY;
         private Optional<WorldClock> defaultClock = Optional.empty();
 
@@ -511,13 +510,13 @@ public interface Dimension extends Keyed {
         }
 
         @AsOf("2.4.0")
-        public Builder attributes(WrappedEnvironmentAttributeMap attributes) {
+        public Builder attributes(EnvironmentAttributeMap attributes) {
             this.attributes = attributes;
             return this;
         }
 
         @AsOf("2.4.0")
-        public <T, K> Builder attribute(WrappedEnvironmentAttributeSupplier<T, K> supplier, K value) {
+        public <T, K> Builder attribute(EnvironmentAttributeSupplier<T, K> supplier, K value) {
             this.attributes = this.attributes.with(supplier, value);
             return this;
         }

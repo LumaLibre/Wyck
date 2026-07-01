@@ -17,15 +17,14 @@ import org.jspecify.annotations.NullUnmarked;
  */
 @NullMarked
 @AsOf("2.4.0")
-@ApiStatus.Experimental
-public interface LevelNoiseRouter extends NmsHandle {
+public interface NoiseRouter extends NmsHandle {
 
     @ApiStatus.Internal
-    WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.level.noise.LevelNoiseRouterFactoryImpl");
+    WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.level.noise.NoiseRouterFactoryImpl");
 
     @ApiStatus.Internal
     interface Factory {
-        LevelNoiseRouter create(Slots slots);
+        NoiseRouter create(Slots slots);
     }
 
     /**
@@ -188,7 +187,7 @@ public interface LevelNoiseRouter extends NmsHandle {
         }
 
         @AsOf("2.4.0")
-        public LevelNoiseRouter build() {
+        public NoiseRouter build() {
             Slots slots = new Slots(
                 this.barrier,
                 this.fluidLevelFloodedness,

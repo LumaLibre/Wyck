@@ -12,7 +12,7 @@ import me.outspending.biomesapi.registry.level.dimension.DimensionRegistry;
 import me.outspending.biomesapi.util.Lazy;
 import me.outspending.biomesapi.wrapper.entity.data.MonsterSettings;
 import me.outspending.biomesapi.wrapper.environment.attribute.NmsEnvironmentAttributes;
-import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttributeMap;
+import me.outspending.biomesapi.wrapper.environment.attribute.EnvironmentAttributeMap;
 import me.outspending.biomesapi.wrapper.level.dimension.InfiniburnImpl;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
@@ -21,13 +21,11 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.valueproviders.IntProvider;
-import net.minecraft.world.attribute.EnvironmentAttributeMap;
 import net.minecraft.world.clock.WorldClock;
 import net.minecraft.world.level.CardinalLighting;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.timeline.Timeline;
 import org.jspecify.annotations.NonNull;
-import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NullMarked;
 
 import java.lang.reflect.Field;
@@ -55,8 +53,8 @@ public class DimensionTypeRegistry implements DimensionRegistry {
             ms.monsterSpawnBlockLightLimit()
         );
 
-        EnvironmentAttributeMap.Builder attributeBuilder = EnvironmentAttributeMap.builder();
-        WrappedEnvironmentAttributeMap attributes = dimension.getAttributes();
+        net.minecraft.world.attribute.EnvironmentAttributeMap.Builder attributeBuilder = net.minecraft.world.attribute.EnvironmentAttributeMap.builder();
+        EnvironmentAttributeMap attributes = dimension.getAttributes();
         NmsEnvironmentAttributes.applyTo(attributeBuilder, attributes);
 
         InfiniburnImpl infiniburn = (InfiniburnImpl) dimension.getInfiniburn();
