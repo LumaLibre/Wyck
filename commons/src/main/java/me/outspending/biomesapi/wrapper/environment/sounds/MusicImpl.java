@@ -9,9 +9,8 @@ public record MusicImpl(@Override SoundEvent sound, @Override int minDelay, @Ove
 
     @Override
     public Object toMinecraft() {
-        net.minecraft.sounds.SoundEvent sound = (net.minecraft.sounds.SoundEvent) this.sound.toMinecraft();
         return new net.minecraft.sounds.Music(
-            net.minecraft.core.Holder.direct(sound),
+            net.minecraft.core.Holder.direct(this.sound.asHandle()),
             this.minDelay,
             this.maxDelay,
             this.replaceCurrentMusic
