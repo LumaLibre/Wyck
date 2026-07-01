@@ -22,7 +22,7 @@ jobs:
       - name: Publish API
         run: "./gradlew :bundle:publish"
         env:
-          REPO_URL: ${{ secrets.REPO_URL }}
+          REPO_URL: "https://repo.jsinco.dev/releases"
           REPO_USERNAME: ${{ secrets.REPO_USERNAME }}
           REPO_PASSWORD: ${{ secrets.REPO_PASSWORD }}
 
