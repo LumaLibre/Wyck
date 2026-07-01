@@ -2,6 +2,7 @@ package me.outspending.biomesapi.wrapper.environment.attribute;
 
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
+import me.outspending.biomesapi.wrapper.environment.sounds.BackgroundMusic;
 import me.outspending.biomesapi.wrapper.internal.NmsEnumTranslatable;
 import me.outspending.biomesapi.wrapper.environment.BedRule;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleCatalog;

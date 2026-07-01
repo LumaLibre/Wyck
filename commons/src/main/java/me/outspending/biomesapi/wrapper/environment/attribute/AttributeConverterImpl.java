@@ -2,6 +2,7 @@ package me.outspending.biomesapi.wrapper.environment.attribute;
 
 import io.papermc.paper.adventure.AdventureComponent;
 import me.outspending.biomesapi.annotations.WireFactory;
+import me.outspending.biomesapi.wrapper.environment.sounds.BackgroundMusic;
 import me.outspending.biomesapi.wrapper.internal.NmsEnumTranslatable;
 import me.outspending.biomesapi.wrapper.environment.BedRule;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleCatalog;
@@ -11,6 +12,7 @@ import net.kyori.adventure.text.Component;
 import net.minecraft.core.particles.ParticleOptions;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -40,19 +42,22 @@ public final class AttributeConverterImpl implements AttributeConverter {
 
     @Override
     public Object convertBedRule(BedRule rule) {
+        Optional<net.minecraft.network.chat.Component> errorMessage = rule.errorMessage() != null ? Optional.of(new AdventureComponent(rule.errorMessage()).deepConverted()) : Optional.empty();
         return new net.minecraft.world.attribute.BedRule(
                 rule.canSleep().toNms(net.minecraft.world.attribute.BedRule.Rule.class),
                 rule.canSetSpawn().toNms(net.minecraft.world.attribute.BedRule.Rule.class),
                 rule.explodes(),
-                errorMessageToNms(rule.errorMessage())
+                errorMessage
         );
     }
 
     @Override
     public Object convertAmbientParticles(ParticleCatalog catalog) {
         return catalog.resolveParticles().stream()
-                .map(AttributeConverterImpl::resolvedToNms)
-                .toList();
+            .map(resolved ->
+                new net.minecraft.world.attribute.AmbientParticle((ParticleOptions) resolved.options().nms(), resolved.probability())
+            )
+            .toList();
     }
 
     @Override
@@ -60,14 +65,4 @@ public final class AttributeConverterImpl implements AttributeConverter {
         return particle.toParticleOptions().nms();
     }
 
-    private static net.minecraft.world.attribute.AmbientParticle resolvedToNms(ResolvedAmbientParticle resolved) {
-        return new net.minecraft.world.attribute.AmbientParticle((ParticleOptions) resolved.options().nms(), resolved.probability());
-    }
-
-    private static Optional<net.minecraft.network.chat.Component> errorMessageToNms(Component errorMessage) {
-        if (errorMessage == null) {
-            return Optional.empty();
-        }
-        return Optional.of(new AdventureComponent(errorMessage).deepConverted());
-    }
 }

@@ -17,7 +17,7 @@ import java.lang.reflect.Constructor;
 @NullMarked
 @AsOf("2.2.0")
 @ApiStatus.Internal
-public sealed class WireProvider<F> permits NullableWireProvider {
+public sealed class WireProvider<F> permits NullableWireProvider, ConstructWireProvider {
 
     private static final String ALLOWED_PACKAGE = "me.outspending.biomesapi";
     private static final String VERSION_EXPECTED = "*";
@@ -35,13 +35,37 @@ public sealed class WireProvider<F> permits NullableWireProvider {
 
     /**
      * Creates a new WireProvider instance.
-     * @param classNameTemplate the class name template to use for loading the factory
+     * @param template the class name template to use for loading the factory
      * @return a new WireProvider instance
      * @param <F> the type of the factory
+     * @since 2.0.0
      */
     @AsOf("2.0.0")
-    public static <F> WireProvider<F> create(String classNameTemplate) {
-        return new WireProvider<>(classNameTemplate);
+    public static <F> WireProvider<F> create(String template) {
+        return new WireProvider<>(template);
+    }
+
+    /**
+     * Creates a WireProvider that does not reflectively instantiate anything.
+     * @return a WireProvider that is empty
+     * @param <F> the type of the factory
+     * @since 2.4.1
+     */
+    @AsOf("2.4.1")
+    public static <F> NullableWireProvider<F> empty() {
+        return NullableWireProvider.empty();
+    }
+
+    /**
+     * Creates a WireProvider that uses the given template to construct the factory.
+     * @param template the class name template to use for loading the factory
+     * @return a WireProvider that constructs the factory using the given template
+     * @param <F> the type of the factory
+     * @since 2.4.1
+     */
+    @AsOf("2.4.1")
+    public static <F> ConstructWireProvider<F> construct(String template) {
+        return ConstructWireProvider.create(template);
     }
 
     /**
@@ -113,7 +137,7 @@ public sealed class WireProvider<F> permits NullableWireProvider {
      */
     @AsOf("2.3.0")
     @SuppressWarnings("unchecked")
-    private Class<? extends F> resolveClass() {
+    protected Class<? extends F> resolveClass() {
         if (classNameTemplate.contains(VERSION_AVAILABLE)) {
             String versioned = classNameTemplate.replace(VERSION_AVAILABLE, Versions.ACTIVE.id());
             try {

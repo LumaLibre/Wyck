@@ -1,5 +1,7 @@
 package me.outspending.biomesapi.codegen;
 
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.data.worldgen.features.AquaticFeatures;
@@ -24,6 +26,7 @@ import net.minecraft.world.level.levelgen.NoiseRouterData;
 import net.minecraft.world.level.levelgen.Noises;
 import org.jspecify.annotations.Nullable;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 public final class Generators {
@@ -32,7 +35,8 @@ public final class Generators {
         configuredFeatures(),
         placedFeatures(),
         densityFunctions(),
-        noiseParameters()
+        noiseParameters(),
+        soundEvents()
     );
 
     private static @Nullable Identifier keyLocation(Object entry) {
@@ -42,7 +46,6 @@ public final class Generators {
         return null;
     }
 
-    // TODO: replace these with builders
 
     private static GeneratorSpec configuredFeatures() {
         return new GeneratorSpec(
@@ -128,6 +131,40 @@ public final class Generators {
         );
     }
 
-    private Generators() {
+    private static GeneratorSpec soundEvents() {
+        return new GeneratorSpec(
+            "me.outspending.biomesapi.wrapper.environment.sounds",
+            "SoundEvents",
+            "SoundEvent",
+            "SoundEvent.variableRange",
+            net.minecraft.sounds.SoundEvent.class,
+            Generators::soundLocation,
+            List.of(
+                net.minecraft.sounds.SoundEvents.class
+            ),
+            "Typed references that point to vanilla's sound events.",
+            "2.4.1",
+            "SOUND_EVENTS",
+            Generators::isSoundField
+        );
     }
+
+    private static boolean isSoundField(Field field) {
+        Class<?> type = field.getType();
+        return net.minecraft.sounds.SoundEvent.class.isAssignableFrom(type) || Holder.class.isAssignableFrom(type);
+    }
+
+    private static @Nullable Identifier soundLocation(Object entry) {
+        net.minecraft.sounds.SoundEvent event = null;
+        if (entry instanceof net.minecraft.sounds.SoundEvent se) {
+            event = se;
+        } else if (entry instanceof Holder<?> holder && holder.value() instanceof net.minecraft.sounds.SoundEvent se) {
+            event = se;
+        }
+        if (event == null) {
+            return null;
+        }
+        return BuiltInRegistries.SOUND_EVENT.getKey(event);
+    }
+
 }

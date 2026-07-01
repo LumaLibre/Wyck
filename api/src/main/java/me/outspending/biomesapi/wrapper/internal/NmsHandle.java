@@ -21,6 +21,12 @@ public interface NmsHandle {
     @AsOf("2.3.0")
     Object toMinecraft();
 
+    @AsOf("2.4.1")
+    @SuppressWarnings("unchecked")
+    default <T> T asHandle() {
+        return (T) this.toMinecraft();
+    }
+
     @AsOf("2.4.0")
     interface Context<C> extends NmsHandle {
 

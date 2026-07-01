@@ -3,6 +3,7 @@ package me.outspending.biomesapi.keys;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.level.dimension.Dimension;
+import me.outspending.biomesapi.wrapper.environment.sounds.SoundEvent;
 import me.outspending.biomesapi.wrapper.level.noise.function.DensityFunction;
 import me.outspending.biomesapi.wrapper.worldgen.feature.ConfiguredFeature;
 import me.outspending.biomesapi.wrapper.worldgen.placement.PlacedFeature;
@@ -36,6 +37,9 @@ public interface KeyChains {
 
     @AsOf("2.4.0")
     KeyChain<ResourceKey> NOISE = KeyChain.mutable();
+
+    @AsOf("2.4.1")
+    KeyChain<SoundEvent> SOUND_EVENTS = KeyChain.mutable();
 
     /**
      * @return {@link #BIOMES}

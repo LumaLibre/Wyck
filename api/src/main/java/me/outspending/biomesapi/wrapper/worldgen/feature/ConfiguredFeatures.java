@@ -17,8 +17,8 @@ import org.jspecify.annotations.NullMarked;
  * @author BiomesAPI codegen
  */
 @NullMarked
-@AsOf("2.4.0")
-@Generated("2026-06-24T02:34:37.547600Z")
+@AsOf("2.3.0")
+@Generated("2026-07-01T19:33:09.496674Z")
 public final class ConfiguredFeatures {
 
     // From: AquaticFeatures 
@@ -46,16 +46,22 @@ public final class ConfiguredFeatures {
     public static final ConfiguredFeature FOSSIL_DIAMONDS = reference("fossil_diamonds");
     @AsOf("2.3.0")
     public static final ConfiguredFeature DRIPSTONE_CLUSTER = reference("dripstone_cluster");
+    @AsOf("2.4.0")
+    public static final ConfiguredFeature SULFUR_SPIKE_CLUSTER = reference("sulfur_spike_cluster");
     @AsOf("2.3.0")
     public static final ConfiguredFeature LARGE_DRIPSTONE = reference("large_dripstone");
     @AsOf("2.3.0")
     public static final ConfiguredFeature POINTED_DRIPSTONE = reference("pointed_dripstone");
+    @AsOf("2.4.0")
+    public static final ConfiguredFeature SULFUR_SPIKE = reference("sulfur_spike");
     @AsOf("2.3.0")
     public static final ConfiguredFeature UNDERWATER_MAGMA = reference("underwater_magma");
     @AsOf("2.3.0")
     public static final ConfiguredFeature GLOW_LICHEN = reference("glow_lichen");
     @AsOf("2.3.0")
     public static final ConfiguredFeature ROOTED_AZALEA_TREE = reference("rooted_azalea_tree");
+    @AsOf("2.4.0")
+    public static final ConfiguredFeature ROOTED_SULFUR_SPRING = reference("rooted_sulfur_spring");
     @AsOf("2.3.0")
     public static final ConfiguredFeature CAVE_VINE = reference("cave_vine");
     @AsOf("2.3.0")
@@ -116,6 +122,10 @@ public final class ConfiguredFeatures {
     public static final ConfiguredFeature BLUE_ICE = reference("blue_ice");
     @AsOf("2.3.0")
     public static final ConfiguredFeature LAKE_LAVA = reference("lake_lava");
+    @AsOf("2.4.0")
+    public static final ConfiguredFeature SULFUR_POOL = reference("sulfur_pool");
+    @AsOf("2.4.0")
+    public static final ConfiguredFeature SULFUR_SPRING = reference("sulfur_spring");
     @AsOf("2.3.0")
     public static final ConfiguredFeature DISK_CLAY = reference("disk_clay");
     @AsOf("2.3.0")

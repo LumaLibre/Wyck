@@ -1,5 +1,5 @@
 const REPO_BASE = "https://repo.jsinco.dev";
-const DEV_REPO = "releases"; // commit-tagged dev builds live here
+const DEV_REPO = "snapshots"; // commit-tagged dev builds live here
 const GAV_PATH = "me/outspending/biomesapi/BiomesAPI";
 const GITHUB_REPO = "LumaLibre/BiomesAPI";
 const FALLBACK = "unknown";
