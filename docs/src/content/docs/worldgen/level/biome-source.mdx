@@ -7,7 +7,7 @@ import CodeBlock from "@/components/CodeBlock.astro";
 import SourceLink from "@/components/SourceLink.astro";
 
 A <SourceLink path="wrapper/level/BiomeSource.java">BiomeSource</SourceLink>
-dictates how biomes occupy regions in a world. These work in tandem with <SourceLink path="wrapper/level/noise/chunk/LevelChunkGenerator.java">LevelChunkGenerator</SourceLink>s
+dictates how biomes occupy regions in a world. These work in tandem with <SourceLink path="wrapper/level/noise/chunk/ChunkGenerator.java">ChunkGenerator</SourceLink>s
 to produce a dimension's terrain.
 
 ## Fixed
@@ -104,7 +104,7 @@ Once built, you can pass the biome source to a generator and the generator to a 
     lang="java"
     filename="ExamplePlugin.java"
     code={
-`LevelChunkGenerator generator = LevelChunkGenerator.noise(source, Noise.overworld());
+`ChunkGenerator generator = ChunkGenerator.noise(source, Noise.overworld());
 
 World world = LevelCreator.builder()
     .levelKey(ResourceKey.of("test", "example"))

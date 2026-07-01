@@ -16,7 +16,7 @@ Complex particle types require a type, density, and a custom data specific to th
 BiomesAPI supports all particle types that are available on the server version you're running on,
 but some new particle types may not be available on older server versions.
 
-* [WrappedParticleTypes](https://github.com/LumaLibre/BiomesAPI/blob/main/api/src/main/java/me/outspending/biomesapi/wrapper/environment/particle/WrappedParticleTypes.java)
+* [ParticleTypes](https://github.com/LumaLibre/BiomesAPI/blob/main/api/src/main/java/me/outspending/biomesapi/wrapper/environment/particle/ParticleTypes.java)
 * [Options for Complex Types](https://github.com/LumaLibre/BiomesAPI/tree/main/api/src/main/java/me/outspending/biomesapi/wrapper/environment/particle/options)
 
 ### Example Usage
@@ -24,7 +24,7 @@ but some new particle types may not be available on older server versions.
     lang="java"
     filename="ExamplePlugin.java"
     code={`import me.outspending.biomesapi.biome.CustomBiome;
-import me.outspending.biomesapi.wrapper.environment.particle.WrappedParticleTypes;
+import me.outspending.biomesapi.wrapper.environment.particle.ParticleTypes;
 import me.outspending.biomesapi.wrapper.environment.particle.options.DustParticle;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -33,8 +33,8 @@ public class ExamplePlugin extends JavaPlugin {
     public void onEnable() {
         CustomBiome.builder()
             // Other biome settings...
-            .ambientParticle(WrappedParticleTypes.SMOKE, 0.001f)
-            .ambientParticle(WrappedParticleTypes.DUST, 0.002f, DustParticle.of("#FF0000"))
+            .ambientParticle(ParticleTypes.SMOKE, 0.001f)
+            .ambientParticle(ParticleTypes.DUST, 0.002f, DustParticle.of("#FF0000"))
             .build();
     }
 }`}
@@ -52,7 +52,7 @@ which can be used for storing a list of ambient particles that you may want to a
     filename="ExamplePlugin.java"
     code={`import me.outspending.biomesapi.biome.CustomBiome;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleCatalog;
-import me.outspending.biomesapi.wrapper.environment.particle.WrappedParticleTypes;
+import me.outspending.biomesapi.wrapper.environment.particle.ParticleTypes;
 import me.outspending.biomesapi.wrapper.environment.particle.options.DustParticle;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -60,8 +60,8 @@ public class ExamplePlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         ParticleCatalog catalog = ParticleCatalog.builder()
-            .addSimple(WrappedParticleTypes.ASH, 0.001f)
-            .addComplex(WrappedParticleTypes.DUST, 0.002f, DustParticle.of("#FF0000"))
+            .addSimple(ParticleTypes.ASH, 0.001f)
+            .addComplex(ParticleTypes.DUST, 0.002f, DustParticle.of("#FF0000"))
             .build();
 
         CustomBiome.builder()

@@ -6,7 +6,7 @@ description: Learn how to bundle the various density functions that shape a dime
 import CodeBlock from "@/components/CodeBlock.astro";
 import SourceLink from "@/components/SourceLink.astro";
 
-The <SourceLink path="wrapper/level/noise/LevelNoiseRouter.java">LevelNoiseRouter</SourceLink> bundles the
+The <SourceLink path="wrapper/level/noise/NoiseRouter.java">NoiseRouter</SourceLink> bundles the
 various <SourceLink path="wrapper/level/noise/function/DensityFunction.java">DensityFunction</SourceLink>s
 that create a given dimension's terrain. Where a single density function describes one piece of the
 generator's behavior.
@@ -25,7 +25,7 @@ decides whether a given block ends up solid.
 
 :::note
 
-The builder requires **all** slots to be set before the <SourceLink path="wrapper/level/noise/LevelNoiseRouter.java">LevelNoiseRouter</SourceLink>
+The builder requires **all** slots to be set before the <SourceLink path="wrapper/level/noise/NoiseRouter.java">NoiseRouter</SourceLink>
 can be built.
 
 :::
@@ -36,7 +36,7 @@ can be built.
     lang="java"
     filename="ExamplePlugin.java"
     code={
-`import me.outspending.biomesapi.wrapper.level.noise.LevelNoiseRouter;
+`import me.outspending.biomesapi.wrapper.level.noise.NoiseRouter;
 import me.outspending.biomesapi.wrapper.level.noise.function.DensityFunction;
 import me.outspending.biomesapi.wrapper.level.noise.function.DensityFunctions;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -54,7 +54,7 @@ public class ExamplePlugin extends JavaPlugin {
         // Actual terrain shape
         DensityFunction finalDensity = DensityFunctions.SLOPED_CHEESE;
 
-        LevelNoiseRouter router = LevelNoiseRouter.builder()
+        NoiseRouter router = NoiseRouter.builder()
             // Aquifers and fluids
             .barrier(DensityFunction.constant(0.0))
             .fluidLevelFloodedness(DensityFunction.constant(0.0))

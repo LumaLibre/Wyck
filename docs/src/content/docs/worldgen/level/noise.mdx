@@ -6,9 +6,9 @@ description: Learn how to reference built-in noise or author custom noise genera
 import CodeBlock from "@/components/CodeBlock.astro";
 import SourceLink from "@/components/SourceLink.astro";
 
-<SourceLink path="wrapper/level/noise/Noise.java">Noise</SourceLink> is what a <SourceLink path="wrapper/level/noise/chunk/LevelChunkGenerator.java">LevelChunkGenerator</SourceLink>
+<SourceLink path="wrapper/level/noise/Noise.java">Noise</SourceLink> is what a <SourceLink path="wrapper/level/noise/chunk/ChunkGenerator.java">ChunkGenerator</SourceLink>
 uses to shape terrain. BiomesAPI provides ways to reference existing noise generators or author your own using
-<SourceLink path="wrapper/level/noise/LevelNoiseGeneratorSettings.java">LevelNoiseGeneratorSettings</SourceLink>.
+<SourceLink path="wrapper/level/noise/NoiseGeneratorSettings.java">NoiseGeneratorSettings</SourceLink>.
 
 ## Referencing Existing Noise
 
@@ -36,7 +36,7 @@ Noise byKey = Noise.reference(ResourceKey.of("test", "my_noise"));
 ## Authoring Custom Noise
 
 Building your own noise can be done with `Noise.builder()`.
-An authored <SourceLink path="wrapper/level/noise/LevelNoiseGeneratorSettings.java">LevelNoiseGeneratorSettings</SourceLink> is itself an instance of <SourceLink path="wrapper/level/noise/Noise.java">Noise</SourceLink>, so you can hand it straight to a generator
+An authored <SourceLink path="wrapper/level/noise/NoiseGeneratorSettings.java">NoiseGeneratorSettings</SourceLink> is itself an instance of <SourceLink path="wrapper/level/noise/Noise.java">Noise</SourceLink>, so you can hand it straight to a generator
 without registering anything.
 
 :::note
@@ -49,13 +49,13 @@ without registering anything.
     lang="java"
     filename="ExamplePlugin.java"
     code={
-`import me.outspending.biomesapi.wrapper.level.noise.LevelNoiseRouter;
+`import me.outspending.biomesapi.wrapper.level.noise.NoiseRouter;
 import me.outspending.biomesapi.wrapper.level.noise.Noise;
 import me.outspending.biomesapi.wrapper.level.noise.function.DensityFunction;
 import me.outspending.biomesapi.wrapper.level.noise.function.DensityFunctions;
-import me.outspending.biomesapi.wrapper.level.noise.settings.LevelNoiseSettings;
-import me.outspending.biomesapi.wrapper.worldgen.surface.WrappedSurfaceCondition;
-import me.outspending.biomesapi.wrapper.worldgen.surface.WrappedSurfaceRule;
+import me.outspending.biomesapi.wrapper.level.noise.settings.NoiseSettings;
+import me.outspending.biomesapi.wrapper.worldgen.surface.SurfaceCondition;
+import me.outspending.biomesapi.wrapper.worldgen.surface.SurfaceRule;
 import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -64,7 +64,7 @@ import java.util.List;
 public class ExamplePlugin extends JavaPlugin {
     @Override
     public void onEnable() {
-        LevelNoiseRouter router = LevelNoiseRouter.builder()
+        NoiseRouter router = NoiseRouter.builder()
             // Aquifers and fluids
             .barrier(DensityFunction.constant(0.0))
             .fluidLevelFloodedness(DensityFunction.constant(0.0))
@@ -90,23 +90,23 @@ public class ExamplePlugin extends JavaPlugin {
             .build();
 
         // grass on top of the column, stone everywhere beneath
-        WrappedSurfaceRule surfaceRule = WrappedSurfaceRule.sequence(List.of(
-            WrappedSurfaceRule.ifTrue(
-                WrappedSurfaceCondition.stoneDepth(0, false, WrappedSurfaceCondition.CaveSurface.FLOOR),
-                WrappedSurfaceRule.block(Material.GRASS_BLOCK)
+        SurfaceRule surfaceRule = SurfaceRule.sequence(List.of(
+            SurfaceRule.ifTrue(
+                SurfaceCondition.stoneDepth(0, false, SurfaceCondition.CaveSurface.FLOOR),
+                SurfaceRule.block(Material.GRASS_BLOCK)
             ),
-            WrappedSurfaceRule.block(Material.STONE)
+            SurfaceRule.block(Material.STONE)
         ));
 
         Noise settings = Noise.builder()
-            .noiseSettings(LevelNoiseSettings.OVERWORLD)
+            .noiseSettings(NoiseSettings.OVERWORLD)
             .defaultBlock(Material.STONE)
             .defaultFluid(Material.WATER)
             .noiseRouter(router)
             .surfaceRule(surfaceRule)
             .seaLevel(63)
             .build();
-        // Done. Use this in a LevelChunkGenerator
+        // Done. Use this in a ChunkGenerator
     }
 }`}
 />
