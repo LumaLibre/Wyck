@@ -12,16 +12,16 @@ import me.outspending.biomesapi.level.dimension.Dimension;
 import me.outspending.biomesapi.wrapper.BiomeSettings;
 import me.outspending.biomesapi.wrapper.environment.BedRule;
 import me.outspending.biomesapi.wrapper.environment.MoonPhase;
-import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttributes;
-import me.outspending.biomesapi.wrapper.environment.particle.WrappedParticleTypes;
+import me.outspending.biomesapi.wrapper.environment.attribute.EnvironmentAttributes;
+import me.outspending.biomesapi.wrapper.environment.particle.ParticleTypes;
 import me.outspending.biomesapi.wrapper.level.BiomeSource;
-import me.outspending.biomesapi.wrapper.level.noise.LevelNoiseGeneratorSettings;
-import me.outspending.biomesapi.wrapper.level.noise.LevelNoiseRouter;
+import me.outspending.biomesapi.wrapper.level.noise.NoiseGeneratorSettings;
+import me.outspending.biomesapi.wrapper.level.noise.NoiseRouter;
 import me.outspending.biomesapi.wrapper.level.noise.Noises;
-import me.outspending.biomesapi.wrapper.level.noise.chunk.LevelChunkGenerator;
+import me.outspending.biomesapi.wrapper.level.noise.chunk.ChunkGenerator;
 import me.outspending.biomesapi.wrapper.level.noise.function.DensityFunction;
 import me.outspending.biomesapi.wrapper.level.noise.function.DensityFunctions;
-import me.outspending.biomesapi.wrapper.level.noise.settings.LevelNoiseSettings;
+import me.outspending.biomesapi.wrapper.level.noise.settings.NoiseSettings;
 import me.outspending.biomesapi.wrapper.worldgen.BiomeGenerationSettings;
 import me.outspending.biomesapi.wrapper.worldgen.GenerationStep;
 import me.outspending.biomesapi.wrapper.worldgen.HeightmapType;
@@ -108,8 +108,8 @@ public class ExamplePlugin extends JavaPlugin {
             .waterColor("#00FFD0")
             .grassColor("#D1D13A")
             .foliageColor("#FF6A00")
-            .ambientParticle(WrappedParticleTypes.ASH, 0.1f)
-            .setAttribute(WrappedEnvironmentAttributes.MOON_PHASE, MoonPhase.FIRST_QUARTER)
+            .ambientParticle(ParticleTypes.ASH, 0.1f)
+            .setAttribute(EnvironmentAttributes.MOON_PHASE, MoonPhase.FIRST_QUARTER)
             .setGenerationSettings(generation)
             .build();
 
@@ -128,9 +128,9 @@ public class ExamplePlugin extends JavaPlugin {
             .hasSkyLight(true)
             .height(256)
             .logicalHeight(256)
-            .attribute(WrappedEnvironmentAttributes.MOON_PHASE, MoonPhase.THIRD_QUARTER)
-            .attribute(WrappedEnvironmentAttributes.SKY_COLOR, 0xFF00FF)
-            .attribute(WrappedEnvironmentAttributes.BED_RULE, BedRule.builder().setExplodes(true).build())
+            .attribute(EnvironmentAttributes.MOON_PHASE, MoonPhase.THIRD_QUARTER)
+            .attribute(EnvironmentAttributes.SKY_COLOR, 0xFF00FF)
+            .attribute(EnvironmentAttributes.BED_RULE, BedRule.builder().setExplodes(true).build())
             .build();
 
         DataResult<JsonElement> dimensionResult = Dimension.CODEC.encodeStart(JsonOps.INSTANCE, dimension);
@@ -159,7 +159,7 @@ public class ExamplePlugin extends JavaPlugin {
         DensityFunction base = DensityFunction.yClampedGradient(0, 256, 1.2, -1.2);
         DensityFunction finalDensity = DensityFunction.add(base, wobble).clamp(-1.0, 1.0);
 
-        LevelNoiseRouter router = LevelNoiseRouter.builder()
+        NoiseRouter router = NoiseRouter.builder()
             .temperature(DensityFunction.noise(ResourceKey.minecraft("temperature"), 0.25, 0.0))
             .vegetation(DensityFunction.noise(ResourceKey.minecraft("vegetation"), 0.25, 0.0))
             .finalDensity(finalDensity)
@@ -186,9 +186,9 @@ public class ExamplePlugin extends JavaPlugin {
             SurfaceRule.ifTrue(underFloor, subBlocks)
         ));
 
-        LevelNoiseGeneratorSettings noiseSettings = LevelNoiseGeneratorSettings.builder()
+        NoiseGeneratorSettings noiseSettings = NoiseGeneratorSettings.builder()
             .resourceKey(ResourceKey.of("test", "customnoisesettings"))
-            .noiseSettings(LevelNoiseSettings.OVERWORLD)
+            .noiseSettings(NoiseSettings.OVERWORLD)
             .defaultBlock(Material.STONE)
             .defaultFluid(Material.WATER)
             .noiseRouter(router)
@@ -198,7 +198,7 @@ public class ExamplePlugin extends JavaPlugin {
             .oreVeinsEnabled(false)
             .build();
 
-        LevelChunkGenerator generator = LevelChunkGenerator.noise(biomeSource, noiseSettings);
+        ChunkGenerator generator = ChunkGenerator.noise(biomeSource, noiseSettings);
 
         LevelCreator spec = LevelCreator.builder(ResourceKey.of("test", "customworld"))
             .dimension(dimension)

@@ -19,4 +19,15 @@ public final class VerticalAnchorFactoryImpl implements VerticalAnchor.Factory {
             case VerticalAnchor.BelowTop below -> net.minecraft.world.level.levelgen.VerticalAnchor.belowTop(below.offset());
         };
     }
+
+    @Override
+    public VerticalAnchor fromMinecraft(Object nms) {
+        net.minecraft.world.level.levelgen.VerticalAnchor anchor = (net.minecraft.world.level.levelgen.VerticalAnchor) nms;
+        return switch (anchor) {
+            case net.minecraft.world.level.levelgen.VerticalAnchor.Absolute(int y) -> VerticalAnchor.absolute(y);
+            case net.minecraft.world.level.levelgen.VerticalAnchor.AboveBottom(int offset) -> VerticalAnchor.aboveBottom(offset);
+            case net.minecraft.world.level.levelgen.VerticalAnchor.BelowTop(int offset) -> VerticalAnchor.belowTop(offset);
+            default -> throw new IllegalStateException("Unexpected value: " + anchor.getClass().getSimpleName());
+        };
+    }
 }

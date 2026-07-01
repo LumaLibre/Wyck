@@ -6,7 +6,7 @@ import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.level.dimension.Dimension;
 import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.registry.level.LevelFactory;
-import me.outspending.biomesapi.wrapper.level.noise.chunk.LevelChunkGenerator;
+import me.outspending.biomesapi.wrapper.level.noise.chunk.ChunkGenerator;
 import me.outspending.biomesapi.wrapper.level.spawner.LevelSpawner;
 import org.bukkit.World;
 import org.jetbrains.annotations.ApiStatus;
@@ -63,7 +63,7 @@ public interface LevelCreator {
      * @since 2.4.0
      */
     @AsOf("2.4.0")
-    LevelChunkGenerator getGenerator();
+    ChunkGenerator getGenerator();
 
     /**
      * The seed to use for the world.
@@ -159,7 +159,7 @@ public interface LevelCreator {
         private @Nullable ResourceKey levelKey = null;
         private @Nullable Dimension dimension = null;
         private @Nullable ResourceKey dimensionType = null;
-        private @Nullable LevelChunkGenerator generator = null;
+        private @Nullable ChunkGenerator generator = null;
         private long seed = ThreadLocalRandom.current().nextLong();
         private boolean generateStructures = true;
         private boolean bonusChest = false;
@@ -190,7 +190,7 @@ public interface LevelCreator {
         }
 
         @AsOf("2.4.0")
-        public Builder generator(LevelChunkGenerator generator) {
+        public Builder generator(ChunkGenerator generator) {
             this.generator = generator;
             return this;
         }

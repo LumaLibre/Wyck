@@ -44,7 +44,7 @@ public final class BiomeGenerationSettingsImpl implements BiomeGenerationSetting
 
     @Override
     @SuppressWarnings("unchecked")
-    public Object toMinecraft() {
+    public net.minecraft.world.level.biome.BiomeGenerationSettings toMinecraft() {
         net.minecraft.world.level.biome.BiomeGenerationSettings.PlainBuilder builder =
                 new net.minecraft.world.level.biome.BiomeGenerationSettings.PlainBuilder();
 

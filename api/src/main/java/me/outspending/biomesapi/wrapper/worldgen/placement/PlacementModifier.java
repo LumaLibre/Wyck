@@ -8,6 +8,7 @@ import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
 import me.outspending.biomesapi.serialization.Codecs;
 import me.outspending.biomesapi.serialization.StringRepresentable;
+import me.outspending.biomesapi.wrapper.internal.NmsDecoder;
 import me.outspending.biomesapi.wrapper.internal.NmsHandle;
 import me.outspending.biomesapi.wrapper.worldgen.BlockPredicate;
 import me.outspending.biomesapi.wrapper.worldgen.HeightmapType;
@@ -36,20 +37,20 @@ public sealed interface PlacementModifier extends NmsHandle, StringRepresentable
 
     Codec<PlacementModifier> CODEC = Codec.lazyInitialized(() -> {
         Map<String, MapCodec<? extends PlacementModifier>> byType = Map.ofEntries(
-            Map.entry("biome", BiomeFilter.MAP_CODEC),
-            Map.entry("block_predicate", BlockPredicateFilter.MAP_CODEC),
-            Map.entry("count", CountPlacement.MAP_CODEC),
-            Map.entry("environment_scan", EnvironmentScanPlacement.MAP_CODEC),
-            Map.entry("fixed", FixedPlacement.MAP_CODEC),
-            Map.entry("height_range", HeightRangePlacement.MAP_CODEC),
-            Map.entry("heightmap", HeightmapPlacement.MAP_CODEC),
-            Map.entry("in_square", InSquarePlacement.MAP_CODEC),
-            Map.entry("noise_based_count", NoiseBasedCountPlacement.MAP_CODEC),
-            Map.entry("noise_threshold_count", NoiseThresholdCountPlacement.MAP_CODEC),
-            Map.entry("random_offset", RandomOffsetPlacement.MAP_CODEC),
-            Map.entry("rarity", RarityFilter.MAP_CODEC),
-            Map.entry("surface_relative_threshold", SurfaceRelativeThresholdFilter.MAP_CODEC),
-            Map.entry("surface_water_depth", SurfaceWaterDepthFilter.MAP_CODEC)
+            Map.entry("biome_filter", BiomeFilter.MAP_CODEC),
+            Map.entry("block_predicate_filter", BlockPredicateFilter.MAP_CODEC),
+            Map.entry("count_placement", CountPlacement.MAP_CODEC),
+            Map.entry("environment_scan_placement", EnvironmentScanPlacement.MAP_CODEC),
+            Map.entry("fixed_placement", FixedPlacement.MAP_CODEC),
+            Map.entry("height_range_placement", HeightRangePlacement.MAP_CODEC),
+            Map.entry("heightmap_placement", HeightmapPlacement.MAP_CODEC),
+            Map.entry("in_square_placement", InSquarePlacement.MAP_CODEC),
+            Map.entry("noise_based_count_placement", NoiseBasedCountPlacement.MAP_CODEC),
+            Map.entry("noise_threshold_count_placement", NoiseThresholdCountPlacement.MAP_CODEC),
+            Map.entry("random_offset_placement", RandomOffsetPlacement.MAP_CODEC),
+            Map.entry("rarity_filter", RarityFilter.MAP_CODEC),
+            Map.entry("surface_relative_threshold_filter", SurfaceRelativeThresholdFilter.MAP_CODEC),
+            Map.entry("surface_water_depth_filter", SurfaceWaterDepthFilter.MAP_CODEC)
         );
         return Codec.STRING.dispatch("type", modifier -> {
             String key = modifier.type();
@@ -65,14 +66,8 @@ public sealed interface PlacementModifier extends NmsHandle, StringRepresentable
     WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.worldgen.placement.PlacementModifierFactoryImpl");
 
     @ApiStatus.Internal
-    interface Factory {
+    interface Factory extends NmsDecoder<PlacementModifier> {
         Object toNms(PlacementModifier modifier);
-    }
-
-    @Override
-    default String postProcess(String processedClassName) {
-        return processedClassName.replace("_placement", "")
-            .replace("_filter", "");
     }
 
     /**

@@ -1,14 +1,20 @@
 package me.outspending.biomesapi.v26_2.wrapper.worldgen.surface;
 
+import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.annotations.WireFactory;
+import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.registry.bootstrap.util.BootstrapSafeMinecraftRegistries;
+import me.outspending.biomesapi.util.internal.InternalReflectUtil;
 import me.outspending.biomesapi.wrapper.worldgen.surface.SurfaceCondition;
+import me.outspending.biomesapi.wrapper.worldgen.valueproviders.VerticalAnchor;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.SurfaceRules;
-import net.minecraft.world.level.levelgen.VerticalAnchor;
-import net.minecraft.world.level.levelgen.placement.CaveSurface;
+import me.outspending.biomesapi.wrapper.worldgen.surface.CaveSurface;
 import net.minecraft.world.level.levelgen.synth.NormalNoise;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -31,15 +37,62 @@ public class SurfaceConditionFactoryImpl implements SurfaceCondition.Factory {
             case SurfaceCondition.Noise noise -> noise(noise);
             case SurfaceCondition.YCheck yCheck -> yCheck(yCheck);
             case SurfaceCondition.VerticalGradient verticalGradient -> verticalGradient(verticalGradient);
-            case SurfaceCondition.Steep ignored -> SurfaceRules.steep();
-            case SurfaceCondition.Hole ignored -> SurfaceRules.hole();
-            case SurfaceCondition.AbovePreliminarySurface ignored -> SurfaceRules.abovePreliminarySurface();
-            case SurfaceCondition.Temperature ignored -> SurfaceRules.temperature();
+            case SurfaceCondition.Steep _ -> SurfaceRules.steep();
+            case SurfaceCondition.Hole _ -> SurfaceRules.hole();
+            case SurfaceCondition.AbovePreliminarySurface _ -> SurfaceRules.abovePreliminarySurface();
+            case SurfaceCondition.Temperature _ -> SurfaceRules.temperature();
+        };
+    }
+
+    @Override
+    public SurfaceCondition fromMinecraft(Object nms) {
+        SurfaceRules.ConditionSource source = (SurfaceRules.ConditionSource) nms;
+
+        Identifier typeId = BuiltInRegistries.MATERIAL_CONDITION.getKey(source.codec());
+        Preconditions.checkNotNull(typeId, "unregistered surface condition type: " + source.getClass());
+
+        return switch (typeId.getPath()) {
+            case "stone_depth" -> new SurfaceCondition.StoneDepth(
+                InternalReflectUtil.<Integer>getFieldValue(source, "offset"),
+                InternalReflectUtil.<Boolean>getFieldValue(source, "addSurfaceDepth"),
+                InternalReflectUtil.<Integer>getFieldValue(source, "secondaryDepthRange"),
+                CaveSurface.TRANSLATOR.fromNms(InternalReflectUtil.<net.minecraft.world.level.levelgen.placement.CaveSurface>getFieldValue(source, "surfaceType")));
+
+            case "not" -> new SurfaceCondition.Not(fromMinecraft(InternalReflectUtil.getFieldValue(source, "target")));
+
+            case "water" -> new SurfaceCondition.Water(
+                InternalReflectUtil.<Integer>getFieldValue(source, "offset"),
+                InternalReflectUtil.<Integer>getFieldValue(source, "surfaceDepthMultiplier"),
+                InternalReflectUtil.<Boolean>getFieldValue(source, "addStoneDepth"));
+
+            case "biome" -> new SurfaceCondition.Biome(biomeKeys(InternalReflectUtil.getFieldValue(source, "biomes")));
+
+            case "noise_threshold" -> new SurfaceCondition.Noise(
+                noiseKey(InternalReflectUtil.getFieldValue(source, "noise")),
+                InternalReflectUtil.<Double>getFieldValue(source, "minThreshold"),
+                InternalReflectUtil.<Double>getFieldValue(source, "maxThreshold"));
+
+            case "y_above" -> new SurfaceCondition.YCheck(
+                fromAnchor(InternalReflectUtil.getFieldValue(source, "anchor")),
+                InternalReflectUtil.<Integer>getFieldValue(source, "surfaceDepthMultiplier"),
+                InternalReflectUtil.<Boolean>getFieldValue(source, "addStoneDepth"));
+
+            case "vertical_gradient" -> new SurfaceCondition.VerticalGradient(
+                InternalReflectUtil.<Identifier>getFieldValue(source, "randomName").toString(),
+                fromAnchor(InternalReflectUtil.getFieldValue(source, "trueAtAndBelow")),
+                fromAnchor(InternalReflectUtil.getFieldValue(source, "falseAtAndAbove")));
+
+            case "steep" -> SurfaceCondition.steep();
+            case "hole" -> SurfaceCondition.hole();
+            case "above_preliminary_surface" -> SurfaceCondition.abovePreliminarySurface();
+            case "temperature" -> SurfaceCondition.temperature();
+
+            default -> throw new UnsupportedOperationException("no wrapper representation for surface condition type: " + typeId);
         };
     }
 
     private SurfaceRules.ConditionSource stoneDepth(SurfaceCondition.StoneDepth stoneDepth) {
-        CaveSurface surfaceType = caveSurface(stoneDepth.surfaceType());
+        net.minecraft.world.level.levelgen.placement.CaveSurface surfaceType = stoneDepth.surfaceType().toNms(net.minecraft.world.level.levelgen.placement.CaveSurface.class);
         return SurfaceRules.stoneDepthCheck(stoneDepth.offset(), stoneDepth.addSurfaceDepth(), stoneDepth.secondaryDepthRange(), surfaceType);
     }
 
@@ -74,7 +127,7 @@ public class SurfaceConditionFactoryImpl implements SurfaceCondition.Factory {
     }
 
     private SurfaceRules.ConditionSource yCheck(SurfaceCondition.YCheck yCheck) {
-        VerticalAnchor anchor = (VerticalAnchor) yCheck.anchor().toMinecraft();
+        net.minecraft.world.level.levelgen.VerticalAnchor anchor = (net.minecraft.world.level.levelgen.VerticalAnchor) yCheck.anchor().toMinecraft();
         if (yCheck.addStoneDepth()) {
             return SurfaceRules.yStartCheck(anchor, yCheck.surfaceDepthMultiplier());
         }
@@ -82,15 +135,33 @@ public class SurfaceConditionFactoryImpl implements SurfaceCondition.Factory {
     }
 
     private SurfaceRules.ConditionSource verticalGradient(SurfaceCondition.VerticalGradient verticalGradient) {
-        VerticalAnchor trueAtAndBelow = (VerticalAnchor) verticalGradient.trueAtAndBelow().toMinecraft();
-        VerticalAnchor falseAtAndAbove = (VerticalAnchor) verticalGradient.falseAtAndAbove().toMinecraft();
+        net.minecraft.world.level.levelgen.VerticalAnchor trueAtAndBelow = (net.minecraft.world.level.levelgen.VerticalAnchor) verticalGradient.trueAtAndBelow().toMinecraft();
+        net.minecraft.world.level.levelgen.VerticalAnchor falseAtAndAbove = (net.minecraft.world.level.levelgen.VerticalAnchor) verticalGradient.falseAtAndAbove().toMinecraft();
         return SurfaceRules.verticalGradient(verticalGradient.randomName(), trueAtAndBelow, falseAtAndAbove);
     }
 
-    private CaveSurface caveSurface(me.outspending.biomesapi.wrapper.worldgen.surface.CaveSurface surface) {
-        return switch (surface) {
-            case FLOOR -> CaveSurface.FLOOR;
-            case CEILING -> CaveSurface.CEILING;
-        };
+    private static VerticalAnchor fromAnchor(net.minecraft.world.level.levelgen.VerticalAnchor anchor) {
+        if (anchor instanceof net.minecraft.world.level.levelgen.VerticalAnchor.Absolute(int y)) {
+            return VerticalAnchor.absolute(y);
+        }
+        if (anchor instanceof net.minecraft.world.level.levelgen.VerticalAnchor.AboveBottom(int offset)) {
+            return VerticalAnchor.aboveBottom(offset);
+        }
+        net.minecraft.world.level.levelgen.VerticalAnchor.BelowTop belowTop = (net.minecraft.world.level.levelgen.VerticalAnchor.BelowTop) anchor;
+        return VerticalAnchor.belowTop(belowTop.offset());
+    }
+
+    private static List<ResourceKey> biomeKeys(HolderSet<Biome> biomes) {
+        List<ResourceKey> keys = new ArrayList<>();
+        for (Holder<Biome> holder : biomes) {
+            Identifier id = holder.unwrapKey().orElseThrow().identifier();
+            keys.add(ResourceKey.of(id.getNamespace(), id.getPath()));
+        }
+        return keys;
+    }
+
+    private static ResourceKey noiseKey(net.minecraft.resources.ResourceKey<NormalNoise.NoiseParameters> key) {
+        Identifier id = key.identifier();
+        return ResourceKey.of(id.getNamespace(), id.getPath());
     }
 }

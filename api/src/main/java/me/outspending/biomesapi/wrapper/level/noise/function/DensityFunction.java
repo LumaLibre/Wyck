@@ -11,6 +11,7 @@ import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.registry.worldgen.DensityFunctionRegistry;
 import me.outspending.biomesapi.serialization.ConstantRepresentable;
 import me.outspending.biomesapi.serialization.StringRepresentable;
+import me.outspending.biomesapi.wrapper.internal.NmsDecoder;
 import me.outspending.biomesapi.wrapper.internal.NmsHandle;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -64,14 +65,8 @@ public sealed interface DensityFunction extends NmsHandle, AutoKeyed, StringRepr
     WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.level.noise.function.DensityFunctionFactoryImpl");
 
     @ApiStatus.Internal
-    interface Factory {
+    interface Factory extends NmsDecoder<DensityFunction> {
         Object toNms(DensityFunction function);
-    }
-
-    @Override
-    @AsOf("2.4.0")
-    default Object toMinecraft() {
-        return WIRE.get().toNms(this);
     }
 
     /**
@@ -112,6 +107,17 @@ public sealed interface DensityFunction extends NmsHandle, AutoKeyed, StringRepr
         ResourceKey key = this.key();
         Preconditions.checkState(key != null, "density function must have a key to be registered");
         return register(key);
+    }
+
+    @Override
+    @AsOf("2.4.0")
+    default Object toMinecraft() {
+        return WIRE.get().toNms(this);
+    }
+
+    @AsOf("2.4.0")
+    static DensityFunction fromMinecraft(Object nms) {
+        return WIRE.get().fromMinecraft(nms);
     }
 
     @AsOf("2.4.0")
@@ -310,6 +316,33 @@ public sealed interface DensityFunction extends NmsHandle, AutoKeyed, StringRepr
     static DensityFunction findTopSurface(DensityFunction density, DensityFunction upperBound, int lowerBound, int cellHeight) {
         return new FindTopSurface(density, upperBound, lowerBound, cellHeight);
     }
+
+    @AsOf("2.4.0")
+    static DensityFunction interpolated(DensityFunction input) {
+        return new Cache(CacheKind.INTERPOLATED, input);
+    }
+
+    @AsOf("2.4.0")
+    static DensityFunction flatCache(DensityFunction input) {
+        return new Cache(CacheKind.FLAT_CACHE, input);
+    }
+
+    @AsOf("2.4.0")
+    static DensityFunction cache2d(DensityFunction input) {
+        return new Cache(CacheKind.CACHE_2D, input);
+    }
+
+    @AsOf("2.4.0")
+    static DensityFunction cacheOnce(DensityFunction input) {
+        return new Cache(CacheKind.CACHE_ONCE, input);
+    }
+
+    @AsOf("2.4.0")
+    static DensityFunction cacheAllInCell(DensityFunction input) {
+        return new Cache(CacheKind.CACHE_ALL_IN_CELL, input);
+    }
+
+    ///
 
     @AsOf("2.4.0")
     default DensityFunction add(DensityFunction other) {

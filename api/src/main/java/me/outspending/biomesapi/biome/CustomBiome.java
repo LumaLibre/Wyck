@@ -14,11 +14,11 @@ import me.outspending.biomesapi.wrapper.BiomeSettings;
 import me.outspending.biomesapi.wrapper.entity.BiomeSpawner;
 import me.outspending.biomesapi.wrapper.environment.GrassColorModifier;
 import me.outspending.biomesapi.wrapper.environment.attribute.IntColorSupplier;
-import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttributeMap;
-import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttributeSupplier;
+import me.outspending.biomesapi.wrapper.environment.attribute.EnvironmentAttributeMap;
+import me.outspending.biomesapi.wrapper.environment.attribute.EnvironmentAttributeSupplier;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleCatalog;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleData;
-import me.outspending.biomesapi.wrapper.environment.particle.WrappedParticleTypes;
+import me.outspending.biomesapi.wrapper.environment.particle.ParticleTypes;
 import me.outspending.biomesapi.wrapper.worldgen.BiomeGenerationSettings;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -195,7 +195,7 @@ public interface CustomBiome extends AbstractBiome {
         private GrassColorModifier grassColorModifier = GrassColorModifier.NONE;
         private ParticleCatalog particleCatalog = ParticleCatalog.EMPTY;
         private BlockReplacement[] blockReplacements = new BlockReplacement[0];
-        private WrappedEnvironmentAttributeMap attributeMap = WrappedEnvironmentAttributeMap.EMPTY;
+        private EnvironmentAttributeMap attributeMap = EnvironmentAttributeMap.EMPTY;
         private @Nullable BiomeSpawner biomeSpawner = null;
         private @Nullable BiomeGenerationSettings generationSettings = null;
 
@@ -475,7 +475,7 @@ public interface CustomBiome extends AbstractBiome {
          * @since 2.1.0
          */
         @AsOf("2.1.0")
-        public Builder ambientParticle(WrappedParticleTypes particleType, float probability) {
+        public Builder ambientParticle(ParticleTypes particleType, float probability) {
             this.particleCatalog = this.particleCatalog.with(particleType, probability);
             return this;
         }
@@ -490,7 +490,7 @@ public interface CustomBiome extends AbstractBiome {
          * @since 2.1.0
          */
         @AsOf("2.1.0")
-        public <T extends ParticleData> Builder ambientParticle(WrappedParticleTypes particleType, float probability, @Nullable T data) {
+        public <T extends ParticleData> Builder ambientParticle(ParticleTypes particleType, float probability, @Nullable T data) {
             this.particleCatalog = this.particleCatalog.with(particleType, probability, data);
             return this;
         }
@@ -569,7 +569,7 @@ public interface CustomBiome extends AbstractBiome {
          */
         @AsOf("1.1.0")
         @Deprecated(forRemoval = true, since = "2.1.0")
-        public Builder environmentAttributeMap(WrappedEnvironmentAttributeMap environmentAttributeMap) {
+        public Builder environmentAttributeMap(EnvironmentAttributeMap environmentAttributeMap) {
             setAttributes(environmentAttributeMap);
             return this;
         }
@@ -583,7 +583,7 @@ public interface CustomBiome extends AbstractBiome {
          * @since 2.1.0
          */
         @AsOf("2.1.0")
-        public Builder setAttributes(WrappedEnvironmentAttributeMap environmentAttributeMap) {
+        public Builder setAttributes(EnvironmentAttributeMap environmentAttributeMap) {
             this.attributeMap = environmentAttributeMap;
             return this;
         }
@@ -599,7 +599,7 @@ public interface CustomBiome extends AbstractBiome {
          * @since 2.1.0
          */
         @AsOf("2.1.0")
-        public <T, K> Builder setAttribute(WrappedEnvironmentAttributeSupplier<T, K> supplier, K value) {
+        public <T, K> Builder setAttribute(EnvironmentAttributeSupplier<T, K> supplier, K value) {
             this.attributeMap = this.attributeMap.with(supplier, value);
             return this;
         }

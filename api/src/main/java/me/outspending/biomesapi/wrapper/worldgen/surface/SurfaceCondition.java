@@ -6,8 +6,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
 import me.outspending.biomesapi.keys.ResourceKey;
-import me.outspending.biomesapi.serialization.ConstantRepresentable;
 import me.outspending.biomesapi.serialization.StringRepresentable;
+import me.outspending.biomesapi.wrapper.internal.NmsDecoder;
 import me.outspending.biomesapi.wrapper.internal.NmsHandle;
 import me.outspending.biomesapi.wrapper.worldgen.valueproviders.VerticalAnchor;
 import org.jetbrains.annotations.ApiStatus;
@@ -50,7 +50,7 @@ public sealed interface SurfaceCondition extends NmsHandle, StringRepresentable 
     WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.*.wrapper.worldgen.surface.SurfaceConditionFactoryImpl");
 
     @ApiStatus.Internal
-    interface Factory {
+    interface Factory extends NmsDecoder<SurfaceCondition> {
         Object toNms(SurfaceCondition condition);
     }
 
@@ -59,6 +59,11 @@ public sealed interface SurfaceCondition extends NmsHandle, StringRepresentable 
     @AsOf("2.4.0")
     default Object toMinecraft() {
         return WIRE.get().toNms(this);
+    }
+
+    @AsOf("2.4.0")
+    static SurfaceCondition fromMinecraft(Object nms) {
+        return WIRE.get().fromMinecraft(nms);
     }
 
     /**

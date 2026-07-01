@@ -6,6 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
 import me.outspending.biomesapi.keys.ResourceKey;
+import me.outspending.biomesapi.wrapper.internal.NmsDecoder;
 import me.outspending.biomesapi.wrapper.internal.NmsHandle;
 import me.outspending.biomesapi.wrapper.worldgen.feature.ConfiguredFeature;
 import net.kyori.adventure.key.Key;
@@ -49,7 +50,7 @@ public sealed interface PlacedFeature extends NmsHandle, Keyed permits PlacedFea
     WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.worldgen.placement.PlacedFeatureFactoryImpl");
 
     @ApiStatus.Internal
-    interface Factory {
+    interface Factory extends NmsDecoder<PlacedFeature> {
         Object toNms(PlacedFeature feature);
     }
 
@@ -92,6 +93,11 @@ public sealed interface PlacedFeature extends NmsHandle, Keyed permits PlacedFea
     @AsOf("2.3.0")
     default Object toMinecraft() {
         return WIRE.get().toNms(this);
+    }
+
+    @AsOf("2.4.0")
+    static PlacedFeature fromMinecraft(Object nms) {
+        return WIRE.get().fromMinecraft(nms);
     }
 
     @AsOf("2.3.0")

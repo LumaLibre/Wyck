@@ -6,7 +6,7 @@ plugins {
 
 dependencies {
     implementation(project(":bundle"))
-    paperweight.paperDevBundle(libs.versions.minecraft.v1.m21.r11)
+    paperweight.foliaDevBundle(libs.versions.minecraft.v1.m21.r11)
 }
 
 tasks {

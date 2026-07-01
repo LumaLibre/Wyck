@@ -26,9 +26,9 @@ public final class Lazy<T> implements Supplier<@Nullable T> {
     @Override
     @AsOf("2.3.0")
     public T get() {
-        if (supplier != null) {
-            value = supplier.get();
-            supplier = null;
+        if (this.supplier != null) {
+            this.value = supplier.get();
+            this.supplier = null;
         }
         return value;
     }

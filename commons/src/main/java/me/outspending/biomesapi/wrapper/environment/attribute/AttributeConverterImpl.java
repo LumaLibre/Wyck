@@ -6,10 +6,9 @@ import me.outspending.biomesapi.wrapper.internal.NmsEnumTranslatable;
 import me.outspending.biomesapi.wrapper.environment.BedRule;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleCatalog;
 import me.outspending.biomesapi.wrapper.environment.particle.ResolvedAmbientParticle;
-import me.outspending.biomesapi.wrapper.environment.particle.WrappedAmbientParticle;
+import me.outspending.biomesapi.wrapper.environment.particle.AmbientParticle;
 import net.kyori.adventure.text.Component;
 import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.world.attribute.AmbientParticle;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
@@ -57,12 +56,12 @@ public final class AttributeConverterImpl implements AttributeConverter {
     }
 
     @Override
-    public Object convertDripstoneParticle(WrappedAmbientParticle<?> particle) {
+    public Object convertDripstoneParticle(AmbientParticle<?> particle) {
         return particle.toParticleOptions().nms();
     }
 
-    private static AmbientParticle resolvedToNms(ResolvedAmbientParticle resolved) {
-        return new AmbientParticle((ParticleOptions) resolved.options().nms(), resolved.probability());
+    private static net.minecraft.world.attribute.AmbientParticle resolvedToNms(ResolvedAmbientParticle resolved) {
+        return new net.minecraft.world.attribute.AmbientParticle((ParticleOptions) resolved.options().nms(), resolved.probability());
     }
 
     private static Optional<net.minecraft.network.chat.Component> errorMessageToNms(Component errorMessage) {

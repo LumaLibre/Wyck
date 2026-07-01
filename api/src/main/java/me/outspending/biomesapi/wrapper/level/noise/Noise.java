@@ -1,18 +1,17 @@
 package me.outspending.biomesapi.wrapper.level.noise;
 
-import com.google.common.base.Preconditions;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.keys.ResourceKey;
-import me.outspending.biomesapi.wrapper.level.noise.chunk.LevelChunkGenerator;
+import me.outspending.biomesapi.wrapper.level.noise.chunk.ChunkGenerator;
 import org.jspecify.annotations.Nullable;
 
 /**
  * Represents an abstract noise function.
  *
- * @see LevelNoiseGeneratorSettings
- * @see LevelChunkGenerator
+ * @see NoiseGeneratorSettings
+ * @see ChunkGenerator
  * @since 2.4.0
  * @version 2.4.0
  * @author Jsinco
@@ -22,14 +21,14 @@ public interface Noise {
 
     Codec<Noise> CODEC = Codec.either(
         ResourceKey.CODEC,
-        LevelNoiseGeneratorSettings.CODEC
+        NoiseGeneratorSettings.CODEC
     ).xmap(
         either -> either.map(Noise::reference, settings -> (Noise) settings),
         noise -> {
             if (noise instanceof Reference(ResourceKey key)) {
                 return Either.left(key);
             }
-            if (noise instanceof LevelNoiseGeneratorSettings settings) {
+            if (noise instanceof NoiseGeneratorSettings settings) {
                 return Either.right(settings);
             }
             throw new IllegalStateException("unknown noise type: " + noise.getClass().getName());
@@ -111,8 +110,8 @@ public interface Noise {
      * @since 2.4.0
      */
     @AsOf("2.4.0")
-    static LevelNoiseGeneratorSettings.Builder builder() {
-        return LevelNoiseGeneratorSettings.builder();
+    static NoiseGeneratorSettings.Builder builder() {
+        return NoiseGeneratorSettings.builder();
     }
 
     /**

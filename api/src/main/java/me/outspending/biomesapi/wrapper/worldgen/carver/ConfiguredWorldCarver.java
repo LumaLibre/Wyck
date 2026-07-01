@@ -5,6 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
 import me.outspending.biomesapi.keys.ResourceKey;
+import me.outspending.biomesapi.wrapper.internal.NmsDecoder;
 import me.outspending.biomesapi.wrapper.internal.NmsHandle;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -38,7 +39,7 @@ public sealed interface ConfiguredWorldCarver extends NmsHandle permits Configur
     WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.worldgen.carver.ConfiguredWorldCarverFactoryImpl");
 
     @ApiStatus.Internal
-    interface Factory {
+    interface Factory extends NmsDecoder<ConfiguredWorldCarver> {
         Object toNms(ConfiguredWorldCarver carver);
     }
 
@@ -90,6 +91,11 @@ public sealed interface ConfiguredWorldCarver extends NmsHandle permits Configur
     @AsOf("2.3.0")
     default Object toMinecraft() {
         return WIRE.get().toNms(this);
+    }
+
+    @AsOf("2.4.0")
+    static ConfiguredWorldCarver fromMinecraft(Object nms) {
+        return WIRE.get().fromMinecraft(nms);
     }
 
     /**

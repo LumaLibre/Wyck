@@ -6,7 +6,6 @@ import me.outspending.biomesapi.wrapper.worldgen.climate.ClimatePoint;
 import net.minecraft.world.level.biome.Climate;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
 import net.minecraft.world.level.levelgen.NoiseRouter;
 import net.minecraft.world.level.levelgen.NoiseSettings;
 import net.minecraft.world.level.levelgen.SurfaceRules;
@@ -20,12 +19,12 @@ import java.util.List;
 
 @NullMarked
 @ApiStatus.Internal
-public final class LevelNoiseGeneratorSettingsImpl implements LevelNoiseGeneratorSettings {
+public final class NoiseGeneratorSettingsImpl implements NoiseGeneratorSettings {
 
     private final Data data;
-    private final Lazy<NoiseGeneratorSettings> cached = Lazy.of(this::build);
+    private final Lazy<net.minecraft.world.level.levelgen.NoiseGeneratorSettings> cached = Lazy.of(this::build);
 
-    public LevelNoiseGeneratorSettingsImpl(Data data) {
+    public NoiseGeneratorSettingsImpl(Data data) {
         this.data = data;
     }
 
@@ -39,14 +38,14 @@ public final class LevelNoiseGeneratorSettingsImpl implements LevelNoiseGenerato
         return this.cached.get();
     }
 
-    private NoiseGeneratorSettings build() {
+    private net.minecraft.world.level.levelgen.NoiseGeneratorSettings build() {
         NoiseSettings noiseSettings = (NoiseSettings) this.data.noiseSettings().toMinecraft();
         BlockState defaultBlock = blockState(this.data.defaultBlock());
         BlockState defaultFluid = blockState(this.data.defaultFluid());
         NoiseRouter noiseRouter = (NoiseRouter) this.data.noiseRouter().toMinecraft();
         SurfaceRules.RuleSource surfaceRule = (SurfaceRules.RuleSource) this.data.surfaceRule().toMinecraft();
         List<Climate.ParameterPoint> spawnTarget = spawnTarget(this.data.spawnTarget());
-        return new NoiseGeneratorSettings(
+        return new net.minecraft.world.level.levelgen.NoiseGeneratorSettings(
             noiseSettings,
             defaultBlock,
             defaultFluid,

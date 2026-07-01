@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
+import me.outspending.biomesapi.wrapper.internal.NmsDecoder;
 import me.outspending.biomesapi.wrapper.internal.NmsHandle;
 
 import org.jetbrains.annotations.ApiStatus;
@@ -31,7 +32,7 @@ public interface ClimateParameter extends NmsHandle {
     WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.worldgen.climate.ClimateParameterFactoryImpl");
 
     @ApiStatus.Internal
-    interface Factory {
+    interface Factory extends NmsDecoder<ClimateParameter> {
         ClimateParameter create(float min, float max);
     }
 
@@ -76,4 +77,8 @@ public interface ClimateParameter extends NmsHandle {
         return WIRE.get().create(min, max);
     }
 
+    @AsOf("2.4.0")
+    static ClimateParameter fromMinecraft(Object nms) {
+        return WIRE.get().fromMinecraft(nms);
+    }
 }

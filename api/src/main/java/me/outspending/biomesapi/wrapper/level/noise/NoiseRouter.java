@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
+import me.outspending.biomesapi.wrapper.internal.NmsDecoder;
 import me.outspending.biomesapi.wrapper.internal.NmsHandle;
 import me.outspending.biomesapi.wrapper.level.noise.function.DensityFunction;
 import org.jetbrains.annotations.ApiStatus;
@@ -20,9 +21,9 @@ import org.jspecify.annotations.NullUnmarked;
 @NullMarked
 @AsOf("2.4.0")
 @ApiStatus.Experimental
-public interface LevelNoiseRouter extends NmsHandle {
+public interface NoiseRouter extends NmsHandle {
 
-    Codec<LevelNoiseRouter> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    Codec<NoiseRouter> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         DensityFunction.CODEC.optionalFieldOf("barrier", DensityFunction.zero()).forGetter(r -> r.slots().barrier()),
         DensityFunction.CODEC.optionalFieldOf("fluid_level_floodedness", DensityFunction.zero()).forGetter(r -> r.slots().fluidLevelFloodedness()),
         DensityFunction.CODEC.optionalFieldOf("fluid_level_spread", DensityFunction.zero()).forGetter(r -> r.slots().fluidLevelSpread()),
@@ -38,14 +39,14 @@ public interface LevelNoiseRouter extends NmsHandle {
         DensityFunction.CODEC.optionalFieldOf("vein_toggle", DensityFunction.zero()).forGetter(r -> r.slots().veinToggle()),
         DensityFunction.CODEC.optionalFieldOf("vein_ridged", DensityFunction.zero()).forGetter(r -> r.slots().veinRidged()),
         DensityFunction.CODEC.optionalFieldOf("vein_gap", DensityFunction.zero()).forGetter(r -> r.slots().veinGap())
-    ).apply(instance, LevelNoiseRouter::fromCodec));
+    ).apply(instance, NoiseRouter::of));
 
     @ApiStatus.Internal
-    WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.level.noise.LevelNoiseRouterFactoryImpl");
+    WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.level.noise.NoiseRouterFactoryImpl");
 
     @ApiStatus.Internal
-    interface Factory {
-        LevelNoiseRouter create(Slots slots);
+    interface Factory extends NmsDecoder<NoiseRouter> {
+        NoiseRouter create(Slots slots);
     }
 
     /**
@@ -66,6 +67,38 @@ public interface LevelNoiseRouter extends NmsHandle {
     @AsOf("2.4.0")
     static Builder builder() {
         return new Builder();
+    }
+
+    @AsOf("2.4.0")
+    static NoiseRouter of(Slots slots) {
+        return WIRE.get().create(slots);
+    }
+
+    @AsOf("2.4.0")
+    static NoiseRouter of(DensityFunction barrier, DensityFunction fluidLevelFloodedness, DensityFunction fluidLevelSpread, DensityFunction lava, DensityFunction temperature, DensityFunction vegetation, DensityFunction continents, DensityFunction erosion, DensityFunction depth, DensityFunction ridges, DensityFunction preliminarySurfaceLevel, DensityFunction finalDensity, DensityFunction veinToggle, DensityFunction veinRidged, DensityFunction veinGap) {
+        Slots slots = new Slots(
+            barrier,
+            fluidLevelFloodedness,
+            fluidLevelSpread,
+            lava,
+            temperature,
+            vegetation,
+            continents,
+            erosion,
+            depth,
+            ridges,
+            preliminarySurfaceLevel,
+            finalDensity,
+            veinToggle,
+            veinRidged,
+            veinGap
+        );
+        return of(slots);
+    }
+
+    @AsOf("2.4.0")
+    static NoiseRouter fromMinecraft(Object nms) {
+        return WIRE.get().fromMinecraft(nms);
     }
 
     /**
@@ -91,14 +124,6 @@ public interface LevelNoiseRouter extends NmsHandle {
         DensityFunction veinRidged,
         DensityFunction veinGap
     ) {}
-
-    private static LevelNoiseRouter fromCodec(DensityFunction barrier, DensityFunction fluidLevelFloodedness, DensityFunction fluidLevelSpread, DensityFunction lava, DensityFunction temperature, DensityFunction vegetation, DensityFunction continents, DensityFunction erosion, DensityFunction depth, DensityFunction ridges, DensityFunction preliminarySurfaceLevel, DensityFunction finalDensity, DensityFunction veinToggle, DensityFunction veinRidged, DensityFunction veinGap) {
-        return builder().barrier(barrier).fluidLevelFloodedness(fluidLevelFloodedness)
-            .fluidLevelSpread(fluidLevelSpread).lava(lava).temperature(temperature)
-            .vegetation(vegetation).continents(continents).erosion(erosion).depth(depth)
-            .ridges(ridges).preliminarySurfaceLevel(preliminarySurfaceLevel).finalDensity(finalDensity)
-            .veinToggle(veinToggle).veinRidged(veinRidged).veinGap(veinGap).build();
-    }
 
     /**
      * Builder for a noise router.
@@ -221,7 +246,7 @@ public interface LevelNoiseRouter extends NmsHandle {
         }
 
         @AsOf("2.4.0")
-        public LevelNoiseRouter build() {
+        public NoiseRouter build() {
             Slots slots = new Slots(
                 this.barrier,
                 this.fluidLevelFloodedness,

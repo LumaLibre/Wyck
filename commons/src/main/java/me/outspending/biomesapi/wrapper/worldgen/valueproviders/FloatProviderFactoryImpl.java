@@ -20,4 +20,15 @@ public final class FloatProviderFactoryImpl implements FloatProvider.Factory {
             case FloatProvider.Trapezoid t -> net.minecraft.util.valueproviders.TrapezoidFloat.of(t.min(), t.max(), t.plateau());
         };
     }
+
+    @Override
+    public FloatProvider fromMinecraft(Object nms) {
+        return switch (nms) {
+            case net.minecraft.util.valueproviders.ConstantFloat(float value) -> FloatProvider.constant(value);
+            case net.minecraft.util.valueproviders.UniformFloat(float min, float max) -> FloatProvider.uniform(min, max);
+            case net.minecraft.util.valueproviders.ClampedNormalFloat(float mean, float deviation, float min, float max) -> FloatProvider.clampedNormal(mean, deviation, min, max);
+            case net.minecraft.util.valueproviders.TrapezoidFloat(float min, float max, float plateau) -> FloatProvider.trapezoid(min, max, plateau);
+            default -> throw new IllegalArgumentException("Unknown FloatProvider type: " + nms.getClass().getSimpleName());
+        };
+    }
 }

@@ -68,7 +68,7 @@ public final class ClimatePointImpl implements ClimatePoint {
     }
 
     @Override
-    public Object toMinecraft() {
+    public Climate.ParameterPoint toMinecraft() {
         return Climate.parameters(
             (Climate.Parameter) this.temperature.toMinecraft(),
             (Climate.Parameter) this.humidity.toMinecraft(),

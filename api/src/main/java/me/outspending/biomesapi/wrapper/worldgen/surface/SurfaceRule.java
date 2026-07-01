@@ -7,6 +7,7 @@ import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
 import me.outspending.biomesapi.serialization.Codecs;
 import me.outspending.biomesapi.serialization.StringRepresentable;
+import me.outspending.biomesapi.wrapper.internal.NmsDecoder;
 import me.outspending.biomesapi.wrapper.internal.NmsHandle;
 import org.bukkit.Material;
 import org.jetbrains.annotations.ApiStatus;
@@ -42,7 +43,7 @@ public sealed interface SurfaceRule extends NmsHandle, StringRepresentable permi
     WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.worldgen.surface.SurfaceRuleFactoryImpl");
 
     @ApiStatus.Internal
-    interface Factory {
+    interface Factory extends NmsDecoder<SurfaceRule> {
         Object toNms(SurfaceRule rule);
     }
 
@@ -50,6 +51,11 @@ public sealed interface SurfaceRule extends NmsHandle, StringRepresentable permi
     @AsOf("2.4.0")
     default Object toMinecraft() {
         return WIRE.get().toNms(this);
+    }
+
+    @AsOf("2.4.0")
+    static SurfaceRule fromMinecraft(Object nms) {
+        return WIRE.get().fromMinecraft(nms);
     }
 
     /**

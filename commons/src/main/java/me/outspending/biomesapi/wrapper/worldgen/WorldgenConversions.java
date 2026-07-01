@@ -1,12 +1,18 @@
 package me.outspending.biomesapi.wrapper.worldgen;
 
 import me.outspending.biomesapi.annotations.AsOf;
+import me.outspending.biomesapi.util.internal.InternalReflectUtil;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Vec3i;
+import net.minecraft.resources.Identifier;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Tag;
 import org.bukkit.block.BlockFace;
 import org.bukkit.craftbukkit.block.CraftBlock;
 import org.bukkit.craftbukkit.util.CraftMagicNumbers;
@@ -44,6 +50,12 @@ public final class WorldgenConversions {
         return HolderSet.direct(holders);
     }
 
+    public static List<Material> fromBlockHolderSet(HolderSet<Block> holderSet) {
+        return holderSet.stream()
+            .map(blockHolder -> blockHolder.value().defaultBlockState().getBukkitMaterial())
+            .toList();
+    }
+
     public static List<Block> toBlockList(Collection<Material> materials) {
         List<Block> blocks = new ArrayList<>(materials.size());
         for (Material material : materials) {
@@ -62,6 +74,10 @@ public final class WorldgenConversions {
         return new Vec3i(vector.getBlockX(), vector.getBlockY(), vector.getBlockZ());
     }
 
+    public static BlockVector toBlockVector(Vec3i vec3i) {
+        return new BlockVector(vec3i.getX(), vec3i.getY(), vec3i.getZ());
+    }
+
 
     public static Direction toNmsDirection(BlockFace face) {
         Direction direction = CraftBlock.blockFaceToNotch(face);
@@ -70,5 +86,16 @@ public final class WorldgenConversions {
         }
 
         return direction;
+    }
+
+    public static Tag<Material> toBukkitMaterialTag(TagKey<Block> tagKey) {
+        Identifier location = tagKey.location();
+        NamespacedKey key = new NamespacedKey(location.getNamespace(), location.getPath());
+
+        Tag<Material> bukkitTag = Bukkit.getTag(Tag.REGISTRY_BLOCKS, key, Material.class);
+        if (bukkitTag == null) {
+            throw new IllegalArgumentException("Block tag " + key + " is not registered with Bukkit");
+        }
+        return bukkitTag;
     }
 }

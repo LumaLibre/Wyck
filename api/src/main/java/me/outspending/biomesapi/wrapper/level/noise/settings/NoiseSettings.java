@@ -5,6 +5,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
+import me.outspending.biomesapi.wrapper.internal.NmsDecoder;
 import me.outspending.biomesapi.wrapper.internal.NmsHandle;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -19,28 +20,28 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 @AsOf("2.4.0")
 @ApiStatus.Experimental
-public interface LevelNoiseSettings extends NmsHandle {
+public interface NoiseSettings extends NmsHandle {
 
-    Codec<LevelNoiseSettings> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        Codec.INT.fieldOf("min_y").forGetter(LevelNoiseSettings::minY),
-        Codec.INT.fieldOf("height").forGetter(LevelNoiseSettings::height),
-        Codec.INT.fieldOf("size_horizontal").forGetter(LevelNoiseSettings::sizeHorizontal),
-        Codec.INT.fieldOf("size_vertical").forGetter(LevelNoiseSettings::sizeVertical)
-    ).apply(instance, LevelNoiseSettings::of));
-
-    @ApiStatus.Internal
-    WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.level.noise.settings.LevelNoiseSettingsFactoryImpl");
+    Codec<NoiseSettings> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+        Codec.INT.fieldOf("min_y").forGetter(NoiseSettings::minY),
+        Codec.INT.fieldOf("height").forGetter(NoiseSettings::height),
+        Codec.INT.fieldOf("size_horizontal").forGetter(NoiseSettings::sizeHorizontal),
+        Codec.INT.fieldOf("size_vertical").forGetter(NoiseSettings::sizeVertical)
+    ).apply(instance, NoiseSettings::of));
 
     @ApiStatus.Internal
-    interface Factory {
-        LevelNoiseSettings create(int minY, int height, int sizeHorizontal, int sizeVertical);
+    WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.level.noise.settings.NoiseSettingsFactoryImpl");
+
+    @ApiStatus.Internal
+    interface Factory extends NmsDecoder<NoiseSettings> {
+        NoiseSettings create(int minY, int height, int sizeHorizontal, int sizeVertical);
     }
 
-    LevelNoiseSettings OVERWORLD = of(-64, 384, 1, 2);
-    LevelNoiseSettings NETHER = of(0, 128, 1, 2);
-    LevelNoiseSettings END = of(0, 128, 2, 1);
-    LevelNoiseSettings CAVES = of(-64, 192, 1, 2);
-    LevelNoiseSettings FLOATING_ISLANDS = of(0, 256, 2, 1);
+    NoiseSettings OVERWORLD = of(-64, 384, 1, 2);
+    NoiseSettings NETHER = of(0, 128, 1, 2);
+    NoiseSettings END = of(0, 128, 2, 1);
+    NoiseSettings CAVES = of(-64, 192, 1, 2);
+    NoiseSettings FLOATING_ISLANDS = of(0, 256, 2, 1);
 
     /**
      * The lowest Y level the noise generates at.
@@ -92,10 +93,15 @@ public interface LevelNoiseSettings extends NmsHandle {
      * @since 2.4.0
      */
     @AsOf("2.4.0")
-    static LevelNoiseSettings of(int minY, int height, int sizeHorizontal, int sizeVertical) {
+    static NoiseSettings of(int minY, int height, int sizeHorizontal, int sizeVertical) {
         Preconditions.checkArgument(height % 16 == 0, "height must be a multiple of 16");
         Preconditions.checkArgument(minY + height <= 2032, "minY + height must be <= 2032");
         Preconditions.checkArgument(minY % 16 == 0, "minY must be a multiple of 16");
         return WIRE.get().create(minY, height, sizeHorizontal, sizeVertical);
+    }
+
+    @AsOf("2.4.0")
+    static NoiseSettings fromMinecraft(Object nms) {
+        return WIRE.get().fromMinecraft(nms);
     }
 }

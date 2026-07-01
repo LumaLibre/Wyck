@@ -15,6 +15,8 @@ import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfigur
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
+import java.util.Optional;
+
 @NullMarked
 @WireFactory
 @AsOf("2.3.0")
@@ -28,6 +30,17 @@ public final class ConfiguredFeatureFactoryImpl implements ConfiguredFeature.Fac
             case ConfiguredFeature.VanillaConfigured vanilla -> resolveVanilla(vanilla);
             case ConfiguredFeature.CustomConfigured custom -> resolveCustom(custom);
         };
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public ConfiguredFeature fromMinecraft(Object nms) {
+        Holder<net.minecraft.world.level.levelgen.feature.ConfiguredFeature<?, ?>> holder =
+            (Holder<net.minecraft.world.level.levelgen.feature.ConfiguredFeature<?, ?>>) nms;
+
+        Optional<ResourceKey<net.minecraft.world.level.levelgen.feature.ConfiguredFeature<?, ?>>> key = holder.unwrapKey();
+        return key.map(this::reverseReference).orElseGet(() -> reverseDirect(holder.value()));
+
     }
 
     private Object resolveReference(ConfiguredFeature.Reference reference) {
@@ -66,5 +79,30 @@ public final class ConfiguredFeatureFactoryImpl implements ConfiguredFeature.Fac
         net.minecraft.world.level.levelgen.feature.ConfiguredFeature<?, ?> configured =
             new net.minecraft.world.level.levelgen.feature.ConfiguredFeature(feature, holder);
         return Holder.direct(configured);
+    }
+
+    private ConfiguredFeature reverseReference(ResourceKey<net.minecraft.world.level.levelgen.feature.ConfiguredFeature<?, ?>> key) {
+        Identifier location = key.identifier();
+        me.outspending.biomesapi.keys.ResourceKey wrapperKey = me.outspending.biomesapi.keys.ResourceKey.of(location.getNamespace(), location.getPath());
+        return ConfiguredFeature.reference(wrapperKey);
+    }
+
+    private ConfiguredFeature reverseDirect(net.minecraft.world.level.levelgen.feature.ConfiguredFeature<?, ?> configured) {
+        net.minecraft.world.level.levelgen.feature.Feature<?> feature = configured.feature();
+        Identifier featureId = BuiltInRegistries.FEATURE.getKey(feature);
+        if (featureId == null) {
+            throw new IllegalArgumentException("feature is not registered in BuiltInRegistries.FEATURE: " + feature);
+        }
+        me.outspending.biomesapi.keys.ResourceKey featureKey = me.outspending.biomesapi.keys.ResourceKey.of(featureId.getNamespace(), featureId.getPath());
+
+        FeatureConfiguration nmsConfig = configured.config();
+
+        if (nmsConfig instanceof CustomFeatureBridge.Holder<?>(Object config)) {
+            return new ConfiguredFeature.CustomConfigured(featureKey, config);
+        }
+
+        me.outspending.biomesapi.wrapper.worldgen.feature.config.FeatureConfiguration configuration =
+            me.outspending.biomesapi.wrapper.worldgen.feature.config.FeatureConfiguration.fromMinecraft(nmsConfig);
+        return new ConfiguredFeature.VanillaConfigured(featureKey, configuration);
     }
 }

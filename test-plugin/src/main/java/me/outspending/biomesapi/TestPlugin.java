@@ -4,22 +4,21 @@ import me.outspending.biomesapi.level.dimension.Dimension;
 import me.outspending.biomesapi.level.LevelCreator;
 import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.registry.level.LevelFactory;
-import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttributes;
+import me.outspending.biomesapi.wrapper.environment.attribute.EnvironmentAttributes;
 import me.outspending.biomesapi.wrapper.level.BiomeSource;
 import me.outspending.biomesapi.wrapper.level.clock.WorldClock;
 import me.outspending.biomesapi.wrapper.level.dimension.Skybox;
-import me.outspending.biomesapi.wrapper.level.noise.LevelNoiseGeneratorSettings;
-import me.outspending.biomesapi.wrapper.level.noise.LevelNoiseRouter;
+import me.outspending.biomesapi.wrapper.level.noise.NoiseGeneratorSettings;
+import me.outspending.biomesapi.wrapper.level.noise.NoiseRouter;
 import me.outspending.biomesapi.wrapper.level.noise.Noises;
-import me.outspending.biomesapi.wrapper.level.noise.chunk.LevelChunkGenerator;
+import me.outspending.biomesapi.wrapper.level.noise.chunk.ChunkGenerator;
 import me.outspending.biomesapi.wrapper.level.noise.function.DensityFunction;
 import me.outspending.biomesapi.wrapper.level.noise.function.DensityFunctions;
-import me.outspending.biomesapi.wrapper.level.noise.settings.LevelNoiseSettings;
+import me.outspending.biomesapi.wrapper.level.noise.settings.NoiseSettings;
 import me.outspending.biomesapi.wrapper.worldgen.climate.ClimatePoint;
 import me.outspending.biomesapi.wrapper.worldgen.surface.CaveSurface;
 import me.outspending.biomesapi.wrapper.worldgen.surface.SurfaceCondition;
 import me.outspending.biomesapi.wrapper.worldgen.surface.SurfaceRule;
-import net.minecraft.core.registries.Registries;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.event.Listener;
@@ -34,6 +33,10 @@ public class TestPlugin extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
+        ConfiguredFeature;
+        Feature;
+        OverworldBiomeBuilder;
+        AsyncPlayerSpawnLocationEvent
         //Registries.DENSITY_FUNCTION
         ResourceKey dimKey = ResourceKey.of("test", "example");
         Dimension dimension = Dimension.builder(dimKey)
@@ -42,7 +45,7 @@ public class TestPlugin extends JavaPlugin implements Listener {
             .logicalHeight(800)
             .skybox(Skybox.OVERWORLD)
             .defaultClock(WorldClock.OVERWORLD)
-            .attribute(WrappedEnvironmentAttributes.FOG_COLOR, -4138753)
+            .attribute(EnvironmentAttributes.FOG_COLOR, -4138753)
             .build();
         ResourceKey levelKey = ResourceKey.of("test", "wobbleworld");
 
@@ -63,7 +66,7 @@ public class TestPlugin extends JavaPlugin implements Listener {
         DensityFunction base = DensityFunction.yClampedGradient(0, 256, 1.2, -1.2);
         DensityFunction finalDensity = DensityFunction.add(base, wobble).clamp(-1.0, 1.0);
 
-        LevelNoiseRouter router = LevelNoiseRouter.builder()
+        NoiseRouter router = NoiseRouter.builder()
             .temperature(DensityFunction.noise(ResourceKey.minecraft("temperature"), 0.25, 0.0))
             .vegetation(DensityFunction.noise(ResourceKey.minecraft("vegetation"), 0.25, 0.0))
             .finalDensity(finalDensity)
@@ -90,8 +93,8 @@ public class TestPlugin extends JavaPlugin implements Listener {
             SurfaceRule.ifTrue(underFloor, subBlocks)
         ));
 
-        LevelNoiseGeneratorSettings noiseSettings = LevelNoiseGeneratorSettings.builder()
-            .noiseSettings(LevelNoiseSettings.OVERWORLD)
+        NoiseGeneratorSettings noiseSettings = NoiseGeneratorSettings.builder()
+            .noiseSettings(NoiseSettings.OVERWORLD)
             .defaultBlock(Material.STONE)
             .defaultFluid(Material.WATER)
             .noiseRouter(router)
@@ -101,7 +104,7 @@ public class TestPlugin extends JavaPlugin implements Listener {
             .oreVeinsEnabled(false)
             .build();
 
-        LevelChunkGenerator generator = LevelChunkGenerator.noise(biomeSource, noiseSettings);
+        ChunkGenerator generator = ChunkGenerator.noise(biomeSource, noiseSettings);
 
         LevelCreator spec = LevelCreator.builder(levelKey)
             .dimension(dimension)

@@ -38,4 +38,9 @@ public class LevelSpawnerFactoryImpl implements LevelSpawner.Factory {
     public LevelSpawner custom(SpawnTick tick) {
         return new CustomLevelSpawnerImpl(tick);
     }
+
+    @Override
+    public LevelSpawner fromMinecraft(Object nms) {
+        return null;
+    }
 }

@@ -1,14 +1,14 @@
 package me.outspending.biomesapi.wrapper.internal;
 
 import me.outspending.biomesapi.annotations.AsOf;
-import me.outspending.biomesapi.serialization.StringRepresentable;
+import me.outspending.biomesapi.serialization.ConstantRepresentable;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 @AsOf("2.0.0")
 @ApiStatus.Internal
-public interface NmsEnumTranslatable<W extends NmsEnumTranslatable<W>> extends StringRepresentable {
+public interface NmsEnumTranslatable<W extends NmsEnumTranslatable<W>> extends ConstantRepresentable {
 
     @AsOf("2.0.0")
     KeyedEnumTranslator<W> translator();

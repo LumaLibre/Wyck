@@ -5,6 +5,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
+import me.outspending.biomesapi.wrapper.internal.NmsDecoder;
 import me.outspending.biomesapi.wrapper.internal.NmsHandle;
 import me.outspending.biomesapi.wrapper.worldgen.valueproviders.FloatProvider;
 import org.jetbrains.annotations.ApiStatus;
@@ -39,10 +40,10 @@ public record CanyonShapeConfiguration(
     ).apply(i, CanyonShapeConfiguration::new));
 
     @ApiStatus.Internal
-    static final WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.worldgen.carver.CanyonShapeConfigurationFactoryImpl");
+    private static final WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.worldgen.carver.CanyonShapeConfigurationFactoryImpl");
 
     @ApiStatus.Internal
-    interface Factory {
+    protected interface Factory extends NmsDecoder<CanyonShapeConfiguration> {
         Object toNms(CanyonShapeConfiguration configuration);
     }
 
@@ -73,6 +74,11 @@ public record CanyonShapeConfiguration(
     @AsOf("2.3.0")
     public Object toMinecraft() {
         return WIRE.get().toNms(this);
+    }
+
+    @AsOf("2.4.0")
+    static CanyonShapeConfiguration fromMinecraft(Object nms) {
+        return WIRE.get().fromMinecraft(nms);
     }
 
     /**

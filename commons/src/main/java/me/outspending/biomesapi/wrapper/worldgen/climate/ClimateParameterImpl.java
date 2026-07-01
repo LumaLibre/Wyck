@@ -35,7 +35,7 @@ public class ClimateParameterImpl implements ClimateParameter {
     }
 
     @Override
-    public Object toMinecraft() {
+    public Climate.Parameter toMinecraft() {
         return Climate.Parameter.span(this.min, this.max);
     }
 }

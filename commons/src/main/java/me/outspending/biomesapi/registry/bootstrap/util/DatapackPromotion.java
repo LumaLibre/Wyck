@@ -120,7 +120,7 @@ public final class DatapackPromotion {
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public Object reference(Object wrapper, ResourceKey registry) {
+    public Holder.Reference reference(Object wrapper, ResourceKey registry) {
         ResourceKey key = this.wrapperKeys.get(wrapper);
         if (key == null) {
             throw new IllegalStateException("custom worldgen object was not collected: " + wrapper);

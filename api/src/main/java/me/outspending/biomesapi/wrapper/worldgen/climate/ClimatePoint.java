@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
+import me.outspending.biomesapi.wrapper.internal.NmsDecoder;
 import me.outspending.biomesapi.wrapper.internal.NmsHandle;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -26,13 +27,13 @@ public interface ClimatePoint extends NmsHandle {
         ClimateParameter.CODEC.fieldOf("depth").forGetter(ClimatePoint::depth),
         ClimateParameter.CODEC.fieldOf("weirdness").forGetter(ClimatePoint::weirdness),
         Codec.floatRange(0.0f, 1.0f).fieldOf("offset").forGetter(ClimatePoint::offset)
-    ).apply(instance, ClimatePoint::fromCodec));
+    ).apply(instance, ClimatePoint::of));
 
     @ApiStatus.Internal
     WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.worldgen.climate.ClimatePointFactoryImpl");
 
     @ApiStatus.Internal
-    interface Factory {
+    interface Factory extends NmsDecoder<ClimatePoint> {
         ClimatePoint create(ClimateParameter temperature, ClimateParameter humidity, ClimateParameter continentalness, ClimateParameter erosion, ClimateParameter depth, ClimateParameter weirdness, float offset);
     }
 
@@ -132,9 +133,14 @@ public interface ClimatePoint extends NmsHandle {
         );
     }
 
-    @ApiStatus.Internal
-    private static ClimatePoint fromCodec(ClimateParameter temperature, ClimateParameter humidity, ClimateParameter continentalness, ClimateParameter erosion, ClimateParameter depth, ClimateParameter weirdness, float offset) {
+    @AsOf("2.4.0")
+    static ClimatePoint of(ClimateParameter temperature, ClimateParameter humidity, ClimateParameter continentalness, ClimateParameter erosion, ClimateParameter depth, ClimateParameter weirdness, float offset) {
         return WIRE.get().create(temperature, humidity, continentalness, erosion, depth, weirdness, offset);
+    }
+
+    @AsOf("2.4.0")
+    static ClimatePoint fromMinecraft(Object nms) {
+        return WIRE.get().fromMinecraft(nms);
     }
 
     /**

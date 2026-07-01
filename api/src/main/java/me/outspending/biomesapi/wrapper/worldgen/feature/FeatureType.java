@@ -3,7 +3,9 @@ package me.outspending.biomesapi.wrapper.worldgen.feature;
 import com.mojang.serialization.Codec;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.keys.ResourceKey;
-import me.outspending.biomesapi.serialization.ConstantRepresentable;
+import me.outspending.biomesapi.registry.internal.Referer;
+import me.outspending.biomesapi.wrapper.internal.RegisteredConstantTranslator;
+import me.outspending.biomesapi.wrapper.internal.TranslatableRegistryConstant;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -15,7 +17,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.3.0")
-public enum FeatureType implements ConstantRepresentable {
+public enum FeatureType implements TranslatableRegistryConstant<FeatureType> {
 
     NO_OP("no_op"),
     TREE("tree"),
@@ -78,7 +80,8 @@ public enum FeatureType implements ConstantRepresentable {
     POINTED_DRIPSTONE("pointed_dripstone"),
     SCULK_PATCH("sculk_patch");
 
-    public static final Codec<FeatureType> CODEC = ConstantRepresentable.codec(FeatureType.values());
+    public static final RegisteredConstantTranslator<FeatureType> TRANSLATOR = RegisteredConstantTranslator.of(Referer.FEATURE, FeatureType::resourceKey, FeatureType.values());
+    public static final Codec<FeatureType> CODEC = TRANSLATOR.codec();
 
     private final String key;
 
@@ -87,11 +90,18 @@ public enum FeatureType implements ConstantRepresentable {
         this.key = key;
     }
 
+    @Override
+    @AsOf("2.4.0")
+    public RegisteredConstantTranslator<FeatureType> translator() {
+        return TRANSLATOR;
+    }
+
     /**
      * The vanilla registry path for this feature type.
      * @return the FEATURE registry key path
      * @since 2.3.0
      */
+    @Override
     @AsOf("2.3.0")
     public String getKey() {
         return this.key;

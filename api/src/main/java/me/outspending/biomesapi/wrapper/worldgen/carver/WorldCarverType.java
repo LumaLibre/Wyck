@@ -2,7 +2,10 @@ package me.outspending.biomesapi.wrapper.worldgen.carver;
 
 import com.mojang.serialization.Codec;
 import me.outspending.biomesapi.annotations.AsOf;
-import me.outspending.biomesapi.serialization.ConstantRepresentable;
+import me.outspending.biomesapi.keys.ResourceKey;
+import me.outspending.biomesapi.registry.internal.Referer;
+import me.outspending.biomesapi.wrapper.internal.RegisteredConstantTranslator;
+import me.outspending.biomesapi.wrapper.internal.TranslatableRegistryConstant;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -14,14 +17,14 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.3.0")
-public enum WorldCarverType implements ConstantRepresentable {
+public enum WorldCarverType implements TranslatableRegistryConstant<WorldCarverType> {
 
     CAVE("cave"),
     NETHER_CAVE("nether_cave"),
     CANYON("canyon");
 
-    // No translator because this isn't an enum in underlying Minecraft code
-    public static final Codec<WorldCarverType> CODEC = ConstantRepresentable.codec(WorldCarverType.values());
+    public static final RegisteredConstantTranslator<WorldCarverType> TRANSLATOR = RegisteredConstantTranslator.of(Referer.CONFIGURED_CARVER, WorldCarverType::resourceKey, WorldCarverType.values());
+    public static final Codec<WorldCarverType> CODEC = TRANSLATOR.codec();
 
     private final String key;
 
@@ -35,8 +38,19 @@ public enum WorldCarverType implements ConstantRepresentable {
      * @return the vanilla key for this carver
      * @since 2.3.0
      */
+    @Override
     @AsOf("2.3.0")
     public String getKey() {
         return this.key;
+    }
+
+    public ResourceKey resourceKey() {
+        return ResourceKey.minecraft(this.key);
+    }
+
+    @Override
+    @AsOf("2.4.0")
+    public RegisteredConstantTranslator<WorldCarverType> translator() {
+        return TRANSLATOR;
     }
 }

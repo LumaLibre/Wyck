@@ -15,6 +15,7 @@ import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @NullMarked
 @WireFactory
@@ -28,6 +29,19 @@ public final class PlacedFeatureFactoryImpl implements PlacedFeature.Factory {
             case PlacedFeature.Reference reference -> resolveReference(reference);
             case PlacedFeature.Custom custom -> buildCustom(custom);
         };
+    }
+
+    @Override
+    public PlacedFeature fromMinecraft(Object nms) {
+        Holder<net.minecraft.world.level.levelgen.placement.PlacedFeature> holder =
+            (Holder<net.minecraft.world.level.levelgen.placement.PlacedFeature>) nms;
+
+        Optional<ResourceKey<net.minecraft.world.level.levelgen.placement.PlacedFeature>> key = holder.unwrapKey();
+        if (key.isPresent()) {
+            return reverseReference(key.get());
+        }
+
+        return reverseCustom(holder.value());
     }
 
     private Object resolveReference(PlacedFeature.Reference reference) {
@@ -62,5 +76,23 @@ public final class PlacedFeatureFactoryImpl implements PlacedFeature.Factory {
             DatapackPromotion.current().collectPlacedFeature(custom, placed);
         }
         return net.minecraft.core.Holder.direct(placed);
+    }
+
+    private PlacedFeature reverseReference(ResourceKey<net.minecraft.world.level.levelgen.placement.PlacedFeature> key) {
+        Identifier location = key.identifier();
+        me.outspending.biomesapi.keys.ResourceKey wrapperKey = me.outspending.biomesapi.keys.ResourceKey.of(location.getNamespace(), location.getPath());
+        return PlacedFeature.reference(wrapperKey);
+    }
+
+    private PlacedFeature reverseCustom(net.minecraft.world.level.levelgen.placement.PlacedFeature placed) {
+        me.outspending.biomesapi.wrapper.worldgen.feature.ConfiguredFeature feature =
+            me.outspending.biomesapi.wrapper.worldgen.feature.ConfiguredFeature.fromMinecraft(placed.feature());
+
+        List<PlacementModifier> modifiers = new ArrayList<>(placed.placement().size());
+        for (net.minecraft.world.level.levelgen.placement.PlacementModifier nmsModifier : placed.placement()) {
+            modifiers.add(PlacementModifier.fromMinecraft(nmsModifier));
+        }
+
+        return new PlacedFeature.Custom(feature, modifiers);
     }
 }

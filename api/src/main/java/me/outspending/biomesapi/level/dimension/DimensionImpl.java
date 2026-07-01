@@ -11,7 +11,7 @@ import me.outspending.biomesapi.wrapper.level.dimension.Infiniburn;
 import me.outspending.biomesapi.wrapper.level.dimension.Skybox;
 import me.outspending.biomesapi.wrapper.level.dimension.TimelineSet;
 import me.outspending.biomesapi.wrapper.entity.data.MonsterSettings;
-import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttributeMap;
+import me.outspending.biomesapi.wrapper.environment.attribute.EnvironmentAttributeMap;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -72,7 +72,7 @@ public final class DimensionImpl implements Dimension {
     private MonsterSettings monsterSettings;
     private Skybox skybox;
     private CardinalLightType cardinalLightType;
-    private WrappedEnvironmentAttributeMap attributes;
+    private EnvironmentAttributeMap attributes;
     private TimelineSet timelines;
     private Optional<WorldClock> defaultClock;
 
@@ -92,7 +92,7 @@ public final class DimensionImpl implements Dimension {
             MonsterSettings monsterSettings,
             Skybox skybox,
             CardinalLightType cardinalLightType,
-            WrappedEnvironmentAttributeMap attributes,
+            EnvironmentAttributeMap attributes,
             TimelineSet timelines,
             Optional<WorldClock> defaultClock
     ) {
@@ -186,7 +186,7 @@ public final class DimensionImpl implements Dimension {
     }
 
     @Override
-    public WrappedEnvironmentAttributeMap getAttributes() {
+    public EnvironmentAttributeMap getAttributes() {
         return attributes;
     }
 
@@ -279,7 +279,7 @@ public final class DimensionImpl implements Dimension {
     }
 
     @Override
-    public Dimension setAttributes(WrappedEnvironmentAttributeMap attributes) {
+    public Dimension setAttributes(EnvironmentAttributeMap attributes) {
         this.attributes = attributes;
         return this;
     }
@@ -365,7 +365,7 @@ public final class DimensionImpl implements Dimension {
         ).apply(instance, Head::new));
     }
 
-    private record Tail(int logicalHeight, Infiniburn infiniburn, float ambientLight, MonsterSettings monsterSettings, Skybox skybox, CardinalLightType cardinalLightType, WrappedEnvironmentAttributeMap attributes, TimelineSet timelines, Optional<WorldClock> defaultClock) {
+    private record Tail(int logicalHeight, Infiniburn infiniburn, float ambientLight, MonsterSettings monsterSettings, Skybox skybox, CardinalLightType cardinalLightType, EnvironmentAttributeMap attributes, TimelineSet timelines, Optional<WorldClock> defaultClock) {
         static final MapCodec<Tail> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.INT.fieldOf("logical_height").forGetter(Tail::logicalHeight),
             Infiniburn.CODEC.fieldOf("infiniburn").forGetter(Tail::infiniburn),
@@ -373,7 +373,7 @@ public final class DimensionImpl implements Dimension {
             MonsterSettings.CODEC.fieldOf("monster_settings").forGetter(Tail::monsterSettings),
             Skybox.CODEC.fieldOf("skybox").forGetter(Tail::skybox),
             CardinalLightType.CODEC.fieldOf("cardinal_light_type").forGetter(Tail::cardinalLightType),
-            WrappedEnvironmentAttributeMap.CODEC.fieldOf("attributes").forGetter(Tail::attributes),
+            EnvironmentAttributeMap.CODEC.fieldOf("attributes").forGetter(Tail::attributes),
             TimelineSet.CODEC.fieldOf("timelines").forGetter(Tail::timelines),
             WorldClock.CODEC.optionalFieldOf("default_clock").forGetter(Tail::defaultClock)
         ).apply(instance, Tail::new));

@@ -30,6 +30,7 @@ public enum Skybox implements NmsEnumTranslatable<Skybox> {
         this.key = key;
     }
 
+    @Override
     @AsOf("2.4.0")
     public String getKey() {
         return key;

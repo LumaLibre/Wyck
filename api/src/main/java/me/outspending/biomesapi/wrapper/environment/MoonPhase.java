@@ -28,7 +28,7 @@ public enum MoonPhase implements NmsEnumTranslatable<MoonPhase> {
     WAXING_GIBBOUS("waxing_gibbous");
 
     public static final KeyedEnumTranslator<MoonPhase> TRANSLATOR = KeyedEnumTranslator.byKey(MoonPhase::getKey, MoonPhase.values());
-    public static final Codec<MoonPhase> CODEC = TRANSLATOR.codec(); // TODO: unused, using mc codec
+    public static final Codec<MoonPhase> CODEC = TRANSLATOR.codec();
 
     private final String key;
 

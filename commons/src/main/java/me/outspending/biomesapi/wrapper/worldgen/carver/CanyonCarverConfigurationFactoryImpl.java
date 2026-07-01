@@ -3,14 +3,16 @@ package me.outspending.biomesapi.wrapper.worldgen.carver;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.annotations.WireFactory;
 import me.outspending.biomesapi.wrapper.worldgen.WorldgenConversions;
+import me.outspending.biomesapi.wrapper.worldgen.valueproviders.FloatProvider;
+import me.outspending.biomesapi.wrapper.worldgen.valueproviders.HeightProvider;
+import me.outspending.biomesapi.wrapper.worldgen.valueproviders.VerticalAnchor;
 import net.minecraft.core.HolderSet;
-import net.minecraft.util.valueproviders.FloatProvider;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.levelgen.VerticalAnchor;
-import net.minecraft.world.level.levelgen.carver.CarverDebugSettings;
-import net.minecraft.world.level.levelgen.heightproviders.HeightProvider;
+import org.bukkit.Material;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
+
+import java.util.List;
 
 @NullMarked
 @WireFactory
@@ -20,24 +22,41 @@ public final class CanyonCarverConfigurationFactoryImpl implements CanyonCarverC
 
     @Override
     public Object toNms(CanyonCarverConfiguration configuration) {
-        HeightProvider y = (HeightProvider) configuration.y().toMinecraft();
-        FloatProvider yScale = (FloatProvider) configuration.yScale().toMinecraft();
-        VerticalAnchor lavaLevel = (VerticalAnchor) configuration.lavaLevel().toMinecraft();
-        CarverDebugSettings debugSettings = (CarverDebugSettings) configuration.debugSettings().toMinecraft();
+        net.minecraft.world.level.levelgen.heightproviders.HeightProvider y = (net.minecraft.world.level.levelgen.heightproviders.HeightProvider) configuration.y().toMinecraft();
+        net.minecraft.util.valueproviders.FloatProvider yScale = (net.minecraft.util.valueproviders.FloatProvider) configuration.yScale().toMinecraft();
+        net.minecraft.world.level.levelgen.VerticalAnchor lavaLevel = (net.minecraft.world.level.levelgen.VerticalAnchor) configuration.lavaLevel().toMinecraft();
+        net.minecraft.world.level.levelgen.carver.CarverDebugSettings debugSettings = (net.minecraft.world.level.levelgen.carver.CarverDebugSettings) configuration.debugSettings().toMinecraft();
         HolderSet<Block> replaceable = WorldgenConversions.toBlockHolderSet(configuration.replaceable());
-        FloatProvider verticalRotation = (FloatProvider) configuration.verticalRotation().toMinecraft();
+        net.minecraft.util.valueproviders.FloatProvider verticalRotation = (net.minecraft.util.valueproviders.FloatProvider) configuration.verticalRotation().toMinecraft();
         net.minecraft.world.level.levelgen.carver.CanyonCarverConfiguration.CanyonShapeConfiguration shape =
                 (net.minecraft.world.level.levelgen.carver.CanyonCarverConfiguration.CanyonShapeConfiguration) configuration.shape().toMinecraft();
 
         return new net.minecraft.world.level.levelgen.carver.CanyonCarverConfiguration(
-                configuration.probability(),
-                y,
-                yScale,
-                lavaLevel,
-                debugSettings,
-                replaceable,
-                verticalRotation,
-                shape
+            configuration.probability(),
+            y,
+            yScale,
+            lavaLevel,
+            debugSettings,
+            replaceable,
+            verticalRotation,
+            shape
+        );
+    }
+
+    @Override
+    public CanyonCarverConfiguration fromMinecraft(Object nms) {
+        net.minecraft.world.level.levelgen.carver.CanyonCarverConfiguration nmsConfig = (net.minecraft.world.level.levelgen.carver.CanyonCarverConfiguration) nms;
+
+
+        return new CanyonCarverConfiguration(
+            nmsConfig.probability,
+            HeightProvider.fromMinecraft(nmsConfig.y),
+            FloatProvider.fromMinecraft(nmsConfig.yScale),
+            VerticalAnchor.fromMinecraft(nmsConfig.lavaLevel),
+            CarverDebugSettings.fromMinecraft(nmsConfig.debugSettings),
+            WorldgenConversions.fromBlockHolderSet(nmsConfig.replaceable),
+            FloatProvider.fromMinecraft(nmsConfig.verticalRotation),
+            CanyonShapeConfiguration.fromMinecraft(nmsConfig.shape)
         );
     }
 }

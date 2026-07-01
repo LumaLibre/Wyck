@@ -8,7 +8,7 @@ import me.outspending.biomesapi.renderer.packet.data.BlockReplacement;
 import me.outspending.biomesapi.wrapper.BiomeSettings;
 import me.outspending.biomesapi.wrapper.entity.BiomeSpawner;
 import me.outspending.biomesapi.wrapper.environment.GrassColorModifier;
-import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttributeMap;
+import me.outspending.biomesapi.wrapper.environment.attribute.EnvironmentAttributeMap;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleCatalog;
 import me.outspending.biomesapi.wrapper.worldgen.BiomeGenerationSettings;
 import org.jetbrains.annotations.ApiStatus;
@@ -59,7 +59,7 @@ public class CustomBiomeImpl extends AbstractBiomeImpl implements CustomBiome {
         GrassColorModifier grassColorModifier,
         ParticleCatalog particleCatalog,
         BlockReplacement[] blockReplacements,
-        WrappedEnvironmentAttributeMap attributes,
+        EnvironmentAttributeMap attributes,
         @Nullable BiomeSpawner biomeSpawner,
         @Nullable BiomeGenerationSettings generationSettings
     ) {

@@ -2,6 +2,7 @@ package me.outspending.biomesapi.wrapper.internal;
 
 import com.mojang.serialization.Codec;
 import me.outspending.biomesapi.annotations.AsOf;
+import me.outspending.biomesapi.serialization.ConstantRepresentable;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NullMarked;
@@ -12,7 +13,7 @@ import java.util.function.Function;
 @NullMarked
 @AsOf("2.0.0")
 @ApiStatus.Internal
-public interface KeyedEnumTranslator<W> {
+public interface KeyedEnumTranslator<W extends ConstantRepresentable> {
 
     @AsOf("2.0.0")
     <N extends Enum<N>> N toNms(W wrapped, Class<N> nmsEnumClass);
@@ -37,7 +38,7 @@ public interface KeyedEnumTranslator<W> {
      */
     @AsOf("2.1.0")
     @Contract(value = "_, _ -> new", pure = true)
-    static <W> KeyedEnumTranslator<W> byKey(Function<W, String> keyExtractor, W[] wrapperValues) {
+    static <W extends ConstantRepresentable> KeyedEnumTranslator<W> byKey(Function<W, String> keyExtractor, W[] wrapperValues) {
         return new KeyedEnumTranslator<>() {
             @Override
             public <N extends Enum<N>> N toNms(W wrapped, Class<N> nmsEnumClass) {
@@ -62,14 +63,7 @@ public interface KeyedEnumTranslator<W> {
 
             @Override
             public Codec<W> codec() {
-                return Codec.stringResolver(keyExtractor, key -> {
-                    for (W wrapper : wrapperValues) {
-                        if (keyExtractor.apply(wrapper).equals(key)) {
-                            return wrapper;
-                        }
-                    }
-                    throw new IllegalArgumentException("No wrapper constant maps to key '" + key + "'");
-                });
+                return ConstantRepresentable.codec(wrapperValues);
             }
         };
     }
@@ -83,7 +77,7 @@ public interface KeyedEnumTranslator<W> {
      */
     @AsOf("2.1.0")
     @Contract(value = "_ -> new", pure = true)
-    static <W extends Enum<W>> KeyedEnumTranslator<W> byName(Class<W> wrapperClass) {
+    static <W extends Enum<W> & ConstantRepresentable> KeyedEnumTranslator<W> byName(Class<W> wrapperClass) {
         return new KeyedEnumTranslator<>() {
             @Override
             public <N extends Enum<N>> N toNms(W wrapped, Class<N> nmsEnumClass) {
@@ -105,13 +99,7 @@ public interface KeyedEnumTranslator<W> {
 
             @Override
             public Codec<W> codec() {
-                return Codec.stringResolver(Enum::name, key -> {
-                    try {
-                        return Enum.valueOf(wrapperClass, key.toUpperCase(Locale.ROOT));
-                    } catch (IllegalArgumentException e) {
-                        throw new IllegalArgumentException("No wrapper constant '" + key + "' on " + wrapperClass.getName(), e);
-                    }
-                });
+                return ConstantRepresentable.codec(wrapperClass.getEnumConstants());
             }
         };
     }

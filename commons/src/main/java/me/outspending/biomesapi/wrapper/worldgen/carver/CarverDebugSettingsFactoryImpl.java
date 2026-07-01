@@ -25,6 +25,18 @@ public final class CarverDebugSettingsFactoryImpl implements CarverDebugSettings
         );
     }
 
+    @Override
+    public CarverDebugSettings fromMinecraft(Object nms) {
+        net.minecraft.world.level.levelgen.carver.CarverDebugSettings nmsSettings = (net.minecraft.world.level.levelgen.carver.CarverDebugSettings) nms;
+        return CarverDebugSettings.of(
+            nmsSettings.isDebugMode(),
+            nmsSettings.getAirState().getBukkitMaterial(),
+            nmsSettings.getWaterState().getBukkitMaterial(),
+            nmsSettings.getLavaState().getBukkitMaterial(),
+            nmsSettings.getBarrierState().getBukkitMaterial()
+        );
+    }
+
     private BlockState toNmsState(Material material) {
         return CraftMagicNumbers.getBlock(material).defaultBlockState();
     }

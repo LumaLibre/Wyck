@@ -8,6 +8,7 @@ import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
 import me.outspending.biomesapi.serialization.StringRepresentable;
 import me.outspending.biomesapi.util.WeightedList;
+import me.outspending.biomesapi.wrapper.internal.NmsDecoder;
 import me.outspending.biomesapi.wrapper.internal.NmsHandle;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -43,7 +44,7 @@ public sealed interface IntProvider extends NmsHandle, StringRepresentable permi
     WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.*.wrapper.worldgen.valueproviders.IntProviderFactoryImpl");
 
     @ApiStatus.Internal
-    interface Factory {
+    interface Factory extends NmsDecoder<IntProvider> {
         Object toNms(IntProvider provider);
     }
 
@@ -110,6 +111,11 @@ public sealed interface IntProvider extends NmsHandle, StringRepresentable permi
     @AsOf("2.3.0")
     default Object toMinecraft() {
         return WIRE.get().toNms(this);
+    }
+
+    @AsOf("2.4.0")
+    static IntProvider fromMinecraft(Object nms) {
+        return WIRE.get().fromMinecraft(nms);
     }
 
     @AsOf("2.3.0")

@@ -6,6 +6,7 @@ import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
 import me.outspending.biomesapi.keys.KeyChains;
 import me.outspending.biomesapi.serialization.ConstantRepresentable;
+import me.outspending.biomesapi.wrapper.internal.NmsDecoder;
 import me.outspending.biomesapi.wrapper.internal.NmsHandle;
 import net.kyori.adventure.key.InvalidKeyException;
 import net.kyori.adventure.key.Key;
@@ -49,7 +50,7 @@ public interface LevelSpawner extends NmsHandle.Context<Object> {
     WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.level.spawner.LevelSpawnerFactoryImpl");
 
     @ApiStatus.Internal
-    interface Factory {
+    interface Factory extends NmsDecoder<LevelSpawner> {
         LevelSpawner phantom();
         LevelSpawner patrol();
         LevelSpawner cat();

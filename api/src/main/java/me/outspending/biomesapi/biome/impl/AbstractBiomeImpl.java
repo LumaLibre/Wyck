@@ -5,13 +5,12 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
-import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.biome.AbstractBiome;
 import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.wrapper.BiomeSettings;
 import me.outspending.biomesapi.wrapper.entity.BiomeSpawner;
 import me.outspending.biomesapi.wrapper.environment.GrassColorModifier;
-import me.outspending.biomesapi.wrapper.environment.attribute.WrappedEnvironmentAttributeMap;
+import me.outspending.biomesapi.wrapper.environment.attribute.EnvironmentAttributeMap;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleCatalog;
 import me.outspending.biomesapi.wrapper.worldgen.BiomeGenerationSettings;
 import org.bukkit.NamespacedKey;
@@ -39,7 +38,7 @@ public class AbstractBiomeImpl implements AbstractBiome {
         Codec.INT.optionalFieldOf("dry_foliage_color").forGetter(b -> Optional.ofNullable(b.getDryFoliageColor())),
         GrassColorModifier.CODEC.fieldOf("grass_color_modifier").forGetter(AbstractBiomeImpl::getGrassColorModifier),
         ParticleCatalog.CODEC.fieldOf("particle_catalog").forGetter(AbstractBiomeImpl::getParticleCatalog),
-        WrappedEnvironmentAttributeMap.CODEC.fieldOf("attributes").forGetter(AbstractBiomeImpl::getAttributes),
+        EnvironmentAttributeMap.CODEC.fieldOf("attributes").forGetter(AbstractBiomeImpl::getAttributes),
         BiomeSpawner.CODEC.optionalFieldOf("biome_spawner").forGetter(b -> Optional.ofNullable(b.getBiomeSpawner())),
         BiomeGenerationSettings.CODEC.optionalFieldOf("generation_settings").forGetter(b -> Optional.ofNullable(b.getGenerationSettings()))
     ).apply(instance, (resourceKey, settings, water, fog, waterFog, sky, foliage, grass, dryFoliage, mod, particles, attrs, spawner, gen) ->
@@ -82,7 +81,7 @@ public class AbstractBiomeImpl implements AbstractBiome {
     private GrassColorModifier grassColorModifier;
     private ParticleCatalog particleCatalog;
 
-    private WrappedEnvironmentAttributeMap attributes;
+    private EnvironmentAttributeMap attributes;
 
     private @Nullable BiomeSpawner biomeSpawner;
     private @Nullable BiomeGenerationSettings generationSettings;
@@ -99,7 +98,7 @@ public class AbstractBiomeImpl implements AbstractBiome {
         @Nullable Integer dryFoliageColor,
         GrassColorModifier grassColorModifier,
         ParticleCatalog particleCatalog,
-        WrappedEnvironmentAttributeMap attributes,
+        EnvironmentAttributeMap attributes,
         @Nullable BiomeSpawner biomeSpawner,
         @Nullable BiomeGenerationSettings generationSettings
     ) {
@@ -184,7 +183,7 @@ public class AbstractBiomeImpl implements AbstractBiome {
     }
 
     @Override
-    public WrappedEnvironmentAttributeMap getAttributes() {
+    public EnvironmentAttributeMap getAttributes() {
         return attributes;
     }
 
@@ -259,7 +258,7 @@ public class AbstractBiomeImpl implements AbstractBiome {
     }
 
     @Override
-    public AbstractBiomeImpl setAttributes(WrappedEnvironmentAttributeMap attributes) {
+    public AbstractBiomeImpl setAttributes(EnvironmentAttributeMap attributes) {
         this.attributes = attributes;
         return this;
     }

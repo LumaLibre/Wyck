@@ -1,10 +1,13 @@
 package me.outspending.biomesapi.wrapper.level.noise.function;
 
+import com.google.common.base.Preconditions;
 import me.outspending.biomesapi.annotations.WireFactory;
 import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.registry.bootstrap.util.BootstrapSafeMinecraftRegistries;
+import me.outspending.biomesapi.util.internal.InternalReflectUtil;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.levelgen.DensityFunctions;
@@ -79,6 +82,88 @@ public final class DensityFunctionFactoryImpl implements DensityFunction.Factory
         };
     }
 
+    @Override
+    public DensityFunction fromMinecraft(Object nms) {
+        net.minecraft.world.level.levelgen.DensityFunction function = (net.minecraft.world.level.levelgen.DensityFunction) nms;
+
+        if (function instanceof DensityFunctions.HolderHolder(Holder<net.minecraft.world.level.levelgen.DensityFunction> holderFunction)) {
+            if (holderFunction.unwrapKey().isPresent()) {
+                return new DensityFunction.Reference(keyOf(holderFunction));
+            }
+            return fromMinecraft(holderFunction.value());
+        }
+
+        Identifier typeId = BuiltInRegistries.DENSITY_FUNCTION_TYPE.getKey(function.codec().codec());
+        Preconditions.checkNotNull(typeId, "unregistered density function type: %s", function.getClass());
+
+        return switch (typeId.getPath()) {
+            case "constant" -> DensityFunction.constant(function.minValue());
+
+            case "add" -> DensityFunction.add(fromMinecraft(InternalReflectUtil.invokeMethod(function, "argument1")), fromMinecraft(InternalReflectUtil.invokeMethod(function, "argument2")));
+            case "mul" -> DensityFunction.mul(fromMinecraft(InternalReflectUtil.invokeMethod(function, "argument1")), fromMinecraft(InternalReflectUtil.invokeMethod(function, "argument2")));
+            case "min" -> DensityFunction.min(fromMinecraft(InternalReflectUtil.invokeMethod(function, "argument1")), fromMinecraft(InternalReflectUtil.invokeMethod(function, "argument2")));
+            case "max" -> DensityFunction.max(fromMinecraft(InternalReflectUtil.invokeMethod(function, "argument1")), fromMinecraft(InternalReflectUtil.invokeMethod(function, "argument2")));
+
+            case "abs" -> fromMinecraft(InternalReflectUtil.getFieldValue(function, "input")).abs();
+            case "square" -> fromMinecraft(InternalReflectUtil.getFieldValue(function, "input")).square();
+            case "cube" -> fromMinecraft(InternalReflectUtil.getFieldValue(function, "input")).cube();
+            case "half_negative" -> fromMinecraft(InternalReflectUtil.getFieldValue(function, "input")).halfNegative();
+            case "quarter_negative" -> fromMinecraft(InternalReflectUtil.getFieldValue(function, "input")).quarterNegative();
+            case "invert" -> fromMinecraft(InternalReflectUtil.getFieldValue(function, "input")).invert();
+            case "squeeze" -> fromMinecraft(InternalReflectUtil.getFieldValue(function, "input")).squeeze();
+
+            case "clamp" -> fromMinecraft(InternalReflectUtil.getFieldValue(function, "input")).clamp(function.minValue(), function.maxValue());
+
+            case "interpolated" -> DensityFunction.interpolated(fromMinecraft(((DensityFunctions.MarkerOrMarked) function).wrapped()));
+            case "flat_cache" -> DensityFunction.flatCache(fromMinecraft(((DensityFunctions.MarkerOrMarked) function).wrapped()));
+            case "cache_2d" -> DensityFunction.cache2d(fromMinecraft(((DensityFunctions.MarkerOrMarked) function).wrapped()));
+            case "cache_once" -> DensityFunction.cacheOnce(fromMinecraft(((DensityFunctions.MarkerOrMarked) function).wrapped()));
+            case "cache_all_in_cell" -> DensityFunction.cacheAllInCell(fromMinecraft(((DensityFunctions.MarkerOrMarked) function).wrapped()));
+
+            case "noise" -> DensityFunction.noise(
+                noiseKey(InternalReflectUtil.getFieldValue(function, "noise")),
+                InternalReflectUtil.<Double>getFieldValue(function, "xzScale"),
+                InternalReflectUtil.<Double>getFieldValue(function, "yScale"));
+
+            case "shift" -> DensityFunction.shift(noiseKey(InternalReflectUtil.getFieldValue(function, "offsetNoise")));
+            case "shift_a" -> DensityFunction.shiftA(noiseKey(InternalReflectUtil.getFieldValue(function, "offsetNoise")));
+            case "shift_b" -> DensityFunction.shiftB(noiseKey(InternalReflectUtil.getFieldValue(function, "offsetNoise")));
+
+            case "shifted_noise" -> DensityFunction.shiftedNoise2d(
+                fromMinecraft(InternalReflectUtil.getFieldValue(function, "shiftX")),
+                fromMinecraft(InternalReflectUtil.getFieldValue(function, "shiftZ")),
+                InternalReflectUtil.<Double>getFieldValue(function, "xzScale"),
+                noiseKey(InternalReflectUtil.getFieldValue(function, "noise")));
+
+            case "range_choice" -> DensityFunction.rangeChoice(
+                fromMinecraft(InternalReflectUtil.getFieldValue(function, "input")),
+                InternalReflectUtil.<Double>getFieldValue(function, "minInclusive"),
+                InternalReflectUtil.<Double>getFieldValue(function, "maxExclusive"),
+                fromMinecraft(InternalReflectUtil.getFieldValue(function, "whenInRange")),
+                fromMinecraft(InternalReflectUtil.getFieldValue(function, "whenOutOfRange")));
+
+            case "y_clamped_gradient" -> DensityFunction.yClampedGradient(
+                InternalReflectUtil.<Integer>getFieldValue(function, "fromY"),
+                InternalReflectUtil.<Integer>getFieldValue(function, "toY"),
+                InternalReflectUtil.<Double>getFieldValue(function, "fromValue"),
+                InternalReflectUtil.<Double>getFieldValue(function, "toValue"));
+
+            case "end_islands" -> DensityFunction.endIslands(0L);
+
+            case "blend_density" -> DensityFunction.blendDensity(fromMinecraft(InternalReflectUtil.getFieldValue(function, "input")));
+            case "blend_alpha" -> DensityFunction.blendAlpha();
+            case "blend_offset" -> DensityFunction.blendOffset();
+
+            case "find_top_surface" -> new DensityFunction.FindTopSurface(
+                fromMinecraft(InternalReflectUtil.getFieldValue(function, "density")),
+                fromMinecraft(InternalReflectUtil.getFieldValue(function, "upperBound")),
+                InternalReflectUtil.<Integer>getFieldValue(function, "lowerBound"),
+                InternalReflectUtil.<Integer>getFieldValue(function, "cellHeight"));
+
+            default -> throw new UnsupportedOperationException("no wrapper representation for density function type: " + typeId);
+        };
+    }
+
     static net.minecraft.world.level.levelgen.DensityFunction unwrap(DensityFunction function) {
         return (net.minecraft.world.level.levelgen.DensityFunction) function.toMinecraft();
     }
@@ -93,5 +178,14 @@ public final class DensityFunctionFactoryImpl implements DensityFunction.Factory
         Identifier id = (Identifier) key.resourceLocation();
         Registry<net.minecraft.world.level.levelgen.DensityFunction> registry = BootstrapSafeMinecraftRegistries.mappedRegistry(Registries.DENSITY_FUNCTION);
         return registry.getOrThrow(net.minecraft.resources.ResourceKey.create(Registries.DENSITY_FUNCTION, id));
+    }
+
+    static ResourceKey noiseKey(net.minecraft.world.level.levelgen.DensityFunction.NoiseHolder holder) {
+        return keyOf(holder.noiseData());
+    }
+
+    static ResourceKey keyOf(Holder<?> holder) {
+        Identifier id = holder.unwrapKey().orElseThrow().identifier();
+        return ResourceKey.of(id.getNamespace(), id.getPath());
     }
 }

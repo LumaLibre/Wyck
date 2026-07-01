@@ -13,10 +13,10 @@ import java.util.function.Supplier;
  */
 @NullMarked
 @AsOf("2.1.0")
-public final class IntColorSupplier extends WrappedEnvironmentAttributeSupplier<Integer, Integer> {
+public final class IntColorSupplier extends EnvironmentAttributeSupplier<Integer, Integer> {
 
     @AsOf("2.1.0")
-    public IntColorSupplier(Supplier<WrappedEnvironmentAttribute<Integer, Integer>> supplier) {
+    public IntColorSupplier(Supplier<EnvironmentAttribute<Integer, Integer>> supplier) {
         super(supplier);
     }
 

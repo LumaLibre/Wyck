@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.factory.WireProvider;
+import me.outspending.biomesapi.wrapper.internal.NmsDecoder;
 import me.outspending.biomesapi.wrapper.internal.NmsHandle;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -29,7 +30,7 @@ public sealed interface VerticalAnchor extends NmsHandle permits VerticalAnchor.
     WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.worldgen.valueproviders.VerticalAnchorFactoryImpl");
 
     @ApiStatus.Internal
-    interface Factory {
+    interface Factory extends NmsDecoder<VerticalAnchor> {
         Object toNms(VerticalAnchor anchor);
     }
 
@@ -98,6 +99,11 @@ public sealed interface VerticalAnchor extends NmsHandle permits VerticalAnchor.
     @AsOf("2.3.0")
     default Object toMinecraft() {
         return WIRE.get().toNms(this);
+    }
+
+    @AsOf("2.4.0")
+    static VerticalAnchor fromMinecraft(Object nms) {
+        return WIRE.get().fromMinecraft(nms);
     }
 
     private static VerticalAnchor merge(Either<Absolute, Either<AboveBottom, BelowTop>> either) {

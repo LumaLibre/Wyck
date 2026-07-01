@@ -7,6 +7,7 @@ import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.biome.AbstractBiome;
 import me.outspending.biomesapi.factory.WireProvider;
 import me.outspending.biomesapi.keys.ResourceKey;
+import me.outspending.biomesapi.wrapper.internal.NmsDecoder;
 import me.outspending.biomesapi.wrapper.internal.NmsHandle;
 import me.outspending.biomesapi.wrapper.worldgen.climate.ClimatePoint;
 import org.bukkit.block.Biome;
@@ -31,7 +32,7 @@ public interface BiomeSource extends NmsHandle {
 
     Codec<BiomeSource> CODEC = Codec.STRING.dispatch(
         "type",
-        source -> source.entries() != null ? "multi_noise" : "fixed",
+        source -> source.entries() == null ? "fixed" : "multi_noise",
         type -> switch (type) {
             case "fixed" -> ResourceKey.CODEC.fieldOf("biome").xmap(BiomeSource::fixed,
                 source -> Preconditions.checkNotNull(source.fixedBiome(), "fixedBiome"));
@@ -45,8 +46,9 @@ public interface BiomeSource extends NmsHandle {
     WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.level.BiomeSourceFactoryImpl");
 
     @ApiStatus.Internal
-    interface Factory {
+    interface Factory extends NmsDecoder<BiomeSource> {
         BiomeSource fixed(ResourceKey biome);
+
         BiomeSource multiNoise(List<MultiNoiseEntry> entries);
     }
 
@@ -76,6 +78,11 @@ public interface BiomeSource extends NmsHandle {
     @AsOf("2.4.0")
     static MultiNoiseBuilder multiNoise() {
         return new MultiNoiseBuilder();
+    }
+
+    @AsOf("2.4.0")
+    static BiomeSource fromMinecraft(Object handle) {
+        return WIRE.get().fromMinecraft(handle);
     }
 
     @ApiStatus.Internal

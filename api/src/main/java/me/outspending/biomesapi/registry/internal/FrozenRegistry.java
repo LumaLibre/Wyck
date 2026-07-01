@@ -7,6 +7,7 @@ import me.outspending.biomesapi.util.Lazy;
 import me.outspending.biomesapi.wrapper.internal.NmsHandle;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.function.Consumer;
@@ -77,6 +78,16 @@ public interface FrozenRegistry extends NmsHandle {
     void whileUnfrozen(Runnable action);
 
     /**
+     * Retrieves an object from the registry.
+     * @param key the key of the object to retrieve
+     * @return the object
+     * @param <T> the type of the object
+     * @since 2.4.0
+     */
+    @AsOf("2.4.0")
+    <T> @Nullable T retrieve(ResourceKey key);
+
+    /**
      * Runs the given consumer with the registry while it is unfrozen.
      * @param consumer the consumer to run
      * @since 2.4.0
@@ -126,7 +137,7 @@ public interface FrozenRegistry extends NmsHandle {
      * @since 2.4.0
      */
     @AsOf("2.4.0")
-    static FrozenRegistry of(RegistryReference reference) {
+    static FrozenRegistry of(Referer reference) {
         return WIRE.get().create(reference.getRegistryKeys());
     }
 
@@ -159,7 +170,7 @@ public interface FrozenRegistry extends NmsHandle {
      * @since 2.4.0
      */
     @AsOf("2.4.0")
-    static Lazy<FrozenRegistry> lazy(RegistryReference reference) {
+    static Lazy<FrozenRegistry> lazy(Referer reference) {
         return Lazy.of(() -> of(reference));
     }
 }

@@ -3,11 +3,15 @@ package me.outspending.biomesapi.v1_21_11.wrapper.worldgen.valueproviders;
 import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.annotations.WireFactory;
 import me.outspending.biomesapi.util.WeightedList;
+import me.outspending.biomesapi.util.internal.InternalReflectUtil;
 import me.outspending.biomesapi.wrapper.worldgen.valueproviders.IntProvider;
+import net.minecraft.util.random.Weighted;
 import net.minecraft.util.valueproviders.BiasedToBottomInt;
+import net.minecraft.util.valueproviders.ClampedInt;
 import net.minecraft.util.valueproviders.ClampedNormalInt;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.util.valueproviders.WeightedListInt;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
@@ -36,6 +40,39 @@ public final class IntProviderFactoryImpl implements IntProvider.Factory {
             case IntProvider.WeightedListInt weighted -> buildWeightedList(weighted);
         };
     }
+
+    @Override
+    public IntProvider fromMinecraft(Object nms) {
+        net.minecraft.util.valueproviders.IntProvider provider = (net.minecraft.util.valueproviders.IntProvider) nms;
+        return switch (provider) {
+            case ConstantInt c -> IntProvider.constant(c.getValue());
+            case UniformInt u -> IntProvider.uniform(u.getMinValue(), u.getMaxValue());
+            case BiasedToBottomInt b -> IntProvider.biasedToBottom(b.getMinValue(), b.getMaxValue());
+            case ClampedNormalInt c -> IntProvider.clampedNormal(
+                InternalReflectUtil.getFieldValue(c, "mean"),
+                InternalReflectUtil.getFieldValue(c, "deviation"),
+                c.getMinValue(),
+                c.getMaxValue()
+            );
+            case ClampedInt c -> {
+                IntProvider sourceProvider = this.fromMinecraft(InternalReflectUtil.getFieldValue(c, "source"));
+                yield IntProvider.clamped(sourceProvider, c.getMinValue(), c.getMaxValue());
+            }
+            case WeightedListInt weightedListInt -> {
+                net.minecraft.util.random.WeightedList<net.minecraft.util.valueproviders.IntProvider> distribution =
+                    InternalReflectUtil.getFieldValue(weightedListInt, "distribution");
+
+                WeightedList.Builder<IntProvider> builder = WeightedList.builder();
+                for (Weighted<net.minecraft.util.valueproviders.IntProvider> entry : distribution.unwrap()) {
+                    builder.add(this.fromMinecraft(entry.value()), entry.weight());
+                }
+                yield IntProvider.weightedList(builder.build());
+            }
+            default -> throw new IllegalStateException("Unexpected value: " + provider.getClass().getName());
+        };
+    }
+
+    // TODO: move these
 
     private net.minecraft.util.valueproviders.IntProvider buildClamped(IntProvider.Clamped clamped) {
         net.minecraft.util.valueproviders.IntProvider source =

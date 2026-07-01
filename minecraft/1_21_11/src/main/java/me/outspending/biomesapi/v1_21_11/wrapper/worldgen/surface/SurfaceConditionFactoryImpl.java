@@ -39,7 +39,7 @@ public class SurfaceConditionFactoryImpl implements SurfaceCondition.Factory {
     }
 
     private SurfaceRules.ConditionSource stoneDepth(SurfaceCondition.StoneDepth stoneDepth) {
-        CaveSurface surfaceType = caveSurface(stoneDepth.surfaceType());
+        CaveSurface surfaceType = stoneDepth.surfaceType().toNms(CaveSurface.class);
         return SurfaceRules.stoneDepthCheck(stoneDepth.offset(), stoneDepth.addSurfaceDepth(), stoneDepth.secondaryDepthRange(), surfaceType);
     }
 
@@ -85,12 +85,5 @@ public class SurfaceConditionFactoryImpl implements SurfaceCondition.Factory {
         VerticalAnchor trueAtAndBelow = (VerticalAnchor) verticalGradient.trueAtAndBelow().toMinecraft();
         VerticalAnchor falseAtAndAbove = (VerticalAnchor) verticalGradient.falseAtAndAbove().toMinecraft();
         return SurfaceRules.verticalGradient(verticalGradient.randomName(), trueAtAndBelow, falseAtAndAbove);
-    }
-
-    private CaveSurface caveSurface(me.outspending.biomesapi.wrapper.worldgen.surface.CaveSurface surface) {
-        return switch (surface) {
-            case FLOOR -> CaveSurface.FLOOR;
-            case CEILING -> CaveSurface.CEILING;
-        };
     }
 }

@@ -43,6 +43,11 @@ public final class BlockStateProviderFactoryImpl implements BlockStateProvider.F
         };
     }
 
+    @Override
+    public BlockStateProvider fromMinecraft(Object nms) {
+        return null;
+    }
+
     private static BlockState blockState(BlockData data) {
         return ((CraftBlockData) data).getState();
     }

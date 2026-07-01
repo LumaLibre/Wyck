@@ -5,7 +5,6 @@ import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.registry.internal.FrozenRegistry;
 import me.outspending.biomesapi.util.Lazy;
 import me.outspending.biomesapi.wrapper.level.noise.function.DensityFunction;
-import me.outspending.biomesapi.wrapper.level.noise.function.DensityFunctionFactoryImpl;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.Identifier;

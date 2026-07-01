@@ -7,6 +7,7 @@ import me.outspending.biomesapi.registry.bootstrap.util.BootstrapSafeMinecraftRe
 import me.outspending.biomesapi.util.ThrowingRunnable;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
+import net.minecraft.resources.Identifier;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -17,9 +18,12 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @NullMarked
 public class FrozenRegistryImpl<U> implements FrozenRegistry {
+
+    private static final String TAG_SET_CLASS_NAME = "net.minecraft.core.MappedRegistry$TagSet";
 
     private static final Field FROZEN_FIELD;
     private static final Field ALL_TAGS_FIELD;
@@ -33,7 +37,7 @@ public class FrozenRegistryImpl<U> implements FrozenRegistry {
             ALL_TAGS_FIELD = MappedRegistry.class.getDeclaredField("allTags");
             ALL_TAGS_FIELD.setAccessible(true);
 
-            Class<?> tagSetClass = Class.forName("net.minecraft.core.MappedRegistry$TagSet");
+            Class<?> tagSetClass = Class.forName(TAG_SET_CLASS_NAME);
             UNBOUND_TAGSET = tagSetClass.getDeclaredMethod("unbound");
             UNBOUND_TAGSET.setAccessible(true);
         } catch (NoSuchFieldException | ClassNotFoundException | NoSuchMethodException e) {
@@ -114,6 +118,13 @@ public class FrozenRegistryImpl<U> implements FrozenRegistry {
             freeze();
         }
     }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T> @Nullable T retrieve(ResourceKey key) {
+        return (T) registry.getValue((Identifier) key.resourceLocation());
+    }
+
 
     private static void unsafe(ThrowingRunnable runnable, String err) {
         try {

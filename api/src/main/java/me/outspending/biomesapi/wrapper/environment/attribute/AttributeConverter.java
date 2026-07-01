@@ -5,7 +5,7 @@ import me.outspending.biomesapi.factory.WireProvider;
 import me.outspending.biomesapi.wrapper.internal.NmsEnumTranslatable;
 import me.outspending.biomesapi.wrapper.environment.BedRule;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleCatalog;
-import me.outspending.biomesapi.wrapper.environment.particle.WrappedAmbientParticle;
+import me.outspending.biomesapi.wrapper.environment.particle.AmbientParticle;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
@@ -58,5 +58,5 @@ public interface AttributeConverter {
      * @since 2.1.0
      */
     @AsOf("2.1.0")
-    Object convertDripstoneParticle(WrappedAmbientParticle<?> particle);
+    Object convertDripstoneParticle(AmbientParticle<?> particle);
 }

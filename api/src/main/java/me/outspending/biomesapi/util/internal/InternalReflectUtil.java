@@ -23,4 +23,12 @@ public final class InternalReflectUtil {
         }
         throw new RuntimeException("no field '" + fieldName + "' on " + instance.getClass());
     }
+
+    public static <T> T invokeMethod(Object instance, String methodName, Object... args) {
+        try {
+            return (T) instance.getClass().getMethod(methodName, args.getClass()).invoke(instance, args);
+        } catch (ReflectiveOperationException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

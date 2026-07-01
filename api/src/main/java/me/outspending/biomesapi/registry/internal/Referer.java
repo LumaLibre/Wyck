@@ -7,16 +7,19 @@ import java.util.List;
 import java.util.stream.Stream;
 
 @ApiStatus.Internal
-public enum RegistryReference {
+public enum Referer {
     BIOME("worldgen/biome"),
     FEATURE("worldgen/feature"),
     DIMENSION_TYPE("dimension_type"),
     DIMENSION("dimension"),
-    NOISE_SETTINGS("worldgen/noise_settings");
+    NOISE_SETTINGS("worldgen/noise_settings"),
+    FLUID("fluid"),
+    CONFIGURED_CARVER("worldgen/configured_carver")
+    ;
 
     private final List<ResourceKey> registryKeys;
 
-    RegistryReference(String... registryKeys) {
+    Referer(String... registryKeys) {
         this.registryKeys = Stream.of(registryKeys).map(ResourceKey::of).toList();
     }
 

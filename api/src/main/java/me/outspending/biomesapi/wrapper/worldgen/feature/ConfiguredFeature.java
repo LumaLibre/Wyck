@@ -11,6 +11,7 @@ import me.outspending.biomesapi.factory.WireProvider;
 import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.registry.worldgen.CustomFeatureRegistry;
 import me.outspending.biomesapi.serialization.StringRepresentable;
+import me.outspending.biomesapi.wrapper.internal.NmsDecoder;
 import me.outspending.biomesapi.wrapper.internal.NmsHandle;
 import me.outspending.biomesapi.wrapper.worldgen.feature.config.FeatureConfiguration;
 import me.outspending.biomesapi.wrapper.worldgen.feature.custom.CustomFeature;
@@ -54,7 +55,7 @@ public sealed interface ConfiguredFeature extends NmsHandle, Keyed, StringRepres
     WireProvider<Factory> WIRE = WireProvider.create("me.outspending.biomesapi.wrapper.worldgen.feature.ConfiguredFeatureFactoryImpl");
 
     @ApiStatus.Internal
-    interface Factory {
+    interface Factory extends NmsDecoder<ConfiguredFeature> {
         Object toNms(ConfiguredFeature feature);
     }
 
@@ -99,6 +100,11 @@ public sealed interface ConfiguredFeature extends NmsHandle, Keyed, StringRepres
     @AsOf("2.3.0")
     default Object toMinecraft() {
         return WIRE.get().toNms(this);
+    }
+
+    @AsOf("2.4.0")
+    static ConfiguredFeature fromMinecraft(Object nms) {
+        return WIRE.get().fromMinecraft(nms);
     }
 
     @ApiStatus.Internal
@@ -153,7 +159,7 @@ public sealed interface ConfiguredFeature extends NmsHandle, Keyed, StringRepres
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    record CustomConfigured(ResourceKey featureKey, Object config) implements ConfiguredFeature {
+    record CustomConfigured(ResourceKey featureKey, Object config) implements ConfiguredFeature { // TODO: Should not be Object for config
         @SuppressWarnings({"unchecked", "rawtypes"})
         public static final MapCodec<CustomConfigured> MAP_CODEC = ResourceKey.CODEC.dispatchMap(
             "feature_key",

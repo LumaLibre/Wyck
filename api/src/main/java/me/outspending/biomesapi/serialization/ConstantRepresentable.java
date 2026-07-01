@@ -12,7 +12,7 @@ public interface ConstantRepresentable {
     static <E extends ConstantRepresentable> Codec<E> codec(E[] values) {
         return Codec.stringResolver(ConstantRepresentable::getKey, key -> {
             for (E value : values) {
-                if (value.getKey().equals(key)) {
+                if (value.getKey().equalsIgnoreCase(key)) {
                     return value;
                 }
             }

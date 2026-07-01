@@ -1,7 +1,9 @@
 package me.outspending.biomesapi.wrapper.worldgen.feature.config;
 
 import me.outspending.biomesapi.annotations.AsOf;
+import me.outspending.biomesapi.wrapper.internal.NmsDecoder;
 import me.outspending.biomesapi.wrapper.internal.NmsHandle;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -15,4 +17,13 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 @AsOf("2.3.0")
 public interface FeatureConfiguration extends NmsHandle {
+
+    @ApiStatus.Internal // Internal wire
+    NmsDecoder<FeatureConfiguration> DECODER = nms -> () -> nms;
+
+    @AsOf("2.4.0")
+    @ApiStatus.Internal
+    static FeatureConfiguration fromMinecraft(Object nms) {
+        return DECODER.fromMinecraft(nms);
+    }
 }
