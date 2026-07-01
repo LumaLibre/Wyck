@@ -33,11 +33,6 @@ public class TestPlugin extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
-        ConfiguredFeature;
-        Feature;
-        OverworldBiomeBuilder;
-        AsyncPlayerSpawnLocationEvent
-        //Registries.DENSITY_FUNCTION
         ResourceKey dimKey = ResourceKey.of("test", "example");
         Dimension dimension = Dimension.builder(dimKey)
             .hasSkyLight(true)

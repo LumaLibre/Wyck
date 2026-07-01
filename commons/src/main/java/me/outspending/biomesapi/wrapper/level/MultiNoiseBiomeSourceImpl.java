@@ -41,4 +41,9 @@ public record MultiNoiseBiomeSourceImpl(@Override List<BiomeSource.MultiNoiseEnt
     public @Nullable ResourceKey fixedBiome() {
         return null;
     }
+
+    @Override
+    public @Nullable ResourceKey preset() {
+        return null;
+    }
 }

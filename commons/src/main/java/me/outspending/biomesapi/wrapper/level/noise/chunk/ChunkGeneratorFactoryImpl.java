@@ -4,7 +4,6 @@ import me.outspending.biomesapi.annotations.WireFactory;
 import me.outspending.biomesapi.keys.ResourceKey;
 import me.outspending.biomesapi.wrapper.level.BiomeSource;
 import me.outspending.biomesapi.wrapper.level.noise.NoiseGeneratorSettings;
-import ;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 

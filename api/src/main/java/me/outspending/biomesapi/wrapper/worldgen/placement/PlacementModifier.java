@@ -341,6 +341,11 @@ public sealed interface PlacementModifier extends NmsHandle, StringRepresentable
         return WIRE.get().toNms(this);
     }
 
+    @AsOf("2.4.0")
+    static PlacementModifier fromMinecraft(Object nms) {
+        return WIRE.get().fromMinecraft(nms);
+    }
+
     @AsOf("2.3.0")
     record BiomeFilter() implements PlacementModifier {
         public static final MapCodec<BiomeFilter> MAP_CODEC = MapCodec.unit(BiomeFilter::new);

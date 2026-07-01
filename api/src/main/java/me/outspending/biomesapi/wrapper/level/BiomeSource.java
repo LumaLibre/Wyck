@@ -50,15 +50,21 @@ public interface BiomeSource extends NmsHandle {
         BiomeSource fixed(ResourceKey biome);
 
         BiomeSource multiNoise(List<MultiNoiseEntry> entries);
+
+        BiomeSource preset(ResourceKey preset);
+
+        // TODO: Do when decoders are available
+        //List<MultiNoiseEntry> presetEntries(ResourceKey preset);
     }
 
-    @AsOf("2.4.0")
     @ApiStatus.Internal
     @Nullable ResourceKey fixedBiome();
 
-    @AsOf("2.4.0")
     @ApiStatus.Internal
     @Nullable List<MultiNoiseEntry> entries();
+
+    @ApiStatus.Internal
+    @Nullable ResourceKey preset();
 
     @AsOf("2.4.0")
     static BiomeSource fixed(ResourceKey biome) {
@@ -78,6 +84,31 @@ public interface BiomeSource extends NmsHandle {
     @AsOf("2.4.0")
     static MultiNoiseBuilder multiNoise() {
         return new MultiNoiseBuilder();
+    }
+
+    @AsOf("2.4.0")
+    static BiomeSource preset(ResourceKey preset) {
+        return WIRE.get().preset(preset);
+    }
+
+    /**
+     * Biome source preset for the overworld.
+     * @return the overworld biome source preset
+     * @since 2.4.0
+     */
+    @AsOf("2.4.0")
+    static BiomeSource overworld() {
+        return preset(ResourceKey.minecraft("overworld"));
+    }
+
+    /**
+     * Biome source preset for the nether.
+     * @return the nether biome source preset
+     * @since 2.4.0
+     */
+    @AsOf("2.4.0")
+    static BiomeSource nether() {
+        return preset(ResourceKey.minecraft("nether"));
     }
 
     @AsOf("2.4.0")
@@ -106,6 +137,12 @@ public interface BiomeSource extends NmsHandle {
     final class MultiNoiseBuilder {
 
         private final List<MultiNoiseEntry> entries = new ArrayList<>();
+
+        private MultiNoiseBuilder() {}
+
+        private MultiNoiseBuilder(MultiNoiseBuilder builder) {
+            this.entries.addAll(builder.entries);
+        }
 
         @AsOf("2.4.0")
         public MultiNoiseBuilder add(ResourceKey biome, ClimatePoint point) {

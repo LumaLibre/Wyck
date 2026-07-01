@@ -94,7 +94,7 @@ public interface ClimatePoint extends NmsHandle {
     float offset();
 
     /**
-     * Creates a builder for a climate climatePoint. Unset axes span the full range.
+     * Creates a builder for a climate point. Unset axes span the full range.
      * @return a new builder
      * @since 2.3.0
      */
@@ -109,7 +109,7 @@ public interface ClimatePoint extends NmsHandle {
     }
 
     /**
-     * Creates a climate climatePoint pinned to a single value on every axis.
+     * Creates a climate point pinned to a single value on every axis.
      * @param temperature the temperature value
      * @param humidity the humidity value
      * @param continentalness the continentalness value
@@ -117,7 +117,7 @@ public interface ClimatePoint extends NmsHandle {
      * @param depth the depth value
      * @param weirdness the weirdness value
      * @param offset the fitness offset
-     * @return a new climate climatePoint
+     * @return a new climate point
      * @since 2.3.0
      */
     @AsOf("2.3.0")
@@ -144,7 +144,7 @@ public interface ClimatePoint extends NmsHandle {
     }
 
     /**
-     * Builder for a climate climatePoint. Any axis left unset spans the full [-2.0, 2.0] range, so it
+     * Builder for a climate point. Any axis left unset spans the full [-2.0, 2.0] range, so it
      * matches anywhere on that axis.
      *
      * @since 2.3.0

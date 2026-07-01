@@ -8,7 +8,6 @@ import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.ApiStatus;
-import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
@@ -23,7 +22,7 @@ public final class LevelNoiseGeneratorSettingsRegistryImpl implements LevelNoise
         net.minecraft.world.level.levelgen.NoiseGeneratorSettings noiseSettings = (net.minecraft.world.level.levelgen.NoiseGeneratorSettings) settings.toMinecraft();
         Identifier id = (Identifier) key.resourceLocation();
         this.noiseSettingsRegistry.get().whileUnfrozen(raw -> {
-            MappedRegistry<net.minecraft.world.level.levelgen.NoiseGeneratorSettings> registry = (MappedRegistry<@NonNull net.minecraft.world.level.levelgen.NoiseGeneratorSettings>) raw.toMinecraft();
+            MappedRegistry<net.minecraft.world.level.levelgen.NoiseGeneratorSettings> registry = (MappedRegistry<net.minecraft.world.level.levelgen.NoiseGeneratorSettings>) raw.toMinecraft();
 
             if (!registry.containsKey(id)) {
                 Registry.register(registry, id, noiseSettings);

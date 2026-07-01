@@ -35,4 +35,9 @@ public record FixedBiomeSourceImpl(@Override ResourceKey biome) implements Biome
     public @Nullable List<MultiNoiseEntry> entries() {
         return null;
     }
+
+    @Override
+    public @Nullable ResourceKey preset() {
+        return null;
+    }
 }

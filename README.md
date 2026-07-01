@@ -2,7 +2,7 @@
 
 <div align="center">
     <h1>BiomesAPI</h1>
-    <p>Custom Biomes for Paper servers without datapacks.</p>
+    <p>Custom biomes, dimensions, and world generation for Paper servers without datapacks.</p>
     <img src="https://img.shields.io/github/last-commit/LumaLibre/BiomesAPI">
     <img src="https://img.shields.io/github/contributors/LumaLibre/BiomesAPI">
     <img src="https://img.shields.io/github/forks/LumaLibre/BiomesAPI">
@@ -18,8 +18,8 @@ Documentation is still under construction!
 
 ## About 📃
 
-BiomesAPI is a custom biome API for PaperMC Servers. This API is a fork of Outspending's original BiomesAPI and
-has been updated to support the **modern** Minecraft versions. Currently, we support Minecraft **1.21.11**
+BiomesAPI is a custom biome, dimensions, and world generation API for PaperMC Servers. This API is a fork of Outspending's original BiomesAPI and
+has been updated to support the **modern** Minecraft versions. Currently, we support Minecraft **1.21.11 <-> 26.2**
 but version support will expand with time.
 
 
