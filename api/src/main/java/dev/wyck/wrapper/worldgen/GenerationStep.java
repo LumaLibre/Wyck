@@ -2,7 +2,7 @@ package dev.wyck.wrapper.worldgen;
 
 import dev.wyck.annotations.AsOf;
 import dev.wyck.wrapper.internal.KeyedEnumTranslator;
-import dev.wyck.wrapper.internal.NmsEnumTranslatable;
+import dev.wyck.wrapper.internal.WrappedEnumerator;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -14,7 +14,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.3.0")
-public enum GenerationStep implements NmsEnumTranslatable<GenerationStep> {
+public enum GenerationStep implements WrappedEnumerator<GenerationStep> {
 
     RAW_GENERATION("RAW_GENERATION"),
     LAKES("LAKES"),

@@ -2,7 +2,7 @@ package dev.wyck.wrapper.environment;
 
 import dev.wyck.annotations.AsOf;
 import dev.wyck.wrapper.internal.KeyedEnumTranslator;
-import dev.wyck.wrapper.internal.NmsEnumTranslatable;
+import dev.wyck.wrapper.internal.WrappedEnumerator;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -15,7 +15,7 @@ import org.jspecify.annotations.Nullable;
  */
 @NullMarked
 @AsOf("2.4.1")
-public enum TriState implements NmsEnumTranslatable<TriState> {
+public enum TriState implements WrappedEnumerator<TriState> {
     TRUE("true"),
     FALSE("false"),
     DEFAULT("default");

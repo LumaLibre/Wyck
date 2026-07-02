@@ -4,7 +4,7 @@ import dev.wyck.annotations.AsOf;
 import dev.wyck.model.biome.AbstractBiome;
 import dev.wyck.factory.WireProvider;
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.wrapper.internal.NmsHandle;
+import dev.wyck.wrapper.internal.Wrapper;
 import dev.wyck.wrapper.worldgen.climate.ClimatePoint;
 import org.bukkit.block.Biome;
 import org.jetbrains.annotations.ApiStatus;
@@ -23,7 +23,7 @@ import java.util.List;
  */
 @NullMarked
 @AsOf("2.4.0")
-public interface BiomeSource extends NmsHandle {
+public interface BiomeSource extends Wrapper {
 
     @ApiStatus.Internal
     WireProvider<Factory> WIRE = WireProvider.create("dev.wyck.wrapper.level.BiomeSourceFactoryImpl");

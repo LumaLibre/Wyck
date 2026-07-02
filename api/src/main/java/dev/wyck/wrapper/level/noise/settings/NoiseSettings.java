@@ -3,7 +3,7 @@ package dev.wyck.wrapper.level.noise.settings;
 import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.WireProvider;
-import dev.wyck.wrapper.internal.NmsHandle;
+import dev.wyck.wrapper.internal.Wrapper;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
@@ -16,7 +16,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.4.0")
-public interface NoiseSettings extends NmsHandle {
+public interface NoiseSettings extends Wrapper {
 
     @ApiStatus.Internal
     WireProvider<Factory> WIRE = WireProvider.create("dev.wyck.wrapper.level.noise.settings.NoiseSettingsFactoryImpl");

@@ -4,7 +4,7 @@ import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.WireProvider;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.model.level.LevelCreator;
-import dev.wyck.wrapper.internal.NmsHandle;
+import dev.wyck.wrapper.internal.Wrapper;
 import dev.wyck.wrapper.level.BiomeSource;
 import dev.wyck.wrapper.level.noise.NoiseGeneratorSettings;
 import dev.wyck.wrapper.level.noise.Noise;
@@ -20,7 +20,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.4.0")
-public interface ChunkGenerator extends NmsHandle {
+public interface ChunkGenerator extends Wrapper {
 
     @ApiStatus.Internal
     WireProvider<Factory> WIRE = WireProvider.create("dev.wyck.wrapper.level.noise.chunk.ChunkGeneratorFactoryImpl");

@@ -6,7 +6,7 @@ import dev.wyck.keys.KeyChains;
 import dev.wyck.model.level.dimension.Dimension;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.registry.bootstrap.util.BootstrapSafeMinecraftRegistries;
-import dev.wyck.registry.internal.FrozenRegistry;
+import dev.wyck.registry.internal.WyckRegistry;
 import dev.wyck.registry.level.dimension.DimensionRegistry;
 import dev.wyck.util.Lazy;
 import dev.wyck.wrapper.entity.data.MonsterSettings;
@@ -40,7 +40,7 @@ import java.util.Optional;
 @SuppressWarnings("unchecked")
 public class DimensionTypeRegistry implements DimensionRegistry {
 
-    private final Lazy<FrozenRegistry> dimensionTypeRegistry = FrozenRegistry.lazy("dimension_type");
+    private final Lazy<WyckRegistry> dimensionTypeRegistry = WyckRegistry.lazy("dimension_type");
 
     @Override
     public DimensionType buildDelegate(Dimension dimension) {

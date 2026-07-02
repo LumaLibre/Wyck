@@ -7,16 +7,18 @@ import java.util.List;
 import java.util.stream.Stream;
 
 @ApiStatus.Internal
-public enum RegistryReference {
+public enum RegistryId {
     BIOME("worldgen/biome"),
     FEATURE("worldgen/feature"),
     DIMENSION_TYPE("dimension_type"),
     DIMENSION("dimension"),
-    NOISE_SETTINGS("worldgen/noise_settings");
+    NOISE_SETTINGS("worldgen/noise_settings"),
+    PARTICLE_TYPE("particle_type"),
+    ENVIRONMENT_ATTRIBUTE("environment_attribute");
 
     private final List<ResourceKey> registryKeys;
 
-    RegistryReference(String... registryKeys) {
+    RegistryId(String... registryKeys) {
         this.registryKeys = Stream.of(registryKeys).map(ResourceKey::of).toList();
     }
 

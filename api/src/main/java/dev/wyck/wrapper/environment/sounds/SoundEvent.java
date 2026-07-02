@@ -4,7 +4,7 @@ import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.ConstructWireProvider;
 import dev.wyck.factory.WireProvider;
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.wrapper.internal.NmsHandle;
+import dev.wyck.wrapper.internal.Wrapper;
 import net.kyori.adventure.key.Keyed;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -20,7 +20,7 @@ import java.util.Optional;
  */
 @NullMarked
 @AsOf("2.4.1")
-public interface SoundEvent extends NmsHandle, Keyed {
+public interface SoundEvent extends Wrapper, Keyed {
 
     @ApiStatus.Internal
     ConstructWireProvider<SoundEvent> WIRE = WireProvider.construct("dev.wyck.wrapper.environment.sounds.SoundEventImpl");

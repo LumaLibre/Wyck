@@ -3,7 +3,7 @@ package dev.wyck;
 import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.BuildInfo;
-import dev.wyck.factory.NullableWireProvider;
+import dev.wyck.factory.OptionalWireProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -24,7 +24,7 @@ import org.jspecify.annotations.Nullable;
 public interface Wyck {
 
     @ApiStatus.Internal
-    NullableWireProvider<Wyck> WIRE = NullableWireProvider.empty();
+    OptionalWireProvider<Wyck> WIRE = OptionalWireProvider.empty();
 
     /**
      * @return the active Wyck instance. When running as a standalone plugin, this is the
@@ -83,7 +83,7 @@ public interface Wyck {
     }
 
     /**
-     * Default implementation of Wyck when shaded into a consumer plugin.
+     * The default implementation of Wyck when shaded into a consumer plugin.
      * Constructed reflectively by the wire as a fallback when no standalone plugin
      * has registered itself.
      *
@@ -106,7 +106,7 @@ public interface Wyck {
 
 
         private ShadedWyck() {
-            Preconditions.checkState(INSTANCE == null, "Already initialized");
+            Preconditions.checkState(INSTANCE == null, "already initialized");
         }
     }
 }

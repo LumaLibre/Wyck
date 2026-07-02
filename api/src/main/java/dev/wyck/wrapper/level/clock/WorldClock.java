@@ -3,7 +3,7 @@ package dev.wyck.wrapper.level.clock;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.WireProvider;
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.wrapper.internal.NmsHandle;
+import dev.wyck.wrapper.internal.Wrapper;
 import net.kyori.adventure.key.Keyed;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -17,7 +17,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.4.0")
-public interface WorldClock extends NmsHandle, Keyed {
+public interface WorldClock extends Wrapper, Keyed {
 
     @ApiStatus.Internal
     WireProvider<Factory> WIRE = WireProvider.create("dev.wyck.wrapper.level.clock.WorldClockFactoryImpl");

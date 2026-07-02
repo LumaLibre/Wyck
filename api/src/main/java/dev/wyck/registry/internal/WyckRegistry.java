@@ -4,9 +4,10 @@ import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.WireProvider;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.util.Lazy;
-import dev.wyck.wrapper.internal.NmsHandle;
+import dev.wyck.wrapper.internal.Wrapper;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.function.Consumer;
@@ -20,16 +21,16 @@ import java.util.function.Consumer;
 @NullMarked
 @AsOf("2.3.0")
 @ApiStatus.Internal
-public interface FrozenRegistry extends NmsHandle {
+public interface WyckRegistry extends Wrapper {
 
     @ApiStatus.Internal
-    WireProvider<Factory> WIRE = WireProvider.create("dev.wyck.registry.internal.FrozenRegistryFactoryImpl");
+    WireProvider<Factory> WIRE = WireProvider.create("dev.wyck.registry.internal.WyckRegistryFactoryImpl");
 
     @ApiStatus.Internal
     interface Factory {
-        FrozenRegistry create(ResourceKey key);
+        WyckRegistry create(ResourceKey key);
 
-        FrozenRegistry create(Collection<ResourceKey> keys);
+        WyckRegistry create(Collection<ResourceKey> keys);
     }
 
     /**
@@ -77,12 +78,22 @@ public interface FrozenRegistry extends NmsHandle {
     void whileUnfrozen(Runnable action);
 
     /**
+     * Retrieves an object from the registry.
+     * @param key the key of the object to retrieve
+     * @return the object
+     * @param <T> the type of the object
+     * @since 2.5.0
+     */
+    @AsOf("2.5.0")
+    <T> @Nullable T retrieve(ResourceKey key);
+
+    /**
      * Runs the given consumer with the registry while it is unfrozen.
      * @param consumer the consumer to run
      * @since 2.4.0
      */
     @AsOf("2.4.0")
-    default void whileUnfrozen(Consumer<FrozenRegistry> consumer) {
+    default void whileUnfrozen(Consumer<WyckRegistry> consumer) {
         whileUnfrozen(() -> consumer.accept(this));
     }
 
@@ -94,7 +105,7 @@ public interface FrozenRegistry extends NmsHandle {
     @Override
     @AsOf("2.3.0")
     default Object toMinecraft() {
-        return registry();
+        return this.registry();
     }
 
     /**
@@ -104,7 +115,7 @@ public interface FrozenRegistry extends NmsHandle {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static FrozenRegistry of(ResourceKey key) {
+    static WyckRegistry of(ResourceKey key) {
         return WIRE.get().create(key);
     }
 
@@ -115,7 +126,7 @@ public interface FrozenRegistry extends NmsHandle {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static FrozenRegistry of(String path) {
+    static WyckRegistry of(String path) {
         return of(ResourceKey.minecraft(path));
     }
 
@@ -126,7 +137,7 @@ public interface FrozenRegistry extends NmsHandle {
      * @since 2.4.0
      */
     @AsOf("2.4.0")
-    static FrozenRegistry of(RegistryReference reference) {
+    static WyckRegistry of(RegistryId reference) {
         return WIRE.get().create(reference.getRegistryKeys());
     }
 
@@ -137,7 +148,7 @@ public interface FrozenRegistry extends NmsHandle {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static Lazy<FrozenRegistry> lazy(ResourceKey key) {
+    static Lazy<WyckRegistry> lazy(ResourceKey key) {
         return Lazy.of(() -> of(key));
     }
 
@@ -148,7 +159,7 @@ public interface FrozenRegistry extends NmsHandle {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static Lazy<FrozenRegistry> lazy(String path) {
+    static Lazy<WyckRegistry> lazy(String path) {
         return Lazy.of(() -> of(path));
     }
 
@@ -159,7 +170,7 @@ public interface FrozenRegistry extends NmsHandle {
      * @since 2.4.0
      */
     @AsOf("2.4.0")
-    static Lazy<FrozenRegistry> lazy(RegistryReference reference) {
+    static Lazy<WyckRegistry> lazy(RegistryId reference) {
         return Lazy.of(() -> of(reference));
     }
 }

@@ -1,42 +1,108 @@
 package dev.wyck.wrapper.environment;
 
 import dev.wyck.annotations.AsOf;
+import dev.wyck.factory.ConstructWireProvider;
 import dev.wyck.wrapper.internal.KeyedEnumTranslator;
-import dev.wyck.wrapper.internal.NmsEnumTranslatable;
+import dev.wyck.wrapper.internal.WrappedEnumerator;
+import dev.wyck.wrapper.internal.Wrapper;
 import net.kyori.adventure.text.Component;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.Optional;
+
 /**
- * A record representing bed rules in a biome environment.
- * @param canSleep if players can sleep in the bed
- * @param canSetSpawn if players can set their spawn point using the bed
- * @param explodes if the bed explodes when used in this environment
- * @param errorMessage an optional error message displayed when a player tries to use the bed inappropriately
+ * A wrapper for bed rules in a dimensional environment.
+ *
  * @version 1.1.0
- * @since 1.1.0
+ * @since 2.5.0
  * @author Jsinco
  */
 @NullMarked
 @AsOf("1.1.0")
-public record BedRule(Rule canSleep, Rule canSetSpawn, boolean explodes, @Nullable Component errorMessage) {
+public interface BedRule extends Wrapper {
+
+    @ApiStatus.Internal
+    ConstructWireProvider<BedRule> WIRE = ConstructWireProvider.construct("dev.wyck.wrapper.environment.BedRuleImpl");
 
     /**
-     * An enum representing the rules for bed usage in a biome environment.
-     * Each enum value carries a vanilla key, retrievable via {@link #getKey()}, which the impl module translates to the underlying NMS BedRule.Rule value.
+     * Gets the rule for sleeping in the bed.
+     * @return the rule for sleeping in the bed
+     * @since 1.1.0
+     */
+    @AsOf("1.1.0")
+    Rule canSleep();
+
+    /**
+     * Gets the rule for setting the spawn point using the bed.
+     * @return the rule for setting the spawn point using the bed
+     * @since 1.1.0
+     */
+    @AsOf("1.1.0")
+    Rule canSetSpawn();
+
+    /**
+     * Whether the bed explodes when used in this environment.
+     * @return whether the bed explodes when used in this environment
+     * @since 1.1.0
+     */
+    @AsOf("1.1.0")
+    boolean explodes();
+
+    /**
+     * The error message displayed when a player tries to use the bed inappropriately.
+     * @return the error message displayed when a player tries to use the bed inappropriately, or null if no error message is set
+     * @since 1.1.0
+     */
+    @AsOf("1.1.0")
+    Optional<Component> errorMessage();
+
+    /**
+     * Converts this BedRule to a builder.
+     * @return a new builder for this BedRule
+     * @since 2.5.0
+     */
+    @AsOf("2.5.0")
+    default Builder toBuilder() {
+        return new Builder(this);
+    }
+
+    /**
+     * Creates a new BedRule instance.
+     * @param canSleep the rule for sleeping in the bed
+     * @param canSetSpawn the rule for setting the spawn point using the bed
+     * @param explodes whether the bed explodes when used in this environment
+     * @param errorMessage the error message displayed when a player tries to use the bed inappropriately, or null if no error message is set
+     * @return a new BedRule instance
+     * @since 2.5.0
+     */
+    @AsOf("2.5.0")
+    static BedRule of(Rule canSleep, Rule canSetSpawn, boolean explodes, @Nullable Component errorMessage) {
+        return WIRE.construct(canSleep, canSetSpawn, explodes, Optional.ofNullable(errorMessage));
+    }
+
+    /**
+     * Creates a new builder for bed rules.
+     * @return a new builder for bed rules
+     * @since 1.1.0
+     */
+    @AsOf("1.1.0")
+    static Builder builder() {
+        return new Builder();
+    }
+
+    /**
+     * An enum representing the rules for bed usage in an environment.
      *
      * @version 1.1.0
      * @since 1.1.0
      * @author Jsinco
      */
     @AsOf("1.1.0")
-    public enum Rule implements NmsEnumTranslatable<Rule> {
-
-        /** Beds can always be slept in. */
+    enum Rule implements WrappedEnumerator<Rule> {
         ALWAYS("always"),
-        /** Beds can be slept in only when it is dark. */
         WHEN_DARK("when_dark"),
-        /** Beds can never be slept in. */
         NEVER("never");
 
         public static final KeyedEnumTranslator<Rule> TRANSLATOR = KeyedEnumTranslator.byKey(Rule::getKey, Rule.values());
@@ -49,53 +115,105 @@ public record BedRule(Rule canSleep, Rule canSetSpawn, boolean explodes, @Nullab
         }
 
         /**
-         * Returns the vanilla key for this rule (e.g. "always", "when_dark", "never").
-         * The impl module uses this key to resolve the underlying Minecraft BedRule.Rule value.
-         * @return The vanilla key for this enum value.
+         * Gets the key for this rule.
+         * @return the key for this rule
+         * @since 1.1.0
          */
         @AsOf("1.1.0")
         public String getKey() {
             return key;
         }
 
+        /**
+         * Gets the translator for this enum.
+         * @return the translator for this enum
+         * @since 1.1.0
+         */
         @Override
+        @AsOf("1.1.0")
         public KeyedEnumTranslator<Rule> translator() {
             return TRANSLATOR;
         }
     }
 
-    public static Builder builder() {
-        return new Builder();
-    }
-
-    public static class Builder {
+    /**
+     * A builder for bed rules. Defaults to Minecraft overworld rules.
+     * @version 1.1.0
+     * @since 1.1.0
+     * @author Jsinco
+     */
+    @AsOf("1.1.0")
+    final class Builder {
         private Rule canSleep = Rule.WHEN_DARK;
         private Rule canSetSpawn = Rule.ALWAYS;
         private boolean explodes = false;
         private @Nullable Component errorMessage = Component.text("You can only sleep at night or during thunderstorms");
 
+        public Builder() {}
+
+        public Builder(BedRule bedRule) {
+            this.canSleep = bedRule.canSleep();
+            this.canSetSpawn = bedRule.canSetSpawn();
+            this.explodes = bedRule.explodes();
+            this.errorMessage = bedRule.errorMessage().orElse(null);
+        }
+
+        /**
+         * Sets the rule for sleeping in the bed.
+         * @param canSleep the rule for sleeping in the bed
+         * @return this builder, for chaining
+         * @since 1.1.0
+         */
+        @AsOf("1.1.0")
         public Builder setCanSleep(Rule canSleep) {
             this.canSleep = canSleep;
             return this;
         }
 
+        /**
+         * Sets the rule for setting the spawn point using the bed.
+         * @param canSetSpawn the rule for setting the spawn point using the bed
+         * @return this builder, for chaining
+         * @since 1.1.0
+         */
+        @AsOf("1.1.0")
         public Builder setCanSetSpawn(Rule canSetSpawn) {
             this.canSetSpawn = canSetSpawn;
             return this;
         }
 
+        /**
+         * Sets whether the bed explodes when used in this environment.
+         * @param explodes whether the bed explodes when used in this environment
+         * @return this builder, for chaining
+         * @since 1.1.0
+         */
+        @AsOf("1.1.0")
         public Builder setExplodes(boolean explodes) {
             this.explodes = explodes;
             return this;
         }
 
+        /**
+         * Sets the error message displayed when a player tries to use the bed inappropriately.
+         * @param errorMessage the error message displayed when a player tries to use the bed inappropriately, or null to remove the error message
+         * @return this builder, for chaining
+         * @since 1.1.0
+         */
+        @AsOf("1.1.0")
         public Builder setErrorMessage(@Nullable Component errorMessage) {
             this.errorMessage = errorMessage;
             return this;
         }
 
+        /**
+         * Builds the BedRule instance.
+         * @return the BedRule instance
+         * @since 1.1.0
+         */
+        @AsOf("1.1.0")
         public BedRule build() {
-            return new BedRule(canSleep, canSetSpawn, explodes, errorMessage);
+            return of(canSleep, canSetSpawn, explodes, errorMessage);
         }
     }
 }

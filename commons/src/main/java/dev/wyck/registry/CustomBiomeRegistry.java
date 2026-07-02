@@ -14,7 +14,8 @@ import dev.wyck.registry.handlers.BiomeGenerationSettingsHandler;
 import dev.wyck.registry.handlers.MobSpawnSettingsHandler;
 import dev.wyck.registry.handlers.ParticleCatalogHandler;
 import dev.wyck.registry.handlers.SpecialEffectsHandler;
-import dev.wyck.registry.internal.FrozenRegistry;
+import dev.wyck.registry.internal.RegistryId;
+import dev.wyck.registry.internal.WyckRegistry;
 import dev.wyck.util.Lazy;
 import dev.wyck.wrapper.BiomeSettings;
 import dev.wyck.wrapper.entity.BiomeSpawner;
@@ -64,10 +65,7 @@ public class CustomBiomeRegistry implements BiomeRegistry {
     private static final MobSpawnSettingsHandler MOB_SPAWN_SETTINGS_HANDLER = new MobSpawnSettingsHandler();
     private static final BiomeGenerationSettingsHandler BIOME_GENERATION_SETTINGS_HANDLER = new BiomeGenerationSettingsHandler();
 
-    private final Lazy<FrozenRegistry> biomeRegistry = FrozenRegistry.lazy("worldgen/biome");
-
-    // TODO: Extract commons
-
+    private final Lazy<WyckRegistry> biomeRegistry = WyckRegistry.lazy(RegistryId.BIOME);
 
     /**
      * Builds the NMS {@link net.minecraft.world.level.biome.Biome} from a {@link Biome} using the registered settings, colors,
@@ -140,7 +138,7 @@ public class CustomBiomeRegistry implements BiomeRegistry {
         Preconditions.checkNotNull(biomes, "biomes cannot be null");
 
         this.biomeRegistry.get().whileUnfrozen(() -> {
-            Registry<net.minecraft.world.level.biome.Biome> registry = (Registry<@NonNull net.minecraft.world.level.biome.Biome>) biomeRegistry.get().toMinecraft();
+            Registry<net.minecraft.world.level.biome.Biome> registry = (Registry<net.minecraft.world.level.biome.@NonNull Biome>) biomeRegistry.get().toMinecraft();
             for (Biome biome : biomes) {
                 Identifier resourceLocation = ((ResourceKeyImpl) biome.getResourceKey()).resourceLocation();
 
@@ -175,7 +173,7 @@ public class CustomBiomeRegistry implements BiomeRegistry {
             BiomeSettings settings = abstractBiome.getSettings();
 
 
-            Registry<net.minecraft.world.level.biome.Biome> biomeRegistry = (Registry<@NonNull net.minecraft.world.level.biome.Biome>) this.biomeRegistry.get().toMinecraft();
+            Registry<net.minecraft.world.level.biome.Biome> biomeRegistry = (Registry<net.minecraft.world.level.biome.@NonNull Biome>) this.biomeRegistry.get().toMinecraft();
             net.minecraft.world.level.biome.Biome biome = biomeRegistry.getOptional((Identifier) key.resourceLocation()).orElseThrow(
                 () -> new IllegalStateException("Biome " + key + " is not registered in the internal biome registry")
             );
@@ -255,7 +253,7 @@ public class CustomBiomeRegistry implements BiomeRegistry {
             return KeyChains.BIOMES.getOrThrow(key);
         }
 
-        Registry<net.minecraft.world.level.biome.Biome> biomeRegistry = (Registry<@NonNull net.minecraft.world.level.biome.Biome>) this.biomeRegistry.get().toMinecraft();
+        Registry<net.minecraft.world.level.biome.Biome> biomeRegistry = this.biomeRegistry.get().asHandle();
 
         net.minecraft.world.level.biome.Biome biome = biomeRegistry.getOptional((Identifier) key.resourceLocation()).orElse(null);
         if (biome == null) {
@@ -315,6 +313,8 @@ public class CustomBiomeRegistry implements BiomeRegistry {
         }
         return abstractBiome;
     }
+
+    // TODO: Remove this when decoders are available
 
     @SuppressWarnings("unchecked")
     private BiomeSpawner readSpawner(MobSpawnSettings settings) {

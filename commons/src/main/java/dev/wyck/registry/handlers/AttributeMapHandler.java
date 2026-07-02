@@ -19,11 +19,6 @@ public class AttributeMapHandler implements BuilderHandler<Biome.BiomeBuilder, E
         NmsEnvironmentAttributes.applyTo(key, value);
     }
 
-    public void applyToNms(@Nullable EnvironmentAttributeMap wrappedEnvironmentAttributeMap, net.minecraft.world.attribute.EnvironmentAttributeMap attributeMap) {
-        if (wrappedEnvironmentAttributeMap == null || wrappedEnvironmentAttributeMap.empty()) return;
-        NmsEnvironmentAttributes.applyTo(attributeMap, wrappedEnvironmentAttributeMap);
-    }
-
     @Override
     public @Nullable EnvironmentAttributeMap build(AbstractBiome biome) {
         return null;

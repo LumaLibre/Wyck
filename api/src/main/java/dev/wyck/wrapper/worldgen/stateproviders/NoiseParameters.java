@@ -3,7 +3,7 @@ package dev.wyck.wrapper.worldgen.stateproviders;
 import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.WireProvider;
-import dev.wyck.wrapper.internal.NmsHandle;
+import dev.wyck.wrapper.internal.Wrapper;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
@@ -20,7 +20,7 @@ import java.util.List;
  */
 @NullMarked
 @AsOf("2.3.0")
-public interface NoiseParameters extends NmsHandle {
+public interface NoiseParameters extends Wrapper {
 
     @ApiStatus.Internal
     WireProvider<Factory> WIRE = WireProvider.create("dev.wyck.wrapper.worldgen.stateproviders.NoiseParametersFactoryImpl");

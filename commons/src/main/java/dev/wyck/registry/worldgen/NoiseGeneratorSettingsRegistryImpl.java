@@ -1,7 +1,7 @@
 package dev.wyck.registry.worldgen;
 
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.registry.internal.FrozenRegistry;
+import dev.wyck.registry.internal.WyckRegistry;
 import dev.wyck.util.Lazy;
 import dev.wyck.wrapper.level.noise.NoiseGeneratorSettings;
 import net.minecraft.core.MappedRegistry;
@@ -14,7 +14,7 @@ import org.jspecify.annotations.NullMarked;
 @ApiStatus.Internal
 public final class NoiseGeneratorSettingsRegistryImpl implements NoiseGeneratorSettingsRegistry {
 
-    private final Lazy<FrozenRegistry> noiseSettingsRegistry = FrozenRegistry.lazy("worldgen/noise_settings");
+    private final Lazy<WyckRegistry> noiseSettingsRegistry = WyckRegistry.lazy("worldgen/noise_settings");
 
     @Override
     @SuppressWarnings("unchecked")

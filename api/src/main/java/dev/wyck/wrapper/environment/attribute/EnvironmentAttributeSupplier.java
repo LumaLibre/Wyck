@@ -7,24 +7,23 @@ import java.util.function.Supplier;
 
 /**
  * A supplier for WrappedEnvironmentAttribute instances.
- * @param <T> the type of the underlying EnvironmentAttribute
- * @param <K> the type of the exposed 'api' value
+ * @param <V> the type of the attribute value
  * @version 2.1.0
  * @since 1.1.0
  * @author Jsinco
  */
 @NullMarked
 @AsOf("2.1.0")
-public class EnvironmentAttributeSupplier<T, K> {
+public sealed class EnvironmentAttributeSupplier<V> permits FriendlyColorSupplier {
 
-    private final Supplier<EnvironmentAttribute<T, K>> supplier;
+    private final Supplier<EnvironmentAttribute<V>> supplier;
 
     /**
      * Creates a new WrappedEnvironmentAttributeSupplier with the given supplier.
      * @param supplier the supplier that provides the WrappedEnvironmentAttribute
      */
     @AsOf("2.1.0")
-    public EnvironmentAttributeSupplier(Supplier<EnvironmentAttribute<T, K>> supplier) {
+    public EnvironmentAttributeSupplier(Supplier<EnvironmentAttribute<V>> supplier) {
         this.supplier = supplier;
     }
 
@@ -34,7 +33,7 @@ public class EnvironmentAttributeSupplier<T, K> {
      * @param wrappedEnvironmentAttribute the WrappedEnvironmentAttribute to supply
      */
     @AsOf("1.1.0")
-    public EnvironmentAttributeSupplier(EnvironmentAttribute<T, K> wrappedEnvironmentAttribute) {
+    public EnvironmentAttributeSupplier(EnvironmentAttribute<V> wrappedEnvironmentAttribute) {
         this(() -> wrappedEnvironmentAttribute);
     }
 
@@ -43,7 +42,7 @@ public class EnvironmentAttributeSupplier<T, K> {
      * @return the WrappedEnvironmentAttribute
      */
     @AsOf("1.1.0")
-    public EnvironmentAttribute<T, K> get() {
+    public EnvironmentAttribute<V> get() {
         return supplier.get();
     }
 
@@ -54,9 +53,9 @@ public class EnvironmentAttributeSupplier<T, K> {
      * @since 2.1.0
      */
     @AsOf("2.1.0")
-    public EnvironmentAttribute<T, K> unbox(K value) {
-        EnvironmentAttribute<T, K> attribute = supplier.get();
-        attribute.setValue(value);
+    public EnvironmentAttribute<V> unbox(V value) {
+        EnvironmentAttribute<V> attribute = supplier.get();
+        attribute.value(value);
         return attribute;
     }
 }

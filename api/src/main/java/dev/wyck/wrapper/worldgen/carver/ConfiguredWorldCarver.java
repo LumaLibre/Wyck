@@ -3,7 +3,7 @@ package dev.wyck.wrapper.worldgen.carver;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.WireProvider;
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.wrapper.internal.NmsHandle;
+import dev.wyck.wrapper.internal.Wrapper;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
@@ -16,7 +16,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.3.0")
-public sealed interface ConfiguredWorldCarver extends NmsHandle permits ConfiguredWorldCarver.Reference, ConfiguredWorldCarver.Custom {
+public sealed interface ConfiguredWorldCarver extends Wrapper permits ConfiguredWorldCarver.Reference, ConfiguredWorldCarver.Custom {
 
     @ApiStatus.Internal
     WireProvider<Factory> WIRE = WireProvider.create("dev.wyck.wrapper.worldgen.carver.ConfiguredWorldCarverFactoryImpl");

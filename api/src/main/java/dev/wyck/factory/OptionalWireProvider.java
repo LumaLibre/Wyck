@@ -15,13 +15,13 @@ import java.util.Optional;
  * @author Jsinco
  */
 @NullUnmarked
-public final class NullableWireProvider<F> extends WireProvider<@NonNull F> {
+public final class OptionalWireProvider<F> extends WireProvider<@NonNull F> {
 
     private final boolean reflectiveFallback;
     private boolean initialized;
 
     @AsOf("2.1.0")
-    private NullableWireProvider(@Nullable String classNameTemplate, boolean reflectiveFallback) {
+    private OptionalWireProvider(@Nullable String classNameTemplate, boolean reflectiveFallback) {
         super(classNameTemplate);
         this.reflectiveFallback = reflectiveFallback;
     }
@@ -31,8 +31,8 @@ public final class NullableWireProvider<F> extends WireProvider<@NonNull F> {
      * if no provider has been explicitly set.
      */
     @AsOf("2.1.0")
-    public static <F> @NonNull NullableWireProvider<@NonNull F> create(@NonNull String classNameTemplate) {
-        return new NullableWireProvider<>(classNameTemplate, true);
+    public static <F> @NonNull OptionalWireProvider<@NonNull F> create(@NonNull String classNameTemplate) {
+        return new OptionalWireProvider<>(classNameTemplate, true);
     }
 
     /**
@@ -42,8 +42,8 @@ public final class NullableWireProvider<F> extends WireProvider<@NonNull F> {
      * the host plugin has explicitly wired itself up.
      */
     @AsOf("2.1.0")
-    public static <F> @NonNull NullableWireProvider<@NonNull F> empty() {
-        return new NullableWireProvider<>(null, false);
+    public static <F> @NonNull OptionalWireProvider<@NonNull F> empty() {
+        return new OptionalWireProvider<>(null, false);
     }
 
     /**

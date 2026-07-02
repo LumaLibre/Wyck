@@ -7,6 +7,7 @@ import dev.wyck.registry.bootstrap.util.BootstrapSafeMinecraftRegistries;
 import dev.wyck.util.ThrowingRunnable;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
+import net.minecraft.resources.Identifier;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -18,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @NullMarked
-public class FrozenRegistryImpl<U> implements FrozenRegistry {
+public class WyckRegistryImpl<U> implements WyckRegistry {
 
     private static final Field FROZEN_FIELD;
     private static final Field ALL_TAGS_FIELD;
@@ -43,14 +44,14 @@ public class FrozenRegistryImpl<U> implements FrozenRegistry {
     private final ResourceKey key;
     private final Registry<U> registry;
 
-    public FrozenRegistryImpl(ResourceKey key) {
+    public WyckRegistryImpl(ResourceKey key) {
         this.key = key;
 
         Registry<U> resolved = getRegistry(key);
         this.registry = Preconditions.checkNotNull(resolved, "Failed to resolve registry for " + key);
     }
 
-    public FrozenRegistryImpl(Collection<ResourceKey> keys) {
+    public WyckRegistryImpl(Collection<ResourceKey> keys) {
         ResourceKey resolvedKey = null;
         Registry<U> resolvedRegistry = null;
 
@@ -112,6 +113,12 @@ public class FrozenRegistryImpl<U> implements FrozenRegistry {
         } finally {
             freeze();
         }
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T> @Nullable T retrieve(ResourceKey key) {
+        return (T) registry.getValue((Identifier) key.identifier());
     }
 
     private static void unsafe(ThrowingRunnable runnable, String err) {

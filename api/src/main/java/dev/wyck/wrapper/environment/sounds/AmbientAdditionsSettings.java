@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.ConstructWireProvider;
 import dev.wyck.factory.WireProvider;
-import dev.wyck.wrapper.internal.NmsHandle;
+import dev.wyck.wrapper.internal.Wrapper;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -18,7 +18,7 @@ import org.jspecify.annotations.Nullable;
  */
 @NullMarked
 @AsOf("2.4.1")
-public interface AmbientAdditionsSettings extends NmsHandle {
+public interface AmbientAdditionsSettings extends Wrapper {
 
     @ApiStatus.Internal
     ConstructWireProvider<AmbientAdditionsSettings> WIRE = WireProvider.construct("dev.wyck.wrapper.environment.sounds.AmbientAdditionsSettingsImpl");

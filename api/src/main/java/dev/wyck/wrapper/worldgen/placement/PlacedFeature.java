@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.WireProvider;
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.wrapper.internal.NmsHandle;
+import dev.wyck.wrapper.internal.Wrapper;
 import dev.wyck.wrapper.worldgen.feature.ConfiguredFeature;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
@@ -27,7 +27,7 @@ import java.util.List;
  */
 @NullMarked
 @AsOf("2.3.0")
-public sealed interface PlacedFeature extends NmsHandle, Keyed permits PlacedFeature.Reference, PlacedFeature.Custom {
+public sealed interface PlacedFeature extends Wrapper, Keyed permits PlacedFeature.Reference, PlacedFeature.Custom {
 
     @ApiStatus.Internal
     WireProvider<Factory> WIRE = WireProvider.create("dev.wyck.wrapper.worldgen.placement.PlacedFeatureFactoryImpl");

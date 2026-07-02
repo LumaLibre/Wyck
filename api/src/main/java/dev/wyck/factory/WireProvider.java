@@ -17,7 +17,7 @@ import java.lang.reflect.Constructor;
 @NullMarked
 @AsOf("2.2.0")
 @ApiStatus.Internal
-public sealed class WireProvider<F> permits NullableWireProvider, ConstructWireProvider {
+public sealed class WireProvider<F> permits OptionalWireProvider, ConstructWireProvider {
 
     private static final String ALLOWED_PACKAGE = "dev.wyck";
     private static final String VERSION_EXPECTED = "*";
@@ -52,8 +52,8 @@ public sealed class WireProvider<F> permits NullableWireProvider, ConstructWireP
      * @since 2.4.1
      */
     @AsOf("2.4.1")
-    public static <F> NullableWireProvider<F> empty() {
-        return NullableWireProvider.empty();
+    public static <F> OptionalWireProvider<F> empty() {
+        return OptionalWireProvider.empty();
     }
 
     /**

@@ -3,7 +3,7 @@ package dev.wyck.wrapper.worldgen.ruletest;
 import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.WireProvider;
-import dev.wyck.wrapper.internal.NmsHandle;
+import dev.wyck.wrapper.internal.Wrapper;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.data.BlockData;
@@ -20,7 +20,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.3.0")
-public sealed interface RuleTest extends NmsHandle permits RuleTest.AlwaysTrue, RuleTest.BlockMatch, RuleTest.BlockStateMatch, RuleTest.TagMatch, RuleTest.RandomBlockMatch, RuleTest.RandomBlockStateMatch {
+public sealed interface RuleTest extends Wrapper permits RuleTest.AlwaysTrue, RuleTest.BlockMatch, RuleTest.BlockStateMatch, RuleTest.TagMatch, RuleTest.RandomBlockMatch, RuleTest.RandomBlockStateMatch {
 
     @ApiStatus.Internal
     WireProvider<Factory> WIRE = WireProvider.create("dev.wyck.wrapper.worldgen.ruletest.RuleTestFactoryImpl");

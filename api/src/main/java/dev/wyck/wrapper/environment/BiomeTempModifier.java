@@ -2,7 +2,7 @@ package dev.wyck.wrapper.environment;
 
 import dev.wyck.annotations.AsOf;
 import dev.wyck.wrapper.internal.KeyedEnumTranslator;
-import dev.wyck.wrapper.internal.NmsEnumTranslatable;
+import dev.wyck.wrapper.internal.WrappedEnumerator;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -16,7 +16,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("0.0.1")
-public enum BiomeTempModifier implements NmsEnumTranslatable<BiomeTempModifier> {
+public enum BiomeTempModifier implements WrappedEnumerator<BiomeTempModifier> {
 
     NONE("none"),
     FROZEN("frozen");

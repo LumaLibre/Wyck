@@ -2,7 +2,7 @@ package dev.wyck.wrapper.worldgen.carver;
 
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.WireProvider;
-import dev.wyck.wrapper.internal.NmsHandle;
+import dev.wyck.wrapper.internal.Wrapper;
 import org.bukkit.Material;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -23,7 +23,7 @@ public record CarverDebugSettings(
     Material waterState,
     Material lavaState,
     Material barrierState
-) implements NmsHandle {
+) implements Wrapper {
 
     @ApiStatus.Internal
     private static final WireProvider<Factory> WIRE = WireProvider.create("dev.wyck.wrapper.worldgen.carver.CarverDebugSettingsFactoryImpl");

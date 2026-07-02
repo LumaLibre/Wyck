@@ -2,7 +2,7 @@ package dev.wyck.wrapper.worldgen;
 
 import dev.wyck.annotations.AsOf;
 import dev.wyck.wrapper.internal.KeyedEnumTranslator;
-import dev.wyck.wrapper.internal.NmsEnumTranslatable;
+import dev.wyck.wrapper.internal.WrappedEnumerator;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -14,7 +14,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.3.0")
-public enum HeightmapType implements NmsEnumTranslatable<HeightmapType> {
+public enum HeightmapType implements WrappedEnumerator<HeightmapType> {
 
     WORLD_SURFACE_WG("WORLD_SURFACE_WG"),
     WORLD_SURFACE("WORLD_SURFACE"),

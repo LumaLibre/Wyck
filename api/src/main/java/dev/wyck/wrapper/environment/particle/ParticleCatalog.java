@@ -18,7 +18,7 @@ import java.util.List;
  */
 @NullMarked
 @AsOf("2.1.0")
-public record ParticleCatalog(List<AmbientParticle<?>> particles) {
+public record ParticleCatalog(List<AmbientParticle> particles) {
 
     public static final ParticleCatalog EMPTY = new ParticleCatalog(List.of());
 
@@ -36,7 +36,7 @@ public record ParticleCatalog(List<AmbientParticle<?>> particles) {
     @AsOf("1.1.0")
     public static ParticleCatalog ofSimple(ParticleTypes particleType, float probability) {
         Preconditions.checkArgument(particleType.isSimple(), "Particle type must be simple.");
-        return new ParticleCatalog(List.of(new AmbientParticle<>(particleType, probability)));
+        return new ParticleCatalog(List.of(AmbientParticle.of(particleType, probability)));
     }
 
     /**
@@ -49,20 +49,7 @@ public record ParticleCatalog(List<AmbientParticle<?>> particles) {
     @AsOf("1.1.0")
     public static ParticleCatalog ofComplex(ParticleTypes particleType, float probability, ParticleData data) {
         Preconditions.checkArgument(!particleType.isSimple(), "Particle type must not be simple.");
-        return new ParticleCatalog(List.of(new AmbientParticle<>(particleType, probability, data)));
-    }
-
-    /**
-     * Resolves each wrapped particle to a (handle, probability) pair.
-     * NMS-side code can turn these into the underlying ambient-particle records.
-     */
-    @AsOf("1.1.0")
-    public List<ResolvedAmbientParticle> resolveParticles() {
-        List<ResolvedAmbientParticle> list = new ArrayList<>(particles.size());
-        for (AmbientParticle<?> wrapped : particles) {
-            list.add(new ResolvedAmbientParticle(wrapped.toParticleOptions(), wrapped.getProbability()));
-        }
-        return list;
+        return new ParticleCatalog(List.of(AmbientParticle.of(particleType, probability, data)));
     }
 
     /**
@@ -75,8 +62,8 @@ public record ParticleCatalog(List<AmbientParticle<?>> particles) {
     @AsOf("2.1.0")
     public ParticleCatalog with(ParticleTypes type, float probability) {
         Preconditions.checkArgument(type.isSimple(), "Particle type must be simple. Got: " + type);
-        List<AmbientParticle<?>> copy = new ArrayList<>(particles);
-        copy.add(new AmbientParticle<>(type, probability));
+        List<AmbientParticle> copy = new ArrayList<>(particles);
+        copy.add(AmbientParticle.of(type, probability));
         return new ParticleCatalog(copy);
     }
 
@@ -90,9 +77,19 @@ public record ParticleCatalog(List<AmbientParticle<?>> particles) {
      */
     @AsOf("2.1.0")
     public <T extends ParticleData> ParticleCatalog with(ParticleTypes type, float probability, @Nullable T data) {
-        List<AmbientParticle<?>> copy = new ArrayList<>(particles);
-        copy.add(new AmbientParticle<>(type, probability, data));
+        List<AmbientParticle> copy = new ArrayList<>(particles);
+        copy.add(AmbientParticle.of(type, probability, data));
         return new ParticleCatalog(copy);
+    }
+
+    /**
+     * Converts this ParticleCatalog to a Builder.
+     * @return A new Builder instance with the same properties as this instance.
+     * @since 2.5.0
+     */
+    @AsOf("2.5.0")
+    public Builder toBuilder() {
+        return new Builder(this);
     }
 
     /**
@@ -114,7 +111,13 @@ public record ParticleCatalog(List<AmbientParticle<?>> particles) {
      */
     @AsOf("2.1.0")
     public static class Builder {
-        private final List<AmbientParticle<?>> particles = new ArrayList<>();
+        private final List<AmbientParticle> particles = new ArrayList<>();
+
+        public Builder() {}
+
+        public Builder(ParticleCatalog catalog) {
+            this.particles.addAll(catalog.particles);
+        }
 
         /**
          * Adds a particle to the catalog.
@@ -124,8 +127,8 @@ public record ParticleCatalog(List<AmbientParticle<?>> particles) {
          * @return The builder instance.
          */
         @AsOf("1.1.0")
-        public Builder addParticle(ParticleTypes particleType, float probability, @Nullable ParticleData data) {
-            particles.add(new AmbientParticle<>(particleType, probability, data));
+        public Builder particle(ParticleTypes particleType, float probability, @Nullable ParticleData data) {
+            this.particles.add(AmbientParticle.of(particleType, probability, data));
             return this;
         }
 
@@ -136,8 +139,8 @@ public record ParticleCatalog(List<AmbientParticle<?>> particles) {
          * @return The builder instance.
          */
         @AsOf("1.1.0")
-        public Builder addParticle(ParticleTypes particleType, float probability) {
-            particles.add(new AmbientParticle<>(particleType, probability));
+        public Builder particle(ParticleTypes particleType, float probability) {
+            this.particles.add(AmbientParticle.of(particleType, probability));
             return this;
         }
 
@@ -149,9 +152,9 @@ public record ParticleCatalog(List<AmbientParticle<?>> particles) {
          * @return The builder instance.
          */
         @AsOf("1.1.0")
-        public Builder addComplex(ParticleTypes particleType, float probability, ParticleData data) {
+        public Builder complex(ParticleTypes particleType, float probability, ParticleData data) {
             Preconditions.checkArgument(!particleType.isSimple(), "Particle type must not be simple.");
-            particles.add(new AmbientParticle<>(particleType, probability, data));
+            this.particles.add(AmbientParticle.of(particleType, probability, data));
             return this;
         }
 
@@ -162,9 +165,9 @@ public record ParticleCatalog(List<AmbientParticle<?>> particles) {
          * @return The builder instance.
          */
         @AsOf("1.1.0")
-        public Builder addSimple(ParticleTypes particleType, float probability) {
+        public Builder simple(ParticleTypes particleType, float probability) {
             Preconditions.checkArgument(particleType.isSimple(), "Particle type must be simple.");
-            particles.add(new AmbientParticle<>(particleType, probability));
+            this.particles.add(AmbientParticle.of(particleType, probability));
             return this;
         }
 
@@ -175,7 +178,7 @@ public record ParticleCatalog(List<AmbientParticle<?>> particles) {
          */
         @AsOf("2.1.0")
         public Builder clear() {
-            particles.clear();
+            this.particles.clear();
             return this;
         }
 
@@ -186,8 +189,8 @@ public record ParticleCatalog(List<AmbientParticle<?>> particles) {
          * @since 2.1.0
          */
         @AsOf("2.1.0")
-        public Builder addAll(ParticleCatalog source) {
-            particles.addAll(source.particles);
+        public Builder merge(ParticleCatalog source) {
+            this.particles.addAll(source.particles);
             return this;
         }
 

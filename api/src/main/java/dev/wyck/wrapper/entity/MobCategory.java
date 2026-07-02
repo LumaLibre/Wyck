@@ -2,7 +2,7 @@ package dev.wyck.wrapper.entity;
 
 import dev.wyck.annotations.AsOf;
 import dev.wyck.wrapper.internal.KeyedEnumTranslator;
-import dev.wyck.wrapper.internal.NmsEnumTranslatable;
+import dev.wyck.wrapper.internal.WrappedEnumerator;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -13,7 +13,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.3.0")
-public enum MobCategory implements NmsEnumTranslatable<MobCategory> {
+public enum MobCategory implements WrappedEnumerator<MobCategory> {
     MONSTER("monster"),
     CREATURE("creature"),
     AMBIENT("ambient"),

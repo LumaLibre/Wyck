@@ -4,6 +4,8 @@ import net.minecraft.world.level.biome.Biome;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
+// TODO: Remove this class
+
 @NullMarked
 @ApiStatus.Internal
 public final class NmsEnvironmentAttributes {
@@ -25,7 +27,7 @@ public final class NmsEnvironmentAttributes {
      * Apply every wrapped attribute to an existing NMS map builder.
      */
     public static void applyTo(net.minecraft.world.attribute.EnvironmentAttributeMap.Builder builder, EnvironmentAttributeMap map) {
-        for (EnvironmentAttribute<?, ?> w : map.values()) {
+        for (EnvironmentAttribute<?> w : map.values()) {
             apply(builder, w);
         }
     }
@@ -34,7 +36,7 @@ public final class NmsEnvironmentAttributes {
      * Apply every wrapped attribute as a modifier on an existing NMS map.
      */
     public static void applyTo(net.minecraft.world.attribute.EnvironmentAttributeMap target, EnvironmentAttributeMap map) {
-        for (EnvironmentAttribute<?, ?> w : map.values()) {
+        for (EnvironmentAttribute<?> w : map.values()) {
             applyAsModifier(target, w);
         }
     }
@@ -43,29 +45,26 @@ public final class NmsEnvironmentAttributes {
      * Apply every wrapped attribute on a Biome.BiomeBuilder.
      */
     public static void applyTo(Biome.BiomeBuilder builder, EnvironmentAttributeMap map) {
-        for (EnvironmentAttribute<?, ?> w : map.values()) {
+        for (EnvironmentAttribute<?> w : map.values()) {
             apply(builder, w);
         }
     }
 
-    private static <T, K> void apply(net.minecraft.world.attribute.EnvironmentAttributeMap.Builder builder, EnvironmentAttribute<T, K> w) {
-        EnvironmentAttributeHandleImpl<T> handle = (EnvironmentAttributeHandleImpl<T>) w.getAttribute();
-        net.minecraft.world.attribute.EnvironmentAttribute<T> nms = handle.nms();
-        T value = sanitize(nms, w.getConvertedValue());
+    private static <V, U> void apply(net.minecraft.world.attribute.EnvironmentAttributeMap.Builder builder, EnvironmentAttribute<V> w) {
+        net.minecraft.world.attribute.EnvironmentAttribute<U> nms = w.asHandle();
+        U value = sanitize(nms, w.minecraftValue());
         builder.set(nms, value);
     }
 
-    private static <T, K> void applyAsModifier(net.minecraft.world.attribute.EnvironmentAttributeMap target, EnvironmentAttribute<T, K> w) {
-        EnvironmentAttributeHandleImpl<T> handle = (EnvironmentAttributeHandleImpl<T>) w.getAttribute();
-        net.minecraft.world.attribute.EnvironmentAttribute<T> nms = handle.nms();
-        T value = sanitize(nms, w.getConvertedValue());
+    private static <V, U> void applyAsModifier(net.minecraft.world.attribute.EnvironmentAttributeMap target, EnvironmentAttribute<V> w) {
+        net.minecraft.world.attribute.EnvironmentAttribute<U> nms = w.asHandle();
+        U value = sanitize(nms, w.minecraftValue());
         target.applyModifier(nms, value);
     }
 
-    private static <T, K> void apply(Biome.BiomeBuilder builder, EnvironmentAttribute<T, K> w) {
-        EnvironmentAttributeHandleImpl<T> handle = (EnvironmentAttributeHandleImpl<T>) w.getAttribute();
-        net.minecraft.world.attribute.EnvironmentAttribute<T> nms = handle.nms();
-        T value = sanitize(nms, w.getConvertedValue());
+    private static <V, U> void apply(Biome.BiomeBuilder builder, EnvironmentAttribute<V> w) {
+        net.minecraft.world.attribute.EnvironmentAttribute<U> nms = w.asHandle();
+        U value = sanitize(nms, w.minecraftValue());
         builder.setAttribute(nms, value);
     }
 

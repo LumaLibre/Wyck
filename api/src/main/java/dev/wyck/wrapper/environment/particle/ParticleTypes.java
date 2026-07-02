@@ -1,17 +1,20 @@
 package dev.wyck.wrapper.environment.particle;
 
 import dev.wyck.annotations.AsOf;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.registry.internal.RegistryId;
 import dev.wyck.wrapper.environment.particle.options.BlockParticle;
 import dev.wyck.wrapper.environment.particle.options.ColorParticle;
 import dev.wyck.wrapper.environment.particle.options.DustParticle;
 import dev.wyck.wrapper.environment.particle.options.DustTransitionParticle;
 import dev.wyck.wrapper.environment.particle.options.ItemParticle;
-import dev.wyck.wrapper.environment.particle.options.ParticleOptionsFactory;
 import dev.wyck.wrapper.environment.particle.options.PowerParticle;
 import dev.wyck.wrapper.environment.particle.options.SculkChargeParticle;
 import dev.wyck.wrapper.environment.particle.options.SpellParticle;
 import dev.wyck.wrapper.environment.particle.options.TrailParticle;
 import dev.wyck.wrapper.environment.particle.options.VibrationParticle;
+import dev.wyck.wrapper.internal.RegisteredConstantTranslator;
+import dev.wyck.wrapper.internal.WrappedConstant;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.Nullable;
 import org.jspecify.annotations.NullMarked;
@@ -31,7 +34,7 @@ import java.util.Map;
  */
 @NullMarked
 @AsOf("2.0.0")
-public enum ParticleTypes {
+public enum ParticleTypes implements WrappedConstant<ParticleTypes> {
 
     ANGRY_VILLAGER("angry_villager"),
     BLOCK("block", BlockParticle.class),
@@ -149,12 +152,13 @@ public enum ParticleTypes {
     BLOCK_CRUMBLE("block_crumble", BlockParticle.class),
     FIREFLY("firefly");
 
+    public static final RegisteredConstantTranslator<ParticleTypes> TRANSLATOR = RegisteredConstantTranslator.of(RegistryId.PARTICLE_TYPE, ParticleTypes::resourceKey, ParticleTypes.values());
     @ApiStatus.Internal
     private static volatile @Nullable Map<String, ParticleTypes> BY_KEY;
 
     private final String key;
     private final @Nullable Class<? extends ParticleData> particleDataClass;
-    private volatile @Nullable ParticleTypeHandle cachedHandle;
+    private volatile @Nullable ParticleType cachedHandle;
 
     ParticleTypes(String key) {
         this(key, null);
@@ -174,11 +178,27 @@ public enum ParticleTypes {
     }
 
     /**
+     * The resource key of this particle.
+     * @return the resource key of this particle.
+     * @since 2.5.0
+     */
+    @AsOf("2.5.0")
+    public ResourceKey resourceKey() {
+        return ResourceKey.minecraft(key);
+    }
+
+    @Override
+    @AsOf("2.5.0")
+    public RegisteredConstantTranslator<ParticleTypes> translator() {
+        return TRANSLATOR;
+    }
+
+    /**
      * Gets a version-agnostic handle to this particle type, resolved on first access
      * via the registered factory and cached.
      */
     @AsOf("1.1.0")
-    public ParticleTypeHandle getParticleType() {
+    public ParticleType getParticleType() {
         if (cachedHandle == null) {
             cachedHandle = ParticleOptionsFactory.WIRE.get().typeByKey(key);
         }
@@ -204,7 +224,7 @@ public enum ParticleTypes {
      * @since 2.1.0
      */
     @AsOf("2.1.0")
-    public AmbientParticle<?> create(float probability, @Nullable ParticleData data) {
+    public AmbientParticle create(float probability, @Nullable ParticleData data) {
         return AmbientParticle.of(this, probability, data);
     }
 
@@ -215,7 +235,7 @@ public enum ParticleTypes {
      * @since 2.1.0
      */
     @AsOf("2.1.0")
-    public AmbientParticle<?> create(float probability) {
+    public AmbientParticle create(float probability) {
         return AmbientParticle.of(this, probability);
     }
 

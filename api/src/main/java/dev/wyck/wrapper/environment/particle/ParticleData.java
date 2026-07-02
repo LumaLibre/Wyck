@@ -36,6 +36,6 @@ public interface ParticleData {
      * @return The ParticleOptions representing the applied particle data.
      */
     @AsOf("1.1.0")
-    ParticleOptionsHandle apply(ParticleTypeHandle particleType);
+    ParticleOptions apply(ParticleType particleType);
 
 }

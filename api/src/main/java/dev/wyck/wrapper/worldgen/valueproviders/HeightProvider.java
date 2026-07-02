@@ -2,7 +2,7 @@ package dev.wyck.wrapper.worldgen.valueproviders;
 
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.WireProvider;
-import dev.wyck.wrapper.internal.NmsHandle;
+import dev.wyck.wrapper.internal.Wrapper;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
@@ -15,7 +15,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.3.0")
-public sealed interface HeightProvider extends NmsHandle permits HeightProvider.Constant, HeightProvider.Uniform, HeightProvider.Trapezoid, HeightProvider.BiasedToBottom, HeightProvider.VeryBiasedToBottom {
+public sealed interface HeightProvider extends Wrapper permits HeightProvider.Constant, HeightProvider.Uniform, HeightProvider.Trapezoid, HeightProvider.BiasedToBottom, HeightProvider.VeryBiasedToBottom {
 
     @ApiStatus.Internal
     WireProvider<Factory> WIRE = WireProvider.create("dev.wyck.wrapper.worldgen.valueproviders.HeightProviderFactoryImpl");

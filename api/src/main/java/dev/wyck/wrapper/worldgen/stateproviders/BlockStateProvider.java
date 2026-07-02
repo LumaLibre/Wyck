@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.WireProvider;
 import dev.wyck.util.WeightedList;
-import dev.wyck.wrapper.internal.NmsHandle;
+import dev.wyck.wrapper.internal.Wrapper;
 import dev.wyck.wrapper.worldgen.BlockPredicate;
 import dev.wyck.wrapper.worldgen.valueproviders.IntProvider;
 import org.bukkit.Material;
@@ -25,7 +25,7 @@ import java.util.List;
  */
 @NullMarked
 @AsOf("2.3.0")
-public sealed interface BlockStateProvider extends NmsHandle permits BlockStateProvider.Simple, BlockStateProvider.Weighted, BlockStateProvider.Rotated, BlockStateProvider.RandomizedInt, BlockStateProvider.RuleBased, BlockStateProvider.Noise, BlockStateProvider.DualNoise, BlockStateProvider.NoiseThreshold {
+public sealed interface BlockStateProvider extends Wrapper permits BlockStateProvider.Simple, BlockStateProvider.Weighted, BlockStateProvider.Rotated, BlockStateProvider.RandomizedInt, BlockStateProvider.RuleBased, BlockStateProvider.Noise, BlockStateProvider.DualNoise, BlockStateProvider.NoiseThreshold {
 
     @ApiStatus.Internal
     WireProvider<Factory> WIRE = WireProvider.create("dev.wyck.wrapper.worldgen.stateproviders.BlockStateProviderFactoryImpl");

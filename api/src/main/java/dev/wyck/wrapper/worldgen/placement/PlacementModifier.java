@@ -3,7 +3,7 @@ package dev.wyck.wrapper.worldgen.placement;
 import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.WireProvider;
-import dev.wyck.wrapper.internal.NmsHandle;
+import dev.wyck.wrapper.internal.Wrapper;
 import dev.wyck.wrapper.worldgen.BlockPredicate;
 import dev.wyck.wrapper.worldgen.HeightmapType;
 import dev.wyck.wrapper.worldgen.valueproviders.HeightProvider;
@@ -26,7 +26,7 @@ import java.util.List;
  */
 @NullMarked
 @AsOf("2.3.0")
-public sealed interface PlacementModifier extends NmsHandle permits PlacementModifier.BiomeFilter, PlacementModifier.BlockPredicateFilter, PlacementModifier.CountPlacement, PlacementModifier.EnvironmentScanPlacement, PlacementModifier.FixedPlacement, PlacementModifier.HeightRangePlacement, PlacementModifier.HeightmapPlacement, PlacementModifier.InSquarePlacement, PlacementModifier.NoiseBasedCountPlacement, PlacementModifier.NoiseThresholdCountPlacement, PlacementModifier.RandomOffsetPlacement, PlacementModifier.RarityFilter, PlacementModifier.SurfaceRelativeThresholdFilter, PlacementModifier.SurfaceWaterDepthFilter {
+public sealed interface PlacementModifier extends Wrapper permits PlacementModifier.BiomeFilter, PlacementModifier.BlockPredicateFilter, PlacementModifier.CountPlacement, PlacementModifier.EnvironmentScanPlacement, PlacementModifier.FixedPlacement, PlacementModifier.HeightRangePlacement, PlacementModifier.HeightmapPlacement, PlacementModifier.InSquarePlacement, PlacementModifier.NoiseBasedCountPlacement, PlacementModifier.NoiseThresholdCountPlacement, PlacementModifier.RandomOffsetPlacement, PlacementModifier.RarityFilter, PlacementModifier.SurfaceRelativeThresholdFilter, PlacementModifier.SurfaceWaterDepthFilter {
 
     @ApiStatus.Internal
     WireProvider<Factory> WIRE = WireProvider.create("dev.wyck.wrapper.worldgen.placement.PlacementModifierFactoryImpl");

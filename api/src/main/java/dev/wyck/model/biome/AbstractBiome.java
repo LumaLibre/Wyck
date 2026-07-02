@@ -8,7 +8,7 @@ import dev.wyck.keys.ResourceKey;
 import dev.wyck.wrapper.BiomeSettings;
 import dev.wyck.wrapper.entity.BiomeSpawner;
 import dev.wyck.wrapper.environment.GrassColorModifier;
-import dev.wyck.wrapper.environment.attribute.IntColorSupplier;
+import dev.wyck.wrapper.environment.attribute.FriendlyColorSupplier;
 import dev.wyck.wrapper.environment.attribute.EnvironmentAttributeMap;
 import dev.wyck.wrapper.environment.attribute.EnvironmentAttributeSupplier;
 import dev.wyck.wrapper.environment.particle.ParticleCatalog;
@@ -19,7 +19,6 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
 import org.bukkit.Color;
 import org.bukkit.NamespacedKey;
-import org.bukkit.block.Biome;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -48,7 +47,7 @@ public interface AbstractBiome extends Keyed {
      * @since 0.0.6
      */
     @AsOf("0.0.6")
-    Biome toBukkitBiome();
+    org.bukkit.block.Biome toBukkitBiome();
 
     /**
      * Returns the ResourceKey of the AbstractBiome.
@@ -649,7 +648,7 @@ public interface AbstractBiome extends Keyed {
         }
 
         @AsOf("2.3.0")
-        public Builder setAttribute(IntColorSupplier supplier, String hex) {
+        public Builder setAttribute(FriendlyColorSupplier supplier, String hex) {
             this.attributeMap = this.attributeMap.with(supplier, hex);
             return this;
         }

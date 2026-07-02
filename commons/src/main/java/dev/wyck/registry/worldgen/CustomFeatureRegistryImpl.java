@@ -3,7 +3,7 @@ package dev.wyck.registry.worldgen;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.annotations.WireFactory;
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.registry.internal.FrozenRegistry;
+import dev.wyck.registry.internal.WyckRegistry;
 import dev.wyck.util.Lazy;
 import dev.wyck.wrapper.worldgen.feature.custom.CustomFeature;
 import dev.wyck.wrapper.worldgen.feature.custom.CustomFeatureBridge;
@@ -19,7 +19,7 @@ import org.jspecify.annotations.NullMarked;
 @ApiStatus.Internal
 public final class CustomFeatureRegistryImpl implements CustomFeatureRegistry {
 
-    private final Lazy<FrozenRegistry> featureRegistry = FrozenRegistry.lazy("worldgen/feature");
+    private final Lazy<WyckRegistry> featureRegistry = WyckRegistry.lazy("worldgen/feature");
 
     @Override
     @SuppressWarnings({"unchecked", "rawtypes"})

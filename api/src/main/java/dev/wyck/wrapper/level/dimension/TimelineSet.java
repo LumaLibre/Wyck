@@ -3,7 +3,7 @@ package dev.wyck.wrapper.level.dimension;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.WireProvider;
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.wrapper.internal.NmsHandle;
+import dev.wyck.wrapper.internal.Wrapper;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
@@ -18,7 +18,7 @@ import java.util.List;
  */
 @NullMarked
 @AsOf("2.4.0")
-public interface TimelineSet extends NmsHandle {
+public interface TimelineSet extends Wrapper {
 
     @ApiStatus.Internal
     WireProvider<Factory> WIRE = WireProvider.create("dev.wyck.wrapper.level.dimension.TimelineSetFactoryImpl");

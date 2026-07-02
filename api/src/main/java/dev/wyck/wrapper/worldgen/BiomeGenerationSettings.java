@@ -3,7 +3,7 @@ package dev.wyck.wrapper.worldgen;
 import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.WireProvider;
-import dev.wyck.wrapper.internal.NmsHandle;
+import dev.wyck.wrapper.internal.Wrapper;
 import dev.wyck.wrapper.worldgen.carver.ConfiguredWorldCarver;
 import dev.wyck.wrapper.worldgen.placement.PlacedFeature;
 import org.jetbrains.annotations.ApiStatus;
@@ -24,7 +24,7 @@ import java.util.Map;
  */
 @NullMarked
 @AsOf("2.3.0")
-public interface BiomeGenerationSettings extends NmsHandle {
+public interface BiomeGenerationSettings extends Wrapper {
 
     @ApiStatus.Internal
     WireProvider<Factory> WIRE = WireProvider.create("dev.wyck.wrapper.worldgen.BiomeGenerationSettingsFactoryImpl");

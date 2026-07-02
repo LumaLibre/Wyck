@@ -3,8 +3,6 @@ package dev.wyck.wrapper.environment.attribute;
 import dev.wyck.annotations.AsOf;
 import org.jspecify.annotations.NullMarked;
 
-import java.util.function.Supplier;
-
 /**
  * A supplier for int color values.
  * @version 2.1.0
@@ -13,11 +11,11 @@ import java.util.function.Supplier;
  */
 @NullMarked
 @AsOf("2.1.0")
-public final class IntColorSupplier extends EnvironmentAttributeSupplier<Integer, Integer> {
+public final class FriendlyColorSupplier extends EnvironmentAttributeSupplier<Integer> {
 
     @AsOf("2.1.0")
-    public IntColorSupplier(Supplier<EnvironmentAttribute<Integer, Integer>> supplier) {
-        super(supplier);
+    public FriendlyColorSupplier(EnvironmentAttribute<Integer> environmentAttribute) {
+        super(() -> environmentAttribute);
     }
 
     @AsOf("2.1.0")

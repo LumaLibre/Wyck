@@ -2,13 +2,13 @@ package dev.wyck.wrapper.level.spawner;
 
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.WireProvider;
-import dev.wyck.wrapper.internal.NmsHandle;
+import dev.wyck.wrapper.internal.Wrapper;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 @AsOf("2.4.0")
-public interface LevelSpawner extends NmsHandle.Context<Object> {
+public interface LevelSpawner extends Wrapper.Context<Object> {
 
     @ApiStatus.Internal
     WireProvider<Factory> WIRE = WireProvider.create("dev.wyck.wrapper.level.spawner.LevelSpawnerFactoryImpl");

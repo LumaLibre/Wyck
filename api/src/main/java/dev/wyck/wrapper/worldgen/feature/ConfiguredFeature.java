@@ -3,7 +3,7 @@ package dev.wyck.wrapper.worldgen.feature;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.WireProvider;
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.wrapper.internal.NmsHandle;
+import dev.wyck.wrapper.internal.Wrapper;
 import dev.wyck.wrapper.worldgen.feature.config.FeatureConfiguration;
 import dev.wyck.wrapper.worldgen.feature.custom.CustomFeature;
 import net.kyori.adventure.key.Key;
@@ -27,7 +27,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.3.0")
-public sealed interface ConfiguredFeature extends NmsHandle, Keyed permits ConfiguredFeature.Reference, ConfiguredFeature.VanillaConfigured, ConfiguredFeature.CustomConfigured {
+public sealed interface ConfiguredFeature extends Wrapper, Keyed permits ConfiguredFeature.Reference, ConfiguredFeature.VanillaConfigured, ConfiguredFeature.CustomConfigured {
 
     @ApiStatus.Internal
     WireProvider<Factory> WIRE = WireProvider.create("dev.wyck.wrapper.worldgen.feature.ConfiguredFeatureFactoryImpl");

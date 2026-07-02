@@ -1,136 +1,204 @@
 package dev.wyck.wrapper.environment.attribute;
 
 import dev.wyck.annotations.AsOf;
+import dev.wyck.factory.ConstructWireProvider;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.model.biome.AbstractBiome;
+import dev.wyck.model.level.dimension.Dimension;
+import dev.wyck.wrapper.internal.Wrapper;
+import net.kyori.adventure.key.Keyed;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.Nullable;
 import org.jspecify.annotations.NullMarked;
 
 /**
- * A wrapper for an environment attribute that allows for value conversion and storage.
- * The actual application to an NMS environment attribute map happens in the NMS module.
+ * Environment attributes control various visual and gameplay features depending on the dimension,
+ * biome, time, and weather and can be applied to {@link AbstractBiome}s and {@link Dimension}s.
  *
- * @param <T> the type of the underlying environment attribute
- * @param <K> the type of the exposed 'api' value
- * @version 1.1.0
+ * @param <V> the type of the environment attribute
+ * @see EnvironmentAttributeMap
  * @since 1.1.0
- * @author Jsinco
+ * @version 2.5.0
  */
 @NullMarked
 @AsOf("1.1.0")
-public class EnvironmentAttribute<T, K> {
+public interface EnvironmentAttribute<V> extends Wrapper, Keyed {
 
-    private final EnvironmentAttributeHandle<T> attribute;
-    private final @Nullable Converter<T, K> converter;
-    private @MonotonicNonNull K value;
+    @ApiStatus.Internal
+    ConstructWireProvider<EnvironmentAttribute<?>> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.environment.attribute.EnvironmentAttributeImpl");
 
-    @AsOf("1.1.0")
-    public EnvironmentAttribute(EnvironmentAttributeHandle<T> attribute, @Nullable Converter<T, K> converter, @Nullable K value) {
-        this.attribute = attribute;
-        this.converter = converter;
-        this.value = value;
-    }
+    /**
+     * Gets the key of the environment attribute.
+     * @return the key of the environment attribute
+     * @since 2.5.0
+     */
+    @Override
+    @AsOf("2.5.0")
+    ResourceKey key();
 
-    @AsOf("1.1.0")
-    public EnvironmentAttributeHandle<T> getAttribute() {
+    /**
+     * Gets the value of the environment attribute.
+     * @return the value of the environment attribute, if present
+     * @since 2.5.0
+     */
+    @AsOf("2.5.0")
+    @MonotonicNonNull V value();
+
+    /**
+     * Sets the value of the environment attribute.
+     * @param value the value to set
+     * @since 2.5.0
+     */
+    @AsOf("2.5.0")
+    void value(V value);
+
+    /**
+     * Gets the default value of the environment attribute.
+     * @return the default value of the environment attribute
+     * @throws UnsupportedOperationException if the default value isn't decodable yet :(
+     * @since 2.5.0
+     */
+    @AsOf("2.5.0")
+    V defaultValue();
+
+    /**
+     * Gets the underlying Minecraft value of the environment attribute.
+     * @return the underlying Minecraft value of the environment attribute
+     * @param <U> the type of the underlying Minecraft value
+     * @since 2.5.0
+     */
+    @AsOf("2.5.0")
+    <U> U minecraftValue();
+
+    /**
+     * Gets the default Minecraft value of the environment attribute.
+     * @return the default Minecraft value of the environment attribute
+     * @param <U> the type of the default Minecraft value
+     * @since 2.5.0
+     */
+    @AsOf("2.5.0")
+    <U> U minecraftDefaultValue();
+
+    /**
+     * If the client handles processing of this attribute.
+     * @return true if the client handles processing of this attribute, false otherwise
+     * @since 2.5.0
+     */
+    @AsOf("2.5.0")
+    boolean syncable();
+
+    /**
+     * If the attribute is spatially interpolated.
+     * @return true if the attribute is spatially interpolated, false otherwise
+     * @since 2.5.0
+     */
+    @AsOf("2.5.0")
+    boolean spatiallyInterpolated();
+
+    /**
+     * If the attribute is positional.
+     * @return true if the attribute is positional, false otherwise
+     * @since 2.5.0
+     */
+    @AsOf("2.5.0")
+    boolean positional();
+
+    /**
+     * Gets an EnvironmentAttribute instance for the given key and default value.
+     * @param key the key of the environment attribute
+     * @param converter the converter for the environment attribute
+     * @param defaultValue the default value of the environment attribute
+     * @return an EnvironmentAttribute instance for the given key and default value
+     * @param <V> the type of the environment attribute
+     * @param <U> the underlying type of the environment attribute
+     * @since 2.5.0
+     */
+    @AsOf("2.5.0")
+    @SuppressWarnings("unchecked")
+    static <V, U> EnvironmentAttribute<V> of(ResourceKey key, @Nullable Converter<V, U> converter, @Nullable V defaultValue) {
+        EnvironmentAttribute<V> attribute = (EnvironmentAttribute<V>) WIRE.construct(key, converter);
+        if (defaultValue != null) {
+            attribute.value(defaultValue);
+        }
         return attribute;
     }
 
-    @AsOf("1.1.0")
-    public K getValue() {
-        return value;
-    }
-
-    @AsOf("1.1.0")
-    public void setValue(K value) {
-        this.value = value;
+    /**
+     * Gets an EnvironmentAttribute instance for the given key.
+     * @param key the key of the environment attribute
+     * @param converter the converter for the environment attribute
+     * @return an EnvironmentAttribute instance for the given key
+     * @param <V> the type of the environment attribute
+     * @param <U> the underlying type of the environment attribute
+     * @since 2.5.0
+     */
+    @AsOf("2.5.0")
+    @SuppressWarnings("unchecked")
+    static <V, U> EnvironmentAttribute<V> of(ResourceKey key, @Nullable Converter<V, U> converter) {
+        return (EnvironmentAttribute<V>) WIRE.construct(key, converter);
     }
 
     /**
-     * Converts and gets the underlying value of type T.
+     * Gets an EnvironmentAttribute instance for the given key.
+     * @param key the key of the environment attribute
+     * @return an EnvironmentAttribute instance for the given key
+     * @param <V> the type of the environment attribute
+     * @since 2.5.0
      */
-    @AsOf("1.1.0")
-    @SuppressWarnings("unchecked")
-    public T getConvertedValue() throws ClassCastException, IllegalStateException {
-        if (converter == null && value != null) {
-            return (T) value;
-        } else if (converter == null) {
-            throw new IllegalStateException("No converter defined for WrappedEnvironmentAttribute");
-        }
-        return converter.convert(value);
+    @AsOf("2.5.0")
+    static <V> EnvironmentAttribute<V> of(ResourceKey key) {
+        return of(key, null);
     }
 
     /**
-     * Checks if this attribute is similar to another attribute. By comparing the attribute handles.
-     * @param other the other WrappedEnvironmentAttribute to compare to
-     * @return true if the attributes are similar, false otherwise
-     * @since 2.1.0
+     * Gets an EnvironmentAttributeSupplier instance for the given key and default value.
+     * @param key the key of the environment attribute
+     * @param converter the converter for the environment attribute
+     * @return an EnvironmentAttributeSupplier instance for the given key and default value
+     * @param <V> the type of the environment attribute
+     * @param <U> the underlying type of the environment attribute
+     * @since 1.1.0
      */
-    @AsOf("2.1.0")
-    public boolean isSimilar(EnvironmentAttribute<?, ?> other) {
-        return attribute.equals(other.attribute);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (!(obj instanceof EnvironmentAttribute<?, ?> other)) return false;
-        return attribute.equals(other.attribute) &&
-                ((value == null && other.value == null) || (value != null && value.equals(other.value)));
-    }
-
-    @Override
-    public int hashCode() {
-        int result = attribute.hashCode();
-        result = 31 * result + (value != null ? value.hashCode() : 0);
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        return attribute + " = " + value;
-    }
-
     @AsOf("1.1.0")
-    @ApiStatus.Internal
-    @SuppressWarnings("unchecked")
-    public static <T, K> EnvironmentAttribute<T, K> of(@Nullable EnvironmentAttributeHandle<T> attribute) {
-        if (attribute == null) {
-            return null;
-        }
-        T defaultValue = EnvironmentAttributeFactory.WIRE.get().defaultValue(attribute);
-        return new EnvironmentAttribute<>(attribute, null, (K) defaultValue);
+    static <V, U> EnvironmentAttributeSupplier<V> ofSupplier(ResourceKey key, @Nullable Converter<V, U> converter) {
+        return new EnvironmentAttributeSupplier<>(of(key, converter));
     }
 
+    /**
+     * Gets an EnvironmentAttributeSupplier instance for the given key.
+     * @param key the key of the environment attribute
+     * @return an EnvironmentAttributeSupplier instance for the given key
+     * @param <V> the type of the environment attribute
+     * @since 1.1.0
+     */
     @AsOf("1.1.0")
-    @ApiStatus.Internal
-    public static <T, K> EnvironmentAttribute<T, K> of(EnvironmentAttributeHandle<T> attribute, K value) {
-        return new EnvironmentAttribute<>(attribute, null, value);
+    static <V> EnvironmentAttributeSupplier<V> ofSupplier(ResourceKey key) {
+        return new EnvironmentAttributeSupplier<>(of(key));
     }
 
-    @AsOf("1.1.0")
-    public static <T, K> EnvironmentAttribute<T, K> of(EnvironmentAttributeHandle<T> attribute, Converter<T, K> converter) {
-        return new EnvironmentAttribute<>(attribute, converter, null);
+    /**
+     * Gets a FriendlyColorSupplier instance for the given key.
+     * @param key the key of the environment attribute
+     * @return a FriendlyColorSupplier instance for the given key
+     * @since 2.5.0
+     */
+    @AsOf("2.5.0")
+    static FriendlyColorSupplier ofFriendlyColorSupplier(ResourceKey key) {
+        return new FriendlyColorSupplier(of(key));
     }
 
-    @AsOf("1.1.0")
-    public static <T, K> EnvironmentAttributeSupplier<T, K> ofSupplier(EnvironmentAttributeHandle<T> attribute) {
-        return new EnvironmentAttributeSupplier<>(of(attribute));
-    }
 
-    @AsOf("1.1.0")
-    public static <T, K> EnvironmentAttributeSupplier<T, K> ofSupplier(EnvironmentAttributeHandle<T> attribute, K value) {
-        return new EnvironmentAttributeSupplier<>(of(attribute, value));
-    }
-
-    @AsOf("1.1.0")
-    public static <T, K> EnvironmentAttributeSupplier<T, K> ofSupplier(EnvironmentAttributeHandle<T> attribute, Converter<T, K> converter) {
-        return new EnvironmentAttributeSupplier<>(of(attribute, converter));
-    }
-
+    /**
+     * Converts an API value to a Minecraft value.
+     * @param <V> the type of the API value
+     * @param <U> the type of the Minecraft value
+     * @since 1.1.0
+     * @version 2.5.0
+     */
     @AsOf("1.1.0")
     @FunctionalInterface
-    public interface Converter<T, K> {
-        T convert(K value);
+    interface Converter<V, U> {
+        U convert(V value);
     }
 }

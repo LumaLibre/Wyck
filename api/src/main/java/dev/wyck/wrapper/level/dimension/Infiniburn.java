@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.WireProvider;
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.wrapper.internal.NmsHandle;
+import dev.wyck.wrapper.internal.Wrapper;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.jetbrains.annotations.ApiStatus;
@@ -18,7 +18,7 @@ import org.jspecify.annotations.NullMarked;
  * @author Jsinco
  */
 @NullMarked
-public interface Infiniburn extends NmsHandle {
+public interface Infiniburn extends Wrapper {
 
     @ApiStatus.Internal
     WireProvider<Factory> WIRE = WireProvider.create("dev.wyck.wrapper.level.dimension.InfiniburnFactoryImpl");

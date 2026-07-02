@@ -3,7 +3,7 @@ package dev.wyck.keys;
 import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.WireProvider;
-import dev.wyck.wrapper.internal.NmsHandle;
+import dev.wyck.wrapper.internal.Wrapper;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.KeyPattern;
 import net.kyori.adventure.key.Keyed;
@@ -20,7 +20,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.3.0")
-public interface ResourceKey extends Key, Keyed, NmsHandle {
+public interface ResourceKey extends Key, Keyed, Wrapper {
 
     String MINECRAFT_NAMESPACE = "minecraft";
     String WYCK_NAMESPACE = "wyck";

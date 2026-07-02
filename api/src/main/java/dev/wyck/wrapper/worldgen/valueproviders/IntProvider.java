@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.WireProvider;
 import dev.wyck.util.WeightedList;
-import dev.wyck.wrapper.internal.NmsHandle;
+import dev.wyck.wrapper.internal.Wrapper;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
@@ -18,7 +18,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.3.0")
-public sealed interface IntProvider extends NmsHandle permits IntProvider.Constant, IntProvider.Uniform, IntProvider.BiasedToBottom, IntProvider.ClampedNormal, IntProvider.Trapezoid, IntProvider.Clamped, IntProvider.WeightedListInt {
+public sealed interface IntProvider extends Wrapper permits IntProvider.Constant, IntProvider.Uniform, IntProvider.BiasedToBottom, IntProvider.ClampedNormal, IntProvider.Trapezoid, IntProvider.Clamped, IntProvider.WeightedListInt {
 
     @ApiStatus.Internal
     WireProvider<Factory> WIRE = WireProvider.create("dev.wyck.*.wrapper.worldgen.valueproviders.IntProviderFactoryImpl");

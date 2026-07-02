@@ -12,7 +12,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.3.0")
-public interface NmsHandle {
+public interface Wrapper {
     /**
      * Convert this handle to the real Minecraft object.
      * @return the real Minecraft object
@@ -28,7 +28,7 @@ public interface NmsHandle {
     }
 
     @AsOf("2.4.0")
-    interface Context<C> extends NmsHandle {
+    interface Context<C> extends Wrapper {
 
         @Override
         @ApiStatus.Internal

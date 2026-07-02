@@ -5,7 +5,7 @@ import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.WireProvider;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.registry.worldgen.NoiseGeneratorSettingsRegistry;
-import dev.wyck.wrapper.internal.NmsHandle;
+import dev.wyck.wrapper.internal.Wrapper;
 import dev.wyck.wrapper.level.noise.settings.NoiseSettings;
 import dev.wyck.wrapper.worldgen.climate.ClimatePoint;
 import dev.wyck.wrapper.worldgen.surface.SurfaceRule;
@@ -25,7 +25,7 @@ import java.util.List;
  */
 @NullMarked
 @AsOf("2.4.0")
-public interface NoiseGeneratorSettings extends NmsHandle, Noise {
+public interface NoiseGeneratorSettings extends Wrapper, Noise {
 
     @ApiStatus.Internal
     WireProvider<Factory> WIRE = WireProvider.create("dev.wyck.wrapper.level.noise.NoiseGeneratorSettingsFactoryImpl");

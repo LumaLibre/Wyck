@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.registry.level.dimension.DimensionRegistry;
-import dev.wyck.wrapper.environment.attribute.IntColorSupplier;
+import dev.wyck.wrapper.environment.attribute.FriendlyColorSupplier;
 import dev.wyck.wrapper.environment.attribute.EnvironmentAttributeSupplier;
 import dev.wyck.wrapper.level.clock.WorldClock;
 import dev.wyck.wrapper.level.dimension.CardinalLightType;
@@ -521,7 +521,7 @@ public interface Dimension extends Keyed {
         }
 
         @AsOf("2.4.0")
-        public Builder attribute(IntColorSupplier supplier, String hex) {
+        public Builder attribute(FriendlyColorSupplier supplier, String hex) {
             this.attributes = this.attributes.with(supplier, hex);
             return this;
         }

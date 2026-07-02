@@ -2,7 +2,7 @@ package dev.wyck.wrapper.environment;
 
 import dev.wyck.annotations.AsOf;
 import dev.wyck.wrapper.internal.KeyedEnumTranslator;
-import dev.wyck.wrapper.internal.NmsEnumTranslatable;
+import dev.wyck.wrapper.internal.WrappedEnumerator;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -15,7 +15,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("1.1.0")
-public enum Activity implements NmsEnumTranslatable<Activity> {
+public enum Activity implements WrappedEnumerator<Activity> {
 
     CORE("core"),
     IDLE("idle"),

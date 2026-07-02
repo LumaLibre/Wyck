@@ -4,7 +4,7 @@ import com.google.common.collect.Maps;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.WireProvider;
 import dev.wyck.util.WeightedList;
-import dev.wyck.wrapper.internal.NmsHandle;
+import dev.wyck.wrapper.internal.Wrapper;
 import dev.wyck.wrapper.entity.data.SpawnCost;
 import dev.wyck.wrapper.entity.data.NaturalSpawner;
 import org.bukkit.entity.EntityType;
@@ -22,7 +22,7 @@ import java.util.Map;
  */
 @NullMarked
 @AsOf("2.3.0")
-public interface BiomeSpawner extends NmsHandle {
+public interface BiomeSpawner extends Wrapper {
 
     float DEFAULT_CREATURE_GENERATION_PROBABILITY = 0.1F;
 

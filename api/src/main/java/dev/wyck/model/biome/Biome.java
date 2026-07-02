@@ -12,7 +12,7 @@ import dev.wyck.renderer.packet.data.PhonyCustomBiome;
 import dev.wyck.wrapper.BiomeSettings;
 import dev.wyck.wrapper.entity.BiomeSpawner;
 import dev.wyck.wrapper.environment.GrassColorModifier;
-import dev.wyck.wrapper.environment.attribute.IntColorSupplier;
+import dev.wyck.wrapper.environment.attribute.FriendlyColorSupplier;
 import dev.wyck.wrapper.environment.attribute.EnvironmentAttributeMap;
 import dev.wyck.wrapper.environment.attribute.EnvironmentAttributeSupplier;
 import dev.wyck.wrapper.environment.particle.ParticleCatalog;
@@ -610,7 +610,7 @@ public interface Biome extends AbstractBiome {
          * @since 2.1.0
          */
         @AsOf("2.1.0")
-        public Builder setAttribute(IntColorSupplier supplier, String hex) {
+        public Builder setAttribute(FriendlyColorSupplier supplier, String hex) {
             this.attributeMap = this.attributeMap.with(supplier, hex);
             return this;
         }

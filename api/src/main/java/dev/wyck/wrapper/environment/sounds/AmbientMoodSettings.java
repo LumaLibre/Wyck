@@ -3,14 +3,14 @@ package dev.wyck.wrapper.environment.sounds;
 import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.ConstructWireProvider;
-import dev.wyck.wrapper.internal.NmsHandle;
+import dev.wyck.wrapper.internal.Wrapper;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 @NullMarked
 @AsOf("2.4.1")
-public interface AmbientMoodSettings extends NmsHandle {
+public interface AmbientMoodSettings extends Wrapper {
 
     @ApiStatus.Internal
     ConstructWireProvider<AmbientMoodSettings> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.environment.sounds.AmbientMoodSettingsImpl");

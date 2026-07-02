@@ -2,7 +2,7 @@ package dev.wyck.wrapper.worldgen.surface;
 
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.WireProvider;
-import dev.wyck.wrapper.internal.NmsHandle;
+import dev.wyck.wrapper.internal.Wrapper;
 import org.bukkit.Material;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -19,7 +19,7 @@ import java.util.List;
  */
 @NullMarked
 @AsOf("2.4.0")
-public sealed interface SurfaceRule extends NmsHandle permits SurfaceRule.Bandlands, SurfaceRule.Block, SurfaceRule.Sequence, SurfaceRule.Condition {
+public sealed interface SurfaceRule extends Wrapper permits SurfaceRule.Bandlands, SurfaceRule.Block, SurfaceRule.Sequence, SurfaceRule.Condition {
 
     @ApiStatus.Internal
     WireProvider<Factory> WIRE = WireProvider.create("dev.wyck.wrapper.worldgen.surface.SurfaceRuleFactoryImpl");

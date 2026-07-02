@@ -2,7 +2,7 @@ package dev.wyck.wrapper.environment.sounds;
 
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.ConstructWireProvider;
-import dev.wyck.wrapper.internal.NmsHandle;
+import dev.wyck.wrapper.internal.Wrapper;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.NullUnmarked;
@@ -19,7 +19,7 @@ import java.util.Optional;
  */
 @NullMarked
 @AsOf("2.4.1")
-public interface BackgroundMusic extends NmsHandle {
+public interface BackgroundMusic extends Wrapper {
 
     @ApiStatus.Internal
     ConstructWireProvider<BackgroundMusic> WIRE = ConstructWireProvider.construct("dev.wyck.wrapper.environment.sounds.BackgroundMusicImpl");

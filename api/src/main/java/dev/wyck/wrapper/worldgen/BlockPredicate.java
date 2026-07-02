@@ -3,7 +3,7 @@ package dev.wyck.wrapper.worldgen;
 import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.WireProvider;
-import dev.wyck.wrapper.internal.NmsHandle;
+import dev.wyck.wrapper.internal.Wrapper;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.Biome;
@@ -25,7 +25,7 @@ import java.util.List;
  */
 @NullMarked
 @AsOf("2.3.0")
-public sealed interface BlockPredicate extends NmsHandle permits BlockPredicate.AllOf, BlockPredicate.AnyOf, BlockPredicate.HasSturdyFace, BlockPredicate.InsideWorldBounds, BlockPredicate.MatchingBiomes, BlockPredicate.MatchingBlockTag, BlockPredicate.MatchingBlocks, BlockPredicate.MatchingFluids, BlockPredicate.Not, BlockPredicate.Replaceable, BlockPredicate.True, BlockPredicate.Unobstructed, BlockPredicate.WouldSurvive {
+public sealed interface BlockPredicate extends Wrapper permits BlockPredicate.AllOf, BlockPredicate.AnyOf, BlockPredicate.HasSturdyFace, BlockPredicate.InsideWorldBounds, BlockPredicate.MatchingBiomes, BlockPredicate.MatchingBlockTag, BlockPredicate.MatchingBlocks, BlockPredicate.MatchingFluids, BlockPredicate.Not, BlockPredicate.Replaceable, BlockPredicate.True, BlockPredicate.Unobstructed, BlockPredicate.WouldSurvive {
 
     @ApiStatus.Internal
     WireProvider<Factory> WIRE = WireProvider.create("dev.wyck.*?.wrapper.worldgen.BlockPredicateFactoryImpl");

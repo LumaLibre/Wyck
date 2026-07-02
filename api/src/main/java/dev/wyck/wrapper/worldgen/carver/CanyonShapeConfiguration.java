@@ -3,7 +3,7 @@ package dev.wyck.wrapper.worldgen.carver;
 import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.WireProvider;
-import dev.wyck.wrapper.internal.NmsHandle;
+import dev.wyck.wrapper.internal.Wrapper;
 import dev.wyck.wrapper.worldgen.valueproviders.FloatProvider;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -25,7 +25,7 @@ public record CanyonShapeConfiguration(
     FloatProvider horizontalRadiusFactor,
     float verticalRadiusDefaultFactor,
     float verticalRadiusCenterFactor
-) implements NmsHandle {
+) implements Wrapper {
 
     @ApiStatus.Internal
     static final WireProvider<Factory> WIRE = WireProvider.create("dev.wyck.wrapper.worldgen.carver.CanyonShapeConfigurationFactoryImpl");

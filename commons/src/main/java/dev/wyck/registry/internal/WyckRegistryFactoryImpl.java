@@ -10,14 +10,14 @@ import java.util.Collection;
 @NullMarked
 @WireFactory
 @ApiStatus.Internal
-public class FrozenRegistryFactoryImpl implements FrozenRegistry.Factory {
+public class WyckRegistryFactoryImpl implements WyckRegistry.Factory {
     @Override
-    public FrozenRegistry create(ResourceKey key) {
-        return new FrozenRegistryImpl<>(key);
+    public WyckRegistry create(ResourceKey key) {
+        return new WyckRegistryImpl<>(key);
     }
 
     @Override
-    public FrozenRegistry create(Collection<ResourceKey> keys) {
-        return new FrozenRegistryImpl<>(keys);
+    public WyckRegistry create(Collection<ResourceKey> keys) {
+        return new WyckRegistryImpl<>(keys);
     }
 }
