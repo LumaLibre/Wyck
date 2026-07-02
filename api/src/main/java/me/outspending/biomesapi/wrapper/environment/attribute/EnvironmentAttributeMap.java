@@ -1,30 +1,64 @@
 package me.outspending.biomesapi.wrapper.environment.attribute;
 
 import me.outspending.biomesapi.annotations.AsOf;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
- * A collection of WrappedEnvironmentAttributes, keyed by their underlying attribute handle.
+ * A collection of EnvironmentAttributes, keyed by their underlying attribute handle.
  * NMS-side code converts this into the underlying environment attribute map.
  *
  * @author Jsinco
- * @version 2.1.0
  * @see EnvironmentAttributes
  * @since 1.1.0
+ * @version 2.4.2
  */
 @NullMarked
 @AsOf("2.1.0")
-public record EnvironmentAttributeMap(Map<EnvironmentAttributeHandle<?>, EnvironmentAttribute<?, ?>> attributes) {
+public record EnvironmentAttributeMap(
+    Map<EnvironmentAttributeHandle<?>, EnvironmentAttribute<?, ?>> attributes,
+    List<Pending<?, ?>> pending
+) {
 
-    public static final EnvironmentAttributeMap EMPTY = new EnvironmentAttributeMap(Map.of());
+    public static final EnvironmentAttributeMap EMPTY = new EnvironmentAttributeMap(Map.of(), List.of());
 
     @AsOf("2.1.0")
     public EnvironmentAttributeMap {
         attributes = Map.copyOf(attributes);
+        pending = List.copyOf(pending);
+    }
+
+
+    @AsOf("2.1.0")
+    public EnvironmentAttributeMap(Map<EnvironmentAttributeHandle<?>, EnvironmentAttribute<?, ?>> attributes) {
+        this(attributes, List.of());
+    }
+
+    /**
+     * Returns the fully resolved attribute map.
+     *
+     * @return the resolved attributes, in an unmodifiable map
+     * @since 2.1.0
+     */
+    @Override
+    @AsOf("2.1.0")
+    public Map<EnvironmentAttributeHandle<?>, EnvironmentAttribute<?, ?>> attributes() {
+        if (pending.isEmpty()) {
+            return attributes;
+        }
+        Map<EnvironmentAttributeHandle<?>, EnvironmentAttribute<?, ?>> resolved = new LinkedHashMap<>(attributes);
+        for (Pending<?, ?> entry : pending) {
+            EnvironmentAttribute<?, ?> attr = entry.resolve();
+            resolved.put(attr.getAttribute(), attr);
+        }
+        return Collections.unmodifiableMap(resolved);
     }
 
     /**
@@ -34,7 +68,7 @@ public record EnvironmentAttributeMap(Map<EnvironmentAttributeHandle<?>, Environ
      */
     @AsOf("2.1.0")
     public Collection<EnvironmentAttribute<?, ?>> values() {
-        return attributes.values();
+        return attributes().values();
     }
 
     /**
@@ -43,7 +77,7 @@ public record EnvironmentAttributeMap(Map<EnvironmentAttributeHandle<?>, Environ
      */
     @AsOf("1.1.0")
     public boolean empty() {
-        return attributes.isEmpty();
+        return attributes.isEmpty() && pending.isEmpty();
     }
 
     /**
@@ -52,9 +86,10 @@ public record EnvironmentAttributeMap(Map<EnvironmentAttributeHandle<?>, Environ
      */
     @AsOf("2.1.0")
     public Builder toBuilder() {
-        Builder b = new Builder();
-        b.attributes.putAll(attributes);
-        return b;
+        Builder builder = new Builder();
+        builder.attributes.putAll(attributes);
+        builder.pending.addAll(pending);
+        return builder;
     }
 
     /**
@@ -68,10 +103,9 @@ public record EnvironmentAttributeMap(Map<EnvironmentAttributeHandle<?>, Environ
      */
     @AsOf("2.1.0")
     public <T, K> EnvironmentAttributeMap with(EnvironmentAttributeSupplier<T, K> supplier, K value) {
-        EnvironmentAttribute<T, K> attr = supplier.unbox(value);
-        Map<EnvironmentAttributeHandle<?>, EnvironmentAttribute<?, ?>> newAttrs = new LinkedHashMap<>(attributes);
-        newAttrs.put(attr.getAttribute(), attr);
-        return new EnvironmentAttributeMap(newAttrs);
+        List<Pending<?, ?>> newPending = new ArrayList<>(pending);
+        newPending.add(new Pending<>(supplier, value));
+        return new EnvironmentAttributeMap(attributes, newPending);
     }
 
     /**
@@ -84,6 +118,20 @@ public record EnvironmentAttributeMap(Map<EnvironmentAttributeHandle<?>, Environ
     @AsOf("2.1.0")
     public EnvironmentAttributeMap with(IntColorSupplier supplier, String hex) {
         return with(supplier, IntColorSupplier.parseHex(hex));
+    }
+
+    /**
+     * A deferred attribute entry, holding a supplier and its exposed value.
+     *
+     * @param <T> the type of the attribute
+     * @param <K> the type of the exposed value
+     * @since 2.1.0
+     */
+    @ApiStatus.Internal
+    public record Pending<T, K>(EnvironmentAttributeSupplier<T, K> supplier, K value) {
+        EnvironmentAttribute<T, K> resolve() {
+            return this.supplier.unbox(value);
+        }
     }
 
     /**
@@ -112,7 +160,7 @@ public record EnvironmentAttributeMap(Map<EnvironmentAttributeHandle<?>, Environ
             }
             map.put(key, attribute);
         }
-        return new EnvironmentAttributeMap(map);
+        return new EnvironmentAttributeMap(map, List.of());
     }
 
     /**
@@ -126,6 +174,7 @@ public record EnvironmentAttributeMap(Map<EnvironmentAttributeHandle<?>, Environ
     public static class Builder {
 
         private final Map<EnvironmentAttributeHandle<?>, EnvironmentAttribute<?, ?>> attributes = new LinkedHashMap<>();
+        private final List<Pending<?, ?>> pending = new ArrayList<>();
 
         /**
          * Sets an attribute in the builder.
@@ -141,16 +190,9 @@ public record EnvironmentAttributeMap(Map<EnvironmentAttributeHandle<?>, Environ
          */
         @AsOf("1.1.0")
         public <T, K> Builder setAttribute(
-                EnvironmentAttributeSupplier<T, K> supplier,
-                K value) {
-            EnvironmentAttribute<T, K> wrappedEnvironmentAttribute = supplier.get();
-            wrappedEnvironmentAttribute.setValue(value);
-
-            EnvironmentAttributeHandle<?> key = wrappedEnvironmentAttribute.getAttribute();
-            if (attributes.containsKey(key)) {
-                throw new IllegalArgumentException("Attribute: " + key + " is already present.");
-            }
-            attributes.put(key, wrappedEnvironmentAttribute);
+            EnvironmentAttributeSupplier<T, K> supplier,
+            K value) {
+            this.pending.add(new Pending<>(supplier, value));
             return this;
         }
 
@@ -174,7 +216,8 @@ public record EnvironmentAttributeMap(Map<EnvironmentAttributeHandle<?>, Environ
          */
         @AsOf("2.1.0")
         public Builder clear() {
-            attributes.clear();
+            this.attributes.clear();
+            this.pending.clear();
             return this;
         }
 
@@ -186,12 +229,13 @@ public record EnvironmentAttributeMap(Map<EnvironmentAttributeHandle<?>, Environ
          */
         @AsOf("2.1.0")
         public Builder putAll(EnvironmentAttributeMap source) {
-            for (var entry : source.attributes().entrySet()) {
-                if (attributes.containsKey(entry.getKey())) {
+            for (var entry : source.attributes.entrySet()) {
+                if (this.attributes.containsKey(entry.getKey())) {
                     throw new IllegalArgumentException("Attribute: " + entry.getKey() + " is already present.");
                 }
-                attributes.put(entry.getKey(), entry.getValue());
+                this.attributes.put(entry.getKey(), entry.getValue());
             }
+            this.pending.addAll(source.pending);
             return this;
         }
 
@@ -203,7 +247,7 @@ public record EnvironmentAttributeMap(Map<EnvironmentAttributeHandle<?>, Environ
          */
         @AsOf("1.1.0")
         public EnvironmentAttributeMap build() {
-            return new EnvironmentAttributeMap(attributes);
+            return new EnvironmentAttributeMap(attributes, pending);
         }
     }
 }
