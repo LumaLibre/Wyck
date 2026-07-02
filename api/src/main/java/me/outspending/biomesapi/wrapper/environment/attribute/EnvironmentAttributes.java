@@ -4,8 +4,11 @@ import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.wrapper.environment.Activity;
 import me.outspending.biomesapi.wrapper.environment.BedRule;
 import me.outspending.biomesapi.wrapper.environment.MoonPhase;
+import me.outspending.biomesapi.wrapper.environment.TriState;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleCatalog;
 import me.outspending.biomesapi.wrapper.environment.particle.AmbientParticle;
+import me.outspending.biomesapi.wrapper.environment.sounds.AmbientSounds;
+import me.outspending.biomesapi.wrapper.environment.sounds.BackgroundMusic;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.Nullable;
 import org.jspecify.annotations.NullMarked;
@@ -231,30 +234,21 @@ public final class EnvironmentAttributes {
     @AsOf("1.1.0")
     public static final EnvironmentAttributeSupplier<Object, Activity> BABY_VILLAGER_ACTIVITY = supplierWith("gameplay/baby_villager_activity", AttributeConverters.ACTIVITY);
 
-    /** The background music to play.
-     * @apiNote The value type ({@code BackgroundMusic}) is an NMS-only
-     * type without an API wrapper yet - pass an instance obtained directly from NMS. */
+    /** The background music to play. */
     @AsOf("1.1.0")
-    @ApiStatus.Experimental
-    public static final EnvironmentAttributeSupplier<Object, Object> BACKGROUND_MUSIC = supplier("audio/background_music");
+    public static final EnvironmentAttributeSupplier<Object, BackgroundMusic> BACKGROUND_MUSIC = supplierWith("audio/background_music", BackgroundMusic::toMinecraft);
 
-    /** Controls ambient sounds that are played around the camera.
-     * @apiNote The value type ({@code AmbientSounds}) is an NMS-only
-     * type without an API wrapper yet - pass an instance obtained directly from NMS. */
+    /** Controls ambient sounds that are played around the camera. */
     @AsOf("1.1.0")
-    @ApiStatus.Experimental
-    public static final EnvironmentAttributeSupplier<Object, Object> AMBIENT_SOUNDS = supplier("audio/ambient_sounds");
+    public static final EnvironmentAttributeSupplier<Object, AmbientSounds> AMBIENT_SOUNDS = supplierWith("audio/ambient_sounds", AmbientSounds::toMinecraft);
 
     /**
      * How eyeblossoms should behave.
      * True: eyeblossoms will open
      * False: eyeblossoms will close
-     * Default: eyeblossom will stay in their current state
-     * @apiNote The value type ({@code TriState})
-     * is an NMS-only type without an API wrapper yet - pass an instance obtained directly from NMS. */
+     * Default: eyeblossom will stay in their current state */
     @AsOf("1.1.0")
-    @ApiStatus.Experimental
-    public static final EnvironmentAttributeSupplier<Object, Object> EYEBLOSSOM_OPEN = supplier("gameplay/eyeblossom_open");
+    public static final EnvironmentAttributeSupplier<Object, TriState> EYEBLOSSOM_OPEN = supplierWith("gameplay/eyeblossom_open", AttributeConverters.EYEBLOSSOM_OPEN);
 
 
     @ApiStatus.Internal

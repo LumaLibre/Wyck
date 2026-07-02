@@ -1,6 +1,5 @@
 plugins {
     alias(libs.plugins.run.paper)
-    //alias(libs.plugins.plugin.yml.bukkit)
     alias(libs.plugins.paperweight.userdev)
 }
 
@@ -34,11 +33,3 @@ tasks {
         //commandLine.add("--safeMode")
     }
 }
-
-//bukkit {
-//    name = "BiomesAPITest"
-//    main = "me.outspending.biomesapi.BiomesAPITest"
-//    version = project.version.toString()
-//    apiVersion = "1.21"
-//    softDepend = listOf("ProtocolLib", "PacketEvents")
-//}

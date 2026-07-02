@@ -21,7 +21,7 @@ import org.jspecify.annotations.NullMarked;
 public class EnvironmentAttribute<T, K> {
 
     private final EnvironmentAttributeHandle<T> attribute;
-    private final Converter<T, K> converter;
+    private final @Nullable Converter<T, K> converter;
     private @MonotonicNonNull K value;
 
     @AsOf("1.1.0")

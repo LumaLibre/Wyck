@@ -84,7 +84,7 @@ public final class ReferenceGenerator {
         sb.append(" * @author BiomesAPI codegen\n");
         sb.append(" */\n");
         sb.append("@NullMarked\n");
-        sb.append("@AsOf(\"").append(version).append("\")\n");
+        sb.append("@AsOf(\"").append(spec.since()).append("\")\n");
         sb.append("@Generated(\"").append(Instant.now().toString()).append("\")\n");
         sb.append("public final class ").append(spec.outputClass()).append(" {\n\n");
 
@@ -95,12 +95,16 @@ public final class ReferenceGenerator {
             sb.append("    // From: ").append(sourceClass.getSimpleName()).append(" \n");
 
             for (Field field : sourceClass.getDeclaredFields()) {
-                // only static fields of the matched type
+                // only static fields
                 if (!Modifier.isStatic(field.getModifiers())) {
                     continue;
                 }
 
-                if (!spec.registryType().isAssignableFrom(field.getType())) {
+                if (spec.fieldFilter() != null) {
+                    if (!spec.fieldFilter().test(field)) {
+                        continue;
+                    }
+                } else if (!spec.registryType().isAssignableFrom(field.getType())) {
                     continue;
                 }
 
@@ -119,7 +123,7 @@ public final class ReferenceGenerator {
                 }
 
                 // existing fields keep their original @AsOf; new fields get the current version
-                String fieldVersion = existingVersions.getOrDefault(field.getName(), version);
+                String fieldVersion = existingVersions.getOrDefault(field.getName(), spec.since());
 
                 sb.append("    @AsOf(\"").append(fieldVersion).append("\")\n");
                 sb.append("    public static final ").append(spec.typeSimpleName()).append(" ")

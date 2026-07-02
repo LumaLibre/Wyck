@@ -4,6 +4,7 @@ import me.outspending.biomesapi.annotations.AsOf;
 import me.outspending.biomesapi.wrapper.environment.Activity;
 import me.outspending.biomesapi.wrapper.environment.BedRule;
 import me.outspending.biomesapi.wrapper.environment.MoonPhase;
+import me.outspending.biomesapi.wrapper.environment.TriState;
 import me.outspending.biomesapi.wrapper.environment.particle.ParticleCatalog;
 import me.outspending.biomesapi.wrapper.environment.particle.AmbientParticle;
 import org.jetbrains.annotations.ApiStatus;
@@ -35,4 +36,8 @@ final class AttributeConverters {
 
     static final EnvironmentAttribute.Converter<Object, AmbientParticle<?>> DRIPSTONE_PARTICLE =
             value -> AttributeConverter.WIRE.get().convertDripstoneParticle(value);
+
+    static final EnvironmentAttribute.Converter<Object, TriState> EYEBLOSSOM_OPEN =
+        value -> AttributeConverter.WIRE.get().convertEnum(value, "net.minecraft.util.TriState");
+
 }

@@ -18,7 +18,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.4.0")
-@Generated("2026-06-24T02:34:37.555235Z")
+@Generated("2026-07-01T19:33:09.504133Z")
 public final class Noises {
 
     // From: Noises 
@@ -122,6 +122,8 @@ public final class Noises {
     public static final ResourceKey ICEBERG_PILLAR_ROOF = reference("iceberg_pillar_roof");
     @AsOf("2.4.0")
     public static final ResourceKey ICEBERG_SURFACE = reference("iceberg_surface");
+    @AsOf("2.4.0")
+    public static final ResourceKey SULFUR_CAVE_GRADIENT = reference("sulfur_cave_gradient");
     @AsOf("2.4.0")
     public static final ResourceKey SWAMP = reference("surface_swamp");
     @AsOf("2.4.0")

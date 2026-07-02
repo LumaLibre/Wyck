@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    paperweight.paperDevBundle(libs.versions.minecraft.v26.m1.r2)
+    paperweight.paperDevBundle(libs.versions.minecraft.v26.m2)
 }
 
 // may differ across paperweight-userdev versions
@@ -18,6 +18,7 @@ val generatedCatalogFiles = listOf(
     "me/outspending/biomesapi/wrapper/worldgen/placement/PlacedFeatures.java",
     "me/outspending/biomesapi/wrapper/level/noise/function/DensityFunctions.java",
     "me/outspending/biomesapi/wrapper/level/noise/Noises.java",
+    "me/outspending/biomesapi/wrapper/environment/sounds/SoundEvents.java"
 ).map { rootProject.file("api/src/main/java/$it") }
 
 tasks.register<JavaExec>("generateSources") {

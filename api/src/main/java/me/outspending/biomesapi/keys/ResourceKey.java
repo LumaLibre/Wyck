@@ -56,6 +56,9 @@ public interface ResourceKey extends Key, Keyed, NmsHandle {
     @AsOf("2.0.0")
     Object resourceLocation();
 
+    @AsOf("2.4.1")
+    <T> T identifier();
+
     @Override
     @AsOf("2.2.1")
     @KeyPattern.Value

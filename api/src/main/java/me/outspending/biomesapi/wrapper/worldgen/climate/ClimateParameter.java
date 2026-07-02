@@ -48,7 +48,7 @@ public interface ClimateParameter extends NmsHandle {
      * A zero width span pinned to one value.
      *
      * @param value the value to pin to
-     * @return a BiomeParameter pinned to the given value
+     * @return a ClimateParameter pinned to the given value
      * @since 2.3.0
      */
     @AsOf("2.3.0")
@@ -61,7 +61,7 @@ public interface ClimateParameter extends NmsHandle {
      *
      * @param min the minimum value
      * @param max the maximum value
-     * @return a BiomeParameter between the given values
+     * @return a ClimateParameter between the given values
      * @since 2.3.0
      */
     @AsOf("2.3.0")
@@ -69,4 +69,23 @@ public interface ClimateParameter extends NmsHandle {
         return WIRE.get().create(min, max);
     }
 
+    /**
+     * A zero width span pinned to zero.
+     * @return a ClimateParameter pinned to zero
+     * @since 2.4.1
+     */
+    @AsOf("2.4.1")
+    static ClimateParameter zero() {
+        return point(0.0f);
+    }
+
+    /**
+     * A span between -2.0 and 2.0.
+     * @return a ClimateParameter between -2.0 and 2.0
+     * @since 2.4.1
+     */
+    @AsOf("2.4.1")
+    static ClimateParameter all() {
+        return span(MIN_BOUNDARY, MAX_BOUNDARY);
+    }
 }
