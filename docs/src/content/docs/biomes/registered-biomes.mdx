@@ -9,7 +9,7 @@ import CodeBlock from "@/components/CodeBlock.astro";
 import SourceLink from "@/components/SourceLink.astro";
 
 In addition to being able to keep references to your <SourceLink path="biome/CustomBiome.java">CustomBiome</SourceLink>s
-in your own code, **BiomesAPI** also provides a built-in <SourceLink path="biome/RegisteredBiomes.java">RegisteredBiomes</SourceLink>
+in your own code, **Wyck** also provides a built-in <SourceLink path="biome/RegisteredBiomes.java">RegisteredBiomes</SourceLink>
 that allows you to get a reference to your custom biomes just from a <SourceLink path="keys/ResourceKey.java">ResourceKey</SourceLink>.
 
 **RegisteredBiomes** exposes the following methods. The `*Lazily` variants return a <SourceLink path="util/Lazy.java">Lazy</SourceLink> that defers the lookup until first accessed.
@@ -28,10 +28,10 @@ that allows you to get a reference to your custom biomes just from a <SourceLink
 <CodeBlock
     lang="java"
     filename="ExamplePlugin.java"
-    code={`import me.outspending.biomesapi.biome.RegisteredBiomes;
-import me.outspending.biomesapi.biome.CustomBiome;
-import me.outspending.biomesapi.registry.ResourceKey;
-import me.outspending.biomesapi.wrapper.BiomeSettings;
+    code={`import biome.dev.wyck.RegisteredBiomes;
+import biome.dev.wyck.CustomBiome;
+import dev.wyck.registry.ResourceKey;
+import wrapper.dev.wyck.BiomeSettings;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ExamplePlugin extends JavaPlugin {

@@ -27,8 +27,8 @@ tasks.javadoc {
 
     opt.apply {
         addStringOption("Xdoclint:none", "-quiet")
-        windowTitle = "BiomesAPI ${project.version}"
-        docTitle = "BiomesAPI ${project.version}"
+        windowTitle = "Wyck ${project.version}"
+        docTitle = "Wyck ${project.version}"
         encoding = "UTF-8"
         charSet = "UTF-8"
         docEncoding = "UTF-8"

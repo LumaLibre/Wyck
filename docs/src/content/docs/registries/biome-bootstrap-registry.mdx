@@ -34,14 +34,14 @@ you must choose a <SourceLink path="registry/bootstrap/Composer.java">Composer</
     filename="ExampleBootstrapper.java"
     code={`import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
-import me.outspending.biomesapi.biome.CustomBiome;
-import me.outspending.biomesapi.registry.ResourceKey;
-import me.outspending.biomesapi.registry.bootstrap.BootstrapBiomeRegistry;
-import me.outspending.biomesapi.registry.bootstrap.Composer;
-import me.outspending.biomesapi.wrapper.BiomeSettings;
-import me.outspending.biomesapi.wrapper.entity.BiomeSpawner;
-import me.outspending.biomesapi.wrapper.entity.MobCategory;
-import me.outspending.biomesapi.wrapper.entity.data.NaturalSpawner;
+import biome.dev.wyck.CustomBiome;
+import dev.wyck.registry.ResourceKey;
+import bootstrap.registry.dev.wyck.BootstrapBiomeRegistry;
+import bootstrap.registry.dev.wyck.Composer;
+import wrapper.dev.wyck.BiomeSettings;
+import entity.wrapper.dev.wyck.BiomeSpawner;
+import entity.wrapper.dev.wyck.MobCategory;
+import data.entity.wrapper.dev.wyck.NaturalSpawner;
 import org.bukkit.entity.EntityType;
 
 public class ExampleBootstrapper implements PluginBootstrap {

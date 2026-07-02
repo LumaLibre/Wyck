@@ -22,11 +22,11 @@ is a wrapper for <SourceLink path="biome/CustomBiome.java" line={90}>CustomBiome
 <CodeBlock
     lang="java"
     filename="ExamplePlugin.java"
-    code={`import me.outspending.biomesapi.biome.CustomBiome;
-import me.outspending.biomesapi.registry.ResourceKey;
-import me.outspending.biomesapi.renderer.packet.PacketHandler;
-import me.outspending.biomesapi.renderer.packet.data.PhonyCustomBiome;
-import me.outspending.biomesapi.wrapper.BiomeSettings;
+    code={`import biome.dev.wyck.CustomBiome;
+import dev.wyck.registry.ResourceKey;
+import packet.renderer.dev.wyck.PacketHandler;
+import data.packet.renderer.dev.wyck.PhonyCustomBiome;
+import wrapper.dev.wyck.BiomeSettings;
 import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -79,9 +79,9 @@ This means that the biome change is purely visual and does not affect gameplay e
 #### Choosing an Injector
 
 <SourceLink path="renderer/packet/PacketHandler.java">PacketHandler</SourceLink>s require and injector in order to inject biome data into packets.
-BiomesAPI supports three different injectors:
+Wyck supports three different injectors:
 
-* **Netty**: BiomesAPI's built-in standalone injector that does not require any external dependencies. Works similarly to ProtocolLib.
+* **Netty**: Wyck's built-in standalone injector that does not require any external dependencies. Works similarly to ProtocolLib.
 * **ProtocolLib**: Injects block replacements and custom biomes into packets using ProtocolLib injectors.
 * **PacketEvents**: Injects block replacements and custom biomes into packets using PacketEvents wrappers and injectors.
 
@@ -89,9 +89,9 @@ BiomesAPI supports three different injectors:
 <CodeBlock
     lang="java"
     filename="ExamplePlugin.java"
-    code={`import me.outspending.biomesapi.biome.CustomBiome;
-import me.outspending.biomesapi.renderer.packet.PacketHandler;
-import me.outspending.biomesapi.renderer.packet.data.PhonyCustomBiome;
+    code={`import biome.dev.wyck.CustomBiome;
+import packet.renderer.dev.wyck.PacketHandler;
+import data.packet.renderer.dev.wyck.PhonyCustomBiome;
 import net.kyori.adventure.key.Key;
 import org.bukkit.plugin.java.JavaPlugin;
 

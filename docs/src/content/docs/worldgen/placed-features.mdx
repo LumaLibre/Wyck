@@ -1,6 +1,6 @@
 ---
 title: Placed Features
-description: Learn how to reference and author placed features with BiomesAPI, controlling where and how often features generate.
+description: Learn how to reference and author placed features with Wyck, controlling where and how often features generate.
 sidebar:
     order: 4
 ---
@@ -23,8 +23,8 @@ references to every placeable vanilla feature.
 <CodeBlock
     lang="java"
     filename="ExamplePlugin.java"
-    code={`import me.outspending.biomesapi.wrapper.worldgen.placement.PlacedFeature;
-import me.outspending.biomesapi.wrapper.worldgen.placement.PlacedFeatures;
+    code={`import placement.worldgen.wrapper.dev.wyck.PlacedFeature;
+import placement.worldgen.wrapper.dev.wyck.PlacedFeatures;
 
 PlacedFeature diamonds = PlacedFeatures.ORE_DIAMOND;`}
 />
@@ -36,10 +36,10 @@ To author one, pass a [configured feature](/wrappers/worldgen/configured-feature
 <CodeBlock
     lang="java"
     filename="ExamplePlugin.java"
-    code={`import me.outspending.biomesapi.wrapper.worldgen.HeightmapType;
-import me.outspending.biomesapi.wrapper.worldgen.PlacementModifier;
-import me.outspending.biomesapi.wrapper.worldgen.feature.ConfiguredFeatures;
-import me.outspending.biomesapi.wrapper.worldgen.placement.PlacedFeature;
+    code={`import worldgen.wrapper.dev.wyck.HeightmapType;
+import dev.wyck.wrapper.worldgen.PlacementModifier;
+import feature.worldgen.wrapper.dev.wyck.ConfiguredFeatures;
+import placement.worldgen.wrapper.dev.wyck.PlacedFeature;
 
 PlacedFeature flowers = PlacedFeature.of(
     ConfiguredFeatures.FLOWER_DEFAULT,

@@ -21,9 +21,6 @@ build/
 # jitpack requires gradle-wrapper.jar
 !gradle/wrapper/gradle-wrapper.jar
 
-# Main Classes
-/main/src/main/java/me/outspending/biomesapi/Main.java
-
 # Ignore resources
 /main/src/main/resources/
 

@@ -7,25 +7,25 @@ description: Ambient particles for biomes
 import CodeBlock from "@/components/CodeBlock.astro";
 
 Ambient particles are a visual effect that can be added to biomes to enhance their atmosphere.
-BiomesAPI provides wrappers for ambient particles that can be used to easily add them to your custom biomes.
+Wyck provides wrappers for ambient particles that can be used to easily add them to your custom biomes.
 
 Ambient particles come in two forms, **simple** and **complex**.
 Simple particle types only require a particle type and a `float` specifying the density of the ambient particles.
 Complex particle types require a type, density, and a custom data specific to the particle type.
 
-BiomesAPI supports all particle types that are available on the server version you're running on,
+Wyck supports all particle types that are available on the server version you're running on,
 but some new particle types may not be available on older server versions.
 
-* [ParticleTypes](https://github.com/LumaLibre/BiomesAPI/blob/main/api/src/main/java/me/outspending/biomesapi/wrapper/environment/particle/ParticleTypes.java)
-* [Options for Complex Types](https://github.com/LumaLibre/BiomesAPI/tree/main/api/src/main/java/me/outspending/biomesapi/wrapper/environment/particle/options)
+* [ParticleTypes](https://github.com/LumaLibre/Wyck/blob/main/api/src/main/java/dev/wyck/wrapper/environment/particle/ParticleTypes.java)
+* [Options for Complex Types](https://github.com/LumaLibre/Wyck/tree/main/api/src/main/java/dev/wyck/wrapper/environment/particle/options)
 
 ### Example Usage
 <CodeBlock
     lang="java"
     filename="ExamplePlugin.java"
-    code={`import me.outspending.biomesapi.biome.CustomBiome;
-import me.outspending.biomesapi.wrapper.environment.particle.ParticleTypes;
-import me.outspending.biomesapi.wrapper.environment.particle.options.DustParticle;
+    code={`import biome.dev.wyck.CustomBiome;
+import particle.environment.wrapper.dev.wyck.ParticleTypes;
+import options.particle.environment.wrapper.dev.wyck.DustParticle;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ExamplePlugin extends JavaPlugin {
@@ -43,17 +43,17 @@ public class ExamplePlugin extends JavaPlugin {
 
 ## Particle Catalogs
 
-BiomesAPI provides a built-in [`ParticleCatalog`](https://github.com/LumaLibre/BiomesAPI/blob/main/api/src/main/java/me/outspending/biomesapi/wrapper/environment/particle/ParticleCatalog.java)
+Wyck provides a built-in [`ParticleCatalog`](https://github.com/LumaLibre/Wyck/blob/main/api/src/main/java/dev/wyck/wrapper/environment/particle/ParticleCatalog.java)
 which can be used for storing a list of ambient particles that you may want to apply across multiple biomes.
 
 ### Example Usage
 <CodeBlock
     lang="java"
     filename="ExamplePlugin.java"
-    code={`import me.outspending.biomesapi.biome.CustomBiome;
-import me.outspending.biomesapi.wrapper.environment.particle.ParticleCatalog;
-import me.outspending.biomesapi.wrapper.environment.particle.ParticleTypes;
-import me.outspending.biomesapi.wrapper.environment.particle.options.DustParticle;
+    code={`import biome.dev.wyck.CustomBiome;
+import particle.environment.wrapper.dev.wyck.ParticleCatalog;
+import particle.environment.wrapper.dev.wyck.ParticleTypes;
+import options.particle.environment.wrapper.dev.wyck.DustParticle;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ExamplePlugin extends JavaPlugin {

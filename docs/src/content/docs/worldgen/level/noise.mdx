@@ -1,13 +1,13 @@
 ---
 title: Noise Generators
-description: Learn how to reference built-in noise or author custom noise generator settings in BiomesAPI.
+description: Learn how to reference built-in noise or author custom noise generator settings in Wyck.
 ---
 
 import CodeBlock from "@/components/CodeBlock.astro";
 import SourceLink from "@/components/SourceLink.astro";
 
 <SourceLink path="wrapper/level/noise/Noise.java">Noise</SourceLink> is what a <SourceLink path="wrapper/level/noise/chunk/ChunkGenerator.java">ChunkGenerator</SourceLink>
-uses to shape terrain. BiomesAPI provides ways to reference existing noise generators or author your own using
+uses to shape terrain. Wyck provides ways to reference existing noise generators or author your own using
 <SourceLink path="wrapper/level/noise/NoiseGeneratorSettings.java">NoiseGeneratorSettings</SourceLink>.
 
 ## Referencing Existing Noise
@@ -18,8 +18,8 @@ Referencing existing nodes can be done by keys or by convenience methods.
     lang="java"
     filename="Examples.java"
     code={
-`import me.outspending.biomesapi.keys.ResourceKey;
-import me.outspending.biomesapi.wrapper.level.noise.Noise;
+`import keys.dev.wyck.ResourceKey;
+import noise.level.wrapper.dev.wyck.Noise;
 
 Noise overworld = Noise.overworld();
 Noise nether = Noise.nether();
@@ -49,13 +49,13 @@ without registering anything.
     lang="java"
     filename="ExamplePlugin.java"
     code={
-`import me.outspending.biomesapi.wrapper.level.noise.NoiseRouter;
-import me.outspending.biomesapi.wrapper.level.noise.Noise;
-import me.outspending.biomesapi.wrapper.level.noise.function.DensityFunction;
-import me.outspending.biomesapi.wrapper.level.noise.function.DensityFunctions;
-import me.outspending.biomesapi.wrapper.level.noise.settings.NoiseSettings;
-import me.outspending.biomesapi.wrapper.worldgen.surface.SurfaceCondition;
-import me.outspending.biomesapi.wrapper.worldgen.surface.SurfaceRule;
+`import noise.level.wrapper.dev.wyck.NoiseRouter;
+import noise.level.wrapper.dev.wyck.Noise;
+import function.noise.level.wrapper.dev.wyck.DensityFunction;
+import function.noise.level.wrapper.dev.wyck.DensityFunctions;
+import settings.noise.level.wrapper.dev.wyck.NoiseSettings;
+import surface.worldgen.wrapper.dev.wyck.SurfaceCondition;
+import surface.worldgen.wrapper.dev.wyck.SurfaceRule;
 import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
 

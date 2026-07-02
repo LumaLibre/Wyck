@@ -1,18 +1,18 @@
 ---
 title: Introduction
-description: An introduction to world generation using BiomesAPI, covering the basics of biome generation.
+description: An introduction to world generation using Wyck, covering the basics of biome generation.
 sidebar:
     order: 1
 ---
 
 :::note
 
-[`BiomeGenerationSettings`](/worldgen/biome-generation-settings) and subsequently all worldgen api from BiomesAPI is not compatible
+[`BiomeGenerationSettings`](/worldgen/biome-generation-settings) and subsequently all worldgen api from Wyck is not compatible
 with [`PacketHandler`](/renderers/packet-handler)s, you have to physically set your biomes in the world for them to modify world generation!
 
 :::
 
-BiomesAPI exposes Minecraft's underlying world generation system.
+Wyck exposes Minecraft's underlying world generation system.
 World generation takes place in both biomes and dimensions but is primarily bound to biomes themselves.
 
 When we say `worldgen`, we are referring to how Minecraft blocks are placed in the world and how the game looks in a particular biome.
@@ -23,7 +23,7 @@ terrain generation is inherently tied to biomes themselves, although you may reu
 
 ## Puzzle Pieces
 
-A biome's generation is described by three kinds of components, which BiomesAPI wraps separately:
+A biome's generation is described by three kinds of components, which Wyck wraps separately:
 
 * [**Carvers**](/worldgen/carvers) cut caves, canyons, and ravines into already-generated terrain.
 * [**Configured features**](/worldgen/configured-features) describe *what* to generate, such as an ore vein or a tree, by pairing a feature with its configuration.

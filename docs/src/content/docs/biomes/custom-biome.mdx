@@ -1,6 +1,6 @@
 ---
 title: Creating Custom Biomes
-description: Learn how to create custom biomes with BiomesAPI
+description: Learn how to create custom biomes with Wyck
 sidebar:
     order: 1
 ---
@@ -10,7 +10,7 @@ import SourceLink from "@/components/SourceLink.astro";
 import CodeTabs from "@/components/CodeTabs.astro";
 
 <SourceLink path="biome/CustomBiome.java">CustomBiome</SourceLink>s
-are the core of BiomesAPI and are used to create biomes that can be rendered to players using the various biome renderers in BiomesAPI.
+are the core of Wyck and are used to create biomes that can be rendered to players using the various biome renderers in Wyck.
 
 We provide many different options for customizing your biome visuals and gameplay elements through our builder,
 but you may also omit any of these attributes if you want to use the default underlying biome's values.
@@ -22,9 +22,9 @@ but you may also omit any of these attributes if you want to use the default und
             label: "Basic",
             filename: "ExamplePlugin.java",
             lang: "java",
-            code: `import me.outspending.biomesapi.biome.CustomBiome;
-import me.outspending.biomesapi.registry.ResourceKey;
-import me.outspending.biomesapi.wrapper.BiomeSettings;
+            code: `import biome.dev.wyck.CustomBiome;
+import dev.wyck.registry.ResourceKey;
+import wrapper.dev.wyck.BiomeSettings;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ExamplePlugin extends JavaPlugin {
@@ -50,12 +50,12 @@ public class ExamplePlugin extends JavaPlugin {
             label: "Exhaustive",
             filename: "ExamplePlugin.java",
             lang: "java",
-            code: `import me.outspending.biomesapi.biome.CustomBiome;
-import me.outspending.biomesapi.registry.ResourceKey;
-import me.outspending.biomesapi.wrapper.BiomeSettings;
-import me.outspending.biomesapi.wrapper.environment.attribute.EnvironmentAttributes;
-import me.outspending.biomesapi.wrapper.environment.particle.ParticleTypes;
-import me.outspending.biomesapi.wrapper.environment.particle.options.DustParticle;
+            code: `import biome.dev.wyck.CustomBiome;
+import dev.wyck.registry.ResourceKey;
+import wrapper.dev.wyck.BiomeSettings;
+import attribute.environment.wrapper.dev.wyck.EnvironmentAttributes;
+import particle.environment.wrapper.dev.wyck.ParticleTypes;
+import options.particle.environment.wrapper.dev.wyck.DustParticle;
 import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -89,7 +89,7 @@ public class ExamplePlugin extends JavaPlugin {
 
 ## Modifying Biomes
 
-BiomesAPI supports modifying existing biomes after they've been registered.
+Wyck supports modifying existing biomes after they've been registered.
 This means that you can change the visuals and gameplay elements of your biome on the fly.
 To apply your changes, you must call the <SourceLink path="biome/CustomBiome.java" line={329}>modify()</SourceLink> method on your biome, which will update the registry.
 
@@ -99,9 +99,9 @@ For players to see your changes they will either need to relog or you can use th
 <CodeBlock
     lang="java"
     filename="ExamplePlugin.java"
-    code={`import me.outspending.biomesapi.biome.CustomBiome;
-import me.outspending.biomesapi.registry.ResourceKey;
-import me.outspending.biomesapi.wrapper.BiomeSettings;
+    code={`import biome.dev.wyck.CustomBiome;
+import dev.wyck.registry.ResourceKey;
+import wrapper.dev.wyck.BiomeSettings;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ExamplePlugin extends JavaPlugin {

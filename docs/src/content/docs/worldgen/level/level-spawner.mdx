@@ -1,6 +1,6 @@
 ---
 title: Level Spawners
-description: A basic tutorial on LevelSpawners in BiomesAPI.
+description: A basic tutorial on LevelSpawners in Wyck.
 ---
 
 import CodeBlock from "@/components/CodeBlock.astro";
@@ -11,7 +11,7 @@ the spawning of entities around players or specific areas in a world. These are 
 and are tied directly to the world itself. By default, <SourceLink path="level/LevelCreator.java">LevelCreator</SourceLink> will not have
 any spawners attached to it.
 
-In BiomesAPI, you can reference existing built-in <SourceLink path="wrapper/level/spawner/LevelSpawner.java">LevelSpawner</SourceLink>s
+In Wyck, you can reference existing built-in <SourceLink path="wrapper/level/spawner/LevelSpawner.java">LevelSpawner</SourceLink>s
 or author your own.
 
 ## SpawnTick (For Custom Spawners)
@@ -24,9 +24,9 @@ world. It contains the world itself and a boolean indicating whether or not to s
     lang="java"
     filename="ExamplePlugin.java"
     code={
-`import me.outspending.biomesapi.keys.ResourceKey;
-import me.outspending.biomesapi.level.LevelCreator;
-import me.outspending.biomesapi.wrapper.level.spawner.LevelSpawner;
+`import keys.dev.wyck.ResourceKey;
+import level.dev.wyck.LevelCreator;
+import spawner.level.wrapper.dev.wyck.LevelSpawner;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;

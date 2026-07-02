@@ -33,12 +33,12 @@ and the server will always be able to load the Minecraft world without your biom
     lang="java"
     filename="ExamplePlugin.java"
     code={
-`import me.outspending.biomesapi.biome.CustomBiome;
-import me.outspending.biomesapi.registry.ResourceKey;
-import me.outspending.biomesapi.registry.dimension.LevelStemEditor;
-import me.outspending.biomesapi.wrapper.worldgen.BiomeGenerationSettings;
-import me.outspending.biomesapi.wrapper.worldgen.GenerationStep;
-import me.outspending.biomesapi.wrapper.worldgen.placement.PlacedFeatures;
+`import biome.dev.wyck.CustomBiome;
+import dev.wyck.registry.ResourceKey;
+import dev.wyck.registry.dimension.LevelStemEditor;
+import worldgen.wrapper.dev.wyck.BiomeGenerationSettings;
+import worldgen.wrapper.dev.wyck.GenerationStep;
+import placement.worldgen.wrapper.dev.wyck.PlacedFeatures;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ExamplePlugin extends JavaPlugin {
@@ -77,7 +77,7 @@ The <SourceLink path="registry/bootstrap/BootstrapBiomeRegistry.java">BootstrapB
 This means that if your biome is not present, the world will fail to load and will not be able to load unless your biome becomes present
 or manual modifications are made to that world's `.dat` files.
 
-If you want BiomesAPI to mimic a normal datapack or you anticipate and *want* your biome to always be present on a given server, then this is the option for you.
+If you want Wyck to mimic a normal datapack or you anticipate and *want* your biome to always be present on a given server, then this is the option for you.
 
 ### Example Usage
 <CodeBlock
@@ -86,13 +86,13 @@ If you want BiomesAPI to mimic a normal datapack or you anticipate and *want* yo
     code={
 `import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
-import me.outspending.biomesapi.biome.CustomBiome;
-import me.outspending.biomesapi.registry.ResourceKey;
-import me.outspending.biomesapi.registry.bootstrap.BootstrapBiomeRegistry;
-import me.outspending.biomesapi.registry.bootstrap.Composer;
-import me.outspending.biomesapi.wrapper.worldgen.BiomeGenerationSettings;
-import me.outspending.biomesapi.wrapper.worldgen.GenerationStep;
-import me.outspending.biomesapi.wrapper.worldgen.placement.PlacedFeatures;
+import biome.dev.wyck.CustomBiome;
+import dev.wyck.registry.ResourceKey;
+import bootstrap.registry.dev.wyck.BootstrapBiomeRegistry;
+import bootstrap.registry.dev.wyck.Composer;
+import worldgen.wrapper.dev.wyck.BiomeGenerationSettings;
+import worldgen.wrapper.dev.wyck.GenerationStep;
+import placement.worldgen.wrapper.dev.wyck.PlacedFeatures;
 
 public class ExampleBootstrapper implements PluginBootstrap {
     @Override
@@ -118,7 +118,7 @@ public class ExampleBootstrapper implements PluginBootstrap {
 
         ResourceKey overworldKey = ResourceKey.of("minecraft", "overworld");
         ResourceKey plainsKey = ResourceKey.of("minecraft", "plains");
-        registry.replaceInDimension(overworldKey, plainsKey, myBiomeKey); // Adds this to BiomesAPI's generated transient datapack
+        registry.replaceInDimension(overworldKey, plainsKey, myBiomeKey); // Adds this to Wyck's generated transient datapack
     }
 }`
 }

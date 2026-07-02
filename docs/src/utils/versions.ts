@@ -1,7 +1,7 @@
-const REPO_BASE = "https://repo.jsinco.dev";
+const REPO_BASE = "https://repo.wyck.dev";
 const DEV_REPO = "snapshots"; // commit-tagged dev builds live here
-const GAV_PATH = "me/outspending/biomesapi/BiomesAPI";
-const GITHUB_REPO = "LumaLibre/BiomesAPI";
+const GAV_PATH = "dev/wyck/Wyck";
+const GITHUB_REPO = "LumaLibre/Wyck";
 const FALLBACK = "unknown";
 
 /** Stable release: latest GitHub release tag. */

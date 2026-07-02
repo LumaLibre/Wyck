@@ -1,6 +1,6 @@
 ---
 title: Carvers
-description: An introduction to world generation carvers, covering how to create and customize cave and canyon generation in Minecraft using BiomesAPI.
+description: An introduction to world generation carvers, covering how to create and customize cave and canyon generation in Minecraft using Wyck.
 sidebar:
     order: 2
 ---
@@ -23,8 +23,8 @@ vanilla carver.
 <CodeBlock
     lang="java"
     filename="ExamplePlugin.java"
-    code={`import me.outspending.biomesapi.wrapper.worldgen.BiomeGenerationSettings;
-import me.outspending.biomesapi.wrapper.worldgen.carver.Carvers;
+    code={`import worldgen.wrapper.dev.wyck.BiomeGenerationSettings;
+import carver.worldgen.wrapper.dev.wyck.Carvers;
 
 BiomeGenerationSettings generation = BiomeGenerationSettings.builder()
     .addCarver(Carvers.CAVE)
@@ -42,11 +42,11 @@ To author your own, pair a carver type with a configuration.
             label: "Cave",
             filename: "ExamplePlugin.java",
             lang: "java",
-            code: `import me.outspending.biomesapi.wrapper.worldgen.carver.CaveCarverConfiguration;
-import me.outspending.biomesapi.wrapper.worldgen.carver.ConfiguredWorldCarver;
-import me.outspending.biomesapi.wrapper.worldgen.valueproviders.FloatProvider;
-import me.outspending.biomesapi.wrapper.worldgen.valueproviders.HeightProvider;
-import me.outspending.biomesapi.wrapper.worldgen.valueproviders.VerticalAnchor;
+            code: `import carver.worldgen.wrapper.dev.wyck.CaveCarverConfiguration;
+import carver.worldgen.wrapper.dev.wyck.ConfiguredWorldCarver;
+import valueproviders.worldgen.wrapper.dev.wyck.FloatProvider;
+import valueproviders.worldgen.wrapper.dev.wyck.HeightProvider;
+import valueproviders.worldgen.wrapper.dev.wyck.VerticalAnchor;
 import org.bukkit.Material;
 
 import java.util.List;
@@ -68,12 +68,12 @@ ConfiguredWorldCarver cave = ConfiguredWorldCarver.cave(
             label: "Canyon",
             filename: "ExamplePlugin.java",
             lang: "java",
-            code: `import me.outspending.biomesapi.wrapper.worldgen.carver.CanyonCarverConfiguration;
-import me.outspending.biomesapi.wrapper.worldgen.carver.CanyonShapeConfiguration;
-import me.outspending.biomesapi.wrapper.worldgen.carver.ConfiguredWorldCarver;
-import me.outspending.biomesapi.wrapper.worldgen.valueproviders.FloatProvider;
-import me.outspending.biomesapi.wrapper.worldgen.valueproviders.HeightProvider;
-import me.outspending.biomesapi.wrapper.worldgen.valueproviders.VerticalAnchor;
+            code: `import carver.worldgen.wrapper.dev.wyck.CanyonCarverConfiguration;
+import carver.worldgen.wrapper.dev.wyck.CanyonShapeConfiguration;
+import carver.worldgen.wrapper.dev.wyck.ConfiguredWorldCarver;
+import valueproviders.worldgen.wrapper.dev.wyck.FloatProvider;
+import valueproviders.worldgen.wrapper.dev.wyck.HeightProvider;
+import valueproviders.worldgen.wrapper.dev.wyck.VerticalAnchor;
 import org.bukkit.Material;
 
 import java.util.List;

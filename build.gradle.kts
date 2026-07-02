@@ -8,14 +8,14 @@ plugins {
 }
 
 val isSnapshot: Boolean = project.hasProperty("snapshot") || System.getProperty("snapshot")?.toBoolean() == true
-val stable = "2.4.1"
+val stable = "2.5.0"
 
 allprojects {
     apply(plugin = "java-library")
     apply(plugin = "maven-publish")
     apply(plugin = "com.gradleup.shadow")
 
-    group = "me.outspending.biomesapi"
+    group = "dev.wyck"
     version = if (isSnapshot) "$stable-${gitShortCommitHash()}" else stable
 
 

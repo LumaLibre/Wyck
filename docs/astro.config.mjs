@@ -7,7 +7,7 @@ import yaml from '@rollup/plugin-yaml';
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://biomes.lumas.dev",
+  site: "https://wyck.dev",
   redirects: {
     '/jd': '/javadoc/index.html',
     '/discord': 'https://discord.gg/CCZGFg85jM'
@@ -26,13 +26,13 @@ export default defineConfig({
         Sidebar: './src/components/Sidebar.astro',
       },
       plugins: [starlightThemeVintage()],
-      title: 'BiomesAPI',
+      title: 'Wyck (BiomesAPI)',
       logo: {
-        src: './src/assets/biomesapi.png',
+        src: './src/assets/wyck.png',
         replacesTitle: true,
       },
       social: [
-        { icon: 'github', label: 'GitHub', href: 'https://github.com/LumaLibre/BiomesAPI' },
+        { icon: 'github', label: 'GitHub', href: 'https://github.com/LumaLibre/Wyck' },
         { icon:  'discord', label: 'Discord', href: 'https://discord.gg/CCZGFg85jM' },
       ],
       sidebar: [

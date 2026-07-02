@@ -23,7 +23,7 @@ jobs:
       - name: Publish API
         run: "./gradlew :bundle:publish -Psnapshot"
         env:
-          REPO_URL: "https://repo.jsinco.dev/snapshots"
-          REPO_USERNAME: ${{ secrets.REPO_USERNAME }}
-          REPO_PASSWORD: ${{ secrets.REPO_PASSWORD }}
+          REPO_URL: "https://repo.wyck.dev/snapshots"
+          REPO_USERNAME: ${{ secrets.WYCK_USERNAME }}
+          REPO_PASSWORD: ${{ secrets.WYCK_PASSWORD }}
 

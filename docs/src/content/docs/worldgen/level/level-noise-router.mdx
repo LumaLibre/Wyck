@@ -1,6 +1,6 @@
 ---
 title: Noise Routers
-description: Learn how to bundle the various density functions that shape a dimension's terrain in BiomesAPI.
+description: Learn how to bundle the various density functions that shape a dimension's terrain in Wyck.
 ---
 
 import CodeBlock from "@/components/CodeBlock.astro";
@@ -36,9 +36,9 @@ can be built.
     lang="java"
     filename="ExamplePlugin.java"
     code={
-`import me.outspending.biomesapi.wrapper.level.noise.NoiseRouter;
-import me.outspending.biomesapi.wrapper.level.noise.function.DensityFunction;
-import me.outspending.biomesapi.wrapper.level.noise.function.DensityFunctions;
+`import noise.level.wrapper.dev.wyck.NoiseRouter;
+import function.noise.level.wrapper.dev.wyck.DensityFunction;
+import function.noise.level.wrapper.dev.wyck.DensityFunctions;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ExamplePlugin extends JavaPlugin {

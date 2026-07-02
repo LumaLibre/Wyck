@@ -14,17 +14,17 @@ import CodeBlock from "@/components/CodeBlock.astro";
 Environment attributes are an internal feature used to control specific aspects of biomes, dimensions, weather, and other aspects of the game.
 Many of these attributes are used to control the visual aspects of biomes, such as the color of the sky, the tint of skylight, music, and more.
 
-We provide wrappers for these environment attributes inside our [`EnvironmentAttributes`](https://github.com/LumaLibre/BiomesAPI/blob/main/api/src/main/java/me/outspending/biomesapi/wrapper/environment/attribute/EnvironmentAttributes.java)
+We provide wrappers for these environment attributes inside our [`EnvironmentAttributes`](https://github.com/LumaLibre/Wyck/blob/main/api/src/main/java/dev/wyck/wrapper/environment/attribute/EnvironmentAttributes.java)
 class. All fields marked with `@Deprecated` should be treated as if they will not work on biomes, many environment attributes are internally specific to dimensions or other aspects of Minecraft and will not work on biomes.
 
 #### Using New Environment Attributes on Older Server Versions
 
-BiomesAPI will gracefully degrade new environment attributes for older server versions,
-if you use an environment attribute that is not supported on the server version, BiomesAPI will ignore the attribute and log a warning in the console.
+Wyck will gracefully degrade new environment attributes for older server versions,
+if you use an environment attribute that is not supported on the server version, Wyck will ignore the attribute and log a warning in the console.
 This allows you to use new environment attributes without breaking compatibility with older server versions.
 
 ```log
-[18:48:17 WARN]: [me.outspending.biomesapi.wrapper.environment.attribute.EnvironmentAttributeFactoryImpl] Environment attribute with key 'visual/block_light_tint' not found in registry; this attribute is not supported by this Minecraft version!
+[18:48:17 WARN]: [attribute.environment.wrapper.dev.wyck.EnvironmentAttributeFactoryImpl] Environment attribute with key 'visual/block_light_tint' not found in registry; this attribute is not supported by this Minecraft version!
 ```
 
 #### Example Usage

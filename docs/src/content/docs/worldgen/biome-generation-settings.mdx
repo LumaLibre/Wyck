@@ -1,6 +1,6 @@
 ---
 title: Biome Generation Settings
-description: Learn how to attach carvers and features to a custom biome with BiomesAPI's generation settings.
+description: Learn how to attach carvers and features to a custom biome with Wyck's generation settings.
 sidebar:
     order: 5
 ---
@@ -22,17 +22,17 @@ which controls the order things generate in. Carvers are not stepped as they run
 <CodeBlock
     lang="java"
     filename="ExamplePlugin.java"
-    code={`import me.outspending.biomesapi.biome.CustomBiome;
-import me.outspending.biomesapi.registry.ResourceKey;
-import me.outspending.biomesapi.wrapper.BiomeSettings;
-import me.outspending.biomesapi.wrapper.worldgen.BiomeGenerationSettings;
-import me.outspending.biomesapi.wrapper.worldgen.GenerationStep;
-import me.outspending.biomesapi.wrapper.worldgen.HeightmapType;
-import me.outspending.biomesapi.wrapper.worldgen.PlacementModifier;
-import me.outspending.biomesapi.wrapper.worldgen.carver.Carvers;
-import me.outspending.biomesapi.wrapper.worldgen.feature.ConfiguredFeatures;
-import me.outspending.biomesapi.wrapper.worldgen.placement.PlacedFeature;
-import me.outspending.biomesapi.wrapper.worldgen.placement.PlacedFeatures;
+    code={`import biome.dev.wyck.CustomBiome;
+import dev.wyck.registry.ResourceKey;
+import wrapper.dev.wyck.BiomeSettings;
+import worldgen.wrapper.dev.wyck.BiomeGenerationSettings;
+import worldgen.wrapper.dev.wyck.GenerationStep;
+import worldgen.wrapper.dev.wyck.HeightmapType;
+import dev.wyck.wrapper.worldgen.PlacementModifier;
+import carver.worldgen.wrapper.dev.wyck.Carvers;
+import feature.worldgen.wrapper.dev.wyck.ConfiguredFeatures;
+import placement.worldgen.wrapper.dev.wyck.PlacedFeature;
+import placement.worldgen.wrapper.dev.wyck.PlacedFeatures;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ExamplePlugin extends JavaPlugin {

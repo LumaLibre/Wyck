@@ -1,6 +1,6 @@
 ---
 title: Biome Sources
-description: A brief overview of the exposed BiomeSource interface in BiomesAPI.
+description: A brief overview of the exposed BiomeSource interface in Wyck.
 ---
 
 import CodeBlock from "@/components/CodeBlock.astro";
@@ -19,9 +19,9 @@ fit for flat worlds, void worlds, or any dimension where biome variety does not 
     lang="java"
     filename="Examples.java"
     code={
-        `import me.outspending.biomesapi.biome.CustomBiome;
-import me.outspending.biomesapi.keys.ResourceKey;
-import me.outspending.biomesapi.wrapper.level.BiomeSource;
+        `import biome.dev.wyck.CustomBiome;
+import keys.dev.wyck.ResourceKey;
+import level.wrapper.dev.wyck.BiomeSource;
 import org.bukkit.block.Biome;
 
 // a registered custom biome
@@ -60,11 +60,11 @@ about.
     lang="java"
     filename="ExamplePlugin.java"
     code={
-`import me.outspending.biomesapi.biome.CustomBiome;
-import me.outspending.biomesapi.keys.ResourceKey;
-import me.outspending.biomesapi.wrapper.level.BiomeSource;
-import me.outspending.biomesapi.wrapper.worldgen.climate.BiomeClimatePoint;
-import me.outspending.biomesapi.wrapper.worldgen.climate.BiomeParameter;
+`import biome.dev.wyck.CustomBiome;
+import keys.dev.wyck.ResourceKey;
+import level.wrapper.dev.wyck.BiomeSource;
+import dev.wyck.wrapper.worldgen.climate.BiomeClimatePoint;
+import dev.wyck.wrapper.worldgen.climate.BiomeParameter;
 import org.bukkit.block.Biome;
 import org.bukkit.plugin.java.JavaPlugin;
 
