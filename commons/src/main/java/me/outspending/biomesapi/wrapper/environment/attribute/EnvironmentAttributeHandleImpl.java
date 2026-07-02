@@ -1,6 +1,8 @@
 package me.outspending.biomesapi.wrapper.environment.attribute;
 
+import me.outspending.biomesapi.registry.bootstrap.util.BootstrapSafeMinecraftRegistries;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.attribute.EnvironmentAttribute;
 import org.jetbrains.annotations.ApiStatus;
@@ -23,7 +25,7 @@ public record EnvironmentAttributeHandleImpl<T>(EnvironmentAttribute<T> nms) imp
 
     @Override
     public String key() {
-        Identifier id = BuiltInRegistries.ENVIRONMENT_ATTRIBUTE.getKey(nms);
+        Identifier id = BootstrapSafeMinecraftRegistries.mappedRegistry(Registries.ENVIRONMENT_ATTRIBUTE).getKey(nms);
         if (id == null) {
             return "unknown_attribute";
         }

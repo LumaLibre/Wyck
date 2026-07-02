@@ -1,7 +1,9 @@
 package me.outspending.biomesapi.wrapper.environment.attribute;
 
 import me.outspending.biomesapi.annotations.WireFactory;
+import me.outspending.biomesapi.registry.bootstrap.util.BootstrapSafeMinecraftRegistries;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.attribute.AttributeTypes;
 import net.minecraft.world.attribute.EnvironmentAttribute;
@@ -34,7 +36,8 @@ public final class EnvironmentAttributeFactoryImpl implements EnvironmentAttribu
     @SuppressWarnings("unchecked")
     public <T> EnvironmentAttributeHandle<T> byKey(String key) {
         Identifier id = Identifier.withDefaultNamespace(key);
-        EnvironmentAttribute<?> nms = BuiltInRegistries.ENVIRONMENT_ATTRIBUTE.getValue(id);
+
+        EnvironmentAttribute<?> nms = BootstrapSafeMinecraftRegistries.mappedRegistry(Registries.ENVIRONMENT_ATTRIBUTE).getValue(id);
         if (nms == null) {
             LOGGER.warning("Environment attribute with key '" + key + "' not found in registry; this attribute is not supported by this Minecraft version!");
             return (EnvironmentAttributeHandle<T>) UNSUPPORTED; // backward compat
