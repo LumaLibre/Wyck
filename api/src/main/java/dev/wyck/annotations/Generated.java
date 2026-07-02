@@ -1,7 +1,9 @@
 package dev.wyck.annotations;
 
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NonNull;
 
+import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -13,7 +15,9 @@ import java.lang.annotation.Target;
  * @version 2.3.0
  * @author Jsinco
  */
+@Documented
 @AsOf("2.3.0")
+@ApiStatus.Internal
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.CLASS)
 public @interface Generated {

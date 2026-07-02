@@ -3,6 +3,7 @@ package dev.wyck.annotations;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NonNull;
 
+import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -24,6 +25,7 @@ import java.lang.annotation.Target;
  *
  * In the above example, the {@code someApiMethod} method has been present or modified since version 1.0.
  */
+@Documented
 @AsOf("0.0.1")
 @Target({
     ElementType.METHOD,

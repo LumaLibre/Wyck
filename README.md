@@ -1,7 +1,7 @@
 ![wyck.png](docs/src/assets/wyck.png)
 
 <div align="center">
-    <h1>Wyck</h1>
+    <h1>Wyck (BiomesAPI)</h1>
     <p>Custom biomes, dimensions, and world generation for Paper servers without datapacks.</p>
     <img src="https://img.shields.io/github/last-commit/LumaLibre/Wyck">
     <img src="https://img.shields.io/github/contributors/LumaLibre/Wyck">

@@ -2,6 +2,7 @@ package dev.wyck.util;
 
 import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import java.util.function.Supplier;
@@ -34,7 +35,7 @@ public final class Lazy<T> implements Supplier<@Nullable T> {
     }
 
     @AsOf("2.3.0")
-    public static <T> Lazy<T> of(Supplier<@Nullable T> supplier) {
+    public static <T> @NonNull Lazy<T> of(@NonNull Supplier<@Nullable T> supplier) {
         Preconditions.checkNotNull(supplier, "supplier");
         return new Lazy<>(supplier);
     }

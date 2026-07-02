@@ -7,6 +7,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.world.attribute.EnvironmentAttributes;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.blockpredicates.MatchingBiomesPredicate;
 import org.bukkit.craftbukkit.block.CraftBiome;
@@ -22,6 +23,7 @@ import java.util.List;
 public final class BlockPredicateFactoryImpl extends dev.wyck.wrapper.worldgen.BlockPredicateFactoryImpl {
     @Override
     protected Object matchingBiomes(BlockPredicate.MatchingBiomes matching) {
+        EnvironmentAttributes
         Registry<Biome> registry = BootstrapSafeMinecraftRegistries.mappedRegistry(Registries.BIOME);
         List<Holder<Biome>> holders = new ArrayList<>(matching.biomes().size());
         for (org.bukkit.block.Biome biome : matching.biomes()) {
