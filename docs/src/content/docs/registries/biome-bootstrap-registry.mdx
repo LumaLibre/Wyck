@@ -34,14 +34,14 @@ you must choose a <SourceLink path="registry/bootstrap/Composer.java">Composer</
     filename="ExampleBootstrapper.java"
     code={`import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
-import biome.dev.wyck.CustomBiome;
-import dev.wyck.registry.ResourceKey;
-import bootstrap.registry.dev.wyck.BootstrapBiomeRegistry;
-import bootstrap.registry.dev.wyck.Composer;
-import wrapper.dev.wyck.BiomeSettings;
-import entity.wrapper.dev.wyck.BiomeSpawner;
-import entity.wrapper.dev.wyck.MobCategory;
-import data.entity.wrapper.dev.wyck.NaturalSpawner;
+import dev.wyck.model.biome.CustomBiome;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.registry.bootstrap.BootstrapBiomeRegistry;
+import dev.wyck.registry.bootstrap.Composer;
+import dev.wyck.wrapper.BiomeSettings;
+import dev.wyck.wrapper.entity.BiomeSpawner;
+import dev.wyck.wrapper.entity.MobCategory;
+import dev.wyck.wrapper.entity.data.NaturalSpawner;
 import org.bukkit.entity.EntityType;
 
 public class ExampleBootstrapper implements PluginBootstrap {
@@ -51,8 +51,8 @@ public class ExampleBootstrapper implements PluginBootstrap {
         BootstrapBiomeRegistry registry = BootstrapBiomeRegistry.compose(context, Composer.DATAPACK);
 
         BiomeSpawner spawner = BiomeSpawner.builder()
-            .setCreatureGenerationProbability(0.1f)
-            .addSpawner(MobCategory.CREATURE, 100, NaturalSpawner.of(EntityType.PIG, 4, 12))
+            .creatureGenerationProbability(0.1f)
+            .spawner(MobCategory.CREATURE, 100, NaturalSpawner.of(EntityType.PIG, 4, 12))
             .build();
 
         // #queue(CustomBiome) queues this biome for registration.
@@ -63,7 +63,7 @@ public class ExampleBootstrapper implements PluginBootstrap {
             .skyColor("#B99DFC")
             .waterColor("#F5F2EB")
             .grassColor("#DBE9EC")
-            .setSpawner(spawner)
+            .biomeSpawner(spawner)
             .build()
         );
 
@@ -74,7 +74,7 @@ public class ExampleBootstrapper implements PluginBootstrap {
             .skyColor("#2F46FF")
             .waterColor("#000000")
             .grassColor("#D1D13A")
-            .setSpawner(spawner)
+            .biomeSpawner(spawner)
             .build()
         );
 

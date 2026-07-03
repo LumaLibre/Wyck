@@ -2,6 +2,7 @@ package dev.wyck.wrapper.worldgen.carver;
 
 import dev.wyck.annotations.AsOf;
 import dev.wyck.wrapper.internal.Wrapper;
+import dev.wyck.wrapper.worldgen.feature.config.FeatureConfiguration;
 import dev.wyck.wrapper.worldgen.valueproviders.FloatProvider;
 import dev.wyck.wrapper.worldgen.valueproviders.HeightProvider;
 import dev.wyck.wrapper.worldgen.valueproviders.VerticalAnchor;
@@ -19,7 +20,7 @@ import java.util.Collection;
  */
 @NullMarked
 @AsOf("2.3.0")
-public sealed interface CarverConfiguration extends Wrapper permits CanyonCarverConfiguration, CaveCarverConfiguration {
+public sealed interface CarverConfiguration extends Wrapper, FeatureConfiguration permits CanyonCarverConfiguration, CaveCarverConfiguration {
 
     /**
      * @return the probability of this carver being generated

@@ -22,9 +22,9 @@ public class TestPluginBootstrapper implements PluginBootstrap {
     @Override
     public void bootstrap(BootstrapContext context) {
 
-        new PillarFeature().register(PILLAR_KEY);
-        ConfiguredFeature tallFeature  = ConfiguredFeature.customFeature(PILLAR_KEY, new PillarFeature.PillarConfig(Material.OBSIDIAN, Material.GLOWSTONE, 10, 15));
-        ConfiguredFeature shortFeature = ConfiguredFeature.customFeature(PILLAR_KEY, new PillarFeature.PillarConfig(Material.BLACKSTONE, Material.SHROOMLIGHT, 3, 5));
+        new PillarFeature().registerAs(PILLAR_KEY);
+        ConfiguredFeature tallFeature  = ConfiguredFeature.custom(PILLAR_KEY, new PillarFeature.PillarConfig(Material.OBSIDIAN, Material.GLOWSTONE, 10, 15));
+        ConfiguredFeature shortFeature = ConfiguredFeature.custom(PILLAR_KEY, new PillarFeature.PillarConfig(Material.BLACKSTONE, Material.SHROOMLIGHT, 3, 5));
 
 
         PlacedFeature tallPlaced = PlacedFeature.builder()

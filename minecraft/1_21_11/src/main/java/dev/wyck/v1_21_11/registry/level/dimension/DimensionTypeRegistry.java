@@ -43,33 +43,33 @@ public class DimensionTypeRegistry implements DimensionRegistry {
     public DimensionType buildDelegate(Dimension dimension) {
         Preconditions.checkNotNull(dimension, "dimension cannot be null");
 
-        MonsterSettings ms = dimension.getMonsterSettings();
+        MonsterSettings ms = dimension.monsterSettings();
         DimensionType.MonsterSettings monsterSettings = new DimensionType.MonsterSettings(
             (IntProvider) ms.monsterSpawnLightTest().toMinecraft(),
             ms.monsterSpawnBlockLightLimit()
         );
 
         net.minecraft.world.attribute.EnvironmentAttributeMap.Builder attributeBuilder = net.minecraft.world.attribute.EnvironmentAttributeMap.builder();
-        EnvironmentAttributeMap attributes = dimension.getAttributes();
+        EnvironmentAttributeMap attributes = dimension.attributes();
         NmsEnvironmentAttributes.applyTo(attributeBuilder, attributes);
 
-        InfiniburnImpl infiniburn = (InfiniburnImpl) dimension.getInfiniburn();
+        InfiniburnImpl infiniburn = (InfiniburnImpl) dimension.infiniburn();
 
         return new DimensionType(
             dimension.hasFixedTime(),
             dimension.hasSkyLight(),
             dimension.hasCeiling(),
-            dimension.getCoordinateScale(),
-            dimension.getMinY(),
-            dimension.getHeight(),
-            dimension.getLogicalHeight(),
+            dimension.coordinateScale(),
+            dimension.minY(),
+            dimension.height(),
+            dimension.logicalHeight(),
             infiniburn.asTagKey(),
-            dimension.getAmbientLight(),
+            dimension.ambientLight(),
             monsterSettings,
-            dimension.getSkybox().toNms(DimensionType.Skybox.class),
-            dimension.getCardinalLightType().toNms(DimensionType.CardinalLightType.class),
+            dimension.skybox().toNms(DimensionType.Skybox.class),
+            dimension.cardinalLightType().toNms(DimensionType.CardinalLightType.class),
             attributeBuilder.build(),
-            (HolderSet<@NonNull Timeline>) dimension.getTimelines().toMinecraft()
+            (HolderSet<@NonNull Timeline>) dimension.timelines().toMinecraft()
         );
     }
 
@@ -78,7 +78,7 @@ public class DimensionTypeRegistry implements DimensionRegistry {
     public void register(Dimension dimension) {
         Preconditions.checkNotNull(dimension, "dimension cannot be null");
 
-        Identifier location = (Identifier) dimension.getResourceKey().toMinecraft();
+        Identifier location = (Identifier) dimension.resourceKey().toMinecraft();
         DimensionType built = buildDelegate(dimension);
 
         dimensionTypeRegistry.get().whileUnfrozen(() -> {
@@ -93,7 +93,7 @@ public class DimensionTypeRegistry implements DimensionRegistry {
     @Override
     public void modify(Dimension dimension) {
         Preconditions.checkNotNull(dimension, "dimension cannot be null");
-        ResourceKey key = dimension.getResourceKey();
+        ResourceKey key = dimension.resourceKey();
 
         modify(key, dimension);
     }

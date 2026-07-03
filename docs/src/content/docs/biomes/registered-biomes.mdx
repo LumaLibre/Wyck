@@ -28,10 +28,10 @@ that allows you to get a reference to your custom biomes just from a <SourceLink
 <CodeBlock
     lang="java"
     filename="ExamplePlugin.java"
-    code={`import biome.dev.wyck.RegisteredBiomes;
-import biome.dev.wyck.CustomBiome;
-import dev.wyck.registry.ResourceKey;
-import wrapper.dev.wyck.BiomeSettings;
+    code={`import dev.wyck.registry.BiomeRegistry;
+import dev.wyck.model.biome.CustomBiome;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.wrapper.BiomeSettings;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ExamplePlugin extends JavaPlugin {
@@ -45,7 +45,7 @@ public class ExamplePlugin extends JavaPlugin {
     }
 
     private void example() {
-        CustomBiome reference = RegisteredBiomes.getOrThrow(ResourceKey.of("test", "custombiome"));
+        CustomBiome reference = BiomeRegistry.registry().getBiome(ResourceKey.of("test", "custombiome"));
         // Do something with the reference!
     }
 }`}

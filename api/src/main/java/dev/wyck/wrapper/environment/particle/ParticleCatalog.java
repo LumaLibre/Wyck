@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A catalog of ambient particles for a biome.
+ * An abstraction of {@code List<AmbientParticle>} from Minecraft.
  *
  * @since 1.1.0
  * @version 2.1.0
@@ -85,9 +85,9 @@ public record ParticleCatalog(List<AmbientParticle> particles) {
     /**
      * Converts this ParticleCatalog to a Builder.
      * @return A new Builder instance with the same properties as this instance.
-     * @since 2.5.0
+     * @since 3.0.0
      */
-    @AsOf("2.5.0")
+    @AsOf("3.0.0")
     public Builder toBuilder() {
         return new Builder(this);
     }

@@ -9,12 +9,12 @@ import org.jspecify.annotations.NullMarked;
 /**
  * Represents the climate settings of a biome.
  *
- * @since 2.5.0
- * @version 2.5.0
+ * @since 3.0.0
+ * @version 3.0.0
  * @author Jsinco
  */
 @NullMarked
-@AsOf("2.5.0")
+@AsOf("3.0.0")
 public interface ClimateSettings extends Wrapper {
 
     @ApiStatus.Internal
@@ -25,35 +25,45 @@ public interface ClimateSettings extends Wrapper {
     /**
      * Whether the biome has precipitation.
      * @return whether the biome has precipitation
-     * @since 2.5.0
+     * @since 3.0.0
      */
-    @AsOf("2.5.0")
+    @AsOf("3.0.0")
     boolean hasPrecipitation();
 
     /**
      * The temperature of the biome.
      * Anything less than 0.14 will cause snow to appear instead of rain.
      * @return the temperature of the biome
-     * @since 2.5.0
+     * @since 3.0.0
      */
-    @AsOf("2.5.0")
+    @AsOf("3.0.0")
     float temperature();
 
     /**
      * The temperature modifier of the biome.
      * @return the temperature modifier of the biome
-     * @since 2.5.0
+     * @since 3.0.0
      */
-    @AsOf("2.5.0")
+    @AsOf("3.0.0")
     TemperatureModifier temperatureModifier();
 
     /**
      * The downfall of the biome.
      * @return the downfall of the biome
-     * @since 2.5.0
+     * @since 3.0.0
      */
-    @AsOf("2.5.0")
+    @AsOf("3.0.0")
     float downfall();
+
+    /**
+     * Converts this object back to a builder.
+     * @return a new ClimateSettings builder from this instance
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
+    default Builder toBuilder() {
+        return new Builder(this);
+    }
 
     /**
      * Creates a new ClimateSettings instance.
@@ -62,20 +72,30 @@ public interface ClimateSettings extends Wrapper {
      * @param temperatureModifier the temperature modifier of the biome
      * @param downfall the downfall of the biome
      * @return a new ClimateSettings instance
-     * @since 2.5.0
+     * @since 3.0.0
      */
-    @AsOf("2.5.0")
+    @AsOf("3.0.0")
     static ClimateSettings of(boolean hasPrecipitation, float temperature, TemperatureModifier temperatureModifier, float downfall) {
         return WIRE.construct(hasPrecipitation, temperature, temperatureModifier, downfall);
     }
 
     /**
      * Creates a new ClimateSettings builder.
-     * @since 2.5.0
-     * @version 2.5.0
+     * @return a new ClimateSettings builder
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
+    static Builder builder() {
+        return new Builder();
+    }
+
+    /**
+     * Creates a new ClimateSettings builder.
+     * @since 3.0.0
+     * @version 3.0.0
      * @author Jsinco
      */
-    @AsOf("2.5.0")
+    @AsOf("3.0.0")
     final class Builder {
         private boolean hasPrecipitation = true;
         private float temperature = 0.5F;
@@ -96,7 +116,7 @@ public interface ClimateSettings extends Wrapper {
          * @param hasPrecipitation The hasPrecipitation property of the builder.
          * @return This builder instance.
          */
-        @AsOf("2.5.0")
+        @AsOf("3.0.0")
         public Builder hasPrecipitation(boolean hasPrecipitation) {
             this.hasPrecipitation = hasPrecipitation;
             return this;
@@ -107,7 +127,7 @@ public interface ClimateSettings extends Wrapper {
          * @param temperature The temperature property of the builder.
          * @return This builder instance.
          */
-        @AsOf("2.5.0")
+        @AsOf("3.0.0")
         public Builder temperature(float temperature) {
             this.temperature = temperature;
             return this;
@@ -118,7 +138,7 @@ public interface ClimateSettings extends Wrapper {
          * @param temperatureModifier The temperatureModifier property of the builder.
          * @return This builder instance.
          */
-        @AsOf("2.5.0")
+        @AsOf("3.0.0")
         public Builder temperatureModifier(TemperatureModifier temperatureModifier) {
             this.temperatureModifier = temperatureModifier;
             return this;
@@ -129,7 +149,7 @@ public interface ClimateSettings extends Wrapper {
          * @param downfall The downfall property of the builder.
          * @return This builder instance.
          */
-        @AsOf("2.5.0")
+        @AsOf("3.0.0")
         public Builder downfall(float downfall) {
             this.downfall = downfall;
             return this;
@@ -139,7 +159,7 @@ public interface ClimateSettings extends Wrapper {
          * Builds a new ClimateSettings instance.
          * @return A new ClimateSettings instance.
          */
-        @AsOf("2.5.0")
+        @AsOf("3.0.0")
         public ClimateSettings build() {
             return ClimateSettings.of(hasPrecipitation, temperature, temperatureModifier, downfall);
         }

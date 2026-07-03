@@ -37,7 +37,7 @@ public interface Dimension extends Keyed {
      * @since 2.4.0
      */
     @AsOf("2.4.0")
-    ResourceKey getResourceKey();
+    ResourceKey resourceKey();
 
     /**
      * Whether this dimension type has a fixed time.
@@ -48,14 +48,15 @@ public interface Dimension extends Keyed {
     boolean hasFixedTime();
 
     /**
-     * Whether this dimension type has sky light.
+     * If there should be light that comes from the sky.
      * @return whether this dimension type has sky light.
+     * @since 2.4.0
      */
     @AsOf("2.4.0")
     boolean hasSkyLight();
 
     /**
-     * Whether this dimension type has a ceiling.
+     * Whether this dimension type has a ceiling (e.g., the nether).
      * @return whether this dimension type has a ceiling.
      * @since 2.4.0
      */
@@ -76,7 +77,7 @@ public interface Dimension extends Keyed {
      * @since 2.4.0
      */
     @AsOf("2.4.0")
-    double getCoordinateScale();
+    double coordinateScale();
 
     /**
      * The minimum Y of this dimension type.
@@ -84,7 +85,7 @@ public interface Dimension extends Keyed {
      * @since 2.4.0
      */
     @AsOf("2.4.0")
-    int getMinY();
+    int minY();
 
     /**
      * The height of this dimension type.
@@ -92,7 +93,7 @@ public interface Dimension extends Keyed {
      * @since 2.4.0
      */
     @AsOf("2.4.0")
-    int getHeight();
+    int height();
 
     /**
      * The logical height of this dimension type.
@@ -100,7 +101,7 @@ public interface Dimension extends Keyed {
      * @since 2.4.0
      */
     @AsOf("2.4.0")
-    int getLogicalHeight();
+    int logicalHeight();
 
     /**
      * A tag of blocks that will burn infinitely in this dimension type.
@@ -108,7 +109,7 @@ public interface Dimension extends Keyed {
      * @since 2.4.0
      */
     @AsOf("2.4.0")
-    Infiniburn getInfiniburn();
+    Infiniburn infiniburn();
 
     /**
      * The ambient light of this dimension type.
@@ -116,7 +117,7 @@ public interface Dimension extends Keyed {
      * @since 2.4.0
      */
     @AsOf("2.4.0")
-    float getAmbientLight();
+    float ambientLight();
 
     /**
      * The monster settings of this dimension type.
@@ -124,7 +125,7 @@ public interface Dimension extends Keyed {
      * @since 2.4.0
      */
     @AsOf("2.4.0")
-    MonsterSettings getMonsterSettings();
+    MonsterSettings monsterSettings();
 
     /**
      * The skybox of this dimension type.
@@ -132,7 +133,7 @@ public interface Dimension extends Keyed {
      * @since 2.4.0
      */
     @AsOf("2.4.0")
-    Skybox getSkybox();
+    Skybox skybox();
 
     /**
      * The cardinal light type of this dimension type.
@@ -140,7 +141,7 @@ public interface Dimension extends Keyed {
      * @since 2.4.0
      */
     @AsOf("2.4.0")
-    CardinalLightType getCardinalLightType();
+    CardinalLightType cardinalLightType();
 
     /**
      * The attributes of this dimension type.
@@ -148,7 +149,7 @@ public interface Dimension extends Keyed {
      * @since 2.4.0
      */
     @AsOf("2.4.0")
-    EnvironmentAttributeMap getAttributes();
+    EnvironmentAttributeMap attributes();
 
     /**
      * The timelines of this dimension type.
@@ -156,7 +157,7 @@ public interface Dimension extends Keyed {
      * @since 2.4.0
      */
     @AsOf("2.4.0")
-    TimelineSet getTimelines();
+    TimelineSet timelines();
 
     /**
      * The default clock of this dimension type.
@@ -164,151 +165,7 @@ public interface Dimension extends Keyed {
      * @since 2.4.0
      */
     @AsOf("2.4.0")
-    Optional<WorldClock> getDefaultClock();
-
-    /**
-     * Sets the fixed time of this dimension type.
-     * @param fixedTime the fixed time of this dimension type.
-     * @return this dimension type.
-     * @since 2.4.0
-     */
-    @AsOf("2.4.0")
-    Dimension setFixedTime(boolean fixedTime);
-
-    /**
-     * Sets whether this dimension type has sky light.
-     * @param hasSkyLight whether this dimension type has sky light.
-     * @return this dimension type.
-     * @since 2.4.0
-     */
-    @AsOf("2.4.0")
-    Dimension setSkyLight(boolean hasSkyLight);
-
-    /**
-     * Sets whether this dimension type has a ceiling.
-     * @param hasCeiling whether this dimension type has a ceiling.
-     * @return this dimension type.
-     * @since 2.4.0
-     */
-    @AsOf("2.4.0")
-    Dimension setCeiling(boolean hasCeiling);
-
-    /**
-     * Sets whether this dimension type has an ender dragon fight.
-     * @param hasEnderDragonFight whether this dimension type has an ender dragon fight.
-     * @return this dimension type.
-     * @since 2.4.0
-     */
-    @AsOf("2.4.0")
-    Dimension setEnderDragonFight(boolean hasEnderDragonFight);
-
-    /**
-     * Sets the coordinate scale of this dimension type.
-     * @param coordinateScale the coordinate scale of this dimension type.
-     * @return this dimension type.
-     * @since 2.4.0
-     */
-    @AsOf("2.4.0")
-    Dimension setCoordinateScale(double coordinateScale);
-
-    /**
-     * Sets the minimum Y of this dimension type.
-     * @param minY the minimum Y of this dimension type.
-     * @return this dimension type.
-     * @since 2.4.0
-     */
-    @AsOf("2.4.0")
-    Dimension setMinY(int minY);
-
-    /**
-     * Sets the height of this dimension type.
-     * @param height the height of this dimension type.
-     * @return this dimension type.
-     * @since 2.4.0
-     */
-    @AsOf("2.4.0")
-    Dimension setHeight(int height);
-
-    /**
-     * Sets the logical height of this dimension type.
-     * @param logicalHeight the logical height of this dimension type.
-     * @return this dimension type.
-     * @since 2.4.0
-     */
-    @AsOf("2.4.0")
-    Dimension setLogicalHeight(int logicalHeight);
-
-    /**
-     * Sets the infiniburn of this dimension type.
-     * @param infiniburn the infiniburn of this dimension type.
-     * @return this dimension type.
-     * @since 2.4.0
-     */
-    @AsOf("2.4.0")
-    Dimension setInfiniburn(Infiniburn infiniburn);
-
-    /**
-     * Sets the ambient light of this dimension type.
-     * @param ambientLight the ambient light level of this dimension type.
-     * @return this dimension type.
-     * @since 2.4.0
-     */
-    @AsOf("2.4.0")
-    Dimension setAmbientLight(float ambientLight);
-
-    /**
-     * Sets the monster settings of this dimension type.
-     * @param monsterSettings the monster settings of this dimension type.
-     * @return this dimension type.
-     * @since 2.4.0
-     */
-    @AsOf("2.4.0")
-    Dimension setMonsterSettings(MonsterSettings monsterSettings);
-
-    /**
-     * Sets the skybox of this dimension type.
-     * @param skybox the skybox of this dimension type.
-     * @return this dimension type.
-     * @since 2.4.0
-     */
-    @AsOf("2.4.0")
-    Dimension setSkybox(Skybox skybox);
-
-    /**
-     * Sets the cardinal light type of this dimension type.
-     * @param cardinalLightType the cardinal light type of this dimension type.
-     * @return this dimension type.
-     * @since 2.4.0
-     */
-    @AsOf("2.4.0")
-    Dimension setCardinalLightType(CardinalLightType cardinalLightType);
-
-    /**
-     * Sets the attributes of this dimension type.
-     * @param attributes the attributes of this dimension type.
-     * @return this dimension type.
-     * @since 2.4.0
-     */
-    @AsOf("2.4.0")
-    Dimension setAttributes(EnvironmentAttributeMap attributes);
-
-    /**
-     * Sets the timelines of this dimension type.
-     * @param timelines the timelines of this dimension type.
-     * @return this dimension type.
-     * @since 2.4.0
-     */
-    @AsOf("2.4.0")
-    Dimension setTimelines(TimelineSet timelines);
-
-    /**
-     * Sets the default clock of this dimension type.
-     * @param defaultClock the default clock of this dimension type, or null to clear it.
-     * @return this dimension type.
-     * @since 2.4.0
-     */
-    @AsOf("2.4.0")
-    Dimension setDefaultClock(@Nullable WorldClock defaultClock);
+    Optional<WorldClock> defaultClock();
 
     /**
      * Checks if this dimension type is similar to another.
@@ -362,20 +219,31 @@ public interface Dimension extends Keyed {
 
     /**
      * Creates a new {@link Builder} with the given resource key.
-     * @param resourceKey the resource key to use
+     * @param resourceKey the resource key to seed the builder with
      * @return a new {@link Builder} with the given resource key.
      * @since 2.4.0
      */
     @AsOf("2.4.0")
     static Builder builder(ResourceKey resourceKey) {
-        Preconditions.checkNotNull(resourceKey, "Resource key cannot be null.");
         return new Builder().resourceKey(resourceKey);
+    }
+
+
+    /**
+     * Simply holds a reference to a dimension.
+     * @param resourceKey the resource key of the dimension
+     * @return a new dimension reference
+     * @since 2.4.0
+     */
+    @AsOf("2.4.0")
+    static Dimension reference(ResourceKey resourceKey) {
+        return builder().resourceKey(resourceKey).build();
     }
     
     
     /**
      * Builder for {@link Dimension}. Defaults approximate the vanilla overworld
-     * so a minimally-configured build is valid.
+     * so a minimally configured build is valid.
      *
      * @since 2.4.0
      */
@@ -406,22 +274,22 @@ public interface Dimension extends Keyed {
 
         @AsOf("2.4.0")
         public Builder(Dimension dimension) {
-            this.resourceKey = dimension.getResourceKey();
+            this.resourceKey = dimension.resourceKey();
             this.hasFixedTime = dimension.hasFixedTime();
             this.hasSkyLight = dimension.hasSkyLight();
             this.hasCeiling = dimension.hasCeiling();
-            this.coordinateScale = dimension.getCoordinateScale();
-            this.minY = dimension.getMinY();
-            this.height = dimension.getHeight();
-            this.logicalHeight = dimension.getLogicalHeight();
-            this.infiniburn = dimension.getInfiniburn();
-            this.ambientLight = dimension.getAmbientLight();
-            this.monsterSettings = dimension.getMonsterSettings();
-            this.skybox = dimension.getSkybox();
-            this.cardinalLightType = dimension.getCardinalLightType();
-            this.attributes = dimension.getAttributes();
-            this.timelines = dimension.getTimelines();
-            this.defaultClock = dimension.getDefaultClock().orElse(null);
+            this.coordinateScale = dimension.coordinateScale();
+            this.minY = dimension.minY();
+            this.height = dimension.height();
+            this.logicalHeight = dimension.logicalHeight();
+            this.infiniburn = dimension.infiniburn();
+            this.ambientLight = dimension.ambientLight();
+            this.monsterSettings = dimension.monsterSettings();
+            this.skybox = dimension.skybox();
+            this.cardinalLightType = dimension.cardinalLightType();
+            this.attributes = dimension.attributes();
+            this.timelines = dimension.timelines();
+            this.defaultClock = dimension.defaultClock().orElse(null);
         }
 
         @AsOf("2.4.0")
@@ -526,8 +394,6 @@ public interface Dimension extends Keyed {
             return this;
         }
 
-
-
         @AsOf("2.4.0")
         public Builder timelines(TimelineSet timelines) {
             this.timelines = timelines;
@@ -573,6 +439,11 @@ public interface Dimension extends Keyed {
         @AsOf("2.4.0")
         public Dimension register() {
             return this.build().register();
+        }
+
+        @AsOf("3.0.0")
+        public Dimension modify() {
+            return this.build().modify();
         }
     }
 }

@@ -22,9 +22,9 @@ but you may also omit any of these attributes if you want to use the default und
             label: "Basic",
             filename: "ExamplePlugin.java",
             lang: "java",
-            code: `import biome.dev.wyck.CustomBiome;
-import dev.wyck.registry.ResourceKey;
-import wrapper.dev.wyck.BiomeSettings;
+            code: `import dev.wyck.model.biome.CustomBiome;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.wrapper.BiomeSettings;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ExamplePlugin extends JavaPlugin {
@@ -50,12 +50,12 @@ public class ExamplePlugin extends JavaPlugin {
             label: "Exhaustive",
             filename: "ExamplePlugin.java",
             lang: "java",
-            code: `import biome.dev.wyck.CustomBiome;
-import dev.wyck.registry.ResourceKey;
-import wrapper.dev.wyck.BiomeSettings;
-import attribute.environment.wrapper.dev.wyck.EnvironmentAttributes;
-import particle.environment.wrapper.dev.wyck.ParticleTypes;
-import options.particle.environment.wrapper.dev.wyck.DustParticle;
+            code: `import dev.wyck.model.biome.CustomBiome;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.wrapper.BiomeSettings;
+import dev.wyck.wrapper.environment.attribute.EnvironmentAttributes;
+import dev.wyck.wrapper.environment.particle.ParticleTypes;
+import dev.wyck.wrapper.environment.particle.options.DustParticle;
 import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -72,12 +72,12 @@ public class ExamplePlugin extends JavaPlugin {
             .waterColor("#F5F2EB")
             .waterFogColor("#000000")
             .grassColor("#DBE9EC")
-            .ambientParticle(ParticleTypes.SMOKE, 0.001f)
-            .ambientParticle(ParticleTypes.DUST, 0.002f, DustParticle.of("#FF0000"))
-            .setAttribute(EnvironmentAttributes.BLOCK_LIGHT_TINT, "#FF10F0")
-            .setAttribute(EnvironmentAttributes.SKY_LIGHT_FACTOR, 0.9f)
-            .setAttribute(EnvironmentAttributes.FOG_COLOR, "#FFFFFF")
-            .setAttribute(EnvironmentAttributes.SKY_LIGHT_COLOR, "#FFBEBE")
+            .particle(ParticleTypes.SMOKE, 0.001f)
+            .particle(ParticleTypes.DUST, 0.002f, DustParticle.of("#FF0000"))
+            .attribute(EnvironmentAttributes.BLOCK_LIGHT_TINT, "#FF10F0")
+            .attribute(EnvironmentAttributes.SKY_LIGHT_FACTOR, 0.9f)
+            .attribute(EnvironmentAttributes.FOG_COLOR, "#FFFFFF")
+            .attribute(EnvironmentAttributes.SKY_LIGHT_COLOR, "#FFBEBE")
             // Block replacements can only be used with PacketHandlers!
             .replace(Material.GRASS_BLOCK, Material.STONE)
             .register();
@@ -99,9 +99,9 @@ For players to see your changes they will either need to relog or you can use th
 <CodeBlock
     lang="java"
     filename="ExamplePlugin.java"
-    code={`import biome.dev.wyck.CustomBiome;
-import dev.wyck.registry.ResourceKey;
-import wrapper.dev.wyck.BiomeSettings;
+    code={`import dev.wyck.model.biome.CustomBiome;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.wrapper.BiomeSettings;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ExamplePlugin extends JavaPlugin {
@@ -118,7 +118,7 @@ public class ExamplePlugin extends JavaPlugin {
             .register();
 
         // Don't like it later? Change it!
-        customBiome.setFoliageColor("#00FF00");
+        customBiome.foliageColor("#00FF00");
         customBiome.modify();
     }
 }`}

@@ -13,7 +13,7 @@ import org.jspecify.annotations.NullMarked;
  * </p>
  *
  * @since 2.4.0
- * @version 2.5.0
+ * @version 3.0.0
  * @author Wyck codegen
  */
 @NullMarked

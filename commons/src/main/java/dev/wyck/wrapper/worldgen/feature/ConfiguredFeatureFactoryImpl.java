@@ -27,6 +27,7 @@ public final class ConfiguredFeatureFactoryImpl implements ConfiguredFeature.Fac
             case ConfiguredFeature.Reference reference -> resolveReference(reference);
             case ConfiguredFeature.VanillaConfigured vanilla -> resolveVanilla(vanilla);
             case ConfiguredFeature.CustomConfigured custom -> resolveCustom(custom);
+            case AbstractCustomFeature customFeature -> resolveCustom(ConfiguredFeature.custom(customFeature.key(), customFeature));
         };
     }
 
@@ -59,7 +60,7 @@ public final class ConfiguredFeatureFactoryImpl implements ConfiguredFeature.Fac
         Identifier featureId = (Identifier) custom.featureKey().resourceLocation();
         net.minecraft.world.level.levelgen.feature.Feature feature = BuiltInRegistries.FEATURE.getValue(featureId);
         if (feature == null) {
-            throw new IllegalArgumentException("Custom feature not registered: " + featureId + " (did you call #register() before building?)");
+            throw new IllegalArgumentException("Custom feature not registered: " + featureId + " (did you call #register()?)");
         }
         // full on custom features are backed by bridges
         CustomFeatureBridge.Holder<Object> holder = new CustomFeatureBridge.Holder<>(custom.config());

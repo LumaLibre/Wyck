@@ -13,7 +13,7 @@ import org.jspecify.annotations.Nullable;
  *
  * @see ParticleCatalog
  * @since 1.1.0
- * @version 2.5.0
+ * @version 3.0.0
  * @author Jsinco
  */
 @NullMarked
@@ -54,7 +54,7 @@ public interface AmbientParticle extends Wrapper {
      */
     @AsOf("1.1.0")
     default ParticleOptions particleOptions() {
-        ParticleType particleType = this.type().getParticleType();
+        ParticleType particleType = this.type().particleType();
         if (this.type().isSimple()) {
             return ParticleOptionsFactory.WIRE.get().simple(particleType);
         }
@@ -67,9 +67,9 @@ public interface AmbientParticle extends Wrapper {
     /**
      * Converts this AmbientParticle to a Builder instance.
      * @return a new Builder instance with the same properties as this instance
-     * @since 2.5.0
+     * @since 3.0.0
      */
-    @AsOf("2.5.0")
+    @AsOf("3.0.0")
     default Builder toBuilder() {
         return new Builder(this);
     }
@@ -80,9 +80,9 @@ public interface AmbientParticle extends Wrapper {
      * @param probability The probability of the particle.
      * @param particleData The particle data, or null if the particle is simple.
      * @return A new AmbientParticle instance.
-     * @since 2.5.0
+     * @since 3.0.0
      */
-    @AsOf("2.5.0")
+    @AsOf("3.0.0")
     static AmbientParticle of(ParticleTypes ambientParticle, float probability, @Nullable ParticleData particleData) {
         return WIRE.construct(ambientParticle, probability, particleData);
     }
@@ -92,9 +92,9 @@ public interface AmbientParticle extends Wrapper {
      * @param ambientParticle The particle type.
      * @param probability The probability of the particle.
      * @return A new AmbientParticle instance with no particle data.
-     * @since 2.5.0
+     * @since 3.0.0
      */
-    @AsOf("2.5.0")
+    @AsOf("3.0.0")
     static AmbientParticle of(ParticleTypes ambientParticle, float probability) {
         return WIRE.construct(ambientParticle, probability);
     }
@@ -102,9 +102,9 @@ public interface AmbientParticle extends Wrapper {
     /**
      * Creates a new AmbientParticle builder.
      * @return A new AmbientParticle builder.
-     * @since 2.5.0
+     * @since 3.0.0
      */
-    @AsOf("2.5.0")
+    @AsOf("3.0.0")
     static Builder builder() {
         return new Builder();
     }
@@ -112,11 +112,11 @@ public interface AmbientParticle extends Wrapper {
     /**
      * Builder for creating AmbientParticle instances.
      *
-     * @since 2.5.0
-     * @version 2.5.0
+     * @since 3.0.0
+     * @version 3.0.0
      * @author Jsinco
      */
-    @AsOf("2.5.0")
+    @AsOf("3.0.0")
     final class Builder {
         private @Nullable ParticleTypes type;
         private float probability;
@@ -134,9 +134,9 @@ public interface AmbientParticle extends Wrapper {
          * Sets the particle type.
          * @param type The particle type.
          * @return This builder instance.
-         * @since 2.5.0
+         * @since 3.0.0
          */
-        @AsOf("2.5.0")
+        @AsOf("3.0.0")
         public Builder type(ParticleTypes type) {
             this.type = type;
             return this;
@@ -146,9 +146,9 @@ public interface AmbientParticle extends Wrapper {
          * Sets the probability of the particle.
          * @param probability The probability of the particle.
          * @return This builder instance.
-         * @since 2.5.0
+         * @since 3.0.0
          */
-        @AsOf("2.5.0")
+        @AsOf("3.0.0")
         public Builder probability(float probability) {
             this.probability = probability;
             return this;
@@ -158,9 +158,9 @@ public interface AmbientParticle extends Wrapper {
          * Sets the particle data.
          * @param data The particle data.
          * @return This builder instance.
-         * @since 2.5.0
+         * @since 3.0.0
          */
-        @AsOf("2.5.0")
+        @AsOf("3.0.0")
         public Builder data(ParticleData data) {
             this.data = data;
             return this;
@@ -169,9 +169,9 @@ public interface AmbientParticle extends Wrapper {
         /**
          * Builds the AmbientParticle instance.
          * @return The built AmbientParticle instance.
-         * @since 2.5.0
+         * @since 3.0.0
          */
-        @AsOf("2.5.0")
+        @AsOf("3.0.0")
         public AmbientParticle build() {
             Preconditions.checkNotNull(type, "type must not be null.");
             return of(type, probability, data);

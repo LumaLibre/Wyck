@@ -8,10 +8,12 @@ import dev.wyck.registry.level.LevelFactory;
 import dev.wyck.wrapper.level.noise.chunk.ChunkGenerator;
 import dev.wyck.wrapper.level.spawner.LevelSpawner;
 import org.bukkit.World;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -32,25 +34,17 @@ public interface LevelCreator {
      * @since 2.4.0
      */
     @AsOf("2.4.0")
-    ResourceKey getLevelKey();
+    ResourceKey resourceKey();
 
 
     /**
-     * A custom dimension to register before creating the world, or {@code null} if {@link #getDimensionType()} is preregistered.
-     * @return a custom dimension to register before creating the world, or {@code null} if {@link #getDimensionType()} is preregistered.
+     * The dimension of the world.
+     * @return the dimension of the world
      * @since 2.4.0
      */
     @AsOf("2.4.0")
-    @Nullable Dimension getDimension();
+    Dimension dimension();
 
-
-    /**
-     * Key of an already-registered dimension type, or {@code null} if {@link #getDimension()} is supplied.
-     * @return key of an already-registered dimension type, or {@code null} if {@link #getDimension()} is supplied.
-     * @since 2.4.0
-     */
-    @AsOf("2.4.0")
-    @Nullable ResourceKey getDimensionType();
 
     /**
      * The chunk generator to use for the world.
@@ -58,7 +52,7 @@ public interface LevelCreator {
      * @since 2.4.0
      */
     @AsOf("2.4.0")
-    ChunkGenerator getGenerator();
+    ChunkGenerator generator();
 
     /**
      * The seed to use for the world.
@@ -66,7 +60,7 @@ public interface LevelCreator {
      * @since 2.4.0
      */
     @AsOf("2.4.0")
-    long getSeed();
+    long seed();
 
     /**
      * Whether to generate structures in the world.
@@ -88,9 +82,11 @@ public interface LevelCreator {
      * The environment of the world.
      * @return the environment of the world.
      * @since 2.4.0
+     * @apiNote Obsolete, only here for bukkit compatibility.
      */
     @AsOf("2.4.0")
-    World.Environment getEnvironment();
+    @ApiStatus.Obsolete
+    World.Environment environment();
 
     /**
      * The persistence of the world.
@@ -98,7 +94,7 @@ public interface LevelCreator {
      * @since 2.4.0
      */
     @AsOf("2.4.0")
-    StemPersistence getPersistence();
+    StemPersistence persistence();
 
     /**
      * The spawners of the world.
@@ -106,7 +102,7 @@ public interface LevelCreator {
      * @since 2.4.0
      */
     @AsOf("2.4.0")
-    List<LevelSpawner> getSpawners();
+    List<LevelSpawner> spawners();
 
     /**
      * Converts this {@link LevelCreator} to a {@link World}.
@@ -114,11 +110,10 @@ public interface LevelCreator {
      * @since 2.4.0
      */
     @AsOf("2.4.0")
-    @Nullable World asBukkitWorld();
-
+    @Nullable World bukkitWorld();
 
     /**
-     * Creates a new {@link World} from this {@link LevelCreator}.
+     * Creates a new bukkit world from this level creator.
      * @return a new {@link World} from this {@link LevelCreator}
      * @since 2.4.0
      */
@@ -128,7 +123,18 @@ public interface LevelCreator {
     }
 
     /**
-     * @return a new {@link Builder} instance
+     * Converts this back into a builder.
+     * @return a new builder from this instance
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
+    default Builder toBuilder() {
+        return new Builder(this);
+    }
+
+    /**
+     * Creates a new builder.
+     * @return a new builder
      * @since 2.4.0
      */
     @AsOf("2.4.0")
@@ -137,15 +143,14 @@ public interface LevelCreator {
     }
 
     /**
-     * Creates a new {@link Builder} instance with the given level key.
-     * @param levelKey the level key to use
-     * @return a new {@link Builder} instance with the given level key
+     * Creates a new builder seeded with the given level key.
+     * @param levelKey the level key to seed the builder with
+     * @return a new builder seeded with the given level key
      * @since 2.4.0
      */
     @AsOf("2.4.0")
     static Builder builder(ResourceKey levelKey) {
-        Preconditions.checkNotNull(levelKey, "levelKey cannot be null");
-        return new Builder().levelKey(levelKey);
+        return builder().resourceKey(levelKey);
     }
 
     @AsOf("2.4.0")
@@ -153,84 +158,183 @@ public interface LevelCreator {
 
         private @Nullable ResourceKey levelKey = null;
         private @Nullable Dimension dimension = null;
-        private @Nullable ResourceKey dimensionType = null;
         private @Nullable ChunkGenerator generator = null;
         private long seed = ThreadLocalRandom.current().nextLong();
         private boolean generateStructures = true;
         private boolean bonusChest = false;
         private World.Environment environment = World.Environment.CUSTOM;
         private StemPersistence persistence = StemPersistence.TRANSIENT;
-        private List<LevelSpawner> spawners = List.of();
+        private List<LevelSpawner> spawners = new ArrayList<>();
 
         @AsOf("2.4.0")
         public Builder() {}
 
+        public Builder(LevelCreator other) {
+            this.levelKey = other.resourceKey();
+            this.dimension = other.dimension();
+            this.generator = other.generator();
+            this.seed = other.seed();
+            this.generateStructures = other.generateStructures();
+            this.bonusChest = other.bonusChest();
+            this.environment = other.environment();
+            this.persistence = other.persistence();
+            this.spawners = new ArrayList<>(other.spawners());
+        }
+
+        /**
+         * Sets the resource key of the level stem.
+         * @param levelKey the resource key of the world
+         * @return this builder
+         * @since 2.4.0
+         */
         @AsOf("2.4.0")
-        public Builder levelKey(ResourceKey levelKey) {
+        public Builder resourceKey(ResourceKey levelKey) {
             this.levelKey = levelKey;
             return this;
         }
 
+        /**
+         * Sets the dimension of the world.
+         * @param dimension the dimension of the world
+         * @return this builder
+         * @since 2.4.0
+         */
         @AsOf("2.4.0")
         public Builder dimension(Dimension dimension) {
             this.dimension = dimension;
-            this.dimensionType = dimension.getResourceKey();
             return this;
         }
 
+        /**
+         * Sets the dimension of the world.
+         * @param resourceKey the resource key of the dimension
+         * @return this builder
+         * @since 2.4.0
+         */
         @AsOf("2.4.0")
-        public Builder dimensionType(ResourceKey dimensionType) {
-            this.dimensionType = dimensionType;
+        public Builder dimension(ResourceKey resourceKey) {
+            this.dimension = Dimension.reference(resourceKey);
             return this;
         }
 
+        /**
+         * Sets the chunk generator of the world.
+         * @param generator the chunk generator of the world
+         * @return this builder
+         * @since 2.4.0
+         */
         @AsOf("2.4.0")
         public Builder generator(ChunkGenerator generator) {
             this.generator = generator;
             return this;
         }
 
+        /**
+         * Sets the seed of the world.
+         * @param seed the seed of the world
+         * @return this builder
+         * @since 2.4.0
+         */
         @AsOf("2.4.0")
         public Builder seed(long seed) {
             this.seed = seed;
             return this;
         }
 
+        /**
+         * Sets whether to generate structures in the world.
+         * @param generateStructures whether to generate structures in the world
+         * @return this builder
+         * @since 2.4.0
+         */
         @AsOf("2.4.0")
         public Builder generateStructures(boolean generateStructures) {
             this.generateStructures = generateStructures;
             return this;
         }
 
+        /**
+         * Sets whether to generate a bonus chest in the world.
+         * @param bonusChest whether to generate a bonus chest in the world
+         * @return this builder
+         * @since 2.4.0
+         */
         @AsOf("2.4.0")
         public Builder bonusChest(boolean bonusChest) {
             this.bonusChest = bonusChest;
             return this;
         }
 
+        /**
+         * Sets the environment of the world.
+         * @param environment the environment of the world
+         * @return this builder
+         * @since 2.4.0
+         */
         @AsOf("2.4.0")
         public Builder environment(World.Environment environment) {
             this.environment = environment;
             return this;
         }
 
+        /**
+         * Sets the persistence of the world.
+         * @param persistence the persistence of the world
+         * @return this builder
+         * @since 2.4.0
+         */
         @AsOf("2.4.0")
         public Builder persistence(StemPersistence persistence) {
             this.persistence = persistence;
             return this;
         }
 
+        /**
+         * Sets the spawners of the world.
+         * @param spawners the spawners of the world
+         * @return this builder
+         * @since 2.4.0
+         */
         @AsOf("2.4.0")
         public Builder spawners(List<LevelSpawner> spawners) {
-            this.spawners = List.copyOf(spawners);
+            this.spawners = spawners;
             return this;
         }
 
+        // Friendly builder methods
+
+        /**
+         * Alias of {@link #resourceKey(ResourceKey)}
+         * @param levelKey the resource key of the world
+         * @return this builder
+         * @since 2.4.0
+         */
         @AsOf("2.4.0")
-        public Builder addSpawner(LevelSpawner spawner) {
-            List<LevelSpawner> next = new ArrayList<>(this.spawners);
-            next.add(spawner);
-            this.spawners = List.copyOf(next);
+        public Builder levelKey(ResourceKey levelKey) {
+            return resourceKey(levelKey);
+        }
+
+        /**
+         * Adds a spawner to the world.
+         * @param spawner the spawner to add
+         * @return this builder
+         * @since 2.4.0
+         */
+        @AsOf("2.4.0")
+        public Builder spawner(LevelSpawner spawner) {
+            this.spawners.add(spawner);
+            return this;
+        }
+
+        /**
+         * Adds spawners to the world.
+         * @param spawners the spawners to add
+         * @return this builder
+         * @since 3.0.0
+         */
+        @AsOf("3.0.0")
+        public Builder spawners(LevelSpawner... spawners) {
+            Collections.addAll(this.spawners, spawners);
             return this;
         }
 
@@ -238,11 +342,10 @@ public interface LevelCreator {
         public LevelCreator build() {
             Preconditions.checkArgument(levelKey != null, "levelKey must be set");
             Preconditions.checkArgument(generator != null, "generator must be set");
-            Preconditions.checkArgument(dimensionType != null, "either a dimension or a preregistered dimensionType must be set");
+            Preconditions.checkArgument(dimension != null,  "dimension must be set");
             return new LevelCreatorImpl(
                 levelKey,
                 dimension,
-                dimensionType,
                 generator,
                 seed,
                 generateStructures,

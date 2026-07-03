@@ -16,7 +16,7 @@ import java.util.Optional;
  * A wrapper for bed rules in a dimensional environment.
  *
  * @version 1.1.0
- * @since 2.5.0
+ * @since 3.0.0
  * @author Jsinco
  */
 @NullMarked
@@ -61,9 +61,9 @@ public interface BedRule extends Wrapper {
     /**
      * Converts this BedRule to a builder.
      * @return a new builder for this BedRule
-     * @since 2.5.0
+     * @since 3.0.0
      */
-    @AsOf("2.5.0")
+    @AsOf("3.0.0")
     default Builder toBuilder() {
         return new Builder(this);
     }
@@ -75,9 +75,9 @@ public interface BedRule extends Wrapper {
      * @param explodes whether the bed explodes when used in this environment
      * @param errorMessage the error message displayed when a player tries to use the bed inappropriately, or null if no error message is set
      * @return a new BedRule instance
-     * @since 2.5.0
+     * @since 3.0.0
      */
-    @AsOf("2.5.0")
+    @AsOf("3.0.0")
     static BedRule of(Rule canSleep, Rule canSetSpawn, boolean explodes, @Nullable Component errorMessage) {
         return WIRE.construct(canSleep, canSetSpawn, explodes, Optional.ofNullable(errorMessage));
     }

@@ -21,7 +21,7 @@ public interface WrappedEnumerator<W extends WrappedEnumerator<W>> {
         return translator().toNms((W) this, nmsEnumClass);
     }
 
-    @AsOf("2.5.0")
+    @AsOf("3.0.0")
     @SuppressWarnings("unchecked")
     default <N extends Enum<N>> N toNms(String... nmsClassNames) {
         for (String nmsClassName : nmsClassNames) {

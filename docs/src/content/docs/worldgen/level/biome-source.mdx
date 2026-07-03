@@ -19,9 +19,9 @@ fit for flat worlds, void worlds, or any dimension where biome variety does not 
     lang="java"
     filename="Examples.java"
     code={
-        `import biome.dev.wyck.CustomBiome;
-import keys.dev.wyck.ResourceKey;
-import level.wrapper.dev.wyck.BiomeSource;
+        `import dev.wyck.model.biome.CustomBiome;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.wrapper.level.BiomeSource;
 import org.bukkit.block.Biome;
 
 // a registered custom biome
@@ -60,11 +60,11 @@ about.
     lang="java"
     filename="ExamplePlugin.java"
     code={
-`import biome.dev.wyck.CustomBiome;
-import keys.dev.wyck.ResourceKey;
-import level.wrapper.dev.wyck.BiomeSource;
-import dev.wyck.wrapper.worldgen.climate.BiomeClimatePoint;
-import dev.wyck.wrapper.worldgen.climate.BiomeParameter;
+`import dev.wyck.model.biome.CustomBiome;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.wrapper.level.BiomeSource;
+import dev.wyck.wrapper.worldgen.climate.ClimatePoint;
+import dev.wyck.wrapper.worldgen.climate.ClimateParameter;
 import org.bukkit.block.Biome;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -77,16 +77,16 @@ public class ExamplePlugin extends JavaPlugin {
             .skyColor("#2F46FF")
             .register();
 
-        BiomeClimatePoint withArgsClimate = BiomeClimatePoint.of(1.8f, 1.2f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+        ClimatePoint withArgsClimate = ClimatePoint.of(1.8f, 1.2f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
 
-        BiomeClimatePoint zeroBuilderClimate = BiomeClimatePoint.zero()
-            .temperature(BiomeParameter.point(-0.8f))
-            .humidity(BiomeParameter.point(-0.5f))
+        ClimatePoint zeroBuilderClimate = ClimatePoint.builder()
+            .temperature(ClimateParameter.point(-0.8f))
+            .humidity(ClimateParameter.point(-0.5f))
             .build();
 
-        BiomeClimatePoint builderClimate = BiomeClimatePoint.builder()
-            .temperature(BiomeParameter.point(0.0f))
-            .humidity(BiomeParameter.point(0.0f))
+        ClimatePoint builderClimate = ClimatePoint.builder()
+            .temperature(ClimateParameter.point(0.0f))
+            .humidity(ClimateParameter.point(0.0f))
             .build();
 
         BiomeSource source = BiomeSource.multiNoise()

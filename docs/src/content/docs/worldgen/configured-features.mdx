@@ -27,8 +27,8 @@ typed references to every configured feature vanilla registrar.
 <CodeBlock
     lang="java"
     filename="ExamplePlugin.java"
-    code={`import feature.worldgen.wrapper.dev.wyck.ConfiguredFeature;
-import feature.worldgen.wrapper.dev.wyck.ConfiguredFeatures;
+    code={`import dev.wyck.wrapper.worldgen.feature.ConfiguredFeature;
+import dev.wyck.wrapper.worldgen.feature.ConfiguredFeatures;
 
 // a reference straight from the catalog
 ConfiguredFeature largeDiamonds = ConfiguredFeatures.ORE_DIAMOND_LARGE;
@@ -50,8 +50,8 @@ And pair it with your own configuration context.
             label: "PillarFeature.java",
             lang: "java",
             code:
-`import custom.feature.worldgen.wrapper.dev.wyck.CustomFeature;
-import custom.feature.worldgen.wrapper.dev.wyck.PlacementContext;
+`import dev.wyck.wrapper.worldgen.feature.custom.CustomFeature;
+import dev.wyck.wrapper.worldgen.feature.custom.PlacementContext;
 import org.bukkit.Material;
 import org.bukkit.util.BlockVector;
 import org.jspecify.annotations.NonNull;
@@ -94,18 +94,18 @@ public class PillarFeature extends CustomFeature<@NotNull PillarFeature.PillarCo
             label: "ExamplePlugin.java",
             lang: "java",
             code:
-`import biome.dev.wyck.CustomBiome;
-import dev.wyck.registry.ResourceKey;
-import dev.wyck.registry.dimension.DimensionEditor;
-import worldgen.dev.wyck.PillarFeature;
-import worldgen.wrapper.dev.wyck.BiomeGenerationSettings;
-import worldgen.wrapper.dev.wyck.GenerationStep;
-import worldgen.wrapper.dev.wyck.HeightmapType;
-import feature.worldgen.wrapper.dev.wyck.ConfiguredFeature;
-import custom.feature.worldgen.wrapper.dev.wyck.CustomFeature;
-import placement.worldgen.wrapper.dev.wyck.PlacedFeature;
-import placement.worldgen.wrapper.dev.wyck.PlacedFeatures;
-import placement.worldgen.wrapper.dev.wyck.PlacementModifier;
+`import dev.wyck.model.biome.CustomBiome;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.registry.level.LevelStemEditor;
+import dev.wyck.worldgen.PillarFeature;
+import dev.wyck.wrapper.worldgen.BiomeGenerationSettings;
+import dev.wyck.wrapper.worldgen.GenerationStep;
+import dev.wyck.wrapper.worldgen.HeightmapType;
+import dev.wyck.wrapper.worldgen.feature.ConfiguredFeature;
+import dev.wyck.wrapper.worldgen.feature.custom.CustomFeature;
+import dev.wyck.wrapper.worldgen.placement.PlacedFeature;
+import dev.wyck.wrapper.worldgen.placement.PlacedFeatures;
+import dev.wyck.wrapper.worldgen.placement.PlacementModifier;
 import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -148,10 +148,10 @@ public class ExamplePlugin extends JavaPlugin {
             .waterColor("#00FFD0")
             .grassColor("#D1D13A")
             .foliageColor("#FF6A00")
-            .setGenerationSettings(generation)
+            .generationSettings(generation)
             .register();
 
-        DimensionEditor dimensionEditor = DimensionEditor.create();
+        LevelStemEditor dimensionEditor = LevelStemEditor.create();
         ResourceKey overworldKey = ResourceKey.of("minecraft", "overworld");
         ResourceKey plains = ResourceKey.of("minecraft", "plains");
         dimensionEditor.replaceInDimension(overworldKey, plains, myBiomeKey);

@@ -23,9 +23,9 @@ but some new particle types may not be available on older server versions.
 <CodeBlock
     lang="java"
     filename="ExamplePlugin.java"
-    code={`import biome.dev.wyck.CustomBiome;
-import particle.environment.wrapper.dev.wyck.ParticleTypes;
-import options.particle.environment.wrapper.dev.wyck.DustParticle;
+    code={`import dev.wyck.model.biome.CustomBiome;
+import dev.wyck.wrapper.environment.particle.ParticleTypes;
+import dev.wyck.wrapper.environment.particle.options.DustParticle;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ExamplePlugin extends JavaPlugin {
@@ -33,8 +33,8 @@ public class ExamplePlugin extends JavaPlugin {
     public void onEnable() {
         CustomBiome.builder()
             // Other biome settings...
-            .ambientParticle(ParticleTypes.SMOKE, 0.001f)
-            .ambientParticle(ParticleTypes.DUST, 0.002f, DustParticle.of("#FF0000"))
+            .particle(ParticleTypes.SMOKE, 0.001f)
+            .particle(ParticleTypes.DUST, 0.002f, DustParticle.of("#FF0000"))
             .build();
     }
 }`}
@@ -50,23 +50,24 @@ which can be used for storing a list of ambient particles that you may want to a
 <CodeBlock
     lang="java"
     filename="ExamplePlugin.java"
-    code={`import biome.dev.wyck.CustomBiome;
-import particle.environment.wrapper.dev.wyck.ParticleCatalog;
-import particle.environment.wrapper.dev.wyck.ParticleTypes;
-import options.particle.environment.wrapper.dev.wyck.DustParticle;
+    code={`import dev.wyck.model.biome.CustomBiome;
+import dev.wyck.wrapper.environment.particle.ParticleCatalog;
+import dev.wyck.wrapper.environment.particle.ParticleTypes;
+import dev.wyck.wrapper.environment.particle.options.DustParticle;
+import dev.wyck.wrapper.environment.attribute.EnvironmentAttributes;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ExamplePlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         ParticleCatalog catalog = ParticleCatalog.builder()
-            .addSimple(ParticleTypes.ASH, 0.001f)
-            .addComplex(ParticleTypes.DUST, 0.002f, DustParticle.of("#FF0000"))
+            .simple(ParticleTypes.ASH, 0.001f)
+            .complex(ParticleTypes.DUST, 0.002f, DustParticle.of("#FF0000"))
             .build();
 
         CustomBiome.builder()
             // Other biome settings...
-            .particleCatalog(catalog)
+            .attribute(EnvironmentAttributes.AMBIENT_PARTICLES, catalog)
             .build();
     }
 }`}

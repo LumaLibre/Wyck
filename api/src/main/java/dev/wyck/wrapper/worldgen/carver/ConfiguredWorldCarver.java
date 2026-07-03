@@ -70,6 +70,18 @@ public sealed interface ConfiguredWorldCarver extends Wrapper permits Configured
         return new Custom(WorldCarverType.CANYON, configuration);
     }
 
+    /**
+     * Creates a configured carver from a custom carver type and configuration.
+     * @param type the carver type
+     * @param configuration the carver configuration
+     * @return a configured carver
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
+    static ConfiguredWorldCarver of(WorldCarverType type, CarverConfiguration configuration) {
+        return new Custom(type, configuration);
+    }
+
     @Override
     @AsOf("2.3.0")
     default Object toMinecraft() {

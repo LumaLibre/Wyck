@@ -19,6 +19,7 @@ import dev.wyck.wrapper.level.noise.settings.NoiseSettings;
 import dev.wyck.wrapper.worldgen.climate.ClimatePoint;
 import dev.wyck.wrapper.worldgen.surface.SurfaceCondition;
 import dev.wyck.wrapper.worldgen.surface.SurfaceRule;
+import net.minecraft.world.level.dimension.DimensionType;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
@@ -42,6 +43,7 @@ public class TestPlugin extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
+        //DimensionType
         ResourceKey levelKey = ResourceKey.of("test", "wobbleworld");
 
         BiomeSource biomeSource = BiomeSource.multiNoise()
@@ -125,10 +127,8 @@ public class TestPlugin extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onBreakBlock(BlockBreakEvent event) {
-        DimensionRegistry registry = DimensionRegistry.registry();
         Skybox randomSkybox = Skybox.values()[(int) (Math.random() * Skybox.values().length)];
-        dimension.setSkybox(randomSkybox);
-        registry.modify(dimension);
+        dimension.toBuilder().skybox(randomSkybox).modify();
         event.getPlayer().sendMessage("Skybox changed to " + randomSkybox);
     }
 }

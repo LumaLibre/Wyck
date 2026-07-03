@@ -21,11 +21,11 @@ and more. Building and registering custom dimensions are just as easy as creatin
     lang="java"
     filename="ExamplePlugin.java"
     code={
-`import keys.dev.wyck.ResourceKey;
-import dimension.level.dev.wyck.Dimension;
-import environment.wrapper.dev.wyck.BedRule;
-import attribute.environment.wrapper.dev.wyck.EnvironmentAttributes;
-import dimension.level.wrapper.dev.wyck.Skybox;
+`import dev.wyck.keys.ResourceKey;
+import dev.wyck.model.level.dimension.Dimension;
+import dev.wyck.wrapper.environment.BedRule;
+import dev.wyck.wrapper.environment.attribute.EnvironmentAttributes;
+import dev.wyck.wrapper.level.dimension.Skybox;
 import net.kyori.adventure.text.Component;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -65,18 +65,19 @@ that are specifically suited for custom dimensions and custom biomes.
     lang="java"
     filename="ExamplePlugin.java"
     code={
-`import biome.dev.wyck.CustomBiome;
-import keys.dev.wyck.ResourceKey;
-import level.dev.wyck.LevelCreator;
-import dimension.level.dev.wyck.Dimension;
-import level.registry.dev.wyck.LevelFactory;
-import environment.wrapper.dev.wyck.BedRule;
-import attribute.environment.wrapper.dev.wyck.EnvironmentAttributes;
-import level.wrapper.dev.wyck.BiomeSource;
-import dev.wyck.wrapper.level.ChunkGenerator;
-import dimension.level.wrapper.dev.wyck.Skybox;
-import dev.wyck.wrapper.worldgen.climate.BiomeClimatePoint;
-import dev.wyck.wrapper.worldgen.climate.BiomeParameter;
+`import dev.wyck.model.biome.CustomBiome;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.model.level.LevelCreator;
+import dev.wyck.model.level.dimension.Dimension;
+import dev.wyck.registry.level.LevelFactory;
+import dev.wyck.wrapper.environment.BedRule;
+import dev.wyck.wrapper.environment.attribute.EnvironmentAttributes;
+import dev.wyck.wrapper.level.BiomeSource;
+import dev.wyck.wrapper.level.noise.chunk.ChunkGenerator;
+import dev.wyck.wrapper.level.noise.Noise;
+import dev.wyck.wrapper.level.dimension.Skybox;
+import dev.wyck.wrapper.worldgen.climate.ClimatePoint;
+import dev.wyck.wrapper.worldgen.climate.ClimateParameter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -106,19 +107,19 @@ public class ExamplePlugin extends JavaPlugin {
             .register();
 
         // Create a biome source! This can be fixed or multi noise
-        BiomeParameter span = BiomeParameter.span(1.0f, 1.5f);
-        BiomeParameter point = BiomeParameter.point(0.9f);
+        ClimateParameter span = ClimateParameter.span(1.0f, 1.5f);
+        ClimateParameter point = ClimateParameter.point(0.9f);
 
         // For this example, we'll use a custom biome and a desert and have them span different temperatures and humidity
         BiomeSource biomeSource = BiomeSource.multiNoise()
-            .add(biome, BiomeClimatePoint.builder().temperature(span).humidity(span).build())
-            .add(ResourceKey.minecraft("desert"), BiomeClimatePoint.builder().temperature(point).humidity(point).build())
+            .add(biome, ClimatePoint.builder().temperature(span).humidity(span).build())
+            .add(ResourceKey.minecraft("desert"), ClimatePoint.builder().temperature(point).humidity(point).build())
             .build();
 
         // For this example, we'll use the overworld noise generator. You can also create your own!
         ChunkGenerator generator = ChunkGenerator.noise(
             biomeSource,
-            ChunkGenerator.overworldNoise()
+            Noise.overworld()
         );
 
         LevelCreator levelCreator = LevelCreator.builder(exampleKey)

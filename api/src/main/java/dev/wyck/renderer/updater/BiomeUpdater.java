@@ -177,7 +177,7 @@ public interface BiomeUpdater extends AbstractBiomeRenderer {
      */
     @AsOf("1.2.0")
     @Deprecated(forRemoval = true, since = "2.2.0")
-    @ApiStatus.ScheduledForRemoval(inVersion = "2.5.0")
+    @ApiStatus.ScheduledForRemoval(inVersion = "3.0.0")
     default void updateChunks(List<CompletableFuture<Chunk>> chunks) {
         updateChunksAsync(chunks);
     }

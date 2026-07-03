@@ -20,9 +20,9 @@ from the ground-up rather than replacing biomes in existing worlds with the [`Bi
 <CodeBlock
     lang="java"
     filename="ExamplePlugin.java"
-    code={`import biome.dev.wyck.CustomBiome;
-import providers.dev.wyck.BasicBiomeProvider;
-import dev.wyck.registry.ResourceKey;
+    code={`import dev.wyck.model.biome.CustomBiome;
+import dev.wyck.misc.providers.BasicBiomeProvider;
+import dev.wyck.keys.ResourceKey;
 import org.bukkit.WorldCreator;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -60,9 +60,9 @@ Replaces vanilla biomes with custom biomes on a one-to-one basis. At each positi
 <CodeBlock
     lang="java"
     filename="ExamplePlugin.java"
-    code={`import biome.dev.wyck.CustomBiome;
-import providers.dev.wyck.ReplacementBiomeProvider;
-import dev.wyck.registry.ResourceKey;
+    code={`import dev.wyck.model.biome.CustomBiome;
+import dev.wyck.misc.providers.ReplacementBiomeProvider;
+import dev.wyck.keys.ResourceKey;
 import org.bukkit.WorldCreator;
 import org.bukkit.block.Biome;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -107,9 +107,10 @@ Steps are called concurrently during chunk generation, so each `BiomeStep` must 
 <CodeBlock
     lang="java"
     filename="ExamplePlugin.java"
-    code={`import biome.dev.wyck.CustomBiome;
-import providers.dev.wyck.StepsBiomeProvider;
-import dev.wyck.registry.ResourceKey;
+    code={`import dev.wyck.model.biome.CustomBiome;
+import dev.wyck.misc.providers.StepsBiomeProvider;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.wrapper.environment.particle.ParticleTypes;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -125,7 +126,7 @@ public class ExamplePlugin extends JavaPlugin {
         CustomBiome ashBiome = CustomBiome.builder()
             .resourceKey(ResourceKey.of("test", "ash"))
             .fogColor("#3A3A3A")
-            .ambientParticle(ParticleTypes.ASH, 0.0001f)
+            .particle(ParticleTypes.ASH, 0.0001f)
             .register();
 
         CustomBiome oceanBiome = CustomBiome.builder()

@@ -64,19 +64,10 @@ public final class SimpleLevelFactory implements LevelFactory {
         CraftServer server = (CraftServer) Bukkit.getServer();
         MinecraftServer minecraftServer = server.getServer();
 
-        Identifier typeId;
+        ResourceKey localKey = world.dimension().resourceKey();
+        Identifier typeId = localKey.asHandle();
 
-        if (world.getDimension() != null) {
-            ResourceKey localKey = world.getDimension().getResourceKey();
-            typeId = (Identifier) localKey.toMinecraft();
-            if (!KeyChains.DIMENSIONS.isRegistered(localKey)) {
-                DimensionRegistry.registry().register(world.getDimension());
-            }
-        } else {
-            typeId = (Identifier) Preconditions.checkNotNull(world.getDimensionType(), "dimensionType").toMinecraft();
-        }
-
-        ResourceKey levelKey = world.getLevelKey();
+        ResourceKey levelKey = world.resourceKey();
         Identifier levelId = (Identifier) levelKey.toMinecraft();
         String name = levelId.getPath();
 
@@ -87,10 +78,10 @@ public final class SimpleLevelFactory implements LevelFactory {
             .lookupOrThrow(Registries.DIMENSION_TYPE)
             .getOrThrow(net.minecraft.resources.ResourceKey.create(Registries.DIMENSION_TYPE, typeId));
 
-        ChunkGenerator generator = (ChunkGenerator) world.getGenerator().toMinecraft();
+        ChunkGenerator generator = (ChunkGenerator) world.generator().toMinecraft();
         LevelStem stem = new LevelStem(typeHolder, generator);
 
-        if (world.getPersistence() == StemPersistence.PERSISTENT) {
+        if (world.persistence() == StemPersistence.PERSISTENT) {
             registerStem(levelId, stem);
         }
 
@@ -99,7 +90,7 @@ public final class SimpleLevelFactory implements LevelFactory {
             Bukkit.getWorld(bukkitKey) == null && Bukkit.getWorld(name) == null,
             "world already loaded under %s", levelKey);
 
-        net.minecraft.resources.ResourceKey<LevelStem> storageDimension = switch (world.getEnvironment()) {
+        net.minecraft.resources.ResourceKey<LevelStem> storageDimension = switch (world.environment()) {
             case NETHER -> LevelStem.NETHER;
             case THE_END -> LevelStem.END;
             default -> LevelStem.OVERWORLD;
@@ -114,7 +105,7 @@ public final class SimpleLevelFactory implements LevelFactory {
         }
 
         WorldLoader.DataLoadContext context = minecraftServer.worldLoaderContext;
-        WorldOptions worldOptions = new WorldOptions(world.getSeed(), world.generateStructures(), world.bonusChest());
+        WorldOptions worldOptions = new WorldOptions(world.seed(), world.generateStructures(), world.bonusChest());
 
         DedicatedServerProperties.WorldDimensionData properties =
             new DedicatedServerProperties.WorldDimensionData(new JsonObject(), "normal");
@@ -145,7 +136,7 @@ public final class SimpleLevelFactory implements LevelFactory {
         long biomeZoomSeed = BiomeManager.obfuscateSeed(primaryLevelData.worldGenOptions().seed());
 
         List<CustomSpawner> spawners = new ArrayList<>();
-        for (LevelSpawner spawner : world.getSpawners()) {
+        for (LevelSpawner spawner : world.spawners()) {
             spawners.add((CustomSpawner) spawner.toMinecraft(primaryLevelData));
         }
 
@@ -162,7 +153,7 @@ public final class SimpleLevelFactory implements LevelFactory {
             spawners,
             true,
             null,
-            world.getEnvironment(),
+            world.environment(),
             null,
             null
         );

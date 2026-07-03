@@ -23,8 +23,8 @@ references to every placeable vanilla feature.
 <CodeBlock
     lang="java"
     filename="ExamplePlugin.java"
-    code={`import placement.worldgen.wrapper.dev.wyck.PlacedFeature;
-import placement.worldgen.wrapper.dev.wyck.PlacedFeatures;
+    code={`import dev.wyck.wrapper.worldgen.placement.PlacedFeature;
+import dev.wyck.wrapper.worldgen.placement.PlacedFeatures;
 
 PlacedFeature diamonds = PlacedFeatures.ORE_DIAMOND;`}
 />
@@ -36,10 +36,10 @@ To author one, pass a [configured feature](/wrappers/worldgen/configured-feature
 <CodeBlock
     lang="java"
     filename="ExamplePlugin.java"
-    code={`import worldgen.wrapper.dev.wyck.HeightmapType;
-import dev.wyck.wrapper.worldgen.PlacementModifier;
-import feature.worldgen.wrapper.dev.wyck.ConfiguredFeatures;
-import placement.worldgen.wrapper.dev.wyck.PlacedFeature;
+    code={`import dev.wyck.wrapper.worldgen.HeightmapType;
+import dev.wyck.wrapper.worldgen.placement.PlacementModifier;
+import dev.wyck.wrapper.worldgen.feature.ConfiguredFeatures;
+import dev.wyck.wrapper.worldgen.placement.PlacedFeature;
 
 PlacedFeature flowers = PlacedFeature.of(
     ConfiguredFeatures.FLOWER_DEFAULT,

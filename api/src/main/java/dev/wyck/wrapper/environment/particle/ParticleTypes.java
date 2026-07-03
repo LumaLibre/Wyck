@@ -1,5 +1,6 @@
 package dev.wyck.wrapper.environment.particle;
 
+import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.registry.internal.RegistryId;
@@ -170,25 +171,17 @@ public enum ParticleTypes implements WrappedConstant<ParticleTypes> {
     }
 
     /**
-     * The namespaced name of this particle (without the "minecraft:" prefix).
-     */
-    @AsOf("1.1.0")
-    public String getKey() {
-        return key;
-    }
-
-    /**
      * The resource key of this particle.
      * @return the resource key of this particle.
-     * @since 2.5.0
+     * @since 3.0.0
      */
-    @AsOf("2.5.0")
+    @AsOf("3.0.0")
     public ResourceKey resourceKey() {
         return ResourceKey.minecraft(key);
     }
 
     @Override
-    @AsOf("2.5.0")
+    @AsOf("3.0.0")
     public RegisteredConstantTranslator<ParticleTypes> translator() {
         return TRANSLATOR;
     }
@@ -198,7 +191,7 @@ public enum ParticleTypes implements WrappedConstant<ParticleTypes> {
      * via the registered factory and cached.
      */
     @AsOf("1.1.0")
-    public ParticleType getParticleType() {
+    public ParticleType particleType() {
         if (cachedHandle == null) {
             cachedHandle = ParticleOptionsFactory.WIRE.get().typeByKey(key);
         }
@@ -213,30 +206,6 @@ public enum ParticleTypes implements WrappedConstant<ParticleTypes> {
     @AsOf("1.1.0")
     public boolean isSimple() {
         return particleDataClass == null;
-    }
-
-
-    /**
-     * Creates a WrappedAmbientParticle with the specified probability and optional particle data.
-     * @param probability The probability of the particle.
-     * @param data The optional particle data.
-     * @return A WrappedAmbientParticle with the specified probability and optional particle data.
-     * @since 2.1.0
-     */
-    @AsOf("2.1.0")
-    public AmbientParticle create(float probability, @Nullable ParticleData data) {
-        return AmbientParticle.of(this, probability, data);
-    }
-
-    /**
-     * Creates a simple WrappedAmbientParticle with the specified probability and no particle data.
-     * @param probability The probability of the particle.
-     * @return A simple WrappedAmbientParticle with the specified probability and no particle data.
-     * @since 2.1.0
-     */
-    @AsOf("2.1.0")
-    public AmbientParticle create(float probability) {
-        return AmbientParticle.of(this, probability);
     }
 
     /**

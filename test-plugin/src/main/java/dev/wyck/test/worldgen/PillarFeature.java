@@ -1,5 +1,6 @@
 package dev.wyck.test.worldgen;
 
+import dev.wyck.keys.ResourceKey;
 import dev.wyck.wrapper.worldgen.feature.custom.CustomFeature;
 import dev.wyck.wrapper.worldgen.feature.custom.PlacementContext;
 import org.bukkit.Material;
@@ -12,7 +13,7 @@ import java.util.Random;
 public class PillarFeature extends CustomFeature<PillarFeature.PillarConfig> {
 
     public PillarFeature() {
-        super(PillarConfig::defaults);
+        super(PillarConfig::defaults, ResourceKey.of("test", "pillar_feature"));
     }
 
     @Override

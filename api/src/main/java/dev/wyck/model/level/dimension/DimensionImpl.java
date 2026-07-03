@@ -88,7 +88,7 @@ public final class DimensionImpl implements Dimension {
     }
 
     @Override
-    public ResourceKey getResourceKey() {
+    public ResourceKey resourceKey() {
         return resourceKey;
     }
 
@@ -113,159 +113,63 @@ public final class DimensionImpl implements Dimension {
     }
 
     @Override
-    public double getCoordinateScale() {
+    public double coordinateScale() {
         return coordinateScale;
     }
 
     @Override
-    public int getMinY() {
+    public int minY() {
         return minY;
     }
 
     @Override
-    public int getHeight() {
+    public int height() {
         return height;
     }
 
     @Override
-    public int getLogicalHeight() {
+    public int logicalHeight() {
         return logicalHeight;
     }
 
     @Override
-    public Infiniburn getInfiniburn() {
+    public Infiniburn infiniburn() {
         return infiniburn;
     }
 
     @Override
-    public float getAmbientLight() {
+    public float ambientLight() {
         return ambientLight;
     }
 
     @Override
-    public MonsterSettings getMonsterSettings() {
+    public MonsterSettings monsterSettings() {
         return monsterSettings;
     }
 
     @Override
-    public Skybox getSkybox() {
+    public Skybox skybox() {
         return skybox;
     }
 
     @Override
-    public CardinalLightType getCardinalLightType() {
+    public CardinalLightType cardinalLightType() {
         return cardinalLightType;
     }
 
     @Override
-    public EnvironmentAttributeMap getAttributes() {
+    public EnvironmentAttributeMap attributes() {
         return attributes;
     }
 
     @Override
-    public TimelineSet getTimelines() {
+    public TimelineSet timelines() {
         return timelines;
     }
 
     @Override
-    public Optional<WorldClock> getDefaultClock() {
+    public Optional<WorldClock> defaultClock() {
         return Optional.ofNullable(defaultClock);
-    }
-
-    @Override
-    public Dimension setFixedTime(boolean hasFixedTime) {
-        this.hasFixedTime = hasFixedTime;
-        return this;
-    }
-
-    @Override
-    public Dimension setSkyLight(boolean hasSkyLight) {
-        this.hasSkyLight = hasSkyLight;
-        return this;
-    }
-
-    @Override
-    public Dimension setCeiling(boolean hasCeiling) {
-        this.hasCeiling = hasCeiling;
-        return this;
-    }
-
-    @Override
-    public Dimension setEnderDragonFight(boolean hasEnderDragonFight) {
-        this.hasEnderDragonFight = hasEnderDragonFight;
-        return this;
-    }
-
-    @Override
-    public Dimension setCoordinateScale(double coordinateScale) {
-        this.coordinateScale = coordinateScale;
-        return this;
-    }
-
-    @Override
-    public Dimension setMinY(int minY) {
-        this.minY = minY;
-        return this;
-    }
-
-    @Override
-    public Dimension setHeight(int height) {
-        this.height = height;
-        return this;
-    }
-
-    @Override
-    public Dimension setLogicalHeight(int logicalHeight) {
-        this.logicalHeight = logicalHeight;
-        return this;
-    }
-
-    @Override
-    public Dimension setInfiniburn(Infiniburn infiniburn) {
-        this.infiniburn = infiniburn;
-        return this;
-    }
-
-    @Override
-    public Dimension setAmbientLight(float ambientLight) {
-        this.ambientLight = ambientLight;
-        return this;
-    }
-
-    @Override
-    public Dimension setMonsterSettings(MonsterSettings monsterSettings) {
-        this.monsterSettings = monsterSettings;
-        return this;
-    }
-
-    @Override
-    public Dimension setSkybox(Skybox skybox) {
-        this.skybox = skybox;
-        return this;
-    }
-
-    @Override
-    public Dimension setCardinalLightType(CardinalLightType cardinalLightType) {
-        this.cardinalLightType = cardinalLightType;
-        return this;
-    }
-
-    @Override
-    public Dimension setAttributes(EnvironmentAttributeMap attributes) {
-        this.attributes = attributes;
-        return this;
-    }
-
-    @Override
-    public Dimension setTimelines(TimelineSet timelines) {
-        this.timelines = timelines;
-        return this;
-    }
-
-    @Override
-    public Dimension setDefaultClock(@Nullable WorldClock defaultClock) {
-        this.defaultClock = defaultClock;
-        return this;
     }
 
     @AsOf("2.4.0")
@@ -274,18 +178,18 @@ public final class DimensionImpl implements Dimension {
         return hasFixedTime == other.hasFixedTime()
                 && hasSkyLight == other.hasSkyLight()
                 && hasCeiling == other.hasCeiling()
-                && Double.compare(coordinateScale, other.getCoordinateScale()) == 0
-                && minY == other.getMinY()
-                && height == other.getHeight()
-                && logicalHeight == other.getLogicalHeight()
-                && Float.compare(ambientLight, other.getAmbientLight()) == 0
-                && resourceKey.equals(other.getResourceKey())
-                && infiniburn.equals(other.getInfiniburn())
-                && monsterSettings.equals(other.getMonsterSettings())
-                && skybox == other.getSkybox()
-                && cardinalLightType == other.getCardinalLightType()
-                && attributes.equals(other.getAttributes())
-                && timelines.equals(other.getTimelines());
+                && Double.compare(coordinateScale, other.coordinateScale()) == 0
+                && minY == other.minY()
+                && height == other.height()
+                && logicalHeight == other.logicalHeight()
+                && Float.compare(ambientLight, other.ambientLight()) == 0
+                && resourceKey.equals(other.resourceKey())
+                && infiniburn.equals(other.infiniburn())
+                && monsterSettings.equals(other.monsterSettings())
+                && skybox == other.skybox()
+                && cardinalLightType == other.cardinalLightType()
+                && attributes.equals(other.attributes())
+                && timelines.equals(other.timelines());
     }
 
     @Override
@@ -293,24 +197,4 @@ public final class DimensionImpl implements Dimension {
         return this.resourceKey;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (!(obj instanceof Dimension other)) return false;
-        return isSimilar(other);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(
-                resourceKey, hasFixedTime, hasSkyLight, hasCeiling, coordinateScale,
-                minY, height, logicalHeight, infiniburn, ambientLight, monsterSettings,
-                skybox, cardinalLightType, attributes, timelines
-        );
-    }
-
-    @Override
-    public String toString() {
-        return "CustomDimensionImpl[" + resourceKey + "]";
-    }
 }

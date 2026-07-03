@@ -121,25 +121,25 @@ public record PhonyCustomBiome(
             return this;
         }
 
-        @AsOf("2.5.0")
+        @AsOf("3.0.0")
         public Builder replacement(Material original, Material to) {
             this.blockReplacements.add(new BlockReplacement(original, to));
             return this;
         }
 
-        @AsOf("2.5.0")
+        @AsOf("3.0.0")
         public Builder replacement(BlockReplacement... replacement) {
             Collections.addAll(this.blockReplacements, replacement);
             return this;
         }
 
-        @AsOf("2.5.0")
+        @AsOf("3.0.0")
         public Builder setReplacements(List<BlockReplacement> replacements) {
             this.blockReplacements = replacements;
             return this;
         }
 
-        @AsOf("2.5.0")
+        @AsOf("3.0.0")
         public Builder replacement(List<BlockReplacement> replacement) {
             this.blockReplacements.addAll(replacement);
             return this;

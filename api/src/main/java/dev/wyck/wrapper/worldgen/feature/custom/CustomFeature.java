@@ -1,11 +1,16 @@
 package dev.wyck.wrapper.worldgen.feature.custom;
 
+import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.registry.worldgen.CustomFeatureRegistry;
+import dev.wyck.wrapper.worldgen.feature.AbstractCustomFeature;
+import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.Supplier;
 
@@ -20,13 +25,31 @@ import java.util.function.Supplier;
  */
 @NullMarked
 @AsOf("2.3.0")
-public abstract class CustomFeature<C> {
+public abstract class CustomFeature<C> implements AbstractCustomFeature, Cloneable {
 
     private final Supplier<C> configSupplier;
+    private @Nullable ResourceKey key;
 
+    /**
+     * Creates a new CustomFeature with the given configuration supplier.
+     * @param configSupplier the configuration supplier
+     * @since 2.3.0
+     */
     @AsOf("2.3.0")
     protected CustomFeature(Supplier<C> configSupplier) {
         this.configSupplier = configSupplier;
+    }
+
+    /**
+     * Creates a new CustomFeature with the given configuration supplier and registry key.
+     * @param configSupplier the configuration supplier
+     * @param key the key to register this feature under
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
+    protected CustomFeature(Supplier<C> configSupplier, @Nullable ResourceKey key) {
+        this.configSupplier = configSupplier;
+        this.key = key;
     }
 
     /**
@@ -42,6 +65,14 @@ public abstract class CustomFeature<C> {
     @Contract(value = "null -> fail", pure = false)
     public abstract boolean place(PlacementContext<C> context);
 
+    @Override
+    public ResourceKey key() {
+        return Preconditions.checkNotNull(this.key, "key shouldn't be null at this point");
+    }
+
+    public final @Nullable ResourceKey resourceKey() {
+        return this.key;
+    }
     /**
      * Internal method to get the configuration supplier.
      * @return the configuration supplier
@@ -49,7 +80,7 @@ public abstract class CustomFeature<C> {
      */
     @AsOf("2.3.0")
     @ApiStatus.Internal
-    public Supplier<C> configSupplier() {
+    public final Supplier<C> configSupplier() {
         return this.configSupplier;
     }
 
@@ -60,8 +91,20 @@ public abstract class CustomFeature<C> {
      */
     @AsOf("2.3.0")
     @ApiStatus.Internal
-    public C newConfig() {
+    public final C newConfig() {
         return this.configSupplier.get();
+    }
+
+    /**
+     * Registers this feature into the FEATURE registry under the key of this feature.
+     * @return this feature
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
+    public final CustomFeature<C> register() {
+        Preconditions.checkNotNull(this.key, "key must not be null when registering");
+        CustomFeatureRegistry.registry().register(this.key, this);
+        return this;
     }
 
     /**
@@ -72,9 +115,11 @@ public abstract class CustomFeature<C> {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    public CustomFeature<C> register(ResourceKey key) {
-        CustomFeatureRegistry.registry().register(key, this);
-        return this;
+    public final CustomFeature<C> registerAs(ResourceKey key) {
+        CustomFeature<C> cloned = this.clone();
+        cloned.key = key;
+        CustomFeatureRegistry.registry().register(key, cloned);
+        return cloned;
     }
 
     /**
@@ -87,6 +132,22 @@ public abstract class CustomFeature<C> {
      */
     @AsOf("2.3.0")
     public static <C> CustomFeature<C> register(ResourceKey key, CustomFeature<C> feature) {
-        return feature.register(key);
+        return feature.registerAs(key);
+    }
+
+    /**
+     * Clones this feature.
+     * @return a clone of this feature
+     * @since 3.0.0
+     */
+    @Override
+    @AsOf("3.0.0")
+    @SuppressWarnings({"unchecked", "CloneDoesntDeclareCloneNotSupportedException"})
+    protected CustomFeature<C> clone() {
+        try {
+            return (CustomFeature<C>) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError(e);
+        }
     }
 }

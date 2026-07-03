@@ -11,7 +11,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 /**
- * Wraps a {@code Infiniburn} by referencing a tag (blocks that can burn infinitely in this dimension).
+ * Wraps an {@code Infiniburn} by referencing a tag (blocks that can burn infinitely in this dimension).
  *
  * @since 2.4.0
  * @version 2.4.0

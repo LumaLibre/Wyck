@@ -82,9 +82,9 @@ public interface WyckRegistry extends Wrapper {
      * @param key the key of the object to retrieve
      * @return the object
      * @param <T> the type of the object
-     * @since 2.5.0
+     * @since 3.0.0
      */
-    @AsOf("2.5.0")
+    @AsOf("3.0.0")
     <T> @Nullable T retrieve(ResourceKey key);
 
     /**

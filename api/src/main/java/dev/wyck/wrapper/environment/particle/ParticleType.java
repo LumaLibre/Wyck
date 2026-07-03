@@ -9,7 +9,7 @@ import org.jspecify.annotations.NullMarked;
  * Impl module wraps the real thing.
  *
  * @since 2.0.0
- * @version 2.5.0
+ * @version 3.0.0
  * @author Jsinco
  */
 @NullMarked

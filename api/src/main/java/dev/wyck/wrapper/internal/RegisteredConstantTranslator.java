@@ -18,28 +18,28 @@ import java.util.function.Function;
  * Translates wrapper constants to and from the entries of a Minecraft registry,
  * the registry counterpart to {@link KeyedEnumTranslator}.
  *
- * @since 2.5.0
- * @version 2.5.0
+ * @since 3.0.0
+ * @version 3.0.0
  * @author Jsinco
  */
 @NullMarked
-@AsOf("2.5.0")
+@AsOf("3.0.0")
 @ApiStatus.Internal
 public interface RegisteredConstantTranslator<W> {
 
-    @AsOf("2.5.0")
+    @AsOf("3.0.0")
     <N> N toNms(W constant);
 
-    @AsOf("2.5.0")
+    @AsOf("3.0.0")
     <N> W fromNms(N nmsConstant);
     
 
-    @AsOf("2.5.0")
+    @AsOf("3.0.0")
     static <W> RegisteredConstantTranslator<W> of(String name, Function<W, ResourceKey> keyExtractor, W[] values) {
         return of(WyckRegistry.lazy(ResourceKey.minecraft(name)), keyExtractor, values);
     }
 
-    @AsOf("2.5.0")
+    @AsOf("3.0.0")
     static <W> RegisteredConstantTranslator<W> of(RegistryId registry, Function<W, ResourceKey> keyExtractor, W[] values) {
         return of(WyckRegistry.lazy(registry), keyExtractor, values);
     }
@@ -51,9 +51,9 @@ public interface RegisteredConstantTranslator<W> {
      * @param passedRegistry the registry to resolve against
      * @param keyExtractor extracts the registry key from a wrapper instance
      * @param values all values of the wrapper enum
-     * @since 2.5.0
+     * @since 3.0.0
      */
-    @AsOf("2.5.0")
+    @AsOf("3.0.0")
     @Contract(value = "_, _, _ -> new", pure = true)
     static <W> RegisteredConstantTranslator<W> of(Lazy<WyckRegistry> passedRegistry, Function<W, ResourceKey> keyExtractor, W[] values) {
         return new RegisteredConstantTranslator<>() {

@@ -25,12 +25,12 @@ inform the server what mobs to spawn, how many, how likely, and how many concurr
             filename: "ExamplePlugin.java",
             lang: "java",
             code:
-`import biome.dev.wyck.CustomBiome;
-import dev.wyck.registry.ResourceKey;
-import wrapper.dev.wyck.BiomeSettings;
-import entity.wrapper.dev.wyck.BiomeSpawner;
-import entity.wrapper.dev.wyck.MobCategory;
-import data.entity.wrapper.dev.wyck.NaturalSpawner;
+`import dev.wyck.model.biome.CustomBiome;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.wrapper.BiomeSettings;
+import dev.wyck.wrapper.entity.BiomeSpawner;
+import dev.wyck.wrapper.entity.MobCategory;
+import dev.wyck.wrapper.entity.data.NaturalSpawner;
 import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -39,8 +39,8 @@ public class ExamplePlugin extends JavaPlugin {
     public void onEnable() {
         // A biome that will only ever spawn large quantities of pigs.
         BiomeSpawner spawner = BiomeSpawner.builder()
-            .setCreatureGenerationProbability(0.1f)
-            .addSpawner(MobCategory.CREATURE, 100, NaturalSpawner.of(EntityType.PIG, 4, 12))
+            .creatureGenerationProbability(0.1f)
+            .spawner(MobCategory.CREATURE, 100, NaturalSpawner.of(EntityType.PIG, 4, 12))
             .build();
 
         CustomBiome.builder()
@@ -48,7 +48,7 @@ public class ExamplePlugin extends JavaPlugin {
             .settings(BiomeSettings.defaultSettings())
             .waterColor("#F5F2EB")
             .grassColor("#DBE9EC")
-            .setSpawner(spawner)
+            .biomeSpawner(spawner)
             .register();
     }
 }`,
@@ -58,12 +58,12 @@ public class ExamplePlugin extends JavaPlugin {
             filename: "ExamplePlugin.java",
             lang: "java",
             code:
-`import biome.dev.wyck.CustomBiome;
-import dev.wyck.registry.ResourceKey;
-import wrapper.dev.wyck.BiomeSettings;
-import entity.wrapper.dev.wyck.BiomeSpawner;
-import entity.wrapper.dev.wyck.MobCategory;
-import data.entity.wrapper.dev.wyck.NaturalSpawner;
+`import dev.wyck.model.biome.CustomBiome;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.wrapper.BiomeSettings;
+import dev.wyck.wrapper.entity.BiomeSpawner;
+import dev.wyck.wrapper.entity.MobCategory;
+import dev.wyck.wrapper.entity.data.NaturalSpawner;
 import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -78,7 +78,7 @@ public class ExamplePlugin extends JavaPlugin {
             .settings(BiomeSettings.defaultSettings())
             .waterColor("#F5F2EB")
             .grassColor("#DBE9EC")
-            .setSpawner(spawner)
+            .biomeSpawner(spawner)
             .register();
     }
 }`,
@@ -94,12 +94,13 @@ Setting <SourceLink path="wrapper/entity/data/SpawnCost.java" line={13}>charge</
 <CodeBlock
     lang="java"
     filename="ExamplePlugin.java"
-    code={`import biome.dev.wyck.CustomBiome;
-import dev.wyck.registry.ResourceKey;
-import wrapper.dev.wyck.BiomeSettings;
-import entity.wrapper.dev.wyck.BiomeSpawner;
-import entity.wrapper.dev.wyck.MobCategory;
-import data.entity.wrapper.dev.wyck.NaturalSpawner;
+    code={`import dev.wyck.model.biome.CustomBiome;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.wrapper.BiomeSettings;
+import dev.wyck.wrapper.entity.BiomeSpawner;
+import dev.wyck.wrapper.entity.MobCategory;
+import dev.wyck.wrapper.entity.data.NaturalSpawner;
+import dev.wyck.wrapper.entity.data.SpawnCost;
 import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -107,11 +108,11 @@ public class ExamplePlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         BiomeSpawner spawner = BiomeSpawner.builder()
-            .setCreatureGenerationProbability(0.1f)
-            .addSpawner(MobCategory.CREATURE, 100, NaturalSpawner.of(EntityType.PIG, 4, 12))
-            .addSpawner(MobCategory.CREATURE, 100, NaturalSpawner.of(EntityType.COW, 4, 12))
+            .creatureGenerationProbability(0.1f)
+            .spawner(MobCategory.CREATURE, 100, NaturalSpawner.of(EntityType.PIG, 4, 12))
+            .spawner(MobCategory.CREATURE, 100, NaturalSpawner.of(EntityType.COW, 4, 12))
             // Allows cows to spawn faster in this biome.
-            .addMobSpawnCost(EntityType.COW, SpawnCost.of(25, 100))
+            .spawnCost(EntityType.COW, SpawnCost.of(25, 100))
             .build();
 
         CustomBiome.builder()
@@ -119,7 +120,7 @@ public class ExamplePlugin extends JavaPlugin {
             .settings(BiomeSettings.defaultSettings())
             .waterColor("#F5F2EB")
             .grassColor("#DBE9EC")
-            .setSpawner(spawner)
+            .biomeSpawner(spawner)
             .register();
     }
 }`}

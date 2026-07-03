@@ -19,7 +19,7 @@ position relative to the world.
 <CodeBlock
     lang="java"
     filename="ExamplePlugin.java"
-    code={`import valueproviders.worldgen.wrapper.dev.wyck.VerticalAnchor;
+    code={`import dev.wyck.wrapper.worldgen.valueproviders.VerticalAnchor;
 
     VerticalAnchor.absolute(64); // exactly Y=64
     VerticalAnchor.aboveBottom(8); // 8 blocks above the world's minimum height
@@ -34,7 +34,7 @@ either constant or sampled from a distribution.
 <CodeBlock
     lang="java"
     filename="ExamplePlugin.java"
-    code={`import valueproviders.worldgen.wrapper.dev.wyck.IntProvider;
+    code={`import dev.wyck.wrapper.worldgen.valueproviders.IntProvider;
 
     IntProvider.constant(4); // always 4
     IntProvider.uniform(2, 8); // evenly between 2 and 8
@@ -49,7 +49,7 @@ equivalent, used for radii, scales, and probabilities inside carvers and feature
 <CodeBlock
     lang="java"
     filename="ExamplePlugin.java"
-    code={`import valueproviders.worldgen.wrapper.dev.wyck.FloatProvider;
+    code={`import dev.wyck.wrapper.worldgen.valueproviders.FloatProvider;
 
     FloatProvider.constant(3.0f); // always 3.0
     FloatProvider.uniform(0.1f, 0.9f); // evenly between 0.1 and 0.9
@@ -64,8 +64,8 @@ position by combining vertical anchors.
 <CodeBlock
     lang="java"
     filename="ExamplePlugin.java"
-    code={`import valueproviders.worldgen.wrapper.dev.wyck.HeightProvider;
-import valueproviders.worldgen.wrapper.dev.wyck.VerticalAnchor;
+    code={`import dev.wyck.wrapper.worldgen.valueproviders.HeightProvider;
+import dev.wyck.wrapper.worldgen.valueproviders.VerticalAnchor;
 
 HeightProvider.uniform(VerticalAnchor.aboveBottom(8), VerticalAnchor.absolute(180));
 HeightProvider.trapezoid(VerticalAnchor.absolute(0), VerticalAnchor.absolute(128), 0);`}

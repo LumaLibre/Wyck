@@ -189,30 +189,23 @@ public class BiomeRegistryImpl implements BiomeRegistry {
             net.minecraft.world.level.biome.MobSpawnSettings mobSettings = biome.getMobSettings();
             net.minecraft.world.level.biome.BiomeSpecialEffects specialEffects = biome.getSpecialEffects();
 
-            builder.waterColor(FriendlyColorUtil.toHex(specialEffects.waterColor()));
-            specialEffects.foliageColorOverride().ifPresent(c -> builder.foliageColor(FriendlyColorUtil.toHex(c)));
-            specialEffects.dryFoliageColorOverride().ifPresent(c -> builder.dryFoliageColor(FriendlyColorUtil.toHex(c)));
-            specialEffects.grassColorOverride().ifPresent(c -> builder.grassColor(FriendlyColorUtil.toHex(c)));
-            builder.grassColorModifier(GrassColorModifier.TRANSLATOR.fromNms(specialEffects.grassColorModifier()));
 
-
-            builder.settings(BiomeSettings.builder()
-                .hasPrecipitation(climate.hasPrecipitation())
-                .temperature(climate.temperature())
-                .downfall(climate.downfall())
-                .modifier(TemperatureModifier.TRANSLATOR.fromNms(climate.temperatureModifier()))
+            builder.specialEffects(BiomeSpecialEffects.builder()
+                .waterColor(specialEffects.waterColor())
+                .foliageColorOverride(specialEffects.foliageColorOverride().orElse(null))
+                .dryFoliageColorOverride(specialEffects.dryFoliageColorOverride().orElse(null))
+                .grassColorOverride(specialEffects.grassColorOverride().orElse(null))
+                .grassColorModifier(GrassColorModifier.TRANSLATOR.fromNms(specialEffects.grassColorModifier()))
                 .build());
 
-
-            if (attributeMap.contains(EnvironmentAttributes.FOG_COLOR)) {
-                builder.fogColor(FriendlyColorUtil.toHex(attributeMap.applyModifier(EnvironmentAttributes.FOG_COLOR, 0)));
-            }
-            if (attributeMap.contains(EnvironmentAttributes.SKY_COLOR)) {
-                builder.skyColor(FriendlyColorUtil.toHex(attributeMap.applyModifier(EnvironmentAttributes.SKY_COLOR, 0)));
-            }
-            if (attributeMap.contains(EnvironmentAttributes.WATER_FOG_COLOR)) {
-                builder.waterFogColor(FriendlyColorUtil.toHex(attributeMap.applyModifier(EnvironmentAttributes.WATER_FOG_COLOR, 0)));
-            }
+            builder.climateSettings(
+                ClimateSettings.builder()
+                    .hasPrecipitation(climate.hasPrecipitation())
+                    .temperature(climate.temperature())
+                    .downfall(climate.downfall())
+                    .temperatureModifier(TemperatureModifier.TRANSLATOR.fromNms(climate.temperatureModifier()))
+                    .build()
+            );
 
             // TODO: Reverse AmbientParticles back to wrappers
             // TODO: Reverse attributes back to wrappers

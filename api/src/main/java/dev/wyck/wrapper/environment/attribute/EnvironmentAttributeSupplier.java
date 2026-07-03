@@ -67,10 +67,10 @@ public sealed class EnvironmentAttributeSupplier<V> implements Keyed permits Fri
     /**
      * Gets the key of the attribute.
      * @return the key of the attribute
-     * @since 2.5.0
+     * @since 3.0.0
      */
     @Override
-    @AsOf("2.5.0")
+    @AsOf("3.0.0")
     public ResourceKey key() {
         return this.key;
     }

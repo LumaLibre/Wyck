@@ -21,7 +21,7 @@ A fluent builder for `BiomeSettings`. Each setter returns the builder for chaini
 * <SourceLink path="wrapper/BiomeSettings.java" line={89}>scale(float)</SourceLink>: Sets the biome scale. Default `0.2`.
 * <SourceLink path="wrapper/BiomeSettings.java" line={102}>temperature(float)</SourceLink>: Sets the biome temperature. Default `0.5`.
 * <SourceLink path="wrapper/BiomeSettings.java" line={115}>downfall(float)</SourceLink>: Sets the biome downfall. Default `0.5`.
-* <SourceLink path="wrapper/BiomeSettings.java" line={128}>modifier(BiomeTempModifier)</SourceLink>: Sets the temperature modifier. Default `BiomeTempModifier.NONE`.
+* <SourceLink path="wrapper/BiomeSettings.java" line={128}>modifier(TemperatureModifier)</SourceLink>: Sets the temperature modifier. Default `TemperatureModifier.NONE`.
 * <SourceLink path="wrapper/BiomeSettings.java" line={141}>hasPrecipitation(boolean)</SourceLink>: Sets whether the biome has precipitation. Default `true`.
 * <SourceLink path="wrapper/BiomeSettings.java" line={153}>build()</SourceLink>: Builds and returns a new `BiomeSettings` from the configured values.
 
@@ -29,8 +29,8 @@ A fluent builder for `BiomeSettings`. Each setter returns the builder for chaini
 <CodeBlock
     lang="java"
     filename="ExamplePlugin.java"
-    code={`import wrapper.dev.wyck.BiomeSettings;
-import environment.wrapper.dev.wyck.BiomeTempModifier;
+    code={`import dev.wyck.wrapper.BiomeSettings;
+import dev.wyck.wrapper.biome.TemperatureModifier;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ExamplePlugin extends JavaPlugin {
@@ -46,7 +46,7 @@ public class ExamplePlugin extends JavaPlugin {
             .scale(0.25F)
             .temperature(0.8F)
             .downfall(0.4F)
-            .modifier(BiomeTempModifier.FROZEN)
+            .modifier(TemperatureModifier.FROZEN)
             .hasPrecipitation(true)
             .build();
     }

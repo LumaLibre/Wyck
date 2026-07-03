@@ -119,6 +119,7 @@ public interface PlacementContext<C> {
      * @return whether the block was destroyed
      * @since 2.3.0
      */
+    @AsOf("2.3.0")
     default boolean destroyBlock(BlockVector position, boolean dropResources) {
         return destroyBlock(position, dropResources, null);
     }
@@ -130,6 +131,7 @@ public interface PlacementContext<C> {
      * @return whether the entity was added successfully
      * @since 2.3.0
      */
+    @AsOf("2.3.0")
     boolean addFreshEntity(Entity entity, org.bukkit.event.entity.CreatureSpawnEvent.@Nullable SpawnReason reason);
 
     /**
@@ -138,6 +140,7 @@ public interface PlacementContext<C> {
      * @return whether the entity was added successfully
      * @since 2.3.0
      */
+    @AsOf("2.3.0")
     default boolean addFreshEntity(Entity entity) {
         return addFreshEntity(entity, null);
     }

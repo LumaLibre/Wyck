@@ -18,8 +18,8 @@ Referencing existing nodes can be done by keys or by convenience methods.
     lang="java"
     filename="Examples.java"
     code={
-`import keys.dev.wyck.ResourceKey;
-import noise.level.wrapper.dev.wyck.Noise;
+`import dev.wyck.keys.ResourceKey;
+import dev.wyck.wrapper.level.noise.Noise;
 
 Noise overworld = Noise.overworld();
 Noise nether = Noise.nether();
@@ -49,13 +49,13 @@ without registering anything.
     lang="java"
     filename="ExamplePlugin.java"
     code={
-`import noise.level.wrapper.dev.wyck.NoiseRouter;
-import noise.level.wrapper.dev.wyck.Noise;
-import function.noise.level.wrapper.dev.wyck.DensityFunction;
-import function.noise.level.wrapper.dev.wyck.DensityFunctions;
-import settings.noise.level.wrapper.dev.wyck.NoiseSettings;
-import surface.worldgen.wrapper.dev.wyck.SurfaceCondition;
-import surface.worldgen.wrapper.dev.wyck.SurfaceRule;
+`import dev.wyck.wrapper.level.noise.NoiseRouter;
+import dev.wyck.wrapper.level.noise.Noise;
+import dev.wyck.wrapper.level.noise.function.DensityFunction;
+import dev.wyck.wrapper.level.noise.function.DensityFunctions;
+import dev.wyck.wrapper.level.noise.settings.NoiseSettings;
+import dev.wyck.wrapper.worldgen.surface.SurfaceCondition;
+import dev.wyck.wrapper.worldgen.surface.SurfaceRule;
 import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
 

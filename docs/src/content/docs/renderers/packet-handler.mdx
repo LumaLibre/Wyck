@@ -14,19 +14,19 @@ import SourceLink from "@/components/SourceLink.astro";
 A <SourceLink path="renderer/packet/data/PhonyCustomBiome.java">PhonyCustomBiome</SourceLink>
 is a wrapper for <SourceLink path="biome/CustomBiome.java" line={90}>CustomBiome</SourceLink>s that is required for using the <SourceLink path="renderer/packet/PacketHandler.java">PacketHandler</SourceLink> interface.
 
-* <SourceLink path="renderer/packet/data/PhonyCustomBiome.java" line={90}>setConditional</SourceLink>: Set a condition for when this biome should be shown to a player. This is useful for showing different biomes to different players in the same area.
-* <SourceLink path="renderer/packet/data/PhonyCustomBiome.java" line={96}>setBiomeCondition</SourceLink>: Superset of `setConditional`, this condition also takes in the biome that is being rendered, allowing you to show different biomes based on the original biome of the chunk.
-* <SourceLink path="renderer/packet/data/PhonyCustomBiome.java" line={102}>setPriority</SourceLink>: Set the priority of this phony biome. This is useful for when you have multiple phony biomes that could be shown in the same area and want to control which one is shown. Biomes with higher priority will be chosen over biomes with lower priority. The default priority is `NORMAL`.
+* <SourceLink path="renderer/packet/data/PhonyCustomBiome.java" line={90}>conditional</SourceLink>: Set a condition for when this biome should be shown to a player. This is useful for showing different biomes to different players in the same area.
+* <SourceLink path="renderer/packet/data/PhonyCustomBiome.java" line={96}>biomeCondition</SourceLink>: Superset of `conditional`, this condition also takes in the biome that is being rendered, allowing you to show different biomes based on the original biome of the chunk.
+* <SourceLink path="renderer/packet/data/PhonyCustomBiome.java" line={102}>priority</SourceLink>: Set the priority of this phony biome. This is useful for when you have multiple phony biomes that could be shown in the same area and want to control which one is shown. Biomes with higher priority will be chosen over biomes with lower priority. The default priority is `NORMAL`.
 
 ### Example Usage
 <CodeBlock
     lang="java"
     filename="ExamplePlugin.java"
-    code={`import biome.dev.wyck.CustomBiome;
-import dev.wyck.registry.ResourceKey;
-import packet.renderer.dev.wyck.PacketHandler;
-import data.packet.renderer.dev.wyck.PhonyCustomBiome;
-import wrapper.dev.wyck.BiomeSettings;
+    code={`import dev.wyck.model.biome.CustomBiome;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.renderer.packet.PacketHandler;
+import dev.wyck.renderer.packet.data.PhonyCustomBiome;
+import dev.wyck.wrapper.BiomeSettings;
 import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -45,13 +45,14 @@ public class ExamplePlugin extends JavaPlugin {
             .replace(Material.GRASS_BLOCK, Material.DIAMOND_BLOCK)
             .register();
 
-            PhonyCustomBiome phonyCustomBiome = customBiome.asPhony()
-                .setConditional(((player, chunkLocation) -> {
+            PhonyCustomBiome phonyCustomBiome = PhonyCustomBiome.builder()
+                .biome(customBiome)
+                .conditional(((player, chunkLocation) -> {
                     // Only show this biome to Jsinco
                     return player.getName().equals("Jsinco");
                 }))
                 // Set the priority of this phony biome, defaults to NORMAL
-                .setPriority(PacketHandler.Priority.NORMAL)
+                .priority(PacketHandler.Priority.NORMAL)
                 .build();
     }
 }
@@ -89,9 +90,9 @@ Wyck supports three different injectors:
 <CodeBlock
     lang="java"
     filename="ExamplePlugin.java"
-    code={`import biome.dev.wyck.CustomBiome;
-import packet.renderer.dev.wyck.PacketHandler;
-import data.packet.renderer.dev.wyck.PhonyCustomBiome;
+    code={`import dev.wyck.model.biome.CustomBiome;
+import dev.wyck.renderer.packet.PacketHandler;
+import dev.wyck.renderer.packet.data.PhonyCustomBiome;
 import net.kyori.adventure.key.Key;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -104,8 +105,9 @@ public class ExamplePlugin extends JavaPlugin {
         CustomBiome customBiome = ...;
         Key plains = Key.key("minecraft:plains");
 
-        PhonyCustomBiome phonyCustomBiome = customBiome.asPhony()
-            .setBiomeCondition(((player, snapshot) -> {
+        PhonyCustomBiome phonyCustomBiome = PhonyCustomBiome.builder()
+            .biome(customBiome)
+            .biomeCondition(((player, snapshot) -> {
                 // Replace all 'plains' biomes with this custom biome
                 return snapshot.centerBiome().key().equals(plains);
             }))

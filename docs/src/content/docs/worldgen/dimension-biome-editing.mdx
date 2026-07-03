@@ -33,12 +33,12 @@ and the server will always be able to load the Minecraft world without your biom
     lang="java"
     filename="ExamplePlugin.java"
     code={
-`import biome.dev.wyck.CustomBiome;
-import dev.wyck.registry.ResourceKey;
-import dev.wyck.registry.dimension.LevelStemEditor;
-import worldgen.wrapper.dev.wyck.BiomeGenerationSettings;
-import worldgen.wrapper.dev.wyck.GenerationStep;
-import placement.worldgen.wrapper.dev.wyck.PlacedFeatures;
+`import dev.wyck.model.biome.CustomBiome;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.registry.level.LevelStemEditor;
+import dev.wyck.wrapper.worldgen.BiomeGenerationSettings;
+import dev.wyck.wrapper.worldgen.GenerationStep;
+import dev.wyck.wrapper.worldgen.placement.PlacedFeatures;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ExamplePlugin extends JavaPlugin {
@@ -56,7 +56,7 @@ public class ExamplePlugin extends JavaPlugin {
             .waterColor("#00FFD0")
             .grassColor("#D1D13A")
             .foliageColor("#FF6A00")
-            .setGenerationSettings(generation)
+            .generationSettings(generation)
             .register();
 
         LevelStemEditor dimensionEditor = LevelStemEditor.create();
@@ -86,13 +86,13 @@ If you want Wyck to mimic a normal datapack or you anticipate and *want* your bi
     code={
 `import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
-import biome.dev.wyck.CustomBiome;
-import dev.wyck.registry.ResourceKey;
-import bootstrap.registry.dev.wyck.BootstrapBiomeRegistry;
-import bootstrap.registry.dev.wyck.Composer;
-import worldgen.wrapper.dev.wyck.BiomeGenerationSettings;
-import worldgen.wrapper.dev.wyck.GenerationStep;
-import placement.worldgen.wrapper.dev.wyck.PlacedFeatures;
+import dev.wyck.model.biome.CustomBiome;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.registry.bootstrap.BootstrapBiomeRegistry;
+import dev.wyck.registry.bootstrap.Composer;
+import dev.wyck.wrapper.worldgen.BiomeGenerationSettings;
+import dev.wyck.wrapper.worldgen.GenerationStep;
+import dev.wyck.wrapper.worldgen.placement.PlacedFeatures;
 
 public class ExampleBootstrapper implements PluginBootstrap {
     @Override
@@ -112,7 +112,7 @@ public class ExampleBootstrapper implements PluginBootstrap {
                 .waterColor("#00FFD0")
                 .grassColor("#D1D13A")
                 .foliageColor("#FF6A00")
-                .setGenerationSettings(generation)
+                .generationSettings(generation)
                 .build()
         );
 

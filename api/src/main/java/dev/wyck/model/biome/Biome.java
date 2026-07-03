@@ -5,21 +5,14 @@ import dev.wyck.annotations.AsOf;
 import dev.wyck.model.biome.impl.BiomeImpl;
 import dev.wyck.registry.BiomeRegistry;
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.wrapper.BiomeSettings;
 import dev.wyck.wrapper.biome.BiomeSpecialEffects;
 import dev.wyck.wrapper.biome.ClimateSettings;
 import dev.wyck.wrapper.entity.BiomeSpawner;
-import dev.wyck.wrapper.environment.GrassColorModifier;
 import dev.wyck.wrapper.environment.attribute.EnvironmentAttributeMap;
 import dev.wyck.wrapper.environment.attribute.EnvironmentAttributeSupplier;
-import dev.wyck.wrapper.environment.attribute.EnvironmentAttributes;
 import dev.wyck.wrapper.environment.attribute.FriendlyColorSupplier;
-import dev.wyck.wrapper.environment.particle.ParticleCatalog;
-import dev.wyck.wrapper.environment.particle.ParticleData;
-import dev.wyck.wrapper.environment.particle.ParticleTypes;
 import dev.wyck.wrapper.worldgen.BiomeGenerationSettings;
 import net.kyori.adventure.key.Keyed;
-import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -27,7 +20,7 @@ import org.jspecify.annotations.Nullable;
  * Represents an abstract biome in Minecraft.
  *
  * @since 2.3.0
- * @version 2.5.0
+ * @version 3.0.0
  * @author Jsinco
  */
 @NullMarked
@@ -37,41 +30,41 @@ public interface Biome extends Keyed {
     /**
      * The key associated with this biome.
      * @return the key of this biome.
-     * @since 2.5.0
+     * @since 3.0.0
      */
-    @AsOf("2.5.0")
+    @AsOf("3.0.0")
     ResourceKey resourceKey();
 
     /**
      * Climate settings associated with this biome.
      * @return the climate settings associated with this biome.
-     * @since 2.5.0
+     * @since 3.0.0
      */
-    @AsOf("2.5.0")
+    @AsOf("3.0.0")
     ClimateSettings climateSettings();
 
     /**
      * Sets new climate settings for this biome.
      * @param climateSettings the new climate settings to set for this biome.
-     * @since 2.5.0
+     * @since 3.0.0
      */
-    @AsOf("2.5.0")
+    @AsOf("3.0.0")
     void climateSettings(ClimateSettings climateSettings);
 
     /**
      * Various biome-specific visuals as they appear in vanilla.
      * @return the biome special effects associated with this biome.
-     * @since 2.5.0
+     * @since 3.0.0
      */
-    @AsOf("2.5.0")
+    @AsOf("3.0.0")
     BiomeSpecialEffects specialEffects();
 
     /**
      * Sets new special effects for this biome.
      * @param specialEffects the new special effects to set for this biome.
-     * @since 2.5.0
+     * @since 3.0.0
      */
-    @AsOf("2.5.0")
+    @AsOf("3.0.0")
     void specialEffects(BiomeSpecialEffects specialEffects);
 
     /**
@@ -144,9 +137,9 @@ public interface Biome extends Keyed {
     /**
      * Registers this biome in the biome registry.
      * @return the registered biome
-     * @since 2.5.0
+     * @since 3.0.0
      */
-    @AsOf("2.5.0")
+    @AsOf("3.0.0")
     default Biome register() {
         BiomeRegistry.registry().register(this);
         return this;
@@ -166,9 +159,9 @@ public interface Biome extends Keyed {
     /**
      * Converts this back into a builder.
      * @return a builder with the same properties as this biome.
-     * @since 2.5.0
+     * @since 3.0.0
      */
-    @AsOf("2.5.0")
+    @AsOf("3.0.0")
     default Builder toBuilder() {
         return new Builder(this);
     }
@@ -177,22 +170,11 @@ public interface Biome extends Keyed {
      * Gets a reference to a biome from the biome registry.
      * @param resourceKey the ResourceKey of the biome to get a reference to
      * @return a reference to the biome with the given ResourceKey
-     * @since 2.5.0
+     * @since 3.0.0
      */
-    @AsOf("2.5.0")
+    @AsOf("3.0.0")
     static Biome reference(ResourceKey resourceKey) {
-        return BiomeRegistry.registry().getBiome(resourceKey);
-    }
-
-    /**
-     * Creates or references new biome with the given ResourceKey.
-     * @param resourceKey the ResourceKey of the biome to create
-     * @return a new biome with the given ResourceKey
-     * @since 2.5.0
-     */
-    @AsOf("2.5.0")
-    static Biome of(ResourceKey resourceKey) {
-        return builder(resourceKey).build();
+        return builder().resourceKey(resourceKey).build();
     }
 
     /**
@@ -231,9 +213,6 @@ public interface Biome extends Keyed {
         private @Nullable BiomeSpawner biomeSpawner = null;
         private @Nullable BiomeGenerationSettings generationSettings = null;
 
-        @ApiStatus.Obsolete(since = "2.5.0")
-        private ParticleCatalog.@Nullable Builder friendly$ParticleCatalog;
-
         @AsOf("2.3.0")
         public Builder() {}
 
@@ -263,9 +242,9 @@ public interface Biome extends Keyed {
          * Sets the climate settings of the biome.
          * @param climateSettings the climate settings of the biome
          * @return this builder
-         * @since 2.5.0
+         * @since 3.0.0
          */
-        @AsOf("2.5.0")
+        @AsOf("3.0.0")
         public Builder climateSettings(ClimateSettings climateSettings) {
             this.climateSettings = climateSettings;
             return this;
@@ -275,9 +254,9 @@ public interface Biome extends Keyed {
          * Sets the special effects of the biome.
          * @param specialEffects the special effects of the biome
          * @return this builder
-         * @since 2.5.0
+         * @since 3.0.0
          */
-        @AsOf("2.5.0")
+        @AsOf("3.0.0")
         public Builder specialEffects(BiomeSpecialEffects specialEffects) {
             this.specialEffects = specialEffects;
             return this;
@@ -287,9 +266,9 @@ public interface Biome extends Keyed {
          * Sets the environment attributes of the biome.
          * @param attributeMap the environment attributes of the biome
          * @return this builder
-         * @since 2.5.0
+         * @since 3.0.0
          */
-        @AsOf("2.5.0")
+        @AsOf("3.0.0")
         public Builder attributes(EnvironmentAttributeMap attributeMap) {
             this.attributeMap = attributeMap;
             return this;
@@ -319,83 +298,21 @@ public interface Biome extends Keyed {
 
         // Friendly builder methods
 
-        @AsOf("2.5.0")
-        public Builder waterColor(String waterColor) {
-            this.specialEffects = this.specialEffects.toBuilder().waterColor(waterColor).build();
-            return this;
-        }
-
-        @AsOf("2.5.0")
-        public Builder foliageColor(@Nullable String foliageColor) {
-            this.specialEffects = this.specialEffects.toBuilder().foliageColorOverride(foliageColor).build();
-            return this;
-        }
-
-        @AsOf("2.5.0")
-        public Builder dryFoliageColor(@Nullable String dryFoliageColor) {
-            this.specialEffects = this.specialEffects.toBuilder().dryFoliageColorOverride(dryFoliageColor).build();
-            return this;
-        }
-
-        @AsOf("2.5.0")
-        public Builder grassColor(@Nullable String grassColor) {
-            this.specialEffects = this.specialEffects.toBuilder().grassColorOverride(grassColor).build();
-            return this;
-        }
-
-        @AsOf("2.5.0")
-        public Builder grassColorModifier(GrassColorModifier grassColorModifier) {
-            this.specialEffects = this.specialEffects.toBuilder().grassColorModifier(grassColorModifier).build();
-            return this;
-        }
-
-        @AsOf("2.5.0")
-        public Builder waterFogColor(@Nullable String waterFogColor) {
-            this.attribute(EnvironmentAttributes.WATER_FOG_COLOR, waterFogColor);
-            return this;
-        }
-
-        @AsOf("2.5.0")
-        public Builder fogColor(@Nullable String fogColor) {
-            this.attribute(EnvironmentAttributes.FOG_COLOR, fogColor);
-            return this;
-        }
-
-        @AsOf("2.5.0")
-        public Builder skyColor(@Nullable String skyColor) {
-            this.attribute(EnvironmentAttributes.SKY_COLOR, skyColor);
-            return this;
-        }
-
-        @AsOf("2.5.0")
-        public Builder particle(ParticleTypes type, float probability, @Nullable ParticleData data) {
-            if (this.friendly$ParticleCatalog == null) {
-                this.friendly$ParticleCatalog = ParticleCatalog.builder();
-            }
-            this.friendly$ParticleCatalog.particle(type, probability, data);
-            return this;
-        }
-
-        @AsOf("2.5.0")
-        public Builder particle(ParticleTypes type, float probability) {
-            return this.particle(type, probability, null);
-        }
-
-        @AsOf("2.5.0")
-        public Builder settings(BiomeSettings settings) {
-            this.climateSettings = ClimateSettings.of(settings.hasPrecipitation(), settings.temperature(), settings.modifier(), settings.downfall());
-            return this;
-        }
-
-        @AsOf("2.5.0")
+        @AsOf("3.0.0")
         public <V> Builder attribute(EnvironmentAttributeSupplier<V> attribute, @Nullable V value) {
             this.attributeMap = this.attributeMap.with(attribute, value);
             return this;
         }
 
-        @AsOf("2.5.0")
+        @AsOf("3.0.0")
         public Builder attribute(FriendlyColorSupplier attribute, @Nullable String hex) {
             this.attributeMap = this.attributeMap.with(attribute, hex);
+            return this;
+        }
+
+        @AsOf("3.0.0")
+        public Builder spawner(BiomeSpawner spawner) {
+            this.biomeSpawner = spawner;
             return this;
         }
 
@@ -412,10 +329,6 @@ public interface Biome extends Keyed {
             Preconditions.checkNotNull(specialEffects, "specialEffects cannot be null");
             Preconditions.checkNotNull(attributeMap, "attributeMap cannot be null");
 
-            if (this.friendly$ParticleCatalog != null) {
-                this.attribute(EnvironmentAttributes.AMBIENT_PARTICLES, this.friendly$ParticleCatalog.build());
-            }
-
             return new BiomeImpl(
                 resourceKey,
                 climateSettings,
@@ -426,9 +339,14 @@ public interface Biome extends Keyed {
             );
         }
 
-        @AsOf("2.5.0")
+        @AsOf("3.0.0")
         public Biome register() {
             return build().register();
+        }
+
+        @AsOf("3.0.0")
+        public Biome modify() {
+            return build().modify();
         }
     }
 

@@ -19,7 +19,7 @@ import java.util.Map;
  *
  * @see EnvironmentAttributes
  * @since 1.1.0
- * @version 2.5.0
+ * @version 3.0.0
  * @author Jsinco
  */
 @NullMarked
@@ -81,9 +81,9 @@ public record EnvironmentAttributeMap(
      * @param supplier the attribute supplier
      * @param <V> the type of the attribute
      * @return the value associated with the supplier, or null if absent
-     * @since 2.5.0
+     * @since 3.0.0
      */
-    @AsOf("2.5.0")
+    @AsOf("3.0.0")
     @SuppressWarnings("unchecked")
     public <V> @Nullable V get(EnvironmentAttributeSupplier<V> supplier) {
         for (int i = pending.size() - 1; i >= 0; i--) {

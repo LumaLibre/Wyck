@@ -19,8 +19,7 @@ import java.util.List;
 public final class LevelCreatorImpl implements LevelCreator {
 
     private final ResourceKey levelKey;
-    private final @Nullable Dimension dimension;
-    private final ResourceKey dimensionType;
+    private final Dimension dimension;
     private final ChunkGenerator generator;
     private final long seed;
     private final boolean generateStructures;
@@ -31,8 +30,7 @@ public final class LevelCreatorImpl implements LevelCreator {
 
     public LevelCreatorImpl(
         ResourceKey levelKey,
-        @Nullable Dimension dimension,
-        ResourceKey dimensionType,
+        Dimension dimension,
         ChunkGenerator generator,
         long seed,
         boolean generateStructures,
@@ -43,7 +41,6 @@ public final class LevelCreatorImpl implements LevelCreator {
     ) {
         this.levelKey = levelKey;
         this.dimension = dimension;
-        this.dimensionType = dimensionType;
         this.generator = generator;
         this.seed = seed;
         this.generateStructures = generateStructures;
@@ -54,27 +51,22 @@ public final class LevelCreatorImpl implements LevelCreator {
     }
 
     @Override
-    public ResourceKey getLevelKey() {
+    public ResourceKey resourceKey() {
         return levelKey;
     }
 
     @Override
-    public @Nullable Dimension getDimension() {
+    public Dimension dimension() {
         return dimension;
     }
 
     @Override
-    public ResourceKey getDimensionType() {
-        return dimensionType;
-    }
-
-    @Override
-    public ChunkGenerator getGenerator() {
+    public ChunkGenerator generator() {
         return generator;
     }
 
     @Override
-    public long getSeed() {
+    public long seed() {
         return seed;
     }
 
@@ -89,22 +81,22 @@ public final class LevelCreatorImpl implements LevelCreator {
     }
 
     @Override
-    public World.Environment getEnvironment() {
+    public World.Environment environment() {
         return environment;
     }
 
     @Override
-    public StemPersistence getPersistence() {
+    public StemPersistence persistence() {
         return persistence;
     }
 
     @Override
-    public List<LevelSpawner> getSpawners() {
+    public List<LevelSpawner> spawners() {
         return spawners;
     }
 
     @Override
-    public @Nullable World asBukkitWorld() {
+    public @Nullable World bukkitWorld() {
         return Bukkit.getWorld(levelKey);
     }
 }

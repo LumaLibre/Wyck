@@ -17,7 +17,7 @@ import org.jspecify.annotations.NullMarked;
  *     <ul>
  *         <li>{@link Reference} is a reference to an already-registered configured feature.</li>
  *         <li>{@link VanillaConfigured} is a configured feature authored from a vanilla feature type and configuration.</li>
- *         <li>{@link CustomConfigured} is a configured feature composed of a registered custom feature with a config instance. The feature must already be registered under featureKey via {@link CustomFeature#register(ResourceKey)}.</li>
+ *         <li>{@link CustomConfigured} is a configured feature composed of a registered custom feature with a config instance. The feature must already be registered under featureKey via {@link CustomFeature#registerAs(ResourceKey)}.</li>
  *     </ul>
  * </p>
  *
@@ -27,7 +27,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.3.0")
-public sealed interface ConfiguredFeature extends Wrapper, Keyed permits ConfiguredFeature.Reference, ConfiguredFeature.VanillaConfigured, ConfiguredFeature.CustomConfigured {
+public sealed interface ConfiguredFeature extends Wrapper, Keyed permits ConfiguredFeature.CustomConfigured, ConfiguredFeature.Reference, ConfiguredFeature.VanillaConfigured, AbstractCustomFeature {
 
     @ApiStatus.Internal
     WireProvider<Factory> WIRE = WireProvider.create("dev.wyck.wrapper.worldgen.feature.ConfiguredFeatureFactoryImpl");
@@ -56,7 +56,7 @@ public sealed interface ConfiguredFeature extends Wrapper, Keyed permits Configu
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static ConfiguredFeature custom(FeatureType featureType, FeatureConfiguration configuration) {
+    static ConfiguredFeature.VanillaConfigured vanilla(FeatureType featureType, FeatureConfiguration configuration) {
         return new VanillaConfigured(featureType.resourceKey(), configuration);
     }
 
@@ -70,7 +70,7 @@ public sealed interface ConfiguredFeature extends Wrapper, Keyed permits Configu
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static ConfiguredFeature customFeature(ResourceKey featureKey, Object config) {
+    static ConfiguredFeature.CustomConfigured custom(ResourceKey featureKey, Object config) {
         return new CustomConfigured(featureKey, config);
     }
 
@@ -104,7 +104,7 @@ public sealed interface ConfiguredFeature extends Wrapper, Keyed permits Configu
 
     /**
      * A configured feature composed of a registered custom feature with a config instance.
-     * The feature must already be registered under featureKey via {@link CustomFeature#register(ResourceKey)}.
+     * The feature must already be registered under featureKey via {@link CustomFeature#registerAs(ResourceKey)}.
      * @param featureKey the key the custom feature was registered under
      * @param config the config instance to place with
      * @since 2.3.0
