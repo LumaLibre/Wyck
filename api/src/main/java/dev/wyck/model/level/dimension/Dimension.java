@@ -399,7 +399,7 @@ public interface Dimension extends Keyed {
         private CardinalLightType cardinalLightType = CardinalLightType.DEFAULT;
         private EnvironmentAttributeMap attributes = EnvironmentAttributeMap.EMPTY;
         private TimelineSet timelines = TimelineSet.EMPTY;
-        private Optional<WorldClock> defaultClock = Optional.empty();
+        private @Nullable WorldClock defaultClock = null;
 
         @AsOf("2.4.0")
         public Builder() {}
@@ -421,7 +421,7 @@ public interface Dimension extends Keyed {
             this.cardinalLightType = dimension.getCardinalLightType();
             this.attributes = dimension.getAttributes();
             this.timelines = dimension.getTimelines();
-            this.defaultClock = dimension.getDefaultClock();
+            this.defaultClock = dimension.getDefaultClock().orElse(null);
         }
 
         @AsOf("2.4.0")
@@ -515,7 +515,7 @@ public interface Dimension extends Keyed {
         }
 
         @AsOf("2.4.0")
-        public <T, K> Builder attribute(EnvironmentAttributeSupplier<T, K> supplier, K value) {
+        public <V> Builder attribute(EnvironmentAttributeSupplier<V> supplier, V value) {
             this.attributes = this.attributes.with(supplier, value);
             return this;
         }
@@ -536,7 +536,7 @@ public interface Dimension extends Keyed {
 
         @AsOf("2.4.0")
         public Builder defaultClock(@Nullable WorldClock defaultClock) {
-            this.defaultClock = Optional.ofNullable(defaultClock);
+            this.defaultClock = defaultClock;
             return this;
         }
 

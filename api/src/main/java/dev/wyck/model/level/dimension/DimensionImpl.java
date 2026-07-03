@@ -46,7 +46,7 @@ public final class DimensionImpl implements Dimension {
     private CardinalLightType cardinalLightType;
     private EnvironmentAttributeMap attributes;
     private TimelineSet timelines;
-    private Optional<WorldClock> defaultClock;
+    private @Nullable WorldClock defaultClock;
 
     @AsOf("2.4.0")
     public DimensionImpl(
@@ -66,7 +66,7 @@ public final class DimensionImpl implements Dimension {
             CardinalLightType cardinalLightType,
             EnvironmentAttributeMap attributes,
             TimelineSet timelines,
-            Optional<WorldClock> defaultClock
+            @Nullable WorldClock defaultClock
     ) {
         this.resourceKey = resourceKey;
         this.hasFixedTime = hasFixedTime;
@@ -169,7 +169,7 @@ public final class DimensionImpl implements Dimension {
 
     @Override
     public Optional<WorldClock> getDefaultClock() {
-        return defaultClock;
+        return Optional.ofNullable(defaultClock);
     }
 
     @Override
@@ -264,7 +264,7 @@ public final class DimensionImpl implements Dimension {
 
     @Override
     public Dimension setDefaultClock(@Nullable WorldClock defaultClock) {
-        this.defaultClock = Optional.ofNullable(defaultClock);
+        this.defaultClock = defaultClock;
         return this;
     }
 

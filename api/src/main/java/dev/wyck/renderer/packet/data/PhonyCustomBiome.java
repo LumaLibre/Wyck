@@ -6,11 +6,16 @@ import dev.wyck.model.biome.Biome;
 import dev.wyck.keys.KeyChains;
 import dev.wyck.misc.ChunkLocation;
 import dev.wyck.keys.ResourceKey;
+import dev.wyck.model.biome.CustomBiome;
 import dev.wyck.renderer.packet.PacketHandler;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import java.util.function.BiPredicate;
 
@@ -21,7 +26,7 @@ import java.util.function.BiPredicate;
  *
  * <p>Two conditions gate whether this biome applies to a chunk:
  * <ul>
- *   <li>{@link #conditional()}  the cheap, biome-independent spatial gate
+ *   <li>{@link #conditional()}  the inexpensive, biome-independent spatial gate
  *       ({@code (player, chunkLocation)}). Evaluated <em>before</em> the chunk is decoded, so put
  *       world/permission/region checks here.</li>
  *   <li>{@link #biomeCondition()}  optional, biome-aware refinement
@@ -37,6 +42,7 @@ import java.util.function.BiPredicate;
 @AsOf("2.2.0")
 public record PhonyCustomBiome(
     ResourceKey biomeResourceKey,
+    List<BlockReplacement> blockReplacements,
     BiPredicate<Player, ChunkLocation> conditional,
     @Nullable BiPredicate<Player, SnapshotChunkData> biomeCondition,
     PacketHandler.Priority priority
@@ -50,7 +56,7 @@ public record PhonyCustomBiome(
      * @since 0.0.10
      */
     @AsOf("0.0.10")
-    public Biome customBiome() {
+    public Biome biome() {
         Biome customBiome = KeyChains.BIOMES.get(biomeResourceKey);
         if (customBiome != null) {
             return customBiome;
@@ -58,18 +64,6 @@ public record PhonyCustomBiome(
         Biome other = Biome.builder(biomeResourceKey).build();
         KeyChains.BIOMES.append(other);
         return other;
-    }
-
-    /**
-     * Alias for {@link #customBiome()}.
-     * @return the CustomBiome associated with this phony biome.
-     * @since 0.0.10
-     * @deprecated Use {@link #customBiome()} instead.
-     */
-    @Deprecated
-    @AsOf("0.0.10")
-    public Biome toCustomBiome() {
-        return customBiome();
     }
 
     @Override
@@ -104,44 +98,75 @@ public record PhonyCustomBiome(
     @AsOf("0.0.10")
     public static class Builder {
         private @Nullable ResourceKey biomeResourceKey;
+        private List<BlockReplacement> blockReplacements = new ArrayList<>();
         private BiPredicate<Player, ChunkLocation> conditional = (player, chunkLocation) -> true;
         private @Nullable BiPredicate<Player, SnapshotChunkData> biomeCondition = null;
         private PacketHandler.Priority priority = PacketHandler.Priority.NORMAL;
 
         @AsOf("0.0.6")
-        public Builder setCustomBiome(Biome customBiome) {
-            this.biomeResourceKey = customBiome.getResourceKey();
+        public Builder biome(Biome biome) {
+            this.biomeResourceKey = biome.resourceKey();
+            if (biome instanceof CustomBiome customBiome) {
+                this.blockReplacements.addAll(customBiome.blockReplacements());
+            }
             return this;
         }
 
         @AsOf("0.0.10")
-        public Builder setCustomBiome(ResourceKey biomeResourceKey) {
+        public Builder biome(ResourceKey biomeResourceKey) {
             this.biomeResourceKey = biomeResourceKey;
+            if (KeyChains.BIOMES.get(biomeResourceKey) instanceof CustomBiome customBiome) {
+                this.blockReplacements.addAll(customBiome.blockReplacements());
+            }
+            return this;
+        }
+
+        @AsOf("2.5.0")
+        public Builder replacement(Material original, Material to) {
+            this.blockReplacements.add(new BlockReplacement(original, to));
+            return this;
+        }
+
+        @AsOf("2.5.0")
+        public Builder replacement(BlockReplacement... replacement) {
+            Collections.addAll(this.blockReplacements, replacement);
+            return this;
+        }
+
+        @AsOf("2.5.0")
+        public Builder setReplacements(List<BlockReplacement> replacements) {
+            this.blockReplacements = replacements;
+            return this;
+        }
+
+        @AsOf("2.5.0")
+        public Builder replacement(List<BlockReplacement> replacement) {
+            this.blockReplacements.addAll(replacement);
             return this;
         }
 
         @AsOf("0.0.6")
-        public Builder setConditional(BiPredicate<Player, ChunkLocation> conditional) {
+        public Builder conditional(BiPredicate<Player, ChunkLocation> conditional) {
             this.conditional = conditional;
             return this;
         }
 
         @AsOf("2.2.0")
-        public Builder setBiomeCondition(@Nullable BiPredicate<Player, SnapshotChunkData> biomeCondition) {
+        public Builder biomeCondition(@Nullable BiPredicate<Player, SnapshotChunkData> biomeCondition) {
             this.biomeCondition = biomeCondition;
             return this;
         }
 
         @AsOf("0.0.6")
-        public Builder setPriority(PacketHandler.Priority priority) {
+        public Builder priority(PacketHandler.Priority priority) {
             this.priority = priority;
             return this;
         }
 
         @AsOf("0.0.6")
         public PhonyCustomBiome build() {
-            Preconditions.checkNotNull(biomeResourceKey, "customBiome cannot be null");
-            return new PhonyCustomBiome(biomeResourceKey, conditional, biomeCondition, priority);
+            Preconditions.checkNotNull(biomeResourceKey, "biome cannot be null");
+            return new PhonyCustomBiome(biomeResourceKey, blockReplacements, conditional, biomeCondition, priority);
         }
     }
 }

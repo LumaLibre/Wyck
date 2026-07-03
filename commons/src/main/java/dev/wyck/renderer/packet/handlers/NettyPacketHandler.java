@@ -31,6 +31,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Field;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -158,9 +159,9 @@ public class NettyPacketHandler implements PacketHandler {
 
         private static final Logger LOGGER = Logger.getLogger(NettyChannelHandler.class.getName());
 
-        private static final Field BLOCK_UPDATE_STATE_FIELD = findFieldByType(ClientboundBlockUpdatePacket.class, BlockState.class, "blockState");
-        private static final Field SECTION_POS_FIELD = findFieldByType(ClientboundSectionBlocksUpdatePacket.class, SectionPos.class, "sectionPos");
-        private static final Field SECTION_STATES_FIELD = findFieldByType(ClientboundSectionBlocksUpdatePacket.class, BlockState[].class, "states");
+        private static final @Nullable Field BLOCK_UPDATE_STATE_FIELD = findFieldByType(ClientboundBlockUpdatePacket.class, BlockState.class, "blockState");
+        private static final @Nullable Field SECTION_POS_FIELD = findFieldByType(ClientboundSectionBlocksUpdatePacket.class, SectionPos.class, "sectionPos");
+        private static final @Nullable Field SECTION_STATES_FIELD = findFieldByType(ClientboundSectionBlocksUpdatePacket.class, BlockState[].class, "states");
 
         private final PhonyCustomBiomeCollector collector;
 
@@ -220,8 +221,8 @@ public class NettyPacketHandler implements PacketHandler {
             PhonyCustomBiome override = collector.bestBiomeFor(player, loc);
             if (override == null) return;
 
-            BlockReplacement[] replacements = override.customBiome().getBlockReplacements();
-            if (replacements == null || replacements.length == 0) return;
+            List<BlockReplacement> replacements = override.blockReplacements();
+            if (replacements.isEmpty()) return;
 
             BlockState state = packet.getBlockState();
             Material currentMat = state.getBukkitMaterial();
@@ -249,8 +250,8 @@ public class NettyPacketHandler implements PacketHandler {
                 PhonyCustomBiome override = collector.bestBiomeFor(player, loc);
                 if (override == null) return;
 
-                BlockReplacement[] replacements = override.customBiome().getBlockReplacements();
-                if (replacements == null || replacements.length == 0) return;
+                List<BlockReplacement> replacements = override.blockReplacements();
+                if (replacements.isEmpty()) return;
 
                 BlockState[] states = (BlockState[]) SECTION_STATES_FIELD.get(packet);
                 if (states == null || states.length == 0) return;
@@ -278,7 +279,7 @@ public class NettyPacketHandler implements PacketHandler {
             }
         }
 
-        private static Field findFieldByType(Class<?> owner, Class<?> type, String mojangName) {
+        private static @Nullable Field findFieldByType(Class<?> owner, Class<?> type, String mojangName) {
             try {
                 Field f = owner.getDeclaredField(mojangName);
                 f.setAccessible(true);
@@ -297,7 +298,7 @@ public class NettyPacketHandler implements PacketHandler {
             }
         }
 
-        private static BlockState materialToState(Material material) {
+        private static @Nullable BlockState materialToState(@Nullable Material material) {
             if (material == null || !material.isBlock()) return null;
             return ((CraftBlockData) Bukkit.createBlockData(material)).getState();
         }

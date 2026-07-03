@@ -2,7 +2,6 @@ package dev.wyck.wrapper.level.noise.function;
 
 import dev.wyck.annotations.AsOf;
 import dev.wyck.annotations.Generated;
-import dev.wyck.keys.KeyChains;
 import dev.wyck.keys.ResourceKey;
 import org.jspecify.annotations.NullMarked;
 
@@ -14,12 +13,12 @@ import org.jspecify.annotations.NullMarked;
  * </p>
  *
  * @since 2.4.0
- * @version 2.4.0
+ * @version 2.5.0
  * @author Wyck codegen
  */
 @NullMarked
 @AsOf("2.4.0")
-@Generated("2026-07-01T19:33:09.503471Z")
+@Generated("2026-07-03T03:43:43.972732Z")
 public final class DensityFunctions {
 
     // From: NoiseRouterData 
@@ -96,7 +95,7 @@ public final class DensityFunctions {
 
     private static DensityFunction reference(String path) {
         DensityFunction keyed = DensityFunction.reference(ResourceKey.minecraft(path));
-        KeyChains.DENSITY_FUNCTIONS.append(keyed);
+        dev.wyck.keys.KeyChains.DENSITY_FUNCTIONS.append(keyed);
         return keyed;
     }
 

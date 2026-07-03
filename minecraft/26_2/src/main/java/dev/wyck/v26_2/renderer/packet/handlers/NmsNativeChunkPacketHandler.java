@@ -1,9 +1,9 @@
 package dev.wyck.v26_2.renderer.packet.handlers;
 
+import dev.wyck.renderer.packet.data.PhonyCustomBiome;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import dev.wyck.annotations.WireFactory;
-import dev.wyck.model.biome.Biome;
 import dev.wyck.misc.ChunkLocation;
 import dev.wyck.renderer.packet.PacketHandler;
 import dev.wyck.renderer.packet.PhonyBiomeResolver;
@@ -27,6 +27,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.lang.reflect.Field;
+import java.util.List;
 
 @NullMarked
 @WireFactory
@@ -40,12 +41,12 @@ public final class NmsNativeChunkPacketHandler implements NativeChunkPacketHandl
         LevelChunkSection[] sections = extractChunkSections(chunkData, dimensionSectionCount.getSectionCount());
 
         SnapshotChunkData snapshot = new NmsSnapshotChunkData(chunkLocation, sections);
-        Biome customBiome = resolver.resolve(snapshot);
-        if (customBiome == null) {
+        PhonyCustomBiome phony = resolver.resolve(snapshot);
+        if (phony == null) {
             return;
         }
 
-        org.bukkit.block.Biome bukkitBiome = customBiome.toBukkitBiome();
+        org.bukkit.block.Biome bukkitBiome = phony.biome().bukkitBiome();
         Holder<net.minecraft.world.level.biome.Biome> minecraftBiome =
                 CraftBiome.bukkitToMinecraftHolder(bukkitBiome);
 
@@ -53,7 +54,7 @@ public final class NmsNativeChunkPacketHandler implements NativeChunkPacketHandl
             throw new IllegalStateException("Failed to get Minecraft biome for " + bukkitBiome);
         }
 
-        BlockReplacement[] blockReplacements = customBiome.getBlockReplacements();
+        List<BlockReplacement> blockReplacements = phony.blockReplacements();
 
         for (LevelChunkSection section : sections) {
             for (int x = 0; x < CHUNK_SECTIONS; x++) {
@@ -64,7 +65,7 @@ public final class NmsNativeChunkPacketHandler implements NativeChunkPacketHandl
                 }
             }
 
-            if (blockReplacements.length == 0) {
+            if (blockReplacements.isEmpty()) {
                 continue;
             }
 

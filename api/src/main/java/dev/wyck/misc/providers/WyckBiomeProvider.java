@@ -1,9 +1,8 @@
 package dev.wyck.misc.providers;
 
 import dev.wyck.annotations.AsOf;
-import dev.wyck.model.biome.AbstractBiome;
+import dev.wyck.model.biome.Biome;
 import dev.wyck.keys.ResourceKey;
-import org.bukkit.block.Biome;
 import org.bukkit.generator.BiomeProvider;
 import org.bukkit.generator.WorldInfo;
 import org.jspecify.annotations.NullMarked;
@@ -23,24 +22,24 @@ import java.util.Map;
 @AsOf("2.3.1")
 public abstract class WyckBiomeProvider extends BiomeProvider {
 
-    protected final Map<ResourceKey, AbstractBiome> biomeMap;
+    protected final Map<ResourceKey, Biome> biomeMap;
 
     @AsOf("2.3.1")
-    public WyckBiomeProvider(Collection<AbstractBiome> biomes) {
+    public WyckBiomeProvider(Collection<Biome> biomes) {
         this.biomeMap = new HashMap<>();
-        for (AbstractBiome biome : biomes) {
-            biomeMap.put(biome.getResourceKey(), biome);
+        for (Biome biome : biomes) {
+            biomeMap.put(biome.resourceKey(), biome);
         }
     }
 
     @Override
     @AsOf("2.3.0")
-    public List<Biome> getBiomes(WorldInfo worldInfo) {
-        return biomeMap.values().stream().map(AbstractBiome::toBukkitBiome).toList();
+    public List<org.bukkit.block.Biome> getBiomes(WorldInfo worldInfo) {
+        return biomeMap.values().stream().map(Biome::bukkitBiome).toList();
     }
 
     @AsOf("2.3.1")
-    public Map<ResourceKey, AbstractBiome> getBiomeMap() {
+    public Map<ResourceKey, Biome> getBiomeMap() {
         return biomeMap;
     }
 }

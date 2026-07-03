@@ -2,8 +2,7 @@ package dev.wyck.misc.providers;
 
 import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
-import dev.wyck.model.biome.AbstractBiome;
-import org.bukkit.block.Biome;
+import dev.wyck.model.biome.Biome;
 import org.bukkit.generator.WorldInfo;
 import org.jspecify.annotations.NullMarked;
 
@@ -20,20 +19,20 @@ import java.util.Map;
 @AsOf("2.3.0")
 public final class ReplacementBiomeProvider extends WyckBiomeProvider {
 
-    private final Map<Biome, AbstractBiome> replacements;
+    private final Map<org.bukkit.block.Biome, Biome> replacements;
 
     @AsOf("2.3.0")
-    public ReplacementBiomeProvider(Map<Biome, AbstractBiome> replacements) {
+    public ReplacementBiomeProvider(Map<org.bukkit.block.Biome, Biome> replacements) {
         this.replacements = replacements;
         super(replacements.values());
     }
 
     @Override
     @AsOf("2.3.0")
-    public Biome getBiome(WorldInfo worldInfo, int x, int y, int z) {
-        Biome vanilla = worldInfo.vanillaBiomeProvider().getBiome(worldInfo, x, y, z);
-        AbstractBiome replacement = replacements.get(vanilla);
-        return replacement != null ? replacement.toBukkitBiome() : vanilla;
+    public org.bukkit.block.Biome getBiome(WorldInfo worldInfo, int x, int y, int z) {
+        org.bukkit.block.Biome vanilla = worldInfo.vanillaBiomeProvider().getBiome(worldInfo, x, y, z);
+        Biome replacement = replacements.get(vanilla);
+        return replacement != null ? replacement.bukkitBiome() : vanilla;
     }
 
     @AsOf("2.3.0")
@@ -49,10 +48,10 @@ public final class ReplacementBiomeProvider extends WyckBiomeProvider {
      */
     @AsOf("2.3.0")
     public static class Builder {
-        private final Map<Biome, AbstractBiome> replacements = new HashMap<>();
+        private final Map<org.bukkit.block.Biome, Biome> replacements = new HashMap<>();
 
         @AsOf("2.3.0")
-        public Builder replace(Biome original, AbstractBiome replacement) {
+        public Builder replace(org.bukkit.block.Biome original, Biome replacement) {
             Preconditions.checkNotNull(original, "original cannot be null");
             Preconditions.checkNotNull(replacement, "replacement cannot be null");
             replacements.put(original, replacement);

@@ -1,6 +1,7 @@
 package dev.wyck.registry.bootstrap;
 
 import com.google.common.base.Preconditions;
+import dev.wyck.model.biome.Biome;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEventType;
 import io.papermc.paper.registry.PaperRegistries;
@@ -15,7 +16,6 @@ import io.papermc.paper.registry.event.RegistryEventTypeProviderImpl;
 import io.papermc.paper.registry.event.type.RegistryEntryAddEventType;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.annotations.WireFactory;
-import dev.wyck.model.biome.Biome;
 import dev.wyck.keys.KeyChains;
 import dev.wyck.registry.BiomeRegistry;
 import dev.wyck.keys.ResourceKey;
@@ -221,7 +221,7 @@ public final class UnsafePaperBootstrapBiomeRegistry implements BootstrapBiomeRe
     }
 
     private static net.minecraft.resources.ResourceKey<net.minecraft.world.level.biome.Biome> nmsKeyOf(Biome cb) {
-        ResourceKey rk = cb.getResourceKey();
+        ResourceKey rk = cb.resourceKey();
         return net.minecraft.resources.ResourceKey.create(Registries.BIOME, Identifier.fromNamespaceAndPath(rk.namespace(), rk.path()));
     }
 

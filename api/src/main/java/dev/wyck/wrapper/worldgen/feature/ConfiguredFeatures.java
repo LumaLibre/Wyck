@@ -2,7 +2,6 @@ package dev.wyck.wrapper.worldgen.feature;
 
 import dev.wyck.annotations.AsOf;
 import dev.wyck.annotations.Generated;
-import dev.wyck.keys.KeyChains;
 import dev.wyck.keys.ResourceKey;
 import org.jspecify.annotations.NullMarked;
 
@@ -14,12 +13,12 @@ import org.jspecify.annotations.NullMarked;
  * </p>
  *
  * @since 2.3.0
- * @version 2.4.0
+ * @version 2.5.0
  * @author Wyck codegen
  */
 @NullMarked
 @AsOf("2.3.0")
-@Generated("2026-07-01T19:33:09.496674Z")
+@Generated("2026-07-03T03:43:43.965592Z")
 public final class ConfiguredFeatures {
 
     // From: AquaticFeatures 
@@ -494,7 +493,7 @@ public final class ConfiguredFeatures {
 
     private static ConfiguredFeature reference(String path) {
         ConfiguredFeature keyed = ConfiguredFeature.reference(ResourceKey.minecraft(path));
-        KeyChains.CONFIGURED_FEATURES.append(keyed);
+        dev.wyck.keys.KeyChains.CONFIGURED_FEATURES.append(keyed);
         return keyed;
     }
 

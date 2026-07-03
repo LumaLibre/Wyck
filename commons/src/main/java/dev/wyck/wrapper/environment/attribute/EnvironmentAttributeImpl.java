@@ -1,11 +1,9 @@
 package dev.wyck.wrapper.environment.attribute;
 
-import com.google.common.base.Preconditions;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.registry.internal.RegistryId;
 import dev.wyck.registry.internal.WyckRegistry;
 import dev.wyck.util.Lazy;
-import dev.wyck.wrapper.internal.Wrapper;
 import net.minecraft.world.attribute.AttributeTypes;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.jetbrains.annotations.ApiStatus;
@@ -24,24 +22,23 @@ public class EnvironmentAttributeImpl<V, U> implements EnvironmentAttribute<V> {
 
     private final ResourceKey key;
     private final @Nullable Converter<V, U> converter;
-    private final net.minecraft.world.attribute.EnvironmentAttribute<U> nms;
+    private final Lazy<net.minecraft.world.attribute.EnvironmentAttribute<U>> nms;
     private @MonotonicNonNull V value;
 
-    @SuppressWarnings("unchecked")
     public EnvironmentAttributeImpl(ResourceKey key, @Nullable Converter<V, U> converter) {
         this.key = key;
         this.converter = converter;
+        this.nms = Lazy.of(this::resolveNms);
+    }
+
+    @SuppressWarnings("unchecked")
+    private net.minecraft.world.attribute.EnvironmentAttribute<U> resolveNms() {
         net.minecraft.world.attribute.EnvironmentAttribute<U> nullableNms = REGISTRY.get().retrieve(key);
         if (nullableNms == null) {
             LOGGER.warning("Environment attribute with key '" + key + "' not found in registry; this attribute is not supported by this Minecraft version!");
-            this.nms = (net.minecraft.world.attribute.EnvironmentAttribute<U>) UNSUPPORTED;
-        } else {
-            this.nms = nullableNms;
+            return (net.minecraft.world.attribute.EnvironmentAttribute<U>) UNSUPPORTED;
         }
-
-        if (converter == null) {
-            this.value = (V) nms.defaultValue(); // 🙏
-        }
+        return nullableNms;
     }
 
     @Override
@@ -50,7 +47,11 @@ public class EnvironmentAttributeImpl<V, U> implements EnvironmentAttribute<V> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public @Nullable V value() {
+        if (this.value == null && this.converter == null) {
+            this.value = (V) this.nms.get().defaultValue();
+        }
         return this.value;
     }
 
@@ -62,7 +63,7 @@ public class EnvironmentAttributeImpl<V, U> implements EnvironmentAttribute<V> {
     @Override
     @SuppressWarnings("unchecked")
     public V defaultValue() {
-        Object defaultValue = nms.defaultValue();
+        Object defaultValue = nms.get().defaultValue();
         if (isBasic(defaultValue)) {
             return (V) defaultValue;
         }
@@ -72,43 +73,44 @@ public class EnvironmentAttributeImpl<V, U> implements EnvironmentAttribute<V> {
 
     @SuppressWarnings("unchecked")
     public U minecraftValue() {
-        if (this.converter == null && this.value != null) {
-            return (U) this.value;
+        V current = value();
+        if (this.converter == null && current != null) {
+            return (U) current;
         } else if (this.converter == null) {
             throw new IllegalStateException("No converter defined");
         }
-        return this.converter.convert(value);
+        return this.converter.convert(current);
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public <SHADOWED> SHADOWED minecraftDefaultValue() {
-        return (SHADOWED) this.nms.defaultValue();
+        return (SHADOWED) this.nms.get().defaultValue();
     }
 
     @Override
     public Object toMinecraft() {
-        return this.nms;
+        return this.nms.get();
     }
 
     @Override
     public boolean syncable() {
-        return this.nms.isSyncable();
+        return this.nms.get().isSyncable();
     }
 
     @Override
     public boolean spatiallyInterpolated() {
-        return this.nms.isSpatiallyInterpolated();
+        return this.nms.get().isSpatiallyInterpolated();
     }
 
     @Override
     public boolean positional() {
-        return this.nms.isPositional();
+        return this.nms.get().isPositional();
     }
 
     @Override
     public String toString() {
-        return this.nms.toString();
+        return "EnvironmentAttributeImpl{key=" + this.key + "}";
     }
 
     private static boolean isBasic(Object value) {

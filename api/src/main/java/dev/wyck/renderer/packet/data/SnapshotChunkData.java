@@ -3,7 +3,6 @@ package dev.wyck.renderer.packet.data;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.misc.ChunkLocation;
 import org.bukkit.ChunkSnapshot;
-import org.bukkit.block.Biome;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Optional;
@@ -48,7 +47,7 @@ public interface SnapshotChunkData {
      *
      * @return the source biome at the chunk center
      */
-    Biome centerBiome();
+    org.bukkit.block.Biome centerBiome();
 
     /**
      * The biome at the given <em>chunk-relative</em> block coordinates.
@@ -59,7 +58,7 @@ public interface SnapshotChunkData {
      * @param z chunk-relative block Z (0-15)
      * @return the source biome at those coordinates
      */
-    Biome biomeAt(int x, int y, int z);
+    org.bukkit.block.Biome biomeAt(int x, int y, int z);
 
     /**
      * The full Bukkit {@link ChunkSnapshot}, if one is available.

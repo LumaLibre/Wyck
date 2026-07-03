@@ -1,12 +1,11 @@
 package dev.wyck.wrapper.level;
 
 import dev.wyck.annotations.AsOf;
-import dev.wyck.model.biome.AbstractBiome;
+import dev.wyck.model.biome.Biome;
 import dev.wyck.factory.WireProvider;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.wrapper.internal.Wrapper;
 import dev.wyck.wrapper.worldgen.climate.ClimatePoint;
-import org.bukkit.block.Biome;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -56,12 +55,12 @@ public interface BiomeSource extends Wrapper {
     }
 
     @AsOf("2.4.0")
-    static BiomeSource fixed(AbstractBiome biome) {
-        return fixed(biome.getResourceKey());
+    static BiomeSource fixed(Biome biome) {
+        return fixed(biome.resourceKey());
     }
 
     @AsOf("2.4.0")
-    static BiomeSource fixed(Biome biome) {
+    static BiomeSource fixed(org.bukkit.block.Biome biome) {
         return fixed(ResourceKey.of(biome.getKey().asString()));
     }
 
@@ -117,12 +116,12 @@ public interface BiomeSource extends Wrapper {
         }
 
         @AsOf("2.4.0")
-        public MultiNoiseBuilder add(AbstractBiome biome, ClimatePoint point) {
-            return this.add(biome.getResourceKey(), point);
+        public MultiNoiseBuilder add(Biome biome, ClimatePoint point) {
+            return this.add(biome.resourceKey(), point);
         }
 
         @AsOf("2.4.0")
-        public MultiNoiseBuilder add(Biome biome, ClimatePoint point) {
+        public MultiNoiseBuilder add(org.bukkit.block.Biome biome, ClimatePoint point) {
             return this.add(ResourceKey.of(biome.getKey().asString()), point);
         }
 

@@ -178,6 +178,7 @@ public final class KeyChain<T extends Keyed> {
 
         T existing = get(key);
         if (existing == null) {
+            this.append(item);
             return false;
         }
         this.backing.remove(existing);

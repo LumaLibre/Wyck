@@ -3,7 +3,7 @@ package dev.wyck.wrapper.environment.attribute;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.ConstructWireProvider;
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.model.biome.AbstractBiome;
+import dev.wyck.model.biome.Biome;
 import dev.wyck.model.level.dimension.Dimension;
 import dev.wyck.wrapper.internal.Wrapper;
 import net.kyori.adventure.key.Keyed;
@@ -14,7 +14,7 @@ import org.jspecify.annotations.NullMarked;
 
 /**
  * Environment attributes control various visual and gameplay features depending on the dimension,
- * biome, time, and weather and can be applied to {@link AbstractBiome}s and {@link Dimension}s.
+ * biome, time, and weather and can be applied to {@link Biome}s and {@link Dimension}s.
  *
  * @param <V> the type of the environment attribute
  * @see EnvironmentAttributeMap

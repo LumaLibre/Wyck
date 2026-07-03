@@ -1,8 +1,8 @@
 package dev.wyck.wrapper;
 
 import dev.wyck.annotations.AsOf;
-import dev.wyck.wrapper.environment.BiomeTempModifier;
-import org.jetbrains.annotations.Range;
+import dev.wyck.util.FloatRange;
+import dev.wyck.wrapper.biome.TemperatureModifier;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -13,17 +13,29 @@ import org.jspecify.annotations.NullMarked;
  * @version 0.0.8
  * @since 0.0.1
  * @author Outspending
+ * @deprecated No longer representative of how climate settings should be defined,
+ * use {@link dev.wyck.wrapper.biome.ClimateSettings}.
  */
+@Deprecated
 @NullMarked
 @AsOf("0.0.8")
 public record BiomeSettings(
-    @Range(from = 0, to = 25) float depth,
-    @Range(from = 0, to = 25) float scale,
-    @Range(from = 0, to = 25) float temperature,
-    @Range(from = 0, to = 25) float downfall,
-    BiomeTempModifier modifier,
+    float depth,
+    float scale,
+    float temperature,
+    float downfall,
+    TemperatureModifier modifier,
     boolean hasPrecipitation
 ) {
+
+    public static final FloatRange RANGE = FloatRange.of(0, 25);
+
+    public BiomeSettings {
+        RANGE.validate(depth, "depth");
+        RANGE.validate(scale, "scale");
+        RANGE.validate(temperature, "temperature");
+        RANGE.validate(downfall, "downfall");
+    }
 
     /**
      * This method creates a new Builder object for creating instances of BiomeSettings.
@@ -45,7 +57,7 @@ public record BiomeSettings(
      */
     @AsOf("0.0.1")
     public static BiomeSettings defaultSettings() {
-        return new BiomeSettings(0.1F, 0.2F, 0.5F, 0.5F, BiomeTempModifier.NONE, true);
+        return new BiomeSettings(0.1F, 0.2F, 0.5F, 0.5F, TemperatureModifier.NONE, true);
     }
 
     /**
@@ -63,7 +75,7 @@ public record BiomeSettings(
         private float scale = 0.2F;
         private float temperature = 0.5F;
         private float downfall = 0.5F;
-        private BiomeTempModifier modifier = BiomeTempModifier.NONE;
+        private TemperatureModifier modifier = TemperatureModifier.NONE;
         private boolean hasPrecipitation = true;
 
         /**
@@ -74,7 +86,7 @@ public record BiomeSettings(
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("0.0.1")
-        public Builder depth(@Range(from = 0, to = 25) float depth) {
+        public Builder depth(float depth) {
             this.depth = depth;
             return this;
         }
@@ -87,7 +99,7 @@ public record BiomeSettings(
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("0.0.1")
-        public Builder scale(@Range(from = 0, to = 25) float scale) {
+        public Builder scale(float scale) {
             this.scale = scale;
             return this;
         }
@@ -100,7 +112,7 @@ public record BiomeSettings(
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("0.0.1")
-        public Builder temperature(@Range(from = 0, to = 25) float temperature) {
+        public Builder temperature(float temperature) {
             this.temperature = temperature;
             return this;
         }
@@ -113,7 +125,7 @@ public record BiomeSettings(
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("0.0.1")
-        public Builder downfall(@Range(from = 0, to = 25) float downfall) {
+        public Builder downfall(float downfall) {
             this.downfall = downfall;
             return this;
         }
@@ -126,7 +138,7 @@ public record BiomeSettings(
          * @return The Builder object, for chaining method calls.
          */
         @AsOf("0.0.8")
-        public Builder modifier(BiomeTempModifier modifier) {
+        public Builder modifier(TemperatureModifier modifier) {
             this.modifier = modifier;
             return this;
         }

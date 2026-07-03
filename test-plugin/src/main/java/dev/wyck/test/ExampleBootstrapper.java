@@ -1,8 +1,10 @@
 package dev.wyck.test;
 
+import dev.wyck.wrapper.environment.particle.ParticleTypes;
+import dev.wyck.wrapper.environment.particle.options.DustParticle;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
-import dev.wyck.model.biome.Biome;
+import dev.wyck.model.biome.CustomBiome;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.registry.bootstrap.BootstrapBiomeRegistry;
 import dev.wyck.registry.bootstrap.Composer;
@@ -23,13 +25,15 @@ public class ExampleBootstrapper implements PluginBootstrap {
 
         ResourceKey myBiomeKey = ResourceKey.of("example", "my_biome2");
         registry.queue(
-            Biome.builder(myBiomeKey)
+            CustomBiome.builder(myBiomeKey)
                 .fogColor("#DB00FD")
                 .skyColor("#2F46FF")
                 .waterColor("#00FFD0")
                 .grassColor("#D1D13A")
                 .foliageColor("#FF6A00")
-                .setGenerationSettings(generation)
+                .generationSettings(generation)
+                .particle(ParticleTypes.DUST, 0.1f, DustParticle.of("#FF0000"))
+                .particle(ParticleTypes.ASH, 0.01f)
                 .build()
         );
 

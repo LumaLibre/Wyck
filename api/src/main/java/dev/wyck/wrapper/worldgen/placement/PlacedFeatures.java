@@ -2,7 +2,6 @@ package dev.wyck.wrapper.worldgen.placement;
 
 import dev.wyck.annotations.AsOf;
 import dev.wyck.annotations.Generated;
-import dev.wyck.keys.KeyChains;
 import dev.wyck.keys.ResourceKey;
 import org.jspecify.annotations.NullMarked;
 
@@ -14,12 +13,12 @@ import org.jspecify.annotations.NullMarked;
  * </p>
  *
  * @since 2.3.0
- * @version 2.4.0
+ * @version 2.5.0
  * @author Wyck codegen
  */
 @NullMarked
 @AsOf("2.3.0")
-@Generated("2026-07-01T19:33:09.501447Z")
+@Generated("2026-07-03T03:43:43.970521Z")
 public final class PlacedFeatures {
 
     // From: AquaticPlacements 
@@ -566,7 +565,7 @@ public final class PlacedFeatures {
 
     private static PlacedFeature reference(String path) {
         PlacedFeature keyed = PlacedFeature.reference(ResourceKey.minecraft(path));
-        KeyChains.PLACED_FEATURES.append(keyed);
+        dev.wyck.keys.KeyChains.PLACED_FEATURES.append(keyed);
         return keyed;
     }
 

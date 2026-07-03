@@ -24,6 +24,8 @@ import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
+import java.util.List;
+
 // Credits to: kapstock/RealisticSeasons
 /**
  * ProtocolLib-based implementation of the PacketHandler interface.
@@ -167,8 +169,8 @@ public class ProtocolLibPacketHandler implements PacketHandler {
             }
 
 
-            BlockReplacement[] blockReplacements = override.customBiome().getBlockReplacements();
-            if (blockReplacements == null || blockReplacements.length == 0) {
+            List<BlockReplacement> blockReplacements = override.blockReplacements();
+            if (blockReplacements.isEmpty()) {
                 return;
             }
 
@@ -209,8 +211,8 @@ public class ProtocolLibPacketHandler implements PacketHandler {
                 return;
             }
 
-            BlockReplacement[] blockReplacements = override.customBiome().getBlockReplacements();
-            if (blockReplacements == null || blockReplacements.length == 0) {
+            List<BlockReplacement> blockReplacements = override.blockReplacements();
+            if (blockReplacements.isEmpty()) {
                 return;
             }
 

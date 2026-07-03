@@ -9,13 +9,13 @@ import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
+import dev.wyck.model.biome.Biome;
 import io.papermc.paper.datapack.DatapackRegistrar;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.lifecycle.event.registrar.RegistrarEvent;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.annotations.WireFactory;
-import dev.wyck.model.biome.Biome;
 import dev.wyck.keys.KeyChains;
 import dev.wyck.registry.BiomeRegistry;
 import dev.wyck.keys.ResourceKey;
@@ -190,7 +190,7 @@ public final class DatapackBootstrapBiomeRegistry implements BootstrapBiomeRegis
 
             promotion.beginReference();
             for (Biome biome : this.pending) {
-                ResourceKey rk = biome.getResourceKey();
+                ResourceKey rk = biome.resourceKey();
                 net.minecraft.world.level.biome.Biome nms = (net.minecraft.world.level.biome.Biome) builder.buildDelegate(biome);
 
                 DataResult<JsonElement> result = net.minecraft.world.level.biome.Biome.DIRECT_CODEC.encodeStart(ops, nms);

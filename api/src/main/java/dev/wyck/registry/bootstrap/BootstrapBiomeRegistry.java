@@ -1,8 +1,8 @@
 package dev.wyck.registry.bootstrap;
 
+import dev.wyck.model.biome.Biome;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import dev.wyck.annotations.AsOf;
-import dev.wyck.model.biome.Biome;
 import dev.wyck.factory.WireProvider;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.registry.level.LevelStemEditor;

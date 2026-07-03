@@ -245,9 +245,9 @@ public final class EnvironmentAttributes {
 
     /**
      * How eyeblossoms should behave.
-     * True: eyeblossoms will open
-     * False: eyeblossoms will close
-     * Default: eyeblossom will stay in their current state */
+     * <p>True: eyeblossoms will open
+     * <p>False: eyeblossoms will close
+     * <p>Default: eyeblossom will stay in their current state */
     @AsOf("1.1.0")
     public static final EnvironmentAttributeSupplier<TriState> EYEBLOSSOM_OPEN = supplierWith("gameplay/eyeblossom_open", it -> it.toNms("net.minecraft.util.TriState"));
 

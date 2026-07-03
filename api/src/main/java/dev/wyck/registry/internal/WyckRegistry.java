@@ -138,7 +138,7 @@ public interface WyckRegistry extends Wrapper {
      */
     @AsOf("2.4.0")
     static WyckRegistry of(RegistryId reference) {
-        return WIRE.get().create(reference.getRegistryKeys());
+        return WIRE.get().create(reference.keys());
     }
 
     /**

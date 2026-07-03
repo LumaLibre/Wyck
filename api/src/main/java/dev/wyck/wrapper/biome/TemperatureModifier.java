@@ -1,4 +1,4 @@
-package dev.wyck.wrapper.environment;
+package dev.wyck.wrapper.biome;
 
 import dev.wyck.annotations.AsOf;
 import dev.wyck.wrapper.internal.KeyedEnumTranslator;
@@ -16,16 +16,16 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("0.0.1")
-public enum BiomeTempModifier implements WrappedEnumerator<BiomeTempModifier> {
+public enum TemperatureModifier implements WrappedEnumerator<TemperatureModifier> {
 
     NONE("none"),
     FROZEN("frozen");
 
-    public static final KeyedEnumTranslator<BiomeTempModifier> TRANSLATOR = KeyedEnumTranslator.byKey(BiomeTempModifier::getKey, BiomeTempModifier.values());
+    public static final KeyedEnumTranslator<TemperatureModifier> TRANSLATOR = KeyedEnumTranslator.byKey(TemperatureModifier::getKey, TemperatureModifier.values());
 
     private final String key;
 
-    BiomeTempModifier(String key) {
+    TemperatureModifier(String key) {
         this.key = key;
     }
 
@@ -38,7 +38,7 @@ public enum BiomeTempModifier implements WrappedEnumerator<BiomeTempModifier> {
     }
 
     @Override
-    public KeyedEnumTranslator<BiomeTempModifier> translator() {
+    public KeyedEnumTranslator<TemperatureModifier> translator() {
         return TRANSLATOR;
     }
 }

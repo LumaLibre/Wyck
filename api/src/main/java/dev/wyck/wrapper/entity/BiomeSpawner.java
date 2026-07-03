@@ -3,6 +3,7 @@ package dev.wyck.wrapper.entity;
 import com.google.common.collect.Maps;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.WireProvider;
+import dev.wyck.util.FloatRange;
 import dev.wyck.util.WeightedList;
 import dev.wyck.wrapper.internal.Wrapper;
 import dev.wyck.wrapper.entity.data.SpawnCost;
@@ -94,6 +95,8 @@ public interface BiomeSpawner extends Wrapper {
      */
     @AsOf("2.3.0")
     final class Builder {
+        public static final FloatRange RANGE = FloatRange.of(0.0F, 0.9999999F);
+
         private final Map<MobCategory, WeightedList.Builder<NaturalSpawner>> spawners;
         private final Map<EntityType, SpawnCost> mobSpawnCosts;
         private float creatureGenerationProbability;
@@ -127,7 +130,7 @@ public interface BiomeSpawner extends Wrapper {
          * @since 2.3.0
          */
         @AsOf("2.3.0")
-        public Builder addSpawner(MobCategory category, NaturalSpawner spawner) {
+        public Builder spawner(MobCategory category, NaturalSpawner spawner) {
             this.spawners.computeIfAbsent(category, c -> WeightedList.builder()).add(spawner);
             return this;
         }
@@ -141,7 +144,7 @@ public interface BiomeSpawner extends Wrapper {
          * @since 2.3.0
          */
         @AsOf("2.3.0")
-        public Builder addSpawner(MobCategory category, int weight, NaturalSpawner spawner) {
+        public Builder spawner(MobCategory category, int weight, NaturalSpawner spawner) {
             this.spawners.computeIfAbsent(category, c -> WeightedList.builder()).add(spawner, weight);
             return this;
         }
@@ -157,8 +160,8 @@ public interface BiomeSpawner extends Wrapper {
          * @since 2.3.0
          */
         @AsOf("2.3.0")
-        public Builder addSpawners(MobCategory category, int weight, EntityType type, int minCount, int maxCount) {
-            return this.addSpawner(category, weight, new NaturalSpawner(type, minCount, maxCount));
+        public Builder spawner(MobCategory category, int weight, EntityType type, int minCount, int maxCount) {
+            return this.spawner(category, weight, new NaturalSpawner(type, minCount, maxCount));
         }
 
         /**
@@ -169,7 +172,7 @@ public interface BiomeSpawner extends Wrapper {
          * @since 2.3.0
          */
         @AsOf("2.3.0")
-        public Builder addSpawners(MobCategory category, WeightedList<NaturalSpawner> list) {
+        public Builder spawners(MobCategory category, WeightedList<NaturalSpawner> list) {
             WeightedList.Builder<NaturalSpawner> weightedList = this.spawners.computeIfAbsent(category, c -> WeightedList.builder());
             for (WeightedList.Weighted<NaturalSpawner> entry : list.unwrap()) {
                 weightedList.add(entry.value(), entry.weight());
@@ -185,7 +188,7 @@ public interface BiomeSpawner extends Wrapper {
          * @since 2.3.0
          */
         @AsOf("2.3.0")
-        public Builder addMobSpawnCost(EntityType type, SpawnCost cost) {
+        public Builder spawnCost(EntityType type, SpawnCost cost) {
             this.mobSpawnCosts.put(type, cost);
             return this;
         }
@@ -199,7 +202,7 @@ public interface BiomeSpawner extends Wrapper {
          * @since 2.3.0
          */
         @AsOf("2.3.0")
-        public Builder addMobSpawnCost(EntityType type, double charge, double energyBudget) {
+        public Builder spawnCost(EntityType type, double charge, double energyBudget) {
             this.mobSpawnCosts.put(type, new SpawnCost(charge, energyBudget));
             return this;
         }
@@ -211,7 +214,7 @@ public interface BiomeSpawner extends Wrapper {
          * @since 2.3.0
          */
         @AsOf("2.3.0")
-        public Builder addMobSpawnCosts(Map<EntityType, SpawnCost> costs) {
+        public Builder spawnCosts(Map<EntityType, SpawnCost> costs) {
             this.mobSpawnCosts.putAll(costs);
             return this;
         }
@@ -219,13 +222,14 @@ public interface BiomeSpawner extends Wrapper {
         /**
          * Sets the creature generation probability. Default is 0.1F.
          * Range between 0.0F - 0.9999999F.
-         * @param probability The probability of spawning a creature.
+         * @param creatureGenerationProbability The probability of spawning a creature.
          * @return The builder instance.
          * @since 2.3.0
          */
         @AsOf("2.3.0")
-        public Builder setCreatureGenerationProbability(float probability) {
-            this.creatureGenerationProbability = probability;
+        public Builder creatureGenerationProbability(float creatureGenerationProbability) {
+            RANGE.validate(creatureGenerationProbability, "creatureGenerationProbability");
+            this.creatureGenerationProbability = creatureGenerationProbability;
             return this;
         }
 

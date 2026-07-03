@@ -2,8 +2,10 @@ package dev.wyck.wrapper.environment.attribute;
 
 import dev.wyck.annotations.AsOf;
 import dev.wyck.keys.ResourceKey;
+import dev.wyck.util.internal.FriendlyColorUtil;
 import org.jspecify.annotations.NullMarked;
 import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,13 +15,12 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * A collection of EnvironmentAttributes, keyed by their underlying attribute handle.
- * NMS-side code converts this into the underlying environment attribute map.
+ * A collection of EnvironmentAttributes.
  *
- * @author Jsinco
  * @see EnvironmentAttributes
  * @since 1.1.0
  * @version 2.5.0
+ * @author Jsinco
  */
 @NullMarked
 @AsOf("2.1.0")
@@ -73,6 +74,29 @@ public record EnvironmentAttributeMap(
     }
 
     /**
+     * Returns the value of the given attribute, or null if it is not present.
+     * Pending values take precedence over resolved ones, and the most recently
+     * set pending value wins.
+     *
+     * @param supplier the attribute supplier
+     * @param <V> the type of the attribute
+     * @return the value associated with the supplier, or null if absent
+     * @since 2.5.0
+     */
+    @AsOf("2.5.0")
+    @SuppressWarnings("unchecked")
+    public <V> @Nullable V get(EnvironmentAttributeSupplier<V> supplier) {
+        for (int i = pending.size() - 1; i >= 0; i--) {
+            Pending<?> entry = pending.get(i);
+            if (entry.supplier().equals(supplier)) {
+                return (V) entry.value();
+            }
+        }
+        EnvironmentAttribute<?> attribute = attributes.get(supplier.key());
+        return attribute != null ? (V) attribute.value() : null;
+    }
+
+    /**
      * @return true if the map is empty, false otherwise.
      * @since 1.1.0
      */
@@ -102,9 +126,13 @@ public record EnvironmentAttributeMap(
      * @since 2.1.0
      */
     @AsOf("2.1.0")
-    public <V> EnvironmentAttributeMap with(EnvironmentAttributeSupplier<V> supplier, V value) {
+    public <V> EnvironmentAttributeMap with(EnvironmentAttributeSupplier<V> supplier, @Nullable V value) {
         List<Pending<?>> newPending = new ArrayList<>(pending);
-        newPending.add(new Pending<>(supplier, value));
+        if (value == null) {
+            newPending.removeIf(entry -> entry.supplier().equals(supplier));
+        } else {
+            newPending.add(new Pending<>(supplier, value));
+        }
         return new EnvironmentAttributeMap(attributes, newPending);
     }
 
@@ -116,8 +144,8 @@ public record EnvironmentAttributeMap(
      * @since 2.1.0
      */
     @AsOf("2.1.0")
-    public EnvironmentAttributeMap with(FriendlyColorSupplier supplier, String hex) {
-        return with(supplier, FriendlyColorSupplier.parseHex(hex));
+    public EnvironmentAttributeMap with(FriendlyColorSupplier supplier, @Nullable String hex) {
+        return with(supplier, FriendlyColorUtil.hexOrNull(hex));
     }
 
     /**
@@ -203,7 +231,7 @@ public record EnvironmentAttributeMap(
          */
         @AsOf("2.1.0")
         public Builder attribute(FriendlyColorSupplier supplier, String hex) {
-            return attribute(supplier, FriendlyColorSupplier.parseHex(hex));
+            return attribute(supplier, FriendlyColorUtil.hex(hex));
         }
 
         /**

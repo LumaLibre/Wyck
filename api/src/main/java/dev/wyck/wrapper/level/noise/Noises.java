@@ -2,7 +2,6 @@ package dev.wyck.wrapper.level.noise;
 
 import dev.wyck.annotations.AsOf;
 import dev.wyck.annotations.Generated;
-import dev.wyck.keys.KeyChains;
 import dev.wyck.keys.ResourceKey;
 import org.jspecify.annotations.NullMarked;
 
@@ -14,12 +13,12 @@ import org.jspecify.annotations.NullMarked;
  * </p>
  *
  * @since 2.4.0
- * @version 2.4.0
+ * @version 2.5.0
  * @author Wyck codegen
  */
 @NullMarked
 @AsOf("2.4.0")
-@Generated("2026-07-01T19:33:09.504133Z")
+@Generated("2026-07-03T03:43:43.973695Z")
 public final class Noises {
 
     // From: Noises 
@@ -152,7 +151,7 @@ public final class Noises {
 
     private static ResourceKey reference(String path) {
         ResourceKey keyed = (ResourceKey.minecraft(path));
-        KeyChains.NOISE.append(keyed);
+        dev.wyck.keys.KeyChains.NOISE.append(keyed);
         return keyed;
     }
 

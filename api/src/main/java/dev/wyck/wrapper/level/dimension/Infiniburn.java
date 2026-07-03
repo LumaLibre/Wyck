@@ -40,11 +40,23 @@ public interface Infiniburn extends Wrapper {
     @AsOf("2.4.0")
     ResourceKey tag();
 
+    /**
+     * Creates a reference to a registered infiniburn.
+     * @param tag the key of an entry in the infiniburn registry
+     * @return a reference to that infiniburn
+     * @since 2.4.0
+     */
     @AsOf("2.4.0")
     static Infiniburn of(ResourceKey tag) {
         return WIRE.get().create(tag);
     }
 
+    /**
+     * Creates a reference to a registered infiniburn.
+     * @param tag the tag of an entry in the infiniburn registry
+     * @return a reference to that infiniburn
+     * @since 2.4.0
+     */
     @AsOf("2.4.0")
     static Infiniburn of(Tag<Material> tag) {
         Preconditions.checkNotNull(tag, "tag cannot be null");

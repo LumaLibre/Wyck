@@ -30,8 +30,6 @@ import java.util.List;
 
 public class TestPlugin extends JavaPlugin implements Listener {
 
-    static final long SEED = 8675309L;
-
     ResourceKey dimKey = ResourceKey.of("test", "biomesand");
     Dimension dimension = Dimension.builder(dimKey)
         .hasSkyLight(true)

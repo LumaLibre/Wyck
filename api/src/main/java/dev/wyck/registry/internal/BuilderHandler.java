@@ -1,7 +1,7 @@
 package dev.wyck.registry.internal;
 
 import dev.wyck.annotations.AsOf;
-import dev.wyck.model.biome.AbstractBiome;
+import dev.wyck.model.biome.Biome;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -23,5 +23,5 @@ public interface BuilderHandler<K, V> {
     void handle(@Nullable V value, K key);
 
     @AsOf("0.0.1")
-    @Nullable V build(AbstractBiome biome);
+    @Nullable V build(Biome biome);
 }

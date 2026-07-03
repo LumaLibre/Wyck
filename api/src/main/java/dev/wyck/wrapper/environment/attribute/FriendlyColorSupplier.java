@@ -12,15 +12,8 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 @AsOf("2.1.0")
 public final class FriendlyColorSupplier extends EnvironmentAttributeSupplier<Integer> {
-
     @AsOf("2.1.0")
     public FriendlyColorSupplier(EnvironmentAttribute<Integer> environmentAttribute) {
-        super(() -> environmentAttribute);
-    }
-
-    @AsOf("2.1.0")
-    public static int parseHex(String hex) {
-        if (hex.startsWith("#")) hex = hex.substring(1);
-        return (int) Long.parseLong(hex, 16);
+        super(environmentAttribute);
     }
 }

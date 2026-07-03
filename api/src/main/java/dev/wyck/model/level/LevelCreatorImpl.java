@@ -29,7 +29,7 @@ public final class LevelCreatorImpl implements LevelCreator {
     private final StemPersistence persistence;
     private final List<LevelSpawner> spawners;
 
-    LevelCreatorImpl(
+    public LevelCreatorImpl(
         ResourceKey levelKey,
         @Nullable Dimension dimension,
         ResourceKey dimensionType,

@@ -19,7 +19,6 @@ import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerMu
 import com.google.common.base.Preconditions;
 import io.github.retrooper.packetevents.util.SpigotConversionUtil;
 import dev.wyck.annotations.AsOf;
-import dev.wyck.model.biome.Biome;
 import dev.wyck.misc.ChunkLocation;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.renderer.packet.PacketHandler;
@@ -32,6 +31,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static dev.wyck.renderer.packet.handlers.NativeChunkPacketHandler.CHUNK_SECTIONS;
@@ -177,9 +177,8 @@ public class PacketEventsPacketHandler implements PacketHandler {
                 return;
             }
 
-            Biome customBiome = phonyCustomBiome.customBiome();
             ResourceKey biomeResourceKey = phonyCustomBiome.biomeResourceKey();
-            BlockReplacement[] blockReplacements = customBiome.getBlockReplacements();
+            List<BlockReplacement> blockReplacements = phonyCustomBiome.blockReplacements();
 
 
             IRegistry<?> elementRegistry = user.getRegistry(ResourceLocation.minecraft(REGISTRY_KEY));
@@ -203,7 +202,7 @@ public class PacketEventsPacketHandler implements PacketHandler {
                     }
                 }
 
-                if (blockReplacements.length == 0) {
+                if (blockReplacements.isEmpty()) {
                     continue;
                 }
 
@@ -254,8 +253,8 @@ public class PacketEventsPacketHandler implements PacketHandler {
                 return;
             }
 
-            BlockReplacement[] blockReplacements = override.customBiome().getBlockReplacements();
-            if (blockReplacements == null || blockReplacements.length == 0) {
+            List<BlockReplacement> blockReplacements = override.blockReplacements();
+            if (blockReplacements.isEmpty()) {
                 return;
             }
 
@@ -299,8 +298,8 @@ public class PacketEventsPacketHandler implements PacketHandler {
                 return;
             }
 
-            BlockReplacement[] blockReplacements = override.customBiome().getBlockReplacements();
-            if (blockReplacements == null || blockReplacements.length == 0) {
+            List<BlockReplacement> blockReplacements = override.blockReplacements();
+            if (blockReplacements.isEmpty()) {
                 return;
             }
 

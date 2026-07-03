@@ -4,6 +4,7 @@ import dev.wyck.Wyck;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.WireProvider;
 import dev.wyck.misc.PointRange2D;
+import dev.wyck.renderer.AbstractBiomeRenderer;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -30,7 +31,7 @@ import java.util.concurrent.CompletableFuture;
  */
 @NullMarked
 @AsOf("1.2.0")
-public interface BiomeUpdater {
+public interface BiomeUpdater extends AbstractBiomeRenderer {
 
     @ApiStatus.Internal
     WireProvider<Factory> WIRE = WireProvider.create("dev.wyck.renderer.updater.BiomeUpdaterFactoryImpl");

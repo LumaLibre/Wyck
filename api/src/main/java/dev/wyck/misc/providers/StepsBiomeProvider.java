@@ -2,8 +2,7 @@ package dev.wyck.misc.providers;
 
 import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
-import dev.wyck.model.biome.AbstractBiome;
-import org.bukkit.block.Biome;
+import dev.wyck.model.biome.Biome;
 import org.bukkit.generator.WorldInfo;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -42,10 +41,10 @@ public final class StepsBiomeProvider extends WyckBiomeProvider {
 
     private final List<BiomeStep> steps;
     @Nullable
-    private final AbstractBiome fallback;
+    private final Biome fallback;
 
     @AsOf("2.3.0")
-    private StepsBiomeProvider(Set<AbstractBiome> biomes, List<BiomeStep> steps, @Nullable AbstractBiome fallback) {
+    private StepsBiomeProvider(Set<Biome> biomes, List<BiomeStep> steps, @Nullable Biome fallback) {
         super(biomes);
         this.steps = steps;
         this.fallback = fallback;
@@ -53,15 +52,15 @@ public final class StepsBiomeProvider extends WyckBiomeProvider {
 
     @Override
     @AsOf("2.3.0")
-    public Biome getBiome(WorldInfo worldInfo, int x, int y, int z) {
+    public org.bukkit.block.Biome getBiome(WorldInfo worldInfo, int x, int y, int z) {
         // TODO: Cache bukkit biomes maybe?
         for (BiomeStep step : steps) {
-            AbstractBiome biome = step.apply(worldInfo, x, y, z);
+            Biome biome = step.apply(worldInfo, x, y, z);
             if (biome != null) {
-                return biome.toBukkitBiome();
+                return biome.bukkitBiome();
             }
         }
-        return fallback != null ? fallback.toBukkitBiome() : worldInfo.vanillaBiomeProvider().getBiome(worldInfo, x, y, z);
+        return fallback != null ? fallback.bukkitBiome() : worldInfo.vanillaBiomeProvider().getBiome(worldInfo, x, y, z);
     }
 
     @AsOf("2.3.0")
@@ -78,8 +77,8 @@ public final class StepsBiomeProvider extends WyckBiomeProvider {
     @AsOf("2.3.0")
     public static final class Builder {
         private final List<BiomeStep> steps = new ArrayList<>();
-        private final Set<AbstractBiome> biomes = new LinkedHashSet<>();
-        private AbstractBiome fallback;
+        private final Set<Biome> biomes = new LinkedHashSet<>();
+        private Biome fallback;
 
         /**
          * Full-control step. The lambda receives the position and returns a biome to place,
@@ -87,7 +86,7 @@ public final class StepsBiomeProvider extends WyckBiomeProvider {
          * via {@code produces} so the provider can advertise it from {@code getBiomes(...)}.
          */
         @AsOf("2.3.0")
-        public Builder step(BiomeStep step, AbstractBiome... produces) {
+        public Builder step(BiomeStep step, Biome... produces) {
             Preconditions.checkNotNull(step, "step cannot be null");
             Preconditions.checkNotNull(produces, "produces cannot be null");
             steps.add(step);
@@ -103,7 +102,7 @@ public final class StepsBiomeProvider extends WyckBiomeProvider {
          * @return this builder
          */
         @AsOf("2.3.0")
-        public Builder step(AbstractBiome biome, BiomeCondition condition) {
+        public Builder step(Biome biome, BiomeCondition condition) {
             Preconditions.checkNotNull(biome, "biome cannot be null");
             Preconditions.checkNotNull(condition, "condition cannot be null");
             biomes.add(biome);
@@ -118,7 +117,7 @@ public final class StepsBiomeProvider extends WyckBiomeProvider {
          * @since 2.3.0
          */
         @AsOf("2.3.0")
-        public Builder fallback(AbstractBiome biome) {
+        public Builder fallback(Biome biome) {
             Preconditions.checkNotNull(biome, "fallback biome cannot be null");
             this.fallback = biome;
             this.biomes.add(biome);
@@ -139,7 +138,7 @@ public final class StepsBiomeProvider extends WyckBiomeProvider {
     @AsOf("2.3.0")
     @FunctionalInterface
     public interface BiomeStep {
-        @Nullable AbstractBiome apply(WorldInfo worldInfo, int x, int y, int z);
+        @Nullable Biome apply(WorldInfo worldInfo, int x, int y, int z);
     }
 
     /**

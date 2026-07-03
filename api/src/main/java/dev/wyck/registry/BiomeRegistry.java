@@ -1,7 +1,6 @@
 package dev.wyck.registry;
 
 import dev.wyck.annotations.AsOf;
-import dev.wyck.model.biome.AbstractBiome;
 import dev.wyck.model.biome.Biome;
 import dev.wyck.factory.WireProvider;
 import dev.wyck.keys.ResourceKey;
@@ -15,7 +14,7 @@ import java.util.List;
  * An interface for registering and modifying custom biomes on a Minecraft server.
  *
  * @apiNote Biomes cannot be removed from the Minecraft registry once they have been added.
- * You may {@link #modify(AbstractBiome...) modify} existing biomes to reduce memory footprint.
+ * You may {@link #modify(Biome...) modify} existing biomes to reduce memory footprint.
  *
  * @version 0.0.1
  * @since 0.0.1
@@ -26,7 +25,7 @@ import java.util.List;
 public interface BiomeRegistry {
 
     @ApiStatus.Internal
-    WireProvider<BiomeRegistry> WIRE = WireProvider.create("dev.wyck.registry.CustomBiomeRegistry");
+    WireProvider<BiomeRegistry> WIRE = WireProvider.create("dev.wyck.registry.BiomeRegistryImpl");
 
     /**
      * This static method returns the current BiomeRegistry instance.
@@ -58,14 +57,13 @@ public interface BiomeRegistry {
      * @return the built biome
      */
     @AsOf("2.3.0")
-    Object buildDelegate(AbstractBiome biome);
+    Object buildDelegate(Biome biome);
 
     /**
      * This method registers a custom biome to a Minecraft server.
-     * It takes a CustomBiome object as an argument.
      *
      * @since 0.0.1
-     * @param biomes The CustomBiome objects that should be registered to the server.
+     * @param biomes The biomes that should be registered to the server.
      */
     @AsOf("0.0.1")
     default void register(Biome... biomes) {
@@ -76,7 +74,7 @@ public interface BiomeRegistry {
     /**
      * Registers a collection of custom biomes to a Minecraft server.
      *
-     * @param biomes The collection of CustomBiome objects that should be registered to the server.
+     * @param biomes The collection of Biome objects that should be registered to the server.
      * @since 2.3.1
      */
     @AsOf("2.3.1")
@@ -96,7 +94,7 @@ public interface BiomeRegistry {
      * @param biomes The AbstractBiomes that should internally be used to modify the existing biome.
      */
     @AsOf("0.0.8")
-    default void modify(AbstractBiome... biomes) {
+    default void modify(Biome... biomes) {
         modify(List.of(biomes));
     }
 
@@ -107,7 +105,7 @@ public interface BiomeRegistry {
      * @since 2.3.1
      */
     @AsOf("2.3.1")
-    void modify(Collection<AbstractBiome> biomes);
+    void modify(Collection<Biome> biomes);
 
 
     /**
@@ -118,6 +116,6 @@ public interface BiomeRegistry {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    <T extends AbstractBiome> T getBiome(ResourceKey key);
+    <T extends Biome> T getBiome(ResourceKey key);
 
 }
