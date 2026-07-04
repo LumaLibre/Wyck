@@ -9,12 +9,12 @@ import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 @ApiStatus.Internal
-public record DirectNoiseChunkGeneratorImpl(BiomeSource biomeSource, NoiseGeneratorSettings settings) implements ChunkGenerator {
+public record DirectNoiseChunkGeneratorImpl(BiomeSource biomeSource, NoiseGeneratorSettings noise) implements ChunkGenerator {
 
     @Override
     public Object toMinecraft() {
-        net.minecraft.world.level.biome.BiomeSource source = (net.minecraft.world.level.biome.BiomeSource) this.biomeSource.toMinecraft();
-        net.minecraft.world.level.levelgen.NoiseGeneratorSettings nmsSettings = (net.minecraft.world.level.levelgen.NoiseGeneratorSettings) this.settings.toMinecraft();
+        net.minecraft.world.level.biome.BiomeSource source = this.biomeSource.asHandle();
+        net.minecraft.world.level.levelgen.NoiseGeneratorSettings nmsSettings = this.noise.asHandle();
         Holder<net.minecraft.world.level.levelgen.NoiseGeneratorSettings> holder = Holder.direct(nmsSettings);
         return new NoiseBasedChunkGenerator(source, holder);
     }

@@ -1,8 +1,8 @@
 package dev.wyck.wrapper.level.noise.chunk;
 
 import dev.wyck.annotations.WireFactory;
-import dev.wyck.keys.ResourceKey;
 import dev.wyck.wrapper.level.BiomeSource;
+import dev.wyck.wrapper.level.noise.Noise;
 import dev.wyck.wrapper.level.noise.NoiseGeneratorSettings;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -13,8 +13,8 @@ import org.jspecify.annotations.NullMarked;
 public class ChunkGeneratorFactoryImpl implements ChunkGenerator.Factory {
 
     @Override
-    public ChunkGenerator noise(BiomeSource biomeSource, ResourceKey noiseSettings) {
-        return new NoiseChunkGeneratorImpl(biomeSource, noiseSettings);
+    public ChunkGenerator noise(BiomeSource biomeSource, Noise.Reference settings) {
+        return new NoiseChunkGeneratorImpl(biomeSource, settings);
     }
 
     @Override
