@@ -4,6 +4,8 @@ import dev.wyck.annotations.AsOf;
 import dev.wyck.annotations.WireFactory;
 import dev.wyck.registry.bootstrap.util.BootstrapSafeMinecraftRegistries;
 import dev.wyck.registry.bootstrap.util.DatapackPromotion;
+import dev.wyck.wrapper.worldgen.feature.placement.PlacedFeature;
+import dev.wyck.wrapper.worldgen.feature.placement.PlacementModifier;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;

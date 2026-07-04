@@ -5,7 +5,7 @@ import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.WireProvider;
 import dev.wyck.wrapper.internal.Wrapper;
 import dev.wyck.wrapper.worldgen.carver.ConfiguredWorldCarver;
-import dev.wyck.wrapper.worldgen.placement.PlacedFeature;
+import dev.wyck.wrapper.worldgen.feature.placement.PlacedFeature;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 

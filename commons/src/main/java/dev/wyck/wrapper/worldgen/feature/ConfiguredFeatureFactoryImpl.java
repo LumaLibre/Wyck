@@ -27,7 +27,6 @@ public final class ConfiguredFeatureFactoryImpl implements ConfiguredFeature.Fac
             case ConfiguredFeature.Reference reference -> resolveReference(reference);
             case ConfiguredFeature.VanillaConfigured vanilla -> resolveVanilla(vanilla);
             case ConfiguredFeature.CustomConfigured custom -> resolveCustom(custom);
-            case AbstractCustomFeature customFeature -> resolveCustom(ConfiguredFeature.custom(customFeature.key(), customFeature));
         };
     }
 

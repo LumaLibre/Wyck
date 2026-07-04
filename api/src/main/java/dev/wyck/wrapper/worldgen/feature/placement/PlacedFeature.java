@@ -1,4 +1,4 @@
-package dev.wyck.wrapper.worldgen.placement;
+package dev.wyck.wrapper.worldgen.feature.placement;
 
 import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
@@ -6,6 +6,7 @@ import dev.wyck.factory.WireProvider;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.wrapper.internal.Wrapper;
 import dev.wyck.wrapper.worldgen.feature.ConfiguredFeature;
+import dev.wyck.wrapper.worldgen.feature.custom.CustomFeature;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
 import org.jetbrains.annotations.ApiStatus;
@@ -116,6 +117,12 @@ public sealed interface PlacedFeature extends Wrapper, Keyed permits PlacedFeatu
 
         public FeatureBuilder feature(ConfiguredFeature feature) {
             this.feature = feature;
+            return this;
+        }
+
+        @AsOf("3.0.0")
+        public <C> FeatureBuilder feature(CustomFeature<C> customFeature, C config) {
+            this.feature = ConfiguredFeature.custom(customFeature, config);
             return this;
         }
 

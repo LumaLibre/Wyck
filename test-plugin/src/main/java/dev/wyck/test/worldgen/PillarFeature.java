@@ -17,7 +17,7 @@ public class PillarFeature extends CustomFeature<PillarFeature.PillarConfig> {
     }
 
     @Override
-    public boolean place(PlacementContext<PillarConfig> context) {
+    public boolean place(PlacementContext<PillarFeature.PillarConfig> context) {
         PillarConfig config = context.config();
         Random random = context.random();
         BlockVector origin = context.origin();

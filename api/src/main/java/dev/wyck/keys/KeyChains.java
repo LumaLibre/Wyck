@@ -6,7 +6,7 @@ import dev.wyck.model.level.dimension.Dimension;
 import dev.wyck.wrapper.environment.sounds.SoundEvent;
 import dev.wyck.wrapper.level.noise.function.DensityFunction;
 import dev.wyck.wrapper.worldgen.feature.ConfiguredFeature;
-import dev.wyck.wrapper.worldgen.placement.PlacedFeature;
+import dev.wyck.wrapper.worldgen.feature.placement.PlacedFeature;
 import org.jetbrains.annotations.ApiStatus;
 
 /**

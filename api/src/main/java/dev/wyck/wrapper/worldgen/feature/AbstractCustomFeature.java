@@ -2,6 +2,7 @@ package dev.wyck.wrapper.worldgen.feature;
 
 import dev.wyck.annotations.AsOf;
 import dev.wyck.keys.ResourceKey;
+import net.kyori.adventure.key.Keyed;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -13,7 +14,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("3.0.0")
-public non-sealed interface AbstractCustomFeature extends ConfiguredFeature {
+public interface AbstractCustomFeature extends Keyed {
     @Override
     @AsOf("3.0.0")
     ResourceKey key();

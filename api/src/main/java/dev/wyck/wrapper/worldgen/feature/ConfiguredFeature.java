@@ -27,7 +27,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.3.0")
-public sealed interface ConfiguredFeature extends Wrapper, Keyed permits ConfiguredFeature.CustomConfigured, ConfiguredFeature.Reference, ConfiguredFeature.VanillaConfigured, AbstractCustomFeature {
+public sealed interface ConfiguredFeature extends Wrapper, Keyed permits ConfiguredFeature.CustomConfigured, ConfiguredFeature.Reference, ConfiguredFeature.VanillaConfigured {
 
     @ApiStatus.Internal
     WireProvider<Factory> WIRE = WireProvider.create("dev.wyck.wrapper.worldgen.feature.ConfiguredFeatureFactoryImpl");
@@ -56,7 +56,7 @@ public sealed interface ConfiguredFeature extends Wrapper, Keyed permits Configu
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static ConfiguredFeature.VanillaConfigured vanilla(FeatureType featureType, FeatureConfiguration configuration) {
+    static ConfiguredFeature vanilla(FeatureType featureType, FeatureConfiguration configuration) {
         return new VanillaConfigured(featureType.resourceKey(), configuration);
     }
 
@@ -70,8 +70,21 @@ public sealed interface ConfiguredFeature extends Wrapper, Keyed permits Configu
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static ConfiguredFeature.CustomConfigured custom(ResourceKey featureKey, Object config) {
+    static ConfiguredFeature custom(ResourceKey featureKey, Object config) {
         return new CustomConfigured(featureKey, config);
+    }
+
+    /**
+     * Composes a registered custom feature with a config instance. The feature
+     * @param customFeature the custom feature to compose
+     * @param config the config instance to place with
+     * @return an authored configured feature
+     * @param <C> the config type
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
+    static <C> ConfiguredFeature custom(CustomFeature<C> customFeature, C config) {
+        return new CustomConfigured(customFeature.key(), config);
     }
 
     @Override
