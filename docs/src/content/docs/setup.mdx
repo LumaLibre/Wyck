@@ -1,6 +1,6 @@
 ---
 title: Getting Started
-description: A guide to getting started with BiomesAPI, including installation instructions and a quick overview of the API.
+description: A guide to getting started with Wyck, including installation instructions and a quick overview of the API.
 #tableOfContents: false
 ---
 
@@ -10,24 +10,48 @@ import CodeTabs from "@/components/CodeTabs.astro";
 
 export const latestRelease = await getLatestRelease();
 
-BiomesAPI is a custom biome API for [Paper](https://papermc.io/software/paper) servers without the use of datapacks.
+Wyck is a custom biome API for [Paper](https://papermc.io/software/paper) servers without the use of datapacks.
 Our wrappers allow you to easily add new biomes to the game and send them to clients without touching any internals.
 
 ## Compatibility
 
-BiomesAPI is compatible with **Minecraft 1.21.11, 26.1.2, 26.2** and requires a [Paper](https://papermc.io/software/paper) server running on **Java 25** or later.
-BiomesAPI is also compatible with [Folia](https://papermc.io/software/folia), but it is up to you to ensure that the rest of your plugin is compatible with Folia if you choose to support it.
+Wyck is compatible with **Minecraft 1.21.11, 26.1.2, 26.2** and requires a [Paper](https://papermc.io/software/paper) server running on **Java 25** or later.
+Wyck is also compatible with [Folia](https://papermc.io/software/folia), but it is up to you to ensure that the rest of your plugin is compatible with Folia if you choose to support it.
 
 
 ## Installation
 
-Installation depends on your build system and whether you choose to use BiomesAPI as a shaded dependency or external plugin dependency.
+Installation depends on your build system and whether you choose to use Wyck as a shaded dependency or external plugin dependency.
 This guide will assume you are using **Gradle (Kotlin DSL)** and will cover both shaded and external dependency methods.
 
-The latest stable release is [<Versions />](https://github.com/LumaLibre/BiomesAPI/releases) and the latest snapshot is [<Versions channel="snapshot" />](https://repo.jsinco.dev/#/releases/me/outspending/biomesapi/BiomesAPI).
+The latest stable release is [<Versions />](https://github.com/LumaLibre/Wyck/releases) and the latest snapshot is [<Versions channel="snapshot" />](https://repo.wyck.dev/#/releases/dev/wyck/Wyck).
 
 <CodeTabs
     examples={[
+        {
+            label: "Plugin Loader",
+            filename: "ExampleLoader.java",
+            lang: "java",
+            code:
+`package dev.wyck.example;
+
+import io.papermc.paper.plugin.loader.PluginClasspathBuilder;
+import io.papermc.paper.plugin.loader.PluginLoader;
+import io.papermc.paper.plugin.loader.library.impl.MavenLibraryResolver;
+import org.eclipse.aether.artifact.DefaultArtifact;
+import org.eclipse.aether.graph.Dependency;
+import org.eclipse.aether.repository.RemoteRepository;
+
+public class ExampleLoader implements PluginLoader {
+    @Override
+    public void classloader(PluginClasspathBuilder classpathBuilder) {
+        MavenLibraryResolver resolver = new MavenLibraryResolver();
+        resolver.addDependency(new Dependency(new DefaultArtifact("dev.wyck:Wyck:${latestRelease}"), null));
+        resolver.addRepository(new RemoteRepository.Builder("wyck", "default", "https://repo.wyck.dev/public/").build());
+        classpathBuilder.addLibrary(resolver);
+    }
+}`,
+        },
         {
             label: "Shaded",
             filename: "build.gradle.kts",
@@ -38,17 +62,17 @@ The latest stable release is [<Versions />](https://github.com/LumaLibre/BiomesA
 }
 
 repositories {
-    maven("https://repo.jsinco.dev/public/")
+    maven("https://repo.wyck.dev/public/")
 }
 
 dependencies {
-    implementation("me.outspending.biomesapi:BiomesAPI:${latestRelease}")
+    implementation("dev.wyck:Wyck:${latestRelease}")
 }
 
 tasks {
     shadowJar {
-        val pack = "com.example.testplugin"
-        relocate("me.outspending.biomesapi", "\$pack.biomesapi")
+        val pack = "dev.wyck.example"
+        relocate("dev.wyck", "\$pack.wyck")
         archiveClassifier.set("") // Remove the -all suffix
     }
 
@@ -67,17 +91,17 @@ tasks {
             lang: "kotlin",
             code:
 `repositories {
-    maven("https://repo.jsinco.dev/public/")
+    maven("https://repo.wyck.dev/public/")
 }
 
 dependencies {
-    compileOnly("me.outspending.biomesapi:BiomesAPI:${latestRelease}")
+    compileOnly("dev.wyck:Wyck:${latestRelease}")
 }`,
         },
     ]}
 />
 
-**If you are using BiomesAPI as external dependency** you will need to add BiomesAPI as a plugin dependency in your `plugin.yml`, or `paper-plugin.yml`.
+**If you are using Wyck in a plugin loader or as an external dependency** you will need to add Wyck as a plugin dependency in your `plugin.yml`, or `paper-plugin.yml`.
 
 <CodeTabs
     examples={[
@@ -87,10 +111,11 @@ dependencies {
             lang: "yaml",
             code:
 `name: ExamplePlugin
-main: com.example.ExamplePlugin
+main: dev.wyck.example.ExamplePlugin
 version: 1.0-SNAPSHOT
 api-version: 1.21
-depend: [BiomesAPI] # Add this line!`,
+paper-plugin-loader: dev.wyck.example.ExampleLoader # Add this line if you're using Wyck as a plugin loader
+depend: [Wyck] # Add this line if you're using Wyck as an external dependency`,
         },
         {
             label: "Paper Plugin",
@@ -98,19 +123,20 @@ depend: [BiomesAPI] # Add this line!`,
             lang: "yaml",
             code:
 `name: ExamplePlugin
-main: com.example.ExamplePlugin
-bootstrapper: com.example.ExampleBootstrapper
+main: dev.wyck.example.ExamplePlugin
+bootstrapper: dev.wyck.example.ExampleBootstrapper
 version: 1.0-SNAPSHOT
 api-version: 1.21
-# Add these lines:
+loader: dev.wyck.example.ExampleLoader # Add this line if you're using Wyck as a plugin loader
+# Add these lines if you're using Wyck as an external dependency:
 dependencies:
     bootstrap:
-      BiomesAPI:
+      Wyck:
         load: BEFORE
         required: true
         join-classpath: true
     server:
-      BiomesAPI:
+      Wyck:
         load: BEFORE
         required: true
         join-classpath: true`,
@@ -118,8 +144,8 @@ dependencies:
     ]}
 />
 
-BiomesAPI external dependency plugin can be found on our GitHub releases or [Modrinth](https://modrinth.com/plugin/biomesapi).
+Wyck external dependency plugin can be found on our GitHub releases or [Modrinth](https://modrinth.com/plugin/biomesapi).
 
 ## Leave a Star, Please!
 
-If you find BiomesAPI useful, please consider leaving a star on our [GitHub repository](https://github.com/LumaLibre/BiomesAPI).
+If you find Wyck useful, please consider leaving a star on our [GitHub repository](https://github.com/LumaLibre/Wyck).

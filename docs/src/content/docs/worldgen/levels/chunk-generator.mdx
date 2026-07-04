@@ -1,0 +1,64 @@
+---
+title: Chunk Generators
+description: A basic tutorial on ChunkGenerators in Wyck.
+---
+
+import CodeBlock from "@/components/CodeBlock.astro";
+import SourceLink from "@/components/SourceLink.astro";
+
+A <SourceLink path="wrapper/level/noise/chunk/ChunkGenerator.java">ChunkGenerator</SourceLink> is
+what a dimension's level stem uses to generate chunks. It combines a <SourceLink path="wrapper/level/BiomeSource.java">BiomeSource</SourceLink>,
+which decides which biome occupies each region, along with a set of noise settings which decide how terrain is
+shaped and which blocks fill to the world with.
+
+
+## Noise Settings
+
+The generator needs noise settings, and there are two ways to supply them:
+
+- **By reference**: pass a <SourceLink path="keys/ResourceKey.java">ResourceKey</SourceLink> pointing at an
+existing settings entry, such as `minecraft:overworld`, `minecraft:the_nether`, or `minecraft:end`.
+- **Authored**: pass a <SourceLink path="wrapper/level/noise/NoiseGeneratorSettings.java">NoiseGeneratorSettings</SourceLink>,
+which bundles a `NoiseRouter` (see the [Noise Routers](/worldgen/level/level-noise-router/) page) together with
+the rest of the generator's configuration.
+
+### Example Usage
+<CodeBlock
+    lang="java"
+    filename="ExamplePlugin.java"
+    code={
+`import dev.wyck.model.biome.CustomBiome;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.model.level.LevelCreator;
+import dev.wyck.wrapper.level.BiomeSource;
+import dev.wyck.wrapper.level.noise.Noise;
+import dev.wyck.wrapper.level.noise.chunk.ChunkGenerator;
+import org.bukkit.World;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class ExamplePlugin extends JavaPlugin {
+    @Override
+    public void onEnable() {
+        CustomBiome biome = CustomBiome.builder()
+            .resourceKey(ResourceKey.of("test", "biome"))
+            .fogColor("#DB00FD")
+            .skyColor("#2F46FF")
+            .waterColor("#00FFD0")
+            .grassColor("#D1D13A")
+            .foliageColor("#FF6A00")
+            .register();
+
+
+        // Floating islands with a single fixed custom biome
+        ChunkGenerator generator = ChunkGenerator.of(
+            BiomeSource.fixed(biome),
+            Noise.floatingIslands()
+        );
+
+        World world = LevelCreator.builder()
+            .levelKey(ResourceKey.of("test", "example"))
+            .generator(generator)
+            .create(); // Done!
+    }
+}`}
+/>

@@ -1,0 +1,169 @@
+---
+title: Creating Biomes
+description: Learn how to create custom biomes with Wyck
+sidebar:
+    order: 1
+---
+
+import CodeBlock from "@/components/CodeBlock.astro";
+import SourceLink from "@/components/SourceLink.astro";
+import CodeTabs from "@/components/CodeTabs.astro";
+
+<SourceLink path="model/biome/Biome.java">Biome</SourceLink>s
+are at the core of Wyck and are used to create biomes that can be rendered to players using the various biome renderers in Wyck.
+
+We provide many different options for customizing your biome visuals and gameplay elements through our builder,
+but you may also omit any of these attributes if you do not wish to use them.
+
+### Example Usage
+<CodeBlock
+    lang="java"
+    filename="ExamplePlugin.java"
+    code={
+`import dev.wyck.keys.ResourceKey;
+import dev.wyck.model.biome.Biome;
+import dev.wyck.test.worldgen.PillarFeature;
+import dev.wyck.wrapper.biome.BiomeSpecialEffects;
+import dev.wyck.wrapper.biome.ClimateSettings;
+import dev.wyck.wrapper.biome.TemperatureModifier;
+import dev.wyck.wrapper.entity.BiomeSpawner;
+import dev.wyck.wrapper.entity.MobCategory;
+import dev.wyck.wrapper.entity.data.NaturalSpawner;
+import dev.wyck.wrapper.environment.attribute.EnvironmentAttributes;
+import dev.wyck.wrapper.environment.particle.ParticleCatalog;
+import dev.wyck.wrapper.environment.particle.ParticleOptions;
+import dev.wyck.wrapper.environment.particle.ParticleTypes;
+import dev.wyck.wrapper.environment.particle.options.BlockParticle;
+import dev.wyck.wrapper.worldgen.BiomeGenerationSettings;
+import dev.wyck.wrapper.worldgen.GenerationStep;
+import dev.wyck.wrapper.worldgen.carver.CanyonCarverConfiguration;
+import dev.wyck.wrapper.worldgen.carver.CanyonShapeConfiguration;
+import dev.wyck.wrapper.worldgen.carver.ConfiguredWorldCarver;
+import dev.wyck.wrapper.worldgen.feature.ConfiguredFeature;
+import dev.wyck.wrapper.worldgen.feature.ConfiguredFeatures;
+import dev.wyck.wrapper.worldgen.feature.FeatureType;
+import dev.wyck.wrapper.worldgen.feature.config.FeatureConfiguration;
+import dev.wyck.wrapper.worldgen.placement.PlacedFeature;
+import dev.wyck.wrapper.worldgen.placement.PlacedFeatures;
+import dev.wyck.wrapper.worldgen.placement.PlacementModifier;
+import dev.wyck.wrapper.worldgen.valueproviders.FloatProvider;
+import dev.wyck.wrapper.worldgen.valueproviders.HeightProvider;
+import dev.wyck.wrapper.worldgen.valueproviders.IntProvider;
+import dev.wyck.wrapper.worldgen.valueproviders.VerticalAnchor;
+import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.List;
+
+public class ExamplePlugin extends JavaPlugin {
+    @Override
+    public void onEnable() {
+        Biome.builder()
+            .resourceKey(ResourceKey.of("test:biome")) // Required key
+            // Climate settings
+            .climateSettings(ClimateSettings.builder()
+                .downfall(0.5f)
+                .temperature(0.14f)
+                .temperatureModifier(TemperatureModifier.FROZEN)
+                .build()
+            )
+            // Special effects
+            .specialEffects(BiomeSpecialEffects.builder()
+                .waterColor("#00FF00")
+                .grassColorOverride("#00FF00")
+                .foliageColorOverride("#00FF00")
+                .dryFoliageColorOverride("#0000FF")
+                .build()
+            )
+            // Environmental attributes
+            .attribute(EnvironmentAttributes.BLOCK_LIGHT_TINT, "#FFFFFF")
+            .attribute(EnvironmentAttributes.FOG_COLOR, "#FFFFFF")
+            .attribute(EnvironmentAttributes.AMBIENT_PARTICLES, ParticleCatalog.builder()
+                .particle(ParticleTypes.BLOCK, 0.01f, BlockParticle.of(Material.ACACIA_LOG))
+                .build()
+            )
+            .attribute(EnvironmentAttributes.DEFAULT_DRIPSTONE_PARTICLE, ParticleOptions.of(ParticleTypes.DRIPPING_HONEY))
+            // Mob spawn settings
+            .spawner(BiomeSpawner.builder()
+                .spawner(MobCategory.MONSTER, NaturalSpawner.of(EntityType.ZOMBIE, 5, 15))
+                .build()
+            )
+            // Worldgen
+            .generationSettings(
+                BiomeGenerationSettings.builder()
+                    .addCarver(ConfiguredWorldCarver.canyon(CanyonCarverConfiguration.builder()
+                        .probability(0.9f)
+                        .y(HeightProvider.biasedToBottom(VerticalAnchor.bottom(), VerticalAnchor.bottom(), 20))
+                        .yScale(FloatProvider.constant(1.0f))
+                        .lavaLevel(VerticalAnchor.absolute(63))
+                        .replaceable(List.of(Material.STONE, Material.DIRT, Material.GRASS_BLOCK))
+                        .verticalRotation(FloatProvider.constant(0.0f))
+                        .shape(CanyonShapeConfiguration.builder()
+                            .distanceFactor(FloatProvider.constant(5f))
+                            .thickness(FloatProvider.constant(0.1f))
+                            .widthSmoothness(30)
+                            .horizontalRadiusFactor(FloatProvider.constant(1.0f))
+                            .verticalRadiusCenterFactor(0.3f)
+                            .verticalRadiusDefaultFactor(0.3f)
+                            .build())
+                        .build())
+                    )
+                    .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeature.builder()
+                        .feature(new PillarFeature().register()) // Declared in another class from my plugin
+                        .modifier(PlacementModifier.count(1))
+                        .build())
+                    .addFeature(GenerationStep.TOP_LAYER_MODIFICATION, PlacedFeature.builder()
+                        .feature(ConfiguredFeatures.PILE_SNOW) // Or use one that's already registered
+                        .modifier(PlacementModifier.count(1))
+                        .build())
+                    .addFeature(GenerationStep.UNDERGROUND_ORES, PlacedFeatures.ORE_IRON_SMALL)
+                    .addFeature(GenerationStep.RAW_GENERATION, PlacedFeature.builder()
+                        .feature(ConfiguredFeature.vanilla(FeatureType.VEGETATION_PATCH, FeatureConfiguration.count(IntProvider.constant(3))))
+                        .modifier(PlacementModifier.count(1))
+                        .build())
+                    .build()
+            )
+            .register(); // Build and register
+    }
+}`}
+/>
+
+Intimidating? Don't worry! Most of that is related to world generation, which you can omit if you don't want to customize it.
+
+### Friendly Custom Biomes
+
+In addition to the basic <SourceLink path="model/biome/Biome.java">Biome</SourceLink> interface,
+Wyck also provides a friendly <SourceLink path="model/biome/CustomBiome.java">CustomBiome</SourceLink>
+for easier mutation of biomes you're creating.
+
+### Example Usage
+<CodeBlock
+    lang="java"
+    filename="ExamplePlugin.java"
+    code={
+`import dev.wyck.model.biome.CustomBiome;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.wrapper.BiomeSettings;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class ExamplePlugin extends JavaPlugin {
+    @Override
+    public void onEnable() {
+        CustomBiome customBiome = CustomBiome.builder()
+            .resourceKey(ResourceKey.of("test", "custombiome"))
+            .fogColor("#FFFFFF")
+            .foliageColor("#F5F2EB")
+            .skyColor("#B99DFC")
+            .waterColor("#F5F2EB")
+            .waterFogColor("#000000")
+            .grassColor("#DBE9EC")
+            // Block replacements can only be used with PacketHandlers!
+            .replace(Material.GRASS_BLOCK, Material.STONE)
+            .build();
+
+        // All done? Register it!
+        customBiome.register();
+    }
+}`}
+/>

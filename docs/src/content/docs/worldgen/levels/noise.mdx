@@ -1,0 +1,140 @@
+---
+title: Noise Generators
+description: Learn how to reference built-in noise or author custom noise generator settings in Wyck.
+---
+
+import CodeBlock from "@/components/CodeBlock.astro";
+import SourceLink from "@/components/SourceLink.astro";
+
+<SourceLink path="wrapper/level/noise/Noise.java">Noise</SourceLink> is what a <SourceLink path="wrapper/level/noise/chunk/ChunkGenerator.java">ChunkGenerator</SourceLink>
+uses to shape terrain. Wyck provides ways to reference existing noise generators or author your own using
+<SourceLink path="wrapper/level/noise/NoiseGeneratorSettings.java">NoiseGeneratorSettings</SourceLink>.
+
+## Referencing Existing Noise
+
+Referencing existing nodes can be done by keys or by convenience methods.
+
+<CodeBlock
+    lang="java"
+    filename="Examples.java"
+    code={
+`import dev.wyck.keys.ResourceKey;
+import dev.wyck.wrapper.level.noise.Noise;
+
+Noise overworld = Noise.overworld();
+Noise nether = Noise.nether();
+Noise end = Noise.end();
+Noise floatingIslands = Noise.floatingIslands();
+Noise amplified = Noise.amplified();
+Noise caves = Noise.caves();
+
+// anything registered can be referenced by key
+Noise byKey = Noise.reference(ResourceKey.of("test", "my_noise"));
+`}
+/>
+
+## Authoring Custom Noise
+
+Building your own noise can be done with `Noise.builder()`.
+An authored <SourceLink path="wrapper/level/noise/NoiseGeneratorSettings.java">NoiseGeneratorSettings</SourceLink> is itself an instance of <SourceLink path="wrapper/level/noise/Noise.java">Noise</SourceLink>, so you can hand it straight to a generator
+without registering anything.
+
+:::note
+
+`noiseRouter()` and `surfaceRule()` are required, the rest of this builder is optional.
+
+:::
+
+<CodeBlock
+    lang="java"
+    filename="ExamplePlugin.java"
+    code={
+`import dev.wyck.wrapper.level.noise.NoiseRouter;
+import dev.wyck.wrapper.level.noise.Noise;
+import dev.wyck.wrapper.level.noise.function.DensityFunction;
+import dev.wyck.wrapper.level.noise.function.DensityFunctions;
+import dev.wyck.wrapper.level.noise.settings.NoiseSettings;
+import dev.wyck.wrapper.worldgen.surface.SurfaceCondition;
+import dev.wyck.wrapper.worldgen.surface.SurfaceRule;
+import org.bukkit.Material;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.List;
+
+public class ExamplePlugin extends JavaPlugin {
+    @Override
+    public void onEnable() {
+        NoiseRouter router = NoiseRouter.builder()
+            // Aquifers and fluids
+            .barrier(DensityFunction.constant(0.0))
+            .fluidLevelFloodedness(DensityFunction.constant(0.0))
+            .fluidLevelSpread(DensityFunction.constant(0.0))
+            .lava(DensityFunction.constant(0.0))
+
+            // Climate parameters
+            .temperature(DensityFunctions.ZERO)
+            .vegetation(DensityFunctions.ZERO)
+            .continents(DensityFunctions.CONTINENTS)
+            .erosion(DensityFunctions.EROSION)
+            .depth(DensityFunctions.DEPTH_AMPLIFIED)
+            .ridges(DensityFunctions.RIDGES)
+
+            // Terrain shape
+            .preliminarySurfaceLevel(DensityFunction.constant(0.0))
+            .finalDensity(DensityFunctions.SLOPED_CHEESE)
+
+            // Ore veins (disabled)
+            .veinToggle(DensityFunction.constant(-1.0))
+            .veinRidged(DensityFunction.constant(0.0))
+            .veinGap(DensityFunction.constant(0.0))
+            .build();
+
+        // grass on top of the column, stone everywhere beneath
+        SurfaceRule surfaceRule = SurfaceRule.sequence(List.of(
+            SurfaceRule.ifTrue(
+                SurfaceCondition.stoneDepth(0, false, SurfaceCondition.CaveSurface.FLOOR),
+                SurfaceRule.block(Material.GRASS_BLOCK)
+            ),
+            SurfaceRule.block(Material.STONE)
+        ));
+
+        Noise settings = Noise.builder()
+            .noiseSettings(NoiseSettings.OVERWORLD)
+            .defaultBlock(Material.STONE)
+            .defaultFluid(Material.WATER)
+            .noiseRouter(router)
+            .surfaceRule(surfaceRule)
+            .seaLevel(63)
+            .build();
+        // Done. Use this in a ChunkGenerator
+    }
+}`}
+/>
+
+
+## Registering Custom Noise (Optional)
+
+:::caution
+
+A custom <SourceLink path="wrapper/level/noise/Noise.java">Noise</SourceLink>
+**must** have a `resourceKey` set in order to be registered.
+
+:::
+
+**Registration is optional.**
+You'll only need to if you want to reference the same settings by key elsewhere
+or want to expose the noise generator to other plugins through the registry.
+
+<CodeBlock
+    lang="java"
+    filename="ExamplePlugin.java"
+    code={
+`Noise registered = Noise.builder()
+    .resourceKey(ResourceKey.of("test", "my_noise"))
+    .noiseRouter(router)
+    .surfaceRule(surfaceRule)
+    .register(); // builds and registers in one step
+
+// now reachable by key from anywhere
+Noise byKey = Noise.reference(ResourceKey.of("test", "my_noise"));`}
+/>

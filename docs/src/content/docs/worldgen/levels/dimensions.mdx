@@ -1,0 +1,132 @@
+---
+title: Dimensions & LevelCreators
+description: An introduction to custom dimensions and level creators with Wyck.
+---
+
+import CodeBlock from "@/components/CodeBlock.astro";
+import SourceLink from "@/components/SourceLink.astro";
+
+## What is a Dimension?
+
+A <SourceLink path="level/dimension/Dimension.java">Dimension</SourceLink> in Wyck directly references
+a `DimensionType` in Minecraft, which is the blueprint for how levels (worlds) are created.
+
+Dimensions hold a variety of attributes such as build height, [environment attributes](/wrappers/environment-attributes),
+and more. Building and registering custom dimensions are just as easy as creating custom Biomes within Wyck.
+
+### Example Usage
+<CodeBlock
+    lang="java"
+    filename="ExamplePlugin.java"
+    code={
+`import dev.wyck.keys.ResourceKey;
+import dev.wyck.model.level.dimension.Dimension;
+import dev.wyck.wrapper.environment.BedRule;
+import dev.wyck.wrapper.environment.attribute.EnvironmentAttributes;
+import dev.wyck.wrapper.level.dimension.Skybox;
+import net.kyori.adventure.text.Component;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class ExamplePlugin extends JavaPlugin {
+    @Override
+    public void onEnable() {
+        Dimension dimension = Dimension.builder()
+            .resourceKey(ResourceKey.of("wyck:example"))
+            .hasSkyLight(true)
+            // Set the height of the dimension to 512 blocks
+            .height(512)
+            .logicalHeight(512)
+            .skybox(Skybox.OVERWORLD)
+            .attribute(EnvironmentAttributes.FOG_COLOR, "#FFFFFF")
+            // Make beds always explode in this dimension
+            .attribute(EnvironmentAttributes.BED_RULE,
+                BedRule.builder()
+                    .setExplodes(true)
+                    .setErrorMessage(Component.text("Kaboom!"))
+                    .build()
+            )
+            .register(); // All done!
+    }
+}`}
+/>
+
+
+## LevelCreators
+
+LevelCreators are Wyck's in-house implementation of Bukkit's [`WorldCreator`](https://jd.papermc.io/paper/26.2/org/bukkit/WorldCreator.html)
+that are specifically suited for custom dimensions and custom biomes.
+
+* Here's a quick example on how to generate an entire level with a custom dimension and biome start to finish.
+
+### Example Usage
+<CodeBlock
+    lang="java"
+    filename="ExamplePlugin.java"
+    code={
+`import dev.wyck.model.biome.CustomBiome;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.model.level.LevelCreator;
+import dev.wyck.model.level.dimension.Dimension;
+import dev.wyck.registry.level.LevelFactory;
+import dev.wyck.wrapper.environment.BedRule;
+import dev.wyck.wrapper.environment.attribute.EnvironmentAttributes;
+import dev.wyck.wrapper.level.BiomeSource;
+import dev.wyck.wrapper.level.noise.chunk.ChunkGenerator;
+import dev.wyck.wrapper.level.noise.Noise;
+import dev.wyck.wrapper.level.dimension.Skybox;
+import dev.wyck.wrapper.worldgen.climate.ClimatePoint;
+import dev.wyck.wrapper.worldgen.climate.ClimateParameter;
+import net.kyori.adventure.text.Component;
+import org.bukkit.World;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class ExamplePlugin extends JavaPlugin {
+    @Override
+    public void onEnable() {
+        ResourceKey exampleKey = ResourceKey.of("wyck", "example");
+
+        Dimension dimension = Dimension.builder(exampleKey)
+            .hasSkyLight(true)
+            .skybox(Skybox.OVERWORLD)
+            .attribute(EnvironmentAttributes.FOG_COLOR, "#FFFFFF")
+            .attribute(EnvironmentAttributes.BED_RULE,
+                BedRule.builder()
+                    .setExplodes(true)
+                    .setErrorMessage(Component.text("Kaboom!"))
+                    .build()
+            )
+            .register();
+        CustomBiome biome = CustomBiome.builder(exampleKey)
+            .fogColor("#DB00FD")
+            .skyColor("#2F46FF")
+            .waterColor("#00FFD0")
+            .grassColor("#D1D13A")
+            .foliageColor("#FF6A00")
+            .register();
+
+        // Create a biome source! This can be fixed or multi noise
+        ClimateParameter span = ClimateParameter.span(1.0f, 1.5f);
+        ClimateParameter point = ClimateParameter.point(0.9f);
+
+        // For this example, we'll use a custom biome and a desert and have them span different temperatures and humidity
+        BiomeSource biomeSource = BiomeSource.multiNoise()
+            .add(biome, ClimatePoint.builder().temperature(span).humidity(span).build())
+            .add(ResourceKey.minecraft("desert"), ClimatePoint.builder().temperature(point).humidity(point).build())
+            .build();
+
+        // For this example, we'll use the overworld noise generator. You can also create your own!
+        ChunkGenerator generator = ChunkGenerator.of(
+            biomeSource,
+            Noise.overworld()
+        );
+
+        LevelCreator levelCreator = LevelCreator.builder(exampleKey)
+            .dimension(dimension)
+            .generator(generator)
+            .build();
+
+        World world = LevelFactory.factory().createWorld(levelCreator);
+        // All done!
+    }
+}`}
+/>

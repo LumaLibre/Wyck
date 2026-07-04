@@ -1,0 +1,133 @@
+package dev.wyck.wrapper.environment.sounds;
+
+import dev.wyck.annotations.AsOf;
+import dev.wyck.factory.ConstructWireProvider;
+import dev.wyck.wrapper.internal.Wrapper;
+import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.NullUnmarked;
+import org.jspecify.annotations.Nullable;
+
+import java.util.Optional;
+
+/**
+ * Wraps a Minecraft BackgroundMusic.
+ *
+ * @version 2.4.1
+ * @since 2.4.1
+ * @author Jsinco
+ */
+@NullMarked
+@AsOf("2.4.1")
+public interface BackgroundMusic extends Wrapper {
+
+    @ApiStatus.Internal
+    ConstructWireProvider<BackgroundMusic> WIRE = ConstructWireProvider.construct("dev.wyck.wrapper.environment.sounds.BackgroundMusicImpl");
+
+    /**
+     * Gets the default music.
+     * @return the default music, if present
+     * @since 2.4.1
+     */
+    @AsOf("2.4.1")
+    Optional<Music> defaultMusic();
+
+    /**
+     * Gets the creative music.
+     * @return the creative music, if present
+     * @since 2.4.1
+     */
+    @AsOf("2.4.1")
+    Optional<Music> creativeMusic();
+
+    /**
+     * Gets the underwater music.
+     * @return the underwater music, if present
+     * @since 2.4.1
+     */
+    @AsOf("2.4.1")
+    Optional<Music> underwaterMusic();
+
+    /**
+     * Creates a new background music record.
+     * @param defaultMusic the default music
+     * @param creativeMusic the creative music
+     * @param underwaterMusic the underwater music
+     * @return a new background music record
+     * @since 2.4.1
+     */
+    @NullUnmarked
+    @AsOf("2.4.1")
+    static BackgroundMusic of(Music defaultMusic, Music creativeMusic, Music underwaterMusic) {
+        return WIRE.construct(Optional.ofNullable(defaultMusic), Optional.ofNullable(creativeMusic), Optional.ofNullable(underwaterMusic));
+    }
+
+    /**
+     * Creates a new background music record builder.
+     * @return a new background music record builder
+     * @since 2.4.1
+     */
+    @AsOf("2.4.1")
+    static Builder builder() {
+        return new Builder();
+    }
+
+    /**
+     * Builder for creating background music records.
+     * @since 2.4.1
+     * @version 2.4.1
+     * @author Jsinco
+     */
+    @AsOf("2.4.1")
+    final class Builder {
+        private @Nullable Music defaultMusic;
+        private @Nullable Music creativeMusic;
+        private @Nullable Music underwaterMusic;
+
+        /**
+         * Sets the default music.
+         * @param defaultMusic the default music
+         * @return this builder
+         * @since 2.4.1
+         */
+        @AsOf("2.4.1")
+        public Builder defaultMusic(@Nullable Music defaultMusic) {
+            this.defaultMusic = defaultMusic;
+            return this;
+        }
+
+        /**
+         * Sets the creative music.
+         * @param creativeMusic the creative music
+         * @return this builder
+         * @since 2.4.1
+         */
+        @AsOf("2.4.1")
+        public Builder creativeMusic(@Nullable Music creativeMusic) {
+            this.creativeMusic = creativeMusic;
+            return this;
+        }
+
+        /**
+         * Sets the underwater music.
+         * @param underwaterMusic the underwater music
+         * @return this builder
+         * @since 2.4.1
+         */
+        @AsOf("2.4.1")
+        public Builder underwaterMusic(@Nullable Music underwaterMusic) {
+            this.underwaterMusic = underwaterMusic;
+            return this;
+        }
+
+        /**
+         * Builds the background music.
+         * @return a new background music record
+         * @since 2.4.1
+         */
+        @AsOf("2.4.1")
+        public BackgroundMusic build() {
+            return of(defaultMusic, creativeMusic, underwaterMusic);
+        }
+    }
+}

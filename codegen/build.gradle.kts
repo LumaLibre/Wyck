@@ -14,11 +14,11 @@ val mojangMappedServerConfig = listOf("mojangMappedServer", "mojangMappedServerR
 )
 
 val generatedCatalogFiles = listOf(
-    "me/outspending/biomesapi/wrapper/worldgen/feature/ConfiguredFeatures.java",
-    "me/outspending/biomesapi/wrapper/worldgen/placement/PlacedFeatures.java",
-    "me/outspending/biomesapi/wrapper/level/noise/function/DensityFunctions.java",
-    "me/outspending/biomesapi/wrapper/level/noise/Noises.java",
-    "me/outspending/biomesapi/wrapper/environment/sounds/SoundEvents.java"
+    "dev/wyck/wrapper/worldgen/feature/ConfiguredFeatures.java",
+    "dev/wyck/wrapper/worldgen/placement/PlacedFeatures.java",
+    "dev/wyck/wrapper/level/noise/function/DensityFunctions.java",
+    "dev/wyck/wrapper/level/noise/Noises.java",
+    "dev/wyck/wrapper/environment/sounds/SoundEvents.java"
 ).map { rootProject.file("api/src/main/java/$it") }
 
 tasks.register<JavaExec>("generateSources") {
@@ -27,7 +27,7 @@ tasks.register<JavaExec>("generateSources") {
 
     classpath = sourceSets.main.get().output + mojangMappedServerConfig
 
-    mainClass.set("me.outspending.biomesapi.codegen.ReferenceGenerator")
+    mainClass.set("dev.wyck.codegen.ReferenceGenerator")
     args(
         rootProject.file("api/src/main/java").absolutePath,
         rootProject.version.toString()

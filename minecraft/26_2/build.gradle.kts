@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.paperweight.userdev)
 }
 
-group = "me.outspending.biomesapi.v26_2"
+group = "dev.wyck.v26_2"
 
 dependencies {
     compileOnly(project(":api"))

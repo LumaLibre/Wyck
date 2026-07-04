@@ -7,7 +7,7 @@ import yaml from '@rollup/plugin-yaml';
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://biomes.lumas.dev",
+  site: "https://wyck.dev",
   redirects: {
     '/jd': '/javadoc/index.html',
     '/discord': 'https://discord.gg/CCZGFg85jM'
@@ -22,39 +22,33 @@ export default defineConfig({
   },
   integrations: [
     starlight({
+      favicon: '/favicon.png',
       components: {
         Sidebar: './src/components/Sidebar.astro',
       },
       plugins: [starlightThemeVintage()],
-      title: 'BiomesAPI',
+      title: 'Wyck (BiomesAPI)',
       logo: {
-        src: './src/assets/biomesapi.png',
+        src: './src/assets/wyck.png',
         replacesTitle: true,
       },
       social: [
-        { icon: 'github', label: 'GitHub', href: 'https://github.com/LumaLibre/BiomesAPI' },
-        { icon:  'discord', label: 'Discord', href: 'https://discord.gg/CCZGFg85jM' },
+        { icon: 'github', label: 'GitHub', href: 'https://github.com/LumaLibre/Wyck' },
+        { icon: 'discord', label: 'Discord', href: 'https://discord.gg/CCZGFg85jM' },
+        { icon: 'open-book', label: 'Javadocs', href: 'https://wyck.dev/javadoc/index.html' },
       ],
       sidebar: [
         {
           label: "Getting Started",
           link: "/setup/",
         },
-        // {
-        //   label: "Introduction",
-        //   link: "/intro/",
-        // },
         {
           label: "Biomes",
           autogenerate: { directory: "biomes" },
         },
         {
-          label: "Wrappers",
-          autogenerate: { directory: "wrappers" },
-        },
-        {
-          label: "Registries",
-          autogenerate: { directory: "registries" },
+          label: "Dimensions",
+          autogenerate: { directory: "dimensions" },
         },
         {
           label: "Renderers",
@@ -65,8 +59,8 @@ export default defineConfig({
           autogenerate: { directory: "worldgen" },
         },
         {
-          label: "Connection",
-          autogenerate: { directory: "connection" },
+          label: "Registries",
+          autogenerate: { directory: "registries" },
         },
         {
           label: "Components",

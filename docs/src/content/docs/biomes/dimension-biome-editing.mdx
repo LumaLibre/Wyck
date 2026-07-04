@@ -1,0 +1,125 @@
+---
+title: Adding Biomes to Existing Dimensions
+description: Learn how to inject or add your own biomes into dimensions.
+sidebar:
+    order: 7
+---
+
+import CodeBlock from "@/components/CodeBlock.astro";
+import SourceLink from "@/components/SourceLink.astro";
+
+Adding your biomes to dimensions is an important step in bringing together your custom world generation.
+If you want to use your world generation in an existing world such as `minecraft:overworld`, then this is a necessary step.
+
+The <SourceLink path="registry/dimension/LevelStemEditor.java">LevelStemEditor</SourceLink> and the
+<SourceLink path="registry/bootstrap/Composer.java">Composer.DATAPACK</SourceLink> version of the
+<SourceLink path="registry/bootstrap/BootstrapBiomeRegistry.java">BootstrapBiomeRegistry</SourceLink> both have the
+ability to add or replace biomes in dimensions.
+
+## Using the LevelStemEditor
+
+The <SourceLink path="registry/dimension/LevelStemEditor.java">LevelStemEditor</SourceLink>, in its current state,
+injects and adds biomes to dimensions entirely transiently. This means that if your biome is never saved to the dimension
+and the server will always be able to load the Minecraft world without your biome being registered.
+
+**Use the dimension editor if:**
+
+* You want to add or replace biomes in dimensions during the runtime of your plugin.
+* You expect your plugin not always being present on a server, or want Minecraft worlds to be able to load without your biome being registered.
+
+### Example Usage
+
+<CodeBlock
+    lang="java"
+    filename="ExamplePlugin.java"
+    code={
+`import dev.wyck.model.biome.CustomBiome;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.registry.level.LevelStemEditor;
+import dev.wyck.wrapper.worldgen.BiomeGenerationSettings;
+import dev.wyck.wrapper.worldgen.GenerationStep;
+import dev.wyck.wrapper.worldgen.placement.PlacedFeatures;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class ExamplePlugin extends JavaPlugin {
+    @Override
+    public void onEnable() {
+        BiomeGenerationSettings generation = BiomeGenerationSettings.builder()
+            .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeatures.TREES_PLAINS)
+            .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeatures.FALLEN_OAK_TREE)
+            .build();
+
+        ResourceKey myBiomeKey = ResourceKey.of("example", "my_biome");
+        CustomBiome.builder(myBiomeKey)
+            .fogColor("#DB00FD")
+            .skyColor("#2F46FF")
+            .waterColor("#00FFD0")
+            .grassColor("#D1D13A")
+            .foliageColor("#FF6A00")
+            .generationSettings(generation)
+            .register();
+
+        LevelStemEditor dimensionEditor = LevelStemEditor.create();
+        ResourceKey overworldKey = ResourceKey.of("minecraft", "overworld");
+        ResourceKey plainsKey = ResourceKey.of("minecraft", "plains");
+        dimensionEditor.replaceInDimension(overworldKey, plainsKey, myBiomeKey);
+        dimensionEditor.apply(); // Applies to all loaded worlds
+    }
+}`
+}
+/>
+
+
+#### When to use the BootstrapBiomeRegistry (Composer.DATAPACK)
+
+The <SourceLink path="registry/bootstrap/BootstrapBiomeRegistry.java">BootstrapBiomeRegistry</SourceLink> version of the
+<SourceLink path="registry/bootstrap/Composer.java" line={28}>Composer.DATAPACK</SourceLink> adds or replaces biomes in dimensions during the Bootstrap phase of your plugin's lifecycle.
+This means that if your biome is not present, the world will fail to load and will not be able to load unless your biome becomes present
+or manual modifications are made to that world's `.dat` files.
+
+If you want Wyck to mimic a normal datapack or you anticipate and *want* your biome to always be present on a given server, then this is the option for you.
+
+### Example Usage
+<CodeBlock
+    lang="java"
+    filename="ExampleBootstrapper.java"
+    code={
+`import io.papermc.paper.plugin.bootstrap.BootstrapContext;
+import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
+import dev.wyck.model.biome.CustomBiome;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.registry.bootstrap.BootstrapBiomeRegistry;
+import dev.wyck.registry.bootstrap.Composer;
+import dev.wyck.wrapper.worldgen.BiomeGenerationSettings;
+import dev.wyck.wrapper.worldgen.GenerationStep;
+import dev.wyck.wrapper.worldgen.placement.PlacedFeatures;
+
+public class ExampleBootstrapper implements PluginBootstrap {
+    @Override
+    public void bootstrap(BootstrapContext context) {
+        // This must use the 'DATAPACK' composer!
+        BootstrapBiomeRegistry registry = BootstrapBiomeRegistry.compose(context, Composer.DATAPACK);
+        BiomeGenerationSettings generation = BiomeGenerationSettings.builder()
+            .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeatures.TREES_PLAINS)
+            .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeatures.FALLEN_OAK_TREE)
+            .build();
+
+        ResourceKey myBiomeKey = ResourceKey.of("example", "my_biome");
+        registry.queue(
+            CustomBiome.builder(myBiomeKey)
+                .fogColor("#DB00FD")
+                .skyColor("#2F46FF")
+                .waterColor("#00FFD0")
+                .grassColor("#D1D13A")
+                .foliageColor("#FF6A00")
+                .generationSettings(generation)
+                .build()
+        );
+
+        ResourceKey overworldKey = ResourceKey.of("minecraft", "overworld");
+        ResourceKey plainsKey = ResourceKey.of("minecraft", "plains");
+        registry.replaceInDimension(overworldKey, plainsKey, myBiomeKey); // Adds this to Wyck's generated transient datapack
+    }
+}`
+}
+/>

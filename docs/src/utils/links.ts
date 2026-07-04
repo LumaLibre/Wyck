@@ -1,25 +1,8 @@
-/**
- * GitHub source-link helpers for BiomesAPI docs.
- *
- * Every source link in the docs points at the same repo and, almost always,
- * the same Java source root. These helpers collapse that boilerplate so a
- * link is just the part that actually varies — the file path under the
- * package root, and optionally a line number.
- *
- *   import { repoFile } from "@/lib/links";
- *
- *   repoFile("renderer/setter/BiomeSetter.java");
- *   // -> https://github.com/.../blob/main/api/src/main/java/me/outspending/biomesapi/renderer/setter/BiomeSetter.java
- *
- *   repoFile("renderer/packet/data/PhonyCustomBiome.java", { line: 90 });
- *   // -> ...PhonyCustomBiome.java#L90
- *
- * For paths that live outside the Java source root, pass `root: false` and
- * give the full repo-relative path instead.
- */
-const REPO_BLOB = "https://github.com/LumaLibre/BiomesAPI/blob";
+const REPO_BLOB = "https://github.com/LumaLibre/Wyck/blob";
 const DEFAULT_REF = "main";
-const SRC_ROOT = "api/src/main/java/me/outspending/biomesapi";
+const SRC_ROOT = "api/src/main/java/dev/wyck";
+const JAVADOC_BASE = "https://wyck.dev/javadoc";
+const PACKAGE_ROOT = "dev/wyck";
 
 export interface RepoFileOptions {
     ref?: string;
@@ -35,4 +18,21 @@ export function repoFile(path: string, options: RepoFileOptions = {}): string {
     const url = `${REPO_BLOB}/${ref}/${relative}`;
 
     return typeof line === "number" ? `${url}#L${line}` : url;
+}
+
+export interface JavadocLinkOptions {
+    member?: string;
+    root?: boolean;
+}
+
+export function javadocLink(path: string, options: JavadocLinkOptions = {}): string {
+    const { member, root = true } = options;
+
+    const cleaned = path.replace(/^\/+/, "").replace(/\.java$/, "");
+    const classPath = root ? `${PACKAGE_ROOT}/${cleaned}` : cleaned;
+    const url = `${JAVADOC_BASE}/${classPath}.html`;
+
+    if (!member) return url;
+    const anchor = member.startsWith("#") ? member.slice(1) : member;
+    return `${url}#${anchor}`;
 }

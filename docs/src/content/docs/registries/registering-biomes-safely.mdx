@@ -25,7 +25,7 @@ Example of what happens when a chunk loads a biome that isn't registered:
 
 ## Registering Long-term Biomes Safely
 
-If you plan to use BiomesAPI to make long-term modifications to your world either via the [`BiomeSetter`](/renderers/biome-setter/)
+If you plan to use Wyck to make long-term modifications to your world either via the [`BiomeSetter`](/renderers/biome-setter/)
 or via a [`BiomeProvider`](/components/biome-providers/), it's generally recommended to make sure that the server either stops or fails to load
 if one or more of your custom biomes fails to properly register.
 
@@ -40,11 +40,11 @@ because no chunks can be loaded before the bootstrap phase completes. If a biome
     filename="ExampleBootstrapper.java"
     code={`import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
-import me.outspending.biomesapi.biome.CustomBiome;
-import me.outspending.biomesapi.registry.ResourceKey;
-import me.outspending.biomesapi.registry.bootstrap.BootstrapBiomeRegistry;
-import me.outspending.biomesapi.registry.bootstrap.Composer;
-import me.outspending.biomesapi.wrapper.BiomeSettings;
+import dev.wyck.model.biome.CustomBiome;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.registry.bootstrap.BootstrapBiomeRegistry;
+import dev.wyck.registry.bootstrap.Composer;
+import dev.wyck.wrapper.BiomeSettings;
 import org.bukkit.entity.EntityType;
 
 public class ExampleBootstrapper implements PluginBootstrap {
@@ -82,9 +82,9 @@ A simple way to do this is by simply shutting down the server if a biome fails t
 <CodeBlock
     lang="java"
     filename="ExamplePlugin.java"
-    code={`import me.outspending.biomesapi.biome.CustomBiome;
-import me.outspending.biomesapi.registry.ResourceKey;
-import me.outspending.biomesapi.wrapper.BiomeSettings;
+    code={`import dev.wyck.model.biome.CustomBiome;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.wrapper.BiomeSettings;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.logging.Level;

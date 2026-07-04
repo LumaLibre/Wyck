@@ -1,0 +1,161 @@
+---
+title: Configured Features
+description: Learn how to reference and use Minecraft's configured features with Wyck.
+---
+
+import CodeBlock from "@/components/CodeBlock.astro";
+import SourceLink from "@/components/SourceLink.astro";
+import CodeTabs from "@/components/CodeTabs.astro";
+
+A <SourceLink path="wrapper/worldgen/feature/ConfiguredFeature.java">ConfiguredFeature</SourceLink> is a feature paired
+with a configuration. The *feature* is the algorithm (an ore vein, a tree, a geode) and the *configuration* would be its
+parameters such as which ore, how big, etc.
+
+Configured features are not placed in the world on their own. A configured feature describes what to generate and a
+[placed feature](/worldgen/placed-features) formally wraps it with the placement rules that decide **where** and/or **how often** it should appear.
+
+To use a configured feature in a biome, wrap it in a [placed feature](/worldgen/placed-features).
+
+## Referencing Built-in Configured Features
+
+The <SourceLink path="wrapper/worldgen/feature/ConfiguredFeatures.java">ConfiguredFeatures</SourceLink> catalog holds
+typed references to every configured feature vanilla registrar.
+
+### Example Usage
+<CodeBlock
+    lang="java"
+    filename="ExamplePlugin.java"
+    code={`import dev.wyck.wrapper.worldgen.feature.ConfiguredFeature;
+import dev.wyck.wrapper.worldgen.feature.ConfiguredFeatures;
+
+// a reference straight from the catalog
+ConfiguredFeature largeDiamonds = ConfiguredFeatures.ORE_DIAMOND_LARGE;
+
+// or by key
+ConfiguredFeature byKey = ConfiguredFeature.reference(ResourceKey.minecraft("ore_diamond_large"));`}
+/>
+
+
+## Authoring Configured Features
+
+To author your own configured features, you can extend the <SourceLink path="wrapper/worldgen/feature/custom/CustomFeature.java">CustomFeature</SourceLink> class.
+And pair it with your own configuration context.
+
+### Example Usage
+<CodeTabs
+    examples={[
+        {
+            label: "PillarFeature.java",
+            lang: "java",
+            code:
+`import dev.wyck.wrapper.worldgen.feature.custom.CustomFeature;
+import dev.wyck.wrapper.worldgen.feature.custom.PlacementContext;
+import org.bukkit.Material;
+import org.bukkit.util.BlockVector;
+import org.jspecify.annotations.NonNull;
+
+import java.util.Random;
+
+public class PillarFeature extends CustomFeature<@NotNull PillarFeature.PillarConfig> {
+
+    public PillarFeature() {
+        super(PillarConfig::defaults);
+    }
+
+    @Override
+    public boolean place(PlacementContext<@NotNull PillarConfig> context) {
+        PillarConfig config = context.config();
+        Random random = context.random();
+        BlockVector origin = context.origin();
+
+        int height = config.minHeight() + random.nextInt(config.maxHeight() - config.minHeight() + 1);
+
+        for (int y = 0; y < height; y++) {
+            BlockVector pos = new BlockVector(origin.getBlockX(), origin.getBlockY() + y, origin.getBlockZ());
+            context.setBlock(pos, config.pillarBlock().createBlockData());
+        }
+
+        BlockVector cap = new BlockVector(origin.getBlockX(), origin.getBlockY() + height, origin.getBlockZ());
+        context.setBlock(cap, config.capBlock().createBlockData());
+
+        return true;
+    }
+
+    public record PillarConfig(Material pillarBlock, Material capBlock, int minHeight, int maxHeight) {
+        public static PillarConfig defaults() {
+            return new PillarConfig(Material.OBSIDIAN, Material.GLOWSTONE, 4, 9);
+        }
+    }
+}`,
+        },
+        {
+            label: "ExamplePlugin.java",
+            lang: "java",
+            code:
+`import dev.wyck.model.biome.CustomBiome;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.registry.level.LevelStemEditor;
+import dev.wyck.worldgen.PillarFeature;
+import dev.wyck.wrapper.worldgen.BiomeGenerationSettings;
+import dev.wyck.wrapper.worldgen.GenerationStep;
+import dev.wyck.wrapper.worldgen.HeightmapType;
+import dev.wyck.wrapper.worldgen.feature.ConfiguredFeature;
+import dev.wyck.wrapper.worldgen.feature.custom.CustomFeature;
+import dev.wyck.wrapper.worldgen.placement.PlacedFeature;
+import dev.wyck.wrapper.worldgen.placement.PlacedFeatures;
+import dev.wyck.wrapper.worldgen.placement.PlacementModifier;
+import org.bukkit.Material;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class ExamplePlugin extends JavaPlugin {
+    @Override
+    public void onEnable() {
+        ResourceKey pillar = ResourceKey.of("example", "pillar");
+
+        CustomFeature.register(pillar, new PillarFeature());
+        ConfiguredFeature tallFeature  = ConfiguredFeature.customFeature(pillar, new PillarFeature.PillarConfig(Material.OBSIDIAN, Material.GLOWSTONE, 10, 15));
+        ConfiguredFeature shortFeature = ConfiguredFeature.customFeature(pillar, new PillarFeature.PillarConfig(Material.BLACKSTONE, Material.SHROOMLIGHT, 3, 5));
+
+        PlacedFeature tallPlaced = PlacedFeature.builder()
+            .feature(tallFeature)
+            .modifier(PlacementModifier.count(2))
+            .modifier(PlacementModifier.inSquare())
+            .modifier(PlacementModifier.heightmap(HeightmapType.WORLD_SURFACE))
+            .modifier(PlacementModifier.biomeFilter())
+            .build();
+
+        PlacedFeature shortPlaced = PlacedFeature.builder()
+            .feature(shortFeature)
+            .modifier(PlacementModifier.count(4))
+            .modifier(PlacementModifier.inSquare())
+            .modifier(PlacementModifier.heightmap(HeightmapType.WORLD_SURFACE))
+            .modifier(PlacementModifier.biomeFilter())
+            .build();
+
+
+        BiomeGenerationSettings generation = BiomeGenerationSettings.builder()
+            .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeatures.TREES_PLAINS)
+            .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeatures.FALLEN_OAK_TREE)
+            .addFeature(GenerationStep.VEGETAL_DECORATION, tallPlaced)
+            .addFeature(GenerationStep.VEGETAL_DECORATION, shortPlaced)
+            .build();
+        ResourceKey myBiomeKey = ResourceKey.of("example", "my_biome");
+        CustomBiome.builder(myBiomeKey)
+            .fogColor("#DB00FD")
+            .skyColor("#2F46FF")
+            .waterColor("#00FFD0")
+            .grassColor("#D1D13A")
+            .foliageColor("#FF6A00")
+            .generationSettings(generation)
+            .register();
+
+        LevelStemEditor dimensionEditor = LevelStemEditor.create();
+        ResourceKey overworldKey = ResourceKey.of("minecraft", "overworld");
+        ResourceKey plains = ResourceKey.of("minecraft", "plains");
+        dimensionEditor.replaceInDimension(overworldKey, plains, myBiomeKey);
+        dimensionEditor.apply(); // Applies to all loaded worlds
+    }
+}`,
+        },
+    ]}
+/>

@@ -1,0 +1,84 @@
+---
+title: Noise Routers
+description: Learn how to bundle the various density functions that shape a dimension's terrain in Wyck.
+---
+
+import CodeBlock from "@/components/CodeBlock.astro";
+import SourceLink from "@/components/SourceLink.astro";
+
+The <SourceLink path="wrapper/level/noise/NoiseRouter.java">NoiseRouter</SourceLink> bundles the
+various <SourceLink path="wrapper/level/noise/function/DensityFunction.java">DensityFunction</SourceLink>s
+that create a given dimension's terrain. Where a single density function describes one piece of the
+generator's behavior.
+
+## Slots
+
+The fifteen slots fall into four groups:
+
+- **Aquifers and fluids**: `barrier`, `fluidLevelFloodedness`, `fluidLevelSpread`, and `lava` control where
+and how fluids pool underground.
+- **Climate parameters**: `temperature`, `vegetation`, `continents`, `erosion`, `depth`, and `ridges` describe
+the noise fields that bend terrain and feed biome placement.
+- **Terrain shape**: `preliminarySurfaceLevel` gives an early surface-height estimate, and `finalDensity`
+decides whether a given block ends up solid.
+- **Ore veins**: `veinToggle`, `veinRidged`, and `veinGap` govern the placement of large ore veins.
+
+:::note
+
+The builder requires **all** slots to be set before the <SourceLink path="wrapper/level/noise/NoiseRouter.java">NoiseRouter</SourceLink>
+can be built.
+
+:::
+
+
+### Example Usage
+<CodeBlock
+    lang="java"
+    filename="ExamplePlugin.java"
+    code={
+`import dev.wyck.wrapper.level.noise.NoiseRouter;
+import dev.wyck.wrapper.level.noise.function.DensityFunction;
+import dev.wyck.wrapper.level.noise.function.DensityFunctions;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class ExamplePlugin extends JavaPlugin {
+    @Override
+    public void onEnable() {
+        DensityFunction temperature = DensityFunctions.ZERO;
+        DensityFunction vegetation = DensityFunctions.ZERO;
+        DensityFunction continents = DensityFunctions.CONTINENTS;
+        DensityFunction erosion = DensityFunctions.EROSION;
+        DensityFunction depth = DensityFunctions.DEPTH_AMPLIFIED;
+        DensityFunction ridges = DensityFunctions.RIDGES;
+
+        // Actual terrain shape
+        DensityFunction finalDensity = DensityFunctions.SLOPED_CHEESE;
+
+        NoiseRouter router = NoiseRouter.builder()
+            // Aquifers and fluids
+            .barrier(DensityFunction.constant(0.0))
+            .fluidLevelFloodedness(DensityFunction.constant(0.0))
+            .fluidLevelSpread(DensityFunction.constant(0.0))
+            .lava(DensityFunction.constant(0.0))
+
+            // Climate parameters
+            .temperature(temperature)
+            .vegetation(vegetation)
+            .continents(continents)
+            .erosion(erosion)
+            .depth(depth)
+            .ridges(ridges)
+
+            // Terrain shape
+            .preliminarySurfaceLevel(DensityFunction.constant(0.0))
+            .finalDensity(finalDensity)
+
+            // Ore veins (disabled)
+            .veinToggle(DensityFunction.constant(-1.0))
+            .veinRidged(DensityFunction.constant(0.0))
+            .veinGap(DensityFunction.constant(0.0))
+            // All done!
+            .build();
+    }
+}`}
+/>

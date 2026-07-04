@@ -1,0 +1,26 @@
+package dev.wyck.exceptions;
+
+import dev.wyck.annotations.AsOf;
+
+/**
+ * This exception is thrown when an unknown NMS version is encountered.
+ * NMS (Net Minecraft Server) is the internal server code for Minecraft.
+ * This exception is used to indicate that the server version is not supported by the Wyck.
+ *
+ * @version 0.0.1
+ * @since 0.0.1
+ * @author Outspending
+ */
+@AsOf("0.0.1")
+public class UnsupportedVersionException extends RuntimeException {
+
+    /**
+     * Constructs a new UnknownNMSVersionException with the specified detail message.
+     *
+     * @param message the detail message. The detail message is saved for later retrieval by the Throwable.getMessage() method.
+     */
+    public UnsupportedVersionException(String message) {
+        super(message);
+    }
+
+}

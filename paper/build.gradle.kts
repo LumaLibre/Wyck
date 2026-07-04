@@ -15,7 +15,7 @@ val minecraftProjects = project(minecraft)
     .subprojects
     .map { it.name }
 
-group = "me.outspending.biomesapi.paper"
+group = "dev.wyck.paper"
 
 dependencies {
     paperweight.paperDevBundle(libs.versions.minecraft.v1.m21.r11)
@@ -30,8 +30,8 @@ dependencies {
 
 tasks {
     shadowJar {
-        relocate("dev.faststats", "me.outspending.biomesapi.metrics")
-        relocate("org.objectweb.asm", "me.outspending.biomesapi.asm")
+        relocate("dev.faststats", "dev.wyck.metrics")
+        relocate("org.objectweb.asm", "dev.wyck.asm")
         exclude("com/google/**")
 
         minimize {
@@ -43,7 +43,7 @@ tasks {
             exclude("META-INF/maven/**")
             exclude("META-INF/proguard/**")
         }
-        archiveBaseName.set("BiomesAPI")
+        archiveBaseName.set("Wyck")
         archiveClassifier.set("")
     }
 
@@ -57,14 +57,14 @@ tasks {
 }
 
 paper {
-    name = "BiomesAPI"
-    main = "me.outspending.biomesapi.paper.BiomesAPIPlugin"
-    bootstrapper = "me.outspending.biomesapi.paper.BiomesAPIPluginBootstrap"
+    name = "Wyck"
+    main = "dev.wyck.paper.WyckPlugin"
+    bootstrapper = "dev.wyck.paper.WyckPluginBootstrap"
     version = project.version.toString()
     authors = listOf("Jsinco", "Outspending")
     apiVersion = "1.21"
-    description = "Standalone BiomesAPI plugin for Paper servers."
-    website = "https://biomes.lumas.dev"
+    description = "Standalone Wyck plugin for Paper servers."
+    website = "https://wyck.dev"
     hasOpenClassloader = true
     foliaSupported = true
     load = BukkitPluginDescription.PluginLoadOrder.STARTUP

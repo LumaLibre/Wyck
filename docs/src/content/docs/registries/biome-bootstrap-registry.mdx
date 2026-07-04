@@ -1,5 +1,5 @@
 ---
-title: Bootstrap Registry
+title: Biome Bootstrap Registry
 description: Learn how to register biomes during the bootstrap phase of the Minecraft server lifecycle, allowing you to add biomes before the server fully initializes.
 sidebar:
     order: 2
@@ -21,11 +21,11 @@ This can be useful for adding biomes that need to be available early in the serv
 
 ## Choosing a Composer
 
-When registering <SourceLink path="biome/CustomBiome.java">CustomBiome</SourceLink>s through the <SourceLink path="registry/bootstrap/BootstrapBiomeRegistry.java">BootstrapBiomeRegistry</SourceLink> API,
+When registering <SourceLink path="model/biome/Biome.java">Biome</SourceLink>s through the <SourceLink path="registry/bootstrap/BootstrapBiomeRegistry.java">BootstrapBiomeRegistry</SourceLink> API,
 you must choose a <SourceLink path="registry/bootstrap/Composer.java">Composer</SourceLink> to determine how the server will recognize your biomes.
 
-* <SourceLink path="registry/bootstrap/Composer.java" line={21}>INJECTOR</SourceLink>: Injects biomes directly into the live Minecraft biome registry by patching Paper's registry bootstrap process.
-* <SourceLink path="registry/bootstrap/Composer.java" line={26}>DATAPACK</SourceLink>: Biomes registered with this composer will be added to the server as if they were registered through a datapack.
+* <SourceLink path="registry/bootstrap/Composer.java">INJECTOR</SourceLink>: Injects biomes directly into the live Minecraft biome registry by patching Paper's registry bootstrap process.
+* <SourceLink path="registry/bootstrap/Composer.java">DATAPACK</SourceLink>: Biomes registered with this composer will be added to the server as if they were registered through a datapack.
 
 
 ### Example Usage
@@ -34,14 +34,14 @@ you must choose a <SourceLink path="registry/bootstrap/Composer.java">Composer</
     filename="ExampleBootstrapper.java"
     code={`import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
-import me.outspending.biomesapi.biome.CustomBiome;
-import me.outspending.biomesapi.registry.ResourceKey;
-import me.outspending.biomesapi.registry.bootstrap.BootstrapBiomeRegistry;
-import me.outspending.biomesapi.registry.bootstrap.Composer;
-import me.outspending.biomesapi.wrapper.BiomeSettings;
-import me.outspending.biomesapi.wrapper.entity.BiomeSpawner;
-import me.outspending.biomesapi.wrapper.entity.MobCategory;
-import me.outspending.biomesapi.wrapper.entity.data.NaturalSpawner;
+import dev.wyck.model.biome.CustomBiome;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.registry.bootstrap.BootstrapBiomeRegistry;
+import dev.wyck.registry.bootstrap.Composer;
+import dev.wyck.wrapper.BiomeSettings;
+import dev.wyck.wrapper.entity.BiomeSpawner;
+import dev.wyck.wrapper.entity.MobCategory;
+import dev.wyck.wrapper.entity.data.NaturalSpawner;
 import org.bukkit.entity.EntityType;
 
 public class ExampleBootstrapper implements PluginBootstrap {
@@ -51,8 +51,8 @@ public class ExampleBootstrapper implements PluginBootstrap {
         BootstrapBiomeRegistry registry = BootstrapBiomeRegistry.compose(context, Composer.DATAPACK);
 
         BiomeSpawner spawner = BiomeSpawner.builder()
-            .setCreatureGenerationProbability(0.1f)
-            .addSpawner(MobCategory.CREATURE, 100, NaturalSpawner.of(EntityType.PIG, 4, 12))
+            .creatureGenerationProbability(0.1f)
+            .spawner(MobCategory.CREATURE, 100, NaturalSpawner.of(EntityType.PIG, 4, 12))
             .build();
 
         // #queue(CustomBiome) queues this biome for registration.
@@ -63,7 +63,7 @@ public class ExampleBootstrapper implements PluginBootstrap {
             .skyColor("#B99DFC")
             .waterColor("#F5F2EB")
             .grassColor("#DBE9EC")
-            .setSpawner(spawner)
+            .biomeSpawner(spawner)
             .build()
         );
 
@@ -74,7 +74,7 @@ public class ExampleBootstrapper implements PluginBootstrap {
             .skyColor("#2F46FF")
             .waterColor("#000000")
             .grassColor("#D1D13A")
-            .setSpawner(spawner)
+            .biomeSpawner(spawner)
             .build()
         );
 

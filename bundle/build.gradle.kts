@@ -42,7 +42,7 @@ configurations {
 }
 
 tasks.shadowJar {
-    relocate("org.objectweb.asm", "me.outspending.biomesapi.asm")
+    relocate("org.objectweb.asm", "dev.wyck.asm")
     exclude("com/google/**")
     minimize {
         exclude(project(":api"))
@@ -80,7 +80,7 @@ publishing {
 
         create<MavenPublication>("maven") {
             groupId = project.group.toString()
-            artifactId = "BiomesAPI"
+            artifactId = "Wyck"
             version = project.version.toString()
 
             artifact(tasks.shadowJar.get().archiveFile) {

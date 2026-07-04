@@ -1,0 +1,11 @@
+metrics:
+  default: "true"
+  description: Whether to enable FastStats metrics collection for Wyck.
+
+forced-injector:
+  default: NONE
+  description: >-
+    Wyck may force a specific packet handler implementation to be used by all
+    plugins that hook into it. If a plugin attempts to use another injector, Wyck
+    will silently redirect it to the injector defined below.
+    Options are: `NETTY`, `PROTOCOLLIB`, `PACKETEVENTS`, or `NONE`.

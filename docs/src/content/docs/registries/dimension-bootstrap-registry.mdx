@@ -1,0 +1,90 @@
+---
+title: Dimension Bootstrap Registry
+description: Learn how to register dimensions (dimension types) during the bootstrap phase of the Minecraft server lifecycle, allowing you to add dimension types before the server fully initializes.
+---
+
+import CodeBlock from "@/components/CodeBlock.astro";
+import SourceLink from "@/components/SourceLink.astro";
+
+:::note
+
+The <SourceLink path="registry/bootstrap/BootstrapDimensionRegistry.java">BootstrapDimensionRegistry</SourceLink> leverages the
+Bootstrap API from [Paper Plugins](https://docs.papermc.io/paper/dev/getting-started/paper-plugins/). Your plugin must use a
+`paper-plugin.yml` for this API to be accessible to your project!
+
+:::
+
+The <SourceLink path="registry/bootstrap/BootstrapDimensionRegistry.java">BootstrapDimensionRegistry</SourceLink> allows you to register dimension types during the bootstrap phase of the Minecraft server lifecycle, which occurs before the server fully initializes.
+This can be useful for adding dimension types that need to be available early in the server's startup process, ensuring that your dimension types are always registered and loaded before any code executes that may reference them — for example, worlds created at startup whose level stems point at a custom dimension type.
+
+## Choosing a Composer
+
+When registering <SourceLink path="level/dimension/Dimension.java">Dimension</SourceLink>s through the <SourceLink path="registry/bootstrap/BootstrapDimensionRegistry.java">BootstrapDimensionRegistry</SourceLink> API,
+you must choose a <SourceLink path="registry/bootstrap/Composer.java">Composer</SourceLink> to determine how the server will recognize your dimension types.
+
+* <SourceLink path="registry/bootstrap/Composer.java">INJECTOR</SourceLink>: Injects dimension types directly into the live Minecraft dimension_type registry by patching Paper's registry bootstrap process.
+* <SourceLink path="registry/bootstrap/Composer.java">DATAPACK</SourceLink>: Dimension types registered with this composer will be added to the server as if they were registered through a datapack.
+
+:::caution
+
+Paper exposes no supported registry modification API for dimension types, so the
+<SourceLink path="registry/bootstrap/Composer.java">INJECTOR</SourceLink> composer patches deeper into Paper's internals
+than its biome counterpart and may break between Paper builds. Prefer
+<SourceLink path="registry/bootstrap/Composer.java">DATAPACK</SourceLink> unless you have a specific reason not to.
+
+:::
+
+
+### Example Usage
+<CodeBlock
+    lang="java"
+    filename="ExampleBootstrapper.java"
+    code={
+`import io.papermc.paper.plugin.bootstrap.BootstrapContext;
+import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
+import dev.wyck.model.level.dimension.Dimension;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.registry.bootstrap.BootstrapDimensionRegistry;
+import dev.wyck.registry.bootstrap.Composer;
+import dev.wyck.wrapper.environment.BedRule;
+import dev.wyck.wrapper.environment.attribute.EnvironmentAttributes;
+import dev.wyck.wrapper.level.dimension.Skybox;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+
+public class ExampleBootstrapper implements PluginBootstrap {
+    @Override
+    public void bootstrap(BootstrapContext context) {
+        // Registering 2 custom dimension types during the bootstrap phase as if they were in a datapack.
+        BootstrapDimensionRegistry registry = BootstrapDimensionRegistry.compose(context, Composer.DATAPACK);
+
+        // #queue(Dimension) queues this dimension type for registration.
+        registry.queue(Dimension.builder()
+            .resourceKey(ResourceKey.of("test", "a"))
+            .coordinateScale(8.0D)
+            .minY(0)
+            .height(256)
+            .skybox(Skybox.NETHER)
+            .hasCeiling(true)
+            .ambientLight(0.1F)
+            .build()
+        );
+
+        registry.queue(Dimension.builder()
+            .resourceKey(ResourceKey.of("test", "b"))
+            .hasFixedTime(true)
+            .skybox(Skybox.END)
+            .attribute(EnvironmentAttributes.BED_RULE, BedRule.builder()
+                .setErrorMessage(Component.text("No sleeping!").color(NamedTextColor.RED))
+                .setCanSleep(BedRule.Rule.NEVER)
+                .setCanSetSpawn(BedRule.Rule.WHEN_DARK)
+                .build()
+            )
+            .build()
+        );
+
+        context.getLogger().info("Finished registering dimension types.");
+    }
+}`
+    }
+/>
