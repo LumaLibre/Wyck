@@ -2,6 +2,7 @@ package dev.wyck.model.level.dimension;
 
 import dev.wyck.annotations.AsOf;
 import dev.wyck.keys.ResourceKey;
+import dev.wyck.registry.DimensionRegistry;
 import dev.wyck.wrapper.level.clock.WorldClock;
 import dev.wyck.wrapper.level.dimension.CardinalLightType;
 import dev.wyck.wrapper.level.dimension.Infiniburn;
@@ -14,7 +15,6 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -31,22 +31,22 @@ public final class DimensionImpl implements Dimension {
 
     private final ResourceKey resourceKey;
 
-    private boolean hasFixedTime;
-    private boolean hasSkyLight;
-    private boolean hasCeiling;
-    private boolean hasEnderDragonFight;
-    private double coordinateScale;
-    private int minY;
-    private int height;
-    private int logicalHeight;
-    private Infiniburn infiniburn;
-    private float ambientLight;
-    private MonsterSettings monsterSettings;
-    private Skybox skybox;
-    private CardinalLightType cardinalLightType;
-    private EnvironmentAttributeMap attributes;
-    private TimelineSet timelines;
-    private @Nullable WorldClock defaultClock;
+    private final boolean hasFixedTime;
+    private final boolean hasSkyLight;
+    private final boolean hasCeiling;
+    private final boolean hasEnderDragonFight;
+    private final double coordinateScale;
+    private final int minY;
+    private final int height;
+    private final int logicalHeight;
+    private final Infiniburn infiniburn;
+    private final float ambientLight;
+    private final MonsterSettings monsterSettings;
+    private final Skybox skybox;
+    private final CardinalLightType cardinalLightType;
+    private final EnvironmentAttributeMap attributes;
+    private final TimelineSet timelines;
+    private final @Nullable WorldClock defaultClock;
 
     @AsOf("2.4.0")
     public DimensionImpl(
@@ -197,4 +197,8 @@ public final class DimensionImpl implements Dimension {
         return this.resourceKey;
     }
 
+    @Override
+    public Object toMinecraft() {
+        return DimensionRegistry.registry().buildDelegate(this);
+    }
 }

@@ -41,7 +41,7 @@ public interface ChunkGenerator extends Wrapper {
      * @since 2.4.0
      */
     @AsOf("2.4.0")
-    static ChunkGenerator noise(BiomeSource biomeSource, ResourceKey noiseSettings) {
+    static ChunkGenerator of(BiomeSource biomeSource, ResourceKey noiseSettings) {
         return WIRE.get().noise(biomeSource, noiseSettings);
     }
 
@@ -54,7 +54,7 @@ public interface ChunkGenerator extends Wrapper {
      * @since 2.4.0
      */
     @AsOf("2.4.0")
-    static ChunkGenerator noise(BiomeSource biomeSource, NoiseGeneratorSettings settings) {
+    static ChunkGenerator of(BiomeSource biomeSource, NoiseGeneratorSettings settings) {
         return WIRE.get().noise(biomeSource, settings);
     }
 
@@ -66,11 +66,11 @@ public interface ChunkGenerator extends Wrapper {
      * @since 2.4.0
      */
     @AsOf("2.4.0")
-    static ChunkGenerator noise(BiomeSource biomeSource, Noise abstractNoise) {
+    static ChunkGenerator of(BiomeSource biomeSource, Noise abstractNoise) {
         if (abstractNoise instanceof Noise.Reference(ResourceKey key)) {
-            return noise(biomeSource, key);
+            return of(biomeSource, key);
         } else if (abstractNoise instanceof NoiseGeneratorSettings settings) {
-            return noise(biomeSource, settings);
+            return of(biomeSource, settings);
         }
         throw new IllegalArgumentException("Unknown noise type: " + abstractNoise.getClass().getName());
     }

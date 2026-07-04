@@ -1,6 +1,7 @@
 package dev.wyck.model.biome.impl;
 
 import dev.wyck.model.biome.Biome;
+import dev.wyck.registry.BiomeRegistry;
 import dev.wyck.wrapper.biome.BiomeSpecialEffects;
 import dev.wyck.wrapper.biome.ClimateSettings;
 import io.papermc.paper.registry.RegistryAccess;
@@ -119,5 +120,10 @@ public class BiomeImpl implements Biome {
     @Override
     public Key key() {
         return this.resourceKey;
+    }
+
+    @Override
+    public Object toMinecraft() {
+        return BiomeRegistry.registry().buildDelegate(this);
     }
 }

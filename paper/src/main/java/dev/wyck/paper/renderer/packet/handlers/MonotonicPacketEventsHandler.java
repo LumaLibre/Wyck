@@ -3,7 +3,7 @@ package dev.wyck.paper.renderer.packet.handlers;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.paper.WyckPlugin;
 import dev.wyck.renderer.packet.PacketHandler;
-import dev.wyck.renderer.packet.PhonyCustomBiomeCollector;
+import dev.wyck.renderer.packet.VirtualBiomeCollector;
 import dev.wyck.renderer.packet.handlers.PacketEventsPacketHandler;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -15,7 +15,7 @@ public class MonotonicPacketEventsHandler extends PacketEventsPacketHandler {
 
     private boolean registered;
 
-    public MonotonicPacketEventsHandler(Priority priority, PhonyCustomBiomeCollector collector) {
+    public MonotonicPacketEventsHandler(Priority priority, VirtualBiomeCollector collector) {
         super(priority, collector);
     }
 

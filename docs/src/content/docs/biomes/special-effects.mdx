@@ -1,0 +1,39 @@
+---
+title: Biome Special Effects
+description: Biome special effects in Wyck.
+sidebar:
+    order: 3
+---
+
+import CodeBlock from "@/components/CodeBlock.astro";
+import SourceLink from "@/components/SourceLink.astro";
+
+<SourceLink path="wrapper/biome/BiomeSpecialEffects.java">BiomeSpecialEffects</SourceLink> is part of the wrapper api in Wyck and
+is a wrapper that is specifically tied to [biomes](/biomes/biomes).
+It is used to define the special effects for a biome, which includes water color, grass color, foliage color, dry foliage color, and grass color modifiers.
+
+#### Notes
+* **dry foliage**: Dry foliage refers to the `leaf_litter` block type.
+* **grass color modifiers**: A special tint that is applied to the grass color in a biome *after* the grass color override has been set. **Values: SWAMP, DARK_FOREST, NONE**
+* **water color**: Is a mandatory value for *all* biomes in Minecraft and cannot be empty. If unspecified, Wyck will default to the color **#3F75C4**.
+
+### Example Usage
+<CodeBlock
+    lang="java"
+    filename="Example.java"
+    code={
+`import dev.wyck.wrapper.biome.BiomeSpecialEffects;
+import dev.wyck.wrapper.environment.GrassColorModifier;
+
+public class Example {
+    public void example() {
+        BiomeSpecialEffects.builder()
+            .waterColor("#19B83F")
+            .foliageColorOverride("#346F6C")
+            .dryFoliageColorOverride("#E4AAA3")
+            .grassColorOverride(0x15DFE3) // Or use an int if you feel like it!
+            .grassColorModifier(GrassColorModifier.NONE)
+            .build();
+    }
+}`}
+/>

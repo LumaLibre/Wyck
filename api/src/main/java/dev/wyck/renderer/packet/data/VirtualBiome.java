@@ -20,7 +20,7 @@ import java.util.Objects;
 import java.util.function.BiPredicate;
 
 /**
- * A class representing a "phony" or fake custom biome designed for sending via packets.
+ * A class representing a "virtual" or fake custom biome designed for sending via packets.
  * The {@link Biome} must exist and be registered, but phony custom biomes are never
  * actually set to any chunks and only exist for packet sending purposes.
  *
@@ -40,7 +40,7 @@ import java.util.function.BiPredicate;
  */
 @NullMarked
 @AsOf("2.2.0")
-public record PhonyCustomBiome(
+public record VirtualBiome(
     ResourceKey biomeResourceKey,
     List<BlockReplacement> blockReplacements,
     BiPredicate<Player, ChunkLocation> conditional,
@@ -66,11 +66,21 @@ public record PhonyCustomBiome(
         return other;
     }
 
+    /**
+     * Converts this PhonyCustomBiome to a Builder.
+     * @return A new Builder instance with the same properties as this instance.
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
+    public Builder toBuilder() {
+        return new Builder(this);
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
-        PhonyCustomBiome that = (PhonyCustomBiome) obj;
+        VirtualBiome that = (VirtualBiome) obj;
         return Objects.equals(biomeResourceKey, that.biomeResourceKey);
     }
 
@@ -102,6 +112,16 @@ public record PhonyCustomBiome(
         private BiPredicate<Player, ChunkLocation> conditional = (player, chunkLocation) -> true;
         private @Nullable BiPredicate<Player, SnapshotChunkData> biomeCondition = null;
         private PacketHandler.Priority priority = PacketHandler.Priority.NORMAL;
+
+        public Builder() {}
+
+        public Builder(VirtualBiome other) {
+            this.biomeResourceKey = other.biomeResourceKey();
+            this.blockReplacements.addAll(other.blockReplacements());
+            this.conditional = other.conditional();
+            this.biomeCondition = other.biomeCondition();
+            this.priority = other.priority();
+        }
 
         @AsOf("0.0.6")
         public Builder biome(Biome biome) {
@@ -164,9 +184,9 @@ public record PhonyCustomBiome(
         }
 
         @AsOf("0.0.6")
-        public PhonyCustomBiome build() {
+        public VirtualBiome build() {
             Preconditions.checkNotNull(biomeResourceKey, "biome cannot be null");
-            return new PhonyCustomBiome(biomeResourceKey, blockReplacements, conditional, biomeCondition, priority);
+            return new VirtualBiome(biomeResourceKey, blockReplacements, conditional, biomeCondition, priority);
         }
     }
 }

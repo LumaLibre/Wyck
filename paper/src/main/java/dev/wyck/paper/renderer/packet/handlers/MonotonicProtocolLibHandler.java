@@ -3,7 +3,7 @@ package dev.wyck.paper.renderer.packet.handlers;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.paper.WyckPlugin;
 import dev.wyck.renderer.packet.PacketHandler;
-import dev.wyck.renderer.packet.PhonyCustomBiomeCollector;
+import dev.wyck.renderer.packet.VirtualBiomeCollector;
 import dev.wyck.renderer.packet.handlers.ProtocolLibPacketHandler;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.ApiStatus;
@@ -16,7 +16,7 @@ public class MonotonicProtocolLibHandler extends ProtocolLibPacketHandler {
 
     private boolean registered;
 
-    public MonotonicProtocolLibHandler(Plugin provider, Priority priority, PhonyCustomBiomeCollector collector) {
+    public MonotonicProtocolLibHandler(Plugin provider, Priority priority, VirtualBiomeCollector collector) {
         super(provider, priority, collector);
     }
 

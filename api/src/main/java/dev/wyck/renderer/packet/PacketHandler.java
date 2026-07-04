@@ -5,7 +5,7 @@ import dev.wyck.exceptions.MissingPacketManipulatorLibraryException;
 import dev.wyck.factory.WireProvider;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.renderer.AbstractBiomeRenderer;
-import dev.wyck.renderer.packet.data.PhonyCustomBiome;
+import dev.wyck.renderer.packet.data.VirtualBiome;
 import dev.wyck.renderer.updater.BiomeUpdater;
 import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
@@ -147,7 +147,7 @@ public interface PacketHandler extends AbstractBiomeRenderer {
      * @return the PacketHandler instance for chaining
      */
     @AsOf("0.0.6")
-    PacketHandler appendBiome(PhonyCustomBiome biome);
+    PacketHandler appendBiome(VirtualBiome biome);
 
     /**
      * Appends multiple custom biomes to the packet handler's list of biomes to inject.
@@ -155,8 +155,8 @@ public interface PacketHandler extends AbstractBiomeRenderer {
      * @return the PacketHandler instance for chaining
      */
     @AsOf("0.0.6")
-    default PacketHandler appendBiome(PhonyCustomBiome... biomes) {
-        for (PhonyCustomBiome biome : biomes) {
+    default PacketHandler appendBiome(VirtualBiome... biomes) {
+        for (VirtualBiome biome : biomes) {
             appendBiome(biome);
         }
         return this;
@@ -168,7 +168,7 @@ public interface PacketHandler extends AbstractBiomeRenderer {
      * @return true if the biome was removed, false if it was not found
      */
     @AsOf("0.0.6")
-    boolean removeBiome(PhonyCustomBiome biome);
+    boolean removeBiome(VirtualBiome biome);
 
     /**
      * Removes a custom biome from the packet handler's list of biomes to inject.
@@ -176,7 +176,7 @@ public interface PacketHandler extends AbstractBiomeRenderer {
      * @return the PacketHandler instance for chaining
      */
     @AsOf("2.1.0")
-    default PacketHandler dismissBiome(PhonyCustomBiome biome) {
+    default PacketHandler dismissBiome(VirtualBiome biome) {
         removeBiome(biome);
         return this;
     }
@@ -206,7 +206,7 @@ public interface PacketHandler extends AbstractBiomeRenderer {
      * @return true if the biome is present, false otherwise
      */
     @AsOf("0.0.10")
-    boolean hasBiome(PhonyCustomBiome biome);
+    boolean hasBiome(VirtualBiome biome);
 
     /**
      * Checks if a custom biome is in the packet handler's list of biomes to inject by its ResourceKey.
@@ -264,7 +264,7 @@ public interface PacketHandler extends AbstractBiomeRenderer {
     /**
      * Enum constant for priority levels related to Wyck packet handling.
      *
-     * @see PhonyCustomBiome
+     * @see VirtualBiome
      * @see PacketHandler
      * @version 0.0.6
      */

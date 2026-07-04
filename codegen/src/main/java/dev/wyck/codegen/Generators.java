@@ -39,14 +39,6 @@ public final class Generators {
         soundEvents()
     );
 
-    private static @Nullable Identifier keyLocation(Object entry) {
-        if (entry instanceof ResourceKey<?> resourceKey) {
-            return resourceKey.identifier();
-        }
-        return null;
-    }
-
-
     private static GeneratorSpec configuredFeatures() {
         return new GeneratorSpec(
             "dev.wyck.wrapper.worldgen.feature",
@@ -147,6 +139,13 @@ public final class Generators {
             "SOUND_EVENTS",
             Generators::isSoundField
         );
+    }
+
+    private static @Nullable Identifier keyLocation(Object entry) {
+        if (entry instanceof ResourceKey<?> resourceKey) {
+            return resourceKey.identifier();
+        }
+        return null;
     }
 
     private static boolean isSoundField(Field field) {

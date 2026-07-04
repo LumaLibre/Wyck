@@ -9,14 +9,11 @@ sidebar:
 import CodeBlock from "@/components/CodeBlock.astro";
 import SourceLink from "@/components/SourceLink.astro";
 
-### Constructing a Phony Custom Biome
+### Constructing a Virtual Biome
 
-A <SourceLink path="renderer/packet/data/PhonyCustomBiome.java">PhonyCustomBiome</SourceLink>
-is a wrapper for <SourceLink path="biome/CustomBiome.java" line={90}>CustomBiome</SourceLink>s that is required for using the <SourceLink path="renderer/packet/PacketHandler.java">PacketHandler</SourceLink> interface.
+A <SourceLink path="renderer/packet/data/VirtualBiome.java">VirtualBiome</SourceLink>
+is a wrapper for <SourceLink path="model/biome/iome.java">Biome</SourceLink>s that is required for using the <SourceLink path="renderer/packet/PacketHandler.java">PacketHandler</SourceLink> interface.
 
-* <SourceLink path="renderer/packet/data/PhonyCustomBiome.java" line={90}>conditional</SourceLink>: Set a condition for when this biome should be shown to a player. This is useful for showing different biomes to different players in the same area.
-* <SourceLink path="renderer/packet/data/PhonyCustomBiome.java" line={96}>biomeCondition</SourceLink>: Superset of `conditional`, this condition also takes in the biome that is being rendered, allowing you to show different biomes based on the original biome of the chunk.
-* <SourceLink path="renderer/packet/data/PhonyCustomBiome.java" line={102}>priority</SourceLink>: Set the priority of this phony biome. This is useful for when you have multiple phony biomes that could be shown in the same area and want to control which one is shown. Biomes with higher priority will be chosen over biomes with lower priority. The default priority is `NORMAL`.
 
 ### Example Usage
 <CodeBlock
@@ -25,7 +22,7 @@ is a wrapper for <SourceLink path="biome/CustomBiome.java" line={90}>CustomBiome
     code={`import dev.wyck.model.biome.CustomBiome;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.renderer.packet.PacketHandler;
-import dev.wyck.renderer.packet.data.PhonyCustomBiome;
+import dev.wyck.renderer.packet.data.VirtualBiome;
 import dev.wyck.wrapper.BiomeSettings;
 import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -45,7 +42,7 @@ public class ExamplePlugin extends JavaPlugin {
             .replace(Material.GRASS_BLOCK, Material.DIAMOND_BLOCK)
             .register();
 
-            PhonyCustomBiome phonyCustomBiome = PhonyCustomBiome.builder()
+            VirtualBiome virtualBiome = VirtualBiome.builder()
                 .biome(customBiome)
                 .conditional(((player, chunkLocation) -> {
                     // Only show this biome to Jsinco
@@ -92,7 +89,7 @@ Wyck supports three different injectors:
     filename="ExamplePlugin.java"
     code={`import dev.wyck.model.biome.CustomBiome;
 import dev.wyck.renderer.packet.PacketHandler;
-import dev.wyck.renderer.packet.data.PhonyCustomBiome;
+import dev.wyck.renderer.packet.data.VirtualBiome;
 import net.kyori.adventure.key.Key;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -105,7 +102,7 @@ public class ExamplePlugin extends JavaPlugin {
         CustomBiome customBiome = ...;
         Key plains = Key.key("minecraft:plains");
 
-        PhonyCustomBiome phonyCustomBiome = PhonyCustomBiome.builder()
+        VirtualBiome virtualBiome = VirtualBiome.builder()
             .biome(customBiome)
             .biomeCondition(((player, snapshot) -> {
                 // Replace all 'plains' biomes with this custom biome
@@ -114,7 +111,7 @@ public class ExamplePlugin extends JavaPlugin {
             .build();
 
         this.packetHandler = PacketHandler.of(this) // Defaults to NETTY injector
-            .appendBiome(phonyCustomBiome)
+            .appendBiome(virtualBiome)
             .register();
     }
 

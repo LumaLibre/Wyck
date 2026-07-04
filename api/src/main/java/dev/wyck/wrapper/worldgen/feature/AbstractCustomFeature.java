@@ -2,7 +2,6 @@ package dev.wyck.wrapper.worldgen.feature;
 
 import dev.wyck.annotations.AsOf;
 import dev.wyck.keys.ResourceKey;
-import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 
 /**

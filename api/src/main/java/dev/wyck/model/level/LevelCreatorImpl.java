@@ -27,6 +27,7 @@ public final class LevelCreatorImpl implements LevelCreator {
     private final World.Environment environment;
     private final StemPersistence persistence;
     private final List<LevelSpawner> spawners;
+    private final @Nullable String name;
 
     public LevelCreatorImpl(
         ResourceKey levelKey,
@@ -37,7 +38,8 @@ public final class LevelCreatorImpl implements LevelCreator {
         boolean bonusChest,
         World.Environment environment,
         StemPersistence persistence,
-        List<LevelSpawner> spawners
+        List<LevelSpawner> spawners,
+        @Nullable String name
     ) {
         this.levelKey = levelKey;
         this.dimension = dimension;
@@ -48,6 +50,7 @@ public final class LevelCreatorImpl implements LevelCreator {
         this.environment = environment;
         this.persistence = persistence;
         this.spawners = spawners;
+        this.name = name;
     }
 
     @Override
@@ -93,6 +96,13 @@ public final class LevelCreatorImpl implements LevelCreator {
     @Override
     public List<LevelSpawner> spawners() {
         return spawners;
+    }
+
+    @Override
+    public String name() {
+        return this.name != null ? this.name : this.levelKey.path()
+            .replace("/", "_")
+            .replace(".", "_");
     }
 
     @Override

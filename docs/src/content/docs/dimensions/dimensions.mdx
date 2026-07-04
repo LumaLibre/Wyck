@@ -1,0 +1,73 @@
+---
+title: Creating Dimensions
+description: Learn how to define custom dimensions with Wyck
+sidebar:
+    order: 1
+---
+
+import CodeBlock from "@/components/CodeBlock.astro";
+import SourceLink from "@/components/SourceLink.astro";
+
+In Wyck, `dimension_type`s are represented as <SourceLink path="model/level/dimension/Dimension.java">Dimension</SourceLink>s.
+These are used to define the properties of a dimension, such as its environment attributes, whether it has skylight, and its coordinate scale.
+
+## What is a Dimension?
+
+To be clear, a <SourceLink path="model/level/dimension/Dimension.java">Dimension</SourceLink> in Wyck is not a world.
+A dimension type is a set of properties that define how a world behaves, and can be used to create multiple worlds with the same properties,
+kind of like a blueprint! Vanilla refers to these as `dimension_type`s.
+
+### Creating a Dimension
+<CodeBlock
+    lang="java"
+    filename="ExamplePlugin.java"
+    code={
+`import dev.wyck.keys.ResourceKey;
+import dev.wyck.model.level.dimension.Dimension;
+import dev.wyck.wrapper.environment.BedRule;
+import dev.wyck.wrapper.environment.attribute.EnvironmentAttributes;
+import dev.wyck.wrapper.level.clock.WorldClock;
+import dev.wyck.wrapper.level.dimension.CardinalLightType;
+import dev.wyck.wrapper.level.dimension.Infiniburn;
+import dev.wyck.wrapper.level.dimension.Skybox;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.Tag;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class ExamplePlugin extends JavaPlugin {
+    @Override
+    public void onEnable() {
+        Dimension.builder()
+            .resourceKey(ResourceKey.of("test:dimension"))
+            .ambientLight(0.1f) // 10% ambient light
+            .hasSkyLight(true)
+            .defaultClock(WorldClock.OVERWORLD)
+            .hasCeiling(false)
+            .hasFixedTime(false)
+            .hasEnderDragonFight(false)
+            .skybox(Skybox.END)
+            .infiniburn(Infiniburn.of(Tag.SAND)) // Make sand burn infinitely
+            .minY(-64)
+            .height(800)
+            .logicalHeight(800)
+            .cardinalLightType(CardinalLightType.DEFAULT)
+            .attribute(EnvironmentAttributes.FOG_COLOR, "#FFAA00")
+            .attribute(EnvironmentAttributes.SKY_COLOR, "#0000FF")
+            .attribute(EnvironmentAttributes.BED_RULE, BedRule.builder()
+                .setErrorMessage(Component.text("No sleeping!").color(NamedTextColor.RED))
+                .setCanSleep(BedRule.Rule.NEVER)
+                .setCanSetSpawn(BedRule.Rule.WHEN_DARK)
+                .build()
+            )
+            .attribute(EnvironmentAttributes.STAR_BRIGHTNESS, 0.9f) // 90% star brightness
+            .register(); // Build and register the dimension
+    }
+}`}
+/>
+
+## Using Dimensions
+
+Once you've created your dimension, you can use it to create worlds with the properties you've defined.
+Learn more about <SourceLink path="model/level/LevelCreator.java">LevelCreator</SourceLink> and how to use them
+[here](/dimensions/level-creators).

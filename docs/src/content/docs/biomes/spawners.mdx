@@ -1,6 +1,8 @@
 ---
 title: Biome Spawners
 description: Learn how to use Wyck's natural spawners.
+sidebar:
+    order: 4
 ---
 
 import CodeBlock from "@/components/CodeBlock.astro";
@@ -27,7 +29,6 @@ inform the server what mobs to spawn, how many, how likely, and how many concurr
             code:
 `import dev.wyck.model.biome.CustomBiome;
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.wrapper.BiomeSettings;
 import dev.wyck.wrapper.entity.BiomeSpawner;
 import dev.wyck.wrapper.entity.MobCategory;
 import dev.wyck.wrapper.entity.data.NaturalSpawner;
@@ -45,7 +46,6 @@ public class ExamplePlugin extends JavaPlugin {
 
         CustomBiome.builder()
             .resourceKey(ResourceKey.of("test", "custombiome"))
-            .settings(BiomeSettings.defaultSettings())
             .waterColor("#F5F2EB")
             .grassColor("#DBE9EC")
             .biomeSpawner(spawner)
@@ -60,7 +60,6 @@ public class ExamplePlugin extends JavaPlugin {
             code:
 `import dev.wyck.model.biome.CustomBiome;
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.wrapper.BiomeSettings;
 import dev.wyck.wrapper.entity.BiomeSpawner;
 import dev.wyck.wrapper.entity.MobCategory;
 import dev.wyck.wrapper.entity.data.NaturalSpawner;
@@ -75,7 +74,6 @@ public class ExamplePlugin extends JavaPlugin {
 
         CustomBiome.builder()
             .resourceKey(ResourceKey.of("test", "custombiome"))
-            .settings(BiomeSettings.defaultSettings())
             .waterColor("#F5F2EB")
             .grassColor("#DBE9EC")
             .biomeSpawner(spawner)
@@ -96,7 +94,6 @@ Setting <SourceLink path="wrapper/entity/data/SpawnCost.java" line={13}>charge</
     filename="ExamplePlugin.java"
     code={`import dev.wyck.model.biome.CustomBiome;
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.wrapper.BiomeSettings;
 import dev.wyck.wrapper.entity.BiomeSpawner;
 import dev.wyck.wrapper.entity.MobCategory;
 import dev.wyck.wrapper.entity.data.NaturalSpawner;
@@ -117,7 +114,6 @@ public class ExamplePlugin extends JavaPlugin {
 
         CustomBiome.builder()
             .resourceKey(ResourceKey.of("test", "custombiome"))
-            .settings(BiomeSettings.defaultSettings())
             .waterColor("#F5F2EB")
             .grassColor("#DBE9EC")
             .biomeSpawner(spawner)

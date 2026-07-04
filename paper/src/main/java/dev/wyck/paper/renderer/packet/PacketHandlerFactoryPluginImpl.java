@@ -8,7 +8,7 @@ import dev.wyck.paper.renderer.packet.handlers.MonotonicNettyHandler;
 import dev.wyck.paper.renderer.packet.handlers.MonotonicPacketEventsHandler;
 import dev.wyck.paper.renderer.packet.handlers.MonotonicProtocolLibHandler;
 import dev.wyck.renderer.packet.PacketHandler;
-import dev.wyck.renderer.packet.PhonyCustomBiomeCollector;
+import dev.wyck.renderer.packet.VirtualBiomeCollector;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -28,7 +28,7 @@ public final class PacketHandlerFactoryPluginImpl implements PacketHandler.Facto
     private final WyckPlugin plugin;
     private final Map<PacketHandler.Injector, PacketHandler> injectorMap = new HashMap<>();
     private final List<PacketHandler> pendingRegistration = new ArrayList<>();
-    private final PhonyCustomBiomeCollector collector = new PhonyCustomBiomeCollector();
+    private final VirtualBiomeCollector collector = new VirtualBiomeCollector();
 
     private boolean enabled = false;
 

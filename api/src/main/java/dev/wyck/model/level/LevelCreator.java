@@ -105,6 +105,14 @@ public interface LevelCreator {
     List<LevelSpawner> spawners();
 
     /**
+     * The name of the world.
+     * @return the name of the world, as it appears in Bukkit.
+     * @since 2.4.0
+     */
+    @AsOf("3.0.0")
+    String name();
+
+    /**
      * Converts this {@link LevelCreator} to a {@link World}.
      * @return a {@link World} equivalent to this {@link LevelCreator}
      * @since 2.4.0
@@ -165,6 +173,7 @@ public interface LevelCreator {
         private World.Environment environment = World.Environment.CUSTOM;
         private StemPersistence persistence = StemPersistence.TRANSIENT;
         private List<LevelSpawner> spawners = new ArrayList<>();
+        private @Nullable String name = null;
 
         @AsOf("2.4.0")
         public Builder() {}
@@ -179,6 +188,7 @@ public interface LevelCreator {
             this.environment = other.environment();
             this.persistence = other.persistence();
             this.spawners = new ArrayList<>(other.spawners());
+            this.name = other.name();
         }
 
         /**
@@ -301,6 +311,18 @@ public interface LevelCreator {
             return this;
         }
 
+        /**
+         * Sets the name of the world.
+         * @param name the name of the world, or null to use the default name
+         * @return this builder
+         * @since 3.0.0
+         */
+        @AsOf("3.0.0")
+        public Builder name(@Nullable String name) {
+            this.name = name;
+            return this;
+        }
+
         // Friendly builder methods
 
         /**
@@ -352,7 +374,8 @@ public interface LevelCreator {
                 bonusChest,
                 environment,
                 persistence,
-                spawners
+                spawners,
+                name
             );
         }
 

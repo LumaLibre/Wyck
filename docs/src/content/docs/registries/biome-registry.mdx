@@ -11,7 +11,7 @@ import CodeTabs from "@/components/CodeTabs.astro";
 :::note
 
 Biomes cannot be removed from the Minecraft registry once they have been added.
-You may <SourceLink path="registry/BiomeRegistry.java" line={61}>modify(CustomBiome)</SourceLink> existing biomes to reduce memory footprint.
+You may <SourceLink path="registry/BiomeRegistry.java">modify(CustomBiome)</SourceLink> existing biomes to reduce memory footprint.
 
 :::
 
@@ -20,12 +20,8 @@ The <SourceLink path="registry/BiomeRegistry.java">BiomeRegistry</SourceLink> is
 It provides methods for adding new biomes as well as modifying existing ones.
 Biomes can be registered with this interface at any point, except the bootstrap phase.
 
-Generally, biomes are registered and modified using the shorthand methods on the <SourceLink path="biome/CustomBiome.java">CustomBiome</SourceLink> class,
+Generally, biomes are registered and modified using the shorthand methods on the <SourceLink path="model/biome/Biome.java">CustomBiome</SourceLink> class,
 but you can also use the <SourceLink path="registry/BiomeRegistry.java">BiomeRegistry</SourceLink> directly if you need more control over the registration process.
-
-* <SourceLink path="registry/BiomeRegistry.java" line={30}>registry()</SourceLink>: Creates a new instance of the BiomeRegistry.
-* <SourceLink path="registry/BiomeRegistry.java" line={45}>register(CustomBiome)</SourceLink>: Registers a custom biome to the Minecraft registry.
-* <SourceLink path="registry/BiomeRegistry.java" line={61}>modify(CustomBiome)</SourceLink>: Modifies an existing biome in the Minecraft registry.
 
 ### Example Usage
 

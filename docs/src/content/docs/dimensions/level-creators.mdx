@@ -1,6 +1,21 @@
-package dev.wyck.test;
+---
+title: Creating Worlds
+description: Learn how to create custom worlds with Wyck
+sidebar:
+    order: 2
+---
+import CodeBlock from "@/components/CodeBlock.astro";
+import SourceLink from "@/components/SourceLink.astro";
 
-import dev.wyck.keys.ResourceKey;
+<SourceLink path="model/level/LevelCreator.java">LevelCreator</SourceLink>s are Wyck's in-house implementation of Bukkit's [`WorldCreator`](https://jd.papermc.io/paper/26.2/org/bukkit/WorldCreator.html)
+that are specifically suited for custom dimensions, biomes, and world generation.
+
+### Creating a World
+<CodeBlock
+    lang="java"
+    filename="ExamplePlugin.java"
+    code={
+`import dev.wyck.keys.ResourceKey;
 import dev.wyck.model.level.LevelCreator;
 import dev.wyck.model.level.dimension.Dimension;
 import dev.wyck.wrapper.level.BiomeSource;
@@ -13,8 +28,7 @@ public class ExamplePlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         // Get your dimension from somewhere or create your own!
-        Dimension dimension = Dimension.reference(ResourceKey.of("test:dimension"));
-        System.out.println(dimension.skybox());
+        Dimension dimension = Dimension.reference(ResourceKey.minecraft("the_end"));
 
         // A quick example of a chunk generator with the biomes of the nether and noise generation of the overworld.
         ChunkGenerator chunkGenerator = ChunkGenerator.of(
@@ -33,26 +47,5 @@ public class ExamplePlugin extends JavaPlugin {
             .generator(chunkGenerator)
             .create(); // Build and create the world!
     }
-}
-
-    /*
-
-        Biome reference = Biome.reference(ResourceKey.minecraft("desert"));
-
-        BiomeRegistryImpl registry = (BiomeRegistryImpl) BiomeRegistry.registry();
-        net.minecraft.world.level.biome.Biome nmsBiome = registry.buildDelegate(customBiome);
-
-        RegistryAccess registryAccess = ((CraftServer) getServer()).getServer().registryAccess();
-        RegistryOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, registryAccess);
-
-        JsonElement json = net.minecraft.world.level.biome.Biome.DIRECT_CODEC
-            .encodeStart(ops, nmsBiome)
-            .getOrThrow();
-        String result = json.toString();
-        // write to /Users/jonah/idea/BiomesAPI/test-plugin/biome.json
-        try {
-            java.nio.file.Files.writeString(java.nio.file.Paths.get("/Users/jonah/idea/BiomesAPI/test-plugin/biome.json"), result);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-     */
+}`}
+/>

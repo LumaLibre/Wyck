@@ -1,4 +1,4 @@
-package dev.wyck.registry.level.dimension;
+package dev.wyck.registry;
 
 import dev.wyck.annotations.AsOf;
 import dev.wyck.keys.ResourceKey;

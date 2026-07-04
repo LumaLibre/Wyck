@@ -6,13 +6,11 @@ import com.google.gson.JsonObject;
 import com.mojang.serialization.Lifecycle;
 import io.papermc.paper.FeatureHooks;
 import dev.wyck.annotations.WireFactory;
-import dev.wyck.keys.KeyChains;
 import dev.wyck.model.level.LevelCreator;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.model.level.StemPersistence;
 import dev.wyck.registry.internal.WyckRegistry;
 import dev.wyck.registry.level.LevelFactory;
-import dev.wyck.registry.level.dimension.DimensionRegistry;
 import dev.wyck.util.Lazy;
 import dev.wyck.wrapper.level.spawner.LevelSpawner;
 import net.minecraft.core.Holder;
@@ -69,7 +67,7 @@ public final class SimpleLevelFactory implements LevelFactory {
 
         ResourceKey levelKey = world.resourceKey();
         Identifier levelId = (Identifier) levelKey.toMinecraft();
-        String name = levelId.getPath();
+        String name = world.name();
 
         net.minecraft.resources.ResourceKey<LevelStem> stemKey = net.minecraft.resources.ResourceKey.create(Registries.LEVEL_STEM, levelId);
         net.minecraft.resources.ResourceKey<Level> dimensionKey = net.minecraft.resources.ResourceKey.create(Registries.DIMENSION, stemKey.identifier());

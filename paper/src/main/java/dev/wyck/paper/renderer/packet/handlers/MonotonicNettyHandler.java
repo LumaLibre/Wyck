@@ -3,7 +3,7 @@ package dev.wyck.paper.renderer.packet.handlers;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.paper.WyckPlugin;
 import dev.wyck.renderer.packet.PacketHandler;
-import dev.wyck.renderer.packet.PhonyCustomBiomeCollector;
+import dev.wyck.renderer.packet.VirtualBiomeCollector;
 import dev.wyck.renderer.packet.handlers.NettyPacketHandler;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -15,7 +15,7 @@ public class MonotonicNettyHandler extends NettyPacketHandler {
 
     private boolean registered;
 
-    public MonotonicNettyHandler(String name, PhonyCustomBiomeCollector collector) {
+    public MonotonicNettyHandler(String name, VirtualBiomeCollector collector) {
         super(name, collector);
     }
 

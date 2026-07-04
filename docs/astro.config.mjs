@@ -49,12 +49,8 @@ export default defineConfig({
           autogenerate: { directory: "biomes" },
         },
         {
-          label: "Wrappers",
-          autogenerate: { directory: "wrappers" },
-        },
-        {
-          label: "Registries",
-          autogenerate: { directory: "registries" },
+          label: "Dimensions",
+          autogenerate: { directory: "dimensions" },
         },
         {
           label: "Renderers",
@@ -65,8 +61,8 @@ export default defineConfig({
           autogenerate: { directory: "worldgen" },
         },
         {
-          label: "Connection",
-          autogenerate: { directory: "connection" },
+          label: "Registries",
+          autogenerate: { directory: "registries" },
         },
         {
           label: "Components",

@@ -13,7 +13,8 @@ import java.util.Collection;
 import java.util.function.Consumer;
 
 /**
- * Frozen utilities for Minecraft registries.
+ * A minimal abstraction of Minecraft's registry with frozen registry utilities.
+ *
  * @since 2.3.0
  * @version 2.3.0
  * @author Jsinco

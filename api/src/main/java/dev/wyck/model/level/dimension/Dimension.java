@@ -2,10 +2,12 @@ package dev.wyck.model.level.dimension;
 
 import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
+import dev.wyck.keys.KeyChains;
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.registry.level.dimension.DimensionRegistry;
+import dev.wyck.registry.DimensionRegistry;
 import dev.wyck.wrapper.environment.attribute.FriendlyColorSupplier;
 import dev.wyck.wrapper.environment.attribute.EnvironmentAttributeSupplier;
+import dev.wyck.wrapper.internal.Wrapper;
 import dev.wyck.wrapper.level.clock.WorldClock;
 import dev.wyck.wrapper.level.dimension.CardinalLightType;
 import dev.wyck.wrapper.level.dimension.Infiniburn;
@@ -29,7 +31,7 @@ import java.util.Optional;
  */
 @NullMarked
 @AsOf("2.4.0")
-public interface Dimension extends Keyed {
+public interface Dimension extends Keyed, Wrapper {
 
     /**
      * The key of this dimension type.
@@ -237,6 +239,9 @@ public interface Dimension extends Keyed {
      */
     @AsOf("2.4.0")
     static Dimension reference(ResourceKey resourceKey) {
+        if (KeyChains.DIMENSIONS.isRegistered(resourceKey)) {
+            return KeyChains.DIMENSIONS.getOrThrow(resourceKey);
+        }
         return builder().resourceKey(resourceKey).build();
     }
     

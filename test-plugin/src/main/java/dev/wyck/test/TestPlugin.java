@@ -4,7 +4,6 @@ import dev.wyck.model.level.dimension.Dimension;
 import dev.wyck.model.level.LevelCreator;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.registry.level.LevelFactory;
-import dev.wyck.registry.level.dimension.DimensionRegistry;
 import dev.wyck.wrapper.environment.attribute.EnvironmentAttributes;
 import dev.wyck.wrapper.level.BiomeSource;
 import dev.wyck.wrapper.level.clock.WorldClock;
@@ -19,7 +18,6 @@ import dev.wyck.wrapper.level.noise.settings.NoiseSettings;
 import dev.wyck.wrapper.worldgen.climate.ClimatePoint;
 import dev.wyck.wrapper.worldgen.surface.SurfaceCondition;
 import dev.wyck.wrapper.worldgen.surface.SurfaceRule;
-import net.minecraft.world.level.dimension.DimensionType;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
@@ -112,7 +110,7 @@ public class TestPlugin extends JavaPlugin implements Listener {
             .oreVeinsEnabled(false)
             .build();
 
-        ChunkGenerator generator = ChunkGenerator.noise(biomeSource, noiseSettings);
+        ChunkGenerator generator = ChunkGenerator.of(biomeSource, noiseSettings);
 
         LevelCreator spec = LevelCreator.builder(levelKey)
             .dimension(dimension)

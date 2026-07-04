@@ -4,7 +4,7 @@ import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.WireProvider;
 import dev.wyck.misc.ChunkLocation;
 import dev.wyck.renderer.packet.PacketHandler;
-import dev.wyck.renderer.packet.PhonyBiomeResolver;
+import dev.wyck.renderer.packet.VirtualBiomeResolver;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
@@ -42,5 +42,5 @@ public interface NativeChunkPacketHandler {
      * @param dimensionSectionCount how many sections the dimension has
      */
     @AsOf("2.2.0")
-    void modifyChunkBiomes(Object chunkData, ChunkLocation chunkLocation, PhonyBiomeResolver resolver, PacketHandler.DimensionSectionCount dimensionSectionCount);
+    void modifyChunkBiomes(Object chunkData, ChunkLocation chunkLocation, VirtualBiomeResolver resolver, PacketHandler.DimensionSectionCount dimensionSectionCount);
 }

@@ -1,16 +1,15 @@
 ---
-import { repoFile } from "@/utils/links.ts";
+import { javadocLink } from "@/utils/links.ts";
 
 interface Props {
     path: string;
-    line?: number;
-    ref?: string;
+    member?: string;
     root?: boolean;
     code?: boolean;
 }
 
-const { path, line, ref, root = true, code = true } = Astro.props;
-const href = repoFile(path, { ref, line, root });
+const { path, member, root = true, code = true } = Astro.props;
+const href = javadocLink(path, { member, root });
 ---
 
 <a href={href} target="_blank" rel="noopener noreferrer">{code ? <code><slot /></code> : <slot />}</a>

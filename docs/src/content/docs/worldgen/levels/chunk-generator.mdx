@@ -50,7 +50,7 @@ public class ExamplePlugin extends JavaPlugin {
 
 
         // Floating islands with a single fixed custom biome
-        ChunkGenerator generator = ChunkGenerator.noise(
+        ChunkGenerator generator = ChunkGenerator.of(
             BiomeSource.fixed(biome),
             Noise.floatingIslands()
         );

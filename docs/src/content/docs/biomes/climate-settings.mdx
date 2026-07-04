@@ -1,0 +1,34 @@
+---
+title: Climate Settings
+description: Biome climate settings in Wyck.
+sidebar:
+    order: 2
+---
+
+import CodeBlock from "@/components/CodeBlock.astro";
+import SourceLink from "@/components/SourceLink.astro";
+
+<SourceLink path="wrapper/biome/ClimateSettings.java">ClimateSettings</SourceLink> is part of the wrapper api in Wyck and
+is a wrapper that is specifically tied to [biomes](/biomes/biomes).
+It is used to define the climate settings for a biome, which includes temperature, humidity, and other related properties.
+
+
+### Example Usage
+<CodeBlock
+    lang="java"
+    filename="Example.java"
+    code={
+`import dev.wyck.wrapper.biome.ClimateSettings;
+import dev.wyck.wrapper.biome.TemperatureModifier;
+
+public class Example {
+    public void example() {
+        ClimateSettings.builder()
+            .downfall(0.5f)
+            .temperature(0.14f)
+            .temperatureModifier(TemperatureModifier.FROZEN)
+            .hasPrecipitation(true)
+            .build();
+    }
+}`}
+/>

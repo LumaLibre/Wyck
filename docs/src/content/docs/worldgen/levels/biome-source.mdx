@@ -104,7 +104,7 @@ Once built, you can pass the biome source to a generator and the generator to a 
     lang="java"
     filename="ExamplePlugin.java"
     code={
-`ChunkGenerator generator = ChunkGenerator.noise(source, Noise.overworld());
+`ChunkGenerator generator = ChunkGenerator.of(source, Noise.overworld());
 
 World world = LevelCreator.builder()
     .levelKey(ResourceKey.of("test", "example"))

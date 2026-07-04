@@ -1,0 +1,112 @@
+---
+title: Dimension Registry
+description: Learn how to register and modify dimension types in the Minecraft registry using the DimensionRegistry API.
+---
+
+import SourceLink from "@/components/SourceLink.astro";
+import CodeTabs from "@/components/CodeTabs.astro";
+
+:::note
+
+Dimension types cannot be removed from the Minecraft registry once they have been added.
+You may <SourceLink path="registry/DimensionRegistry.java">modify(Dimension)</SourceLink> existing dimension types to reduce memory footprint.
+
+:::
+
+
+The <SourceLink path="registry/DimensionRegistry.java">DimensionRegistry</SourceLink> is the main API for registering and modifying dimension types in the Minecraft registry.
+It provides methods for adding new dimension types as well as modifying existing ones.
+Dimension types can be registered with this interface at any point, except the bootstrap phase.
+
+Generally, dimension types are registered and modified using the shorthand methods on the <SourceLink path="level/dimension/Dimension.java">Dimension</SourceLink> class,
+but you can also use the <SourceLink path="registry/DimensionRegistry.java">DimensionRegistry</SourceLink> directly if you need more control over the registration process.
+
+### Example Usage
+
+<CodeTabs
+    examples={[
+        {
+            label: "Shorthand",
+            filename: "ExamplePlugin.java",
+            lang: "java",
+            code:
+`import dev.wyck.model.level.dimension.Dimension;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.wrapper.level.dimension.Skybox;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class ExamplePlugin extends JavaPlugin {
+    @Override
+    public void onEnable() {
+        Dimension dimension = Dimension.builder()
+            .resourceKey(ResourceKey.of("test", "customdimension"))
+            .coordinateScale(4.0D)
+            .minY(-64)
+            .height(384)
+            .skybox(Skybox.OVERWORLD)
+            .register(); // Shorthand — builds and registers the dimension type
+    }
+}`,
+        },
+        {
+            label: "Explicit",
+            filename: "ExamplePlugin.java",
+            lang: "java",
+            code:
+`import dev.wyck.model.level.dimension.Dimension;
+import dev.wyck.registry.DimensionRegistry;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.wrapper.level.dimension.Skybox;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class ExamplePlugin extends JavaPlugin {
+    @Override
+    public void onEnable() {
+        Dimension dimension = Dimension.builder()
+            .resourceKey(ResourceKey.of("test", "customdimension"))
+            .coordinateScale(4.0D)
+            .minY(-64)
+            .height(384)
+            .skybox(Skybox.OVERWORLD)
+            .build();
+
+        DimensionRegistry registry = DimensionRegistry.registry();
+        registry.register(dimension);
+    }
+}`,
+        },
+    ]}
+/>
+
+
+## Modifying Dimension Types
+
+Wyck supports modifying existing dimension types after they've been registered.
+This means that you can change the environment and gameplay rules of a dimension on the fly,
+either by rebuilding a <SourceLink path="level/dimension/Dimension.java">Dimension</SourceLink> with
+<SourceLink path="level/dimension/Dimension.java">toBuilder()</SourceLink> and calling
+<SourceLink path="level/dimension/Dimension.java">modify()</SourceLink>, or by targeting an existing key with
+<SourceLink path="registry/DimensionRegistry.java">modify(ResourceKey, Dimension)</SourceLink>.
+
+<CodeTabs
+    examples={[
+        {
+            label: "Shorthand",
+            filename: "ExamplePlugin.java",
+            lang: "java",
+            code:
+                `Dimension modified = existing.toBuilder()
+    .ambientLight(0.5F)
+    .hasCeiling(true)
+    .modify(); // Rebuilds and applies the changes in place`,
+        },
+        {
+            label: "Explicit",
+            filename: "ExamplePlugin.java",
+            lang: "java",
+            code:
+                `DimensionRegistry registry = DimensionRegistry.registry();
+registry.modify(ResourceKey.of("test", "customdimension"), newData);`,
+        },
+    ]}
+/>

@@ -14,10 +14,10 @@ import dev.wyck.annotations.AsOf;
 import dev.wyck.misc.ChunkLocation;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.renderer.packet.PacketHandler;
-import dev.wyck.renderer.packet.PhonyBiomeResolver;
-import dev.wyck.renderer.packet.PhonyCustomBiomeCollector;
+import dev.wyck.renderer.packet.VirtualBiomeResolver;
+import dev.wyck.renderer.packet.VirtualBiomeCollector;
 import dev.wyck.renderer.packet.data.BlockReplacement;
-import dev.wyck.renderer.packet.data.PhonyCustomBiome;
+import dev.wyck.renderer.packet.data.VirtualBiome;
 import net.minecraft.network.protocol.game.ClientboundLevelChunkPacketData;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -39,12 +39,12 @@ import java.util.List;
 @ApiStatus.Internal
 public class ProtocolLibPacketHandler implements PacketHandler {
 
-    private final PhonyCustomBiomeCollector collector;
+    private final VirtualBiomeCollector collector;
     private final PacketAdapter[] protocolListeners;
 
 
     @AsOf("2.1.0")
-    public ProtocolLibPacketHandler(Plugin provider, Priority priority, PhonyCustomBiomeCollector collector) {
+    public ProtocolLibPacketHandler(Plugin provider, Priority priority, VirtualBiomeCollector collector) {
         this.collector = collector;
         ListenerPriority protocolLibPrio = priority.getDelegatePriority(ListenerPriority.class);
         this.protocolListeners = new PacketAdapter[] {
@@ -56,7 +56,7 @@ public class ProtocolLibPacketHandler implements PacketHandler {
 
     @AsOf("0.0.6")
     public ProtocolLibPacketHandler(Plugin provider, Priority priority) {
-        this(provider, priority, new PhonyCustomBiomeCollector());
+        this(provider, priority, new VirtualBiomeCollector());
     }
 
     @Override
@@ -80,13 +80,13 @@ public class ProtocolLibPacketHandler implements PacketHandler {
     }
 
     @Override
-    public PacketHandler appendBiome(PhonyCustomBiome biome) {
+    public PacketHandler appendBiome(VirtualBiome biome) {
         collector.appendBiome(biome);
         return this;
     }
 
     @Override
-    public boolean removeBiome(PhonyCustomBiome biome) {
+    public boolean removeBiome(VirtualBiome biome) {
         return collector.removeBiome(biome);
     }
 
@@ -96,7 +96,7 @@ public class ProtocolLibPacketHandler implements PacketHandler {
     }
 
     @Override
-    public boolean hasBiome(PhonyCustomBiome biome) {
+    public boolean hasBiome(VirtualBiome biome) {
         return collector.hasBiome(biome);
     }
 
@@ -131,7 +131,7 @@ public class ProtocolLibPacketHandler implements PacketHandler {
             StructureModifier<Integer> ints = packet.getIntegers();
             ChunkLocation chunkLocation = ChunkLocation.of(ints.read(0), ints.read(1));
 
-            PhonyBiomeResolver resolver = context.collector.resolverFor(player, chunkLocation);
+            VirtualBiomeResolver resolver = context.collector.resolverFor(player, chunkLocation);
             if (resolver == null) {
                 return;
             }
@@ -163,7 +163,7 @@ public class ProtocolLibPacketHandler implements PacketHandler {
             BlockPosition blockPosition = packet.getBlockPositionModifier().read(0);
 
             ChunkLocation chunkLocation = ChunkLocation.fromBlockCoords(blockPosition.getX(), blockPosition.getZ());
-            PhonyCustomBiome override = context.collector.bestBiomeFor(player, chunkLocation);
+            VirtualBiome override = context.collector.bestBiomeFor(player, chunkLocation);
             if (override == null) {
                 return;
             }
@@ -206,7 +206,7 @@ public class ProtocolLibPacketHandler implements PacketHandler {
             BlockPosition blockPosition = packet.getSectionPositions().read(0);
             ChunkLocation chunkLocation = ChunkLocation.fromBlockCoords(blockPosition.getX(), blockPosition.getZ());
 
-            PhonyCustomBiome override = context.collector.bestBiomeFor(player, chunkLocation);
+            VirtualBiome override = context.collector.bestBiomeFor(player, chunkLocation);
             if (override == null) {
                 return;
             }

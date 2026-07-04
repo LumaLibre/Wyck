@@ -64,7 +64,7 @@ public final class DatapackBootstrapBiomeRegistry implements BootstrapBiomeRegis
     // TODO: Abstract this out to some interfaces to use elsewhere in API
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    private static final String PACK_ID_FORMAT = "wyck_%s";
+    private static final String PACK_ID_FORMAT = "wyck_biome_%s";
     private static final String FEATURE_NAMESPACE_FORMAT = "wyck_%s";
 
     private final List<Biome> pending = new ArrayList<>();
@@ -154,7 +154,7 @@ public final class DatapackBootstrapBiomeRegistry implements BootstrapBiomeRegis
      * Returns the pack root directory.
      */
     private Path writePack() throws Exception {
-        Path root = Files.createTempDirectory("wyck-pack-");
+        Path root = Files.createTempDirectory("wyck-biome-pack-");
 
         // pack.mcmeta. This MC version uses the versioned schema: alongside pack_format it requires
         // min_format and max_format as [major, minor] arrays. We declare support for exactly the

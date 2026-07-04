@@ -1,14 +1,14 @@
 package dev.wyck.v26_1.renderer.packet.handlers;
 
 import dev.wyck.model.biome.Biome;
-import dev.wyck.renderer.packet.data.PhonyCustomBiome;
+import dev.wyck.renderer.packet.data.VirtualBiome;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.annotations.WireFactory;
 import dev.wyck.misc.ChunkLocation;
 import dev.wyck.renderer.packet.PacketHandler;
-import dev.wyck.renderer.packet.PhonyBiomeResolver;
+import dev.wyck.renderer.packet.VirtualBiomeResolver;
 import dev.wyck.renderer.packet.data.BlockReplacement;
 import dev.wyck.renderer.packet.data.SnapshotChunkData;
 import dev.wyck.renderer.packet.handlers.NativeChunkPacketHandler;
@@ -38,13 +38,13 @@ import java.util.List;
 public final class NmsNativeChunkPacketHandler implements NativeChunkPacketHandler {
 
     @Override
-    public void modifyChunkBiomes(Object chunkDataObj, ChunkLocation chunkLocation, PhonyBiomeResolver resolver, PacketHandler.DimensionSectionCount dimensionSectionCount) {
+    public void modifyChunkBiomes(Object chunkDataObj, ChunkLocation chunkLocation, VirtualBiomeResolver resolver, PacketHandler.DimensionSectionCount dimensionSectionCount) {
         ClientboundLevelChunkPacketData chunkData = (ClientboundLevelChunkPacketData) chunkDataObj;
 
         LevelChunkSection[] sections = extractChunkSections(chunkData, dimensionSectionCount.getSectionCount());
 
         SnapshotChunkData snapshot = new NmsSnapshotChunkData(chunkLocation, sections);
-        PhonyCustomBiome phony = resolver.resolve(snapshot);
+        VirtualBiome phony = resolver.resolve(snapshot);
         if (phony == null) {
             return;
         }

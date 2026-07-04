@@ -38,20 +38,6 @@ public interface BiomeRegistry {
     }
 
     /**
-     * This static method creates a new BiomeRegistry object.
-     * It returns a new instance of CustomBiomeRegistry.
-     *
-     * @since 0.0.1
-     * @return a new CustomBiomeRegistry object.
-     * @deprecated Misleading name, use {@link #registry()} instead.
-     */
-    @Deprecated
-    @AsOf("0.0.1")
-    static BiomeRegistry newRegistry() {
-        return registry();
-    }
-
-    /**
      * Builds a custom biome into a minecraft biome.
      * @param biome the biome to build
      * @return the built biome

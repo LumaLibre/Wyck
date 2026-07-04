@@ -3,8 +3,12 @@ package dev.wyck.test;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.model.level.LevelCreator;
 import dev.wyck.model.level.dimension.Dimension;
+import dev.wyck.registry.DimensionRegistry;
+import dev.wyck.registry.bootstrap.BootstrapDimensionRegistry;
+import dev.wyck.registry.bootstrap.Composer;
 import dev.wyck.registry.bootstrap.util.BootstrapSafeMinecraftRegistries;
 import dev.wyck.registry.level.LevelFactory;
+import dev.wyck.wrapper.environment.BedRule;
 import dev.wyck.wrapper.environment.attribute.EnvironmentAttributes;
 import dev.wyck.wrapper.environment.sounds.AmbientAdditionsSettings;
 import dev.wyck.wrapper.environment.sounds.AmbientMoodSettings;
@@ -15,6 +19,10 @@ import dev.wyck.wrapper.environment.sounds.SoundEvents;
 import dev.wyck.wrapper.level.BiomeSource;
 import dev.wyck.wrapper.level.noise.Noise;
 import dev.wyck.wrapper.level.noise.chunk.ChunkGenerator;
+import io.papermc.paper.plugin.bootstrap.BootstrapContext;
+import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.minecraft.core.registries.Registries;
 import org.bukkit.World;
 import org.bukkit.event.Listener;
@@ -35,7 +43,7 @@ public final class WyckTest extends JavaPlugin implements Listener {
 
         BiomeSource src = BiomeSource.overworld();
         getLogger().info("preset src = " + src);
-        ChunkGenerator generator = ChunkGenerator.noise(src, Noise.overworld());
+        ChunkGenerator generator = ChunkGenerator.of(src, Noise.overworld());
 
         BackgroundMusic backgroundMusic = BackgroundMusic.builder()
             .defaultMusic(Music.of(SoundEvents.BARREL_OPEN, 0, 1, true))

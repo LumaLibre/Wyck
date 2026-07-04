@@ -57,8 +57,6 @@ public final class SimpleLevelFactory implements LevelFactory {
         CraftServer server = (CraftServer) Bukkit.getServer();
         MinecraftServer minecraftServer = server.getServer();
 
-        ;
-
         ResourceKey localKey = world.dimension().resourceKey();
         Identifier typeId = localKey.asHandle();
         ResourceKey levelKey = world.resourceKey();
@@ -79,7 +77,7 @@ public final class SimpleLevelFactory implements LevelFactory {
 
         Preconditions.checkArgument(server.getWorld(levelKey.namespace() + ":" + levelKey.path()) == null || server.getWorld(levelId.getPath()) == null, "world already loaded under %s", levelKey);
 
-        String name = levelId.getPath();
+        String name = world.name();
         PaperWorldLoader.LoadedWorldData loadedWorldData = PaperWorldLoader.loadWorldData(minecraftServer, dimensionKey, name);
         PrimaryLevelData primaryLevelData = (PrimaryLevelData) minecraftServer.getWorldData();
 

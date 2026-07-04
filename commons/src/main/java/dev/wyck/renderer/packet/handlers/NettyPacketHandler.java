@@ -10,10 +10,10 @@ import dev.wyck.annotations.AsOf;
 import dev.wyck.misc.ChunkLocation;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.renderer.packet.PacketHandler;
-import dev.wyck.renderer.packet.PhonyBiomeResolver;
-import dev.wyck.renderer.packet.PhonyCustomBiomeCollector;
+import dev.wyck.renderer.packet.VirtualBiomeResolver;
+import dev.wyck.renderer.packet.VirtualBiomeCollector;
 import dev.wyck.renderer.packet.data.BlockReplacement;
-import dev.wyck.renderer.packet.data.PhonyCustomBiome;
+import dev.wyck.renderer.packet.data.VirtualBiome;
 import net.kyori.adventure.key.Key;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
@@ -52,12 +52,12 @@ public class NettyPacketHandler implements PacketHandler {
 
     private static final Logger LOGGER = Logger.getLogger(NettyPacketHandler.class.getName());
 
-    private final PhonyCustomBiomeCollector collector;
+    private final VirtualBiomeCollector collector;
     private final String handlerName;
     private final Key listenerKey;
 
     @AsOf("2.1.0")
-    public NettyPacketHandler(String name, PhonyCustomBiomeCollector collector) {
+    public NettyPacketHandler(String name, VirtualBiomeCollector collector) {
         this.collector = collector;
         this.handlerName = name + "_wyck_handler";
         this.listenerKey = Key.key("wyck", name + "_channel_init");
@@ -65,7 +65,7 @@ public class NettyPacketHandler implements PacketHandler {
 
     @AsOf("2.1.0")
     public NettyPacketHandler(String name) {
-        this(name, new PhonyCustomBiomeCollector());
+        this(name, new VirtualBiomeCollector());
     }
 
     @Override
@@ -122,13 +122,13 @@ public class NettyPacketHandler implements PacketHandler {
     }
 
     @Override
-    public PacketHandler appendBiome(PhonyCustomBiome biome) {
+    public PacketHandler appendBiome(VirtualBiome biome) {
         collector.appendBiome(biome);
         return this;
     }
 
     @Override
-    public boolean removeBiome(PhonyCustomBiome biome) {
+    public boolean removeBiome(VirtualBiome biome) {
         return collector.removeBiome(biome);
     }
 
@@ -138,7 +138,7 @@ public class NettyPacketHandler implements PacketHandler {
     }
 
     @Override
-    public boolean hasBiome(PhonyCustomBiome biome) {
+    public boolean hasBiome(VirtualBiome biome) {
         return collector.hasBiome(biome);
     }
 
@@ -163,11 +163,11 @@ public class NettyPacketHandler implements PacketHandler {
         private static final @Nullable Field SECTION_POS_FIELD = findFieldByType(ClientboundSectionBlocksUpdatePacket.class, SectionPos.class, "sectionPos");
         private static final @Nullable Field SECTION_STATES_FIELD = findFieldByType(ClientboundSectionBlocksUpdatePacket.class, BlockState[].class, "states");
 
-        private final PhonyCustomBiomeCollector collector;
+        private final VirtualBiomeCollector collector;
 
         @Nullable Player player;
 
-        public NettyChannelHandler(PhonyCustomBiomeCollector collector) {
+        public NettyChannelHandler(VirtualBiomeCollector collector) {
             this.collector = collector;
         }
 
@@ -205,7 +205,7 @@ public class NettyPacketHandler implements PacketHandler {
         private void handleChunkPacket(Player player, ClientboundLevelChunkWithLightPacket packet) {
             ChunkLocation loc = ChunkLocation.of(packet.getX(), packet.getZ());
 
-            PhonyBiomeResolver resolver = collector.resolverFor(player, loc);
+            VirtualBiomeResolver resolver = collector.resolverFor(player, loc);
             if (resolver == null) return;
 
             PacketHandler.DimensionSectionCount sectionCount = PacketHandler.DimensionSectionCount.fromBukkitEnvironment(player.getWorld().getEnvironment());
@@ -218,7 +218,7 @@ public class NettyPacketHandler implements PacketHandler {
 
             BlockPos pos = packet.getPos();
             ChunkLocation loc = ChunkLocation.fromBlockCoords(pos.getX(), pos.getZ());
-            PhonyCustomBiome override = collector.bestBiomeFor(player, loc);
+            VirtualBiome override = collector.bestBiomeFor(player, loc);
             if (override == null) return;
 
             List<BlockReplacement> replacements = override.blockReplacements();
@@ -247,7 +247,7 @@ public class NettyPacketHandler implements PacketHandler {
             try {
                 SectionPos sectionPos = (SectionPos) SECTION_POS_FIELD.get(packet);
                 ChunkLocation loc = ChunkLocation.of(sectionPos.x(), sectionPos.z());
-                PhonyCustomBiome override = collector.bestBiomeFor(player, loc);
+                VirtualBiome override = collector.bestBiomeFor(player, loc);
                 if (override == null) return;
 
                 List<BlockReplacement> replacements = override.blockReplacements();

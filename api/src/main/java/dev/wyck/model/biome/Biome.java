@@ -2,6 +2,7 @@ package dev.wyck.model.biome;
 
 import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
+import dev.wyck.keys.KeyChains;
 import dev.wyck.model.biome.impl.BiomeImpl;
 import dev.wyck.registry.BiomeRegistry;
 import dev.wyck.keys.ResourceKey;
@@ -11,6 +12,7 @@ import dev.wyck.wrapper.entity.BiomeSpawner;
 import dev.wyck.wrapper.environment.attribute.EnvironmentAttributeMap;
 import dev.wyck.wrapper.environment.attribute.EnvironmentAttributeSupplier;
 import dev.wyck.wrapper.environment.attribute.FriendlyColorSupplier;
+import dev.wyck.wrapper.internal.Wrapper;
 import dev.wyck.wrapper.worldgen.BiomeGenerationSettings;
 import net.kyori.adventure.key.Keyed;
 import org.jspecify.annotations.NullMarked;
@@ -25,7 +27,7 @@ import org.jspecify.annotations.Nullable;
  */
 @NullMarked
 @AsOf("2.3.0")
-public interface Biome extends Keyed {
+public interface Biome extends Keyed, Wrapper {
 
     /**
      * The key associated with this biome.
@@ -174,6 +176,9 @@ public interface Biome extends Keyed {
      */
     @AsOf("3.0.0")
     static Biome reference(ResourceKey resourceKey) {
+        if (KeyChains.BIOMES.isRegistered(resourceKey)) {
+            return KeyChains.BIOMES.getOrThrow(resourceKey);
+        }
         return builder().resourceKey(resourceKey).build();
     }
 

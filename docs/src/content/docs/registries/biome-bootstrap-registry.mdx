@@ -1,5 +1,5 @@
 ---
-title: Bootstrap Registry
+title: Biome Bootstrap Registry
 description: Learn how to register biomes during the bootstrap phase of the Minecraft server lifecycle, allowing you to add biomes before the server fully initializes.
 sidebar:
     order: 2
@@ -21,11 +21,11 @@ This can be useful for adding biomes that need to be available early in the serv
 
 ## Choosing a Composer
 
-When registering <SourceLink path="biome/CustomBiome.java">CustomBiome</SourceLink>s through the <SourceLink path="registry/bootstrap/BootstrapBiomeRegistry.java">BootstrapBiomeRegistry</SourceLink> API,
+When registering <SourceLink path="model/biome/Biome.java">Biome</SourceLink>s through the <SourceLink path="registry/bootstrap/BootstrapBiomeRegistry.java">BootstrapBiomeRegistry</SourceLink> API,
 you must choose a <SourceLink path="registry/bootstrap/Composer.java">Composer</SourceLink> to determine how the server will recognize your biomes.
 
-* <SourceLink path="registry/bootstrap/Composer.java" line={21}>INJECTOR</SourceLink>: Injects biomes directly into the live Minecraft biome registry by patching Paper's registry bootstrap process.
-* <SourceLink path="registry/bootstrap/Composer.java" line={26}>DATAPACK</SourceLink>: Biomes registered with this composer will be added to the server as if they were registered through a datapack.
+* <SourceLink path="registry/bootstrap/Composer.java">INJECTOR</SourceLink>: Injects biomes directly into the live Minecraft biome registry by patching Paper's registry bootstrap process.
+* <SourceLink path="registry/bootstrap/Composer.java">DATAPACK</SourceLink>: Biomes registered with this composer will be added to the server as if they were registered through a datapack.
 
 
 ### Example Usage
