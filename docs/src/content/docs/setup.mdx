@@ -1,14 +1,14 @@
 ---
 title: Getting Started
 description: A guide to getting started with Wyck, including installation instructions and a quick overview of the API.
-#tableOfContents: false
+# TODO: Change latest snapshot to latest release once we have a stable release
 ---
 
 import Versions from "@/components/Versions.astro";
-import {getLatestRelease} from "@/utils/versions.ts";
+import {getLatestRelease, getLatestSnapshot} from "@/utils/versions.ts";
 import CodeTabs from "@/components/CodeTabs.astro";
 
-export const latestRelease = await getLatestRelease();
+export const latestRelease = await getLatestSnapshot();
 
 Wyck is a custom biome API for [Paper](https://papermc.io/software/paper) servers without the use of datapacks.
 Our wrappers allow you to easily add new biomes to the game and send them to clients without touching any internals.
@@ -114,8 +114,8 @@ dependencies {
 main: dev.wyck.example.ExamplePlugin
 version: 1.0-SNAPSHOT
 api-version: 1.21
-paper-plugin-loader: dev.wyck.example.ExampleLoader # Add this line if you're using Wyck as a plugin loader
-depend: [Wyck] # Add this line if you're using Wyck as an external dependency`,
+paper-plugin-loader: dev.wyck.example.ExampleLoader # Add this line if you're using Wyck in a plugin loader
+depend: [Wyck] # Or, add this line if you're using Wyck as an external dependency`,
         },
         {
             label: "Paper Plugin",
@@ -127,8 +127,8 @@ main: dev.wyck.example.ExamplePlugin
 bootstrapper: dev.wyck.example.ExampleBootstrapper
 version: 1.0-SNAPSHOT
 api-version: 1.21
-loader: dev.wyck.example.ExampleLoader # Add this line if you're using Wyck as a plugin loader
-# Add these lines if you're using Wyck as an external dependency:
+loader: dev.wyck.example.ExampleLoader # Add this line if you're using Wyck in a plugin loader
+# Or, add these lines if you're using Wyck as an external dependency:
 dependencies:
     bootstrap:
       Wyck:
