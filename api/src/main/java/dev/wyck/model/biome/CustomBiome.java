@@ -29,7 +29,6 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Represents a custom biome in Wyck.
  * Extends {@link Biome} with client-side block replacements and friendly color accessors.
  *
  * @since 0.0.1
@@ -58,8 +57,6 @@ public interface CustomBiome extends Biome {
      */
     @AsOf("3.0.0")
     CustomBiome blockReplacements(List<BlockReplacement> blockReplacements);
-
-    // Friendly color accessors
 
     /**
      * @return the water color of this custom biome.
@@ -320,9 +317,7 @@ public interface CustomBiome extends Biome {
         private @Nullable BiomeSpawner biomeSpawner = null;
         private @Nullable BiomeGenerationSettings generationSettings = null;
         private List<BlockReplacement> blockReplacements = new ArrayList<>();
-
-        @ApiStatus.Obsolete(since = "3.0.0")
-        private ParticleCatalog.@Nullable Builder friendly$ParticleCatalog;
+        private ParticleCatalog.@Nullable Builder particleCatalog;
 
         @AsOf("3.0.0")
         public Builder() {}
@@ -459,10 +454,10 @@ public interface CustomBiome extends Biome {
 
         @AsOf("3.0.0")
         public Builder particle(ParticleTypes type, float probability, @Nullable ParticleData data) {
-            if (this.friendly$ParticleCatalog == null) {
-                this.friendly$ParticleCatalog = ParticleCatalog.builder();
+            if (this.particleCatalog == null) {
+                this.particleCatalog = ParticleCatalog.builder();
             }
-            this.friendly$ParticleCatalog.particle(type, probability, data);
+            this.particleCatalog.particle(type, probability, data);
             return this;
         }
 
@@ -556,8 +551,8 @@ public interface CustomBiome extends Biome {
             Preconditions.checkNotNull(specialEffects, "specialEffects cannot be null");
             Preconditions.checkNotNull(attributeMap, "attributeMap cannot be null");
 
-            if (this.friendly$ParticleCatalog != null) {
-                this.attribute(EnvironmentAttributes.AMBIENT_PARTICLES, this.friendly$ParticleCatalog.build());
+            if (this.particleCatalog != null) {
+                this.attribute(EnvironmentAttributes.AMBIENT_PARTICLES, this.particleCatalog.build());
             }
 
             return new CustomBiomeImpl(
