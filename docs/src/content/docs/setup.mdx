@@ -29,6 +29,30 @@ The latest stable release is [<Versions />](https://github.com/LumaLibre/Wyck/re
 <CodeTabs
     examples={[
         {
+            label: "Plugin Loader",
+            filename: "ExampleLoader.java",
+            lang: "java",
+            code:
+`package dev.wyck.example;
+
+import io.papermc.paper.plugin.loader.PluginClasspathBuilder;
+import io.papermc.paper.plugin.loader.PluginLoader;
+import io.papermc.paper.plugin.loader.library.impl.MavenLibraryResolver;
+import org.eclipse.aether.artifact.DefaultArtifact;
+import org.eclipse.aether.graph.Dependency;
+import org.eclipse.aether.repository.RemoteRepository;
+
+public class ExampleLoader implements PluginLoader {
+    @Override
+    public void classloader(PluginClasspathBuilder classpathBuilder) {
+        MavenLibraryResolver resolver = new MavenLibraryResolver();
+        resolver.addDependency(new Dependency(new DefaultArtifact("dev.wyck:Wyck:${latestRelease}"), null));
+        resolver.addRepository(new RemoteRepository.Builder("wyck", "default", "https://repo.wyck.dev/public/").build());
+        classpathBuilder.addLibrary(resolver);
+    }
+}`,
+        },
+        {
             label: "Shaded",
             filename: "build.gradle.kts",
             lang: "kotlin",
@@ -47,7 +71,7 @@ dependencies {
 
 tasks {
     shadowJar {
-        val pack = "com.example.testplugin"
+        val pack = "dev.wyck.example"
         relocate("dev.wyck", "\$pack.wyck")
         archiveClassifier.set("") // Remove the -all suffix
     }
@@ -77,7 +101,7 @@ dependencies {
     ]}
 />
 
-**If you are using Wyck as external dependency** you will need to add Wyck as a plugin dependency in your `plugin.yml`, or `paper-plugin.yml`.
+**If you are using Wyck in a plugin loader or as an external dependency** you will need to add Wyck as a plugin dependency in your `plugin.yml`, or `paper-plugin.yml`.
 
 <CodeTabs
     examples={[
@@ -87,10 +111,11 @@ dependencies {
             lang: "yaml",
             code:
 `name: ExamplePlugin
-main: com.example.ExamplePlugin
+main: dev.wyck.example.ExamplePlugin
 version: 1.0-SNAPSHOT
 api-version: 1.21
-depend: [Wyck] # Add this line!`,
+paper-plugin-loader: dev.wyck.example.ExampleLoader # Add this line if you're using Wyck as a plugin loader
+depend: [Wyck] # Add this line if you're using Wyck as an external dependency`,
         },
         {
             label: "Paper Plugin",
@@ -98,11 +123,12 @@ depend: [Wyck] # Add this line!`,
             lang: "yaml",
             code:
 `name: ExamplePlugin
-main: com.example.ExamplePlugin
-bootstrapper: com.example.ExampleBootstrapper
+main: dev.wyck.example.ExamplePlugin
+bootstrapper: dev.wyck.example.ExampleBootstrapper
 version: 1.0-SNAPSHOT
 api-version: 1.21
-# Add these lines:
+loader: dev.wyck.example.ExampleLoader # Add this line if you're using Wyck as a plugin loader
+# Add these lines if you're using Wyck as an external dependency:
 dependencies:
     bootstrap:
       Wyck:

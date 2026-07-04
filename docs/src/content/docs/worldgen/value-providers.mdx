@@ -19,11 +19,12 @@ position relative to the world.
 <CodeBlock
     lang="java"
     filename="ExamplePlugin.java"
-    code={`import dev.wyck.wrapper.worldgen.valueproviders.VerticalAnchor;
+    code={
+`import dev.wyck.wrapper.worldgen.valueproviders.VerticalAnchor;
 
-    VerticalAnchor.absolute(64); // exactly Y=64
-    VerticalAnchor.aboveBottom(8); // 8 blocks above the world's minimum height
-    VerticalAnchor.belowTop(1); // 1 block below the world's maximum height`}
+VerticalAnchor.absolute(64); // exactly Y=64
+VerticalAnchor.aboveBottom(8); // 8 blocks above the world's minimum height
+VerticalAnchor.belowTop(1); // 1 block below the world's maximum height`}
 />
 
 ## IntProvider
@@ -34,11 +35,12 @@ either constant or sampled from a distribution.
 <CodeBlock
     lang="java"
     filename="ExamplePlugin.java"
-    code={`import dev.wyck.wrapper.worldgen.valueproviders.IntProvider;
+    code={
+`import dev.wyck.wrapper.worldgen.valueproviders.IntProvider;
 
-    IntProvider.constant(4); // always 4
-    IntProvider.uniform(2, 8); // evenly between 2 and 8
-    IntProvider.triangle(6); // triangular distribution centered with spread 6`}
+IntProvider.constant(4); // always 4
+IntProvider.uniform(2, 8); // evenly between 2 and 8
+IntProvider.triangle(6); // triangular distribution centered with spread 6`}
 />
 
 ## FloatProvider
@@ -49,11 +51,12 @@ equivalent, used for radii, scales, and probabilities inside carvers and feature
 <CodeBlock
     lang="java"
     filename="ExamplePlugin.java"
-    code={`import dev.wyck.wrapper.worldgen.valueproviders.FloatProvider;
+    code={
+`import dev.wyck.wrapper.worldgen.valueproviders.FloatProvider;
 
-    FloatProvider.constant(3.0f); // always 3.0
-    FloatProvider.uniform(0.1f, 0.9f); // evenly between 0.1 and 0.9
-    FloatProvider.trapezoid(0.0f, 6.0f, 2.0f); // trapezoidal distribution`}
+FloatProvider.constant(3.0f); // always 3.0
+FloatProvider.uniform(0.1f, 0.9f); // evenly between 0.1 and 0.9
+FloatProvider.trapezoid(0.0f, 6.0f, 2.0f); // trapezoidal distribution`}
 />
 
 ## HeightProvider

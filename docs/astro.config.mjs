@@ -22,6 +22,7 @@ export default defineConfig({
   },
   integrations: [
     starlight({
+      favicon: '/favicon.png',
       components: {
         Sidebar: './src/components/Sidebar.astro',
       },
@@ -33,17 +34,14 @@ export default defineConfig({
       },
       social: [
         { icon: 'github', label: 'GitHub', href: 'https://github.com/LumaLibre/Wyck' },
-        { icon:  'discord', label: 'Discord', href: 'https://discord.gg/CCZGFg85jM' },
+        { icon: 'discord', label: 'Discord', href: 'https://discord.gg/CCZGFg85jM' },
+        { icon: 'open-book', label: 'Javadocs', href: 'https://wyck.dev/javadoc/index.html' },
       ],
       sidebar: [
         {
           label: "Getting Started",
           link: "/setup/",
         },
-        // {
-        //   label: "Introduction",
-        //   link: "/intro/",
-        // },
         {
           label: "Biomes",
           autogenerate: { directory: "biomes" },

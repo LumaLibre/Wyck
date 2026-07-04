@@ -10,7 +10,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 /**
- * Common interface for miscellaneous wyck (BiomesAPI) methods and utilities.
+ * Common interface for miscellaneous Wyck (BiomesAPI) methods and utilities.
  * Implemented by the main plugin class when running as a standalone plugin, and by a default
  * implementation when shaded into a consumer plugin.
  *
