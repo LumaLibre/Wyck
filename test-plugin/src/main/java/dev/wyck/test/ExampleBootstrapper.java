@@ -18,7 +18,7 @@ import dev.wyck.registry.bootstrap.BootstrapBiomeRegistry;
 import dev.wyck.registry.bootstrap.Composer;
 import dev.wyck.wrapper.worldgen.BiomeGenerationSettings;
 import dev.wyck.wrapper.worldgen.GenerationStep;
-import dev.wyck.wrapper.worldgen.feature.placement.PlacedFeatures;
+import dev.wyck.wrapper.worldgen.placement.PlacedFeatures;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 

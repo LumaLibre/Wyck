@@ -5,7 +5,6 @@ import dev.wyck.annotations.WireFactory;
 import dev.wyck.wrapper.worldgen.BlockPredicate;
 import dev.wyck.wrapper.worldgen.HeightmapType;
 import dev.wyck.wrapper.worldgen.WorldgenConversions;
-import dev.wyck.wrapper.worldgen.feature.placement.PlacementModifier;
 import dev.wyck.wrapper.worldgen.valueproviders.IntProvider;
 import org.bukkit.util.BlockVector;
 import org.jetbrains.annotations.ApiStatus;

@@ -22,7 +22,7 @@ but you may also omit any of these attributes if you do not wish to use them.
     code={
 `import dev.wyck.keys.ResourceKey;
 import dev.wyck.model.biome.Biome;
-import dev.wyck.test.worldgen.PillarFeature;
+import dev.wyck.example.PillarFeature;
 import dev.wyck.wrapper.biome.BiomeSpecialEffects;
 import dev.wyck.wrapper.biome.ClimateSettings;
 import dev.wyck.wrapper.biome.TemperatureModifier;
@@ -110,7 +110,7 @@ public class ExamplePlugin extends JavaPlugin {
                         .build())
                     )
                     .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeature.builder()
-                        .feature(new PillarFeature().register()) // Declared in another class from my plugin
+                        .feature(new PillarFeature().register(), PillarFeature.Config.defaults()) // Declared in another class from my plugin
                         .modifier(PlacementModifier.count(1))
                         .build())
                     .addFeature(GenerationStep.TOP_LAYER_MODIFICATION, PlacedFeature.builder()

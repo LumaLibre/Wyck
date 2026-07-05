@@ -1,4 +1,4 @@
-package dev.wyck.wrapper.worldgen.feature.placement;
+package dev.wyck.wrapper.worldgen.placement;
 
 import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;

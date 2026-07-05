@@ -1,4 +1,4 @@
-package dev.wyck.wrapper.worldgen.feature.placement;
+package dev.wyck.wrapper.worldgen.placement;
 
 import dev.wyck.annotations.AsOf;
 import dev.wyck.annotations.Generated;

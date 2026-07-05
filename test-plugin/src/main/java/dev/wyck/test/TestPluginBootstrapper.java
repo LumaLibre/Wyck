@@ -8,9 +8,9 @@ import dev.wyck.wrapper.worldgen.BiomeGenerationSettings;
 import dev.wyck.wrapper.worldgen.GenerationStep;
 import dev.wyck.wrapper.worldgen.HeightmapType;
 import dev.wyck.wrapper.worldgen.feature.ConfiguredFeature;
-import dev.wyck.wrapper.worldgen.feature.placement.PlacedFeature;
-import dev.wyck.wrapper.worldgen.feature.placement.PlacedFeatures;
-import dev.wyck.wrapper.worldgen.feature.placement.PlacementModifier;
+import dev.wyck.wrapper.worldgen.placement.PlacedFeature;
+import dev.wyck.wrapper.worldgen.placement.PlacedFeatures;
+import dev.wyck.wrapper.worldgen.placement.PlacementModifier;
 import org.bukkit.Material;
 
 public class TestPluginBootstrapper implements PluginBootstrap {

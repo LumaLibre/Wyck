@@ -1,49 +1,27 @@
 package dev.wyck.test;
 
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.misc.providers.BasicBiomeProvider;
 import dev.wyck.model.biome.Biome;
 import dev.wyck.model.level.LevelCreator;
 import dev.wyck.model.level.dimension.Dimension;
 import dev.wyck.test.worldgen.FancyTreeFeature;
-import dev.wyck.test.worldgen.PillarFeature;
 import dev.wyck.wrapper.biome.BiomeSpecialEffects;
-import dev.wyck.wrapper.biome.ClimateSettings;
-import dev.wyck.wrapper.biome.TemperatureModifier;
 import dev.wyck.wrapper.entity.BiomeSpawner;
 import dev.wyck.wrapper.entity.MobCategory;
 import dev.wyck.wrapper.entity.data.NaturalSpawner;
 import dev.wyck.wrapper.environment.attribute.EnvironmentAttributes;
-import dev.wyck.wrapper.environment.particle.ParticleCatalog;
 import dev.wyck.wrapper.environment.particle.ParticleOptions;
 import dev.wyck.wrapper.environment.particle.ParticleTypes;
-import dev.wyck.wrapper.environment.particle.options.BlockParticle;
 import dev.wyck.wrapper.level.BiomeSource;
 import dev.wyck.wrapper.level.noise.Noise;
 import dev.wyck.wrapper.level.noise.chunk.ChunkGenerator;
 import dev.wyck.wrapper.worldgen.BiomeGenerationSettings;
 import dev.wyck.wrapper.worldgen.GenerationStep;
 import dev.wyck.wrapper.worldgen.HeightmapType;
-import dev.wyck.wrapper.worldgen.carver.CanyonCarverConfiguration;
-import dev.wyck.wrapper.worldgen.carver.CanyonShapeConfiguration;
-import dev.wyck.wrapper.worldgen.carver.ConfiguredWorldCarver;
-import dev.wyck.wrapper.worldgen.feature.ConfiguredFeature;
-import dev.wyck.wrapper.worldgen.feature.ConfiguredFeatures;
-import dev.wyck.wrapper.worldgen.feature.FeatureType;
-import dev.wyck.wrapper.worldgen.feature.config.FeatureConfiguration;
-import dev.wyck.wrapper.worldgen.feature.placement.PlacedFeature;
-import dev.wyck.wrapper.worldgen.feature.placement.PlacedFeatures;
-import dev.wyck.wrapper.worldgen.feature.placement.PlacementModifier;
-import dev.wyck.wrapper.worldgen.valueproviders.FloatProvider;
-import dev.wyck.wrapper.worldgen.valueproviders.HeightProvider;
-import dev.wyck.wrapper.worldgen.valueproviders.IntProvider;
-import dev.wyck.wrapper.worldgen.valueproviders.VerticalAnchor;
-import org.bukkit.Material;
-import org.bukkit.WorldCreator;
+import dev.wyck.wrapper.worldgen.placement.PlacedFeature;
+import dev.wyck.wrapper.worldgen.placement.PlacementModifier;
 import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.util.List;
 
 public class ExamplePlugin extends JavaPlugin {
     @Override
