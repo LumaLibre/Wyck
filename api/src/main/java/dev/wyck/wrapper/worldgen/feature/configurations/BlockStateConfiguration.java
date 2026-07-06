@@ -22,7 +22,7 @@ import org.jspecify.annotations.Nullable;
 public interface BlockStateConfiguration extends FeatureConfiguration {
 
     @ApiStatus.Internal
-    ConstructWireProvider<BlockStateConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.config.BlockStateConfigurationImpl");
+    ConstructWireProvider<BlockStateConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.configurations.BlockStateConfigurationImpl");
 
     /**
      * The block state used by this configuration.

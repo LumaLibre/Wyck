@@ -23,7 +23,7 @@ import org.jspecify.annotations.Nullable;
 public interface DiskConfiguration extends FeatureConfiguration {
 
     @ApiStatus.Internal
-    ConstructWireProvider<DiskConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.config.DiskConfigurationImpl");
+    ConstructWireProvider<DiskConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.configurations.DiskConfigurationImpl");
 
     /**
      * The block state provider used for the blocks that make up the disk.

@@ -16,6 +16,7 @@ import dev.wyck.wrapper.environment.particle.ParticleTypes;
 import dev.wyck.wrapper.level.BiomeSource;
 import dev.wyck.wrapper.level.clock.WorldClock;
 import dev.wyck.wrapper.level.dimension.Skybox;
+import dev.wyck.wrapper.level.noise.Noise;
 import dev.wyck.wrapper.level.noise.NoiseGeneratorSettings;
 import dev.wyck.wrapper.level.noise.NoiseRouter;
 import dev.wyck.wrapper.level.noise.Noises;
@@ -23,16 +24,24 @@ import dev.wyck.wrapper.level.noise.chunk.ChunkGenerator;
 import dev.wyck.wrapper.level.noise.function.DensityFunction;
 import dev.wyck.wrapper.level.noise.settings.NoiseSettings;
 import dev.wyck.wrapper.worldgen.BiomeGenerationSettings;
+import dev.wyck.wrapper.worldgen.BlockPredicate;
 import dev.wyck.wrapper.worldgen.GenerationStep;
 import dev.wyck.wrapper.worldgen.HeightmapType;
 import dev.wyck.wrapper.worldgen.feature.ConfiguredFeature;
 import dev.wyck.wrapper.worldgen.feature.FeatureType;
 import dev.wyck.wrapper.worldgen.feature.configurations.FeatureConfiguration;
+import dev.wyck.wrapper.worldgen.feature.configurations.TreeConfiguration;
+import dev.wyck.wrapper.worldgen.feature.featuresize.TwoLayersFeatureSize;
+import dev.wyck.wrapper.worldgen.feature.foliageplacers.PineFoliagePlacer;
+import dev.wyck.wrapper.worldgen.feature.trunkplacers.StraightTrunkPlacer;
 import dev.wyck.wrapper.worldgen.placement.PlacedFeature;
 import dev.wyck.wrapper.worldgen.placement.PlacementModifier;
+import dev.wyck.wrapper.worldgen.stateproviders.BlockStateProvider;
 import dev.wyck.wrapper.worldgen.surface.SurfaceCondition;
 import dev.wyck.wrapper.worldgen.surface.SurfaceRule;
+import dev.wyck.wrapper.worldgen.valueproviders.IntProvider;
 import org.bukkit.Material;
+import org.bukkit.Tag;
 import org.bukkit.World;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.EntityType;
@@ -59,32 +68,48 @@ public class TestPlugin extends JavaPlugin implements Listener {
     public void onEnable() {
         //BlockData stone = Material.STONE.createBlockData();
         //DimensionType
-        ResourceKey levelKey = ResourceKey.of("test", "wobbleworld");
+        ResourceKey levelKey = ResourceKey.of("test", "wobbleworld3");
+
+        TreeConfiguration treeConfig = FeatureConfiguration.tree()
+            .belowTrunkProvider(BlockStateProvider.ruleBased(
+                BlockStateProvider.simple(Material.DIRT),
+                List.of(
+                    new BlockStateProvider.RuleBased.Rule(
+                        BlockPredicate.not(BlockPredicate.matchesTag(Tag.CANNOT_REPLACE_BELOW_TREE_TRUNK)),
+                        BlockStateProvider.simple(Material.DIRT)
+                    )
+                )
+            ))
+            .foliagePlacer(PineFoliagePlacer.builder()
+                .height(IntProvider.constant(4))
+                .offset(IntProvider.constant(1))
+                .radius(IntProvider.uniform(4, 6))
+                .build()
+            )
+            .foliageProvider(BlockStateProvider.simple(Material.SPRUCE_LEAVES))
+            .ignoreVines(true)
+            .minimumSize(TwoLayersFeatureSize.builder()
+                .limit(1)
+                .lowerSize(0)
+                .minClippedHeight(0)
+                .upperSize(0)
+                .build()
+            )
+            .trunkPlacer(StraightTrunkPlacer.builder()
+                .baseHeight(10)
+                .heightRandA(4)
+                .heightRandB(8)
+                .build()
+            )
+            .trunkProvider(BlockStateProvider.simple(Material.SPRUCE_LOG))
+            .build();
 
         Biome biome = Biome.builder()
             .resourceKey(ResourceKey.of("test:biome")) // Required key
-            // Climate settings
-//            .climateSettings(ClimateSettings.builder()
-//                .downfall(0.5f)
-//                .temperature(0.14f)
-//                .temperatureModifier(TemperatureModifier.FROZEN)
-//                .build()
-//            )
-            // Special effects
             .specialEffects(BiomeSpecialEffects.builder()
                     .waterColor("#00FF00")
-//                .grassColorOverride("#00FF00")
-//                .foliageColorOverride("#00FF00")
-//                .dryFoliageColorOverride("#0000FF")
                     .build()
             )
-            // Environmental attributes
-//            .attribute(EnvironmentAttributes.BLOCK_LIGHT_TINT, "#FFFFFF")
-//            .attribute(EnvironmentAttributes.FOG_COLOR, "#FFFFFF")
-//            .attribute(EnvironmentAttributes.AMBIENT_PARTICLES, ParticleCatalog.builder()
-//                .particle(ParticleTypes.BLOCK, 0.01f, BlockParticle.of(Material.ACACIA_LOG))
-//                .build()
-//            )
             .attribute(EnvironmentAttributes.DEFAULT_DRIPSTONE_PARTICLE, ParticleOptions.of(ParticleTypes.DRIPPING_HONEY))
             // Mob spawn settings
             .spawner(BiomeSpawner.builder()
@@ -94,33 +119,32 @@ public class TestPlugin extends JavaPlugin implements Listener {
             // Worldgen
             .generationSettings(
                 BiomeGenerationSettings.builder()
-                    .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeature.builder()
-                        .feature(new SchematicTreeFeature().register(), SchematicTreeFeature.SchematicTreeConfig.defaults())
-                        .modifier(PlacementModifier.rarityFilter(1))
-                        .modifier(PlacementModifier.inSquare())
-                        .modifier(PlacementModifier.surfaceWaterDepth(0))
-                        .modifier(PlacementModifier.heightmap(HeightmapType.OCEAN_FLOOR))
-                        .modifier(PlacementModifier.biomeFilter())
-                        .build())
-
-                    .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeature.builder()
-                        .feature(new SchematicTreeFeature().registerAs(ResourceKey.of("t", "s")), SchematicTreeFeature.SchematicTreeConfig.defaults2())
-                        .modifier(PlacementModifier.rarityFilter(1))
-                        .modifier(PlacementModifier.inSquare())
-                        .modifier(PlacementModifier.surfaceWaterDepth(0))
-                        .modifier(PlacementModifier.heightmap(HeightmapType.OCEAN_FLOOR))
-                        .modifier(PlacementModifier.biomeFilter())
-                        .build())
-
 //                    .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeature.builder()
-//                        .feature(ConfiguredFeature.of(FeatureType.TREE, FeatureConfiguration.tree()
-//                            .belowTrunkProvider()))
+//                        .feature(new SchematicTreeFeature().register(), SchematicTreeFeature.SchematicTreeConfig.defaults())
 //                        .modifier(PlacementModifier.rarityFilter(1))
 //                        .modifier(PlacementModifier.inSquare())
 //                        .modifier(PlacementModifier.surfaceWaterDepth(0))
 //                        .modifier(PlacementModifier.heightmap(HeightmapType.OCEAN_FLOOR))
 //                        .modifier(PlacementModifier.biomeFilter())
 //                        .build())
+//
+//                    .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeature.builder()
+//                        .feature(new SchematicTreeFeature().registerAs(ResourceKey.of("t", "s")), SchematicTreeFeature.SchematicTreeConfig.defaults2())
+//                        .modifier(PlacementModifier.rarityFilter(1))
+//                        .modifier(PlacementModifier.inSquare())
+//                        .modifier(PlacementModifier.surfaceWaterDepth(0))
+//                        .modifier(PlacementModifier.heightmap(HeightmapType.OCEAN_FLOOR))
+//                        .modifier(PlacementModifier.biomeFilter())
+//                        .build())
+
+                    .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeature.builder()
+                        .feature(ConfiguredFeature.of(FeatureType.TREE, treeConfig))
+                        .modifier(PlacementModifier.rarityFilter(1))
+                        .modifier(PlacementModifier.inSquare())
+                        .modifier(PlacementModifier.surfaceWaterDepth(0))
+                        .modifier(PlacementModifier.heightmap(HeightmapType.OCEAN_FLOOR))
+                        .modifier(PlacementModifier.biomeFilter())
+                        .build())
                     .build()
             )
             .register();
@@ -190,7 +214,7 @@ public class TestPlugin extends JavaPlugin implements Listener {
             .oreVeinsEnabled(false)
             .build();
 
-        ChunkGenerator generator = ChunkGenerator.of(biomeSource, noiseSettings);
+        ChunkGenerator generator = ChunkGenerator.of(biomeSource, Noise.overworld());
 
         LevelCreator spec = LevelCreator.builder(levelKey)
             .dimension(dimension)

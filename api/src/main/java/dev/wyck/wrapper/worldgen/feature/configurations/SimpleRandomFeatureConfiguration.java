@@ -24,7 +24,7 @@ import java.util.List;
 public interface SimpleRandomFeatureConfiguration extends FeatureConfiguration {
 
     @ApiStatus.Internal
-    ConstructWireProvider<SimpleRandomFeatureConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.config.SimpleRandomFeatureConfigurationImpl");
+    ConstructWireProvider<SimpleRandomFeatureConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.configurations.SimpleRandomFeatureConfigurationImpl");
 
     /**
      * Any number of placed features.

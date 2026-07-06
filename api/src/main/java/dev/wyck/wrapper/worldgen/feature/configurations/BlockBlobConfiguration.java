@@ -23,7 +23,7 @@ import org.jspecify.annotations.Nullable;
 public interface BlockBlobConfiguration extends FeatureConfiguration {
 
     @ApiStatus.Internal
-    ConstructWireProvider<BlockBlobConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.config.BlockBlobConfigurationImpl");
+    ConstructWireProvider<BlockBlobConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.configurations.BlockBlobConfigurationImpl");
 
     /**
      * The block state that makes up the blob.

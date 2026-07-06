@@ -21,7 +21,7 @@ import org.jspecify.annotations.Nullable;
 public interface SimpleBlockConfiguration extends FeatureConfiguration {
 
     @ApiStatus.Internal
-    ConstructWireProvider<SimpleBlockConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.config.SimpleBlockConfigurationImpl");
+    ConstructWireProvider<SimpleBlockConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.configurations.SimpleBlockConfigurationImpl");
 
     /**
      * The block to use.

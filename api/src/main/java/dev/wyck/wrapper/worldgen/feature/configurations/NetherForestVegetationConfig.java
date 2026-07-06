@@ -21,7 +21,7 @@ import org.jspecify.annotations.Nullable;
 public interface NetherForestVegetationConfig extends FeatureConfiguration {
 
     @ApiStatus.Internal
-    ConstructWireProvider<NetherForestVegetationConfig> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.config.NetherForestVegetationConfigImpl");
+    ConstructWireProvider<NetherForestVegetationConfig> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.configurations.NetherForestVegetationConfigImpl");
 
     /**
      * The block to use.

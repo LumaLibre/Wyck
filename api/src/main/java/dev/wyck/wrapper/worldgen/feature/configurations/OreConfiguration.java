@@ -25,7 +25,7 @@ import java.util.List;
 public interface OreConfiguration extends FeatureConfiguration {
 
     @ApiStatus.Internal
-    ConstructWireProvider<OreConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.config.OreConfigurationImpl");
+    ConstructWireProvider<OreConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.configurations.OreConfigurationImpl");
 
     /**
      * A list of targets.

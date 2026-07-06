@@ -24,7 +24,7 @@ import org.jspecify.annotations.Nullable;
 public interface SpikeConfiguration extends FeatureConfiguration {
 
     @ApiStatus.Internal
-    ConstructWireProvider<SpikeConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.config.SpikeConfigurationImpl");
+    ConstructWireProvider<SpikeConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.configurations.SpikeConfigurationImpl");
 
     /**
      * The block to use.

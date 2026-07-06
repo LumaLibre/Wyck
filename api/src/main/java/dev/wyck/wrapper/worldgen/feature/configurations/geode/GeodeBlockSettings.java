@@ -28,7 +28,7 @@ import java.util.List;
 public interface GeodeBlockSettings extends Wrapper {
 
     @ApiStatus.Internal
-    ConstructWireProvider<GeodeBlockSettings> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.config.geode.GeodeBlockSettingsImpl");
+    ConstructWireProvider<GeodeBlockSettings> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.configurations.geode.GeodeBlockSettingsImpl");
 
     /**
      * The block state provider used for the filling layer. This is air in vanilla geodes.

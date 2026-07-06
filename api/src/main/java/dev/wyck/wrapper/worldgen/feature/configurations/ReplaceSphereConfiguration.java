@@ -23,7 +23,7 @@ import org.jspecify.annotations.Nullable;
 public interface ReplaceSphereConfiguration extends FeatureConfiguration {
 
     @ApiStatus.Internal
-    ConstructWireProvider<ReplaceSphereConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.config.ReplaceSphereConfigurationImpl");
+    ConstructWireProvider<ReplaceSphereConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.configurations.ReplaceSphereConfigurationImpl");
 
     /**
      * The block state that is replaced within the sphere.

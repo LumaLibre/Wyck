@@ -25,7 +25,7 @@ import org.jspecify.annotations.Nullable;
 public interface GeodeConfiguration extends FeatureConfiguration {
 
     @ApiStatus.Internal
-    ConstructWireProvider<GeodeConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.config.GeodeConfigurationImpl");
+    ConstructWireProvider<GeodeConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.configurations.GeodeConfigurationImpl");
 
     /**
      * The block state providers used for each of the geode's layers and its inner placements.

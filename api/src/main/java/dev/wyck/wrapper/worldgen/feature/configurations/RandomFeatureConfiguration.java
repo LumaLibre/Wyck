@@ -24,7 +24,7 @@ import java.util.List;
 public interface RandomFeatureConfiguration extends FeatureConfiguration {
 
     @ApiStatus.Internal
-    ConstructWireProvider<RandomFeatureConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.config.RandomFeatureConfigurationImpl");
+    ConstructWireProvider<RandomFeatureConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.configurations.RandomFeatureConfigurationImpl");
 
     /**
      * Gets the list of weighted placed features.

@@ -22,7 +22,7 @@ import org.jspecify.annotations.Nullable;
 public interface HugeMushroomFeatureConfiguration extends FeatureConfiguration {
 
     @ApiStatus.Internal
-    ConstructWireProvider<HugeMushroomFeatureConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.config.HugeMushroomFeatureConfigurationImpl");
+    ConstructWireProvider<HugeMushroomFeatureConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.configurations.HugeMushroomFeatureConfigurationImpl");
 
     /**
      * The block to use for the cap.

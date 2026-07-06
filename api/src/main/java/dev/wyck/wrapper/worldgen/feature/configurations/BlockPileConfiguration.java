@@ -19,7 +19,7 @@ import org.jspecify.annotations.NullMarked;
 public interface BlockPileConfiguration extends FeatureConfiguration {
 
     @ApiStatus.Internal
-    ConstructWireProvider<BlockPileConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.config.BlockPileConfigurationImpl");
+    ConstructWireProvider<BlockPileConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.configurations.BlockPileConfigurationImpl");
 
     /**
      * The block state provider used for the blocks in the pile.

@@ -21,7 +21,7 @@ import org.jspecify.annotations.Nullable;
 public interface RandomBooleanFeatureConfiguration extends FeatureConfiguration {
 
     @ApiStatus.Internal
-    ConstructWireProvider<RandomBooleanFeatureConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.config.RandomBooleanFeatureConfigurationImpl");
+    ConstructWireProvider<RandomBooleanFeatureConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.configurations.RandomBooleanFeatureConfigurationImpl");
 
     /**
      * Gets the placed feature to use when the random boolean is true.

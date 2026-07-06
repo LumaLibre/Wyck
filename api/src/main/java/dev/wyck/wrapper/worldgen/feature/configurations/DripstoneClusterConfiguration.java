@@ -22,7 +22,7 @@ import org.jspecify.annotations.Nullable;
 public interface DripstoneClusterConfiguration extends FeatureConfiguration {
 
     @ApiStatus.Internal
-    ConstructWireProvider<DripstoneClusterConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.config.DripstoneClusterConfigurationImpl");
+    ConstructWireProvider<DripstoneClusterConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.configurations.DripstoneClusterConfigurationImpl");
 
     /**
      * For how many blocks the feature searches for the floor or ceiling. Value between 1 and 512.

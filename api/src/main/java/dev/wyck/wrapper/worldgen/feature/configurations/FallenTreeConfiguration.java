@@ -27,7 +27,7 @@ import java.util.List;
 public interface FallenTreeConfiguration extends FeatureConfiguration {
 
     @ApiStatus.Internal
-    ConstructWireProvider<FallenTreeConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.config.FallenTreeConfigurationImpl");
+    ConstructWireProvider<FallenTreeConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.configurations.FallenTreeConfigurationImpl");
 
     /**
      * The block state provider used for the fallen tree's trunk.

@@ -26,7 +26,7 @@ import java.util.List;
 public interface EndSpikeConfiguration extends FeatureConfiguration {
 
     @ApiStatus.Internal
-    ConstructWireProvider<EndSpikeConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.config.EndSpikeConfigurationImpl");
+    ConstructWireProvider<EndSpikeConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.configurations.EndSpikeConfigurationImpl");
 
     /**
      * Whether the End crystals on top of the spikes are invulnerable.

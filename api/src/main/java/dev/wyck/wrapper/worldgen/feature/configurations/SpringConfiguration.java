@@ -25,7 +25,7 @@ import java.util.Set;
 public interface SpringConfiguration extends FeatureConfiguration {
 
     @ApiStatus.Internal
-    ConstructWireProvider<SpringConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.config.SpringConfigurationImpl");
+    ConstructWireProvider<SpringConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.configurations.SpringConfigurationImpl");
 
     /**
      * Which fluid to use.

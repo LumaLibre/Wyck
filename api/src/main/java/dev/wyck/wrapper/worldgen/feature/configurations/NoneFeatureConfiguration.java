@@ -17,7 +17,7 @@ import org.jspecify.annotations.NullMarked;
 public interface NoneFeatureConfiguration extends FeatureConfiguration {
 
     @ApiStatus.Internal
-    ConstructWireProvider<NoneFeatureConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.config.NoneFeatureConfigurationImpl");
+    ConstructWireProvider<NoneFeatureConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.configurations.NoneFeatureConfigurationImpl");
 
     /** The singleton instance of {@link NoneFeatureConfiguration}. */
     @AsOf("3.0.0")

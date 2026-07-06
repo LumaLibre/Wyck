@@ -27,7 +27,7 @@ import java.util.List;
 public interface BlockColumnConfiguration extends FeatureConfiguration {
 
     @ApiStatus.Internal
-    ConstructWireProvider<BlockColumnConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.config.BlockColumnConfigurationImpl");
+    ConstructWireProvider<BlockColumnConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.configurations.BlockColumnConfigurationImpl");
 
     @ApiStatus.Experimental // may be moved in the future
     BlockPredicate ONLY_IN_AIR_PREDICATE = BlockPredicate.matchesTag(ResourceKey.minecraft("air"));

@@ -22,7 +22,7 @@ import org.jspecify.annotations.Nullable;
 public interface LargeDripstoneConfiguration extends FeatureConfiguration {
 
     @ApiStatus.Internal
-    ConstructWireProvider<LargeDripstoneConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.config.LargeDripstoneConfigurationImpl");
+    ConstructWireProvider<LargeDripstoneConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.configurations.LargeDripstoneConfigurationImpl");
 
     /**
      * The search range from start point to cave floor or ceiling (rather than from floor to ceiling)

@@ -19,7 +19,7 @@ import org.jspecify.annotations.NullMarked;
 public interface TwistingVinesConfig extends FeatureConfiguration {
 
     @ApiStatus.Internal
-    ConstructWireProvider<TwistingVinesConfig> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.config.TwistingVinesConfigImpl");
+    ConstructWireProvider<TwistingVinesConfig> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.configurations.TwistingVinesConfigImpl");
 
     /**
      * How far out the vines can spread.

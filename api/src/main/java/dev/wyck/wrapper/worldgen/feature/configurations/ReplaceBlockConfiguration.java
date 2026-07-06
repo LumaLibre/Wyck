@@ -26,7 +26,7 @@ import java.util.List;
 public interface ReplaceBlockConfiguration extends FeatureConfiguration {
 
     @ApiStatus.Internal
-    ConstructWireProvider<ReplaceBlockConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.config.ReplaceBlockConfigurationImpl");
+    ConstructWireProvider<ReplaceBlockConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.configurations.ReplaceBlockConfigurationImpl");
 
     /**
      * A list of targets. This can be empty.

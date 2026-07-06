@@ -20,7 +20,7 @@ import org.jspecify.annotations.NullMarked;
 public interface GeodeCrackSettings extends Wrapper {
 
     @ApiStatus.Internal
-    ConstructWireProvider<GeodeCrackSettings> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.config.geode.GeodeCrackSettingsImpl");
+    ConstructWireProvider<GeodeCrackSettings> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.configurations.geode.GeodeCrackSettingsImpl");
 
     /**
      * The probability for generating a crack. Value between 0.0 and 1.0.

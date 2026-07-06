@@ -24,7 +24,7 @@ import org.jspecify.annotations.Nullable;
 public interface RootSystemConfiguration extends FeatureConfiguration {
 
     @ApiStatus.Internal
-    ConstructWireProvider<RootSystemConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.config.RootSystemConfigurationImpl");
+    ConstructWireProvider<RootSystemConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.configurations.RootSystemConfigurationImpl");
 
     /**
      * The placed feature to place on top of the root system.

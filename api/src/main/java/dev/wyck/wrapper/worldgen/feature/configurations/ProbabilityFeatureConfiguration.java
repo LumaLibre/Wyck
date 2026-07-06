@@ -18,7 +18,7 @@ import org.jspecify.annotations.NullMarked;
 public interface ProbabilityFeatureConfiguration extends FeatureConfiguration {
 
     @ApiStatus.Internal
-    ConstructWireProvider<ProbabilityFeatureConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.config.ProbabilityFeatureConfigurationImpl");
+    ConstructWireProvider<ProbabilityFeatureConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.configurations.ProbabilityFeatureConfigurationImpl");
 
     /**
      * Gets the probability of the feature being placed between 0.0 and 1.0.

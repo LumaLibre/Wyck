@@ -22,7 +22,7 @@ import org.jspecify.annotations.Nullable;
 public interface SculkPatchConfiguration extends FeatureConfiguration {
 
     @ApiStatus.Internal
-    ConstructWireProvider<SculkPatchConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.config.SculkPatchConfigurationImpl");
+    ConstructWireProvider<SculkPatchConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.configurations.SculkPatchConfigurationImpl");
 
     /**
      * The number of charges between 1 and 32.

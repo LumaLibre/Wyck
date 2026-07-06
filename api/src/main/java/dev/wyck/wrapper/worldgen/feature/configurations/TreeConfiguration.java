@@ -30,7 +30,7 @@ import java.util.Optional;
 public interface TreeConfiguration extends FeatureConfiguration {
 
     @ApiStatus.Internal
-    ConstructWireProvider<TreeConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.config.TreeConfigurationImpl");
+    ConstructWireProvider<TreeConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.configurations.TreeConfigurationImpl");
 
     /**
      * The block to use for the trunk.

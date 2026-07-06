@@ -42,7 +42,7 @@ import dev.wyck.wrapper.worldgen.carver.ConfiguredWorldCarver;
 import dev.wyck.wrapper.worldgen.feature.ConfiguredFeature;
 import dev.wyck.wrapper.worldgen.feature.ConfiguredFeatures;
 import dev.wyck.wrapper.worldgen.feature.FeatureType;
-import dev.wyck.wrapper.worldgen.feature.config.FeatureConfiguration;
+import dev.wyck.wrapper.worldgen.feature.configurations.FeatureConfiguration;
 import dev.wyck.wrapper.worldgen.placement.PlacedFeature;
 import dev.wyck.wrapper.worldgen.placement.PlacedFeatures;
 import dev.wyck.wrapper.worldgen.placement.PlacementModifier;
@@ -110,7 +110,7 @@ public class ExamplePlugin extends JavaPlugin {
                         .build())
                     )
                     .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeature.builder()
-                        .feature(new PillarFeature().register(), PillarFeature.Config.defaults()) // Declared in another class from my plugin
+                        .feature(new PillarFeature().register(), Pillarfeature.configurations.defaults()) // Declared in another class from my plugin
                         .modifier(PlacementModifier.count(1))
                         .build())
                     .addFeature(GenerationStep.TOP_LAYER_MODIFICATION, PlacedFeature.builder()

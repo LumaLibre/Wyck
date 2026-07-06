@@ -20,7 +20,7 @@ import org.jspecify.annotations.Nullable;
 public interface CountConfiguration extends FeatureConfiguration {
 
     @ApiStatus.Internal
-    ConstructWireProvider<CountConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.config.CountConfigurationImpl");
+    ConstructWireProvider<CountConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.configurations.CountConfigurationImpl");
 
     /**
      * The count provider.

@@ -23,7 +23,7 @@ import java.util.Set;
 public interface MultifaceGrowthConfiguration extends FeatureConfiguration {
 
     @ApiStatus.Internal
-    ConstructWireProvider<MultifaceGrowthConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.config.MultifaceGrowthConfigurationImpl");
+    ConstructWireProvider<MultifaceGrowthConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.configurations.MultifaceGrowthConfigurationImpl");
 
     /**
      * The block to place.

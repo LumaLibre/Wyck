@@ -22,7 +22,7 @@ import org.jspecify.annotations.Nullable;
 public interface DeltaFeatureConfiguration extends FeatureConfiguration {
 
     @ApiStatus.Internal
-    ConstructWireProvider<DeltaFeatureConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.config.DeltaFeatureConfigurationImpl");
+    ConstructWireProvider<DeltaFeatureConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.configurations.DeltaFeatureConfigurationImpl");
 
     /**
      * The block to use on the inside of the delta.

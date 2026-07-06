@@ -24,7 +24,7 @@ import org.jspecify.annotations.Nullable;
 public interface LayerConfiguration extends FeatureConfiguration {
 
     @ApiStatus.Internal
-    ConstructWireProvider<LayerConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.config.LayerConfigurationImpl");
+    ConstructWireProvider<LayerConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.configurations.LayerConfigurationImpl");
 
     /**
      * The layer to fill, starting at the bottom of the world between 0 and 4064.

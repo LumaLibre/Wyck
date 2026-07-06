@@ -21,7 +21,7 @@ import org.jspecify.annotations.NullMarked;
 public interface GeodeLayerSettings extends Wrapper {
 
     @ApiStatus.Internal
-    ConstructWireProvider<GeodeLayerSettings> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.config.geode.GeodeLayerSettingsImpl");
+    ConstructWireProvider<GeodeLayerSettings> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.configurations.geode.GeodeLayerSettingsImpl");
 
     /**
      * The thickness of the filling layer. Value between 0.01 and 50.0.

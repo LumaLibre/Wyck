@@ -20,7 +20,7 @@ import org.jspecify.annotations.Nullable;
 public interface ColumnFeatureConfiguration extends FeatureConfiguration {
 
     @ApiStatus.Internal
-    ConstructWireProvider<ColumnFeatureConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.config.ColumnFeatureConfigurationImpl");
+    ConstructWireProvider<ColumnFeatureConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.configurations.ColumnFeatureConfigurationImpl");
 
     /**
      * The reach of the column feature.

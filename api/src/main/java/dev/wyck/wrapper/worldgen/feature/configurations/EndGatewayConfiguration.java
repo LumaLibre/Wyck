@@ -22,7 +22,7 @@ import java.util.Optional;
 public interface EndGatewayConfiguration extends FeatureConfiguration {
 
     @ApiStatus.Internal
-    ConstructWireProvider<EndGatewayConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.config.EndGatewayConfigurationImpl");
+    ConstructWireProvider<EndGatewayConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.configurations.EndGatewayConfigurationImpl");
 
     /**
      * The block position where the gateway should exit, or empty if the exit is searched for on use.
