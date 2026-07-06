@@ -4,8 +4,10 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":bundle"))
-    paperweight.paperDevBundle(libs.versions.minecraft.v1.m21.r11)
+    implementation(project(":bundle")) {
+        exclude(group = "org.bukkit")
+    }
+    paperweight.paperDevBundle(libs.versions.minecraft.v26.m1.r2)
 }
 
 tasks {

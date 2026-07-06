@@ -16,7 +16,8 @@ public enum RegistryId {
     DIMENSION("dimension"),
     NOISE_SETTINGS("worldgen/noise_settings"),
     PARTICLE_TYPE("particle_type"),
-    ENVIRONMENT_ATTRIBUTE("environment_attribute");
+    ENVIRONMENT_ATTRIBUTE("environment_attribute"),
+    FLUID("fluid");
 
     private final List<ResourceKey> keys;
 

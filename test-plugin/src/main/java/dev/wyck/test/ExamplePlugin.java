@@ -4,7 +4,6 @@ import dev.wyck.keys.ResourceKey;
 import dev.wyck.model.biome.Biome;
 import dev.wyck.model.level.LevelCreator;
 import dev.wyck.model.level.dimension.Dimension;
-import dev.wyck.test.worldgen.FancyTreeFeature;
 import dev.wyck.wrapper.biome.BiomeSpecialEffects;
 import dev.wyck.wrapper.entity.BiomeSpawner;
 import dev.wyck.wrapper.entity.MobCategory;
@@ -15,11 +14,6 @@ import dev.wyck.wrapper.environment.particle.ParticleTypes;
 import dev.wyck.wrapper.level.BiomeSource;
 import dev.wyck.wrapper.level.noise.Noise;
 import dev.wyck.wrapper.level.noise.chunk.ChunkGenerator;
-import dev.wyck.wrapper.worldgen.BiomeGenerationSettings;
-import dev.wyck.wrapper.worldgen.GenerationStep;
-import dev.wyck.wrapper.worldgen.HeightmapType;
-import dev.wyck.wrapper.worldgen.placement.PlacedFeature;
-import dev.wyck.wrapper.worldgen.placement.PlacementModifier;
 import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -57,17 +51,27 @@ public class ExamplePlugin extends JavaPlugin {
                 .build()
             )
             // Worldgen
-            .generationSettings(
-                BiomeGenerationSettings.builder()
-                    .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeature.builder()
-                        .feature(new FancyTreeFeature().register(), FancyTreeFeature.TreeConfig.defaults())
-                        .modifier(PlacementModifier.count(1))
-                        .modifier(PlacementModifier.inSquare())
-                        .modifier(PlacementModifier.heightmap(HeightmapType.MOTION_BLOCKING))
-                        .modifier(PlacementModifier.biomeFilter())
-                        .build())
-                    .build()
-            )
+//            .generationSettings(
+//                BiomeGenerationSettings.builder()
+//                    .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeature.builder()
+//                        .feature(new SchematicTreeFeature().register(), SchematicTreeFeature.SchematicTreeConfig.defaults())
+//                        .modifier(PlacementModifier.rarityFilter(10))
+//                        .modifier(PlacementModifier.inSquare())
+//                        .modifier(PlacementModifier.surfaceWaterDepth(0))
+//                        .modifier(PlacementModifier.heightmap(HeightmapType.OCEAN_FLOOR))
+//                        .modifier(PlacementModifier.biomeFilter())
+//                        .build())
+//
+//                    .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeature.builder()
+//                        .feature(new SchematicTreeFeature().registerAs(ResourceKey.of("t", "s")), SchematicTreeFeature.SchematicTreeConfig.defaults2())
+//                        .modifier(PlacementModifier.rarityFilter(10))
+//                        .modifier(PlacementModifier.inSquare())
+//                        .modifier(PlacementModifier.surfaceWaterDepth(0))
+//                        .modifier(PlacementModifier.heightmap(HeightmapType.OCEAN_FLOOR))
+//                        .modifier(PlacementModifier.biomeFilter())
+//                        .build())
+//                    .build()
+//            )
             .register();
 
         ChunkGenerator chunkGenerator = ChunkGenerator.builder()
@@ -75,7 +79,7 @@ public class ExamplePlugin extends JavaPlugin {
             .noise(Noise.overworld())
             .build();
 
-        LevelCreator spec = LevelCreator.builder(ResourceKey.of("test:exampleworldtwo"))
+        LevelCreator spec = LevelCreator.builder(ResourceKey.of("test:exampleworld21"))
             .generator(chunkGenerator)
             .dimension(Dimension.reference(ResourceKey.minecraft("overworld")))
             .build();

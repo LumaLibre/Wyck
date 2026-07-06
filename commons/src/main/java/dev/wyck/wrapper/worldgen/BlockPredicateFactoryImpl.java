@@ -3,7 +3,6 @@ package dev.wyck.wrapper.worldgen;
 import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.annotations.WireFactory;
-import org.bukkit.NamespacedKey;
 import org.bukkit.craftbukkit.block.data.CraftBlockData;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -54,11 +53,8 @@ public class BlockPredicateFactoryImpl implements BlockPredicate.Factory {
 
     private net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate buildMatchingTag(BlockPredicate.MatchingBlockTag matching) {
         net.minecraft.core.Vec3i offset = WorldgenConversions.toVec3i(matching.offset());
-        NamespacedKey key = matching.tag().getKey();
 
-        // mapping-sensitive: ResourceLocation.fromNamespaceAndPath / TagKey.create
-        net.minecraft.resources.Identifier location =
-                net.minecraft.resources.Identifier.fromNamespaceAndPath(key.getNamespace(), key.getKey());
+        net.minecraft.resources.Identifier location = matching.tagKey().identifier();
         net.minecraft.tags.TagKey<net.minecraft.world.level.block.Block> tagKey =
                 net.minecraft.tags.TagKey.create(net.minecraft.core.registries.Registries.BLOCK, location);
 
@@ -87,8 +83,7 @@ public class BlockPredicateFactoryImpl implements BlockPredicate.Factory {
         return net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate.wouldSurvive(state, offset);
     }
 
-    private net.minecraft.world.level.material.Fluid toNmsFluid(FluidType fluid) {
-        // mapping-sensitive: registry value lookup
+    private net.minecraft.world.level.material.Fluid toNmsFluid(FluidType fluid) { // TODO: registryconstant
         net.minecraft.resources.Identifier location =
                 net.minecraft.resources.Identifier.withDefaultNamespace(fluid.key());
         net.minecraft.world.level.material.Fluid resolved =

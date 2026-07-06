@@ -13,6 +13,6 @@ import dev.wyck.annotations.AsOf;
 public enum StemPersistence {
     /** The level stem lives only for the session and is injected straight into the world's dimensions. */
     TRANSIENT,
-    /** The level stem is also registered into the level_stem registry, so other registry callers can see it. */
+    /** The level stem is also registered into the dimension registry, so other registry callers can see it. */
     PERSISTENT
 }

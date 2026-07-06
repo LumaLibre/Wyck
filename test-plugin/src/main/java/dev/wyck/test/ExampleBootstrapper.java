@@ -19,8 +19,13 @@ import dev.wyck.registry.bootstrap.Composer;
 import dev.wyck.wrapper.worldgen.BiomeGenerationSettings;
 import dev.wyck.wrapper.worldgen.GenerationStep;
 import dev.wyck.wrapper.worldgen.placement.PlacedFeatures;
+import io.papermc.paper.world.MoonPhase;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.Material;
+import org.bukkit.Particle;
+import org.bukkit.Tag;
+import org.bukkit.block.data.BlockData;
 
 public class ExampleBootstrapper implements PluginBootstrap {
     @Override

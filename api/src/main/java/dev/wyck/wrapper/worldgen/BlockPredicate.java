@@ -3,6 +3,7 @@ package dev.wyck.wrapper.worldgen;
 import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.WireProvider;
+import dev.wyck.keys.ResourceKey;
 import dev.wyck.wrapper.internal.Wrapper;
 import org.bukkit.Material;
 import org.bukkit.Tag;
@@ -55,13 +56,25 @@ public sealed interface BlockPredicate extends Wrapper permits BlockPredicate.Al
     }
 
     @AsOf("2.3.0")
-    static BlockPredicate matchesTag(BlockVector offset, Tag<Material> tag) {
-        return new MatchingBlockTag(offset, tag);
+    static BlockPredicate matchesTag(BlockVector offset, ResourceKey tagKey) {
+        return new MatchingBlockTag(offset, tagKey);
     }
 
     @AsOf("2.3.0")
+    static BlockPredicate matchesTag(ResourceKey tagKey) {
+        return new MatchingBlockTag(zero(), tagKey);
+    }
+
+    // TODO: deprecate
+
+    @AsOf("3.0.0")
+    static BlockPredicate matchesTag(BlockVector offset, Tag<Material> tag) {
+        return new MatchingBlockTag(offset, ResourceKey.of(tag.getKey().asString()));
+    }
+
+    @AsOf("3.0.0")
     static BlockPredicate matchesTag(Tag<Material> tag) {
-        return new MatchingBlockTag(zero(), tag);
+        return new MatchingBlockTag(zero(), ResourceKey.of(tag.getKey().asString()));
     }
 
     @AsOf("2.3.0")
@@ -176,12 +189,12 @@ public sealed interface BlockPredicate extends Wrapper permits BlockPredicate.Al
     }
 
     @AsOf("2.3.0")
-    record MatchingBlockTag(BlockVector offset, Tag<Material> tag) implements BlockPredicate {
+    record MatchingBlockTag(BlockVector offset, ResourceKey tagKey) implements BlockPredicate {
 
         @AsOf("2.3.0")
         public MatchingBlockTag {
             Preconditions.checkNotNull(offset, "offset");
-            Preconditions.checkNotNull(tag, "tag");
+            Preconditions.checkNotNull(tagKey, "tagKey");
         }
     }
 

@@ -4,11 +4,8 @@ import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.registry.worldgen.CustomFeatureRegistry;
-import dev.wyck.wrapper.worldgen.feature.AbstractCustomFeature;
-import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -25,7 +22,7 @@ import java.util.function.Supplier;
  */
 @NullMarked
 @AsOf("2.3.0")
-public abstract class CustomFeature<C> implements AbstractCustomFeature, Cloneable {
+public abstract class CustomFeature<C> implements Cloneable {
 
     private final Supplier<C> configSupplier;
     private @Nullable ResourceKey key;
@@ -65,14 +62,17 @@ public abstract class CustomFeature<C> implements AbstractCustomFeature, Cloneab
     @Contract(value = "null -> fail", pure = false)
     public abstract boolean place(PlacementContext<C> context);
 
-    @Override
+    @AsOf("3.0.0")
     public ResourceKey key() {
         return Preconditions.checkNotNull(this.key, "key shouldn't be null at this point");
     }
 
+    @AsOf("3.0.0")
+    @ApiStatus.Internal
     public final @Nullable ResourceKey resourceKey() {
         return this.key;
     }
+
     /**
      * Internal method to get the configuration supplier.
      * @return the configuration supplier

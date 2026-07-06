@@ -1,6 +1,10 @@
 package dev.wyck.wrapper.worldgen;
 
 import dev.wyck.annotations.AsOf;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.registry.internal.RegistryId;
+import dev.wyck.wrapper.internal.RegisteredConstantTranslator;
+import dev.wyck.wrapper.internal.WrappedConstant;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -12,7 +16,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.3.0")
-public enum FluidType {
+public enum FluidType implements WrappedConstant<FluidType> {
 
     EMPTY("empty"),
     WATER("water"),
@@ -20,8 +24,7 @@ public enum FluidType {
     LAVA("lava"),
     FLOWING_LAVA("flowing_lava");
 
-    // No translator, not an enum
-
+    public static final RegisteredConstantTranslator<FluidType> TRANSLATOR = RegisteredConstantTranslator.of(RegistryId.FLUID, FluidType::resourceKey, FluidType.values());
     private final String key;
 
     @AsOf("2.3.0")
@@ -37,5 +40,16 @@ public enum FluidType {
     @AsOf("2.3.0")
     public String key() {
         return this.key;
+    }
+
+    @AsOf("3.0.0")
+    public ResourceKey resourceKey() {
+        return ResourceKey.minecraft(this.key);
+    }
+
+    @Override
+    @AsOf("3.0.0")
+    public RegisteredConstantTranslator<FluidType> translator() {
+        return TRANSLATOR;
     }
 }

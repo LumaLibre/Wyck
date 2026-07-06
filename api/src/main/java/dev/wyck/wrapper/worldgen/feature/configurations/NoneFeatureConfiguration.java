@@ -1,0 +1,35 @@
+package dev.wyck.wrapper.worldgen.feature.configurations;
+
+import dev.wyck.annotations.AsOf;
+import dev.wyck.factory.ConstructWireProvider;
+import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.NullMarked;
+
+/**
+ * A feature configuration that does nothing.
+ *
+ * @since 2.3.0
+ * @version 3.0.0
+ * @author Jsinco
+ */
+@NullMarked
+@AsOf("3.0.0")
+public interface NoneFeatureConfiguration extends FeatureConfiguration {
+
+    @ApiStatus.Internal
+    ConstructWireProvider<NoneFeatureConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.config.NoneFeatureConfigurationImpl");
+
+    /** The singleton instance of {@link NoneFeatureConfiguration}. */
+    @AsOf("3.0.0")
+    NoneFeatureConfiguration INSTANCE = instance();
+
+    /**
+     * The singleton instance of {@link NoneFeatureConfiguration}.
+     * @return the singleton instance
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
+    static NoneFeatureConfiguration instance() {
+        return WIRE.construct();
+    }
+}

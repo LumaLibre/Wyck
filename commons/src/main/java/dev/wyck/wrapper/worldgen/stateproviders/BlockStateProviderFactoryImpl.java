@@ -1,6 +1,5 @@
 package dev.wyck.wrapper.worldgen.stateproviders;
 
-import dev.wyck.annotations.AsOf;
 import dev.wyck.annotations.WireFactory;
 import dev.wyck.util.WeightedList;
 import net.minecraft.util.InclusiveRange;
@@ -25,7 +24,6 @@ import java.util.List;
 
 @NullMarked
 @WireFactory
-@AsOf("2.3.0")
 @ApiStatus.Internal
 public final class BlockStateProviderFactoryImpl implements BlockStateProvider.Factory {
 

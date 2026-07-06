@@ -4,7 +4,7 @@ import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.WireProvider;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.wrapper.internal.Wrapper;
-import dev.wyck.wrapper.worldgen.feature.config.FeatureConfiguration;
+import dev.wyck.wrapper.worldgen.feature.configurations.FeatureConfiguration;
 import dev.wyck.wrapper.worldgen.feature.custom.CustomFeature;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
@@ -56,7 +56,7 @@ public sealed interface ConfiguredFeature extends Wrapper, Keyed permits Configu
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static ConfiguredFeature vanilla(FeatureType featureType, FeatureConfiguration configuration) {
+    static ConfiguredFeature of(FeatureType featureType, FeatureConfiguration configuration) {
         return new VanillaConfigured(featureType.resourceKey(), configuration);
     }
 

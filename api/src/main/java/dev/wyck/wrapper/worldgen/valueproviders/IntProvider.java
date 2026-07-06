@@ -29,43 +29,43 @@ public sealed interface IntProvider extends Wrapper permits IntProvider.Constant
     }
 
     @AsOf("2.3.0")
-    static IntProvider constant(int value) {
+    static IntProvider.Constant constant(int value) {
         return new Constant(value);
     }
 
     @AsOf("2.3.0")
-    static IntProvider uniform(int minInclusive, int maxInclusive) {
+    static IntProvider.Uniform uniform(int minInclusive, int maxInclusive) {
         return new Uniform(minInclusive, maxInclusive);
     }
 
     @AsOf("2.3.0")
-    static IntProvider biasedToBottom(int minInclusive, int maxInclusive) {
+    static IntProvider.BiasedToBottom biasedToBottom(int minInclusive, int maxInclusive) {
         return new BiasedToBottom(minInclusive, maxInclusive);
     }
 
     @AsOf("2.3.0")
-    static IntProvider clampedNormal(float mean, float deviation, int minInclusive, int maxInclusive) {
+    static IntProvider.ClampedNormal clampedNormal(float mean, float deviation, int minInclusive, int maxInclusive) {
         return new ClampedNormal(mean, deviation, minInclusive, maxInclusive);
     }
 
     @AsOf("2.3.0")
-    static IntProvider trapezoid(int minInclusive, int maxInclusive, int plateau) {
+    static IntProvider.Trapezoid trapezoid(int minInclusive, int maxInclusive, int plateau) {
         return new Trapezoid(minInclusive, maxInclusive, plateau);
     }
 
     /** A symmetric triangular distribution over [-range, range], matching TrapezoidInt.triangle. */
     @AsOf("2.3.0")
-    static IntProvider triangle(int range) {
+    static IntProvider.Trapezoid triangle(int range) {
         return new Trapezoid(-range, range, 0);
     }
 
     @AsOf("2.3.0")
-    static IntProvider clamped(IntProvider source, int minInclusive, int maxInclusive) {
+    static IntProvider.Clamped clamped(IntProvider source, int minInclusive, int maxInclusive) {
         return new Clamped(source, minInclusive, maxInclusive);
     }
 
     @AsOf("2.3.0")
-    static IntProvider weightedList(WeightedList<IntProvider> distribution) {
+    static IntProvider.WeightedListInt weightedList(WeightedList<IntProvider> distribution) {
         return new WeightedListInt(distribution);
     }
 

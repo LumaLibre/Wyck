@@ -13,7 +13,6 @@ import org.jspecify.annotations.NullMarked;
 import java.util.function.Supplier;
 
 @NullMarked
-@AsOf("2.3.0")
 @ApiStatus.Internal
 public final class CustomFeatureBridge<C> extends Feature<CustomFeatureBridge.Holder<C>> {
 

@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.WireProvider;
 import dev.wyck.util.WeightedList;
+import dev.wyck.util.BukkitBootstrapUtil;
 import dev.wyck.wrapper.internal.Wrapper;
 import dev.wyck.wrapper.worldgen.BlockPredicate;
 import dev.wyck.wrapper.worldgen.valueproviders.IntProvider;
@@ -42,7 +43,7 @@ public sealed interface BlockStateProvider extends Wrapper permits BlockStatePro
 
     @AsOf("2.3.0")
     static BlockStateProvider simple(Material block) {
-        return new Simple(block.createBlockData());
+        return new Simple(BukkitBootstrapUtil.util().createBlockData(block));
     }
 
     @AsOf("2.3.0")

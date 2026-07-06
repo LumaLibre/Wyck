@@ -1,10 +1,18 @@
 package dev.wyck.test;
 
+import dev.wyck.model.biome.Biome;
 import dev.wyck.model.level.dimension.Dimension;
 import dev.wyck.model.level.LevelCreator;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.registry.level.LevelFactory;
+import dev.wyck.test.worldgen.SchematicTreeFeature;
+import dev.wyck.wrapper.biome.BiomeSpecialEffects;
+import dev.wyck.wrapper.entity.BiomeSpawner;
+import dev.wyck.wrapper.entity.MobCategory;
+import dev.wyck.wrapper.entity.data.NaturalSpawner;
 import dev.wyck.wrapper.environment.attribute.EnvironmentAttributes;
+import dev.wyck.wrapper.environment.particle.ParticleOptions;
+import dev.wyck.wrapper.environment.particle.ParticleTypes;
 import dev.wyck.wrapper.level.BiomeSource;
 import dev.wyck.wrapper.level.clock.WorldClock;
 import dev.wyck.wrapper.level.dimension.Skybox;
@@ -13,13 +21,21 @@ import dev.wyck.wrapper.level.noise.NoiseRouter;
 import dev.wyck.wrapper.level.noise.Noises;
 import dev.wyck.wrapper.level.noise.chunk.ChunkGenerator;
 import dev.wyck.wrapper.level.noise.function.DensityFunction;
-import dev.wyck.wrapper.level.noise.function.DensityFunctions;
 import dev.wyck.wrapper.level.noise.settings.NoiseSettings;
-import dev.wyck.wrapper.worldgen.climate.ClimatePoint;
+import dev.wyck.wrapper.worldgen.BiomeGenerationSettings;
+import dev.wyck.wrapper.worldgen.GenerationStep;
+import dev.wyck.wrapper.worldgen.HeightmapType;
+import dev.wyck.wrapper.worldgen.feature.ConfiguredFeature;
+import dev.wyck.wrapper.worldgen.feature.FeatureType;
+import dev.wyck.wrapper.worldgen.feature.configurations.FeatureConfiguration;
+import dev.wyck.wrapper.worldgen.placement.PlacedFeature;
+import dev.wyck.wrapper.worldgen.placement.PlacementModifier;
 import dev.wyck.wrapper.worldgen.surface.SurfaceCondition;
 import dev.wyck.wrapper.worldgen.surface.SurfaceRule;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -37,26 +53,90 @@ public class TestPlugin extends JavaPlugin implements Listener {
         .skybox(Skybox.OVERWORLD)
         .defaultClock(WorldClock.OVERWORLD)
         .attribute(EnvironmentAttributes.FOG_COLOR, -4138753)
-        .build();
+        .register();
 
     @Override
     public void onEnable() {
+        //BlockData stone = Material.STONE.createBlockData();
         //DimensionType
         ResourceKey levelKey = ResourceKey.of("test", "wobbleworld");
 
-        BiomeSource biomeSource = BiomeSource.multiNoise()
-            .add(ResourceKey.minecraft("snowy_taiga"), ClimatePoint.of(-0.7f, -0.2f, 0f, 0f, 0f, 0f, 0f))
-            .add(ResourceKey.minecraft("taiga"), ClimatePoint.of(-0.3f, 0.4f, 0f, 0f, 0f, 0f, 0f))
-            .add(ResourceKey.minecraft("plains"), ClimatePoint.of(0.1f, -0.4f, 0f, 0f, 0f, 0f, 0f))
-            .add(ResourceKey.minecraft("forest"), ClimatePoint.of(0.2f, 0.3f, 0f, 0f, 0f, 0f, 0f))
-            .add(ResourceKey.minecraft("desert"), ClimatePoint.of(0.8f, -0.6f, 0f, 0f, 0f, 0f, 0f))
-            .add(ResourceKey.minecraft("jungle"), ClimatePoint.of(0.8f, 0.7f, 0f, 0f, 0f, 0f, 0f))
-            .build();
+        Biome biome = Biome.builder()
+            .resourceKey(ResourceKey.of("test:biome")) // Required key
+            // Climate settings
+//            .climateSettings(ClimateSettings.builder()
+//                .downfall(0.5f)
+//                .temperature(0.14f)
+//                .temperatureModifier(TemperatureModifier.FROZEN)
+//                .build()
+//            )
+            // Special effects
+            .specialEffects(BiomeSpecialEffects.builder()
+                    .waterColor("#00FF00")
+//                .grassColorOverride("#00FF00")
+//                .foliageColorOverride("#00FF00")
+//                .dryFoliageColorOverride("#0000FF")
+                    .build()
+            )
+            // Environmental attributes
+//            .attribute(EnvironmentAttributes.BLOCK_LIGHT_TINT, "#FFFFFF")
+//            .attribute(EnvironmentAttributes.FOG_COLOR, "#FFFFFF")
+//            .attribute(EnvironmentAttributes.AMBIENT_PARTICLES, ParticleCatalog.builder()
+//                .particle(ParticleTypes.BLOCK, 0.01f, BlockParticle.of(Material.ACACIA_LOG))
+//                .build()
+//            )
+            .attribute(EnvironmentAttributes.DEFAULT_DRIPSTONE_PARTICLE, ParticleOptions.of(ParticleTypes.DRIPPING_HONEY))
+            // Mob spawn settings
+            .spawner(BiomeSpawner.builder()
+                .spawner(MobCategory.MONSTER, NaturalSpawner.of(EntityType.ZOMBIE, 5, 15))
+                .build()
+            )
+            // Worldgen
+            .generationSettings(
+                BiomeGenerationSettings.builder()
+                    .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeature.builder()
+                        .feature(new SchematicTreeFeature().register(), SchematicTreeFeature.SchematicTreeConfig.defaults())
+                        .modifier(PlacementModifier.rarityFilter(1))
+                        .modifier(PlacementModifier.inSquare())
+                        .modifier(PlacementModifier.surfaceWaterDepth(0))
+                        .modifier(PlacementModifier.heightmap(HeightmapType.OCEAN_FLOOR))
+                        .modifier(PlacementModifier.biomeFilter())
+                        .build())
+
+                    .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeature.builder()
+                        .feature(new SchematicTreeFeature().registerAs(ResourceKey.of("t", "s")), SchematicTreeFeature.SchematicTreeConfig.defaults2())
+                        .modifier(PlacementModifier.rarityFilter(1))
+                        .modifier(PlacementModifier.inSquare())
+                        .modifier(PlacementModifier.surfaceWaterDepth(0))
+                        .modifier(PlacementModifier.heightmap(HeightmapType.OCEAN_FLOOR))
+                        .modifier(PlacementModifier.biomeFilter())
+                        .build())
+
+//                    .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeature.builder()
+//                        .feature(ConfiguredFeature.of(FeatureType.TREE, FeatureConfiguration.tree()
+//                            .belowTrunkProvider()))
+//                        .modifier(PlacementModifier.rarityFilter(1))
+//                        .modifier(PlacementModifier.inSquare())
+//                        .modifier(PlacementModifier.surfaceWaterDepth(0))
+//                        .modifier(PlacementModifier.heightmap(HeightmapType.OCEAN_FLOOR))
+//                        .modifier(PlacementModifier.biomeFilter())
+//                        .build())
+                    .build()
+            )
+            .register();
+
+//        BiomeSource biomeSource = BiomeSource.multiNoise()
+//            .add(ResourceKey.minecraft("snowy_taiga"), ClimatePoint.of(-0.7f, -0.2f, 0f, 0f, 0f, 0f, 0f))
+//            .add(ResourceKey.minecraft("taiga"), ClimatePoint.of(-0.3f, 0.4f, 0f, 0f, 0f, 0f, 0f))
+//            .add(ResourceKey.minecraft("plains"), ClimatePoint.of(0.1f, -0.4f, 0f, 0f, 0f, 0f, 0f))
+//            .add(ResourceKey.minecraft("forest"), ClimatePoint.of(0.2f, 0.3f, 0f, 0f, 0f, 0f, 0f))
+//            .add(ResourceKey.minecraft("desert"), ClimatePoint.of(0.8f, -0.6f, 0f, 0f, 0f, 0f, 0f))
+//            .add(ResourceKey.minecraft("jungle"), ClimatePoint.of(0.8f, 0.7f, 0f, 0f, 0f, 0f, 0f))
+//            .build();
+        BiomeSource biomeSource = BiomeSource.fixed(biome);
 
         DensityFunction wobble = DensityFunction.noise(Noises.SPAGHETTI_3D_1, 0.4, 0.9)
-            .mul(DensityFunction.constant(1.0))
-            .mul(DensityFunction.noise(Noises.SPAGHETTI_3D_2, 0.4, 0.9))
-            .mul(DensityFunctions.EROSION_LARGE);
+            .mul(DensityFunction.constant(25.0));
 
         DensityFunction base = DensityFunction.yClampedGradient(0, 256, 1.2, -1.2);
         DensityFunction finalDensity = DensityFunction.add(base, wobble).clamp(-1.0, 1.0);
@@ -120,7 +200,7 @@ public class TestPlugin extends JavaPlugin implements Listener {
         World world = LevelFactory.factory().createWorld(spec);
         System.out.println("Created world: " + world.getName());
 
-        getServer().getPluginManager().registerEvents(this, this);
+        //getServer().getPluginManager().registerEvents(this, this);
     }
 
     @EventHandler
