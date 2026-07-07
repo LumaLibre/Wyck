@@ -1,0 +1,64 @@
+---
+title: Block State Providers
+description: Block state providers are used to provide block states for features in Wyck.
+sidebar:
+    order: 3
+---
+
+import CodeBlock from "@/components/CodeBlock.astro";
+import SourceLink from "@/components/SourceLink.astro";
+
+A <SourceLink path="wrapper/worldgen/stateproviders/BlockStateProvider.java">BlockStateProvider</SourceLink> is used
+to provide a (potentially randomized) block and block state to be placed by
+[configured features](worldgen/biomes/configured-features).
+
+## Block States
+
+To clarify, a block state in Wyck is **not** the same as a [`BlockState`](https://jd.papermc.io/paper/26.2/org/bukkit/block/BlockState.html) in Bukkit.
+A block state in Bukkit is a snapshot of a block and encapsulates more data than
+what Minecraft uses for world generation. The Bukkit equivalent of a Minecraft block state
+is [`BlockData`](https://jd.papermc.io/paper/26.2/org/bukkit/block/data/BlockData.html).
+
+## Providers
+
+Every provider is created from a static factory method on `BlockStateProvider`. Simple providers are returned
+directly, while those with additional options return a builder.
+
+- `simple` - Always provides the same block state.
+- `rotated` - Randomly rotates axially rotatable blocks, such as logs.
+- `weighted` - Chooses from a weighted list of block states.
+- `randomizedInt` - Assigns a random value to an integer block property.
+- `noise` - Chooses a block state according to a noise value.
+- `dualNoise` - Chooses a block state according to two noise values.
+- `noiseThreshold` - Uses different block states above or below a noise threshold.
+- `ruleBased` - Chooses a block state based on the block currently in the world using a series of rules.
+
+- *More information on block state providers: https://minecraft.wiki/w/Block_state_provider*
+
+### Example Usage
+<CodeBlock
+    lang="java"
+    filename="Examples.java"
+    code={
+`// Always places oak planks.
+BlockStateProvider.simple(Material.OAK_PLANKS);
+
+// A log that is randomly rotated along an axis.
+BlockStateProvider.rotated(Material.OAK_LOG);
+
+// Mostly grass blocks, with the occasional patch of podzol.
+BlockStateProvider.weighted()
+    .entry(Material.GRASS_BLOCK, 8)
+    .entry(Material.PODZOL, 2)
+    .build();
+
+// Replaces dirt below the trunk of a tree while leaving other blocks untouched.
+BlockStateProvider.ruleBased()
+    .rule(
+        BlockPredicate.not(BlockPredicate.matchesTag(Tag.CANNOT_REPLACE_BELOW_TREE_TRUNK)),
+        BlockStateProvider.simple(Material.DIRT)
+    )
+    .build();`
+}
+/>
+
