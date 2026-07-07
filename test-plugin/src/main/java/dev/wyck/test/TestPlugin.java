@@ -5,7 +5,6 @@ import dev.wyck.model.level.dimension.Dimension;
 import dev.wyck.model.level.LevelCreator;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.registry.level.LevelFactory;
-import dev.wyck.test.worldgen.SchematicTreeFeature;
 import dev.wyck.wrapper.biome.BiomeSpecialEffects;
 import dev.wyck.wrapper.entity.BiomeSpawner;
 import dev.wyck.wrapper.entity.MobCategory;
@@ -43,7 +42,6 @@ import dev.wyck.wrapper.worldgen.valueproviders.IntProvider;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.World;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -71,15 +69,14 @@ public class TestPlugin extends JavaPlugin implements Listener {
         ResourceKey levelKey = ResourceKey.of("test", "wobbleworld3");
 
         TreeConfiguration treeConfig = FeatureConfiguration.tree()
-            .belowTrunkProvider(BlockStateProvider.ruleBased(
-                BlockStateProvider.simple(Material.DIRT),
-                List.of(
-                    new BlockStateProvider.RuleBased.Rule(
+            .belowTrunkProvider(
+                BlockStateProvider.ruleBased()
+                    .rule(
                         BlockPredicate.not(BlockPredicate.matchesTag(Tag.CANNOT_REPLACE_BELOW_TREE_TRUNK)),
                         BlockStateProvider.simple(Material.DIRT)
                     )
-                )
-            ))
+                    .build()
+            )
             .foliagePlacer(PineFoliagePlacer.builder()
                 .height(IntProvider.constant(4))
                 .offset(IntProvider.constant(1))

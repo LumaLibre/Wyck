@@ -123,6 +123,11 @@ public final class WeightedList<E> {
             return this;
         }
 
+        public Builder<E> addAll(List<Weighted<E>> elements) {
+            this.result.addAll(elements);
+            return this;
+        }
+
         public WeightedList<E> build() {
             return new WeightedList<>(this.result);
         }

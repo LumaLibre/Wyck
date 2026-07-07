@@ -1,185 +1,114 @@
 package dev.wyck.wrapper.worldgen.stateproviders;
 
-import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
-import dev.wyck.factory.WireProvider;
-import dev.wyck.util.WeightedList;
-import dev.wyck.util.BukkitBootstrapUtil;
 import dev.wyck.wrapper.internal.Wrapper;
-import dev.wyck.wrapper.worldgen.BlockPredicate;
-import dev.wyck.wrapper.worldgen.valueproviders.IntProvider;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
-import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
-
-import java.util.List;
 
 /**
- * Wraps the BlockStateProvider family, the per-position block state suppliers
- * used by feature configurations. All variants are authored; to point at a
- * registered provider type by key, see BlockStateProviderTypeReference.
+ * Used to provide a (potentially randomized) block and block state to be placed by configured features.
+ *
+ * @see <a href="https://minecraft.wiki/w/Block_state_provider">Block state provider</a>
  * @since 2.3.0
- * @version 2.3.0
+ * @version 3.0.0
  * @author Jsinco
  */
 @NullMarked
 @AsOf("2.3.0")
-public sealed interface BlockStateProvider extends Wrapper permits BlockStateProvider.Simple, BlockStateProvider.Weighted, BlockStateProvider.Rotated, BlockStateProvider.RandomizedInt, BlockStateProvider.RuleBased, BlockStateProvider.Noise, BlockStateProvider.DualNoise, BlockStateProvider.NoiseThreshold {
+public interface BlockStateProvider extends Wrapper {
 
-    @ApiStatus.Internal
-    WireProvider<Factory> WIRE = WireProvider.create("dev.wyck.wrapper.worldgen.stateproviders.BlockStateProviderFactoryImpl");
-
-    @ApiStatus.Internal
-    interface Factory {
-        Object toNms(BlockStateProvider provider);
-    }
-
+    /**
+     * Creates a simple block state provider.
+     * @param state the block state
+     * @return a simple block state provider
+     * @since 2.3.0
+     */
     @AsOf("2.3.0")
-    static BlockStateProvider simple(BlockData state) {
-        return new Simple(state);
+    static SimpleStateProvider simple(BlockData state) {
+        return SimpleStateProvider.of(state);
     }
 
+    /**
+     * Creates a simple block state provider.
+     * @param material the material of the block
+     * @return a simple block state provider
+     * @since 2.3.0
+     */
     @AsOf("2.3.0")
-    static BlockStateProvider simple(Material block) {
-        return new Simple(BukkitBootstrapUtil.util().createBlockData(block));
+    static SimpleStateProvider simple(Material material) {
+        return SimpleStateProvider.of(material);
     }
 
+    /**
+     * Creates a rotated block provider.
+     * @param material the material of the block
+     * @return a rotated block provider
+     * @since 2.3.0
+     */
     @AsOf("2.3.0")
-    static BlockStateProvider weighted(WeightedList<BlockData> states) {
-        return new Weighted(states);
+    static RotatedBlockProvider rotated(Material material) {
+        return RotatedBlockProvider.of(material);
     }
 
+    /**
+     * Creates a builder for a weighted state provider.
+     * @return a new weighted state provider builder
+     * @since 2.3.0
+     */
     @AsOf("2.3.0")
-    static BlockStateProvider rotated(Material block) {
-        return new Rotated(block);
+    static WeightedStateProvider.Builder weighted() {
+        return WeightedStateProvider.builder();
     }
 
+    /**
+     * Creates a builder for a randomized int state provider.
+     * @return a new randomized int state provider builder
+     * @since 2.3.0
+     */
     @AsOf("2.3.0")
-    static BlockStateProvider randomizedInt(BlockStateProvider source, String property, IntProvider values) {
-        return new RandomizedInt(source, property, values);
+    static RandomizedIntStateProvider.Builder randomizedInt() {
+        return RandomizedIntStateProvider.builder();
     }
 
+    /**
+     * Creates a builder for a noise provider.
+     * @return a new noise provider builder
+     * @since 2.3.0
+     */
     @AsOf("2.3.0")
-    static BlockStateProvider ruleBased(BlockStateProvider fallback, List<RuleBased.Rule> rules) {
-        return new RuleBased(fallback, rules);
+    static NoiseProvider.Builder noise() {
+        return NoiseProvider.builder();
     }
 
+    /**
+     * Creates a builder for a rule based state provider.
+     * @return a new rule based state provider builder
+     * @since 2.3.0
+     */
     @AsOf("2.3.0")
-    static BlockStateProvider noise(long seed, NoiseParameters parameters, float scale, List<BlockData> states) {
-        return new Noise(seed, parameters, scale, states);
+    static RuleBasedStateProvider.Builder ruleBased() {
+        return RuleBasedStateProvider.builder();
     }
 
+    /**
+     * Creates a builder for a dual-noise provider.
+     * @return a new dual-noise provider builder
+     * @since 2.3.0
+     */
     @AsOf("2.3.0")
-    static BlockStateProvider dualNoise(int varietyMin, int varietyMax, NoiseParameters slowNoise, float slowScale, long seed, NoiseParameters parameters, float scale, List<BlockData> states) {
-        return new DualNoise(varietyMin, varietyMax, slowNoise, slowScale, seed, parameters, scale, states);
+    static DualNoiseProvider.Builder dualNoise() {
+        return DualNoiseProvider.builder();
     }
 
+    /**
+     * Creates a builder for a noise threshold provider.
+     * @return a new noise threshold provider builder
+     * @since 2.3.0
+     */
     @AsOf("2.3.0")
-    static BlockStateProvider noiseThreshold(long seed, NoiseParameters parameters, float scale, float threshold, float highChance, BlockData defaultState, List<BlockData> lowStates, List<BlockData> highStates) {
-        return new NoiseThreshold(seed, parameters, scale, threshold, highChance, defaultState, lowStates, highStates);
+    static NoiseThresholdProvider.Builder noiseThreshold() {
+        return NoiseThresholdProvider.builder();
     }
 
-    @Override
-    @AsOf("2.3.0")
-    default Object toMinecraft() {
-        return WIRE.get().toNms(this);
-    }
-
-    @AsOf("2.3.0")
-    record Simple(BlockData state) implements BlockStateProvider {
-
-        @AsOf("2.3.0")
-        public Simple {
-            Preconditions.checkNotNull(state, "state");
-        }
-    }
-
-    @AsOf("2.3.0")
-    record Weighted(WeightedList<BlockData> states) implements BlockStateProvider {
-
-        @AsOf("2.3.0")
-        public Weighted {
-            Preconditions.checkNotNull(states, "states");
-        }
-    }
-
-    @AsOf("2.3.0")
-    record Rotated(Material block) implements BlockStateProvider {
-
-        @AsOf("2.3.0")
-        public Rotated {
-            Preconditions.checkNotNull(block, "block");
-        }
-    }
-
-    // recursive, composes a child provider
-    @AsOf("2.3.0")
-    record RandomizedInt(BlockStateProvider source, String property, IntProvider values) implements BlockStateProvider {
-
-        @AsOf("2.3.0")
-        public RandomizedInt {
-            Preconditions.checkNotNull(source, "source");
-            Preconditions.checkNotNull(property, "property");
-            Preconditions.checkNotNull(values, "values");
-        }
-    }
-
-    // recursive, composes child providers and block predicates
-    @AsOf("2.3.0")
-    record RuleBased(@Nullable BlockStateProvider fallback, List<Rule> rules) implements BlockStateProvider {
-
-        @AsOf("2.3.0")
-        public RuleBased {
-            rules = List.copyOf(rules);
-        }
-
-        /**
-         * A rule: when the predicate holds, the provider is used.
-         * @since 2.3.0
-         */
-        @AsOf("2.3.0")
-        public record Rule(BlockPredicate ifTrue, BlockStateProvider then) {
-
-            @AsOf("2.3.0")
-            public Rule {
-                Preconditions.checkNotNull(ifTrue, "ifTrue");
-                Preconditions.checkNotNull(then, "then");
-            }
-        }
-    }
-
-    @AsOf("2.3.0")
-    record Noise(long seed, NoiseParameters parameters, float scale, List<BlockData> states) implements BlockStateProvider {
-
-        @AsOf("2.3.0")
-        public Noise {
-            Preconditions.checkNotNull(parameters, "parameters");
-            states = List.copyOf(states);
-        }
-    }
-
-    @AsOf("2.3.0")
-    record DualNoise(int varietyMin, int varietyMax, NoiseParameters slowNoise, float slowScale, long seed, NoiseParameters parameters, float scale, List<BlockData> states) implements BlockStateProvider {
-
-        @AsOf("2.3.0")
-        public DualNoise {
-            Preconditions.checkNotNull(slowNoise, "slowNoise");
-            Preconditions.checkNotNull(parameters, "parameters");
-            states = List.copyOf(states);
-        }
-    }
-
-    @AsOf("2.3.0")
-    record NoiseThreshold(long seed, NoiseParameters parameters, float scale, float threshold, float highChance, BlockData defaultState, List<BlockData> lowStates, List<BlockData> highStates) implements BlockStateProvider {
-
-        @AsOf("2.3.0")
-        public NoiseThreshold {
-            Preconditions.checkNotNull(parameters, "parameters");
-            Preconditions.checkNotNull(defaultState, "defaultState");
-            lowStates = List.copyOf(lowStates);
-            highStates = List.copyOf(highStates);
-        }
-    }
 }

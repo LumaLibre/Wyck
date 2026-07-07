@@ -1,7 +1,8 @@
-package dev.wyck.wrapper.worldgen.stateproviders;
+package dev.wyck.wrapper.worldgen.synth;
 
 import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
+import dev.wyck.factory.ConstructWireProvider;
 import dev.wyck.factory.WireProvider;
 import dev.wyck.wrapper.internal.Wrapper;
 import org.jetbrains.annotations.ApiStatus;
@@ -12,10 +13,10 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Wraps Minecraft's NoiseParameters, which is a first octave plus amplitudes.
+ * Wrapper for noise parameters.
  *
  * @since 2.3.0
- * @version 2.3.0
+ * @version 3.0.0
  * @author Jsinco
  */
 @NullMarked
@@ -23,12 +24,7 @@ import java.util.List;
 public interface NoiseParameters extends Wrapper {
 
     @ApiStatus.Internal
-    WireProvider<Factory> WIRE = WireProvider.create("dev.wyck.wrapper.worldgen.stateproviders.NoiseParametersFactoryImpl");
-
-    @ApiStatus.Internal
-    interface Factory {
-        NoiseParameters create(int firstOctave, List<Double> amplitudes);
-    }
+    ConstructWireProvider<NoiseParameters> WIRE = WireProvider.construct("dev.wyck.wrapper.worldgen.synth.NoiseParametersImpl");
 
     /**
      * The first octave of the noise parameters.
@@ -47,13 +43,41 @@ public interface NoiseParameters extends Wrapper {
     List<Double> amplitudes();
 
     /**
-     * Creates a builder initialized to the values of this NoiseParameters.
-     * @return a builder initialized to the values of this NoiseParameters
+     * Converts this object back to a builder.
+     * @return a builder with the same values as this object
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    default Builder asBuilder() {
+    default Builder toBuilder() {
         return new Builder(this);
+    }
+
+    /**
+     * Creates a new NoiseParameters.
+     * @param firstOctave the first octave of the noise parameters
+     * @param amplitudes the amplitudes of the noise parameters
+     * @return a new NoiseParameters
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
+    static NoiseParameters of(int firstOctave, List<Double> amplitudes) {
+        return WIRE.construct(firstOctave, amplitudes);
+    }
+
+    /**
+     * Creates a new NoiseParameters.
+     * @param firstOctave the first octave of the noise parameters
+     * @param amplitudes the amplitudes of the noise parameters
+     * @return a new NoiseParameters
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
+    static NoiseParameters of(int firstOctave, double... amplitudes) {
+        List<Double> list = new ArrayList<>(amplitudes.length);
+        for (double amplitude : amplitudes) {
+            list.add(amplitude);
+        }
+        return WIRE.construct(firstOctave, list);
     }
 
     /**
@@ -145,7 +169,7 @@ public interface NoiseParameters extends Wrapper {
          */
         @AsOf("2.3.0")
         public NoiseParameters build() {
-            return WIRE.get().create(firstOctave, amplitudes);
+            return of(firstOctave, amplitudes);
         }
     }
 }
