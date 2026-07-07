@@ -12,17 +12,19 @@ import org.jspecify.annotations.Nullable;
 /**
  * Dripstone feature found in caves.
  *
+ * @deprecated Wyck will no longer support multiple versions of Minecraft soon.
  * @see <a href="https://minecraft.wiki/w/Dripstone_(feature)">Dripstone (feature)</a>
  * @since 3.0.0
  * @version 3.0.0
  * @author Jsinco
  */
+@Deprecated
 @NullMarked
 @AsOf("3.0.0")
 public interface DripstoneClusterConfiguration extends FeatureConfiguration {
 
     @ApiStatus.Internal
-    ConstructWireProvider<DripstoneClusterConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.configurations.DripstoneClusterConfigurationImpl");
+    ConstructWireProvider<DripstoneClusterConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.*?.wrapper.worldgen.feature.configurations.DripstoneClusterConfigurationImpl");
 
     /**
      * For how many blocks the feature searches for the floor or ceiling. Value between 1 and 512.

@@ -7,9 +7,13 @@ import dev.wyck.keys.ResourceKey;
 import dev.wyck.wrapper.worldgen.BlockPredicate;
 import dev.wyck.wrapper.worldgen.placement.PlacedFeature;
 import dev.wyck.wrapper.worldgen.stateproviders.BlockStateProvider;
+import org.bukkit.Material;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A feature that spawns below naturally generated azalea trees.
@@ -24,7 +28,7 @@ import org.jspecify.annotations.Nullable;
 public interface RootSystemConfiguration extends FeatureConfiguration {
 
     @ApiStatus.Internal
-    ConstructWireProvider<RootSystemConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.configurations.RootSystemConfigurationImpl");
+    ConstructWireProvider<RootSystemConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.*?.wrapper.worldgen.feature.configurations.RootSystemConfigurationImpl");
 
     /**
      * The placed feature to place on top of the root system.
@@ -43,6 +47,22 @@ public interface RootSystemConfiguration extends FeatureConfiguration {
     int requiredVerticalSpaceForTree();
 
     /**
+     * The distance to test for the level of the root system between 0 and 64.
+     * @return the level test distance
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
+    int levelTestDistance();
+
+    /**
+     * The maximum level deviation between 1 and 64.
+     * @return the maximum level deviation
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
+    int maxLevelDeviation();
+
+    /**
      * The radius of which these roots can spread between 1 and 64.
      * @return the root radius
      * @since 3.0.0
@@ -51,12 +71,12 @@ public interface RootSystemConfiguration extends FeatureConfiguration {
     int rootRadius();
 
     /**
-     * A tag of materials which can be replaced by the root system.
-     * @return the replaceable tag
+     * A set of materials which can be replaced by the root system.
+     * @return the root replaceable materials
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    ResourceKey rootReplaceable();
+    Set<Material> rootReplaceable();
 
     /**
      * The block to use for the root column.
@@ -131,6 +151,16 @@ public interface RootSystemConfiguration extends FeatureConfiguration {
     BlockPredicate allowedTreePosition();
 
     /**
+     * A tag of materials which can be replaced by the root system.
+     * @return the replaceable tag
+     * @since 3.0.0
+     * @deprecated Wyck will soon no longer support multiple versions of Minecraft.
+     */
+    @Deprecated
+    @AsOf("3.0.0")
+    @Nullable ResourceKey legacy$rootReplaceable();
+
+    /**
      * Converts this object back to a builder.
      * @return a new builder with the same values as this object
      * @since 3.0.0
@@ -144,6 +174,8 @@ public interface RootSystemConfiguration extends FeatureConfiguration {
      * Creates a new root system configuration.
      * @param treeFeature the placed feature to place on top of the root system
      * @param requiredVerticalSpaceForTree the amount of vertical space for the placed feature
+     * @param levelTestDistance the distance to test for the level of the root system
+     * @param maxLevelDeviation the maximum level deviation
      * @param rootRadius the radius of which these roots can spread
      * @param rootReplaceable a tag of materials which can be replaced by the root system
      * @param rootStateProvider the block to use for the root column
@@ -155,6 +187,7 @@ public interface RootSystemConfiguration extends FeatureConfiguration {
      * @param hangingRootPlacementAttempts the number of attempts to place the hanging roots
      * @param allowedVerticalWaterForTree the amount of vertical water allowed for the placed feature
      * @param allowedTreePosition the block predicate used to check if the tree position is valid
+     * @param legacy$rootReplaceable a tag of materials which can be replaced by the root system
      * @return a new root system configuration
      * @since 3.0.0
      */
@@ -162,8 +195,10 @@ public interface RootSystemConfiguration extends FeatureConfiguration {
     static RootSystemConfiguration of(
         PlacedFeature treeFeature,
         int requiredVerticalSpaceForTree,
+        int levelTestDistance,
+        int maxLevelDeviation,
         int rootRadius,
-        ResourceKey rootReplaceable,
+        Set<Material> rootReplaceable,
         BlockStateProvider rootStateProvider,
         int rootPlacementAttempts,
         int rootColumnMaxHeight,
@@ -172,9 +207,10 @@ public interface RootSystemConfiguration extends FeatureConfiguration {
         BlockStateProvider hangingRootStateProvider,
         int hangingRootPlacementAttempts,
         int allowedVerticalWaterForTree,
-        BlockPredicate allowedTreePosition
+        BlockPredicate allowedTreePosition,
+        @Nullable ResourceKey legacy$rootReplaceable
     ) {
-        return WIRE.construct(treeFeature, requiredVerticalSpaceForTree, rootRadius, rootReplaceable, rootStateProvider, rootPlacementAttempts, rootColumnMaxHeight, hangingRootRadius, hangingRootsVerticalSpan, hangingRootStateProvider, hangingRootPlacementAttempts, allowedVerticalWaterForTree, allowedTreePosition);
+        return WIRE.construct(treeFeature, requiredVerticalSpaceForTree, levelTestDistance, maxLevelDeviation, rootRadius, rootReplaceable, rootStateProvider, rootPlacementAttempts, rootColumnMaxHeight, hangingRootRadius, hangingRootsVerticalSpan, hangingRootStateProvider, hangingRootPlacementAttempts, allowedVerticalWaterForTree, allowedTreePosition, legacy$rootReplaceable);
     }
 
     /**
@@ -197,8 +233,10 @@ public interface RootSystemConfiguration extends FeatureConfiguration {
     final class Builder {
         private @Nullable PlacedFeature treeFeature;
         private int requiredVerticalSpaceForTree = 1;
+        private int levelTestDistance = 0;
+        private int maxLevelDeviation = 1;
         private int rootRadius = 1;
-        private @Nullable ResourceKey rootReplaceable;
+        private Set<Material> rootReplaceable = new HashSet<>();
         private @Nullable BlockStateProvider rootStateProvider;
         private int rootPlacementAttempts = 1;
         private int rootColumnMaxHeight = 1;
@@ -208,12 +246,15 @@ public interface RootSystemConfiguration extends FeatureConfiguration {
         private int hangingRootPlacementAttempts = 1;
         private int allowedVerticalWaterForTree = 1;
         private @Nullable BlockPredicate allowedTreePosition;
+        private @Nullable ResourceKey legacy$rootReplaceable;
 
         public Builder() {}
 
         public Builder(RootSystemConfiguration configuration) {
             this.treeFeature = configuration.treeFeature();
             this.requiredVerticalSpaceForTree = configuration.requiredVerticalSpaceForTree();
+            this.levelTestDistance = configuration.levelTestDistance();
+            this.maxLevelDeviation = configuration.maxLevelDeviation();
             this.rootRadius = configuration.rootRadius();
             this.rootReplaceable = configuration.rootReplaceable();
             this.rootStateProvider = configuration.rootStateProvider();
@@ -225,6 +266,7 @@ public interface RootSystemConfiguration extends FeatureConfiguration {
             this.hangingRootPlacementAttempts = configuration.hangingRootPlacementAttempts();
             this.allowedVerticalWaterForTree = configuration.allowedVerticalWaterForTree();
             this.allowedTreePosition = configuration.allowedTreePosition();
+            this.legacy$rootReplaceable = configuration.legacy$rootReplaceable();
         }
 
         /**
@@ -252,6 +294,30 @@ public interface RootSystemConfiguration extends FeatureConfiguration {
         }
 
         /**
+         * Sets the maximum level deviation.
+         * @param levelTestDistance the maximum level deviation
+         * @return this builder
+         * @since 3.0.0
+         */
+        @AsOf("3.0.0")
+        public Builder levelTestDistance(int levelTestDistance) {
+            this.levelTestDistance = levelTestDistance;
+            return this;
+        }
+
+        /**
+         * Sets the maximum level deviation.
+         * @param maxLevelDeviation the maximum level deviation
+         * @return this builder
+         * @since 3.0.0
+         */
+        @AsOf("3.0.0")
+        public Builder maxLevelDeviation(int maxLevelDeviation) {
+            this.maxLevelDeviation = maxLevelDeviation;
+            return this;
+        }
+
+        /**
          * Sets the radius of which these roots can spread.
          * @param rootRadius the radius of which these roots can spread
          * @return this builder
@@ -270,7 +336,7 @@ public interface RootSystemConfiguration extends FeatureConfiguration {
          * @since 3.0.0
          */
         @AsOf("3.0.0")
-        public Builder rootReplaceable(ResourceKey rootReplaceable) {
+        public Builder rootReplaceable(Set<Material> rootReplaceable) {
             this.rootReplaceable = rootReplaceable;
             return this;
         }
@@ -384,6 +450,34 @@ public interface RootSystemConfiguration extends FeatureConfiguration {
         }
 
         /**
+         * Sets the tag of materials which can be replaced by the root system.
+         * @param legacy$rootReplaceable the tag of materials which can be replaced by the root system
+         * @return this builder
+         * @since 3.0.0
+         * @deprecated Wyck will soon no longer support multiple versions of Minecraft.
+         */
+        @Deprecated
+        @AsOf("3.0.0")
+        public Builder legacy$rootReplaceable(@Nullable ResourceKey legacy$rootReplaceable) {
+            this.legacy$rootReplaceable = legacy$rootReplaceable;
+            return this;
+        }
+
+        // Friendly builder methods
+
+        /**
+         * Adds a material to the root replaceable list.
+         * @param rootReplaceable the material to add
+         * @return this builder
+         * @since 3.0.0
+         */
+        @AsOf("3.0.0")
+        public Builder rootReplaceable(Material... rootReplaceable) {
+            this.rootReplaceable.addAll(Set.of(rootReplaceable));
+            return this;
+        }
+
+        /**
          * Builds the root system configuration.
          * @return the root system configuration
          * @since 3.0.0
@@ -392,8 +486,9 @@ public interface RootSystemConfiguration extends FeatureConfiguration {
         public RootSystemConfiguration build() {
             Preconditions.checkNotNull(treeFeature, "treeFeature must be set");
             Preconditions.checkArgument(requiredVerticalSpaceForTree >= 1 && requiredVerticalSpaceForTree <= 64, "requiredVerticalSpaceForTree must be between 1 and 64");
+            Preconditions.checkArgument(levelTestDistance >= 0 && levelTestDistance <= 64, "levelTestDistance must be between 0 and 64");
+            Preconditions.checkArgument(maxLevelDeviation >= 1 && maxLevelDeviation <= 64, "maxLevelDeviation must be between 1 and 64");
             Preconditions.checkArgument(rootRadius >= 1 && rootRadius <= 64, "rootRadius must be between 1 and 64");
-            Preconditions.checkNotNull(rootReplaceable, "rootReplaceable must be set");
             Preconditions.checkNotNull(rootStateProvider, "rootStateProvider must be set");
             Preconditions.checkArgument(rootPlacementAttempts >= 1 && rootPlacementAttempts <= 256, "rootPlacementAttempts must be between 1 and 256");
             Preconditions.checkArgument(rootColumnMaxHeight >= 1 && rootColumnMaxHeight <= 4096, "rootColumnMaxHeight must be between 1 and 4096");
@@ -406,6 +501,8 @@ public interface RootSystemConfiguration extends FeatureConfiguration {
             return of(
                 treeFeature,
                 requiredVerticalSpaceForTree,
+                levelTestDistance,
+                maxLevelDeviation,
                 rootRadius,
                 rootReplaceable,
                 rootStateProvider,
@@ -416,7 +513,8 @@ public interface RootSystemConfiguration extends FeatureConfiguration {
                 hangingRootStateProvider,
                 hangingRootPlacementAttempts,
                 allowedVerticalWaterForTree,
-                allowedTreePosition
+                allowedTreePosition,
+                legacy$rootReplaceable
             );
         }
     }

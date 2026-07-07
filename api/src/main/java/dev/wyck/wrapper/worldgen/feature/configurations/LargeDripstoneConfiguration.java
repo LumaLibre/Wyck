@@ -5,9 +5,14 @@ import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.ConstructWireProvider;
 import dev.wyck.wrapper.worldgen.valueproviders.FloatProvider;
 import dev.wyck.wrapper.worldgen.valueproviders.IntProvider;
+import org.bukkit.Material;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
+
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Dripstone feature found in caves.
@@ -22,7 +27,15 @@ import org.jspecify.annotations.Nullable;
 public interface LargeDripstoneConfiguration extends FeatureConfiguration {
 
     @ApiStatus.Internal
-    ConstructWireProvider<LargeDripstoneConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.configurations.LargeDripstoneConfigurationImpl");
+    ConstructWireProvider<LargeDripstoneConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.*?.wrapper.worldgen.feature.configurations.LargeDripstoneConfigurationImpl");
+
+    /**
+     * Describes which blocks the feature can generate on.
+     * @return the set of replaceable blocks
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
+    Set<Material> replaceableBlocks();
 
     /**
      * The search range from start point to cave floor or ceiling (rather than from floor to ceiling)
@@ -109,6 +122,7 @@ public interface LargeDripstoneConfiguration extends FeatureConfiguration {
 
     /**
      * Creates a new large dripstone configuration.
+     * @param replaceableBlocks the set of replaceable blocks
      * @param floorToCeilingSearchRange the search range from start point to cave floor or ceiling (rather than from floor to ceiling) between 1 and 512
      * @param columnRadius the column radius
      * @param heightScale the height scale
@@ -122,8 +136,8 @@ public interface LargeDripstoneConfiguration extends FeatureConfiguration {
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    static LargeDripstoneConfiguration of(int floorToCeilingSearchRange, IntProvider columnRadius, FloatProvider heightScale, float maxColumnRadiusToCaveHeightRatio, FloatProvider stalactiteBluntness, FloatProvider stalagmiteBluntness, FloatProvider windSpeed, int minRadiusForWind, float minBluntnessForWind) {
-        return WIRE.construct(floorToCeilingSearchRange, columnRadius, heightScale, maxColumnRadiusToCaveHeightRatio, stalactiteBluntness, stalagmiteBluntness, windSpeed, minRadiusForWind, minBluntnessForWind);
+    static LargeDripstoneConfiguration of(Set<Material> replaceableBlocks, int floorToCeilingSearchRange, IntProvider columnRadius, FloatProvider heightScale, float maxColumnRadiusToCaveHeightRatio, FloatProvider stalactiteBluntness, FloatProvider stalagmiteBluntness, FloatProvider windSpeed, int minRadiusForWind, float minBluntnessForWind) {
+        return WIRE.construct(replaceableBlocks, floorToCeilingSearchRange, columnRadius, heightScale, maxColumnRadiusToCaveHeightRatio, stalactiteBluntness, stalagmiteBluntness, windSpeed, minRadiusForWind, minBluntnessForWind);
     }
 
     /**
@@ -144,6 +158,7 @@ public interface LargeDripstoneConfiguration extends FeatureConfiguration {
      */
     @AsOf("3.0.0")
     final class Builder {
+        private Set<Material> replaceableBlocks = new HashSet<>();
         private int floorToCeilingSearchRange = 30;
         private @Nullable IntProvider columnRadius;
         private @Nullable FloatProvider heightScale;
@@ -157,6 +172,7 @@ public interface LargeDripstoneConfiguration extends FeatureConfiguration {
         public Builder() {}
 
         public Builder(LargeDripstoneConfiguration configuration) {
+            this.replaceableBlocks.addAll(configuration.replaceableBlocks());
             this.floorToCeilingSearchRange = configuration.floorToCeilingSearchRange();
             this.columnRadius = configuration.columnRadius();
             this.heightScale = configuration.heightScale();
@@ -168,6 +184,17 @@ public interface LargeDripstoneConfiguration extends FeatureConfiguration {
             this.minBluntnessForWind = configuration.minBluntnessForWind();
         }
 
+        /**
+         * Sets the replaceable blocks.
+         * @param replaceableBlocks the replaceable blocks
+         * @return this builder
+         * @since 3.0.0
+         */
+        @AsOf("3.0.0")
+        public Builder replaceableBlocks(Set<Material> replaceableBlocks) {
+            this.replaceableBlocks = replaceableBlocks;
+            return this;
+        }
 
         /**
          * Sets the search range from floor to ceiling.
@@ -277,6 +304,20 @@ public interface LargeDripstoneConfiguration extends FeatureConfiguration {
             return this;
         }
 
+        // Friendly builder methods
+
+        /**
+         * Adds a replaceable block.
+         * @param replaceableBlocks the replaceable blocks
+         * @return this builder
+         * @since 3.0.0
+         */
+        @AsOf("3.0.0")
+        public Builder replaceableBlock(Material... replaceableBlocks) {
+            Collections.addAll(this.replaceableBlocks, replaceableBlocks);
+            return this;
+        }
+
         /**
          * Builds the configuration.
          * @return the configuration
@@ -299,6 +340,7 @@ public interface LargeDripstoneConfiguration extends FeatureConfiguration {
             Preconditions.checkArgument(minRadiusForWind >= 0 && minRadiusForWind <= 100, "minRadiusForWind must be between 0 and 100");
             Preconditions.checkArgument(minBluntnessForWind >= 0.0F && minBluntnessForWind <= 5.0F, "minBluntnessForWind must be between 0.0 and 5.0");
             return of(
+                replaceableBlocks,
                 floorToCeilingSearchRange,
                 columnRadius,
                 heightScale,

@@ -1,8 +1,9 @@
-package dev.wyck.wrapper.worldgen.feature.configurations;
+package dev.wyck.v26_1.wrapper.worldgen.feature.configurations;
 
+import com.google.common.base.Preconditions;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.wrapper.worldgen.BlockPredicate;
-import dev.wyck.wrapper.worldgen.WorldgenConversions;
+import dev.wyck.wrapper.worldgen.feature.configurations.RootSystemConfiguration;
 import dev.wyck.wrapper.worldgen.placement.PlacedFeature;
 import dev.wyck.wrapper.worldgen.stateproviders.BlockStateProvider;
 import org.bukkit.Material;
@@ -34,15 +35,18 @@ public record RootSystemConfigurationImpl(
 ) implements RootSystemConfiguration {
     @Override
     public Object toMinecraft() {
+        Preconditions.checkNotNull(legacy$rootReplaceable, "legacy$rootReplaceable");
         net.minecraft.core.Holder<net.minecraft.world.level.levelgen.placement.PlacedFeature> feature = treeFeature.asHandle();
+
+        net.minecraft.resources.Identifier location = legacy$rootReplaceable.asHandle();
+        net.minecraft.tags.TagKey<net.minecraft.world.level.block.Block> replaceable =
+            net.minecraft.tags.TagKey.create(net.minecraft.core.registries.Registries.BLOCK, location);
 
         return new net.minecraft.world.level.levelgen.feature.configurations.RootSystemConfiguration(
             feature,
             requiredVerticalSpaceForTree,
-            levelTestDistance,
-            maxLevelDeviation,
             rootRadius,
-            WorldgenConversions.toBlockHolderSet(rootReplaceable),
+            replaceable,
             rootStateProvider.asHandle(),
             rootPlacementAttempts,
             rootColumnMaxHeight,

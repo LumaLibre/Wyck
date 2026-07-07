@@ -1,20 +1,28 @@
-package dev.wyck.wrapper.worldgen.feature.configurations;
+package dev.wyck.v26_1.wrapper.worldgen.feature.configurations;
 
+import dev.wyck.wrapper.worldgen.feature.configurations.SpeleothemConfiguration;
+import org.bukkit.Material;
+import org.bukkit.block.data.BlockData;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
+import java.util.Set;
+
 @NullMarked
 @ApiStatus.Internal
-public record PointedDripstoneConfigurationImpl(
-    @Override float chanceOfTallerDripstone,
+public record SpeleothemConfigurationImpl(
+    @Override BlockData baseBlock,
+    @Override BlockData pointedBlock,
+    @Override Set<Material> replaceableBlocks,
+    @Override float chanceOfTallerGeneration,
     @Override float chanceOfDirectionalSpread,
     @Override float chanceOfSpreadRadius2,
     @Override float chanceOfSpreadRadius3
-) implements PointedDripstoneConfiguration {
+) implements SpeleothemConfiguration {
     @Override
     public Object toMinecraft() {
         return new net.minecraft.world.level.levelgen.feature.configurations.PointedDripstoneConfiguration(
-            chanceOfTallerDripstone,
+            chanceOfTallerGeneration,
             chanceOfDirectionalSpread,
             chanceOfSpreadRadius2,
             chanceOfSpreadRadius3

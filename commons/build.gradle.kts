@@ -9,5 +9,5 @@ dependencies {
     compileOnly(libs.protocollib)
     compileOnly(libs.packetevents)
 
-    paperweight.paperDevBundle(libs.versions.minecraft.v26.m1.r2)
+    paperweight.paperDevBundle(libs.versions.minecraft.v26.m2)
 }

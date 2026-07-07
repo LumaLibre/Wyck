@@ -69,6 +69,8 @@ public class TestPlugin extends JavaPlugin implements Listener {
         ResourceKey levelKey = ResourceKey.of("test", "wobbleworld3");
 
         TreeConfiguration treeConfig = FeatureConfiguration.tree()
+            .foliageProvider(BlockStateProvider.simple(Material.SPRUCE_LEAVES))
+            .trunkProvider(BlockStateProvider.simple(Material.SPRUCE_LOG))
             .belowTrunkProvider(
                 BlockStateProvider.ruleBased()
                     .rule(
@@ -83,8 +85,6 @@ public class TestPlugin extends JavaPlugin implements Listener {
                 .radius(IntProvider.uniform(4, 6))
                 .build()
             )
-            .foliageProvider(BlockStateProvider.simple(Material.SPRUCE_LEAVES))
-            .ignoreVines(true)
             .minimumSize(TwoLayersFeatureSize.builder()
                 .limit(1)
                 .lowerSize(0)
@@ -98,7 +98,7 @@ public class TestPlugin extends JavaPlugin implements Listener {
                 .heightRandB(8)
                 .build()
             )
-            .trunkProvider(BlockStateProvider.simple(Material.SPRUCE_LOG))
+            .ignoreVines()
             .build();
 
         Biome biome = Biome.builder()

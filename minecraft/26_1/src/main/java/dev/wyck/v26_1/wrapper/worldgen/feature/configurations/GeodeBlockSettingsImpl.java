@@ -1,7 +1,8 @@
-package dev.wyck.wrapper.worldgen.feature.configurations.geode;
+package dev.wyck.v26_1.wrapper.worldgen.feature.configurations;
 
+import com.google.common.base.Preconditions;
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.wrapper.worldgen.WorldgenConversions;
+import dev.wyck.wrapper.worldgen.feature.configurations.geode.GeodeBlockSettings;
 import dev.wyck.wrapper.worldgen.stateproviders.BlockStateProvider;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
@@ -30,6 +31,8 @@ public record GeodeBlockSettingsImpl(
 ) implements GeodeBlockSettings {
     @Override
     public Object toMinecraft() {
+        Preconditions.checkNotNull(legacy$cannotReplace, "legacy$cannotReplace");
+        Preconditions.checkNotNull(legacy$invalidBlocks, "legacy$invalidBlocks");
         List<net.minecraft.world.level.block.state.BlockState> placements = new ArrayList<>(innerPlacements.size());
         for (BlockData data : innerPlacements) {
             placements.add(((CraftBlockData) data).getState());
@@ -42,8 +45,13 @@ public record GeodeBlockSettingsImpl(
             middleLayerProvider.asHandle(),
             outerLayerProvider.asHandle(),
             placements,
-            WorldgenConversions.toBlockHolderSet(cannotReplace),
-            WorldgenConversions.toBlockHolderSet(invalidBlocks)
+            toBlockTag(legacy$cannotReplace),
+            toBlockTag(legacy$invalidBlocks)
         );
+    }
+
+    private static net.minecraft.tags.TagKey<net.minecraft.world.level.block.Block> toBlockTag(ResourceKey key) {
+        net.minecraft.resources.Identifier location = key.asHandle();
+        return net.minecraft.tags.TagKey.create(net.minecraft.core.registries.Registries.BLOCK, location);
     }
 }

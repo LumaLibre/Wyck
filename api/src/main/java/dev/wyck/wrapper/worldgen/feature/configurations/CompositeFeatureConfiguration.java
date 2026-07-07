@@ -21,10 +21,10 @@ import java.util.List;
  */
 @NullMarked
 @AsOf("3.0.0")
-public interface SimpleRandomFeatureConfiguration extends FeatureConfiguration {
+public interface CompositeFeatureConfiguration extends FeatureConfiguration {
 
     @ApiStatus.Internal
-    ConstructWireProvider<SimpleRandomFeatureConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.configurations.SimpleRandomFeatureConfigurationImpl");
+    ConstructWireProvider<CompositeFeatureConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.*?.wrapper.worldgen.feature.configurations.CompositeFeatureConfigurationImpl");
 
     /**
      * Any number of placed features.
@@ -52,7 +52,7 @@ public interface SimpleRandomFeatureConfiguration extends FeatureConfiguration {
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    static SimpleRandomFeatureConfiguration of(List<PlacedFeature> features) {
+    static CompositeFeatureConfiguration of(List<PlacedFeature> features) {
         return WIRE.construct(features);
     }
 
@@ -67,7 +67,7 @@ public interface SimpleRandomFeatureConfiguration extends FeatureConfiguration {
     }
 
     /**
-     * Builder for {@link SimpleRandomFeatureConfiguration}.
+     * Builder for {@link CompositeFeatureConfiguration}.
      * @since 3.0.0
      * @version 3.0.0
      * @author Jsinco
@@ -78,7 +78,7 @@ public interface SimpleRandomFeatureConfiguration extends FeatureConfiguration {
 
         public Builder() {}
 
-        public Builder(SimpleRandomFeatureConfiguration configuration) {
+        public Builder(CompositeFeatureConfiguration configuration) {
             this.features.addAll(configuration.features());
         }
 
@@ -114,7 +114,7 @@ public interface SimpleRandomFeatureConfiguration extends FeatureConfiguration {
          * @since 3.0.0
          */
         @AsOf("3.0.0")
-        public SimpleRandomFeatureConfiguration build() {
+        public CompositeFeatureConfiguration build() {
             Preconditions.checkArgument(!features.isEmpty(), "features must not be empty");
             return of(features);
         }

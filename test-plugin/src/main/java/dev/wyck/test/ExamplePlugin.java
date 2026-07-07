@@ -2,87 +2,77 @@ package dev.wyck.test;
 
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.model.biome.Biome;
-import dev.wyck.model.level.LevelCreator;
-import dev.wyck.model.level.dimension.Dimension;
-import dev.wyck.wrapper.biome.BiomeSpecialEffects;
-import dev.wyck.wrapper.entity.BiomeSpawner;
-import dev.wyck.wrapper.entity.MobCategory;
-import dev.wyck.wrapper.entity.data.NaturalSpawner;
-import dev.wyck.wrapper.environment.attribute.EnvironmentAttributes;
-import dev.wyck.wrapper.environment.particle.ParticleOptions;
-import dev.wyck.wrapper.environment.particle.ParticleTypes;
-import dev.wyck.wrapper.level.BiomeSource;
-import dev.wyck.wrapper.level.noise.Noise;
-import dev.wyck.wrapper.level.noise.chunk.ChunkGenerator;
-import org.bukkit.entity.EntityType;
+import dev.wyck.wrapper.worldgen.BiomeGenerationSettings;
+import dev.wyck.wrapper.worldgen.BlockPredicate;
+import dev.wyck.wrapper.worldgen.GenerationStep;
+import dev.wyck.wrapper.worldgen.HeightmapType;
+import dev.wyck.wrapper.worldgen.feature.ConfiguredFeature;
+import dev.wyck.wrapper.worldgen.feature.FeatureType;
+import dev.wyck.wrapper.worldgen.feature.configurations.FeatureConfiguration;
+import dev.wyck.wrapper.worldgen.feature.configurations.TreeConfiguration;
+import dev.wyck.wrapper.worldgen.feature.featuresize.TwoLayersFeatureSize;
+import dev.wyck.wrapper.worldgen.feature.foliageplacers.PineFoliagePlacer;
+import dev.wyck.wrapper.worldgen.feature.trunkplacers.StraightTrunkPlacer;
+import dev.wyck.wrapper.worldgen.placement.PlacedFeature;
+import dev.wyck.wrapper.worldgen.placement.PlacementModifier;
+import dev.wyck.wrapper.worldgen.stateproviders.BlockStateProvider;
+import dev.wyck.wrapper.worldgen.valueproviders.IntProvider;
+import org.bukkit.Material;
+import org.bukkit.Tag;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ExamplePlugin extends JavaPlugin {
     @Override
     public void onEnable() {
-        Biome biome = Biome.builder()
-            .resourceKey(ResourceKey.of("test:biome")) // Required key
-            // Climate settings
-//            .climateSettings(ClimateSettings.builder()
-//                .downfall(0.5f)
-//                .temperature(0.14f)
-//                .temperatureModifier(TemperatureModifier.FROZEN)
-//                .build()
-//            )
-            // Special effects
-            .specialEffects(BiomeSpecialEffects.builder()
-                .waterColor("#00FF00")
-//                .grassColorOverride("#00FF00")
-//                .foliageColorOverride("#00FF00")
-//                .dryFoliageColorOverride("#0000FF")
+        // Making a tall spruce tree
+        TreeConfiguration treeConfig = FeatureConfiguration.tree()
+            .foliageProvider(BlockStateProvider.simple(Material.SPRUCE_LEAVES))
+            .trunkProvider(BlockStateProvider.simple(Material.SPRUCE_LOG))
+            .belowTrunkProvider(
+                BlockStateProvider.ruleBased()
+                    .rule(
+                        BlockPredicate.not(BlockPredicate.matchesTag(Tag.CANNOT_REPLACE_BELOW_TREE_TRUNK)),
+                        BlockStateProvider.simple(Material.DIRT)
+                    )
+                    .build()
+            )
+            .foliagePlacer(PineFoliagePlacer.builder()
+                .height(IntProvider.constant(4))
+                .offset(IntProvider.constant(1))
+                .radius(IntProvider.uniform(4, 6))
                 .build()
             )
-            // Environmental attributes
-//            .attribute(EnvironmentAttributes.BLOCK_LIGHT_TINT, "#FFFFFF")
-//            .attribute(EnvironmentAttributes.FOG_COLOR, "#FFFFFF")
-//            .attribute(EnvironmentAttributes.AMBIENT_PARTICLES, ParticleCatalog.builder()
-//                .particle(ParticleTypes.BLOCK, 0.01f, BlockParticle.of(Material.ACACIA_LOG))
-//                .build()
-//            )
-            .attribute(EnvironmentAttributes.DEFAULT_DRIPSTONE_PARTICLE, ParticleOptions.of(ParticleTypes.DRIPPING_HONEY))
-            // Mob spawn settings
-            .spawner(BiomeSpawner.builder()
-                .spawner(MobCategory.MONSTER, NaturalSpawner.of(EntityType.ZOMBIE, 5, 15))
+            .minimumSize(TwoLayersFeatureSize.builder()
+                .limit(1)
+                .lowerSize(0)
+                .minClippedHeight(0)
+                .upperSize(0)
                 .build()
             )
-            // Worldgen
-//            .generationSettings(
-//                BiomeGenerationSettings.builder()
-//                    .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeature.builder()
-//                        .feature(new SchematicTreeFeature().register(), SchematicTreeFeature.SchematicTreeConfig.defaults())
-//                        .modifier(PlacementModifier.rarityFilter(10))
-//                        .modifier(PlacementModifier.inSquare())
-//                        .modifier(PlacementModifier.surfaceWaterDepth(0))
-//                        .modifier(PlacementModifier.heightmap(HeightmapType.OCEAN_FLOOR))
-//                        .modifier(PlacementModifier.biomeFilter())
-//                        .build())
-//
-//                    .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeature.builder()
-//                        .feature(new SchematicTreeFeature().registerAs(ResourceKey.of("t", "s")), SchematicTreeFeature.SchematicTreeConfig.defaults2())
-//                        .modifier(PlacementModifier.rarityFilter(10))
-//                        .modifier(PlacementModifier.inSquare())
-//                        .modifier(PlacementModifier.surfaceWaterDepth(0))
-//                        .modifier(PlacementModifier.heightmap(HeightmapType.OCEAN_FLOOR))
-//                        .modifier(PlacementModifier.biomeFilter())
-//                        .build())
-//                    .build()
-//            )
+            .trunkPlacer(StraightTrunkPlacer.builder()
+                .baseHeight(10)
+                .heightRandA(4)
+                .heightRandB(8)
+                .build()
+            )
+            .ignoreVines()
+            .build();
+
+        // Using it in a biome
+        Biome.builder()
+            .resourceKey(ResourceKey.of("test:biome"))
+            .generationSettings(
+                BiomeGenerationSettings.builder()
+                    .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeature.builder()
+                        .feature(ConfiguredFeature.of(FeatureType.TREE, treeConfig))
+                        .modifier(PlacementModifier.rarityFilter(1))
+                        .modifier(PlacementModifier.inSquare())
+                        .modifier(PlacementModifier.surfaceWaterDepthFilter(0))
+                        .modifier(PlacementModifier.heightmap(HeightmapType.OCEAN_FLOOR))
+                        .modifier(PlacementModifier.biomeFilter())
+                        .build())
+                    .build()
+            )
             .register();
-
-        ChunkGenerator chunkGenerator = ChunkGenerator.builder()
-            .biomeSource(BiomeSource.fixed(biome))
-            .noise(Noise.overworld())
-            .build();
-
-        LevelCreator spec = LevelCreator.builder(ResourceKey.of("test:exampleworld21"))
-            .generator(chunkGenerator)
-            .dimension(Dimension.reference(ResourceKey.minecraft("overworld")))
-            .build();
-        spec.create();
     }
 }

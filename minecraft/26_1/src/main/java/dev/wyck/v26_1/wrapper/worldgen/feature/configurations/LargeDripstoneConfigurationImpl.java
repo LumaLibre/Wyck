@@ -1,6 +1,6 @@
-package dev.wyck.wrapper.worldgen.feature.configurations;
+package dev.wyck.v26_1.wrapper.worldgen.feature.configurations;
 
-import dev.wyck.wrapper.worldgen.WorldgenConversions;
+import dev.wyck.wrapper.worldgen.feature.configurations.LargeDripstoneConfiguration;
 import dev.wyck.wrapper.worldgen.valueproviders.FloatProvider;
 import dev.wyck.wrapper.worldgen.valueproviders.IntProvider;
 import org.bukkit.Material;
@@ -26,7 +26,6 @@ public record LargeDripstoneConfigurationImpl(
     @Override
     public Object toMinecraft() {
         return new net.minecraft.world.level.levelgen.feature.configurations.LargeDripstoneConfiguration(
-            WorldgenConversions.toBlockHolderSet(replaceableBlocks),
             floorToCeilingSearchRange,
             columnRadius.asHandle(),
             heightScale.asHandle(),

@@ -1,5 +1,6 @@
-package dev.wyck.wrapper.worldgen.feature.configurations;
+package dev.wyck.v26_1.wrapper.worldgen.feature.configurations;
 
+import dev.wyck.wrapper.worldgen.feature.configurations.DripstoneClusterConfiguration;
 import dev.wyck.wrapper.worldgen.valueproviders.FloatProvider;
 import dev.wyck.wrapper.worldgen.valueproviders.IntProvider;
 import org.jetbrains.annotations.ApiStatus;
@@ -22,6 +23,18 @@ public record DripstoneClusterConfigurationImpl(
 ) implements DripstoneClusterConfiguration {
     @Override
     public Object toMinecraft() {
-        throw new UnsupportedOperationException("Doesn't exist in this Minecraft version.");
+        return new net.minecraft.world.level.levelgen.feature.configurations.DripstoneClusterConfiguration(
+            floorToCeilingSearchRange,
+            height.asHandle(),
+            radius.asHandle(),
+            maxStalagmiteStalactiteHeightDiff,
+            heightDeviation,
+            dripstoneBlockLayerThickness.asHandle(),
+            density.asHandle(),
+            wetness.asHandle(),
+            chanceOfDripstoneColumnAtMaxDistanceFromCenter,
+            maxDistanceFromEdgeAffectingChanceOfDripstoneColumn,
+            maxDistanceFromCenterAffectingHeightBias
+        );
     }
 }

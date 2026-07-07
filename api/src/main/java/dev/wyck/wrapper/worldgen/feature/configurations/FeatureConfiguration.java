@@ -110,6 +110,16 @@ public interface FeatureConfiguration extends Wrapper {
     }
 
     /**
+     * Creates a builder for a {@link SpeleothemClusterConfiguration}.
+     * @return a new speleothem cluster configuration builder
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
+    static SpeleothemClusterConfiguration.Builder speleothemCluster() {
+        return SpeleothemClusterConfiguration.builder();
+    }
+
+    /**
      * Creates a builder for an {@link EndGatewayConfiguration}.
      * @return a new end gateway configuration builder
      * @since 3.0.0
@@ -210,13 +220,13 @@ public interface FeatureConfiguration extends Wrapper {
     }
 
     /**
-     * Creates a builder for a {@link PointedDripstoneConfiguration}.
+     * Creates a builder for a {@link SpeleothemConfiguration}.
      * @return a new pointed dripstone configuration builder
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    static PointedDripstoneConfiguration.Builder pointedDripstone() {
-        return PointedDripstoneConfiguration.builder();
+    static SpeleothemConfiguration.Builder speleothem() {
+        return SpeleothemConfiguration.builder();
     }
 
     /**
@@ -300,13 +310,13 @@ public interface FeatureConfiguration extends Wrapper {
     }
 
     /**
-     * Creates a builder for a {@link SimpleRandomFeatureConfiguration}.
+     * Creates a builder for a {@link CompositeFeatureConfiguration}.
      * @return a new simple random feature configuration builder
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    static SimpleRandomFeatureConfiguration.Builder simpleRandom() {
-        return SimpleRandomFeatureConfiguration.builder();
+    static CompositeFeatureConfiguration.Builder composite() {
+        return CompositeFeatureConfiguration.builder();
     }
 
     /**
