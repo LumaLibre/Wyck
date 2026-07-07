@@ -3,7 +3,7 @@ package dev.wyck.wrapper.worldgen.feature.configurations;
 import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.ConstructWireProvider;
-import dev.wyck.wrapper.worldgen.BlockPredicate;
+import dev.wyck.wrapper.worldgen.blockpredicates.BlockPredicate;
 import dev.wyck.wrapper.worldgen.stateproviders.BlockStateProvider;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;

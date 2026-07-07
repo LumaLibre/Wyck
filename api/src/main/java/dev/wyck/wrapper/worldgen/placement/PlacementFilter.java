@@ -1,7 +1,7 @@
 package dev.wyck.wrapper.worldgen.placement;
 
 import dev.wyck.annotations.AsOf;
-import dev.wyck.wrapper.worldgen.BlockPredicate;
+import dev.wyck.wrapper.worldgen.blockpredicates.BlockPredicate;
 import org.jspecify.annotations.NullMarked;
 
 /**

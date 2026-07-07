@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.ConstructWireProvider;
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.wrapper.worldgen.BlockPredicate;
+import dev.wyck.wrapper.worldgen.blockpredicates.BlockPredicate;
 import dev.wyck.wrapper.worldgen.stateproviders.BlockStateProvider;
 import dev.wyck.wrapper.worldgen.valueproviders.IntProvider;
 import org.bukkit.block.BlockFace;
@@ -30,7 +30,7 @@ public interface BlockColumnConfiguration extends FeatureConfiguration {
     ConstructWireProvider<BlockColumnConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.configurations.BlockColumnConfigurationImpl");
 
     @ApiStatus.Experimental // may be moved in the future
-    BlockPredicate ONLY_IN_AIR_PREDICATE = BlockPredicate.matchesTag(ResourceKey.minecraft("air"));
+    BlockPredicate ONLY_IN_AIR_PREDICATE = BlockPredicate.matchingBlockTag(ResourceKey.minecraft("air"));
 
     /**
      * The layers of this column.

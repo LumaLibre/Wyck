@@ -1,6 +1,6 @@
 package dev.wyck.wrapper.worldgen.feature.configurations;
 
-import dev.wyck.wrapper.worldgen.BlockPredicate;
+import dev.wyck.wrapper.worldgen.blockpredicates.BlockPredicate;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.block.data.CraftBlockData;
 import org.jetbrains.annotations.ApiStatus;

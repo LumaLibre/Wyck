@@ -3,7 +3,7 @@ package dev.wyck.test;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.model.biome.Biome;
 import dev.wyck.wrapper.worldgen.BiomeGenerationSettings;
-import dev.wyck.wrapper.worldgen.BlockPredicate;
+import dev.wyck.wrapper.worldgen.blockpredicates.BlockPredicate;
 import dev.wyck.wrapper.worldgen.GenerationStep;
 import dev.wyck.wrapper.worldgen.HeightmapType;
 import dev.wyck.wrapper.worldgen.feature.ConfiguredFeature;
@@ -34,7 +34,7 @@ public class ExamplePlugin extends JavaPlugin {
             .belowTrunkProvider(
                 BlockStateProvider.ruleBased()
                     .rule(
-                        BlockPredicate.not(BlockPredicate.matchesTag(Tag.CANNOT_REPLACE_BELOW_TREE_TRUNK)),
+                        BlockPredicate.not(BlockPredicate.matchingBlockTag(Tag.CANNOT_REPLACE_BELOW_TREE_TRUNK)),
                         BlockStateProvider.simple(Material.DIRT)
                     )
                     .build()

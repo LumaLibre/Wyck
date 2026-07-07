@@ -1,6 +1,6 @@
 package dev.wyck.wrapper.worldgen.feature.configurations;
 
-import dev.wyck.wrapper.worldgen.BlockPredicate;
+import dev.wyck.wrapper.worldgen.blockpredicates.BlockPredicate;
 import dev.wyck.wrapper.worldgen.stateproviders.BlockStateProvider;
 import dev.wyck.wrapper.worldgen.valueproviders.IntProvider;
 import org.jetbrains.annotations.ApiStatus;

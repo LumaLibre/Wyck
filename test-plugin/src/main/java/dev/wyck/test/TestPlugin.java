@@ -23,7 +23,7 @@ import dev.wyck.wrapper.level.noise.chunk.ChunkGenerator;
 import dev.wyck.wrapper.level.noise.function.DensityFunction;
 import dev.wyck.wrapper.level.noise.settings.NoiseSettings;
 import dev.wyck.wrapper.worldgen.BiomeGenerationSettings;
-import dev.wyck.wrapper.worldgen.BlockPredicate;
+import dev.wyck.wrapper.worldgen.blockpredicates.BlockPredicate;
 import dev.wyck.wrapper.worldgen.GenerationStep;
 import dev.wyck.wrapper.worldgen.HeightmapType;
 import dev.wyck.wrapper.worldgen.feature.ConfiguredFeature;
@@ -31,8 +31,8 @@ import dev.wyck.wrapper.worldgen.feature.FeatureType;
 import dev.wyck.wrapper.worldgen.feature.configurations.FeatureConfiguration;
 import dev.wyck.wrapper.worldgen.feature.configurations.TreeConfiguration;
 import dev.wyck.wrapper.worldgen.feature.featuresize.TwoLayersFeatureSize;
-import dev.wyck.wrapper.worldgen.feature.foliageplacers.PineFoliagePlacer;
-import dev.wyck.wrapper.worldgen.feature.trunkplacers.StraightTrunkPlacer;
+import dev.wyck.wrapper.worldgen.feature.foliageplacers.FoliagePlacer;
+import dev.wyck.wrapper.worldgen.feature.trunkplacers.TrunkPlacer;
 import dev.wyck.wrapper.worldgen.placement.PlacedFeature;
 import dev.wyck.wrapper.worldgen.placement.PlacementModifier;
 import dev.wyck.wrapper.worldgen.stateproviders.BlockStateProvider;
@@ -69,20 +69,20 @@ public class TestPlugin extends JavaPlugin implements Listener {
         ResourceKey levelKey = ResourceKey.of("test", "wobbleworld3");
 
         TreeConfiguration treeConfig = FeatureConfiguration.tree()
-            .foliageProvider(BlockStateProvider.simple(Material.SPRUCE_LEAVES))
-            .trunkProvider(BlockStateProvider.simple(Material.SPRUCE_LOG))
+            .foliageProvider(BlockStateProvider.simple(Material.OAK_LEAVES))
+            .trunkProvider(BlockStateProvider.simple(Material.BIRCH_WOOD))
             .belowTrunkProvider(
                 BlockStateProvider.ruleBased()
                     .rule(
-                        BlockPredicate.not(BlockPredicate.matchesTag(Tag.CANNOT_REPLACE_BELOW_TREE_TRUNK)),
+                        BlockPredicate.matchingBlockTag(Tag.CANNOT_REPLACE_BELOW_TREE_TRUNK).not(),
                         BlockStateProvider.simple(Material.DIRT)
                     )
                     .build()
             )
-            .foliagePlacer(PineFoliagePlacer.builder()
-                .height(IntProvider.constant(4))
+            .foliagePlacer(FoliagePlacer.fancy()
+                .height(3)
                 .offset(IntProvider.constant(1))
-                .radius(IntProvider.uniform(4, 6))
+                .radius(IntProvider.constant(4))
                 .build()
             )
             .minimumSize(TwoLayersFeatureSize.builder()
@@ -92,7 +92,7 @@ public class TestPlugin extends JavaPlugin implements Listener {
                 .upperSize(0)
                 .build()
             )
-            .trunkPlacer(StraightTrunkPlacer.builder()
+            .trunkPlacer(TrunkPlacer.fancy()
                 .baseHeight(10)
                 .heightRandA(4)
                 .heightRandB(8)
@@ -136,11 +136,13 @@ public class TestPlugin extends JavaPlugin implements Listener {
 
                     .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeature.builder()
                         .feature(ConfiguredFeature.of(FeatureType.TREE, treeConfig))
-                        .modifier(PlacementModifier.rarityFilter(1))
+                        .modifier(PlacementModifier.rarityFilter(4))
                         .modifier(PlacementModifier.inSquare())
                         .modifier(PlacementModifier.surfaceWaterDepthFilter(0))
                         .modifier(PlacementModifier.heightmap(HeightmapType.OCEAN_FLOOR))
                         .modifier(PlacementModifier.biomeFilter())
+                        .modifier(PlacementModifier.heightmap(HeightmapType.MOTION_BLOCKING_NO_LEAVES))
+                        //.modifier(PlacementModifier.blockPredicateFilter(BlockPredicate.no))
                         .build())
                     .build()
             )

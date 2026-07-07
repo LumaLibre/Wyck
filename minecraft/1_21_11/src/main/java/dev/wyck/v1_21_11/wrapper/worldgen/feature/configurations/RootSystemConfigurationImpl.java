@@ -2,7 +2,7 @@ package dev.wyck.v1_21_11.wrapper.worldgen.feature.configurations;
 
 import com.google.common.base.Preconditions;
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.wrapper.worldgen.BlockPredicate;
+import dev.wyck.wrapper.worldgen.blockpredicates.BlockPredicate;
 import dev.wyck.wrapper.worldgen.feature.configurations.RootSystemConfiguration;
 import dev.wyck.wrapper.worldgen.placement.PlacedFeature;
 import dev.wyck.wrapper.worldgen.stateproviders.BlockStateProvider;
