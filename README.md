@@ -79,8 +79,8 @@ Wyck is designed to be easy to use, flexible, and friendly for developers of all
 - Supports packet-based biome changing with ProtocolLib or PacketEvents
 
 ## Credits 🙏
-Wyck was originally created by Outspending. I (Jsinco) have forked the project to add additional features and
-support modern Minecraft versions. This project would not be possible without Outspending's original work.
+- Outspending for their work on [Outspending/BiomesAPI](https://github.com/outspending/biomesapi), the original biome api of Wyck
+- The [Minecraft Wiki](https://minecraft.wiki/) for providing documentation on Minecraft's data-driven worldgen components
 
 ## Contributing 📰
 
