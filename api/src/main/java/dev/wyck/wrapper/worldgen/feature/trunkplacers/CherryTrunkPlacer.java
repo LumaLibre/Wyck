@@ -44,7 +44,7 @@ public interface CherryTrunkPlacer extends TrunkPlacer {
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    IntProvider branchStartOffsetFromTop();
+    IntProvider.Uniform branchStartOffsetFromTop();
 
     /**
      * The offset of the branches from the top between -16 and 16.
@@ -73,14 +73,12 @@ public interface CherryTrunkPlacer extends TrunkPlacer {
      * @param branchHorizontalLength the horizontal length of the branches
      * @param branchStartOffsetFromTop the offset of the branches from the top
      * @param branchEndOffsetFromTop the offset of the branches from the top
-     * @param secondBranchStartOffsetFromTop the offset of the second branch from the top
-     * @param secondBranchEndOffsetFromTop the offset of the second branch from the top
      * @return a new cherry trunk placer
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    static CherryTrunkPlacer of(int baseHeight, int heightRandA, int heightRandB, IntProvider branchCount, IntProvider branchHorizontalLength, IntProvider branchStartOffsetFromTop, IntProvider branchEndOffsetFromTop, IntProvider secondBranchStartOffsetFromTop, IntProvider secondBranchEndOffsetFromTop) {
-        return WIRE.construct(baseHeight, heightRandA, heightRandB, branchCount, branchHorizontalLength, branchStartOffsetFromTop, branchEndOffsetFromTop, secondBranchStartOffsetFromTop, secondBranchEndOffsetFromTop);
+    static CherryTrunkPlacer of(int baseHeight, int heightRandA, int heightRandB, IntProvider branchCount, IntProvider branchHorizontalLength, IntProvider branchStartOffsetFromTop, IntProvider branchEndOffsetFromTop) {
+        return WIRE.construct(baseHeight, heightRandA, heightRandB, branchCount, branchHorizontalLength, branchStartOffsetFromTop, branchEndOffsetFromTop);
     }
 
     /**
@@ -103,7 +101,7 @@ public interface CherryTrunkPlacer extends TrunkPlacer {
     final class Builder extends TrunkPlacerBuilder<Builder, CherryTrunkPlacer> {
         private IntProvider branchCount = IntProvider.constant(1);
         private IntProvider branchHorizontalLength = IntProvider.constant(2);
-        private IntProvider branchStartOffsetFromTop = IntProvider.constant(0);
+        private IntProvider.Uniform branchStartOffsetFromTop = IntProvider.uniform(-16, 0);
         private IntProvider branchEndOffsetFromTop = IntProvider.constant(0);
 
         public Builder() {}
@@ -147,7 +145,7 @@ public interface CherryTrunkPlacer extends TrunkPlacer {
          * @since 3.0.0
          */
         @AsOf("3.0.0")
-        public Builder branchStartOffsetFromTop(IntProvider branchStartOffsetFromTop) {
+        public Builder branchStartOffsetFromTop(IntProvider.Uniform branchStartOffsetFromTop) {
             this.branchStartOffsetFromTop = branchStartOffsetFromTop;
             return this;
         }
@@ -170,7 +168,7 @@ public interface CherryTrunkPlacer extends TrunkPlacer {
             Preconditions.checkArgument(branchHorizontalLength.minInclusive() >= 2 && branchHorizontalLength.maxInclusive() <= 16, "branchHorizontalLength must be between 2 and 16");
             Preconditions.checkArgument(branchStartOffsetFromTop.minInclusive() >= -16 && branchStartOffsetFromTop.maxInclusive() <= 0, "branchStartOffsetFromTop must be between -16 and 0");
             Preconditions.checkArgument(branchEndOffsetFromTop.minInclusive() >= -16 && branchEndOffsetFromTop.maxInclusive() <= 16, "branchEndOffsetFromTop must be between -16 and 16");
-            return of(baseHeight, heightRandA, heightRandB, branchCount, branchHorizontalLength, branchStartOffsetFromTop, branchEndOffsetFromTop, IntProvider.constant(-16), IntProvider.constant(-16));
+            return of(baseHeight, heightRandA, heightRandB, branchCount, branchHorizontalLength, branchStartOffsetFromTop, branchEndOffsetFromTop);
         }
     }
 

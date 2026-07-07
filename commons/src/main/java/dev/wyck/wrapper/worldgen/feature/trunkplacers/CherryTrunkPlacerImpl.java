@@ -12,7 +12,7 @@ public record CherryTrunkPlacerImpl(
     @Override int heightRandB,
     @Override IntProvider branchCount,
     @Override IntProvider branchHorizontalLength,
-    @Override IntProvider branchStartOffsetFromTop,
+    @Override IntProvider.Uniform branchStartOffsetFromTop,
     @Override IntProvider branchEndOffsetFromTop
 ) implements CherryTrunkPlacer {
 
