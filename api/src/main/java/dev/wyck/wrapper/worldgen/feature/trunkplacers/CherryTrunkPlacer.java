@@ -7,6 +7,14 @@ import dev.wyck.wrapper.worldgen.valueproviders.IntProvider;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
+/**
+ * Places a U shape trunk of multiple branches.
+ *
+ * @see <a href="https://minecraft.wiki/w/Tree_definition#Trunk_placer">Tree definition (Trunk placer)</a>
+ * @since 3.0.0
+ * @version 3.0.0
+ * @author Jsinco
+ */
 @NullMarked
 @AsOf("3.0.0")
 public interface CherryTrunkPlacer extends TrunkPlacer {
@@ -14,38 +22,89 @@ public interface CherryTrunkPlacer extends TrunkPlacer {
     @ApiStatus.Internal
     ConstructWireProvider<CherryTrunkPlacer> WIRE = ConstructWireProvider.construct("dev.wyck.wrapper.worldgen.feature.trunkplacers.CherryTrunkPlacerImpl");
 
+    /**
+     * The number of branches between 1 and 3.
+     * @return the number of branches
+     * @since 3.0.0
+     */
     @AsOf("3.0.0")
     IntProvider branchCount();
 
+    /**
+     * The horizontal length of the branches between 2 and 16.
+     * @return the horizontal length of the branches
+     * @since 3.0.0
+     */
     @AsOf("3.0.0")
     IntProvider branchHorizontalLength();
 
+    /**
+     * The offset of the branches from the top between -16 and 16.
+     * @return the offset of the branches
+     * @since 3.0.0
+     */
     @AsOf("3.0.0")
     IntProvider branchStartOffsetFromTop();
 
+    /**
+     * The offset of the branches from the top between -16 and 16.
+     * @return the offset of the branches
+     * @since 3.0.0
+     */
     @AsOf("3.0.0")
     IntProvider branchEndOffsetFromTop();
 
+    /**
+     * Converts this object back to a builder.
+     * @return a builder with the same values as this object
+     * @since 3.0.0
+     */
     @AsOf("3.0.0")
     default Builder toBuilder() {
         return new Builder(this);
     }
 
+    /**
+     * Creates a new cherry trunk placer.
+     * @param baseHeight the base height of the trunk
+     * @param heightRandA the random height modifier
+     * @param heightRandB the random height modifier
+     * @param branchCount the number of branches
+     * @param branchHorizontalLength the horizontal length of the branches
+     * @param branchStartOffsetFromTop the offset of the branches from the top
+     * @param branchEndOffsetFromTop the offset of the branches from the top
+     * @param secondBranchStartOffsetFromTop the offset of the second branch from the top
+     * @param secondBranchEndOffsetFromTop the offset of the second branch from the top
+     * @return a new cherry trunk placer
+     * @since 3.0.0
+     */
     @AsOf("3.0.0")
     static CherryTrunkPlacer of(int baseHeight, int heightRandA, int heightRandB, IntProvider branchCount, IntProvider branchHorizontalLength, IntProvider branchStartOffsetFromTop, IntProvider branchEndOffsetFromTop, IntProvider secondBranchStartOffsetFromTop, IntProvider secondBranchEndOffsetFromTop) {
         return WIRE.construct(baseHeight, heightRandA, heightRandB, branchCount, branchHorizontalLength, branchStartOffsetFromTop, branchEndOffsetFromTop, secondBranchStartOffsetFromTop, secondBranchEndOffsetFromTop);
     }
 
+    /**
+     * Creates a new builder.
+     * @return a new builder
+     * @since 3.0.0
+     */
     @AsOf("3.0.0")
     static Builder builder() {
         return new Builder();
     }
 
+    /**
+     * Builder for {@link CherryTrunkPlacer}.
+     * @since 3.0.0
+     * @version 3.0.0
+     * @author Jsinco
+     */
+    @AsOf("3.0.0")
     final class Builder extends TrunkPlacerBuilder<Builder, CherryTrunkPlacer> {
         private IntProvider branchCount = IntProvider.constant(1);
         private IntProvider branchHorizontalLength = IntProvider.constant(2);
-        private IntProvider branchStartOffsetFromTop = IntProvider.constant(-16);
-        private IntProvider branchEndOffsetFromTop = IntProvider.constant(-16);
+        private IntProvider branchStartOffsetFromTop = IntProvider.constant(0);
+        private IntProvider branchEndOffsetFromTop = IntProvider.constant(0);
 
         public Builder() {}
 
@@ -57,24 +116,48 @@ public interface CherryTrunkPlacer extends TrunkPlacer {
             this.branchEndOffsetFromTop = trunkPlacer.branchEndOffsetFromTop();
         }
 
+        /**
+         * Sets the number of branches.
+         * @param branchCount the number of branches
+         * @return this builder
+         * @since 3.0.0
+         */
         @AsOf("3.0.0")
         public Builder branchCount(IntProvider branchCount) {
             this.branchCount = branchCount;
             return this;
         }
 
+        /**
+         * Sets the horizontal length of the branches.
+         * @param branchHorizontalLength the horizontal length of the branches
+         * @return this builder
+         * @since 3.0.0
+         */
         @AsOf("3.0.0")
         public Builder branchHorizontalLength(IntProvider branchHorizontalLength) {
             this.branchHorizontalLength = branchHorizontalLength;
             return this;
         }
 
+        /**
+         * Sets the offset of the branches from the top.
+         * @param branchStartOffsetFromTop the offset of the branches from the top
+         * @return this builder
+         * @since 3.0.0
+         */
         @AsOf("3.0.0")
         public Builder branchStartOffsetFromTop(IntProvider branchStartOffsetFromTop) {
             this.branchStartOffsetFromTop = branchStartOffsetFromTop;
             return this;
         }
 
+        /**
+         * Sets the offset of the branches from the top.
+         * @param branchEndOffsetFromTop the offset of the branches from the top
+         * @return this builder
+         * @since 3.0.0
+         */
         @AsOf("3.0.0")
         public Builder branchEndOffsetFromTop(IntProvider branchEndOffsetFromTop) {
             this.branchEndOffsetFromTop = branchEndOffsetFromTop;
@@ -91,10 +174,4 @@ public interface CherryTrunkPlacer extends TrunkPlacer {
         }
     }
 
-    // TODO: maybe expose these in the future
-//    @AsOf("3.0.0")
-//    IntProvider secondBranchStartOffsetFromTop();
-//
-//    @AsOf("3.0.0")
-//    IntProvider secondBranchEndOffsetFromTop();
 }

@@ -6,34 +6,81 @@ import dev.wyck.factory.ConstructWireProvider;
 import dev.wyck.wrapper.worldgen.valueproviders.IntProvider;
 import org.jspecify.annotations.NullMarked;
 
-// TODO: Javadoc
+/**
+ * Places a trunk of the specified height.
+ * The topmost 2 blocks have a chance to be moved by one block each.
+ * On top of the trunk a straight branch of length {@link #bendLength()} is generated.
+ * Foliage is attached to all block of the top branch and any trunk block that is higher than {@link #minHeightForLeaves()}.
+ *
+ * @see <a href="https://minecraft.wiki/w/Tree_definition#Trunk_placer">Tree definition (Trunk placer)</a>
+ * @since 3.0.0
+ * @version 3.0.0
+ * @author Jsinco
+ */
 @NullMarked
 @AsOf("3.0.0")
 public interface BendingTrunkPlacer extends TrunkPlacer {
 
     ConstructWireProvider<BendingTrunkPlacer> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.feature.trunkplacers.BendingTrunkPlacerImpl");
 
+    /**
+     * The minimum height for leaves.
+     * Must be a positive integer.
+     * @return the minimum height for leaves
+     * @since 3.0.0
+     */
     @AsOf("3.0.0")
     int minHeightForLeaves();
 
+    /**
+     * The length of the bend between 1 and 64.
+     * @return the bend length
+     * @since 3.0.0
+     */
     @AsOf("3.0.0")
     IntProvider bendLength();
 
+    /**
+     * Converts this object back to a builder.
+     * @return a builder with the same values as this object
+     * @since 3.0.0
+     */
     @AsOf("3.0.0")
     default Builder toBuilder() {
         return new Builder(this);
     }
 
+    /**
+     * Creates a new bending trunk placer.
+     * @param minHeight the minimum height of the trunk
+     * @param maxHeight the maximum height of the trunk
+     * @param bendLength the length of the bend between 1 and 64
+     * @param minHeightForLeaves the minimum height for leaves
+     * @param bendLengthProvider the length of the bend between 1 and 64
+     * @return a new bending trunk placer
+     * @since 3.0.0
+     */
     @AsOf("3.0.0")
     static BendingTrunkPlacer of(int minHeight, int maxHeight, int bendLength, int minHeightForLeaves, IntProvider bendLengthProvider) {
         return WIRE.construct(minHeight, maxHeight, bendLength, minHeightForLeaves, bendLengthProvider);
     }
 
+    /**
+     * Creates a new builder.
+     * @return a new builder
+     * @since 3.0.0
+     */
     @AsOf("3.0.0")
     static Builder builder() {
         return new Builder();
     }
 
+    /**
+     * Builder for {@link BendingTrunkPlacer}.
+     * @since 3.0.0
+     * @version 3.0.0
+     * @author Jsinco
+     */
     @AsOf("3.0.0")
     final class Builder extends TrunkPlacerBuilder<Builder, BendingTrunkPlacer> {
         // impl defaults
