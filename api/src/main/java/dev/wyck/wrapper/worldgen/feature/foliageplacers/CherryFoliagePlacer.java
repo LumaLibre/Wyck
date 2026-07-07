@@ -7,6 +7,14 @@ import dev.wyck.wrapper.worldgen.valueproviders.IntProvider;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
+/**
+ * Places the foliage of a cherry tree, optionally with holes and hanging leaves.
+ *
+ * @see <a href="https://minecraft.wiki/w/Tree_definition#Foliage_placer">Tree definition (Foliage placer)</a>
+ * @since 3.0.0
+ * @version 3.0.0
+ * @author Jsinco
+ */
 @NullMarked
 @AsOf("3.0.0")
 public interface CherryFoliagePlacer extends FoliagePlacer {
@@ -14,26 +22,68 @@ public interface CherryFoliagePlacer extends FoliagePlacer {
     @ApiStatus.Internal
     ConstructWireProvider<CherryFoliagePlacer> WIRE = ConstructWireProvider.construct("dev.wyck.wrapper.worldgen.feature.foliageplacers.CherryFoliagePlacerImpl");
 
+    /**
+     * The foliage's height, between 4 and 16 (inclusive).
+     * @return the height
+     * @since 3.0.0
+     */
     @AsOf("3.0.0")
     IntProvider height();
 
+    /**
+     * The probability of a hole in the wide bottom layer, between 0.0F and 1.0F (inclusive).
+     * @return the wide bottom layer hole chance
+     * @since 3.0.0
+     */
     @AsOf("3.0.0")
     float wideBottomLayerHoleChance();
 
+    /**
+     * The probability of a hole in the corners, between 0.0F and 1.0F (inclusive).
+     * @return the corner hole chance
+     * @since 3.0.0
+     */
     @AsOf("3.0.0")
     float cornerHoleChance();
 
+    /**
+     * The probability of generating hanging leaves, between 0.0F and 1.0F (inclusive).
+     * @return the hanging leaves chance
+     * @since 3.0.0
+     */
     @AsOf("3.0.0")
     float hangingLeavesChance();
 
+    /**
+     * The probability of extending hanging leaves, between 0.0F and 1.0F (inclusive).
+     * @return the hanging leaves extension chance
+     * @since 3.0.0
+     */
     @AsOf("3.0.0")
     float hangingLeavesExtensionChance();
 
+    /**
+     * Converts this object back to a builder.
+     * @return a builder with the same values as this object
+     * @since 3.0.0
+     */
     @AsOf("3.0.0")
     default Builder toBuilder() {
         return new Builder(this);
     }
 
+    /**
+     * Creates a new cherry foliage placer.
+     * @param radius the radius of the foliage
+     * @param offset the vertical offset from the top of the trunk to the top of the foliage
+     * @param height the foliage's height, between 4 and 16 (inclusive)
+     * @param wideBottomLayerHoleChance the probability of a hole in the wide bottom layer, between 0.0F and 1.0F (inclusive)
+     * @param cornerHoleChance the probability of a hole in the corners, between 0.0F and 1.0F (inclusive)
+     * @param hangingLeavesChance the probability of generating hanging leaves, between 0.0F and 1.0F (inclusive)
+     * @param hangingLeavesExtensionChance the probability of extending hanging leaves, between 0.0F and 1.0F (inclusive)
+     * @return a new cherry foliage placer
+     * @since 3.0.0
+     */
     @AsOf("3.0.0")
     static CherryFoliagePlacer of(
         IntProvider radius,
@@ -47,10 +97,23 @@ public interface CherryFoliagePlacer extends FoliagePlacer {
         return WIRE.construct(radius, offset, height, wideBottomLayerHoleChance, cornerHoleChance, hangingLeavesChance, hangingLeavesExtensionChance);
     }
 
+    /**
+     * Creates a new builder.
+     * @return a new builder
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
     static Builder builder() {
         return new Builder();
     }
 
+    /**
+     * Builder for {@link CherryFoliagePlacer}.
+     * @since 3.0.0
+     * @version 3.0.0
+     * @author Jsinco
+     */
+    @AsOf("3.0.0")
     final class Builder extends FoliagePlacerBuilder<Builder, CherryFoliagePlacer> {
 
         private IntProvider height = IntProvider.constant(4);
@@ -70,30 +133,60 @@ public interface CherryFoliagePlacer extends FoliagePlacer {
             this.hangingLeavesExtensionChance = foliagePlacer.hangingLeavesExtensionChance();
         }
 
+        /**
+         * Sets the foliage's height, between 4 and 16 (inclusive).
+         * @param height the height
+         * @return this builder
+         * @since 3.0.0
+         */
         @AsOf("3.0.0")
         public Builder height(IntProvider height) {
             this.height = height;
             return this;
         }
 
+        /**
+         * Sets the probability of a hole in the wide bottom layer, between 0.0F and 1.0F (inclusive).
+         * @param wideBottomLayerHoleChance the wide bottom layer hole chance
+         * @return this builder
+         * @since 3.0.0
+         */
         @AsOf("3.0.0")
         public Builder wideBottomLayerHoleChance(float wideBottomLayerHoleChance) {
             this.wideBottomLayerHoleChance = wideBottomLayerHoleChance;
             return this;
         }
 
+        /**
+         * Sets the probability of a hole in the corners, between 0.0F and 1.0F (inclusive).
+         * @param cornerHoleChance the corner hole chance
+         * @return this builder
+         * @since 3.0.0
+         */
         @AsOf("3.0.0")
         public Builder cornerHoleChance(float cornerHoleChance) {
             this.cornerHoleChance = cornerHoleChance;
             return this;
         }
 
+        /**
+         * Sets the probability of generating hanging leaves, between 0.0F and 1.0F (inclusive).
+         * @param hangingLeavesChance the hanging leaves chance
+         * @return this builder
+         * @since 3.0.0
+         */
         @AsOf("3.0.0")
         public Builder hangingLeavesChance(float hangingLeavesChance) {
             this.hangingLeavesChance = hangingLeavesChance;
             return this;
         }
 
+        /**
+         * Sets the probability of extending hanging leaves, between 0.0F and 1.0F (inclusive).
+         * @param hangingLeavesExtensionChance the hanging leaves extension chance
+         * @return this builder
+         * @since 3.0.0
+         */
         @AsOf("3.0.0")
         public Builder hangingLeavesExtensionChance(float hangingLeavesExtensionChance) {
             this.hangingLeavesExtensionChance = hangingLeavesExtensionChance;

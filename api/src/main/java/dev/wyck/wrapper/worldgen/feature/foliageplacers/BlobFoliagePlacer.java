@@ -7,6 +7,14 @@ import dev.wyck.wrapper.worldgen.valueproviders.IntProvider;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
+/**
+ * Places a blob of foliage, used by most simple trees such as the oak.
+ *
+ * @see <a href="https://minecraft.wiki/w/Tree_definition#Foliage_placer">Tree definition (Foliage placer)</a>
+ * @since 3.0.0
+ * @version 3.0.0
+ * @author Jsinco
+ */
 @NullMarked
 @AsOf("3.0.0")
 public interface BlobFoliagePlacer extends FoliagePlacer {
@@ -14,23 +22,54 @@ public interface BlobFoliagePlacer extends FoliagePlacer {
     @ApiStatus.Internal
     ConstructWireProvider<BlobFoliagePlacer> WIRE = ConstructWireProvider.construct("dev.wyck.wrapper.worldgen.feature.foliageplacers.BlobFoliagePlacerImpl");
 
+    /**
+     * The foliage's height, between 0 and 16 (inclusive).
+     * @return the height
+     * @since 3.0.0
+     */
     @AsOf("3.0.0")
     int height();
 
+    /**
+     * Converts this object back to a builder.
+     * @return a builder with the same values as this object
+     * @since 3.0.0
+     */
     @AsOf("3.0.0")
     default Builder toBuilder() {
         return new Builder(this);
     }
 
+    /**
+     * Creates a new blob foliage placer.
+     * @param radius the radius of the foliage
+     * @param offset the vertical offset from the top of the trunk to the top of the foliage
+     * @param height the foliage's height, between 0 and 16 (inclusive)
+     * @return a new blob foliage placer
+     * @since 3.0.0
+     */
     @AsOf("3.0.0")
     static BlobFoliagePlacer of(IntProvider radius, IntProvider offset, int height) {
         return WIRE.construct(radius, offset, height);
     }
 
+    /**
+     * Creates a new builder.
+     * @return a new builder
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
     static Builder builder() {
         return new Builder();
     }
 
+    /**
+     * Builder for {@link BlobFoliagePlacer}.
+     * @since 3.0.0
+     * @version 3.0.0
+     * @author Jsinco
+     */
+    @AsOf("3.0.0")
     final class Builder extends FoliagePlacerBuilder<Builder, BlobFoliagePlacer> {
 
         private int height;
@@ -42,6 +81,12 @@ public interface BlobFoliagePlacer extends FoliagePlacer {
             this.height = foliagePlacer.height();
         }
 
+        /**
+         * Sets the foliage's height, between 0 and 16 (inclusive).
+         * @param height the height
+         * @return this builder
+         * @since 3.0.0
+         */
         @AsOf("3.0.0")
         public Builder height(int height) {
             this.height = height;
