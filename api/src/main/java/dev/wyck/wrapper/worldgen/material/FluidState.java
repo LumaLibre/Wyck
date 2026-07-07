@@ -20,7 +20,7 @@ public interface FluidState extends Wrapper {
 
     @AsOf("3.0.0")
     static FluidState source(FluidType fluid) {
-        Preconditions.checkNotNull(fluid, "fluid must be set");
+        Preconditions.checkNotNull(fluid, "fluid cannot be null");
         return WIRE.construct(fluid);
     }
 

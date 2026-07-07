@@ -1,6 +1,7 @@
 package dev.wyck.wrapper.worldgen;
 
 import dev.wyck.annotations.AsOf;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
@@ -62,6 +63,9 @@ public final class WorldgenConversions {
         return new Vec3i(vector.getBlockX(), vector.getBlockY(), vector.getBlockZ());
     }
 
+    public static BlockPos toBlockPos(BlockVector vector) {
+        return new BlockPos(vector.getBlockX(), vector.getBlockY(), vector.getBlockZ());
+    }
 
     public static Direction toNmsDirection(BlockFace face) {
         Direction direction = CraftBlock.blockFaceToNotch(face);

@@ -1,35 +1,45 @@
 package dev.wyck.util;
 
-import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
+import dev.wyck.annotations.MinecraftUtil;
+import dev.wyck.factory.ConstructWireProvider;
+import dev.wyck.wrapper.internal.Wrapper;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.function.Function;
 
 /**
  * Represents a range of values with both ends inclusive.
- * @param minInclusive the minimum value in the range
- * @param maxInclusive the maximum value in the range
+ *
  * @param <T> the type of the range values
  * @since 3.0.0
+ * @version 3.0.0
+ * @author Jsinco
  */
 @NullMarked
 @AsOf("3.0.0")
-public record InclusiveRange<T extends Comparable<T>>(T minInclusive, T maxInclusive) {
+@MinecraftUtil
+public interface InclusiveRange<T extends Comparable<T>> extends Wrapper {
 
-    public InclusiveRange {
-        Preconditions.checkArgument(minInclusive.compareTo(maxInclusive) <= 0, "minInclusive must be less than or equal to maxInclusive");
-    }
+    @ApiStatus.Internal
+    ConstructWireProvider<InclusiveRange<?>> WIRE = ConstructWireProvider.construct("dev.wyck.util.InclusiveRangeImpl");
 
     /**
-     * Creates a new range with the same min and max values.
-     * @param value the value to use for both min and max
+     * The minimum value in the range.
+     * @return the minimum value in the range
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    public InclusiveRange(T value) {
-        this(value, value);
-    }
+    T minInclusive();
+
+    /**
+     * The maximum value in the range.
+     * @return the maximum value in the range
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
+    T maxInclusive();
 
     /**
      * Maps the range to a new type.
@@ -39,8 +49,8 @@ public record InclusiveRange<T extends Comparable<T>>(T minInclusive, T maxInclu
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    public <S extends Comparable<S>> InclusiveRange<S> map(Function<? super T, ? extends S> mapper) {
-        return new InclusiveRange<>(mapper.apply(this.minInclusive), mapper.apply(this.maxInclusive));
+    default <S extends Comparable<S>> InclusiveRange<S> map(Function<? super T, ? extends S> mapper) {
+        return of(mapper.apply(this.minInclusive()), mapper.apply(this.maxInclusive()));
     }
 
     /**
@@ -50,8 +60,8 @@ public record InclusiveRange<T extends Comparable<T>>(T minInclusive, T maxInclu
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    public boolean isValueInRange(T value) {
-        return value.compareTo(this.minInclusive) >= 0 && value.compareTo(this.maxInclusive) <= 0;
+    default boolean isValueInRange(T value) {
+        return value.compareTo(this.minInclusive()) >= 0 && value.compareTo(this.maxInclusive()) <= 0;
     }
 
     /**
@@ -61,32 +71,33 @@ public record InclusiveRange<T extends Comparable<T>>(T minInclusive, T maxInclu
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    public boolean contains(InclusiveRange<T> subRange) {
-        return subRange.minInclusive().compareTo(this.minInclusive) >= 0 && subRange.maxInclusive.compareTo(this.maxInclusive) <= 0;
+    default boolean contains(InclusiveRange<T> subRange) {
+        return subRange.minInclusive().compareTo(this.minInclusive()) >= 0 && subRange.maxInclusive().compareTo(this.maxInclusive()) <= 0;
     }
 
     /**
-     * Creates a new InclusiveRange instance.
+     * Creates a new instance.
      * @param minInclusive the minimum value in the range
      * @param maxInclusive the maximum value in the range
-     * @return a new InclusiveRange instance
+     * @return a new instance
      * @param <T> the type of the range values
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    public static <T extends Comparable<T>> InclusiveRange<T> of(T minInclusive, T maxInclusive) {
-        return new InclusiveRange<>(minInclusive, maxInclusive);
+    @SuppressWarnings("unchecked")
+    static <T extends Comparable<T>> InclusiveRange<T> of(T minInclusive, T maxInclusive) {
+        return (InclusiveRange<T>) WIRE.construct(minInclusive, maxInclusive);
     }
 
     /**
-     * Creates a new InclusiveRange instance with the same min and max values.
+     * Creates a new instance with the same min and max values.
      * @param value the value to use for both min and max
-     * @return a new InclusiveRange instance
+     * @return a new instance
      * @param <T> the type of the range values
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    public static <T extends Comparable<T>> InclusiveRange<T> of(T value) {
-        return new InclusiveRange<>(value);
+    static <T extends Comparable<T>> InclusiveRange<T> of(T value) {
+        return of(value, value);
     }
 }

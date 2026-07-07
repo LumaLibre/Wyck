@@ -138,7 +138,7 @@ public class TestPlugin extends JavaPlugin implements Listener {
                         .feature(ConfiguredFeature.of(FeatureType.TREE, treeConfig))
                         .modifier(PlacementModifier.rarityFilter(1))
                         .modifier(PlacementModifier.inSquare())
-                        .modifier(PlacementModifier.surfaceWaterDepth(0))
+                        .modifier(PlacementModifier.surfaceWaterDepthFilter(0))
                         .modifier(PlacementModifier.heightmap(HeightmapType.OCEAN_FLOOR))
                         .modifier(PlacementModifier.biomeFilter())
                         .build())

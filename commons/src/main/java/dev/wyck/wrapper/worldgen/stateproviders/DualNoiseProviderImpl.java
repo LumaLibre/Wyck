@@ -49,7 +49,7 @@ public final class DualNoiseProviderImpl extends NoiseBasedProviderImpl implemen
     @Override
     public Object toMinecraft() {
         return new net.minecraft.world.level.levelgen.feature.stateproviders.DualNoiseProvider(
-            new net.minecraft.util.InclusiveRange<>(variety.minInclusive(), variety.maxInclusive()),
+            variety.asHandle(),
             slowNoise.asHandle(),
             slowScale,
             seed,

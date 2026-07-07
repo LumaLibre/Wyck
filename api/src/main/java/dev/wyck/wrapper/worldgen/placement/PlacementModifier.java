@@ -1,418 +1,181 @@
 package dev.wyck.wrapper.worldgen.placement;
 
-import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
-import dev.wyck.factory.WireProvider;
 import dev.wyck.wrapper.internal.Wrapper;
 import dev.wyck.wrapper.worldgen.BlockPredicate;
 import dev.wyck.wrapper.worldgen.HeightmapType;
 import dev.wyck.wrapper.worldgen.valueproviders.HeightProvider;
 import dev.wyck.wrapper.worldgen.valueproviders.IntProvider;
-import dev.wyck.wrapper.worldgen.valueproviders.VerticalAnchor;
-import org.bukkit.block.BlockFace;
-import org.bukkit.util.BlockVector;
-import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
-import java.util.List;
-
 /**
- * Wraps the PlacementModifier family, the ordered transforms applied to
- * a feature's candidate positions during placement.
+ * A placed feature determines where a configured feature should be attempted to be placed using placement modifiers.
  *
+ * @see <a href="https://minecraft.wiki/w/Placed_feature#Placement_modifiers">Placement modifiers</a>
  * @since 2.3.0
- * @version 2.3.0
+ * @version 3.0.0
  * @author Jsinco
  */
 @NullMarked
 @AsOf("2.3.0")
-public sealed interface PlacementModifier extends Wrapper permits PlacementModifier.BiomeFilter, PlacementModifier.BlockPredicateFilter, PlacementModifier.CountPlacement, PlacementModifier.EnvironmentScanPlacement, PlacementModifier.FixedPlacement, PlacementModifier.HeightRangePlacement, PlacementModifier.HeightmapPlacement, PlacementModifier.InSquarePlacement, PlacementModifier.NoiseBasedCountPlacement, PlacementModifier.NoiseThresholdCountPlacement, PlacementModifier.RandomOffsetPlacement, PlacementModifier.RarityFilter, PlacementModifier.SurfaceRelativeThresholdFilter, PlacementModifier.SurfaceWaterDepthFilter {
-
-    @ApiStatus.Internal
-    WireProvider<Factory> WIRE = WireProvider.create("dev.wyck.wrapper.worldgen.placement.PlacementModifierFactoryImpl");
-
-    @ApiStatus.Internal
-    interface Factory {
-        Object toNms(PlacementModifier modifier);
-    }
+public interface PlacementModifier extends Wrapper {
 
     /**
-     * Creates a placement modifier that filters positions based on the biome.
-     *
-     * @return a biome filter placement modifier
+     * Reference to the biome filter placement modifier.
+     * @return the biome filter placement modifier
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static PlacementModifier biomeFilter() {
-        return new BiomeFilter();
+    static BiomeFilter biomeFilter() {
+        return BiomeFilter.INSTANCE;
     }
 
     /**
-     * Creates a placement modifier that ensures placement occurs within a square grid.
-     *
-     * @return a placement modifier configured for square-based placement
+     * Creates a block predicate filter.
+     * @param predicate the block predicate to filter by
+     * @return a block predicate filter
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static PlacementModifier inSquare() {
-        return new InSquarePlacement();
+    static BlockPredicateFilter blockPredicateFilter(BlockPredicate predicate) {
+        return BlockPredicateFilter.of(predicate);
     }
 
     /**
-     * Filters a position based on a specified chance value, allowing positions
-     * to be kept with a probability of 1/chance.
-     *
-     * @param chance the probability denominator which determines how likely a position is to be kept and must be greater than 0
-     * @return a placement modifier that applies the rarity filter
-     * @since 2.3.0
+     * Creates a count on every layer placement modifier.
+     * @deprecated Deprecated in Minecraft.
+     * @param count the count provider
+     * @return a count on every layer placement modifier
+     * @since 3.0.0
      */
-    @AsOf("2.3.0")
-    static PlacementModifier rarityFilter(int chance) {
-        return new RarityFilter(chance);
+    @Deprecated
+    @AsOf("3.0.0")
+    static CountOnEveryLayerPlacement countOnEveryLayer(IntProvider count) {
+        return CountOnEveryLayerPlacement.of(count);
     }
 
     /**
-     * Creates a placement modifier that filters positions based on their surface water depth.
-     *
-     * @param maxWaterDepth the maximum depth of water allowed on the surface for a position to pass the filter
-     * @return a surface water depth placement modifier
-     * @since 2.3.0
-     */
-    @AsOf("2.3.0")
-    static PlacementModifier surfaceWaterDepth(int maxWaterDepth) {
-        return new SurfaceWaterDepthFilter(maxWaterDepth);
-    }
-
-    /**
-     * Creates a placement modifier that selects positions based on noise settings.
-     *
-     * @param noiseToCountRatio the ratio between noise value and count, influencing placement density
-     * @param noiseFactor the multiplier applied to the noise value for scaling
-     * @param noiseOffset the constant offset added to the noise value for adjustment
-     * @return a placement modifier that applies noise-based distribution logic
-     * @since 2.3.0
-     */
-    @AsOf("2.3.0")
-    static PlacementModifier noiseBasedCount(int noiseToCountRatio, double noiseFactor, double noiseOffset) {
-        return new NoiseBasedCountPlacement(noiseToCountRatio, noiseFactor, noiseOffset);
-    }
-
-    /**
-     * Creates a placement modifier that adjusts placement based on a noise threshold. Positions are selected based on
-     * whether the noise value at a position is above or below the specified threshold, determining the count of positions
-     * to retain.
-     *
-     * @param noiseLevel the noise level threshold used to decide placement
-     * @param belowNoise the number of placements to retain when the noise level is below the threshold
-     * @param aboveNoise the number of placements to retain when the noise level is above the threshold
-     * @return a placement modifier configured for noise-based threshold placement
-     * @since 2.3.0
-     */
-    @AsOf("2.3.0")
-    static PlacementModifier noiseThresholdCount(double noiseLevel, int belowNoise, int aboveNoise) {
-        return new NoiseThresholdCountPlacement(noiseLevel, belowNoise, aboveNoise);
-    }
-
-    /**
-     * Creates a placement modifier that filters positions based on a specified heightmap type.
-     *
-     * @param heightmap the type of heightmap to use for filtering positions
-     * @return a placement modifier configured to use the specified heightmap type
-     * @since 2.3.0
-     */
-    @AsOf("2.3.0")
-    static PlacementModifier heightmap(HeightmapType heightmap) {
-        return new HeightmapPlacement(heightmap);
-    }
-
-    /**
-     * Creates a placement modifier that filters positions based on their relative surface height
-     * using the specified heightmap type and a range of inclusive minimum and maximum height thresholds.
-     * Positions are retained if they fall within the given range on the specified heightmap.
-     *
-     * @param heightmap the type of heightmap to use for filtering positions
-     * @param minInclusive the inclusive minimum height threshold for filtering
-     * @param maxInclusive the inclusive maximum height threshold for filtering
-     * @return a placement modifier that applies the surface-relative height threshold filter
-     * @since 2.3.0
-     */
-    @AsOf("2.3.0")
-    static PlacementModifier surfaceRelativeThreshold(HeightmapType heightmap, int minInclusive, int maxInclusive) {
-        return new SurfaceRelativeThresholdFilter(heightmap, minInclusive, maxInclusive);
-    }
-
-    /**
-     * Creates a placement modifier that defines a range of vertical heights where placement is allowed.
-     *
-     * @param height the height provider that specifies the inclusive minimum and maximum vertical bounds
-     * @return a placement modifier configured for height-based placement within the specified range
-     * @since 2.3.0
-     */
-    @AsOf("2.3.0")
-    static PlacementModifier heightRange(HeightProvider height) {
-        return new HeightRangePlacement(height);
-    }
-
-    /**
-     * Creates a PlacementModifier that defines a uniform height range for placement
-     * between the specified minimum and maximum vertical anchors, inclusive.
-     *
-     * @param minInclusive the minimum vertical anchor for the placement range, inclusive
-     * @param maxInclusive the maximum vertical anchor for the placement range, inclusive
-     * @return a PlacementModifier that applies a uniform height placement between the given bounds
-     * @since 2.3.0
-     */
-    @AsOf("2.3.0")
-    static PlacementModifier heightRangeUniform(VerticalAnchor minInclusive, VerticalAnchor maxInclusive) {
-        return new HeightRangePlacement(HeightProvider.uniform(minInclusive, maxInclusive));
-    }
-
-    /**
-     * Creates a height range placement modifier using a triangular distribution between
-     * the specified minimum and maximum vertical anchors. The distribution will favor
-     * heights closer to midpoints within the range.
-     *
-     * @param minInclusive the minimum vertical anchor, inclusive
-     * @param maxInclusive the maximum vertical anchor, inclusive
-     * @return a PlacementModifier that represents a triangular height range placement
-     * @since 2.3.0
-     */
-    @AsOf("2.3.0")
-    static PlacementModifier heightRangeTriangle(VerticalAnchor minInclusive, VerticalAnchor maxInclusive) {
-        return new HeightRangePlacement(HeightProvider.trapezoid(minInclusive, maxInclusive, 0));
-    }
-
-    /**
-     * Creates a fixed placement modifier that defines positions where blocks
-     * or features will be placed.
-     *
-     * @param positions an array of BlockVector objects representing the fixed positions for placement
-     * @return a PlacementModifier that applies the fixed placement defined by the specified positions
-     * @since 2.3.0
-     */
-    @AsOf("2.3.0")
-    static PlacementModifier fixedPlacement(BlockVector... positions) {
-        return new FixedPlacement(List.of(positions));
-    }
-
-    /**
-     * Repeats placement a number of times sampled from the count provider.
+     * Creates a count placement modifier.
      * @param count the count provider
      * @return a count placement modifier
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static PlacementModifier count(IntProvider count) {
-        return new CountPlacement(count);
+    static CountPlacement count(IntProvider count) {
+        return CountPlacement.of(count);
     }
 
     /**
-     * Repeats placement a fixed number of times.
-     * @param count the fixed count
-     * @return a count placement modifier
-     * @since 2.3.0
+     * A new builder for the environment scan placement modifier.
+     * @return a new environment scan placement modifier builder
+     * @since 3.0.0
      */
-    @AsOf("2.3.0")
-    static PlacementModifier count(int count) {
-        return new CountPlacement(IntProvider.constant(count));
+    @AsOf("3.0.0")
+    static EnvironmentScanPlacement.Builder environmentScan() {
+        return EnvironmentScanPlacement.builder();
     }
 
     /**
-     * Randomly offsets the position by the given spreads.
-     * @param xzSpread the horizontal spread provider
-     * @param ySpread the vertical spread provider
-     * @return a random offset placement modifier
-     * @since 2.3.0
+     * A new builder for the fixed placement modifier.
+     * @return a new fixed placement modifier builder
+     * @since 3.0.0
      */
-    @AsOf("2.3.0")
-    static PlacementModifier randomOffset(IntProvider xzSpread, IntProvider ySpread) {
-        return new RandomOffsetPlacement(xzSpread, ySpread);
+    @AsOf("3.0.0")
+    static FixedPlacement.Builder fixed() {
+        return FixedPlacement.builder();
     }
 
     /**
-     * Randomly offsets the position vertically only.
-     * @param ySpread the vertical spread provider
-     * @return a random offset placement modifier
+     * A new instance of the heightmap placement modifier.
+     * @param heightmap the heightmap type to use
+     * @return a new heightmap placement modifier
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static PlacementModifier randomOffsetVertical(IntProvider ySpread) {
-        return new RandomOffsetPlacement(IntProvider.constant(0), ySpread);
+    static HeightmapPlacement heightmap(HeightmapType heightmap) {
+        return HeightmapPlacement.of(heightmap);
     }
 
     /**
-     * Randomly offsets the position horizontally only.
-     * @param xzSpread the horizontal spread provider
-     * @return a random offset placement modifier
+     * A new instance of the height range placement modifier.
+     * @param height the height provider
+     * @return a new height range placement modifier
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static PlacementModifier randomOffsetHorizontal(IntProvider xzSpread) {
-        return new RandomOffsetPlacement(xzSpread, IntProvider.constant(0));
+    static HeightRangePlacement heightRange(HeightProvider height) {
+        return HeightRangePlacement.of(height);
     }
 
     /**
-     * Randomly offsets the position using triangular spreads over the given ranges.
-     * @param xzRange the horizontal range
-     * @param yRange the vertical range
-     * @return a random offset placement modifier
+     * Reference to the in-square placement modifier.
+     * @return the in-square placement modifier
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static PlacementModifier randomOffsetTriangle(int xzRange, int yRange) {
-        return new RandomOffsetPlacement(IntProvider.triangle(xzRange), IntProvider.triangle(yRange));
+    static InSquarePlacement inSquare() {
+        return InSquarePlacement.INSTANCE;
     }
 
     /**
-     * Keeps positions that satisfy the given block predicate.
-     * @param predicate the predicate to test
-     * @return a block predicate filter modifier
-     * @since 2.3.0
+     * A new builder for the noise-based count placement modifier.
+     * @return a new noise-based count placement modifier builder
+     * @since 3.0.0
      */
-    @AsOf("2.3.0")
-    static PlacementModifier blockPredicateFilter(BlockPredicate predicate) {
-        return new BlockPredicateFilter(predicate);
+    @AsOf("3.0.0")
+    static NoiseBasedCountPlacement.Builder noiseBasedCount() {
+        return NoiseBasedCountPlacement.builder();
     }
 
     /**
-     * Scans vertically for a target condition, allowing the default search condition.
-     * @param directionOfSearch the vertical search direction (UP or DOWN)
-     * @param targetCondition the condition the scan is looking for
-     * @param maxSteps the maximum number of steps, in [1, 32]
-     * @return an environment scan placement modifier
-     * @since 2.3.0
+     * A new builder for the noise-based placement modifier.
+     * @return a new noise-based placement modifier builder
+     * @since 3.0.0
      */
-    @AsOf("2.3.0")
-    static PlacementModifier environmentScan(BlockFace directionOfSearch, BlockPredicate targetCondition, int maxSteps) {
-        return new EnvironmentScanPlacement(directionOfSearch, targetCondition, BlockPredicate.alwaysTrue(), maxSteps);
+    @AsOf("3.0.0")
+    static NoiseThresholdCountPlacement.Builder noiseThresholdCount() {
+        return NoiseThresholdCountPlacement.builder();
     }
 
     /**
-     * Scans vertically for a target condition while an allowed search condition holds.
-     * @param directionOfSearch the vertical search direction (UP or DOWN)
-     * @param targetCondition the condition the scan is looking for
-     * @param allowedSearchCondition the condition that must hold to keep scanning
-     * @param maxSteps the maximum number of steps, in [1, 32]
-     * @return an environment scan placement modifier
+     * A new builder for the random offset placement modifier.
+     * @return a new random offset placement modifier builder
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
+    static RandomOffsetPlacement.Builder randomOffset() {
+        return RandomOffsetPlacement.builder();
+    }
+
+    /**
+     * A new instance of the rarity filter placement modifier.
+     * @param chance the average chance denominator, a positive integer
+     * @return a new rarity filter placement modifier
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static PlacementModifier environmentScan(BlockFace directionOfSearch, BlockPredicate targetCondition, BlockPredicate allowedSearchCondition, int maxSteps) {
-        return new EnvironmentScanPlacement(directionOfSearch, targetCondition, allowedSearchCondition, maxSteps);
+    static RarityFilter rarityFilter(int chance) {
+        return RarityFilter.of(chance);
     }
 
-    @Override
-    @AsOf("2.3.0")
-    default Object toMinecraft() {
-        return WIRE.get().toNms(this);
+    /**
+     * A new builder for the surface relative threshold filter.
+     * @return a new surface relative threshold filter builder
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
+    static SurfaceRelativeThresholdFilter.Builder surfaceRelativeThreshold() {
+        return SurfaceRelativeThresholdFilter.builder();
     }
 
+    /**
+     * A new instance of the surface water depth filter.
+     * @param maxWaterDepth the maximum allowed water depth
+     * @return a new surface water depth filter
+     * @since 2.3.0
+     */
     @AsOf("2.3.0")
-    record BiomeFilter() implements PlacementModifier {}
-
-    @AsOf("2.3.0")
-    record BlockPredicateFilter(BlockPredicate predicate) implements PlacementModifier {
-
-        @AsOf("2.3.0")
-        public BlockPredicateFilter {
-            Preconditions.checkNotNull(predicate, "predicate");
-        }
+    static SurfaceWaterDepthFilter surfaceWaterDepthFilter(int maxWaterDepth) {
+        return SurfaceWaterDepthFilter.of(maxWaterDepth);
     }
-
-    @AsOf("2.3.0")
-    record CountPlacement(IntProvider count) implements PlacementModifier {
-
-        @AsOf("2.3.0")
-        public CountPlacement {
-            Preconditions.checkNotNull(count, "count");
-        }
-    }
-
-    @AsOf("2.3.0")
-    record EnvironmentScanPlacement(
-        BlockFace directionOfSearch,
-        BlockPredicate targetCondition,
-        BlockPredicate allowedSearchCondition,
-        int maxSteps
-    ) implements PlacementModifier {
-
-        @AsOf("2.3.0")
-        public EnvironmentScanPlacement {
-            Preconditions.checkNotNull(directionOfSearch, "directionOfSearch");
-            Preconditions.checkNotNull(targetCondition, "targetCondition");
-            Preconditions.checkNotNull(allowedSearchCondition, "allowedSearchCondition");
-            Preconditions.checkArgument(
-                directionOfSearch == BlockFace.UP || directionOfSearch == BlockFace.DOWN,
-                "directionOfSearch must be vertical (UP or DOWN)"
-            );
-            Preconditions.checkArgument(maxSteps >= 1 && maxSteps <= 32, "maxSteps must be within [1, 32]");
-        }
-    }
-
-    @AsOf("2.3.0")
-    record FixedPlacement(List<BlockVector> positions) implements PlacementModifier {
-
-        @AsOf("2.3.0")
-        public FixedPlacement {
-            positions = List.copyOf(positions);
-        }
-    }
-
-    @AsOf("2.3.0")
-    record HeightRangePlacement(HeightProvider height) implements PlacementModifier {
-
-        @AsOf("2.3.0")
-        public HeightRangePlacement {
-            Preconditions.checkNotNull(height, "height");
-        }
-    }
-
-    @AsOf("2.3.0")
-    record HeightmapPlacement(HeightmapType heightmap) implements PlacementModifier {
-
-        @AsOf("2.3.0")
-        public HeightmapPlacement {
-            Preconditions.checkNotNull(heightmap, "heightmap");
-        }
-    }
-
-    @AsOf("2.3.0")
-    record InSquarePlacement() implements PlacementModifier {}
-
-    @AsOf("2.3.0")
-    record NoiseBasedCountPlacement(int noiseToCountRatio, double noiseFactor, double noiseOffset) implements PlacementModifier {}
-
-    @AsOf("2.3.0")
-    record NoiseThresholdCountPlacement(double noiseLevel, int belowNoise, int aboveNoise) implements PlacementModifier {}
-
-    @AsOf("2.3.0")
-    record RandomOffsetPlacement(IntProvider xzSpread, IntProvider ySpread) implements PlacementModifier {
-
-        @AsOf("2.3.0")
-        public RandomOffsetPlacement {
-            Preconditions.checkNotNull(xzSpread, "xzSpread");
-            Preconditions.checkNotNull(ySpread, "ySpread");
-        }
-    }
-
-    @AsOf("2.3.0")
-    record RarityFilter(int chance) implements PlacementModifier {
-
-        @AsOf("2.3.0")
-        public RarityFilter {
-            Preconditions.checkArgument(chance > 0, "chance must be positive");
-        }
-    }
-
-    @AsOf("2.3.0")
-    record SurfaceRelativeThresholdFilter(HeightmapType heightmap, int minInclusive, int maxInclusive) implements PlacementModifier {
-
-        @AsOf("2.3.0")
-        public SurfaceRelativeThresholdFilter {
-            Preconditions.checkNotNull(heightmap, "heightmap");
-        }
-    }
-
-    @AsOf("2.3.0")
-    record SurfaceWaterDepthFilter(int maxWaterDepth) implements PlacementModifier {}
 }

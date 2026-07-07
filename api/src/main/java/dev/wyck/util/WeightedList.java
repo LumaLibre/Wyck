@@ -1,6 +1,7 @@
 package dev.wyck.util;
 
 import dev.wyck.annotations.AsOf;
+import dev.wyck.annotations.MinecraftUtil;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -18,6 +19,7 @@ import java.util.random.RandomGenerator;
  */
 @NullMarked
 @AsOf("2.3.0")
+@MinecraftUtil
 public final class WeightedList<E> {
 
     private static final int FLAT_THRESHOLD = 64;

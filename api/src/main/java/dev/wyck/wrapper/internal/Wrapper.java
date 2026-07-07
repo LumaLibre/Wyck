@@ -1,7 +1,6 @@
 package dev.wyck.wrapper.internal;
 
 import dev.wyck.annotations.AsOf;
-import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -25,18 +24,5 @@ public interface Wrapper {
     @SuppressWarnings("unchecked")
     default <T> T asHandle() {
         return (T) this.toMinecraft();
-    }
-
-    @AsOf("2.4.0")
-    interface Context<C> extends Wrapper {
-
-        @Override
-        @ApiStatus.Internal
-        default Object toMinecraft() {
-            throw new UnsupportedOperationException("Context handles require a context to convert to Minecraft");
-        }
-
-        @AsOf("2.4.0")
-        Object toMinecraft(C context);
     }
 }

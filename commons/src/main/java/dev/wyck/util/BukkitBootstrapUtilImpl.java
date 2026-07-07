@@ -7,10 +7,11 @@ import org.bukkit.craftbukkit.block.data.CraftBlockData;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
-public class BukkitBootstrapUtilImpl implements BukkitBootstrapUtil {
+public record BukkitBootstrapUtilImpl() implements BukkitBootstrapUtil {
     @Override
     public BlockData createBlockData(Material material) {
-        BlockType type = material.asBlockType(); // TODO: Ehhh? Maybe use internals?
+        // TODO: dunno if this is bootstrap safe; might have to do this manually
+        BlockType type = material.asBlockType();
         return CraftBlockData.fromString(type, null);
     }
 }

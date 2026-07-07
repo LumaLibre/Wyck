@@ -1,5 +1,6 @@
 package dev.wyck.test;
 
+import dev.wyck.wrapper.worldgen.valueproviders.IntProvider;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
 import dev.wyck.keys.ResourceKey;
@@ -29,7 +30,7 @@ public class TestPluginBootstrapper implements PluginBootstrap {
 
         PlacedFeature tallPlaced = PlacedFeature.builder()
             .feature(tallFeature)
-            .modifier(PlacementModifier.count(2))
+            .modifier(PlacementModifier.count(IntProvider.constant(2)))
             .modifier(PlacementModifier.inSquare())
             .modifier(PlacementModifier.heightmap(HeightmapType.WORLD_SURFACE))
             .modifier(PlacementModifier.biomeFilter())
@@ -37,7 +38,7 @@ public class TestPluginBootstrapper implements PluginBootstrap {
 
         PlacedFeature shortPlaced = PlacedFeature.builder()
             .feature(shortFeature)
-            .modifier(PlacementModifier.count(4))
+            .modifier(PlacementModifier.count(IntProvider.constant(4)))
             .modifier(PlacementModifier.inSquare())
             .modifier(PlacementModifier.heightmap(HeightmapType.WORLD_SURFACE))
             .modifier(PlacementModifier.biomeFilter())

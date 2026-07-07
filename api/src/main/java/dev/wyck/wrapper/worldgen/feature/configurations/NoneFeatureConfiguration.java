@@ -21,15 +21,9 @@ public interface NoneFeatureConfiguration extends FeatureConfiguration {
 
     /** The singleton instance of {@link NoneFeatureConfiguration}. */
     @AsOf("3.0.0")
-    NoneFeatureConfiguration INSTANCE = instance();
+    NoneFeatureConfiguration INSTANCE = of();
 
-    /**
-     * The singleton instance of {@link NoneFeatureConfiguration}.
-     * @return the singleton instance
-     * @since 3.0.0
-     */
-    @AsOf("3.0.0")
-    static NoneFeatureConfiguration instance() {
+    private static NoneFeatureConfiguration of() {
         return WIRE.construct();
     }
 }
