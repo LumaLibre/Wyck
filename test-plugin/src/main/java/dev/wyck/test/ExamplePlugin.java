@@ -10,9 +10,12 @@ import dev.wyck.wrapper.worldgen.feature.ConfiguredFeature;
 import dev.wyck.wrapper.worldgen.feature.FeatureType;
 import dev.wyck.wrapper.worldgen.feature.configurations.FeatureConfiguration;
 import dev.wyck.wrapper.worldgen.feature.configurations.TreeConfiguration;
+import dev.wyck.wrapper.worldgen.feature.featuresize.FeatureSize;
 import dev.wyck.wrapper.worldgen.feature.featuresize.TwoLayersFeatureSize;
+import dev.wyck.wrapper.worldgen.feature.foliageplacers.FoliagePlacer;
 import dev.wyck.wrapper.worldgen.feature.foliageplacers.PineFoliagePlacer;
 import dev.wyck.wrapper.worldgen.feature.trunkplacers.StraightTrunkPlacer;
+import dev.wyck.wrapper.worldgen.feature.trunkplacers.TrunkPlacer;
 import dev.wyck.wrapper.worldgen.placement.PlacedFeature;
 import dev.wyck.wrapper.worldgen.placement.PlacementModifier;
 import dev.wyck.wrapper.worldgen.stateproviders.BlockStateProvider;
@@ -36,20 +39,20 @@ public class ExamplePlugin extends JavaPlugin {
                     )
                     .build()
             )
-            .foliagePlacer(PineFoliagePlacer.builder()
+            .foliagePlacer(FoliagePlacer.pine()
                 .height(IntProvider.constant(4))
                 .offset(IntProvider.constant(1))
                 .radius(IntProvider.uniform(4, 6))
                 .build()
             )
-            .minimumSize(TwoLayersFeatureSize.builder()
+            .minimumSize(FeatureSize.twoLayers()
                 .limit(1)
                 .lowerSize(0)
                 .minClippedHeight(0)
                 .upperSize(0)
                 .build()
             )
-            .trunkPlacer(StraightTrunkPlacer.builder()
+            .trunkPlacer(TrunkPlacer.straight()
                 .baseHeight(10)
                 .heightRandA(4)
                 .heightRandB(8)
