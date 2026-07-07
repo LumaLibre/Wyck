@@ -297,6 +297,17 @@ public interface TreeConfiguration extends FeatureConfiguration {
         }
 
         /**
+         * Sets the tree to ignore vines.
+         * @return this builder
+         * @since 3.0.0
+         */
+        @AsOf("3.0.0")
+        public Builder ignoreVines() {
+            this.ignoreVines = true;
+            return this;
+        }
+
+        /**
          * Builds the tree configuration.
          * @return the tree configuration
          * @since 3.0.0
