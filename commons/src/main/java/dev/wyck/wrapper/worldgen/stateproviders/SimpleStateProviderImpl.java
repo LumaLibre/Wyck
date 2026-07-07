@@ -1,6 +1,7 @@
 package dev.wyck.wrapper.worldgen.stateproviders;
 
 import org.bukkit.block.data.BlockData;
+import org.bukkit.craftbukkit.block.data.CraftBlockData;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
@@ -9,6 +10,9 @@ import org.jspecify.annotations.NullMarked;
 public record SimpleStateProviderImpl(@Override BlockData state) implements SimpleStateProvider {
     @Override
     public Object toMinecraft() {
-        return this.state;
+        CraftBlockData data = (CraftBlockData) state;
+        return net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider.simple(
+            data.getState()
+        );
     }
 }
