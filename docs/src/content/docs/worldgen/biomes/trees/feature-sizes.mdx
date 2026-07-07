@@ -1,0 +1,44 @@
+---
+title: Feature Sizes
+description: Determines how much space a tree needs to generate. Learn how to use feature sizes in Wyck.
+---
+
+import CodeBlock from "@/components/CodeBlock.astro";
+import SourceLink from "@/components/SourceLink.astro";
+
+A <SourceLink path="wrapper/worldgen/feature/featuresize/FeatureSize.java">FeatureSize</SourceLink> is the tree's
+minimum size and determines how much space needs to be available for a tree to be able to place. This is done by
+checking a square area of varying widths at each vertical position of the tree; the available free height is
+calculated as the height until all squares are free.
+
+Every feature size shares an optional `minClippedHeight`. If specified and lower than the trunk height, it
+sets the minimum free height required for the tree to generate; otherwise the trunk height is used.
+
+- `Two Layers` - Uses one width below the `limit` and another above it.
+- `Three Layers` - Uses a bottom, middle, and top width based on the `limit` and `upperLimit`.
+
+- *More information on feature sizes: https://minecraft.wiki/w/Tree_definition#Minimum_size*
+
+### Example Usage
+<CodeBlock
+    lang="java"
+    filename="Examples.java"
+    code={
+`// A two-layer feature size with a thin trunk at every height.
+FeatureSize.twoLayers()
+    .limit(1)
+    .lowerSize(0)
+    .upperSize(0)
+    .minClippedHeight(0)
+    .build();
+
+// A three-layer feature size that widens through the middle of the trunk.
+FeatureSize.threeLayers()
+    .limit(1)
+    .upperLimit(2)
+    .lowerSize(0)
+    .middleSize(1)
+    .upperSize(0)
+    .build();`
+}
+/>

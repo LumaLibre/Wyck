@@ -1,0 +1,80 @@
+---
+title: Tree Configuration
+description: Using Minecraft's built-in tree configurations in Wyck.
+---
+
+import CodeBlock from "@/components/CodeBlock.astro";
+import SourceLink from "@/components/SourceLink.astro";
+
+A <SourceLink path="wrapper/worldgen/feature/configurations/TreeConfiguration.java">TreeConfiguration</SourceLink>
+is a built-in configuration in Minecraft that allows you to create trees with various shapes and sizes.
+In Wyck, you can use this configuration to create custom trees for your biomes.
+
+Tree configurations are made up of several components that branch off into separate configurations.
+
+- `Trunk Provider` - The block state used for the trunk.
+- [`Trunk Placer`](worldgen/biomes/trees/trunk-placers) - The configuration for the trunk of the tree.
+- `Foliage Provider` - The block state used for foliage.
+- [`Foliage Placer`](worldgen/biomes/trees/foliage-placers) - The configuration used for foliage.
+- [`Root Placer`](worldgen/biomes/trees/root-placers) - The configuration used for roots of a tree.
+- [`Minimum Size`](worldgen/biomes/trees/feature-sizes) - The amount of space the tree needs to generate.
+- [`Tree Decorators`](worldgen/biomes/trees/tree-decorators) - A collection of decorators for the tree.
+- `Ignore Vines` - A flag telling world generation if this tree should grow through vines or not.
+- `Below Trunk Provider` - The block state used for the block(s) below the trunk of the tree.
+
+### Example Usage
+<CodeBlock
+    lang="java"
+    filename="ExamplePlugin.java"
+    code={
+`import dev.wyck.wrapper.worldgen.BlockPredicate;
+import dev.wyck.wrapper.worldgen.feature.configurations.FeatureConfiguration;
+import dev.wyck.wrapper.worldgen.feature.configurations.TreeConfiguration;
+import dev.wyck.wrapper.worldgen.feature.featuresize.FeatureSize;
+import dev.wyck.wrapper.worldgen.feature.foliageplacers.FoliagePlacer;
+import dev.wyck.wrapper.worldgen.feature.trunkplacers.TrunkPlacer;
+import dev.wyck.wrapper.worldgen.stateproviders.BlockStateProvider;
+import dev.wyck.wrapper.worldgen.valueproviders.IntProvider;
+import org.bukkit.Material;
+import org.bukkit.Tag;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class ExamplePlugin extends JavaPlugin {
+    @Override
+    public void onEnable() {
+        // Making a tall spruce tree
+        TreeConfiguration treeConfig = FeatureConfiguration.tree()
+            .foliageProvider(BlockStateProvider.simple(Material.SPRUCE_LEAVES))
+            .trunkProvider(BlockStateProvider.simple(Material.SPRUCE_LOG))
+            .belowTrunkProvider(
+                BlockStateProvider.ruleBased()
+                    .rule(
+                        BlockPredicate.not(BlockPredicate.matchesTag(Tag.CANNOT_REPLACE_BELOW_TREE_TRUNK)),
+                        BlockStateProvider.simple(Material.DIRT)
+                    )
+                    .build()
+            )
+            .foliagePlacer(FoliagePlacer.pine()
+                .height(IntProvider.constant(4))
+                .offset(IntProvider.constant(1))
+                .radius(IntProvider.uniform(4, 6))
+                .build()
+            )
+            .minimumSize(FeatureSize.twoLayers()
+                .limit(1)
+                .lowerSize(0)
+                .minClippedHeight(0)
+                .upperSize(0)
+                .build()
+            )
+            .trunkPlacer(TrunkPlacer.straight()
+                .baseHeight(10)
+                .heightRandA(4)
+                .heightRandB(8)
+                .build()
+            )
+            .ignoreVines()
+            .build();
+    }
+}`}
+/>

@@ -1,0 +1,41 @@
+---
+title: Foliage Placers
+description: Determines the placement and shape of a tree's foliage. Learn how to use foliage placers in Wyck.
+---
+
+import CodeBlock from "@/components/CodeBlock.astro";
+import SourceLink from "@/components/SourceLink.astro";
+
+A <SourceLink path="wrapper/worldgen/feature/foliageplacers/FoliagePlacer.java">FoliagePlacer</SourceLink> determines
+the placement and shape of a tree's foliage. All foliage placers share a `radius` and an `offset` which is the vertical
+offset from the top of the trunk to the top of the foliage, with each type adding its own fields on top.
+
+Every foliage placer is created from a static factory method on `FoliagePlacer`, each returning a builder.
+
+- `blob` - A blob of foliage, used by most simple trees such as the oak.
+- `spruce` - Cones of foliage that grow from the top of the trunk.
+- `pine` - The foliage of a pine tree.
+- `acacia` - The foliage of an acacia tree.
+- `bush` - A bush-shaped blob of foliage.
+- `fancy` - The foliage of a fancy (large) oak tree.
+- `mega jungle` - The foliage of a jungle tree.
+- `mega pine` - The foliage of a mega pine (giant spruce) tree.
+- `dark oak` - The foliage of a dark oak tree.
+- `random spread` - Foliage randomly spread within a radius and height, used by trees such as the mangrove.
+- `cherry` - The foliage of a cherry tree, optionally with holes and hanging leaves.
+
+- *Showcase of the various foliage placers: https://minecraft.wiki/w/Tree_definition#Foliage_placer*
+
+### Example Usage
+<CodeBlock
+    lang="java"
+    filename="Examples.java"
+    code={
+`// The foliage of a pine tree.
+FoliagePlacer.pine()
+    .height(IntProvider.constant(4))
+    .offset(IntProvider.constant(1))
+    .radius(IntProvider.uniform(4, 6))
+    .build();`
+}
+/>

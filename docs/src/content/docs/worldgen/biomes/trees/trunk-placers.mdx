@@ -1,0 +1,29 @@
+---
+title: Trunk Placers
+description: Determines the shape trunk of the tree. Learn how to use trunk placers in Wyck.
+---
+
+import CodeBlock from "@/components/CodeBlock.astro";
+import SourceLink from "@/components/SourceLink.astro";
+
+The <SourceLink path="wrapper/worldgen/feature/trunkplacers/TrunkPlacer.java">TrunkPlacer</SourceLink> determines the shape trunk of the tree.
+All trunk placers have a base height and a random height modifier of both **A** and **B**
+allowing each tree placer to stretch and shrink the length of a tree at random.
+
+- *Showcase of the various trunk placers: https://minecraft.wiki/w/Tree_definition#Trunk_placer*
+
+### Example Usage
+<CodeBlock
+    lang="java"
+    filename="Examples.java"
+    code={
+`
+// Places a straight trunk with a base height of 10,
+// a random height modifier of 4 and 8.
+TrunkPlacer.straight()
+    .baseHeight(10)
+    .heightRandA(4)
+    .heightRandB(8)
+    .build();`
+}
+/>

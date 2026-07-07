@@ -1,0 +1,42 @@
+---
+title: Root Placers
+description: Controls the placement and shape of a tree's roots. Learn how to use root placers in Wyck.
+---
+
+import CodeBlock from "@/components/CodeBlock.astro";
+import SourceLink from "@/components/SourceLink.astro";
+
+A <SourceLink path="wrapper/worldgen/feature/rootplacers/RootPlacer.java">RootPlacer</SourceLink> is optional and
+controls the placement and shape of a tree's roots, as well as moving the trunk upwards.
+Currently the only root placer is the <SourceLink path="wrapper/worldgen/feature/rootplacers/MangroveRootPlacer.java">MangroveRootPlacer</SourceLink>,
+created with `RootPlacer.mangrove()`.
+
+All root placers share a `rootProvider`, a block state provider and a `trunkOffsetY` the offset perpendicular
+to the trunk, and an optional `aboveRootPlacement` — the blocks placed above the roots.
+
+- *More information on root placers: https://minecraft.wiki/w/Tree_definition#Root_placer*
+
+### Example Usage
+<CodeBlock
+    lang="java"
+    filename="Examples.java"
+    code={
+`// A mangrove root placer that grows through mud and turns muddy.
+RootPlacer.mangrove()
+    .rootProvider(BlockStateProvider.simple(Material.MANGROVE_ROOTS))
+    .trunkOffsetY(IntProvider.uniform(1, 3))
+    .aboveRootPlacement(
+        AboveRootPlacement.of(BlockStateProvider.simple(Material.MOSS_CARPET), 0.5F)
+    )
+    .mangroveRootPlacement(MangroveRootPlacement.builder()
+        .maxRootWidth(3)
+        .maxRootLength(15)
+        .randomSkewChance(0.5F)
+        .muddyRootsProvider(BlockStateProvider.simple(Material.MUDDY_MANGROVE_ROOTS))
+        .canGrowThrough(Material.MUD, Material.MUDDY_MANGROVE_ROOTS)
+        .muddyRootsIn(Material.MUD)
+        .build()
+    )
+    .build();`
+}
+/>

@@ -1,0 +1,50 @@
+---
+title: Tree Decorators
+description: Add additional blocks to various parts of a tree. Learn how to use tree decorators in Wyck.
+---
+
+import CodeBlock from "@/components/CodeBlock.astro";
+import SourceLink from "@/components/SourceLink.astro";
+
+A <SourceLink path="wrapper/worldgen/feature/treedecorators/TreeDecorator.java">TreeDecorator</SourceLink>
+is used to add additional blocks to various parts of a tree, such as vines, beehives, or cocoa beans.
+A tree configuration may have any number of decorators.
+
+Every decorator is created from a static factory method on `TreeDecorator`. Simple decorators are returned
+directly, while those with additional options return a builder.
+
+- `alter ground` - Replaces blocks in the `#minecraft:dirt` tag around the tree.
+- `attached to leaves` - Attaches blocks to exposed faces of foliage blocks.
+- `attached to logs` - Attaches blocks to exposed faces of trunk blocks.
+- `beehive,` - Places a single beehive below the lowest leaves.
+- `cocoa,` - Places cocoa beans on the bottom of the trunk.
+- `creaking heart,` - Replaces a fully-enclosed trunk block with a creaking heart.
+- `leave vine,` - Places vines attached to foliage blocks.
+- `paleMoss` - Places a pale moss patch and hanging moss.
+- `place on ground` - Places a block on the ground within a radius of the tree.
+- `trunk vine` - Adds vines to each side of each trunk block.
+
+- *Showcase of the various tree decorators: https://minecraft.wiki/w/Tree_definition#Decorator*
+
+### Example Usage
+<CodeBlock
+    lang="java"
+    filename="Examples.java"
+    code={
+`// A beehive with a 5% chance to generate.
+TreeDecorator.beehive(0.05F);
+
+// Vines added to every side of each trunk block.
+TreeDecorator.trunkVine();
+
+// Attach red mushrooms to the underside of foliage blocks.
+TreeDecorator.attachedToLeaves()
+    .probability(0.1F)
+    .exclusionRadiusXZ(1)
+    .exclusionRadiusY(1)
+    .requiredEmptyBlocks(2)
+    .blockProvider(BlockStateProvider.simple(Material.RED_MUSHROOM))
+    .direction(BlockFace.DOWN)
+    .build();`
+}
+/>
