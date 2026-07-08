@@ -5,13 +5,10 @@ import dev.wyck.model.level.dimension.Dimension;
 import dev.wyck.model.level.LevelCreator;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.registry.level.LevelFactory;
+import dev.wyck.test.carver.StarCarver;
+import dev.wyck.test.carver.StarConfig;
 import dev.wyck.wrapper.biome.BiomeSpecialEffects;
-import dev.wyck.wrapper.entity.BiomeSpawner;
-import dev.wyck.wrapper.entity.MobCategory;
-import dev.wyck.wrapper.entity.data.NaturalSpawner;
 import dev.wyck.wrapper.environment.attribute.EnvironmentAttributes;
-import dev.wyck.wrapper.environment.particle.ParticleOptions;
-import dev.wyck.wrapper.environment.particle.ParticleTypes;
 import dev.wyck.wrapper.level.BiomeSource;
 import dev.wyck.wrapper.level.clock.WorldClock;
 import dev.wyck.wrapper.level.dimension.Skybox;
@@ -26,12 +23,14 @@ import dev.wyck.wrapper.worldgen.BiomeGenerationSettings;
 import dev.wyck.wrapper.worldgen.blockpredicates.BlockPredicate;
 import dev.wyck.wrapper.worldgen.GenerationStep;
 import dev.wyck.wrapper.worldgen.HeightmapType;
+import dev.wyck.wrapper.worldgen.carver.ConfiguredWorldCarver;
 import dev.wyck.wrapper.worldgen.feature.ConfiguredFeature;
 import dev.wyck.wrapper.worldgen.feature.FeatureType;
 import dev.wyck.wrapper.worldgen.feature.configurations.FeatureConfiguration;
 import dev.wyck.wrapper.worldgen.feature.configurations.TreeConfiguration;
-import dev.wyck.wrapper.worldgen.feature.featuresize.TwoLayersFeatureSize;
+import dev.wyck.wrapper.worldgen.feature.featuresize.FeatureSize;
 import dev.wyck.wrapper.worldgen.feature.foliageplacers.FoliagePlacer;
+import dev.wyck.wrapper.worldgen.feature.treedecorators.TreeDecorator;
 import dev.wyck.wrapper.worldgen.feature.trunkplacers.TrunkPlacer;
 import dev.wyck.wrapper.worldgen.placement.PlacedFeature;
 import dev.wyck.wrapper.worldgen.placement.PlacementModifier;
@@ -42,7 +41,7 @@ import dev.wyck.wrapper.worldgen.valueproviders.IntProvider;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.World;
-import org.bukkit.entity.EntityType;
+import org.bukkit.block.BlockFace;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -66,11 +65,11 @@ public class TestPlugin extends JavaPlugin implements Listener {
     public void onEnable() {
         //BlockData stone = Material.STONE.createBlockData();
         //DimensionType
-        ResourceKey levelKey = ResourceKey.of("test", "wobbleworld3");
+        ResourceKey levelKey = ResourceKey.of("test", "wobbleworld5");
 
         TreeConfiguration treeConfig = FeatureConfiguration.tree()
-            .foliageProvider(BlockStateProvider.simple(Material.OAK_LEAVES))
-            .trunkProvider(BlockStateProvider.simple(Material.BIRCH_WOOD))
+            .foliageProvider(BlockStateProvider.simple(Material.MANGROVE_LEAVES))
+            .trunkProvider(BlockStateProvider.simple(Material.CHERRY_WOOD))
             .belowTrunkProvider(
                 BlockStateProvider.ruleBased()
                     .rule(
@@ -79,13 +78,13 @@ public class TestPlugin extends JavaPlugin implements Listener {
                     )
                     .build()
             )
-            .foliagePlacer(FoliagePlacer.fancy()
-                .height(3)
+            .foliagePlacer(FoliagePlacer.pine()
+                .height(IntProvider.constant(3))
                 .offset(IntProvider.constant(1))
                 .radius(IntProvider.constant(4))
                 .build()
             )
-            .minimumSize(TwoLayersFeatureSize.builder()
+            .minimumSize(FeatureSize.twoLayers()
                 .limit(1)
                 .lowerSize(0)
                 .minClippedHeight(0)
@@ -93,57 +92,37 @@ public class TestPlugin extends JavaPlugin implements Listener {
                 .build()
             )
             .trunkPlacer(TrunkPlacer.fancy()
-                .baseHeight(10)
+                .baseHeight(7)
                 .heightRandA(4)
-                .heightRandB(8)
+                .heightRandB(6)
+                .build()
+            )
+            .decorator(TreeDecorator.attachedToLeaves()
+                .direction(BlockFace.UP)
+                .blockProvider(BlockStateProvider.simple(Material.MEDIUM_AMETHYST_BUD))
+                .probability(0.1f)
                 .build()
             )
             .ignoreVines()
             .build();
 
         Biome biome = Biome.builder()
-            .resourceKey(ResourceKey.of("test:biome")) // Required key
+            .resourceKey(ResourceKey.of("test:biome"))
             .specialEffects(BiomeSpecialEffects.builder()
-                    .waterColor("#00FF00")
-                    .build()
-            )
-            .attribute(EnvironmentAttributes.DEFAULT_DRIPSTONE_PARTICLE, ParticleOptions.of(ParticleTypes.DRIPPING_HONEY))
-            // Mob spawn settings
-            .spawner(BiomeSpawner.builder()
-                .spawner(MobCategory.MONSTER, NaturalSpawner.of(EntityType.ZOMBIE, 5, 15))
-                .build()
-            )
-            // Worldgen
+                .foliageColorOverride("#89395c")
+                .build())
             .generationSettings(
                 BiomeGenerationSettings.builder()
-//                    .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeature.builder()
-//                        .feature(new SchematicTreeFeature().register(), SchematicTreeFeature.SchematicTreeConfig.defaults())
-//                        .modifier(PlacementModifier.rarityFilter(1))
-//                        .modifier(PlacementModifier.inSquare())
-//                        .modifier(PlacementModifier.surfaceWaterDepth(0))
-//                        .modifier(PlacementModifier.heightmap(HeightmapType.OCEAN_FLOOR))
-//                        .modifier(PlacementModifier.biomeFilter())
-//                        .build())
-//
-//                    .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeature.builder()
-//                        .feature(new SchematicTreeFeature().registerAs(ResourceKey.of("t", "s")), SchematicTreeFeature.SchematicTreeConfig.defaults2())
-//                        .modifier(PlacementModifier.rarityFilter(1))
-//                        .modifier(PlacementModifier.inSquare())
-//                        .modifier(PlacementModifier.surfaceWaterDepth(0))
-//                        .modifier(PlacementModifier.heightmap(HeightmapType.OCEAN_FLOOR))
-//                        .modifier(PlacementModifier.biomeFilter())
-//                        .build())
-
-                    .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeature.builder()
+                    .feature(GenerationStep.VEGETAL_DECORATION, PlacedFeature.builder()
                         .feature(ConfiguredFeature.of(FeatureType.TREE, treeConfig))
-                        .modifier(PlacementModifier.rarityFilter(4))
+                        .modifier(PlacementModifier.rarityFilter(1))
                         .modifier(PlacementModifier.inSquare())
                         .modifier(PlacementModifier.surfaceWaterDepthFilter(0))
                         .modifier(PlacementModifier.heightmap(HeightmapType.OCEAN_FLOOR))
+                        .modifier(PlacementModifier.heightmap(HeightmapType.MOTION_BLOCKING))
                         .modifier(PlacementModifier.biomeFilter())
-                        .modifier(PlacementModifier.heightmap(HeightmapType.MOTION_BLOCKING_NO_LEAVES))
-                        //.modifier(PlacementModifier.blockPredicateFilter(BlockPredicate.no))
                         .build())
+                    .carver(ConfiguredWorldCarver.custom(new StarCarver().register(), StarConfig.defaults()))
                     .build()
             )
             .register();

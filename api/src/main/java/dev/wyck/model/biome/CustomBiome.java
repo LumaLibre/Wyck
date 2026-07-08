@@ -20,7 +20,6 @@ import dev.wyck.wrapper.environment.particle.ParticleData;
 import dev.wyck.wrapper.environment.particle.ParticleTypes;
 import dev.wyck.wrapper.worldgen.BiomeGenerationSettings;
 import org.bukkit.Material;
-import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -467,6 +466,7 @@ public interface CustomBiome extends Biome {
         }
 
         @AsOf("3.0.0")
+        @SuppressWarnings("deprecation")
         public Builder settings(BiomeSettings settings) {
             this.climateSettings = ClimateSettings.of(settings.hasPrecipitation(), settings.temperature(), settings.modifier(), settings.downfall());
             return this;

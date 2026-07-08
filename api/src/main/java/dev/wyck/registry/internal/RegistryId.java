@@ -17,7 +17,9 @@ public enum RegistryId {
     NOISE_SETTINGS("worldgen/noise_settings"),
     PARTICLE_TYPE("particle_type"),
     ENVIRONMENT_ATTRIBUTE("environment_attribute"),
-    FLUID("fluid");
+    FLUID("fluid"),
+    CONFIGURED_CARVER("worldgen/configured_carver"),
+    CARVER("worldgen/carver");
 
     private final List<ResourceKey> keys;
 

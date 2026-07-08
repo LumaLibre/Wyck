@@ -1,6 +1,6 @@
 package dev.wyck.wrapper.worldgen.feature.rootplacers;
 
-import dev.wyck.wrapper.worldgen.WorldgenConversions;
+import dev.wyck.util.WorldgenConversions;
 import dev.wyck.wrapper.worldgen.stateproviders.BlockStateProvider;
 import org.bukkit.Material;
 import org.jetbrains.annotations.ApiStatus;

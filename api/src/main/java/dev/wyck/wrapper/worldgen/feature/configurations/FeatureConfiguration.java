@@ -235,8 +235,8 @@ public interface FeatureConfiguration extends Wrapper {
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    static ProbabilityFeatureConfiguration.Builder probability() {
-        return ProbabilityFeatureConfiguration.builder();
+    static ProbabilityFeatureConfiguration probability(float probability) {
+        return ProbabilityFeatureConfiguration.of(probability);
     }
 
     /**

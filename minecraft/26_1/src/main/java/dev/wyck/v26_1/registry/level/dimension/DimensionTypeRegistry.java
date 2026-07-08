@@ -5,7 +5,7 @@ import dev.wyck.annotations.WireFactory;
 import dev.wyck.keys.KeyChains;
 import dev.wyck.model.level.dimension.Dimension;
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.registry.bootstrap.util.BootstrapSafeMinecraftRegistries;
+import dev.wyck.util.BootstrapSafeMinecraftRegistries;
 import dev.wyck.registry.internal.WyckRegistry;
 import dev.wyck.registry.DimensionRegistry;
 import dev.wyck.util.Lazy;

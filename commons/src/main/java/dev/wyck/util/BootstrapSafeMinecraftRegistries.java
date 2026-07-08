@@ -1,4 +1,4 @@
-package dev.wyck.registry.bootstrap.util;
+package dev.wyck.util;
 
 import com.mojang.serialization.Lifecycle;
 import dev.wyck.annotations.AsOf;

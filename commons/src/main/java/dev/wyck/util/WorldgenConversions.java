@@ -1,4 +1,4 @@
-package dev.wyck.wrapper.worldgen;
+package dev.wyck.util;
 
 import dev.wyck.annotations.AsOf;
 import net.minecraft.core.BlockPos;

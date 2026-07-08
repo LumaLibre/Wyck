@@ -1,7 +1,7 @@
 package dev.wyck.wrapper.worldgen.placement;
 
 import dev.wyck.wrapper.worldgen.blockpredicates.BlockPredicate;
-import dev.wyck.wrapper.worldgen.WorldgenConversions;
+import dev.wyck.util.WorldgenConversions;
 import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;

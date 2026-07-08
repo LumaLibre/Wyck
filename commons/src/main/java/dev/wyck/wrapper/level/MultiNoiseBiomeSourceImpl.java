@@ -3,7 +3,7 @@ package dev.wyck.wrapper.level;
 import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.registry.bootstrap.util.BootstrapSafeMinecraftRegistries;
+import dev.wyck.util.BootstrapSafeMinecraftRegistries;
 import dev.wyck.wrapper.worldgen.TransientMultiNoiseBiomeSource;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;

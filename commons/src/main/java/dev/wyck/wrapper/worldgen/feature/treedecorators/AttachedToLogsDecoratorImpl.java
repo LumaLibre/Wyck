@@ -1,6 +1,6 @@
 package dev.wyck.wrapper.worldgen.feature.treedecorators;
 
-import dev.wyck.wrapper.worldgen.WorldgenConversions;
+import dev.wyck.util.WorldgenConversions;
 import dev.wyck.wrapper.worldgen.stateproviders.BlockStateProvider;
 import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.ApiStatus;

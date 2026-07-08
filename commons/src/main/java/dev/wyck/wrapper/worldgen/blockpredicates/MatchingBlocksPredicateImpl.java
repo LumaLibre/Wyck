@@ -1,6 +1,6 @@
 package dev.wyck.wrapper.worldgen.blockpredicates;
 
-import dev.wyck.wrapper.worldgen.WorldgenConversions;
+import dev.wyck.util.WorldgenConversions;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.block.CraftBlockType;
 import org.bukkit.util.BlockVector;

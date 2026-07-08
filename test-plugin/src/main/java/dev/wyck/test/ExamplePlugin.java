@@ -2,6 +2,7 @@ package dev.wyck.test;
 
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.model.biome.Biome;
+import dev.wyck.wrapper.biome.BiomeSpecialEffects;
 import dev.wyck.wrapper.worldgen.BiomeGenerationSettings;
 import dev.wyck.wrapper.worldgen.blockpredicates.BlockPredicate;
 import dev.wyck.wrapper.worldgen.GenerationStep;
@@ -11,10 +12,8 @@ import dev.wyck.wrapper.worldgen.feature.FeatureType;
 import dev.wyck.wrapper.worldgen.feature.configurations.FeatureConfiguration;
 import dev.wyck.wrapper.worldgen.feature.configurations.TreeConfiguration;
 import dev.wyck.wrapper.worldgen.feature.featuresize.FeatureSize;
-import dev.wyck.wrapper.worldgen.feature.featuresize.TwoLayersFeatureSize;
 import dev.wyck.wrapper.worldgen.feature.foliageplacers.FoliagePlacer;
-import dev.wyck.wrapper.worldgen.feature.foliageplacers.PineFoliagePlacer;
-import dev.wyck.wrapper.worldgen.feature.trunkplacers.StraightTrunkPlacer;
+import dev.wyck.wrapper.worldgen.feature.treedecorators.TreeDecorator;
 import dev.wyck.wrapper.worldgen.feature.trunkplacers.TrunkPlacer;
 import dev.wyck.wrapper.worldgen.placement.PlacedFeature;
 import dev.wyck.wrapper.worldgen.placement.PlacementModifier;
@@ -22,6 +21,7 @@ import dev.wyck.wrapper.worldgen.stateproviders.BlockStateProvider;
 import dev.wyck.wrapper.worldgen.valueproviders.IntProvider;
 import org.bukkit.Material;
 import org.bukkit.Tag;
+import org.bukkit.block.BlockFace;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ExamplePlugin extends JavaPlugin {
@@ -29,8 +29,8 @@ public class ExamplePlugin extends JavaPlugin {
     public void onEnable() {
         // Making a tall spruce tree
         TreeConfiguration treeConfig = FeatureConfiguration.tree()
-            .foliageProvider(BlockStateProvider.simple(Material.SPRUCE_LEAVES))
-            .trunkProvider(BlockStateProvider.simple(Material.SPRUCE_LOG))
+            .foliageProvider(BlockStateProvider.simple(Material.MANGROVE_LEAVES))
+            .trunkProvider(BlockStateProvider.simple(Material.CHERRY_WOOD))
             .belowTrunkProvider(
                 BlockStateProvider.ruleBased()
                     .rule(
@@ -39,10 +39,10 @@ public class ExamplePlugin extends JavaPlugin {
                     )
                     .build()
             )
-            .foliagePlacer(FoliagePlacer.pine()
-                .height(IntProvider.constant(4))
-                .offset(IntProvider.constant(1))
-                .radius(IntProvider.uniform(4, 6))
+            .foliagePlacer(FoliagePlacer.fancy()
+                .height(4)
+                .offset(IntProvider.constant(0))
+                .radius(IntProvider.uniform(6, 7))
                 .build()
             )
             .minimumSize(FeatureSize.twoLayers()
@@ -52,10 +52,18 @@ public class ExamplePlugin extends JavaPlugin {
                 .upperSize(0)
                 .build()
             )
-            .trunkPlacer(TrunkPlacer.straight()
-                .baseHeight(10)
+            .trunkPlacer(TrunkPlacer.cherry()
+                .branchCount(IntProvider.constant(2))
+                .branchHorizontalLength(IntProvider.constant(7))
+                .baseHeight(7)
                 .heightRandA(4)
-                .heightRandB(8)
+                .heightRandB(6)
+                .build()
+            )
+            .decorator(TreeDecorator.attachedToLeaves()
+                .direction(BlockFace.UP)
+                .blockProvider(BlockStateProvider.simple(Material.MEDIUM_AMETHYST_BUD))
+                .probability(0.2f)
                 .build()
             )
             .ignoreVines()
@@ -64,9 +72,12 @@ public class ExamplePlugin extends JavaPlugin {
         // Using it in a biome
         Biome.builder()
             .resourceKey(ResourceKey.of("test:biome"))
+            .specialEffects(BiomeSpecialEffects.builder()
+                .foliageColorOverride("#8b69ca")
+                .build())
             .generationSettings(
                 BiomeGenerationSettings.builder()
-                    .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeature.builder()
+                    .feature(GenerationStep.VEGETAL_DECORATION, PlacedFeature.builder()
                         .feature(ConfiguredFeature.of(FeatureType.TREE, treeConfig))
                         .modifier(PlacementModifier.rarityFilter(1))
                         .modifier(PlacementModifier.inSquare())

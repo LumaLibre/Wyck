@@ -2,7 +2,7 @@ package dev.wyck.wrapper.worldgen.feature.configurations;
 
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.wrapper.worldgen.blockpredicates.BlockPredicate;
-import dev.wyck.wrapper.worldgen.WorldgenConversions;
+import dev.wyck.util.WorldgenConversions;
 import dev.wyck.wrapper.worldgen.placement.PlacedFeature;
 import dev.wyck.wrapper.worldgen.stateproviders.BlockStateProvider;
 import org.bukkit.Material;

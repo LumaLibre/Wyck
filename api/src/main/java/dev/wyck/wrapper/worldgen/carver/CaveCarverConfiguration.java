@@ -2,129 +2,70 @@ package dev.wyck.wrapper.worldgen.carver;
 
 import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
-import dev.wyck.factory.WireProvider;
+import dev.wyck.factory.ConstructWireProvider;
 import dev.wyck.wrapper.worldgen.valueproviders.FloatProvider;
 import dev.wyck.wrapper.worldgen.valueproviders.HeightProvider;
 import dev.wyck.wrapper.worldgen.valueproviders.VerticalAnchor;
 import org.bukkit.Material;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.Set;
 
-/**
- * Wraps Minecraft's CaveCarverConfiguration, the configuration consumed by both
- * the CAVE and NETHER_CAVE carvers.
- *
- * @since 2.3.0
- * @version 2.3.0
- * @author Jsinco
- */
 @NullMarked
 @AsOf("2.3.0")
-public record CaveCarverConfiguration(
-    float probability,
-    HeightProvider y,
-    FloatProvider yScale,
-    VerticalAnchor lavaLevel,
-    CarverDebugSettings debugSettings,
-    Collection<Material> replaceable,
-    FloatProvider horizontalRadiusMultiplier,
-    FloatProvider verticalRadiusMultiplier,
-    FloatProvider floorLevel
-) implements CarverConfiguration {
+public interface CaveCarverConfiguration extends CarverConfiguration {
 
     @ApiStatus.Internal
-    private static final WireProvider<Factory> WIRE = WireProvider.create("dev.wyck.wrapper.worldgen.carver.CaveCarverConfigurationFactoryImpl");
+    ConstructWireProvider<CaveCarverConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.carver.CaveCarverConfigurationImpl");
 
-    @ApiStatus.Internal
-    protected interface Factory {
-        Object toNms(CaveCarverConfiguration configuration);
+    @AsOf("2.3.0")
+    FloatProvider horizontalRadiusMultiplier();
+
+    @AsOf("2.3.0")
+    FloatProvider verticalRadiusMultiplier();
+
+    @AsOf("2.3.0")
+    FloatProvider floorLevel();
+
+    @AsOf("3.0.0")
+    default Builder toBuilder() {
+        return new Builder(this);
+    }
+
+    @AsOf("3.0.0")
+    static CaveCarverConfiguration of(
+        float probability,
+        HeightProvider y,
+        FloatProvider yScale,
+        VerticalAnchor lavaLevel,
+        CarverDebugSettings debugSettings,
+        Set<Material> replaceable,
+        FloatProvider horizontalRadiusMultiplier,
+        FloatProvider verticalRadiusMultiplier,
+        FloatProvider floorLevel
+    ) {
+        return WIRE.construct(probability, y, yScale, lavaLevel, debugSettings, replaceable, horizontalRadiusMultiplier, verticalRadiusMultiplier, floorLevel);
     }
 
     @AsOf("2.3.0")
-    public CaveCarverConfiguration {
-        Preconditions.checkNotNull(y, "y");
-        Preconditions.checkNotNull(yScale, "yScale");
-        Preconditions.checkNotNull(lavaLevel, "lavaLevel");
-        Preconditions.checkNotNull(debugSettings, "debugSettings");
-        Preconditions.checkNotNull(horizontalRadiusMultiplier, "horizontalRadiusMultiplier");
-        Preconditions.checkNotNull(verticalRadiusMultiplier, "verticalRadiusMultiplier");
-        Preconditions.checkNotNull(floorLevel, "floorLevel");
-        replaceable = List.copyOf(replaceable);
-    }
-
-    @AsOf("2.3.0")
-    public static Builder builder() {
+    static Builder builder() {
         return new Builder();
     }
 
-    @Override
-    @AsOf("2.3.0")
-    public Object toMinecraft() {
-        return WIRE.get().toNms(this);
-    }
+    final class Builder extends CarverConfigurationBuilder<CaveCarverConfiguration, Builder> {
+        private @Nullable FloatProvider horizontalRadiusMultiplier;
+        private @Nullable FloatProvider verticalRadiusMultiplier;
+        private @Nullable FloatProvider floorLevel;
 
-    /**
-     * A builder for creating a CaveCarverConfiguration. The debug settings default
-     * to {@link CarverDebugSettings#defaultSettings()} if left unset.
-     * @since 2.3.0
-     * @version 2.3.0
-     * @author Jsinco
-     */
-    @AsOf("2.3.0")
-    public static final class Builder {
+        public Builder() {}
 
-        private Float probability;
-        private HeightProvider y;
-        private FloatProvider yScale;
-        private VerticalAnchor lavaLevel;
-        private CarverDebugSettings debugSettings;
-        private Collection<Material> replaceable;
-        private FloatProvider horizontalRadiusMultiplier;
-        private FloatProvider verticalRadiusMultiplier;
-        private FloatProvider floorLevel;
-
-        @AsOf("2.3.0")
-        public Builder() {
-            this.debugSettings = CarverDebugSettings.defaultSettings();
-        }
-
-        @AsOf("2.3.0")
-        public Builder probability(float probability) {
-            this.probability = probability;
-            return this;
-        }
-
-        @AsOf("2.3.0")
-        public Builder y(HeightProvider y) {
-            this.y = y;
-            return this;
-        }
-
-        @AsOf("2.3.0")
-        public Builder yScale(FloatProvider yScale) {
-            this.yScale = yScale;
-            return this;
-        }
-
-        @AsOf("2.3.0")
-        public Builder lavaLevel(VerticalAnchor lavaLevel) {
-            this.lavaLevel = lavaLevel;
-            return this;
-        }
-
-        @AsOf("2.3.0")
-        public Builder debugSettings(CarverDebugSettings debugSettings) {
-            this.debugSettings = debugSettings;
-            return this;
-        }
-
-        @AsOf("2.3.0")
-        public Builder replaceable(Collection<Material> replaceable) {
-            this.replaceable = replaceable;
-            return this;
+        public Builder(CaveCarverConfiguration configuration) {
+            super(configuration);
+            this.horizontalRadiusMultiplier = configuration.horizontalRadiusMultiplier();
+            this.verticalRadiusMultiplier = configuration.verticalRadiusMultiplier();
+            this.floorLevel = configuration.floorLevel();
         }
 
         @AsOf("2.3.0")
@@ -145,32 +86,13 @@ public record CaveCarverConfiguration(
             return this;
         }
 
-        @AsOf("2.3.0")
-        public CaveCarverConfiguration build() {
-            Preconditions.checkState(this.probability != null, "probability must be set");
-            Preconditions.checkState(this.y != null, "y must be set");
-            Preconditions.checkState(this.yScale != null, "yScale must be set");
-            Preconditions.checkState(this.lavaLevel != null, "lavaLevel must be set");
-            Preconditions.checkState(this.replaceable != null, "replaceable must be set");
-            Preconditions.checkState(this.horizontalRadiusMultiplier != null, "horizontalRadiusMultiplier must be set");
-            Preconditions.checkState(this.verticalRadiusMultiplier != null, "verticalRadiusMultiplier must be set");
-            Preconditions.checkState(this.floorLevel != null, "floorLevel must be set");
-            Preconditions.checkArgument(
-                    this.floorLevel.minValue() >= -1.0F && this.floorLevel.maxValue() <= 1.0F,
-                    "floorLevel must stay within [-1, 1]"
-            );
-
-            return new CaveCarverConfiguration(
-                    this.probability,
-                    this.y,
-                    this.yScale,
-                    this.lavaLevel,
-                    this.debugSettings,
-                    this.replaceable,
-                    this.horizontalRadiusMultiplier,
-                    this.verticalRadiusMultiplier,
-                    this.floorLevel
-            );
+        @Override
+        protected CaveCarverConfiguration create() {
+            Preconditions.checkNotNull(horizontalRadiusMultiplier, "horizontalRadiusMultiplier must be set");
+            Preconditions.checkNotNull(verticalRadiusMultiplier, "verticalRadiusMultiplier must be set");
+            Preconditions.checkNotNull(floorLevel, "floorLevel must be set");
+            //noinspection ConstantConditions
+            return of(probability, y, yScale, lavaLevel, debugSettings, replaceable, horizontalRadiusMultiplier, verticalRadiusMultiplier, floorLevel);
         }
     }
 }

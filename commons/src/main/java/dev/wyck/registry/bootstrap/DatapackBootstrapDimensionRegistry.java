@@ -16,7 +16,7 @@ import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import dev.wyck.annotations.WireFactory;
 import dev.wyck.keys.KeyChains;
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.registry.bootstrap.util.BootstrapSafeMinecraftRegistries;
+import dev.wyck.util.BootstrapSafeMinecraftRegistries;
 import dev.wyck.registry.DimensionRegistry;
 import dev.wyck.util.ThrowingRunnable;
 import net.minecraft.resources.RegistryOps;

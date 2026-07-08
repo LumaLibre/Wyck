@@ -46,10 +46,10 @@ public class TestPluginBootstrapper implements PluginBootstrap {
 
 
         newGen = BiomeGenerationSettings.builder()
-            .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeatures.TREES_PLAINS)
-            .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeatures.FALLEN_OAK_TREE)
-            .addFeature(GenerationStep.VEGETAL_DECORATION, tallPlaced)
-            .addFeature(GenerationStep.VEGETAL_DECORATION, shortPlaced)
+            .feature(GenerationStep.VEGETAL_DECORATION, PlacedFeatures.TREES_PLAINS)
+            .feature(GenerationStep.VEGETAL_DECORATION, PlacedFeatures.FALLEN_OAK_TREE)
+            .feature(GenerationStep.VEGETAL_DECORATION, tallPlaced)
+            .feature(GenerationStep.VEGETAL_DECORATION, shortPlaced)
             .build();
     }
 }

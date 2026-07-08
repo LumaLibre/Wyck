@@ -1,8 +1,8 @@
 package dev.wyck.wrapper.worldgen.placement;
 
 import dev.wyck.annotations.WireFactory;
-import dev.wyck.registry.bootstrap.util.BootstrapSafeMinecraftRegistries;
-import dev.wyck.registry.bootstrap.util.DatapackPromotion;
+import dev.wyck.util.BootstrapSafeMinecraftRegistries;
+import dev.wyck.util.DatapackPromotion;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;

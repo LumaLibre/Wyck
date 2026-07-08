@@ -1,11 +1,10 @@
-package dev.wyck.registry.bootstrap.util;
+package dev.wyck.util;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
-import dev.wyck.annotations.AsOf;
 import net.minecraft.core.Cloner;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
@@ -33,8 +32,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+// TODO: Remove
+
 @NullMarked
-@AsOf("2.3.0")
 @ApiStatus.Internal
 public final class DatapackPromotion {
 

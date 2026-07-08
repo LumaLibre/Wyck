@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.paperweight.userdev)
 }
 
+group = "dev.wyck.codegen"
+
 dependencies {
     paperweight.paperDevBundle(libs.versions.minecraft.v26.m2)
 }

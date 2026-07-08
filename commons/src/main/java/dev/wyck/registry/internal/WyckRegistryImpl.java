@@ -3,7 +3,7 @@ package dev.wyck.registry.internal;
 import com.google.common.base.Preconditions;
 import io.papermc.paper.registry.RegistryKey;
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.registry.bootstrap.util.BootstrapSafeMinecraftRegistries;
+import dev.wyck.util.BootstrapSafeMinecraftRegistries;
 import dev.wyck.util.ThrowingRunnable;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;

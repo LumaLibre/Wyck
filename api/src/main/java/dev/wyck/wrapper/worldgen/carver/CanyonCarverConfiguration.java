@@ -2,7 +2,8 @@ package dev.wyck.wrapper.worldgen.carver;
 
 import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
-import dev.wyck.factory.WireProvider;
+import dev.wyck.factory.ConstructWireProvider;
+import dev.wyck.wrapper.internal.Wrapper;
 import dev.wyck.wrapper.worldgen.valueproviders.FloatProvider;
 import dev.wyck.wrapper.worldgen.valueproviders.HeightProvider;
 import dev.wyck.wrapper.worldgen.valueproviders.VerticalAnchor;
@@ -11,212 +12,170 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.Set;
 
-/**
- * Wraps Minecraft's CanyonCarverConfiguration, the configuration consumed by
- * the CANYON carver.
- *
- * @since 2.3.0
- * @version 2.3.0
- * @author Jsinco
- */
 @NullMarked
 @AsOf("2.3.0")
-public record CanyonCarverConfiguration(
-    float probability,
-    HeightProvider y,
-    FloatProvider yScale,
-    VerticalAnchor lavaLevel,
-    CarverDebugSettings debugSettings,
-    Collection<Material> replaceable,
-    FloatProvider verticalRotation,
-    CanyonShapeConfiguration shape
-) implements CarverConfiguration {
+public interface CanyonCarverConfiguration extends CarverConfiguration {
 
     @ApiStatus.Internal
-    static final WireProvider<Factory> WIRE = WireProvider.create("dev.wyck.wrapper.worldgen.carver.CanyonCarverConfigurationFactoryImpl");
-
-    @ApiStatus.Internal
-    interface Factory {
-        Object toNms(CanyonCarverConfiguration configuration);
-    }
+    ConstructWireProvider<CanyonCarverConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.carver.CanyonCarverConfigurationImpl");
 
     @AsOf("2.3.0")
-    public CanyonCarverConfiguration {
-        Preconditions.checkNotNull(y, "y");
-        Preconditions.checkNotNull(yScale, "yScale");
-        Preconditions.checkNotNull(lavaLevel, "lavaLevel");
-        Preconditions.checkNotNull(debugSettings, "debugSettings");
-        Preconditions.checkNotNull(verticalRotation, "verticalRotation");
-        Preconditions.checkNotNull(shape, "shape");
-        replaceable = List.copyOf(replaceable);
+    FloatProvider verticalRotation();
+
+    @AsOf("2.3.0")
+    CanyonShapeConfiguration shape();
+
+    @AsOf("3.0.0")
+    default Builder toBuilder() {
+        return new Builder(this);
     }
 
-    /**
-     * Creates a new Builder for CanyonCarverConfiguration.
-     * @return a new Builder for CanyonCarverConfiguration
-     * @since 2.3.0
-     */
-    @AsOf("2.3.0")
-    public static Builder builder() {
+    static CanyonCarverConfiguration of(
+        float probability,
+        HeightProvider y,
+        FloatProvider yScale,
+        VerticalAnchor lavaLevel,
+        CarverDebugSettings debugSettings,
+        Set<Material> replaceable,
+        FloatProvider verticalRotation,
+        CanyonShapeConfiguration shape
+    ) {
+        return WIRE.construct(probability, y, yScale, lavaLevel, debugSettings, replaceable, verticalRotation, shape);
+    }
+
+    @AsOf("3.0.0")
+    static Builder builder() {
         return new Builder();
     }
 
-    /**
-     * Converts this CanyonCarverConfiguration to an NMS CanyonCarverConfiguration.
-     * @return the NMS CanyonCarverConfiguration
-     * @since 2.3.0
-     */
-    @Override
-    @AsOf("2.3.0")
-    public Object toMinecraft() {
-        return WIRE.get().toNms(this);
-    }
-
-    /**
-     * A builder for creating a CanyonCarverConfiguration. The debug settings
-     * default to {@link CarverDebugSettings#defaultSettings()} if left unset.
-     * @since 2.3.0
-     * @version 2.3.0
-     * @author Jsinco
-     */
-    @AsOf("2.3.0")
-    public static final class Builder {
-
-        private @Nullable Float probability;
-        private @Nullable HeightProvider y;
-        private @Nullable FloatProvider yScale;
-        private @Nullable VerticalAnchor lavaLevel;
-        private CarverDebugSettings debugSettings = CarverDebugSettings.defaultSettings();
-        private Collection<Material> replaceable = Collections.emptyList();
+    @AsOf("3.0.0")
+    final class Builder extends CarverConfigurationBuilder<CanyonCarverConfiguration, Builder> {
         private @Nullable FloatProvider verticalRotation;
         private @Nullable CanyonShapeConfiguration shape;
 
+        public Builder() {}
 
-        /**
-         * Sets the probability of the carver being generated.
-         * @param probability the probability of the carver being generated, between 0 and 1
-         * @return this builder, for chaining
-         * @since 2.3.0
-         */
-        @AsOf("2.3.0")
-        public Builder probability(float probability) {
-            this.probability = probability;
-            return this;
+        public Builder(CanyonCarverConfiguration configuration) {
+            super(configuration);
+            this.verticalRotation = configuration.verticalRotation();
+            this.shape = configuration.shape();
         }
 
-        /**
-         * Sets the y-coordinate of the carver.
-         * @param y the y-coordinate of the carver
-         * @return this builder, for chaining
-         */
-        @AsOf("2.3.0")
-        public Builder y(HeightProvider y) {
-            this.y = y;
-            return this;
-        }
-
-        /**
-         * Sets the y-scale of the carver.
-         * @param yScale the y-scale of the carver
-         * @return this builder, for chaining
-         * @since 2.3.0
-         */
-        @AsOf("2.3.0")
-        public Builder yScale(FloatProvider yScale) {
-            this.yScale = yScale;
-            return this;
-        }
-
-        /**
-         * Sets the lava level of the carver.
-         * @param lavaLevel the lava level of the carver
-         * @return this builder, for chaining
-         * @since 2.3.0
-         */
-        @AsOf("2.3.0")
-        public Builder lavaLevel(VerticalAnchor lavaLevel) {
-            this.lavaLevel = lavaLevel;
-            return this;
-        }
-
-        /**
-         * Sets the debug settings of the carver.
-         * @param debugSettings the debug settings of the carver
-         * @return this builder, for chaining
-         * @since 2.3.0
-         */
-        @AsOf("2.3.0")
-        public Builder debugSettings(CarverDebugSettings debugSettings) {
-            this.debugSettings = debugSettings;
-            return this;
-        }
-
-        /**
-         * Sets the replaceable materials of the carver.
-         * @param replaceable the replaceable materials of the carver
-         * @return this builder, for chaining
-         * @since 2.3.0
-         */
-        @AsOf("2.3.0")
-        public Builder replaceable(Collection<Material> replaceable) {
-            this.replaceable = replaceable;
-            return this;
-        }
-
-        /**
-         * Sets the vertical rotation of the carver.
-         * @param verticalRotation the vertical rotation of the carver
-         * @return this builder, for chaining
-         * @since 2.3.0
-         */
-        @AsOf("2.3.0")
+        @AsOf("3.0.0")
         public Builder verticalRotation(FloatProvider verticalRotation) {
             this.verticalRotation = verticalRotation;
             return this;
         }
 
-        /**
-         * Sets the shape of the carver.
-         * @param shape the shape of the carver
-         * @return this builder, for chaining
-         * @since 2.3.0
-         */
-        @AsOf("2.3.0")
+        @AsOf("3.0.0")
         public Builder shape(CanyonShapeConfiguration shape) {
             this.shape = shape;
             return this;
         }
 
-        /**
-         * Builds the CanyonCarverConfiguration.
-         * @return the CanyonCarverConfiguration
-         * @throws IllegalStateException if any required fields are not set
-         * @since 2.3.0
-         */
-        @AsOf("2.3.0")
-        public CanyonCarverConfiguration build() {
-            Preconditions.checkState(this.probability != null, "probability must be set");
-            Preconditions.checkState(this.y != null, "y level must be set");
-            Preconditions.checkState(this.yScale != null, "yScale must be set");
-            Preconditions.checkState(this.lavaLevel != null, "lavaLevel must be set");
-            Preconditions.checkState(this.replaceable != null, "replaceable must be set");
-            Preconditions.checkState(this.verticalRotation != null, "verticalRotation must be set");
-            Preconditions.checkState(this.shape != null, "shape must be set");
+        @Override
+        protected CanyonCarverConfiguration create() {
+            Preconditions.checkNotNull(verticalRotation, "verticalRotation must be set");
+            Preconditions.checkNotNull(shape, "shape must be set");
+            return CanyonCarverConfiguration.of(probability, y, yScale, lavaLevel, debugSettings, replaceable, verticalRotation, shape);
+        }
+    }
 
-            return new CanyonCarverConfiguration(
-                    this.probability,
-                    this.y,
-                    this.yScale,
-                    this.lavaLevel,
-                    this.debugSettings,
-                    this.replaceable,
-                    this.verticalRotation,
-                    this.shape
-            );
+    @AsOf("3.0.0")
+    interface CanyonShapeConfiguration extends Wrapper {
+
+        @ApiStatus.Internal
+        ConstructWireProvider<CanyonShapeConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.carver.configurations.CanyonCarverConfigurationImpl$CanyonShapeConfigurationImpl");
+
+        @AsOf("3.0.0")
+        FloatProvider distanceFor();
+
+        @AsOf("3.0.0")
+        FloatProvider thickness();
+
+        @AsOf("3.0.0")
+        int widthSmoothness();
+
+        @AsOf("3.0.0")
+        FloatProvider horizontalRadiusFactor();
+
+        @AsOf("3.0.0")
+        float verticalRadiusDefaultFactor();
+
+        @AsOf("3.0.0")
+        float verticalRadiusCenterFactor();
+
+        @AsOf("3.0.0")
+        default Builder toBuilder() {
+            return new Builder(this);
+        }
+
+        @AsOf("3.0.0")
+        static CanyonShapeConfiguration of(FloatProvider distanceFactor, FloatProvider thickness, int widthSmoothness, FloatProvider horizontalRadiusFactor, float verticalRadiusDefaultFactor, float verticalRadiusCenterFactor) {
+            return WIRE.construct(distanceFactor, thickness, widthSmoothness, horizontalRadiusFactor, verticalRadiusDefaultFactor, verticalRadiusCenterFactor);
+        }
+
+        @AsOf("3.0.0")
+        static Builder builder() {
+            return new Builder();
+        }
+
+        final class Builder {
+            private @Nullable FloatProvider distanceFactor;
+            private @Nullable FloatProvider thickness;
+            private int widthSmoothness;
+            private @Nullable FloatProvider horizontalRadiusFactor;
+            private float verticalRadiusDefaultFactor;
+            private float verticalRadiusCenterFactor;
+
+            public Builder() {}
+
+            public Builder(CanyonShapeConfiguration configuration) {
+                this.distanceFactor = configuration.distanceFor();
+                this.thickness = configuration.thickness();
+                this.widthSmoothness = configuration.widthSmoothness();
+                this.horizontalRadiusFactor = configuration.horizontalRadiusFactor();
+                this.verticalRadiusDefaultFactor = configuration.verticalRadiusDefaultFactor();
+                this.verticalRadiusCenterFactor = configuration.verticalRadiusCenterFactor();
+            }
+
+            public Builder distanceFactor(FloatProvider distanceFactor) {
+                this.distanceFactor = distanceFactor;
+                return this;
+            }
+
+            public Builder thickness(FloatProvider thickness) {
+                this.thickness = thickness;
+                return this;
+            }
+
+            public Builder widthSmoothness(int widthSmoothness) {
+                this.widthSmoothness = widthSmoothness;
+                return this;
+            }
+
+            public Builder horizontalRadiusFactor(FloatProvider horizontalRadiusFactor) {
+                this.horizontalRadiusFactor = horizontalRadiusFactor;
+                return this;
+            }
+
+            public Builder verticalRadiusDefaultFactor(float verticalRadiusDefaultFactor) {
+                this.verticalRadiusDefaultFactor = verticalRadiusDefaultFactor;
+                return this;
+            }
+
+            public Builder verticalRadiusCenterFactor(float verticalRadiusCenterFactor) {
+                this.verticalRadiusCenterFactor = verticalRadiusCenterFactor;
+                return this;
+            }
+
+            public CanyonShapeConfiguration build() {
+                Preconditions.checkArgument(widthSmoothness >= 0, "widthSmoothness must be positive");
+                //noinspection ConstantConditions
+                return CanyonShapeConfiguration.of(distanceFactor, thickness, widthSmoothness, horizontalRadiusFactor, verticalRadiusDefaultFactor, verticalRadiusCenterFactor);
+            }
         }
     }
 }

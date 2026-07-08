@@ -19,13 +19,8 @@ import dev.wyck.registry.bootstrap.Composer;
 import dev.wyck.wrapper.worldgen.BiomeGenerationSettings;
 import dev.wyck.wrapper.worldgen.GenerationStep;
 import dev.wyck.wrapper.worldgen.placement.PlacedFeatures;
-import io.papermc.paper.world.MoonPhase;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.Tag;
-import org.bukkit.block.data.BlockData;
 
 public class ExampleBootstrapper implements PluginBootstrap {
     @Override
@@ -34,8 +29,8 @@ public class ExampleBootstrapper implements PluginBootstrap {
         // This must use the 'DATAPACK' composer!
         BootstrapBiomeRegistry registry = BootstrapBiomeRegistry.compose(context, Composer.INJECTOR);
         BiomeGenerationSettings generation = BiomeGenerationSettings.builder()
-            .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeatures.TREES_PLAINS)
-            .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeatures.FALLEN_OAK_TREE)
+            .feature(GenerationStep.VEGETAL_DECORATION, PlacedFeatures.TREES_PLAINS)
+            .feature(GenerationStep.VEGETAL_DECORATION, PlacedFeatures.FALLEN_OAK_TREE)
             .build();
 
         ResourceKey myBiomeKey = ResourceKey.of("example", "my_biome2");

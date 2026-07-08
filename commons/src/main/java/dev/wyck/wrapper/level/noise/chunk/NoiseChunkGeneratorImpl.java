@@ -1,6 +1,6 @@
 package dev.wyck.wrapper.level.noise.chunk;
 
-import dev.wyck.registry.bootstrap.util.BootstrapSafeMinecraftRegistries;
+import dev.wyck.util.BootstrapSafeMinecraftRegistries;
 import dev.wyck.wrapper.level.BiomeSource;
 import dev.wyck.wrapper.level.noise.Noise;
 import net.minecraft.core.Holder;

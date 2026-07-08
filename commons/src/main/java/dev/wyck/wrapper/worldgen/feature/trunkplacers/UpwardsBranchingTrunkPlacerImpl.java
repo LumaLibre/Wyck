@@ -1,6 +1,6 @@
 package dev.wyck.wrapper.worldgen.feature.trunkplacers;
 
-import dev.wyck.wrapper.worldgen.WorldgenConversions;
+import dev.wyck.util.WorldgenConversions;
 import dev.wyck.wrapper.worldgen.valueproviders.IntProvider;
 import org.bukkit.Material;
 import org.jetbrains.annotations.ApiStatus;

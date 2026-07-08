@@ -2,8 +2,7 @@ package dev.wyck.wrapper.environment;
 
 import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
-import dev.wyck.registry.bootstrap.util.BootstrapSafeMinecraftRegistries;
-import io.papermc.paper.adventure.AdventureComponent;
+import dev.wyck.util.BootstrapSafeMinecraftRegistries;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minecraft.network.chat.ComponentSerialization;

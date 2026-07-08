@@ -1,6 +1,10 @@
 package dev.wyck.wrapper.worldgen.carver;
 
 import dev.wyck.annotations.AsOf;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.registry.internal.RegistryId;
+import dev.wyck.wrapper.internal.RegisteredConstantTranslator;
+import dev.wyck.wrapper.internal.WrappedConstant;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -12,14 +16,13 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.3.0")
-public enum WorldCarverType {
+public enum WorldCarverType implements WrappedConstant<WorldCarverType> {
 
     CAVE("cave"),
     NETHER_CAVE("nether_cave"),
     CANYON("canyon");
 
-    // No translator because this isn't an enum in underlying Minecraft code
-
+    public static final RegisteredConstantTranslator<WorldCarverType> TRANSLATOR = RegisteredConstantTranslator.of(RegistryId.CARVER, WorldCarverType::resourceKey, WorldCarverType.values());
     private final String key;
 
     @AsOf("2.3.0")
@@ -35,5 +38,21 @@ public enum WorldCarverType {
     @AsOf("2.3.0")
     public String key() {
         return this.key;
+    }
+
+    /**
+     * The resource key for this carver.
+     * @return the resource key for this carver
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
+    public ResourceKey resourceKey() {
+        return ResourceKey.minecraft(this.key);
+    }
+
+    @Override
+    @AsOf("3.0.0")
+    public RegisteredConstantTranslator<WorldCarverType> translator() {
+        return TRANSLATOR;
     }
 }

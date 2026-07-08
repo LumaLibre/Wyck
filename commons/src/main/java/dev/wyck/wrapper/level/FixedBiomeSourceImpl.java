@@ -1,7 +1,7 @@
 package dev.wyck.wrapper.level;
 
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.registry.bootstrap.util.BootstrapSafeMinecraftRegistries;
+import dev.wyck.util.BootstrapSafeMinecraftRegistries;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;

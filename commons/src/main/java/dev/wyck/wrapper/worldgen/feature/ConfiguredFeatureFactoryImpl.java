@@ -2,7 +2,7 @@ package dev.wyck.wrapper.worldgen.feature;
 
 import dev.wyck.annotations.AsOf;
 import dev.wyck.annotations.WireFactory;
-import dev.wyck.registry.bootstrap.util.BootstrapSafeMinecraftRegistries;
+import dev.wyck.util.BootstrapSafeMinecraftRegistries;
 import dev.wyck.wrapper.worldgen.feature.custom.CustomFeatureBridge;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;

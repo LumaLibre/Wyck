@@ -1,62 +1,136 @@
 package dev.wyck.wrapper.worldgen.carver;
 
 import dev.wyck.annotations.AsOf;
-import dev.wyck.factory.WireProvider;
+import dev.wyck.factory.ConstructWireProvider;
+import dev.wyck.util.BukkitBootstrapUtil;
 import dev.wyck.wrapper.internal.Wrapper;
 import org.bukkit.Material;
+import org.bukkit.block.data.BlockData;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
-/**
- * Wraps Minecraft's CarverDebugSettings, the block states a carver paints
- * in air, water, lava, and barrier positions when debug mode is enabled.
- *
- * @since 2.3.0
- * @version 2.3.0
- * @author Jsinco
- */
 @NullMarked
 @AsOf("2.3.0")
-public record CarverDebugSettings(
-    boolean debugMode,
-    Material airState,
-    Material waterState,
-    Material lavaState,
-    Material barrierState
-) implements Wrapper {
+public interface CarverDebugSettings extends Wrapper {
 
     @ApiStatus.Internal
-    private static final WireProvider<Factory> WIRE = WireProvider.create("dev.wyck.wrapper.worldgen.carver.CarverDebugSettingsFactoryImpl");
+    ConstructWireProvider<CarverDebugSettings> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.carver.CarverDebugSettingsImpl");
 
-    @ApiStatus.Internal
-    protected interface Factory {
-        Object toNms(CarverDebugSettings settings);
-    }
+    CarverDebugSettings DEFAULT = builder().build();
 
     @AsOf("2.3.0")
-    public static CarverDebugSettings of(boolean debugMode, Material airState, Material waterState, Material lavaState, Material barrierState) {
-        return new CarverDebugSettings(debugMode, airState, waterState, lavaState, barrierState);
-    }
+    boolean debugMode();
 
     @AsOf("2.3.0")
-    public static CarverDebugSettings of(Material airState, Material waterState, Material lavaState, Material barrierState) {
-        return new CarverDebugSettings(false, airState, waterState, lavaState, barrierState);
-    }
+    BlockData airState();
 
     @AsOf("2.3.0")
-    public static CarverDebugSettings defaultSettings() {
-        return new CarverDebugSettings(
-            false,
-            Material.ACACIA_BUTTON,
-            Material.CANDLE,
-            Material.ORANGE_STAINED_GLASS,
-            Material.GLASS
-        );
+    BlockData waterState();
+
+    @AsOf("2.3.0")
+    BlockData lavaState();
+
+    @AsOf("2.3.0")
+    BlockData barrierState();
+
+    @AsOf("3.0.0")
+    default Builder toBuilder() {
+        return new Builder(this);
     }
 
-    @Override
-    @AsOf("2.3.0")
-    public Object toMinecraft() {
-        return WIRE.get().toNms(this);
+    @AsOf("3.0.0")
+    static CarverDebugSettings of(boolean debugMode, BlockData airState, BlockData waterState, BlockData lavaState, BlockData barrierState) {
+        return WIRE.construct(debugMode, airState, waterState, lavaState, barrierState);
+    }
+
+    @AsOf("3.0.0")
+    static Builder builder() {
+        return new Builder();
+    }
+
+    @AsOf("3.0.0")
+    final class Builder {
+        private boolean debugMode = false;
+        private BlockData airState = BukkitBootstrapUtil.util().createBlockData(Material.ACACIA_BUTTON);
+        private BlockData waterState = BukkitBootstrapUtil.util().createBlockData(Material.CANDLE);
+        private BlockData lavaState = BukkitBootstrapUtil.util().createBlockData(Material.ORANGE_STAINED_GLASS);
+        private BlockData barrierState = BukkitBootstrapUtil.util().createBlockData(Material.GLASS);
+
+        public Builder() {}
+
+        public Builder(CarverDebugSettings settings) {
+            this.debugMode = settings.debugMode();
+            this.airState = settings.airState();
+            this.waterState = settings.waterState();
+            this.lavaState = settings.lavaState();
+            this.barrierState = settings.barrierState();
+        }
+
+        @AsOf("3.0.0")
+        public Builder debugMode(boolean debugMode) {
+            this.debugMode = debugMode;
+            return this;
+        }
+
+        @AsOf("3.0.0")
+        public Builder airState(BlockData airState) {
+            this.airState = airState;
+            return this;
+        }
+
+        @AsOf("3.0.0")
+        public Builder waterState(BlockData waterState) {
+            this.waterState = waterState;
+            return this;
+        }
+
+        @AsOf("3.0.0")
+        public Builder lavaState(BlockData lavaState) {
+            this.lavaState = lavaState;
+            return this;
+        }
+
+        @AsOf("3.0.0")
+        public Builder barrierState(BlockData barrierState) {
+            this.barrierState = barrierState;
+            return this;
+        }
+
+        // Friendly builder methods
+
+        @AsOf("3.0.0")
+        public Builder debugMode() {
+            this.debugMode = true;
+            return this;
+        }
+
+        @AsOf("3.0.0")
+        public Builder airState(Material airState) {
+            this.airState = BukkitBootstrapUtil.util().createBlockData(airState);
+            return this;
+        }
+
+        @AsOf("3.0.0")
+        public Builder waterState(Material waterState) {
+            this.waterState = BukkitBootstrapUtil.util().createBlockData(waterState);
+            return this;
+        }
+
+        @AsOf("3.0.0")
+        public Builder lavaState(Material lavaState) {
+            this.lavaState = BukkitBootstrapUtil.util().createBlockData(lavaState);
+            return this;
+        }
+
+        @AsOf("3.0.0")
+        public Builder barrierState(Material barrierState) {
+            this.barrierState = BukkitBootstrapUtil.util().createBlockData(barrierState);
+            return this;
+        }
+
+        @AsOf("3.0.0")
+        public CarverDebugSettings build() {
+            return of(debugMode, airState, waterState, lavaState, barrierState);
+        }
     }
 }

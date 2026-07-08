@@ -1,6 +1,6 @@
 package dev.wyck.wrapper.worldgen.feature.configurations;
 
-import dev.wyck.wrapper.worldgen.WorldgenConversions;
+import dev.wyck.util.WorldgenConversions;
 import dev.wyck.wrapper.worldgen.valueproviders.FloatProvider;
 import dev.wyck.wrapper.worldgen.valueproviders.IntProvider;
 import org.bukkit.Material;

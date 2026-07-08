@@ -2,7 +2,7 @@ package dev.wyck.v26_2.wrapper.worldgen.surface;
 
 import dev.wyck.annotations.WireFactory;
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.registry.bootstrap.util.BootstrapSafeMinecraftRegistries;
+import dev.wyck.util.BootstrapSafeMinecraftRegistries;
 import dev.wyck.wrapper.worldgen.surface.SurfaceCondition;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;

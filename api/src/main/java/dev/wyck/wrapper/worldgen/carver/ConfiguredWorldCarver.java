@@ -1,30 +1,26 @@
 package dev.wyck.wrapper.worldgen.carver;
 
 import dev.wyck.annotations.AsOf;
-import dev.wyck.factory.WireProvider;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.wrapper.internal.Wrapper;
-import org.jetbrains.annotations.ApiStatus;
+import dev.wyck.wrapper.worldgen.carver.custom.CustomCarver;
+import dev.wyck.wrapper.worldgen.carver.types.ComposedCarver;
+import dev.wyck.wrapper.worldgen.carver.types.ComposedCustomCarver;
+import dev.wyck.wrapper.worldgen.carver.types.ReferencedCarver;
+import net.kyori.adventure.key.Keyed;
 import org.jspecify.annotations.NullMarked;
 
 /**
- * Wraps Minecraft's ConfiguredWorldCarver, a carver paired with its configuration.
+ * Wraps Minecraft's ConfiguredWorldCarver,
+ * a carver paired with its configuration or a reference to a carver already registered.
  *
  * @since 2.3.0
- * @version 2.3.0
+ * @version 3.0.0
  * @author Jsinco
  */
 @NullMarked
 @AsOf("2.3.0")
-public sealed interface ConfiguredWorldCarver extends Wrapper permits ConfiguredWorldCarver.Reference, ConfiguredWorldCarver.Custom {
-
-    @ApiStatus.Internal
-    WireProvider<Factory> WIRE = WireProvider.create("dev.wyck.wrapper.worldgen.carver.ConfiguredWorldCarverFactoryImpl");
-
-    @ApiStatus.Internal
-    interface Factory {
-        Object toNms(ConfiguredWorldCarver carver);
-    }
+public interface ConfiguredWorldCarver extends Wrapper, Keyed {
 
     /**
      * References a configured carver already registered under the given key.
@@ -33,8 +29,8 @@ public sealed interface ConfiguredWorldCarver extends Wrapper permits Configured
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static ConfiguredWorldCarver reference(ResourceKey key) {
-        return new Reference(key);
+    static ReferencedCarver reference(ResourceKey key) {
+        return ReferencedCarver.of(key);
     }
 
     /**
@@ -44,8 +40,8 @@ public sealed interface ConfiguredWorldCarver extends Wrapper permits Configured
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static ConfiguredWorldCarver cave(CaveCarverConfiguration configuration) {
-        return new Custom(WorldCarverType.CAVE, configuration);
+    static ComposedCarver.Builder cave() {
+        return ComposedCarver.cave();
     }
 
     /**
@@ -55,8 +51,8 @@ public sealed interface ConfiguredWorldCarver extends Wrapper permits Configured
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static ConfiguredWorldCarver netherCave(CaveCarverConfiguration configuration) {
-        return new Custom(WorldCarverType.NETHER_CAVE, configuration);
+    static ComposedCarver.Builder netherCave() {
+        return ComposedCarver.netherCave();
     }
 
     /**
@@ -66,39 +62,31 @@ public sealed interface ConfiguredWorldCarver extends Wrapper permits Configured
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static ConfiguredWorldCarver canyon(CanyonCarverConfiguration configuration) {
-        return new Custom(WorldCarverType.CANYON, configuration);
+    static ComposedCarver.Builder canyon() {
+        return ComposedCarver.canyon();
     }
 
     /**
-     * Creates a configured carver from a custom carver type and configuration.
-     * @param type the carver type
-     * @param configuration the carver configuration
-     * @return a configured carver
+     * Composes a registered custom carver with a config instance.
+     * @param customCarver the custom carver to compose
+     * @param config the config instance to carve with
+     * @return an authored configured carver
+     * @param <C> the config type
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    static ConfiguredWorldCarver of(WorldCarverType type, CarverConfiguration configuration) {
-        return new Custom(type, configuration);
-    }
-
-    @Override
-    @AsOf("2.3.0")
-    default Object toMinecraft() {
-        return WIRE.get().toNms(this);
+    static <C> ComposedCustomCarver<C> custom(CustomCarver<C> customCarver, C config) {
+        return ComposedCustomCarver.of(customCarver, config);
     }
 
     /**
-     * A reference to an already-registered configured carver.
-     * @since 2.3.0
+     * Creates a new builder for a custom carver.
+     * @return a new custom carver builder
+     * @param <C> the config type
+     * @since 3.0.0
      */
-    @AsOf("2.3.0")
-    record Reference(ResourceKey key) implements ConfiguredWorldCarver {}
-
-    /**
-     * A configured carver authored from a vanilla algorithm and a custom config.
-     * @since 2.3.0
-     */
-    @AsOf("2.3.0")
-    record Custom(WorldCarverType type, CarverConfiguration config) implements ConfiguredWorldCarver {}
+    @AsOf("3.0.0")
+    static <C> ComposedCustomCarver.Builder<C> custom() {
+        return ComposedCustomCarver.builder();
+    }
 }
