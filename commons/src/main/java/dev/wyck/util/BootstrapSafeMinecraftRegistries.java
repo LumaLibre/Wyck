@@ -19,6 +19,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -38,7 +39,7 @@ import java.util.stream.Stream;
  * {@link #serialization()} so the codec's owner for that registry matches.
  *
  * @since 2.3.0
- * @version 2.4.0
+ * @version 3.0.0
  * @author Jsinco
  */
 @NullMarked
@@ -50,8 +51,37 @@ public final class BootstrapSafeMinecraftRegistries {
     private static volatile HolderLookup.@Nullable Provider VANILLA;
     private static volatile HolderLookup.@Nullable Provider ACTIVE;
     private static final Map<ResourceKey<? extends Registry<?>>, Registry<?>> MATERIALIZED = new ConcurrentHashMap<>();
+    private static final Map<Identifier, Registry<?>> STATIC_REGISTRIES = buildStaticRegistryTable();
 
     private BootstrapSafeMinecraftRegistries() {
+    }
+
+    private static @Nullable Registry<?> staticRegistry(Identifier id) {
+        return STATIC_REGISTRIES.get(id);
+    }
+
+    private static Map<Identifier, Registry<?>> buildStaticRegistryTable() {
+        Map<Identifier, Registry<?>> table = new HashMap<>();
+        put(table, BuiltInRegistries.BLOCK);
+        put(table, BuiltInRegistries.ITEM);
+        put(table, BuiltInRegistries.FEATURE);
+        put(table, BuiltInRegistries.CARVER);
+        put(table, BuiltInRegistries.PLACEMENT_MODIFIER_TYPE);
+        put(table, BuiltInRegistries.BLOCKSTATE_PROVIDER_TYPE);
+        put(table, BuiltInRegistries.FOLIAGE_PLACER_TYPE);
+        put(table, BuiltInRegistries.TRUNK_PLACER_TYPE);
+        put(table, BuiltInRegistries.ROOT_PLACER_TYPE);
+        put(table, BuiltInRegistries.TREE_DECORATOR_TYPE);
+        put(table, BuiltInRegistries.FEATURE_SIZE_TYPE);
+        put(table, BuiltInRegistries.BLOCK_PREDICATE_TYPE);
+        put(table, BuiltInRegistries.HEIGHT_PROVIDER_TYPE);
+        put(table, BuiltInRegistries.INT_PROVIDER_TYPE);
+        put(table, BuiltInRegistries.FLOAT_PROVIDER_TYPE);
+        return Map.copyOf(table);
+    }
+
+    private static void put(Map<Identifier, Registry<?>> table, Registry<?> registry) {
+        table.put(registry.key().identifier(), registry);
     }
 
     public static HolderLookup.Provider vanilla() {
@@ -109,7 +139,7 @@ public final class BootstrapSafeMinecraftRegistries {
         };
     }
 
-    // server registries at runtime, materialized/active/vanilla lookup at bootstrap
+    // server registries at runtime, builtin/materialized/active/vanilla lookup at bootstrap
     @SuppressWarnings({"ConstantValue", "unchecked"}) // Server annotated NotNull when it actually can be null during bootstrap
     public static <T> HolderGetter<T> getter(ResourceKey<? extends Registry<T>> registry) {
         Server bukkit = Bukkit.getServer();
@@ -117,10 +147,17 @@ public final class BootstrapSafeMinecraftRegistries {
             RegistryAccess access = ((CraftServer) bukkit).getServer().registryAccess();
             return access.lookupOrThrow(registry);
         }
+
         Registry<?> materialized = MATERIALIZED.get(registry);
         if (materialized != null) {
             return (HolderGetter<T>) materialized;
         }
+
+        Registry<?> builtin = staticRegistry(registry.identifier());
+        if (builtin != null) {
+            return (HolderGetter<T>) builtin;
+        }
+
         return vanilla().lookupOrThrow(registry);
     }
 
@@ -144,7 +181,7 @@ public final class BootstrapSafeMinecraftRegistries {
         return mappedRegistryOrNull(registryKey);
     }
 
-    @SuppressWarnings("ConstantValue")
+    @SuppressWarnings({"ConstantValue", "unchecked"})
     public static <T> @Nullable Registry<T> mappedRegistryOrNull(ResourceKey<? extends Registry<T>> registry) {
         Server bukkit = Bukkit.getServer();
         if (bukkit != null) {
@@ -152,10 +189,9 @@ public final class BootstrapSafeMinecraftRegistries {
             return access.lookup(registry).orElse(null);
         }
 
-        RegistryAccess builtins = RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY);
-        Registry<T> builtin = builtins.lookup(registry).orElse(null);
+        Registry<?> builtin = staticRegistry(registry.identifier());
         if (builtin != null) {
-            return builtin;
+            return (Registry<T>) builtin;
         }
 
         return materialize(registry);
@@ -183,7 +219,7 @@ public final class BootstrapSafeMinecraftRegistries {
     }
 
     private static <T> @Nullable Registry<T> copyToMapped(HolderLookup.Provider source, ResourceKey<? extends Registry<T>> key) {
-        HolderLookup.RegistryLookup<T> lookup = source.<T>lookup((ResourceKey<? extends Registry<? extends T>>) (ResourceKey<?>) key).orElse(null);
+        HolderLookup.RegistryLookup<T> lookup = source.<T>lookup(key).orElse(null);
         if (lookup == null) {
             return null;
         }

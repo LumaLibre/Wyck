@@ -1,5 +1,6 @@
 package dev.wyck.test;
 
+import dev.wyck.util.BukkitBootstrapUtil;
 import dev.wyck.wrapper.worldgen.valueproviders.IntProvider;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
@@ -12,7 +13,10 @@ import dev.wyck.wrapper.worldgen.feature.ConfiguredFeature;
 import dev.wyck.wrapper.worldgen.placement.PlacedFeature;
 import dev.wyck.wrapper.worldgen.placement.PlacedFeatures;
 import dev.wyck.wrapper.worldgen.placement.PlacementModifier;
+import org.bukkit.Axis;
 import org.bukkit.Material;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Orientable;
 
 public class TestPluginBootstrapper implements PluginBootstrap {
 
@@ -22,6 +26,10 @@ public class TestPluginBootstrapper implements PluginBootstrap {
 
     @Override
     public void bootstrap(BootstrapContext context) {
+        BlockData blockData = BukkitBootstrapUtil.util().createBlockData(Material.OAK_LOG);
+        Orientable orientable = (Orientable) blockData;
+        orientable.setAxis(Axis.X);
+        System.out.println(orientable);
 
         new PillarFeature().registerAs(PILLAR_KEY);
         ConfiguredFeature tallFeature  = ConfiguredFeature.custom(PILLAR_KEY, new PillarFeature.PillarConfig(Material.OBSIDIAN, Material.GLOWSTONE, 10, 15));

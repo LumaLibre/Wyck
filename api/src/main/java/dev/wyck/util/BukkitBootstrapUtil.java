@@ -1,5 +1,6 @@
 package dev.wyck.util;
 
+import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.WireProvider;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
@@ -22,9 +23,22 @@ public interface BukkitBootstrapUtil {
     @ApiStatus.Internal
     WireProvider<BukkitBootstrapUtil> WIRE = WireProvider.create("dev.wyck.util.BukkitBootstrapUtilImpl");
 
+    /**
+     * Creates a new BlockData instance for the given material.
+     * @param material the material to create a BlockData for
+     * @return a new BlockData instance for the given material
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
+    BlockData createBlockData(Material material);
+
+    /**
+     * Gets the current BukkitBootstrapUtil instance.
+     * @return the current BukkitBootstrapUtil instance
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
     static BukkitBootstrapUtil util() {
         return WIRE.get();
     }
-
-    BlockData createBlockData(Material material);
 }
