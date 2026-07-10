@@ -23,7 +23,7 @@ public sealed class WireProvider<F> permits OptionalWireProvider, ConstructWireP
     private static final String VERSION_EXPECTED = "*";
     private static final String VERSION_AVAILABLE = "*?";
 
-    private final String classNameTemplate;
+    protected final String classNameTemplate;
     protected volatile @Nullable F factory;
 
     /** Cached constructor for {@link #getNew()}. Resolved once, reused thereafter. */

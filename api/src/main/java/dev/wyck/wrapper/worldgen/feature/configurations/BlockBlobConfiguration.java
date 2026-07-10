@@ -42,6 +42,16 @@ public interface BlockBlobConfiguration extends FeatureConfiguration {
     BlockPredicate canPlaceOn();
 
     /**
+     * Creates a new builder from this configuration.
+     * @return a new builder with the same values as this configuration
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
+    default Builder toBuilder() {
+        return new Builder(this);
+    }
+
+    /**
      * Creates a new block blob configuration.
      * @param state the block state that makes up the blob
      * @param canPlaceOn the block predicate that must be passed for the blob to be placed on a block
@@ -54,6 +64,16 @@ public interface BlockBlobConfiguration extends FeatureConfiguration {
     }
 
     /**
+     * Creates a new builder.
+     * @return a new builder
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
+    static Builder builder() {
+        return new Builder();
+    }
+
+    /**
      * Builder for {@link BlockBlobConfiguration}.
      * @since 3.0.0
      * @version 3.0.0
@@ -63,6 +83,13 @@ public interface BlockBlobConfiguration extends FeatureConfiguration {
     final class Builder {
         private @Nullable BlockData state;
         private @Nullable BlockPredicate canPlaceOn;
+
+        public Builder() {}
+
+        public Builder(BlockBlobConfiguration configuration) {
+            this.state = configuration.state();
+            this.canPlaceOn = configuration.canPlaceOn();
+        }
 
         /**
          * Sets the block state that makes up the blob.

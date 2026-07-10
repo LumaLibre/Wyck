@@ -17,8 +17,9 @@ import java.util.Set;
 /**
  * Wraps Minecraft's CarverConfiguration class.
  *
+ * @see <a href="https://minecraft.wiki/w/Carver_definition">Carver definition</a>
  * @since 2.3.0
- * @version 2.3.0
+ * @version 3.0.0
  * @author Jsinco
  */
 @NullMarked
@@ -81,36 +82,72 @@ public interface CarverConfiguration extends ProbabilityFeatureConfiguration {
             this.replaceable.addAll(configuration.replaceable());
         }
 
+        /**
+         * Sets the probability of the carver.
+         * @param probability the probability of the carver
+         * @return this builder
+         * @since 3.0.0
+         */
         @AsOf("3.0.0")
         public B probability(float probability) {
             this.probability = probability;
             return (B) this;
         }
 
+        /**
+         * Sets the y-level of the carver.
+         * @param y the y-level of the carver
+         * @return this builder
+         * @since 3.0.0
+         */
         @AsOf("3.0.0")
         public B y(HeightProvider y) {
             this.y = y;
             return (B) this;
         }
 
+        /**
+         * Sets the y-scale of the carver.
+         * @param yScale the y-scale of the carver
+         * @return this builder
+         * @since 3.0.0
+         */
         @AsOf("3.0.0")
         public B yScale(FloatProvider yScale) {
             this.yScale = yScale;
             return (B) this;
         }
 
+        /**
+         * Sets the lava level of the carver.
+         * @param lavaLevel the lava level of the carver
+         * @return this builder
+         * @since 3.0.0
+         */
         @AsOf("3.0.0")
         public B lavaLevel(VerticalAnchor lavaLevel) {
             this.lavaLevel = lavaLevel;
             return (B) this;
         }
 
+        /**
+         * Sets the debug settings of the carver.
+         * @param debugSettings the debug settings of the carver
+         * @return this builder
+         * @since 3.0.0
+         */
         @AsOf("3.0.0")
         public B debugSettings(CarverDebugSettings debugSettings) {
             this.debugSettings = debugSettings;
             return (B) this;
         }
 
+        /**
+         * Sets the materials that can be replaced by this carver.
+         * @param replaceable the materials that can be replaced by this carver
+         * @return this builder
+         * @since 3.0.0
+         */
         @AsOf("3.0.0")
         public B replaceable(Set<Material> replaceable) {
             this.replaceable = replaceable;
@@ -119,18 +156,31 @@ public interface CarverConfiguration extends ProbabilityFeatureConfiguration {
 
         // Friendly builder methods
 
+        /**
+         * Adds a material to the list of replaceable materials.
+         * @param replaceable the material to add
+         * @return this builder
+         * @since 3.0.0
+         */
         @AsOf("3.0.0")
         public B replaceable(Material... replaceable) {
             Collections.addAll(this.replaceable, replaceable);
             return (B) this;
         }
 
+        /**
+         * Builds the carver configuration.
+         * @return the carver configuration
+         * @since 3.0.0
+         */
+        @AsOf("3.0.0")
         public final T build() {
             Preconditions.checkArgument(probability >= 0.0F && probability <= 1.0F, "probability must be between 0.0 and 1.0");
             Preconditions.checkNotNull(y, "y must be set");
             Preconditions.checkNotNull(yScale, "yScale must be set");
             Preconditions.checkNotNull(lavaLevel, "lavaLevel must be set");
             Preconditions.checkNotNull(debugSettings, "debugSettings must be set");
+            Preconditions.checkNotNull(replaceable, "replaceable must be set");
             return create();
         }
 

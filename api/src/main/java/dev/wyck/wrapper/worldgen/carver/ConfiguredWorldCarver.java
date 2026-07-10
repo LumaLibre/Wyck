@@ -5,7 +5,7 @@ import dev.wyck.keys.ResourceKey;
 import dev.wyck.wrapper.internal.Wrapper;
 import dev.wyck.wrapper.worldgen.carver.custom.CustomCarver;
 import dev.wyck.wrapper.worldgen.carver.types.ComposedCarver;
-import dev.wyck.wrapper.worldgen.carver.types.ComposedCustomCarver;
+import dev.wyck.wrapper.worldgen.carver.types.CustomComposedCarver;
 import dev.wyck.wrapper.worldgen.carver.types.ReferencedCarver;
 import net.kyori.adventure.key.Keyed;
 import org.jspecify.annotations.NullMarked;
@@ -75,8 +75,8 @@ public interface ConfiguredWorldCarver extends Wrapper, Keyed {
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    static <C> ComposedCustomCarver<C> custom(CustomCarver<C> customCarver, C config) {
-        return ComposedCustomCarver.of(customCarver, config);
+    static <C> CustomComposedCarver<C> custom(CustomCarver<C> customCarver, C config) {
+        return CustomComposedCarver.of(customCarver, config);
     }
 
     /**
@@ -86,7 +86,7 @@ public interface ConfiguredWorldCarver extends Wrapper, Keyed {
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    static <C> ComposedCustomCarver.Builder<C> custom() {
-        return ComposedCustomCarver.builder();
+    static <C> CustomComposedCarver.Builder<C> custom() {
+        return CustomComposedCarver.builder();
     }
 }

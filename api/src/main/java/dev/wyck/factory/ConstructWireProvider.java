@@ -1,5 +1,6 @@
 package dev.wyck.factory;
 
+import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -37,6 +38,18 @@ public final class ConstructWireProvider<F> extends WireProvider<F> {
     @AsOf("2.4.1")
     public static <F> ConstructWireProvider<F> create(String classNameTemplate) {
         return new ConstructWireProvider<>(classNameTemplate);
+    }
+
+    /**
+     * Derives a provider for a class nested inside this provider's resolved class.
+     * @param innerClassName the simple name of the nested class
+     * @return a provider that constructs the nested class
+     * @param <T> the type of the nested class
+     */
+    @AsOf("3.0.0")
+    public <T> ConstructWireProvider<T> resolve(String innerClassName) {
+        Preconditions.checkArgument(!innerClassName.isBlank(), "innerClassName must not be blank");
+        return ConstructWireProvider.create(classNameTemplate + '$' + innerClassName);
     }
 
     /**

@@ -3,10 +3,19 @@ package dev.wyck.wrapper.worldgen.carver.types;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.ConstructWireProvider;
 import dev.wyck.keys.ResourceKey;
+import dev.wyck.wrapper.worldgen.carver.Carvers;
 import dev.wyck.wrapper.worldgen.carver.ConfiguredWorldCarver;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
+/**
+ * A reference to an existing registered carver.
+ *
+ * @see Carvers
+ * @since 3.0.0
+ * @version 3.0.0
+ * @author Jsinco
+ */
 @NullMarked
 @AsOf("3.0.0")
 public interface ReferencedCarver extends ConfiguredWorldCarver {
@@ -14,6 +23,12 @@ public interface ReferencedCarver extends ConfiguredWorldCarver {
     @ApiStatus.Internal
     ConstructWireProvider<ReferencedCarver> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.carver.types.ReferencedCarverImpl");
 
+    /**
+     * Creates a new reference to the given carver.
+     * @param key the key of the carver
+     * @return a new reference to the given carver
+     * @since 3.0.0
+     */
     @AsOf("3.0.0")
     static ReferencedCarver of(ResourceKey key) {
         return WIRE.construct(key);

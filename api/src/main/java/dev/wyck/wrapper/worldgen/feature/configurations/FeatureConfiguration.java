@@ -25,7 +25,7 @@ public interface FeatureConfiguration extends Wrapper {
      */
     @AsOf("3.0.0")
     static BlockBlobConfiguration.Builder blockBlob() {
-        return new BlockBlobConfiguration.Builder();
+        return BlockBlobConfiguration.builder();
     }
 
     /**
@@ -101,9 +101,11 @@ public interface FeatureConfiguration extends Wrapper {
 
     /**
      * Creates a builder for a {@link DripstoneClusterConfiguration}.
+     * @deprecated Wyck will no longer support multiple versions of Minecraft soon.
      * @return a new dripstone cluster configuration builder
      * @since 3.0.0
      */
+    @Deprecated
     @AsOf("3.0.0")
     static DripstoneClusterConfiguration.Builder dripstoneCluster() {
         return DripstoneClusterConfiguration.builder();
