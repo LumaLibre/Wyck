@@ -9,7 +9,7 @@ import dev.wyck.test.carver.StarCarver;
 import dev.wyck.test.carver.StarConfig;
 import dev.wyck.wrapper.biome.BiomeSpecialEffects;
 import dev.wyck.wrapper.environment.attribute.EnvironmentAttributes;
-import dev.wyck.wrapper.level.BiomeSource;
+import dev.wyck.wrapper.worldgen.biome.BiomeSource;
 import dev.wyck.wrapper.level.dimension.WorldClock;
 import dev.wyck.wrapper.level.dimension.Skybox;
 import dev.wyck.wrapper.worldgen.noise.Noise;
@@ -38,6 +38,7 @@ import dev.wyck.wrapper.worldgen.stateproviders.BlockStateProvider;
 import dev.wyck.wrapper.worldgen.surface.SurfaceCondition;
 import dev.wyck.wrapper.worldgen.surface.SurfaceRule;
 import dev.wyck.wrapper.worldgen.valueproviders.IntProvider;
+import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.World;
@@ -63,6 +64,8 @@ public class TestPlugin extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
+        //BuiltinDimensionTypes;
+        //Biomes
         //BlockData stone = Material.STONE.createBlockData();
         //DimensionType
         ResourceKey levelKey = ResourceKey.of("test", "wobbleworld5");

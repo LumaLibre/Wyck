@@ -22,6 +22,10 @@ import net.minecraft.data.worldgen.placement.OrePlacements;
 import net.minecraft.data.worldgen.placement.TreePlacements;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.data.worldgen.placement.VillagePlacements;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
 import net.minecraft.world.level.levelgen.NoiseRouterData;
 import net.minecraft.world.level.levelgen.Noises;
 import org.jspecify.annotations.Nullable;
@@ -36,7 +40,9 @@ public final class Generators {
         placedFeatures(),
         densityFunctions(),
         noiseParameters(),
-        soundEvents()
+        soundEvents(),
+        biomeKeys(),
+        dimensionKeys()
     );
 
     private static GeneratorSpec configuredFeatures() {
@@ -129,15 +135,49 @@ public final class Generators {
             "SoundEvents",
             "SoundEvent",
             "SoundEvent.variableRange",
-            net.minecraft.sounds.SoundEvent.class,
+            SoundEvent.class,
             Generators::soundLocation,
             List.of(
-                net.minecraft.sounds.SoundEvents.class
+                SoundEvents.class
             ),
             "Typed references that point to vanilla's sound events.",
             "2.4.1",
             "SOUND_EVENTS",
             Generators::isSoundField
+        );
+    }
+
+    private static GeneratorSpec biomeKeys() {
+        return new GeneratorSpec(
+            "dev.wyck.model.biome",
+            "Biomes",
+            "Biome",
+            "Biome.reference",
+            ResourceKey.class,
+            Generators::keyLocation,
+            List.of(
+                Biomes.class
+            ),
+            "Typed references that point to vanilla's biomes.",
+            "3.0.0",
+            "BIOMES"
+        );
+    }
+
+    private static GeneratorSpec dimensionKeys() {
+        return new GeneratorSpec(
+            "dev.wyck.model.level.dimension",
+            "Dimensions",
+            "Dimension",
+            "Dimension.reference",
+            ResourceKey.class,
+            Generators::keyLocation,
+            List.of(
+                BuiltinDimensionTypes.class
+            ),
+            "Typed references that point to vanilla's dimensions.",
+            "3.0.0",
+            "DIMENSIONS"
         );
     }
 

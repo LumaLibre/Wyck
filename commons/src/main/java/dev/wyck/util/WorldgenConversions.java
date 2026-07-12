@@ -17,7 +17,10 @@ import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.function.Function;
 
 /**
  * Internal conversion helpers shared across the worldgen carver factories.
@@ -31,18 +34,33 @@ public final class WorldgenConversions {
     private WorldgenConversions() {
     }
 
+    public static <W, T> HolderSet<T> toHolderSet(Collection<W> elements, Function<? super W, ? extends Holder<T>> toHolder) {
+        List<Holder<T>> holders = new ArrayList<>(elements.size());
+        for (W element : elements) {
+            holders.add(toHolder.apply(element));
+        }
+
+        return HolderSet.direct(holders);
+    }
+
+    public static <W, T> Set<W> fromHolderSet(HolderSet<T> holderSet, Function<? super Holder<T>, ? extends W> fromHolder) {
+        Set<W> set = new LinkedHashSet<>();
+        for (Holder<T> holder : holderSet) {
+            set.add(fromHolder.apply(holder));
+        }
+
+        return set;
+    }
+
     public static HolderSet<Block> toBlockHolderSet(Collection<Material> materials) {
-        List<Holder<Block>> holders = new ArrayList<>(materials.size());
-        for (Material material : materials) {
+        return toHolderSet(materials, material -> {
             Block block = CraftMagicNumbers.getBlock(material);
             if (block == null) {
                 throw new IllegalArgumentException("Material " + material + " does not map to a block");
             }
 
-            holders.add(block.builtInRegistryHolder());
-        }
-
-        return HolderSet.direct(holders);
+            return block.builtInRegistryHolder();
+        });
     }
 
     public static List<Block> toBlockList(Collection<Material> materials) {

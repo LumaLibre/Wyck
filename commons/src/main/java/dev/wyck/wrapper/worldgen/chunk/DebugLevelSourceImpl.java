@@ -3,7 +3,7 @@ package dev.wyck.wrapper.worldgen.chunk;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.model.biome.Biome;
 import dev.wyck.util.BootstrapSafeMinecraftRegistries;
-import dev.wyck.wrapper.level.BiomeSource;
+import dev.wyck.wrapper.worldgen.biome.BiomeSource;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 

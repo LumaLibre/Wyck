@@ -3,7 +3,6 @@ package dev.wyck.wrapper.worldgen.chunk;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.ConstructWireProvider;
 import dev.wyck.model.biome.Biome;
-import dev.wyck.wrapper.level.BiomeSource;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 

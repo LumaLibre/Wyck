@@ -5,7 +5,7 @@ import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.ConstructWireProvider;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.model.level.LevelCreator;
-import dev.wyck.wrapper.level.BiomeSource;
+import dev.wyck.wrapper.worldgen.biome.BiomeSource;
 import dev.wyck.wrapper.worldgen.noise.Noise;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;

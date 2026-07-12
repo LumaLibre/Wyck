@@ -12,7 +12,7 @@ import dev.wyck.wrapper.environment.sounds.AmbientSounds;
 import dev.wyck.wrapper.environment.sounds.BackgroundMusic;
 import dev.wyck.wrapper.environment.sounds.Music;
 import dev.wyck.wrapper.environment.sounds.SoundEvents;
-import dev.wyck.wrapper.level.BiomeSource;
+import dev.wyck.wrapper.worldgen.biome.BiomeSource;
 import dev.wyck.wrapper.worldgen.noise.Noise;
 import dev.wyck.wrapper.worldgen.chunk.NoiseBasedChunkGenerator;
 import net.minecraft.core.registries.Registries;

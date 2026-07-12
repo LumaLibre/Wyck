@@ -18,7 +18,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.4.0")
-@Generated("2026-07-12T03:24:01.288090Z")
+@Generated("2026-07-12T06:32:42.060278Z")
 public final class Noises {
 
     // From: Noises 

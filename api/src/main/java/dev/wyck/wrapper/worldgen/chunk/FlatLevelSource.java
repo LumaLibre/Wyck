@@ -3,7 +3,7 @@ package dev.wyck.wrapper.worldgen.chunk;
 import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.ConstructWireProvider;
-import dev.wyck.wrapper.level.BiomeSource;
+import dev.wyck.wrapper.worldgen.biome.BiomeSource;
 import dev.wyck.wrapper.worldgen.chunk.flat.FlatLevelGeneratorSettings;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;

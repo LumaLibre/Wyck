@@ -5,7 +5,7 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.wrapper.level.TransientMultiNoiseBiomeSource;
+import dev.wyck.wrapper.worldgen.biome.TransientMultiNoiseBiomeSource;
 import dev.wyck.wrapper.worldgen.climate.ClimatePoint;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;

@@ -1,4 +1,4 @@
-package dev.wyck.wrapper.level;
+package dev.wyck.wrapper.worldgen.biome;
 
 import com.google.common.base.Suppliers;
 import com.google.common.collect.ImmutableSet;
