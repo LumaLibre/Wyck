@@ -1,6 +1,7 @@
 package dev.wyck.test;
 
 import dev.wyck.model.biome.Biome;
+import dev.wyck.model.biome.Biomes;
 import dev.wyck.model.level.dimension.Dimension;
 import dev.wyck.model.level.LevelCreator;
 import dev.wyck.keys.ResourceKey;
@@ -15,6 +16,9 @@ import dev.wyck.wrapper.level.dimension.Skybox;
 import dev.wyck.wrapper.worldgen.noise.Noise;
 import dev.wyck.wrapper.worldgen.noise.types.NoiseGeneratorSettings;
 import dev.wyck.wrapper.worldgen.noise.NoiseRouter;
+import dev.wyck.wrapper.worldgen.surface.condition.CaveSurface;
+import dev.wyck.wrapper.worldgen.surface.condition.ConditionSource;
+import dev.wyck.wrapper.worldgen.surface.rule.RuleSource;
 import dev.wyck.wrapper.worldgen.synth.Noises;
 import dev.wyck.wrapper.worldgen.chunk.NoiseBasedChunkGenerator;
 import dev.wyck.wrapper.worldgen.function.DensityFunction;
@@ -35,10 +39,8 @@ import dev.wyck.wrapper.worldgen.feature.trunkplacers.TrunkPlacer;
 import dev.wyck.wrapper.worldgen.placement.PlacedFeature;
 import dev.wyck.wrapper.worldgen.placement.PlacementModifier;
 import dev.wyck.wrapper.worldgen.stateproviders.BlockStateProvider;
-import dev.wyck.wrapper.worldgen.surface.SurfaceCondition;
 import dev.wyck.wrapper.worldgen.surface.SurfaceRule;
 import dev.wyck.wrapper.worldgen.valueproviders.IntProvider;
-import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.World;
@@ -164,18 +166,20 @@ public class TestPlugin extends JavaPlugin implements Listener {
             .veinGap(DensityFunction.constant(0.0))
             .build();
 
-        SurfaceCondition onFloor = SurfaceCondition.stoneDepth(0, false, SurfaceCondition.CaveSurface.FLOOR);
-        SurfaceCondition underFloor = SurfaceCondition.stoneDepth(0, true, SurfaceCondition.CaveSurface.FLOOR);
+        ConditionSource onFloor = SurfaceRule.stoneDepth(0, false, CaveSurface.FLOOR);
+        ConditionSource underFloor = SurfaceRule.stoneDepth(0, true, CaveSurface.FLOOR);
 
-        SurfaceRule topBlocks = SurfaceRule.sequence(List.of(
-            SurfaceRule.ifTrue(SurfaceCondition.isBiome(List.of(ResourceKey.minecraft("desert"))), SurfaceRule.block(Material.SAND)),
-            SurfaceRule.ifTrue(SurfaceCondition.isBiome(List.of(ResourceKey.minecraft("snowy_taiga"))), SurfaceRule.block(Material.SNOW_BLOCK)),
-            SurfaceRule.ifTrue(SurfaceCondition.isBiome(List.of(ResourceKey.minecraft("taiga"))), SurfaceRule.block(Material.PODZOL)),
-            SurfaceRule.block(Material.GRASS_BLOCK)
-        ));
 
-        SurfaceRule subBlocks = SurfaceRule.sequence(List.of(
-            SurfaceRule.ifTrue(SurfaceCondition.isBiome(List.of(ResourceKey.minecraft("desert"))), SurfaceRule.block(Material.SANDSTONE)),
+        RuleSource topBlocks = SurfaceRule.sequence()
+            .rule(SurfaceRule.isBiome(Biomes.DESERT).then(SurfaceRule.block(Material.SAND)))
+            .rule(SurfaceRule.isBiome(Biomes.SNOWY_TAIGA).then(SurfaceRule.block(Material.SNOW_BLOCK)))
+            .rule(SurfaceRule.isBiome(Biomes.TAIGA).then(SurfaceRule.block(Material.PODZOL)))
+            .rule(SurfaceRule.block(Material.GRASS_BLOCK))
+            .build();
+
+
+        RuleSource subBlocks = SurfaceRule.sequence(List.of(
+            SurfaceRule.ifTrue(SurfaceRule.isBiome(List.of(Biomes.DESERT)), SurfaceRule.block(Material.SANDSTONE)),
             SurfaceRule.block(Material.DIRT)
         ));
 
