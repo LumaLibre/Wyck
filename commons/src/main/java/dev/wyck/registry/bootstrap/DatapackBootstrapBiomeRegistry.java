@@ -203,7 +203,7 @@ public final class DatapackBootstrapBiomeRegistry implements BootstrapBiomeRegis
                 Path biomeFile = root.resolve("data")
                     .resolve(rk.namespace())
                     .resolve("worldgen")
-                    .resolve("dev/wyck/model/biome")
+                    .resolve("biome")
                     .resolve(rk.path() + ".json");
                 Files.createDirectories(biomeFile.getParent());
                 Files.writeString(biomeFile, GSON.toJson(json));
@@ -251,7 +251,7 @@ public final class DatapackBootstrapBiomeRegistry implements BootstrapBiomeRegis
         JsonArray biomes = new JsonArray();
         for (Pair<Climate.ParameterPoint, net.minecraft.resources.ResourceKey<net.minecraft.world.level.biome.Biome>> pair : pairs) {
             JsonObject biomeEntry = new JsonObject();
-            biomeEntry.addProperty("dev/wyck/model/biome", pair.getSecond().identifier().toString());
+            biomeEntry.addProperty("biome", pair.getSecond().identifier().toString());
 
             DataResult<JsonElement> encoded = Climate.ParameterPoint.CODEC.encodeStart(JsonOps.INSTANCE, pair.getFirst());
             biomeEntry.add("parameters", encoded.result().orElseThrow());
