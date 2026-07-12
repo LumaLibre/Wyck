@@ -1,116 +1,124 @@
 package dev.wyck.wrapper.worldgen.ruletest;
 
-import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
-import dev.wyck.factory.WireProvider;
+import dev.wyck.keys.ResourceKey;
 import dev.wyck.wrapper.internal.Wrapper;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.data.BlockData;
-import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 /**
- * Wraps Minecraft's RuleTest family, the block-match predicates used by ore and
- * replace-block configurations.
+ * Rule tests are used to test if a block matches specific conditions.
  *
+ * @see <a href="https://minecraft.wiki/w/Processor_list#Rule_test">Processor list (Rule test)</a>
  * @since 2.3.0
- * @version 2.3.0
+ * @version 3.0.0
  * @author Jsinco
  */
 @NullMarked
 @AsOf("2.3.0")
-public sealed interface RuleTest extends Wrapper permits RuleTest.AlwaysTrue, RuleTest.BlockMatch, RuleTest.BlockStateMatch, RuleTest.TagMatch, RuleTest.RandomBlockMatch, RuleTest.RandomBlockStateMatch {
+public interface RuleTest extends Wrapper {
 
-    @ApiStatus.Internal
-    WireProvider<Factory> WIRE = WireProvider.create("dev.wyck.wrapper.worldgen.ruletest.RuleTestFactoryImpl");
-
-    @ApiStatus.Internal
-    interface Factory {
-        Object toNms(RuleTest test);
+    /**
+     * Matches any block.
+     * @return the always true test
+     * @since 2.3.0
+     */
+    @AsOf("2.3.0")
+    static AlwaysTrueTest alwaysTrue() {
+        return AlwaysTrueTest.INSTANCE;
     }
 
+    /**
+     * Tests the block is the specified block.
+     * @param block the block to match
+     * @return the block match test
+     * @since 2.3.0
+     */
     @AsOf("2.3.0")
-    static RuleTest alwaysTrue() {
-        return new AlwaysTrue();
+    static BlockMatchTest blockMatch(Material block) {
+        return BlockMatchTest.of(block);
     }
 
+    /**
+     * Tests is the block for the specified {@link BlockData}.
+     * @param blockState the block blockState to match
+     * @return the block blockState match test
+     * @since 2.3.0
+     */
     @AsOf("2.3.0")
-    static RuleTest blockMatch(Material block) {
-        return new BlockMatch(block);
+    static BlockStateMatchTest blockStateMatch(BlockData blockState) {
+        return BlockStateMatchTest.of(blockState);
     }
 
-    @AsOf("2.3.0")
-    static RuleTest blockStateMatch(BlockData state) {
-        return new BlockStateMatch(state);
+    /**
+     * Tests is the block for the specified {@link Material}.
+     * @param material the material to match
+     * @return the block material match test
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
+    static BlockStateMatchTest blockStateMatch(Material material) {
+        return BlockStateMatchTest.of(material);
     }
 
-    @AsOf("2.3.0")
-    static RuleTest tagMatch(Tag<Material> tag) {
-        return new TagMatch(tag);
+    /**
+     * Tests if the block is in the specified block tag.
+     * @param tag the tag to match
+     * @return the tag match test
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
+    static TagMatchTest tagMatch(ResourceKey tag) {
+        return TagMatchTest.of(tag);
     }
 
+    /**
+     * Tests if the block is in the specified block tag.
+     * @param tag the tag to match
+     * @return the tag match test
+     * @since 2.3.0
+     */
     @AsOf("2.3.0")
-    static RuleTest randomBlockMatch(Material block, float probability) {
-        return new RandomBlockMatch(block, probability);
+    static TagMatchTest tagMatch(Tag<Material> tag) {
+        return TagMatchTest.of(tag);
     }
 
+    /**
+     * Tests the block is the specified block. Then only matches with a given probability.
+     * @param block the block to match
+     * @param probability the probability of matching
+     * @return the random block match test
+     * @since 2.3.0
+     */
     @AsOf("2.3.0")
-    static RuleTest randomBlockStateMatch(BlockData state, float probability) {
-        return new RandomBlockStateMatch(state, probability);
+    static RandomBlockMatchTest randomBlockMatch(Material block, float probability) {
+        return RandomBlockMatchTest.of(block, probability);
     }
 
-    @Override
+    /**
+     * Tests is the block for the specified {@link BlockData}. Then only matches with a given probability.
+     * @param state the block blockState to match
+     * @param probability the probability of matching
+     * @return the random block blockState match test
+     * @since 2.3.0
+     */
     @AsOf("2.3.0")
-    default Object toMinecraft() {
-        return WIRE.get().toNms(this);
+    static RandomBlockStateMatchTest randomBlockStateMatch(BlockData state, float probability) {
+        return RandomBlockStateMatchTest.of(state, probability);
     }
 
-    @AsOf("2.3.0")
-    record AlwaysTrue() implements RuleTest {}
-
-    @AsOf("2.3.0")
-    record BlockMatch(Material block) implements RuleTest {
-
-        @AsOf("2.3.0")
-        public BlockMatch {
-            Preconditions.checkNotNull(block, "block");
-        }
+    /**
+     * Tests is the block for the specified {@link Material}. Then only matches with a given probability.
+     * @param material the material to match
+     * @param probability the probability of matching
+     * @return the random block material match test
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
+    static RandomBlockStateMatchTest randomBlockStateMatch(Material material, float probability) {
+        return RandomBlockStateMatchTest.of(material, probability);
     }
 
-    @AsOf("2.3.0")
-    record BlockStateMatch(BlockData state) implements RuleTest {
-
-        @AsOf("2.3.0")
-        public BlockStateMatch {
-            Preconditions.checkNotNull(state, "state");
-        }
-    }
-
-    @AsOf("2.3.0")
-    record TagMatch(Tag<Material> tag) implements RuleTest {
-
-        @AsOf("2.3.0")
-        public TagMatch {
-            Preconditions.checkNotNull(tag, "tag");
-        }
-    }
-
-    @AsOf("2.3.0")
-    record RandomBlockMatch(Material block, float probability) implements RuleTest {
-
-        @AsOf("2.3.0")
-        public RandomBlockMatch {
-            Preconditions.checkNotNull(block, "block");
-        }
-    }
-
-    @AsOf("2.3.0")
-    record RandomBlockStateMatch(BlockData state, float probability) implements RuleTest {
-
-        @AsOf("2.3.0")
-        public RandomBlockStateMatch {
-            Preconditions.checkNotNull(state, "state");
-        }
-    }
 }
