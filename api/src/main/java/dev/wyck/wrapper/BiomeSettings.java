@@ -15,7 +15,7 @@ import org.jspecify.annotations.NullMarked;
  * @deprecated No longer representative of how climate settings should be defined,
  * use {@link dev.wyck.wrapper.biome.ClimateSettings}.
  */
-@Deprecated
+@Deprecated(forRemoval = true)
 @NullMarked
 @AsOf("0.0.8")
 public record BiomeSettings(
