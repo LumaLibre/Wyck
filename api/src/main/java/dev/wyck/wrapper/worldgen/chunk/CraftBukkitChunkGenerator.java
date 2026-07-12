@@ -3,7 +3,6 @@ package dev.wyck.wrapper.worldgen.chunk;
 import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.ConstructWireProvider;
-import org.bukkit.World;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -17,18 +16,11 @@ import org.jspecify.annotations.Nullable;
  */
 @NullMarked
 @AsOf("3.0.0")
+@ApiStatus.Obsolete
 public interface CraftBukkitChunkGenerator extends ChunkGenerator {
 
     @ApiStatus.Internal
     ConstructWireProvider<CraftBukkitChunkGenerator> WIRE = ConstructWireProvider.construct("dev.wyck.wrapper.worldgen.chunk.CraftBukkitChunkGeneratorImpl");
-
-    /**
-     * The world this chunk generator is for.
-     * @return the world
-     * @since 3.0.0
-     */
-    @AsOf("3.0.0")
-    World world();
 
     /**
      * The delegate Minecraft chunk generator for everything Bukkit's chunk generator can't do.
@@ -58,15 +50,14 @@ public interface CraftBukkitChunkGenerator extends ChunkGenerator {
 
     /**
      * Creates a new CraftBukkitChunkGenerator.
-     * @param world the world
      * @param delegate the delegate
      * @param generator the generator
      * @return the CraftBukkitChunkGenerator
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    static CraftBukkitChunkGenerator of(World world, ChunkGenerator delegate, org.bukkit.generator.ChunkGenerator generator) {
-        return WIRE.construct(world, delegate, generator);
+    static CraftBukkitChunkGenerator of(ChunkGenerator delegate, org.bukkit.generator.ChunkGenerator generator) {
+        return WIRE.construct(delegate, generator);
     }
 
     /**
@@ -87,28 +78,14 @@ public interface CraftBukkitChunkGenerator extends ChunkGenerator {
      */
     @AsOf("3.0.0")
     final class Builder {
-        private @Nullable World world;
         private @Nullable ChunkGenerator delegate;
         private org.bukkit.generator.@Nullable ChunkGenerator generator;
 
         public Builder() {}
 
         public Builder(CraftBukkitChunkGenerator other) {
-            this.world = other.world();
             this.delegate = other.delegate();
             this.generator = other.generator();
-        }
-
-        /**
-         * Sets the world.
-         * @param world the world
-         * @return this builder
-         * @since 3.0.0
-         */
-        @AsOf("3.0.0")
-        public Builder world(World world) {
-            this.world = world;
-            return this;
         }
 
         /**
@@ -156,10 +133,9 @@ public interface CraftBukkitChunkGenerator extends ChunkGenerator {
          */
         @AsOf("3.0.0")
         public CraftBukkitChunkGenerator build() {
-            Preconditions.checkNotNull(world, "world must be set");
             Preconditions.checkNotNull(delegate, "delegate must be set");
             Preconditions.checkNotNull(generator, "generator must be set");
-            return of(world, delegate, generator);
+            return of(delegate, generator);
         }
     }
 }

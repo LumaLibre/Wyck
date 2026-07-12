@@ -3,6 +3,7 @@ package dev.wyck.registry.level;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonObject;
+import dev.wyck.wrapper.worldgen.chunk.CraftBukkitChunkGeneratorImpl;
 import io.papermc.paper.FeatureHooks;
 import io.papermc.paper.world.PaperWorldLoader;
 import dev.wyck.annotations.WireFactory;
@@ -125,6 +126,11 @@ public final class SimpleLevelFactory implements LevelFactory {
             savedDataStorage,
             loadedWorldData
         );
+
+        // shitty bukkit hacks
+        if (world.generator() instanceof CraftBukkitChunkGeneratorImpl craftBukkitChunkGenerator) {
+            craftBukkitChunkGenerator.bindLevel(serverLevel);
+        }
 
         minecraftServer.addLevel(serverLevel);
         minecraftServer.initWorld(serverLevel, null);

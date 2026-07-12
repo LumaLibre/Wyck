@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.Lifecycle;
+import dev.wyck.wrapper.worldgen.chunk.CraftBukkitChunkGeneratorImpl;
 import io.papermc.paper.FeatureHooks;
 import dev.wyck.annotations.WireFactory;
 import dev.wyck.model.level.LevelCreator;
@@ -155,6 +156,10 @@ public final class SimpleLevelFactory implements LevelFactory {
             null,
             null
         );
+
+        if (world.generator() instanceof CraftBukkitChunkGeneratorImpl craftBukkitChunkGenerator) {
+            craftBukkitChunkGenerator.bindLevel(serverLevel);
+        }
 
         minecraftServer.addLevel(serverLevel);
         minecraftServer.initWorld(serverLevel, primaryLevelData, worldOptions);
