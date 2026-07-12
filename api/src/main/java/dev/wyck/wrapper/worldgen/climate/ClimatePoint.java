@@ -1,6 +1,8 @@
 package dev.wyck.wrapper.worldgen.climate;
 
+import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
+import dev.wyck.factory.ConstructWireProvider;
 import dev.wyck.factory.WireProvider;
 import dev.wyck.wrapper.internal.Wrapper;
 import org.jetbrains.annotations.ApiStatus;
@@ -17,12 +19,7 @@ import org.jspecify.annotations.NullMarked;
 public interface ClimatePoint extends Wrapper {
 
     @ApiStatus.Internal
-    WireProvider<Factory> WIRE = WireProvider.create("dev.wyck.wrapper.worldgen.climate.ClimatePointFactoryImpl");
-
-    @ApiStatus.Internal
-    interface Factory {
-        ClimatePoint create(ClimateParameter temperature, ClimateParameter humidity, ClimateParameter continentalness, ClimateParameter erosion, ClimateParameter depth, ClimateParameter weirdness, float offset);
-    }
+    ConstructWireProvider<ClimatePoint> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.climate.ClimatePointImpl");
 
     /**
      * The temperature axis span.
@@ -114,7 +111,8 @@ public interface ClimatePoint extends Wrapper {
      */
     @AsOf("2.4.1")
     static ClimatePoint of(ClimateParameter temperature, ClimateParameter humidity, ClimateParameter continentalness, ClimateParameter erosion, ClimateParameter depth, ClimateParameter weirdness, float offset) {
-        return WIRE.get().create(temperature, humidity, continentalness, erosion, depth, weirdness, offset);
+        Preconditions.checkArgument(offset >= 0.0f && offset <= 1.0f, "offset must be within [0.0, 1.0]: %s", offset);
+        return WIRE.construct(temperature, humidity, continentalness, erosion, depth, weirdness, offset);
     }
 
     /**

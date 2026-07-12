@@ -1,6 +1,8 @@
 package dev.wyck.wrapper.worldgen.climate;
 
+import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
+import dev.wyck.factory.ConstructWireProvider;
 import dev.wyck.factory.WireProvider;
 import dev.wyck.wrapper.internal.Wrapper;
 
@@ -17,16 +19,11 @@ import org.jspecify.annotations.NullMarked;
 @AsOf("2.3.0")
 public interface ClimateParameter extends Wrapper {
 
+    @ApiStatus.Internal
+    ConstructWireProvider<ClimateParameter> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.climate.ClimateParameterImpl");
+
     float MAX_BOUNDARY = 2.0f;
     float MIN_BOUNDARY = -2.0f;
-
-    @ApiStatus.Internal
-    WireProvider<Factory> WIRE = WireProvider.create("dev.wyck.wrapper.worldgen.climate.ClimateParameterFactoryImpl");
-
-    @ApiStatus.Internal
-    interface Factory {
-        ClimateParameter create(float min, float max);
-    }
 
     /**
      * The minimum and maximum values of this parameter between -2.0 and 2.0.
@@ -45,18 +42,6 @@ public interface ClimateParameter extends Wrapper {
     float max();
 
     /**
-     * A zero width span pinned to one value.
-     *
-     * @param value the value to pin to
-     * @return a ClimateParameter pinned to the given value
-     * @since 2.3.0
-     */
-    @AsOf("2.3.0")
-    static ClimateParameter point(float value) {
-        return WIRE.get().create(value, value);
-    }
-
-    /**
      * A span between two values.
      *
      * @param min the minimum value
@@ -66,7 +51,21 @@ public interface ClimateParameter extends Wrapper {
      */
     @AsOf("2.3.0")
     static ClimateParameter span(float min, float max) {
-        return WIRE.get().create(min, max);
+        Preconditions.checkArgument(min <= max, "min > max: %s %s", min, max);
+        Preconditions.checkArgument(min >= MIN_BOUNDARY && max <= MAX_BOUNDARY, "climate values must be within [-2.0, 2.0]: %s %s", min, max);
+        return WIRE.construct(min, max);
+    }
+
+    /**
+     * A zero width span pinned to one value.
+     *
+     * @param value the value to pin to
+     * @return a ClimateParameter pinned to the given value
+     * @since 2.3.0
+     */
+    @AsOf("2.3.0")
+    static ClimateParameter point(float value) {
+        return span(value, value);
     }
 
     /**

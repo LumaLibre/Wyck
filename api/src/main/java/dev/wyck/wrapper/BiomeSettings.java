@@ -1,7 +1,6 @@
 package dev.wyck.wrapper;
 
 import dev.wyck.annotations.AsOf;
-import dev.wyck.util.FloatRange;
 import dev.wyck.wrapper.biome.TemperatureModifier;
 import org.jspecify.annotations.NullMarked;
 
@@ -27,15 +26,6 @@ public record BiomeSettings(
     TemperatureModifier modifier,
     boolean hasPrecipitation
 ) {
-
-    public static final FloatRange RANGE = FloatRange.of(0, 25);
-
-    public BiomeSettings {
-        RANGE.validate(depth, "depth");
-        RANGE.validate(scale, "scale");
-        RANGE.validate(temperature, "temperature");
-        RANGE.validate(downfall, "downfall");
-    }
 
     /**
      * This method creates a new Builder object for creating instances of BiomeSettings.

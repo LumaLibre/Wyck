@@ -15,6 +15,8 @@ import dev.wyck.wrapper.worldgen.feature.featuresize.FeatureSize;
 import dev.wyck.wrapper.worldgen.feature.foliageplacers.FoliagePlacer;
 import dev.wyck.wrapper.worldgen.feature.treedecorators.TreeDecorator;
 import dev.wyck.wrapper.worldgen.feature.trunkplacers.TrunkPlacer;
+import dev.wyck.wrapper.worldgen.function.DensityFunction;
+import dev.wyck.wrapper.worldgen.function.DensityFunctions;
 import dev.wyck.wrapper.worldgen.placement.PlacedFeature;
 import dev.wyck.wrapper.worldgen.placement.PlacementModifier;
 import dev.wyck.wrapper.worldgen.stateproviders.BlockStateProvider;
@@ -87,6 +89,12 @@ public class ExamplePlugin extends JavaPlugin {
                         .build())
                     .build()
             )
+            .register();
+
+        DensityFunction densityFunction = DensityFunctions.PILLARS
+            .add(DensityFunctions.CONTINENTS_LARGE)
+            .mul(DensityFunction.constant(10f))
+            .blendDensity()
             .register();
     }
 }

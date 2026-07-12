@@ -1,9 +1,9 @@
 package dev.wyck.wrapper.biome.entity;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.WireProvider;
-import dev.wyck.util.FloatRange;
 import dev.wyck.util.WeightedList;
 import dev.wyck.wrapper.internal.Wrapper;
 import dev.wyck.wrapper.biome.entity.data.SpawnCost;
@@ -95,7 +95,6 @@ public interface BiomeSpawner extends Wrapper {
      */
     @AsOf("2.3.0")
     final class Builder {
-        public static final FloatRange RANGE = FloatRange.of(0.0F, 0.9999999F);
 
         private final Map<MobCategory, WeightedList.Builder<NaturalSpawner>> spawners;
         private final Map<EntityType, SpawnCost> mobSpawnCosts;
@@ -228,7 +227,6 @@ public interface BiomeSpawner extends Wrapper {
          */
         @AsOf("2.3.0")
         public Builder creatureGenerationProbability(float creatureGenerationProbability) {
-            RANGE.validate(creatureGenerationProbability, "creatureGenerationProbability");
             this.creatureGenerationProbability = creatureGenerationProbability;
             return this;
         }
@@ -240,6 +238,7 @@ public interface BiomeSpawner extends Wrapper {
          */
         @AsOf("2.3.0")
         public BiomeSpawner build() {
+            Preconditions.checkArgument(creatureGenerationProbability >= 0.0F && creatureGenerationProbability <= 1.0F, "creatureGenerationProbability must be between 0.0 and 1.0");
             return WIRE.get().create(spawners, mobSpawnCosts, creatureGenerationProbability);
         }
     }
