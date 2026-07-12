@@ -42,7 +42,7 @@ final class FeatureOrderResolver {
             for (Holder<PlacedFeature> holder : steps.get(step)) {
                 ordered.add(holder);
             }
-            // stable sort by global rank, unranked features sort last keeping their existing order
+            // stable sort by global rank, unranked decoration sort last keeping their existing order
             ordered.sort(Comparator.comparingInt(holder -> rankOf(rank, holder)));
 
             for (Holder<PlacedFeature> holder : ordered) {

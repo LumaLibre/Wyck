@@ -4,9 +4,10 @@ import dev.wyck.annotations.AsOf;
 import dev.wyck.model.biome.Biome;
 import dev.wyck.model.level.dimension.Dimension;
 import dev.wyck.wrapper.environment.sounds.SoundEvent;
-import dev.wyck.wrapper.level.noise.function.DensityFunction;
+import dev.wyck.wrapper.worldgen.function.DensityFunction;
 import dev.wyck.wrapper.worldgen.feature.ConfiguredFeature;
 import dev.wyck.wrapper.worldgen.placement.PlacedFeature;
+import dev.wyck.wrapper.worldgen.synth.NoiseParameters;
 import org.jetbrains.annotations.ApiStatus;
 
 /**
@@ -36,7 +37,7 @@ public interface KeyChains {
     KeyChain<DensityFunction> DENSITY_FUNCTIONS = KeyChain.mutable();
 
     @AsOf("2.4.0")
-    KeyChain<ResourceKey> NOISE = KeyChain.mutable();
+    KeyChain<NoiseParameters> NOISE = KeyChain.mutable();
 
     @AsOf("2.4.1")
     KeyChain<SoundEvent> SOUND_EVENTS = KeyChain.mutable();
@@ -91,7 +92,7 @@ public interface KeyChains {
      * @since 2.4.0
      */
     @AsOf("2.4.0")
-    static KeyChain<ResourceKey> noise() {
+    static KeyChain<NoiseParameters> noise() {
         return NOISE;
     }
 }

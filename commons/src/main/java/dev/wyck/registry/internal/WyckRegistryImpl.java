@@ -1,10 +1,12 @@
 package dev.wyck.registry.internal;
 
 import com.google.common.base.Preconditions;
+import dev.wyck.annotations.AsOf;
 import io.papermc.paper.registry.RegistryKey;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.util.BootstrapSafeMinecraftRegistries;
 import dev.wyck.util.ThrowingRunnable;
+import net.minecraft.core.Holder;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.Identifier;
@@ -119,6 +121,20 @@ public class WyckRegistryImpl<U> implements WyckRegistry {
     @SuppressWarnings("unchecked")
     public <T> @Nullable T retrieve(ResourceKey key) {
         return (T) registry.getValue((Identifier) key.identifier());
+    }
+
+    public <T> void register(ResourceKey key, T object) {
+        Identifier id = key.identifier();
+        Registry<T> registry = (Registry<T>) this.registry;
+        this.whileUnfrozen(() -> {
+            if (!registry.containsKey(id)) {
+                if (object instanceof Holder<?> holder) {
+                    Registry.register(registry, id, (T) holder.value());
+                } else {
+                    Registry.register(registry, id, object);
+                }
+            }
+        });
     }
 
     private static void unsafe(ThrowingRunnable runnable, String err) {

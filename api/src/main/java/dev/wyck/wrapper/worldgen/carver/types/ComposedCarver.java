@@ -3,12 +3,16 @@ package dev.wyck.wrapper.worldgen.carver.types;
 import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.ConstructWireProvider;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.wrapper.internal.Registerable;
 import dev.wyck.wrapper.worldgen.carver.CarverConfiguration;
 import dev.wyck.wrapper.worldgen.carver.ConfiguredWorldCarver;
 import dev.wyck.wrapper.worldgen.carver.WorldCarverType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
+
+import java.util.Optional;
 
 /**
  * A composed carver that uses a world carver type and its configuration.
@@ -19,10 +23,17 @@ import org.jspecify.annotations.Nullable;
  */
 @NullMarked
 @AsOf("3.0.0")
-public interface ComposedCarver extends ConfiguredWorldCarver {
+public interface ComposedCarver extends ConfiguredWorldCarver, Registerable<ComposedCarver> {
 
     @ApiStatus.Internal
     ConstructWireProvider<ComposedCarver> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.carver.types.ComposedCarverImpl");
+
+    /**
+     * The resource key of the carver.
+     * @return the resource key of the carver
+     * @since 3.0.0
+     */
+    Optional<ResourceKey> resourceKey();
 
     /**
      * The type of the carver.
@@ -52,6 +63,19 @@ public interface ComposedCarver extends ConfiguredWorldCarver {
 
     /**
      * Creates a new composed carver.
+     * @param resourceKey the resource key of the carver, or null if not present
+     * @param type the type of the carver
+     * @param config the configuration of the carver
+     * @return a new composed carver
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
+    static ComposedCarver of(@Nullable ResourceKey resourceKey, WorldCarverType type, CarverConfiguration config) {
+        return WIRE.construct(Optional.ofNullable(resourceKey), type, config);
+    }
+
+    /**
+     * Creates a new composed carver.
      * @param type the type of the carver
      * @param config the configuration of the carver
      * @return a new composed carver
@@ -59,7 +83,7 @@ public interface ComposedCarver extends ConfiguredWorldCarver {
      */
     @AsOf("3.0.0")
     static ComposedCarver of(WorldCarverType type, CarverConfiguration config) {
-        return WIRE.construct(type, config);
+        return of(null, type, config);
     }
 
     /**
@@ -112,6 +136,7 @@ public interface ComposedCarver extends ConfiguredWorldCarver {
      */
     @AsOf("3.0.0")
     final class Builder {
+        private @Nullable ResourceKey resourceKey;
         private @Nullable WorldCarverType type;
         private @Nullable CarverConfiguration config;
 
@@ -122,8 +147,21 @@ public interface ComposedCarver extends ConfiguredWorldCarver {
         }
 
         public Builder(ComposedCarver carver) {
+            this.resourceKey = carver.resourceKey().orElse(null);
             this.type = carver.type();
             this.config = carver.config();
+        }
+
+        /**
+         * Sets the resource key of the carver.
+         * @param resourceKey the resource key of the carver
+         * @return this builder
+         * @since 3.0.0
+         */
+        @AsOf("3.0.0")
+        public Builder resourceKey(ResourceKey resourceKey) {
+            this.resourceKey = resourceKey;
+            return this;
         }
 
         /**
@@ -159,7 +197,7 @@ public interface ComposedCarver extends ConfiguredWorldCarver {
         public ComposedCarver build() {
             Preconditions.checkNotNull(type, "type must be set");
             Preconditions.checkNotNull(config, "config must be set");
-            return of(type, config);
+            return of(resourceKey, type, config);
         }
     }
 }

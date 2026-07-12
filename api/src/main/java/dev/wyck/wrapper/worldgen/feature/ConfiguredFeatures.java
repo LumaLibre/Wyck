@@ -18,7 +18,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.3.0")
-@Generated("2026-07-03T03:43:43.965592Z")
+@Generated("2026-07-12T03:24:01.281100Z")
 public final class ConfiguredFeatures {
 
     // From: AquaticFeatures 

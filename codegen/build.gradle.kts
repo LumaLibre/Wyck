@@ -18,8 +18,8 @@ val mojangMappedServerConfig = listOf("mojangMappedServer", "mojangMappedServerR
 val generatedCatalogFiles = listOf(
     "dev/wyck/wrapper/worldgen/feature/ConfiguredFeatures.java",
     "dev/wyck/wrapper/worldgen/placement/PlacedFeatures.java",
-    "dev/wyck/wrapper/level/noise/function/DensityFunctions.java",
-    "dev/wyck/wrapper/level/noise/Noises.java",
+    "dev/wyck/wrapper/worldgen/function/DensityFunctions.java",
+    "dev/wyck/wrapper/worldgen/synth/Noises.java",
     "dev/wyck/wrapper/environment/sounds/SoundEvents.java"
 ).map { rootProject.file("api/src/main/java/$it") }
 

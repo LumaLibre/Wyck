@@ -12,7 +12,7 @@ import dev.wyck.model.level.StemPersistence;
 import dev.wyck.registry.internal.WyckRegistry;
 import dev.wyck.util.Lazy;
 import dev.wyck.util.internal.InternalReflectUtil;
-import dev.wyck.wrapper.level.spawner.LevelSpawner;
+import dev.wyck.wrapper.level.entity.LevelSpawner;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;

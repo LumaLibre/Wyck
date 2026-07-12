@@ -9,13 +9,10 @@ import net.minecraft.world.level.biome.MultiNoiseBiomeSource;
 import net.minecraft.world.level.biome.MultiNoiseBiomeSourceParameterList;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
-
-import java.util.List;
 
 @NullMarked
 @ApiStatus.Internal
-public record PresetBiomeSourceImpl(@Override ResourceKey preset) implements BiomeSource {
+public record PresetBiomeSourceImpl(ResourceKey preset) implements BiomeSource {
 
     @Override
     public Object toMinecraft() {
@@ -29,13 +26,4 @@ public record PresetBiomeSourceImpl(@Override ResourceKey preset) implements Bio
         return MultiNoiseBiomeSource.createFromPreset(holder);
     }
 
-    @Override
-    public @Nullable ResourceKey fixedBiome() {
-        return null;
-    }
-
-    @Override
-    public @Nullable List<BiomeSource.MultiNoiseEntry> entries() {
-        return null;
-    }
 }

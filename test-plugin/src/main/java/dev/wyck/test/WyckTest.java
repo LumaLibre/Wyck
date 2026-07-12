@@ -13,10 +13,9 @@ import dev.wyck.wrapper.environment.sounds.BackgroundMusic;
 import dev.wyck.wrapper.environment.sounds.Music;
 import dev.wyck.wrapper.environment.sounds.SoundEvents;
 import dev.wyck.wrapper.level.BiomeSource;
-import dev.wyck.wrapper.level.noise.Noise;
-import dev.wyck.wrapper.level.noise.chunk.ChunkGenerator;
+import dev.wyck.wrapper.worldgen.noise.Noise;
+import dev.wyck.wrapper.worldgen.chunk.NoiseBasedChunkGenerator;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.Carvers;
 import org.bukkit.World;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -36,7 +35,7 @@ public final class WyckTest extends JavaPlugin implements Listener {
 
         BiomeSource src = BiomeSource.overworld();
         getLogger().info("preset src = " + src);
-        ChunkGenerator generator = ChunkGenerator.of(src, Noise.overworld());
+        NoiseBasedChunkGenerator generator = NoiseBasedChunkGenerator.of(src, Noise.overworld());
 
         BackgroundMusic backgroundMusic = BackgroundMusic.builder()
             .defaultMusic(Music.of(SoundEvents.BARREL_OPEN, 0, 1, true))

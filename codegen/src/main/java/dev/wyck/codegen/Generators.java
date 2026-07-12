@@ -91,7 +91,7 @@ public final class Generators {
 
     private static GeneratorSpec densityFunctions() {
         return new GeneratorSpec(
-            "dev.wyck.wrapper.level.noise.function",
+            "dev.wyck.wrapper.worldgen.function",
             "DensityFunctions",
             "DensityFunction",
             "DensityFunction.reference",
@@ -108,10 +108,10 @@ public final class Generators {
 
     private static GeneratorSpec noiseParameters() {
         return new GeneratorSpec(
-            "dev.wyck.wrapper.level.noise",
+            "dev.wyck.wrapper.worldgen.synth",
             "Noises",
-            "ResourceKey",
-            "",
+            "NoiseParameters",
+            "NoiseParameters.reference",
             ResourceKey.class,
             Generators::keyLocation,
             List.of(

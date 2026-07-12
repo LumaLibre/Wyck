@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.registry.worldgen.CustomCarverRegistry;
+import dev.wyck.wrapper.internal.Registerable;
 import dev.wyck.wrapper.worldgen.valueproviders.FloatProvider;
 import dev.wyck.wrapper.worldgen.valueproviders.HeightProvider;
 import dev.wyck.wrapper.worldgen.valueproviders.VerticalAnchor;
@@ -28,7 +29,7 @@ import java.util.function.Supplier;
 @NullMarked
 @AsOf("3.0.0")
 @ApiStatus.Experimental
-public abstract class CustomCarver<C> implements Cloneable {
+public abstract class CustomCarver<C> implements Cloneable, Registerable<CustomCarver<C>> {
 
     private final Supplier<C> configSupplier;
     private @Nullable ResourceKey key;
@@ -213,11 +214,12 @@ public abstract class CustomCarver<C> implements Cloneable {
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    public final CustomCarver<C> registerAs(ResourceKey key) {
+    @SuppressWarnings("unchecked")
+    public final <T> T registerAs(ResourceKey key) {
         CustomCarver<C> cloned = this.clone();
         cloned.key = key;
         CustomCarverRegistry.registry().register(key, cloned);
-        return cloned;
+        return (T) cloned;
     }
 
     /**

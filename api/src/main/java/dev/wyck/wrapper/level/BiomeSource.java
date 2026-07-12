@@ -8,7 +8,6 @@ import dev.wyck.wrapper.internal.Wrapper;
 import dev.wyck.wrapper.worldgen.climate.ClimatePoint;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,45 +29,59 @@ public interface BiomeSource extends Wrapper {
     @ApiStatus.Internal
     interface Factory {
         BiomeSource fixed(ResourceKey biome);
-
         BiomeSource multiNoise(List<MultiNoiseEntry> entries);
-
         BiomeSource preset(ResourceKey preset);
-
-        // TODO: Do when decoders are available
-        //List<MultiNoiseEntry> presetEntries(ResourceKey preset);
     }
 
-    // TODO: Decoders
-    @ApiStatus.Internal
-    @Nullable ResourceKey fixedBiome();
-
-    @ApiStatus.Internal
-    @Nullable List<MultiNoiseEntry> entries();
-
-    @ApiStatus.Internal
-    @Nullable ResourceKey preset();
-
+    /**
+     * Creates a biome source that always returns the specified biome.
+     * @param biome the biome to return
+     * @return a biome source that always returns the specified biome
+     * @since 2.4.0
+     */
     @AsOf("2.4.0")
     static BiomeSource fixed(ResourceKey biome) {
         return WIRE.get().fixed(biome);
     }
 
+    /**
+     * Creates a biome source that always returns the specified biome.
+     * @param biome the biome to return
+     * @return a biome source that always returns the specified biome
+     * @since 2.4.0
+     */
     @AsOf("2.4.0")
     static BiomeSource fixed(Biome biome) {
         return fixed(biome.resourceKey());
     }
 
+    /**
+     * Creates a biome source that always returns the specified biome.
+     * @param biome the biome to return
+     * @return a biome source that always returns the specified biome
+     * @since 2.4.0
+     */
     @AsOf("2.4.0")
     static BiomeSource fixed(org.bukkit.block.Biome biome) {
         return fixed(ResourceKey.of(biome.getKey().asString()));
     }
 
+    /**
+     * Creates a multi-noise biome source.
+     * @return a new multi-noise biome source builder
+     * @since 2.4.0
+     */
     @AsOf("2.4.0")
     static MultiNoiseBuilder multiNoise() {
         return new MultiNoiseBuilder();
     }
 
+    /**
+     * Creates a biome source preset.
+     * @param preset the preset to create
+     * @return the biome source preset
+     * @since 2.4.0
+     */
     @AsOf("2.4.0")
     static BiomeSource preset(ResourceKey preset) {
         return WIRE.get().preset(preset);
@@ -94,20 +107,27 @@ public interface BiomeSource extends Wrapper {
         return preset(ResourceKey.minecraft("nether"));
     }
 
-
+    /**
+     * A multi-noise entry.
+     * @param biome the biome to return
+     * @param climatePoint the climate point to use
+     * @since 2.4.0
+     */
     @AsOf("2.4.0")
     record MultiNoiseEntry(ResourceKey biome, ClimatePoint climatePoint) {}
 
+    /**
+     * A builder for multi-noise biome sources.
+     * @since 2.4.0
+     * @version 2.4.0
+     * @author Jsinco
+     */
     @AsOf("2.4.0")
     final class MultiNoiseBuilder {
 
         private final List<MultiNoiseEntry> entries = new ArrayList<>();
 
-        private MultiNoiseBuilder() {}
-
-        private MultiNoiseBuilder(MultiNoiseBuilder builder) {
-            this.entries.addAll(builder.entries);
-        }
+        public MultiNoiseBuilder() {}
 
         @AsOf("2.4.0")
         public MultiNoiseBuilder add(ResourceKey biome, ClimatePoint point) {

@@ -3,7 +3,7 @@ package dev.wyck.test;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.model.biome.Biome;
 import dev.wyck.wrapper.biome.BiomeSpecialEffects;
-import dev.wyck.wrapper.worldgen.BiomeGenerationSettings;
+import dev.wyck.wrapper.biome.BiomeGenerationSettings;
 import dev.wyck.wrapper.worldgen.blockpredicates.BlockPredicate;
 import dev.wyck.wrapper.worldgen.GenerationStep;
 import dev.wyck.wrapper.worldgen.HeightmapType;

@@ -1,40 +1,79 @@
 package dev.wyck.wrapper.worldgen.feature;
 
 import dev.wyck.annotations.AsOf;
-import dev.wyck.factory.WireProvider;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.wrapper.internal.Wrapper;
 import dev.wyck.wrapper.worldgen.feature.configurations.FeatureConfiguration;
 import dev.wyck.wrapper.worldgen.feature.custom.CustomFeature;
-import net.kyori.adventure.key.Key;
+import dev.wyck.wrapper.worldgen.feature.types.ComposedConfiguredFeature;
+import dev.wyck.wrapper.worldgen.feature.types.CustomComposedConfiguredFeature;
+import dev.wyck.wrapper.worldgen.feature.types.ReferencedConfiguredFeature;
 import net.kyori.adventure.key.Keyed;
+import org.checkerframework.checker.units.qual.C;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
+import java.util.Optional;
+
 /**
- * Wraps Minecraft's ConfiguredFeature.
- * <p>
- *     <ul>
- *         <li>{@link Reference} is a reference to an already-registered configured feature.</li>
- *         <li>{@link VanillaConfigured} is a configured feature authored from a vanilla feature type and configuration.</li>
- *         <li>{@link CustomConfigured} is a configured feature composed of a registered custom feature with a config instance. The feature must already be registered under featureKey via {@link CustomFeature#registerAs(ResourceKey)}.</li>
- *     </ul>
- * </p>
+ * A configured feature is a feature that has been configured with a specific configuration.
+ * Configured features are used to generate features in the world and are tied to biomes.
  *
+ * @see <a href="https://minecraft.wiki/w/Configured_feature">Configured feature</a>
  * @since 2.3.0
  * @version 2.3.0
  * @author Jsinco
  */
 @NullMarked
 @AsOf("2.3.0")
-public sealed interface ConfiguredFeature extends Wrapper, Keyed permits ConfiguredFeature.CustomConfigured, ConfiguredFeature.Reference, ConfiguredFeature.VanillaConfigured {
+public interface ConfiguredFeature extends Wrapper, Keyed {
 
-    @ApiStatus.Internal
-    WireProvider<Factory> WIRE = WireProvider.create("dev.wyck.wrapper.worldgen.feature.ConfiguredFeatureFactoryImpl");
+    /**
+     * The resource key of the configured feature, if present.
+     * @return the resource key of the configured feature, if present
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
+    Optional<ResourceKey> resourceKey();
 
-    @ApiStatus.Internal
-    interface Factory {
-        Object toNms(ConfiguredFeature feature);
+    /**
+     * Authors a configured feature from a vanilla feature type and configuration.
+     * @param featureType the vanilla feature type
+     * @param config the configuration
+     * @return an authored configured feature
+     * @since 2.3.0
+     */
+    @AsOf("2.3.0")
+    @ApiStatus.Obsolete
+    static ComposedConfiguredFeature of(FeatureType featureType, FeatureConfiguration config) {
+        return ComposedConfiguredFeature.of(featureType, config);
+    }
+
+    /**
+     * Composes a custom feature with a config instance.
+     * @param feature the custom feature to compose
+     * @param config the config instance to place with
+     * @return an authored configured feature
+     * @param <C> the config type
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
+    static <C> CustomComposedConfiguredFeature<C> custom(CustomFeature<C> feature, C config) {
+        return CustomComposedConfiguredFeature.of(feature, config);
+    }
+
+    /**
+     * Composes a registered custom feature with a config instance.
+     * @param feature the custom feature to compose
+     * @param config the config instance to place with
+     * @return an authored configured feature
+     * @param <C> the config type
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
+    @ApiStatus.Obsolete
+    static <C> CustomComposedConfiguredFeature<C> of(CustomFeature<C> feature, C config) {
+        return CustomComposedConfiguredFeature.of(feature, config);
     }
 
     /**
@@ -44,34 +83,18 @@ public sealed interface ConfiguredFeature extends Wrapper, Keyed permits Configu
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static ConfiguredFeature reference(ResourceKey key) {
-        return new Reference(key);
+    static ReferencedConfiguredFeature reference(ResourceKey key) {
+        return ReferencedConfiguredFeature.of(key);
     }
 
     /**
      * Authors a configured feature from a vanilla feature type and configuration.
-     * @param featureType the vanilla feature algorithm
-     * @param configuration the vanilla configuration for it
      * @return an authored configured feature
-     * @since 2.3.0
+     * @since 3.0.0
      */
-    @AsOf("2.3.0")
-    static ConfiguredFeature of(FeatureType featureType, FeatureConfiguration configuration) {
-        return new VanillaConfigured(featureType.resourceKey(), configuration);
-    }
-
-    /**
-     * Composes a registered custom feature with a config instance. The feature
-     * must already be registered under featureKey via CustomFeature.register(...).
-     * The same feature may be composed with different configs.
-     * @param featureKey the key the custom feature was registered under
-     * @param config the config instance to place with
-     * @return an authored configured feature
-     * @since 2.3.0
-     */
-    @AsOf("2.3.0")
-    static ConfiguredFeature custom(ResourceKey featureKey, Object config) {
-        return new CustomConfigured(featureKey, config);
+    @AsOf("3.0.0")
+    static ComposedConfiguredFeature.Builder composed() {
+        return ComposedConfiguredFeature.builder();
     }
 
     /**
@@ -83,50 +106,8 @@ public sealed interface ConfiguredFeature extends Wrapper, Keyed permits Configu
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    static <C> ConfiguredFeature custom(CustomFeature<C> customFeature, C config) {
-        return new CustomConfigured(customFeature.key(), config);
+    static <C> CustomComposedConfiguredFeature.Builder<C> custom() {
+        return CustomComposedConfiguredFeature.builder();
     }
 
-    @Override
-    @AsOf("2.3.0")
-    default Object toMinecraft() {
-        return WIRE.get().toNms(this);
-    }
-
-    /**
-     * A reference to an already-registered configured feature.
-     * @param key the key of the configured feature
-     * @since 2.3.0
-     */
-    @AsOf("2.3.0")
-    record Reference(ResourceKey key) implements ConfiguredFeature {}
-
-    /**
-     * A configured feature authored from a vanilla feature type and configuration.
-     * @param featureKey the vanilla feature type
-     * @param configuration the vanilla configuration
-     * @since 2.3.0
-     */
-    @AsOf("2.3.0")
-    record VanillaConfigured(ResourceKey featureKey, FeatureConfiguration configuration) implements ConfiguredFeature {
-        @Override
-        public Key key() {
-            return this.featureKey;
-        }
-    }
-
-    /**
-     * A configured feature composed of a registered custom feature with a config instance.
-     * The feature must already be registered under featureKey via {@link CustomFeature#registerAs(ResourceKey)}.
-     * @param featureKey the key the custom feature was registered under
-     * @param config the config instance to place with
-     * @since 2.3.0
-     */
-    @AsOf("2.3.0")
-    record CustomConfigured(ResourceKey featureKey, Object config) implements ConfiguredFeature {
-        @Override
-        public Key key() {
-            return this.featureKey;
-        }
-    }
 }

@@ -10,16 +10,16 @@ import dev.wyck.test.carver.StarConfig;
 import dev.wyck.wrapper.biome.BiomeSpecialEffects;
 import dev.wyck.wrapper.environment.attribute.EnvironmentAttributes;
 import dev.wyck.wrapper.level.BiomeSource;
-import dev.wyck.wrapper.level.clock.WorldClock;
+import dev.wyck.wrapper.level.dimension.WorldClock;
 import dev.wyck.wrapper.level.dimension.Skybox;
-import dev.wyck.wrapper.level.noise.Noise;
-import dev.wyck.wrapper.level.noise.NoiseGeneratorSettings;
-import dev.wyck.wrapper.level.noise.NoiseRouter;
-import dev.wyck.wrapper.level.noise.Noises;
-import dev.wyck.wrapper.level.noise.chunk.ChunkGenerator;
-import dev.wyck.wrapper.level.noise.function.DensityFunction;
-import dev.wyck.wrapper.level.noise.settings.NoiseSettings;
-import dev.wyck.wrapper.worldgen.BiomeGenerationSettings;
+import dev.wyck.wrapper.worldgen.noise.Noise;
+import dev.wyck.wrapper.worldgen.noise.types.NoiseGeneratorSettings;
+import dev.wyck.wrapper.worldgen.noise.NoiseRouter;
+import dev.wyck.wrapper.worldgen.synth.Noises;
+import dev.wyck.wrapper.worldgen.chunk.NoiseBasedChunkGenerator;
+import dev.wyck.wrapper.worldgen.function.DensityFunction;
+import dev.wyck.wrapper.worldgen.noise.NoiseSettings;
+import dev.wyck.wrapper.biome.BiomeGenerationSettings;
 import dev.wyck.wrapper.worldgen.blockpredicates.BlockPredicate;
 import dev.wyck.wrapper.worldgen.GenerationStep;
 import dev.wyck.wrapper.worldgen.HeightmapType;
@@ -141,15 +141,15 @@ public class TestPlugin extends JavaPlugin implements Listener {
             .mul(DensityFunction.constant(25.0));
 
         DensityFunction base = DensityFunction.yClampedGradient(0, 256, 1.2, -1.2);
-        DensityFunction finalDensity = DensityFunction.add(base, wobble).clamp(-1.0, 1.0);
+        DensityFunction finalDensity = base.add(wobble).clamp(-1.0, 1.0);
 
         NoiseRouter router = NoiseRouter.builder()
             .barrier(DensityFunction.constant(0.0))
             .fluidLevelFloodedness(DensityFunction.constant(0.0))
             .fluidLevelSpread(DensityFunction.constant(0.0))
             .lava(DensityFunction.constant(0.0))
-            .temperature(DensityFunction.noise(ResourceKey.minecraft("temperature"), 0.25, 0.0))
-            .vegetation(DensityFunction.noise(ResourceKey.minecraft("vegetation"), 0.25, 0.0))
+            .temperature(DensityFunction.noise(Noises.TEMPERATURE, 0.25, 0.0))
+            .vegetation(DensityFunction.noise(Noises.VEGETATION, 0.25, 0.0))
             .continents(DensityFunction.constant(0.0))
             .erosion(DensityFunction.constant(0.0))
             .depth(DensityFunction.constant(0.0))
@@ -192,7 +192,7 @@ public class TestPlugin extends JavaPlugin implements Listener {
             .oreVeinsEnabled(false)
             .build();
 
-        ChunkGenerator generator = ChunkGenerator.of(biomeSource, Noise.overworld());
+        NoiseBasedChunkGenerator generator = NoiseBasedChunkGenerator.of(biomeSource, Noise.overworld());
 
         LevelCreator spec = LevelCreator.builder(levelKey)
             .dimension(dimension)

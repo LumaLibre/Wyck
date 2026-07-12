@@ -10,7 +10,7 @@ import dev.wyck.util.BootstrapSafeMinecraftRegistries;
 import dev.wyck.registry.internal.WyckRegistry;
 import dev.wyck.registry.DimensionRegistry;
 import dev.wyck.util.Lazy;
-import dev.wyck.wrapper.entity.data.MonsterSettings;
+import dev.wyck.wrapper.biome.entity.data.MonsterSettings;
 import dev.wyck.wrapper.environment.attribute.NmsEnvironmentAttributes;
 import dev.wyck.wrapper.environment.attribute.EnvironmentAttributeMap;
 import dev.wyck.wrapper.level.dimension.InfiniburnImpl;

@@ -1,0 +1,61 @@
+package dev.wyck.wrapper.worldgen.chunk;
+
+import dev.wyck.annotations.AsOf;
+import dev.wyck.model.biome.Biome;
+import dev.wyck.wrapper.internal.Wrapper;
+import dev.wyck.wrapper.level.BiomeSource;
+import org.jspecify.annotations.NullMarked;
+
+@NullMarked
+@AsOf("2.4.0")
+public interface ChunkGenerator extends Wrapper {
+
+    /**
+     * The biome source this generator draws from.
+     * @return the biome source
+     * @since 2.5.0
+     */
+    @AsOf("2.5.0")
+    BiomeSource biomeSource();
+
+    /**
+     * Creates a new noise-based chunk generator.
+     * @return a new noise-based chunk generator
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
+    static NoiseBasedChunkGenerator.Builder noise() {
+        return NoiseBasedChunkGenerator.builder();
+    }
+
+    /**
+     * Creates a new flat chunk generator.
+     * @return a new flat chunk generator
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
+    static FlatLevelSource.Builder flat() {
+        return FlatLevelSource.builder();
+    }
+
+    /**
+     * Creates a new debug chunk generator.
+     * @param biome the biome
+     * @return a new debug chunk generator
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
+    static DebugLevelSource debug(Biome biome) {
+        return DebugLevelSource.of(biome);
+    }
+
+    /**
+     * Creates a new builder for a {@link CraftBukkitChunkGenerator}.
+     * @return a new builder
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
+    static CraftBukkitChunkGenerator.Builder craftBukkit() {
+        return CraftBukkitChunkGenerator.builder();
+    }
+}

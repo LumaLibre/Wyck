@@ -10,14 +10,15 @@ import net.minecraft.world.level.block.Blocks;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.data.BlockData;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
+@ApiStatus.Internal
 public record BukkitBootstrapUtilImpl() implements BukkitBootstrapUtil {
 
     static {
         try {
-            //Class.forName(Feature.class.getName()); - handled by: BootstrapSafeMinecraftRegistries
             Class.forName(Blocks.class.getName());
         } catch (ClassNotFoundException exception) {
             throw new IllegalStateException("Vanilla block registry could not be bootstrapped", exception);

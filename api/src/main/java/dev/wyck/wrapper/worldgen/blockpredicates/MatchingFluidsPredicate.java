@@ -2,7 +2,7 @@ package dev.wyck.wrapper.worldgen.blockpredicates;
 
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.ConstructWireProvider;
-import dev.wyck.wrapper.worldgen.FluidType;
+import dev.wyck.wrapper.worldgen.material.FluidType;
 import org.bukkit.util.BlockVector;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;

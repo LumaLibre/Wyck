@@ -3,6 +3,7 @@ package dev.wyck.wrapper.worldgen.carver.types;
 import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.ConstructWireProvider;
+import dev.wyck.wrapper.internal.Registerable;
 import dev.wyck.wrapper.worldgen.carver.ConfiguredWorldCarver;
 import dev.wyck.wrapper.worldgen.carver.custom.CustomCarver;
 import org.jetbrains.annotations.ApiStatus;
@@ -19,7 +20,7 @@ import org.jspecify.annotations.Nullable;
  */
 @NullMarked
 @AsOf("3.0.0")
-public interface CustomComposedCarver<C> extends ConfiguredWorldCarver {
+public interface CustomComposedCarver<C> extends ConfiguredWorldCarver, Registerable<CustomComposedCarver<C>> {
 
     @ApiStatus.Internal
     ConstructWireProvider<CustomComposedCarver<?>> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.carver.types.CustomComposedCarverImpl");
@@ -48,6 +49,17 @@ public interface CustomComposedCarver<C> extends ConfiguredWorldCarver {
     @AsOf("3.0.0")
     default Builder<C> toBuilder() {
         return new Builder<>(this);
+    }
+
+    /**
+     * Registers the custom carver.
+     * @since 3.0.0
+     */
+    @Override
+    @AsOf("3.0.0")
+    default CustomComposedCarver<C> register() {
+        this.carver().register();
+        return this;
     }
 
     /**

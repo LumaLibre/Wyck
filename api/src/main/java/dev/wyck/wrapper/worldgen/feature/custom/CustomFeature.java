@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.registry.worldgen.CustomFeatureRegistry;
+import dev.wyck.wrapper.internal.Registerable;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NullMarked;
@@ -22,7 +23,7 @@ import java.util.function.Supplier;
  */
 @NullMarked
 @AsOf("2.3.0")
-public abstract class CustomFeature<C> implements Cloneable {
+public abstract class CustomFeature<C> implements Cloneable, Registerable<CustomFeature<C>> {
 
     private final Supplier<C> configSupplier;
     private @Nullable ResourceKey key;
@@ -115,11 +116,12 @@ public abstract class CustomFeature<C> implements Cloneable {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    public final CustomFeature<C> registerAs(ResourceKey key) {
+    @SuppressWarnings("unchecked")
+    public final <T> T registerAs(ResourceKey key) {
         CustomFeature<C> cloned = this.clone();
         cloned.key = key;
         CustomFeatureRegistry.registry().register(key, cloned);
-        return cloned;
+        return (T) cloned;
     }
 
     /**

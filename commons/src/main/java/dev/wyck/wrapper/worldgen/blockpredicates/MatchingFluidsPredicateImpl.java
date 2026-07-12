@@ -1,6 +1,6 @@
 package dev.wyck.wrapper.worldgen.blockpredicates;
 
-import dev.wyck.wrapper.worldgen.FluidType;
+import dev.wyck.wrapper.worldgen.material.FluidType;
 import dev.wyck.util.WorldgenConversions;
 import org.bukkit.util.BlockVector;
 import org.jetbrains.annotations.ApiStatus;

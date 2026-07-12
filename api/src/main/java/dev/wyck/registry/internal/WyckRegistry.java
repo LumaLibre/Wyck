@@ -79,6 +79,17 @@ public interface WyckRegistry extends Wrapper {
     void whileUnfrozen(Runnable action);
 
     /**
+     * Runs the given consumer with the registry while it is unfrozen.
+     * @param consumer the consumer to run
+     * @since 2.4.0
+     */
+    @AsOf("2.4.0")
+    default void whileUnfrozen(Consumer<WyckRegistry> consumer) {
+        whileUnfrozen(() -> consumer.accept(this));
+    }
+
+
+    /**
      * Retrieves an object from the registry.
      * @param key the key of the object to retrieve
      * @return the object
@@ -89,14 +100,42 @@ public interface WyckRegistry extends Wrapper {
     <T> @Nullable T retrieve(ResourceKey key);
 
     /**
-     * Runs the given consumer with the registry while it is unfrozen.
-     * @param consumer the consumer to run
-     * @since 2.4.0
+     * Retrieves an object from the registry, or throws an exception if it is not present.
+     * @param key the key of the object to retrieve
+     * @return the object
+     * @param <T> the type of the object
+     * @since 3.0.0
      */
-    @AsOf("2.4.0")
-    default void whileUnfrozen(Consumer<WyckRegistry> consumer) {
-        whileUnfrozen(() -> consumer.accept(this));
+    @AsOf("3.0.0")
+    default <T> T retrieveOrThrow(ResourceKey key) {
+        T value = retrieve(key);
+        if (value == null) {
+            throw new IllegalStateException("Failed to retrieve object from registry " + this.key() + " with key " + key);
+        }
+        return value;
     }
+
+    /**
+     * Registers an object in the registry.
+     * @param key the key of the object to register
+     * @param object the minecraft object
+     * @param <T> the type of the object
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
+    <T> void register(ResourceKey key, T object);
+
+    /**
+     * Registers a wrapper in the registry.
+     * @param key the key of the object to register
+     * @param wrappable the wrapper to register
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
+    default void register(ResourceKey key, Wrapper wrappable) {
+        register(key, wrappable.toMinecraft());
+    }
+
 
     /**
      * Returns the registry itself.
