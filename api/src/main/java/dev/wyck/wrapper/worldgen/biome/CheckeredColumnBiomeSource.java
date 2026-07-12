@@ -14,7 +14,7 @@ import java.util.Set;
 /**
  * The checkerboard biome source places biomes in a checkerboard pattern.
  *
- * @see <a href="https://minecraft.wiki/w/Dimension_definition#checkerboard_column">Dimension definition (checkerboard column)</a>
+ * @see <a href="https://minecraft.wiki/w/Dimension_definition#checkerboard">Dimension definition (checkerboard column)</a>
  * @since 3.0.0
  * @version 3.0.0
  * @author Jsinco
