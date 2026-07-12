@@ -263,7 +263,7 @@ public final class DatapackBootstrapBiomeRegistry implements BootstrapBiomeRegis
         biomeSource.add("biomes", biomes);
 
         JsonObject generator = new JsonObject();
-        generator.addProperty("type", "minecraft:noiseSettings");
+        generator.addProperty("type", "minecraft:noise");
         generator.addProperty("settings", defaults.noiseSettings()); // per dimension noiseSettings settings
         generator.add("biome_source", biomeSource);
 
