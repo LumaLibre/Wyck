@@ -1,19 +1,25 @@
 package dev.wyck.wrapper.worldgen;
 
 import dev.wyck.annotations.AsOf;
+import dev.wyck.annotations.Generated;
 import dev.wyck.wrapper.internal.KeyedEnumTranslator;
 import dev.wyck.wrapper.internal.WrappedEnumerator;
 import org.jspecify.annotations.NullMarked;
 
 /**
+ * Auto-generated. Do not modify!
+ * Run ./gradlew generateSources to regenerate.
+ * <p>
  * Wraps Minecraft's GenerationStep.Decoration.
+ * </p>
  *
- * @version 2.3.0
  * @since 2.3.0
- * @author Jsinco
+ * @version 3.0.0
+ * @author Wyck codegen
  */
 @NullMarked
 @AsOf("2.3.0")
+@Generated("2026-07-13T07:21:53.854161Z")
 public enum GenerationStep implements WrappedEnumerator<GenerationStep> {
 
     RAW_GENERATION("RAW_GENERATION"),
@@ -38,7 +44,7 @@ public enum GenerationStep implements WrappedEnumerator<GenerationStep> {
     }
 
     /**
-     * The vanilla name for this decoration step.
+     * The vanilla name for this Decoration value.
      * @return the vanilla key for this enum value
      * @since 2.3.0
      */

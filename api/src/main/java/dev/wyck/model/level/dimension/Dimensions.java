@@ -18,7 +18,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("3.0.0")
-@Generated("2026-07-12T06:32:42.081659Z")
+@Generated("2026-07-13T07:21:53.853542Z")
 public final class Dimensions {
 
     // From: BuiltinDimensionTypes 

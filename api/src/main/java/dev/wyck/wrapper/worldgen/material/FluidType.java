@@ -1,6 +1,7 @@
 package dev.wyck.wrapper.worldgen.material;
 
 import dev.wyck.annotations.AsOf;
+import dev.wyck.annotations.Generated;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.registry.internal.RegistryId;
 import dev.wyck.wrapper.internal.RegisteredConstantTranslator;
@@ -8,21 +9,26 @@ import dev.wyck.wrapper.internal.WrappedConstant;
 import org.jspecify.annotations.NullMarked;
 
 /**
+ * Auto-generated. Do not modify!
+ * Run ./gradlew generateSources to regenerate.
+ * <p>
  * The vanilla fluids a block predicate can match against.
+ * </p>
  *
  * @since 2.3.0
- * @version 2.3.0
- * @author Jsinco
+ * @version 3.0.0
+ * @author Wyck codegen
  */
 @NullMarked
 @AsOf("2.3.0")
+@Generated("2026-07-13T07:21:53.857786Z")
 public enum FluidType implements WrappedConstant<FluidType> {
 
     EMPTY("empty"),
-    WATER("water"),
     FLOWING_WATER("flowing_water"),
-    LAVA("lava"),
-    FLOWING_LAVA("flowing_lava");
+    WATER("water"),
+    FLOWING_LAVA("flowing_lava"),
+    LAVA("lava");
 
     public static final RegisteredConstantTranslator<FluidType> TRANSLATOR = RegisteredConstantTranslator.of(RegistryId.FLUID, FluidType::resourceKey, FluidType.values());
     private final String key;
@@ -33,7 +39,7 @@ public enum FluidType implements WrappedConstant<FluidType> {
     }
 
     /**
-     * The vanilla registry path for this fluid (e.g. "water", "lava").
+     * The vanilla registry path for this fluid.
      * @return the registry path for this fluid
      * @since 2.3.0
      */

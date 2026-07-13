@@ -1,19 +1,28 @@
 package dev.wyck.wrapper.worldgen.feature;
 
 import dev.wyck.annotations.AsOf;
+import dev.wyck.annotations.Generated;
 import dev.wyck.keys.ResourceKey;
+import dev.wyck.registry.internal.RegistryId;
+import dev.wyck.wrapper.internal.RegisteredConstantTranslator;
+import dev.wyck.wrapper.internal.WrappedConstant;
 import org.jspecify.annotations.NullMarked;
 
 /**
- * Typed references to the built-in feature types, the algorithms in the {@code FEATURE}
- * registry.
+ * Auto-generated. Do not modify!
+ * Run ./gradlew generateSources to regenerate.
+ * <p>
+ * Typed references to the built-in feature types, the algorithms in the {@code FEATURE} registry.
+ * </p>
+ *
  * @since 2.3.0
- * @version 2.3.0
- * @author Jsinco
+ * @version 3.0.0
+ * @author Wyck codegen
  */
 @NullMarked
 @AsOf("2.3.0")
-public enum FeatureType {
+@Generated("2026-07-13T07:21:53.858356Z")
+public enum FeatureType implements WrappedConstant<FeatureType> {
 
     NO_OP("no_op"),
     TREE("tree"),
@@ -68,14 +77,20 @@ public enum FeatureType {
     BASALT_PILLAR("basalt_pillar"),
     SCATTERED_ORE("scattered_ore"),
     RANDOM_SELECTOR("random_selector"),
+    WEIGHTED_RANDOM_SELECTOR("weighted_random_selector"),
     SIMPLE_RANDOM_SELECTOR("simple_random_selector"),
     RANDOM_BOOLEAN_SELECTOR("random_boolean_selector"),
+    SEQUENCE("sequence"),
+    TEMPLATE("template"),
     GEODE("geode"),
-    DRIPSTONE_CLUSTER("dripstone_cluster"),
+    SPELEOTHEM_CLUSTER("speleothem_cluster"),
     LARGE_DRIPSTONE("large_dripstone"),
-    POINTED_DRIPSTONE("pointed_dripstone"),
-    SCULK_PATCH("sculk_patch");
+    SPELEOTHEM("speleothem"),
+    SCULK_PATCH("sculk_patch"),
+    @Deprecated(since = "3.0.0")
+    POINTED_DRIPSTONE("pointed_dripstone");
 
+    public static final RegisteredConstantTranslator<FeatureType> TRANSLATOR = RegisteredConstantTranslator.of(RegistryId.FEATURE, FeatureType::resourceKey, FeatureType.values());
     private final String key;
 
     @AsOf("2.3.0")
@@ -84,22 +99,23 @@ public enum FeatureType {
     }
 
     /**
-     * The vanilla registry path for this feature type.
-     * @return the FEATURE registry key path
+     * The vanilla registry path for this feature.
+     * @return the registry path for this feature
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    public String getKey() {
+    public String key() {
         return this.key;
     }
 
-    /**
-     * The registry key of this feature in the FEATURE registry.
-     * @return the resource key
-     * @since 2.3.0
-     */
     @AsOf("2.3.0")
     public ResourceKey resourceKey() {
         return ResourceKey.minecraft(this.key);
+    }
+
+    @Override
+    @AsOf("2.3.0")
+    public RegisteredConstantTranslator<FeatureType> translator() {
+        return TRANSLATOR;
     }
 }

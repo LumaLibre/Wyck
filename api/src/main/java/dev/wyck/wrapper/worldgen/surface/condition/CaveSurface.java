@@ -1,26 +1,32 @@
 package dev.wyck.wrapper.worldgen.surface.condition;
 
 import dev.wyck.annotations.AsOf;
+import dev.wyck.annotations.Generated;
 import dev.wyck.wrapper.internal.KeyedEnumTranslator;
 import dev.wyck.wrapper.internal.WrappedEnumerator;
 import org.jspecify.annotations.NullMarked;
 
 /**
- * Which face of the surface a {@link StoneDepthConditionSource stone-depth} check measures from. If
+ * Auto-generated. Do not modify!
+ * Run ./gradlew generateSources to regenerate.
+ * <p>
+ * Which face of the surface a {@link StoneDepthConditionSource stone-depth} check measures from.
  * {@link #FLOOR}, blocks are placed based on the distance to the surface above; if {@link #CEILING},
  * the distance to the surface below is used instead.
- *
+ * </p>
  * @see <a href="https://minecraft.wiki/w/Surface_rule#Surface_conditions">Surface rule (surface conditions)</a>
+ *
  * @since 3.0.0
  * @version 3.0.0
- * @author Jsinco
+ * @author Wyck codegen
  */
 @NullMarked
 @AsOf("3.0.0")
+@Generated("2026-07-13T07:21:53.854773Z")
 public enum CaveSurface implements WrappedEnumerator<CaveSurface> {
 
-    FLOOR("FLOOR"),
-    CEILING("CEILING");
+    CEILING("CEILING"),
+    FLOOR("FLOOR");
 
     public static final KeyedEnumTranslator<CaveSurface> TRANSLATOR = KeyedEnumTranslator.byKey(CaveSurface::getKey, CaveSurface.values());
 
@@ -32,7 +38,7 @@ public enum CaveSurface implements WrappedEnumerator<CaveSurface> {
     }
 
     /**
-     * The vanilla name for this cave surface.
+     * The vanilla name for this CaveSurface value.
      * @return the vanilla key for this enum value
      * @since 3.0.0
      */

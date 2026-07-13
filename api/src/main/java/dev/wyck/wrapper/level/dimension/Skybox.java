@@ -1,20 +1,27 @@
 package dev.wyck.wrapper.level.dimension;
 
 import dev.wyck.annotations.AsOf;
+import dev.wyck.annotations.Generated;
 import dev.wyck.wrapper.internal.KeyedEnumTranslator;
 import dev.wyck.wrapper.internal.WrappedEnumerator;
 import org.jspecify.annotations.NullMarked;
 
 /**
+ * Auto-generated. Do not modify!
+ * Run ./gradlew generateSources to regenerate.
+ * <p>
  * Skybox type, as it appears in Minecraft.
+ * </p>
  *
- * @version 2.4.0
  * @since 2.4.0
- * @author Jsinco
+ * @version 3.0.0
+ * @author Wyck codegen
  */
 @NullMarked
 @AsOf("2.4.0")
+@Generated("2026-07-13T07:21:53.855831Z")
 public enum Skybox implements WrappedEnumerator<Skybox> {
+
     NONE("none"),
     OVERWORLD("overworld"),
     END("end");
@@ -28,9 +35,14 @@ public enum Skybox implements WrappedEnumerator<Skybox> {
         this.key = key;
     }
 
+    /**
+     * The vanilla name for this Skybox value.
+     * @return the vanilla key for this enum value
+     * @since 2.4.0
+     */
     @AsOf("2.4.0")
     public String getKey() {
-        return key;
+        return this.key;
     }
 
     @Override

@@ -123,6 +123,27 @@ public interface ParticleOptionsFactory {
     ParticleOptions vibration(Vibration.Destination destination, int arrivalInTicks);
 
     /**
+     * Geyser particle
+     * @param type The particle type handle corresponding to a geyser particle type.
+     * @param waterBlocks The number of water blocks to use for the geyser effect.
+     * @return A ParticleOptionsHandle configured for the geyser particle type and water blocks.
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
+    ParticleOptions geyser(ParticleType type, int waterBlocks);
+
+    /**
+     * Geyser particle base
+     * @param type The particle type handle corresponding to a geyser particle type.
+     * @param waterBlocks The number of water blocks to use for the geyser effect.
+     * @param burstImpulseBase The base impulse for the burst effect.
+     * @return A ParticleOptionsHandle configured for the geyser particle type and water blocks.
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
+    ParticleOptions geyserBase(ParticleType type, int waterBlocks, float burstImpulseBase);
+
+    /**
      * Retrieves a particle type handle by its key.
      * @param key The key of the particle type.
      * @return A ParticleTypeHandle corresponding to the particle type with the specified key.

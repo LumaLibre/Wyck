@@ -1,21 +1,29 @@
 package dev.wyck.wrapper.environment;
 
 import dev.wyck.annotations.AsOf;
-import dev.wyck.wrapper.internal.KeyedEnumTranslator;
-import dev.wyck.wrapper.internal.WrappedEnumerator;
+import dev.wyck.annotations.Generated;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.registry.internal.RegistryId;
+import dev.wyck.wrapper.internal.RegisteredConstantTranslator;
+import dev.wyck.wrapper.internal.WrappedConstant;
 import org.jspecify.annotations.NullMarked;
 
 /**
+ * Auto-generated. Do not modify!
+ * Run ./gradlew generateSources to regenerate.
+ * <p>
  * This enum represents the various activities that entities in Minecraft can perform.
- * Each enum value carries a vanilla key, retrievable via {@link #getKey()}, which the impl module translates to the underlying NMS Activity value.
+ * Each enum value carries a vanilla key which the impl module translates to the underlying NMS Activity value.
+ * </p>
  *
- * @version 1.1.0
  * @since 1.1.0
- * @author Jsinco
+ * @version 3.0.0
+ * @author Wyck codegen
  */
 @NullMarked
 @AsOf("1.1.0")
-public enum Activity implements WrappedEnumerator<Activity> {
+@Generated("2026-07-13T07:21:53.859766Z")
+public enum Activity implements WrappedConstant<Activity> {
 
     CORE("core"),
     IDLE("idle"),
@@ -44,8 +52,7 @@ public enum Activity implements WrappedEnumerator<Activity> {
     EMERGE("emerge"),
     DIG("dig");
 
-    public static final KeyedEnumTranslator<Activity> TRANSLATOR = KeyedEnumTranslator.byKey(Activity::getKey, Activity.values());
-
+    public static final RegisteredConstantTranslator<Activity> TRANSLATOR = RegisteredConstantTranslator.of(RegistryId.ACTIVITY, Activity::resourceKey, Activity.values());
     private final String key;
 
     @AsOf("1.1.0")
@@ -54,17 +61,23 @@ public enum Activity implements WrappedEnumerator<Activity> {
     }
 
     /**
-     * Returns the vanilla key for this activity (e.g. "core", "idle", "play_dead").
-     * The impl module uses this key to resolve the underlying Minecraft Activity value.
-     * @return The vanilla key for this enum value.
+     * The vanilla registry path for this activity.
+     * @return the registry path for this activity
+     * @since 1.1.0
      */
     @AsOf("1.1.0")
-    public String getKey() {
-        return key;
+    public String key() {
+        return this.key;
+    }
+
+    @AsOf("1.1.0")
+    public ResourceKey resourceKey() {
+        return ResourceKey.minecraft(this.key);
     }
 
     @Override
-    public KeyedEnumTranslator<Activity> translator() {
+    @AsOf("1.1.0")
+    public RegisteredConstantTranslator<Activity> translator() {
         return TRANSLATOR;
     }
 }

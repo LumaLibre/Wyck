@@ -1,6 +1,7 @@
 package dev.wyck.wrapper.worldgen.carver;
 
 import dev.wyck.annotations.AsOf;
+import dev.wyck.annotations.Generated;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.registry.internal.RegistryId;
 import dev.wyck.wrapper.internal.RegisteredConstantTranslator;
@@ -8,14 +9,19 @@ import dev.wyck.wrapper.internal.WrappedConstant;
 import org.jspecify.annotations.NullMarked;
 
 /**
+ * Auto-generated. Do not modify!
+ * Run ./gradlew generateSources to regenerate.
+ * <p>
  * The vanilla world-carver algorithms that a configured carver can be built on.
+ * </p>
  *
  * @since 2.3.0
- * @version 2.3.0
- * @author Jsinco
+ * @version 3.0.0
+ * @author Wyck codegen
  */
 @NullMarked
 @AsOf("2.3.0")
+@Generated("2026-07-13T07:21:53.859431Z")
 public enum WorldCarverType implements WrappedConstant<WorldCarverType> {
 
     CAVE("cave"),
@@ -31,8 +37,8 @@ public enum WorldCarverType implements WrappedConstant<WorldCarverType> {
     }
 
     /**
-     * The vanilla registry key for this carver (e.g. "cave", "canyon").
-     * @return the vanilla key for this carver
+     * The vanilla registry path for this worldcarver.
+     * @return the registry path for this worldcarver
      * @since 2.3.0
      */
     @AsOf("2.3.0")
@@ -40,11 +46,6 @@ public enum WorldCarverType implements WrappedConstant<WorldCarverType> {
         return this.key;
     }
 
-    /**
-     * The resource key for this carver.
-     * @return the resource key for this carver
-     * @since 3.0.0
-     */
     @AsOf("3.0.0")
     public ResourceKey resourceKey() {
         return ResourceKey.minecraft(this.key);

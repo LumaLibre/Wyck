@@ -23,7 +23,8 @@ public enum RegistryId {
     CARVER("worldgen/carver"),
     NOISE("worldgen/noise"),
     CONFIGURED_FEATURE("worldgen/configured_feature"),
-    DENSITY_FUNCTION("worldgen/density_function");
+    DENSITY_FUNCTION("worldgen/density_function"),
+    ACTIVITY("activity");
 
     private final List<ResourceKey> keys;
 

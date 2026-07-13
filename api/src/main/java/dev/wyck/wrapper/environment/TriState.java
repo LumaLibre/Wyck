@@ -1,62 +1,53 @@
 package dev.wyck.wrapper.environment;
 
 import dev.wyck.annotations.AsOf;
+import dev.wyck.annotations.Generated;
 import dev.wyck.wrapper.internal.KeyedEnumTranslator;
 import dev.wyck.wrapper.internal.WrappedEnumerator;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 
 /**
+ * Auto-generated. Do not modify!
+ * Run ./gradlew generateSources to regenerate.
+ * <p>
  * Represents a tri-state value, which can be true, false, or default.
+ * </p>
  *
  * @since 2.4.1
- * @version 2.4.1
- * @author Jsinco
+ * @version 3.0.0
+ * @author Wyck codegen
  */
 @NullMarked
 @AsOf("2.4.1")
+@Generated("2026-07-13T07:21:53.855030Z")
 public enum TriState implements WrappedEnumerator<TriState> {
-    TRUE("true"),
-    FALSE("false"),
-    DEFAULT("default");
+
+    TRUE("TRUE"),
+    FALSE("FALSE"),
+    DEFAULT("DEFAULT");
 
     public static final KeyedEnumTranslator<TriState> TRANSLATOR = KeyedEnumTranslator.byKey(TriState::getKey, TriState.values());
 
     private final String key;
 
+    @AsOf("2.4.1")
     TriState(String key) {
         this.key = key;
     }
 
     /**
-     * Gets the key for this enum.
-     * @return The key for this enum.
+     * The vanilla name for this TriState value.
+     * @return the vanilla key for this enum value
      * @since 2.4.1
      */
     @AsOf("2.4.1")
     public String getKey() {
-        return key;
+        return this.key;
     }
 
-    /**
-     * Gets the translator for this enum.
-     * @return The translator for this enum.
-     * @since 2.4.1
-     */
     @Override
     @AsOf("2.4.1")
     public KeyedEnumTranslator<TriState> translator() {
         return TRANSLATOR;
-    }
-
-    /**
-     * Converts a boolean to a TriState.
-     * @param value The boolean to convert.
-     * @return The TriState equivalent of the boolean.
-     * @since 2.4.1
-     */
-    @AsOf("2.4.1")
-    public static TriState fromBoolean(@Nullable Boolean value) {
-        return value == null ? DEFAULT : value ? TRUE : FALSE;
     }
 }

@@ -105,6 +105,16 @@ public final class ParticleOptionsFactoryImpl implements ParticleOptionsFactory 
         return new ParticleOptionsImpl(new VibrationParticleOption(toNmsPositionSource(destination), arrivalInTicks));
     }
 
+    @Override
+    public ParticleOptions geyser(ParticleType type, int waterBlocks) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public ParticleOptions geyserBase(ParticleType type, int waterBlocks, float burstImpulseBase) {
+        throw new UnsupportedOperationException();
+    }
+
 
     @Override
     public ParticleType typeByKey(String key) {

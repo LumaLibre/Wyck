@@ -21,7 +21,7 @@ public interface ParticleData {
      * @return The integer representation of the color.
      */
     @AsOf("1.1.0")
-    static int parseHex(String color) {
+    static int parseHex(String color) { // TODO: replace with FriendlyColorUtil.hex
         if (color.isEmpty()) {
             return 0;
         } else if (color.startsWith("#")) {

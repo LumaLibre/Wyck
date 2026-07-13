@@ -7,7 +7,7 @@ dependencies {
     implementation(project(":bundle")) {
         exclude(group = "org.bukkit")
     }
-    paperweight.paperDevBundle(libs.versions.minecraft.v26.m1.r2)
+    paperweight.paperDevBundle(libs.versions.minecraft.v26.m2)
 }
 
 tasks {

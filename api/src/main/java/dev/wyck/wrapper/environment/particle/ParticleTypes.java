@@ -7,6 +7,8 @@ import dev.wyck.wrapper.environment.particle.options.BlockParticle;
 import dev.wyck.wrapper.environment.particle.options.ColorParticle;
 import dev.wyck.wrapper.environment.particle.options.DustParticle;
 import dev.wyck.wrapper.environment.particle.options.DustTransitionParticle;
+import dev.wyck.wrapper.environment.particle.options.GeyserBaseParticle;
+import dev.wyck.wrapper.environment.particle.options.GeyserParticle;
 import dev.wyck.wrapper.environment.particle.options.ItemParticle;
 import dev.wyck.wrapper.environment.particle.options.PowerParticle;
 import dev.wyck.wrapper.environment.particle.options.SculkChargeParticle;
@@ -40,6 +42,13 @@ public enum ParticleTypes implements WrappedConstant<ParticleTypes> {
     BLOCK("block", BlockParticle.class),
     BLOCK_MARKER("block_marker", BlockParticle.class),
     BUBBLE("bubble"),
+    SULFUR_BUBBLES("sulfur_bubbles"),
+    NOXIOUS_GAS("noxious_gas"),
+    NOXIOUS_GAS_CLOUD("noxious_gas_cloud"),
+    GEYSER("geyser", GeyserParticle.class),
+    GEYSER_BASE("geyser_base", GeyserBaseParticle.class),
+    GEYSER_POOF("geyser_poof", GeyserBaseParticle.class),
+    GEYSER_PLUME("geyser_plume", GeyserParticle.class),
     CLOUD("cloud"),
     COPPER_FIRE_FLAME("copper_fire_flame"),
     CRIT("crit"),
@@ -86,6 +95,8 @@ public enum ParticleTypes implements WrappedConstant<ParticleTypes> {
     ITEM("item", ItemParticle.class),
     VIBRATION("vibration", VibrationParticle.class),
     TRAIL("trail", TrailParticle.class),
+    PAUSE_MOB_GROWTH("pause_mob_growth"),
+    RESET_MOB_GROWTH("reset_mob_growth"),
     ITEM_SLIME("item_slime"),
     ITEM_COBWEB("item_cobweb"),
     ITEM_SNOWBALL("item_snowball"),
@@ -150,7 +161,8 @@ public enum ParticleTypes implements WrappedConstant<ParticleTypes> {
     RAID_OMEN("raid_omen"),
     TRIAL_OMEN("trial_omen"),
     BLOCK_CRUMBLE("block_crumble", BlockParticle.class),
-    FIREFLY("firefly");
+    FIREFLY("firefly"),
+    SULFUR_CUBE_GOO("sulfur_cube_goo");
 
     public static final RegisteredConstantTranslator<ParticleTypes> TRANSLATOR = RegisteredConstantTranslator.of(RegistryId.PARTICLE_TYPE, ParticleTypes::resourceKey, ParticleTypes.values());
     @ApiStatus.Internal

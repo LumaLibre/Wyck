@@ -18,7 +18,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.4.0")
-@Generated("2026-07-12T06:32:42.059456Z")
+@Generated("2026-07-13T07:21:53.829030Z")
 public final class DensityFunctions {
 
     // From: NoiseRouterData 

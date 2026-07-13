@@ -6,10 +6,13 @@ import dev.wyck.wrapper.environment.particle.ParticleOptionsImpl;
 import dev.wyck.wrapper.environment.particle.ParticleType;
 import dev.wyck.wrapper.environment.particle.ParticleTypeImpl;
 import dev.wyck.wrapper.environment.particle.ParticleOptionsFactory;
+import dev.wyck.wrapper.environment.particle.options.GeyserBaseParticle;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ColorParticleOption;
 import net.minecraft.core.particles.DustColorTransitionOptions;
 import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.core.particles.GeyserBaseParticleOptions;
+import net.minecraft.core.particles.GeyserParticleOptions;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.PowerParticleOption;
 import net.minecraft.core.particles.SculkChargeParticleOptions;
@@ -105,6 +108,17 @@ public final class ParticleOptionsFactoryImpl implements ParticleOptionsFactory 
         return new ParticleOptionsImpl(new VibrationParticleOption(toNmsPositionSource(destination), arrivalInTicks));
     }
 
+    @Override
+    public ParticleOptions geyser(ParticleType type, int waterBlocks) {
+        net.minecraft.core.particles.ParticleType<GeyserParticleOptions> nmsType = (net.minecraft.core.particles.ParticleType<GeyserParticleOptions>) ((ParticleTypeImpl<?>) type).nms();
+        return new ParticleOptionsImpl(new GeyserParticleOptions(nmsType, waterBlocks));
+    }
+
+    @Override
+    public ParticleOptions geyserBase(ParticleType type, int waterBlocks, float burstImpulseBase) {
+        net.minecraft.core.particles.ParticleType<GeyserBaseParticleOptions> nmsType = (net.minecraft.core.particles.ParticleType<GeyserBaseParticleOptions>) ((ParticleTypeImpl<?>) type).nms();
+        return new ParticleOptionsImpl(new GeyserBaseParticleOptions(nmsType, waterBlocks, burstImpulseBase));
+    }
 
     @Override
     public ParticleType typeByKey(String key) {

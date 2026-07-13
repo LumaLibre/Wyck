@@ -11,6 +11,7 @@ import dev.wyck.wrapper.environment.particle.AmbientParticle;
 import dev.wyck.wrapper.environment.particle.ParticleOptions;
 import dev.wyck.wrapper.environment.sounds.AmbientSounds;
 import dev.wyck.wrapper.environment.sounds.BackgroundMusic;
+import dev.wyck.wrapper.internal.WrappedConstant;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.Nullable;
 import org.jspecify.annotations.NullMarked;
@@ -228,13 +229,13 @@ public final class EnvironmentAttributes {
      * Core, hide, idle, meet, panic, pre_raid, raid, rest, or work.
      * Other activities are allowed causing the villager to do nothing. */
     @AsOf("1.1.0")
-    public static final EnvironmentAttributeSupplier<Activity> VILLAGER_ACTIVITY = supplierWith("gameplay/villager_activity", it -> it.toNms("net.minecraft.world.entity.schedule.Activity"));
+    public static final EnvironmentAttributeSupplier<Activity> VILLAGER_ACTIVITY = supplierWith("gameplay/villager_activity", WrappedConstant::toNms);
 
     /** Controls the default AI activity of baby villagers.
      * Core, hide, idle, meet, panic, pre_raid, raid, rest, or work.
      * Other activities are allowed causing the villager to do nothing. */
     @AsOf("1.1.0")
-    public static final EnvironmentAttributeSupplier<Activity> BABY_VILLAGER_ACTIVITY = supplierWith("gameplay/baby_villager_activity", it -> it.toNms("net.minecraft.world.entity.schedule.Activity"));
+    public static final EnvironmentAttributeSupplier<Activity> BABY_VILLAGER_ACTIVITY = supplierWith("gameplay/baby_villager_activity", WrappedConstant::toNms);
 
     /** The background music to play. */
     @AsOf("1.1.0")

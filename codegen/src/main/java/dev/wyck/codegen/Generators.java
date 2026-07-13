@@ -24,8 +24,24 @@ import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.data.worldgen.placement.VillagePlacements;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.StringRepresentable;
+import net.minecraft.util.TriState;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.schedule.Activity;
+import net.minecraft.world.level.CardinalLighting;
+import net.minecraft.world.level.MoonPhase;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.BiomeSpecialEffects;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
+import net.minecraft.world.level.dimension.DimensionType;
+import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.carver.WorldCarver;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.placement.CaveSurface;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.levelgen.NoiseRouterData;
 import net.minecraft.world.level.levelgen.Noises;
 import org.jspecify.annotations.Nullable;
@@ -42,11 +58,25 @@ public final class Generators {
         noiseParameters(),
         soundEvents(),
         biomeKeys(),
-        dimensionKeys()
+        dimensionKeys(),
+        generationSteps(),
+        heightmapTypes(),
+        caveSurfaces(),
+        tristates(),
+        skyboxes(),
+        cardinalLightTypes(),
+        moonPhases(),
+        grassColorModifiers(),
+        temperatureModifiers(),
+        mobCategories(),
+        fluidTypes(),
+        featureTypes(),
+        worldCarverTypes(),
+        activities()
     );
 
     private static GeneratorSpec configuredFeatures() {
-        return new GeneratorSpec(
+        return new ReferenceSpec(
             "dev.wyck.wrapper.worldgen.feature",
             "ConfiguredFeatures",
             "ConfiguredFeature",
@@ -71,7 +101,7 @@ public final class Generators {
     }
 
     private static GeneratorSpec placedFeatures() {
-        return new GeneratorSpec(
+        return new ReferenceSpec(
             "dev.wyck.wrapper.worldgen.placement",
             "PlacedFeatures",
             "PlacedFeature",
@@ -96,7 +126,7 @@ public final class Generators {
     }
 
     private static GeneratorSpec densityFunctions() {
-        return new GeneratorSpec(
+        return new ReferenceSpec(
             "dev.wyck.wrapper.worldgen.function",
             "DensityFunctions",
             "DensityFunction",
@@ -113,7 +143,7 @@ public final class Generators {
     }
 
     private static GeneratorSpec noiseParameters() {
-        return new GeneratorSpec(
+        return new ReferenceSpec(
             "dev.wyck.wrapper.worldgen.synth",
             "Noises",
             "NoiseParameters",
@@ -130,7 +160,7 @@ public final class Generators {
     }
 
     private static GeneratorSpec soundEvents() {
-        return new GeneratorSpec(
+        return new ReferenceSpec(
             "dev.wyck.wrapper.environment.sounds",
             "SoundEvents",
             "SoundEvent",
@@ -148,7 +178,7 @@ public final class Generators {
     }
 
     private static GeneratorSpec biomeKeys() {
-        return new GeneratorSpec(
+        return new ReferenceSpec(
             "dev.wyck.model.biome",
             "Biomes",
             "Biome",
@@ -165,7 +195,7 @@ public final class Generators {
     }
 
     private static GeneratorSpec dimensionKeys() {
-        return new GeneratorSpec(
+        return new ReferenceSpec(
             "dev.wyck.model.level.dimension",
             "Dimensions",
             "Dimension",
@@ -179,6 +209,222 @@ public final class Generators {
             "3.0.0",
             "DIMENSIONS"
         );
+    }
+
+    private static GeneratorSpec generationSteps() {
+        return new EnumSpec(
+            "dev.wyck.wrapper.worldgen",
+            "GenerationStep",
+            GenerationStep.Decoration.class,
+            Generators::enumName,
+            "Wraps Minecraft's GenerationStep.Decoration.",
+            "2.3.0"
+        );
+    }
+
+    private static GeneratorSpec heightmapTypes() {
+        return new EnumSpec(
+            "dev.wyck.wrapper.worldgen",
+            "HeightmapType",
+            Heightmap.Types.class,
+            Generators::enumName,
+            "Wraps Minecraft's Heightmap.Types.",
+            "3.0.0"
+        );
+    }
+
+    private static GeneratorSpec caveSurfaces() {
+        return new EnumSpec(
+            "dev.wyck.wrapper.worldgen.surface.condition",
+            "CaveSurface",
+            CaveSurface.class,
+            List.of(
+                "Which face of the surface a {@link StoneDepthConditionSource stone-depth} check measures from.",
+                "{@link #FLOOR}, blocks are placed based on the distance to the surface above; if {@link #CEILING},",
+                "the distance to the surface below is used instead.",
+                "",
+                "@see <a href=\"https://minecraft.wiki/w/Surface_rule#Surface_conditions\">Surface rule (surface conditions)</a>"
+            ),
+            "3.0.0"
+        );
+    }
+
+    private static GeneratorSpec tristates() {
+        return new EnumSpec(
+            "dev.wyck.wrapper.environment",
+            "TriState",
+            TriState.class,
+            "Represents a tri-state value, which can be true, false, or default.",
+            "2.4.1"
+        );
+    }
+
+    private static GeneratorSpec skyboxes() {
+        return new EnumSpec(
+            "dev.wyck.wrapper.level.dimension",
+            "Skybox",
+            DimensionType.Skybox.class,
+            Generators::serializedName,
+            "Skybox type, as it appears in Minecraft.",
+            "2.4.0"
+        );
+    }
+
+    private static GeneratorSpec cardinalLightTypes() {
+        return new EnumSpec(
+            "dev.wyck.wrapper.level.dimension",
+            "CardinalLightType",
+            CardinalLighting.Type.class,
+            Generators::serializedName,
+            "Cardinal light type, as it appears in Minecraft.",
+            "2.4.0"
+        );
+    }
+
+    private static GeneratorSpec moonPhases() {
+        return new EnumSpec(
+            "dev.wyck.wrapper.environment",
+            "MoonPhase",
+            MoonPhase.class,
+            Generators::serializedName,
+            List.of(
+                "This enum represents the phases of the moon in Minecraft.",
+                "Each enum value carries a vanilla key, retrievable via {@link #getKey()}, which the impl module translates to the underlying NMS MoonPhase value."
+            ),
+            "1.1.0"
+        );
+    }
+
+    private static GeneratorSpec grassColorModifiers() {
+        return new EnumSpec(
+            "dev.wyck.wrapper.environment",
+            "GrassColorModifier",
+            BiomeSpecialEffects.GrassColorModifier.class,
+            Generators::serializedName,
+            List.of(
+                "This enum represents the grass color modifier for a biome in Minecraft.",
+                "It includes three values: NONE, SWAMP, and DARK_FOREST, which correspond to the GrassColorModifier values in the BiomeSpecialEffects class in the Minecraft code.",
+                "Each enum value carries a vanilla key, retrievable via {@link #getKey()}, which the impl module translates to the underlying NMS value."
+            ),
+            "0.0.24"
+        );
+    }
+
+    private static GeneratorSpec temperatureModifiers() {
+        return new EnumSpec(
+            "dev.wyck.wrapper.biome",
+            "TemperatureModifier",
+            Biome.TemperatureModifier.class,
+            Generators::serializedName,
+            List.of(
+                "This enum represents the temperature modifier for a biome in Minecraft.",
+                "It includes two values: NONE and FROZEN, which correspond to the TemperatureModifier values in the Biome class in the Minecraft code.",
+                "Each enum value carries a vanilla key, retrievable via {@link #getKey()}, which the impl module translates to the underlying NMS value."
+            ),
+            "0.0.1"
+        );
+    }
+
+    private static GeneratorSpec mobCategories() {
+        return new EnumSpec(
+            "dev.wyck.wrapper.biome.entity",
+            "MobCategory",
+            MobCategory.class,
+            Generators::serializedName,
+            "Represents the category of a mob in Minecraft.",
+            "2.3.0"
+        );
+    }
+
+    private static GeneratorSpec fluidTypes() {
+        return new ConstantSpec(
+            "dev.wyck.wrapper.worldgen.material",
+            "FluidType",
+            Fluid.class,
+            Generators::fluidLocation,
+            List.of(
+                Fluids.class
+            ),
+            "FLUID",
+            "The vanilla fluids a block predicate can match against.",
+            "2.3.0"
+        );
+    }
+
+    private static GeneratorSpec featureTypes() {
+        return new ConstantSpec(
+            "dev.wyck.wrapper.worldgen.feature",
+            "FeatureType",
+            Feature.class,
+            Generators::featureLocation,
+            List.of(
+                Feature.class
+            ),
+            "FEATURE",
+            "Typed references to the built-in feature types, the algorithms in the {@code FEATURE} registry.",
+            "2.3.0"
+        );
+    }
+
+    private static GeneratorSpec worldCarverTypes() {
+        return new ConstantSpec(
+            "dev.wyck.wrapper.worldgen.carver",
+            "WorldCarverType",
+            WorldCarver.class,
+            Generators::worldCarverLocation,
+            List.of(
+                WorldCarver.class
+            ),
+            "CARVER",
+            "The vanilla world-carver algorithms that a configured carver can be built on.",
+            "2.3.0"
+        );
+    }
+
+    private static GeneratorSpec activities() {
+        return new ConstantSpec(
+            "dev.wyck.wrapper.environment",
+            "Activity",
+            Activity.class,
+            Generators::activityLocation,
+            List.of(
+                Activity.class
+            ),
+            "ACTIVITY",
+            List.of(
+                "This enum represents the various activities that entities in Minecraft can perform.",
+                "Each enum value carries a vanilla key which the impl module translates to the underlying NMS Activity value."
+            ),
+            "1.1.0"
+        );
+    }
+
+    private static @Nullable Identifier fluidLocation(Object entry) {
+        if (entry instanceof Fluid fluid) {
+            return BuiltInRegistries.FLUID.getKey(fluid);
+        }
+        return null;
+    }
+
+    private static @Nullable Identifier featureLocation(Object entry) {
+        if (entry instanceof Feature<?> feature) {
+            return BuiltInRegistries.FEATURE.getKey(feature);
+        }
+        return null;
+    }
+
+    private static @Nullable Identifier worldCarverLocation(Object entry) {
+        if (entry instanceof WorldCarver<?> carver) {
+            return BuiltInRegistries.CARVER.getKey(carver);
+        }
+        return null;
+    }
+
+    private static @Nullable Identifier activityLocation(Object entry) {
+        if (entry instanceof Activity activity) {
+            return BuiltInRegistries.ACTIVITY.getKey(activity);
+        }
+        return null;
     }
 
     private static @Nullable Identifier keyLocation(Object entry) {
@@ -204,6 +450,24 @@ public final class Generators {
             return null;
         }
         return BuiltInRegistries.SOUND_EVENT.getKey(event);
+    }
+
+    /**
+     * Keys the wrapped constant by the vanilla constant's name, e.g.
+     * {@code RAW_GENERATION}. Use when the translator resolves via
+     * {@code Enum.valueOf}.
+     */
+    static String enumName(Enum<?> constant) {
+        return constant.name();
+    }
+
+    /**
+     * Keys the wrapped constant by {@code getSerializedName()}, e.g.
+     * {@code raw_generation}. Only valid for enums implementing
+     * {@link StringRepresentable}.
+     */
+    static String serializedName(Enum<?> constant) {
+        return ((StringRepresentable) constant).getSerializedName();
     }
 
 }
