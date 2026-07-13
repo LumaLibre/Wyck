@@ -83,21 +83,6 @@ public interface PacketHandler extends AbstractBiomeRenderer {
 
     /**
      * Creates a PacketHandler using the specified packet manipulation library.
-     * The packet listener priority defaults to NORMAL.
-     * @param provider The plugin providing this PacketHandler
-     * @param manipulator The packet manipulation library to use
-     * @return A new PacketHandler instance
-     * @since 0.0.19
-     * @throws MissingPacketManipulatorLibraryException if the specified manipulator library is not installed
-     */
-    @AsOf("0.0.19")
-    @Deprecated(since = "2.1.0", forRemoval = true)
-    static PacketHandler of(Plugin provider, Manipulator manipulator) {
-        return of(provider, manipulator.injector, Priority.NORMAL);
-    }
-
-    /**
-     * Creates a PacketHandler using the specified packet manipulation library.
      * @param provider The plugin providing this PacketHandler
      * @param injector The packet manipulation library to use
      * @param priority The priority of the packet listener
@@ -108,20 +93,6 @@ public interface PacketHandler extends AbstractBiomeRenderer {
     @AsOf("2.1.0")
     static PacketHandler of(Plugin provider, Injector injector, PacketHandler.Priority priority) {
         return WIRE.get().create(provider, injector, priority);
-    }
-
-    /**
-     * Creates a PacketHandler using the specified packet manipulation library.
-     * @param provider The plugin providing this PacketHandler
-     * @param manipulator The packet manipulation library to use
-     * @param priority The priority of the packet listener
-     * @return A new PacketHandler instance
-     * @since 0.0.19
-     * @throws MissingPacketManipulatorLibraryException if the specified injector library is not installed
-     */
-    @AsOf("0.0.19")
-    static PacketHandler of(Plugin provider, Manipulator manipulator, PacketHandler.Priority priority) {
-        return WIRE.get().create(provider, manipulator.injector, priority);
     }
 
     /**
@@ -344,32 +315,4 @@ public interface PacketHandler extends AbstractBiomeRenderer {
 
     }
 
-    /**
-     * Enum constant for supported packet manipulation libraries.
-     * @version 0.0.19
-     * @since 0.0.19
-     * @author Jsinco
-     * @deprecated Use {@link Injector} instead.
-     */
-    @AsOf("0.0.19")
-    @ApiStatus.ScheduledForRemoval(inVersion = "3.0.0")
-    @Deprecated(since = "2.1.0", forRemoval = true)
-    enum Manipulator {
-        PROTOCOLLIB(Injector.PROTOCOLLIB),
-        PACKETEVENTS(Injector.PACKETEVENTS);
-
-        private final Injector injector;
-
-        Manipulator(Injector injector) {
-            this.injector = injector;
-        }
-
-        public String getName() {
-            return injector.getName();
-        }
-
-        public boolean isAvailable() {
-            return injector.isAvailable();
-        }
-    }
 }

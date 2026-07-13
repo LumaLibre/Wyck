@@ -66,15 +66,6 @@ public record ChunkLocation(int x, int z) {
     }
 
     /**
-     * @deprecated Use isChunk(Chunk) or isChunk(int, int) instead.
-     * @throws UnsupportedOperationException always
-     */
-    @Deprecated(forRemoval = true, since = "2.0.0")
-    public boolean isChunk(Object obj) {
-        throw new UnsupportedOperationException("isChunk(Object) is not supported. Use isChunk(Chunk) or isChunk(int, int) instead.");
-    }
-
-    /**
      * Checks if this ChunkLocation is within a certain radius of another ChunkLocation.
      * @param other the other ChunkLocation to compare
      * @param radius the radius to check within

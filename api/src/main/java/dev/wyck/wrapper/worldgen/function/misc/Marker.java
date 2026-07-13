@@ -112,7 +112,7 @@ public interface Marker extends DensityFunction, Registerable<Marker> {
     }
 
     /**
-     * Used by the game onto {@link NoiseRouter.Slots#finalDensity()}.
+     * Used by the game onto {@link NoiseRouter#finalDensity()}.
      * @param input the input density function
      * @return the marker
      * @since 3.0.0

@@ -20,6 +20,12 @@ public interface ReferencedNoise extends Noise {
     @ApiStatus.Internal
     ConstructWireProvider<ReferencedNoise> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.noise.types.ReferencedNoiseImpl");
 
+    /**
+     * The resource key of the noise function.
+     * @param resourceKey the resource key of the noise function
+     * @return the noise function
+     * @since 3.0.0
+     */
     @AsOf("3.0.0")
     static ReferencedNoise of(ResourceKey resourceKey) {
         return WIRE.construct(resourceKey);

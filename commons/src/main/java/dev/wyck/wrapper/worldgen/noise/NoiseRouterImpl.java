@@ -7,31 +7,47 @@ import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 @ApiStatus.Internal
-public record NoiseRouterImpl(NoiseRouter.Slots slots) implements NoiseRouter {
+public record NoiseRouterImpl(
+    @Override DensityFunction barrier,
+    @Override DensityFunction fluidLevelFloodedness,
+    @Override DensityFunction fluidLevelSpread,
+    @Override DensityFunction lava,
+    @Override DensityFunction temperature,
+    @Override DensityFunction vegetation,
+    @Override DensityFunction continents,
+    @Override DensityFunction erosion,
+    @Override DensityFunction depth,
+    @Override DensityFunction ridges,
+    @Override DensityFunction preliminarySurfaceLevel,
+    @Override DensityFunction finalDensity,
+    @Override DensityFunction veinToggle,
+    @Override DensityFunction veinRidged,
+    @Override DensityFunction veinGap
+) implements NoiseRouter {
 
     @Override
     public Object toMinecraft() {
         return new net.minecraft.world.level.levelgen.NoiseRouter(
-            resolve(this.slots.barrier()),
-            resolve(this.slots.fluidLevelFloodedness()),
-            resolve(this.slots.fluidLevelSpread()),
-            resolve(this.slots.lava()),
-            resolve(this.slots.temperature()),
-            resolve(this.slots.vegetation()),
-            resolve(this.slots.continents()),
-            resolve(this.slots.erosion()),
-            resolve(this.slots.depth()),
-            resolve(this.slots.ridges()),
-            resolve(this.slots.preliminarySurfaceLevel()),
-            resolve(this.slots.finalDensity()),
-            resolve(this.slots.veinToggle()),
-            resolve(this.slots.veinRidged()),
-            resolve(this.slots.veinGap())
+            resolve(this.barrier),
+            resolve(this.fluidLevelFloodedness),
+            resolve(this.fluidLevelSpread),
+            resolve(this.lava),
+            resolve(this.temperature),
+            resolve(this.vegetation),
+            resolve(this.continents),
+            resolve(this.erosion),
+            resolve(this.depth),
+            resolve(this.ridges),
+            resolve(this.preliminarySurfaceLevel),
+            resolve(this.finalDensity),
+            resolve(this.veinToggle),
+            resolve(this.veinRidged),
+            resolve(this.veinGap)
         );
     }
 
     private static net.minecraft.world.level.levelgen.DensityFunction resolve(DensityFunction function) {
-        Preconditions.checkNotNull(function, "noiseSettings router is missing a density function slot function: %s", function.toMinecraft());
-        return (net.minecraft.world.level.levelgen.DensityFunction) function.toMinecraft();
+        Preconditions.checkNotNull(function, "noise router is missing a density function slot");
+        return function.asHandle();
     }
 }

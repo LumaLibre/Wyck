@@ -154,7 +154,7 @@ public record VirtualBiome(
         }
 
         @AsOf("3.0.0")
-        public Builder setReplacements(List<BlockReplacement> replacements) {
+        public Builder replacements(List<BlockReplacement> replacements) {
             this.blockReplacements = replacements;
             return this;
         }

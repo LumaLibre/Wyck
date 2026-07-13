@@ -73,7 +73,7 @@ public class TestPlugin extends JavaPlugin implements Listener {
         ResourceKey levelKey = ResourceKey.of("test", "wobbleworld5");
 
         TreeConfiguration treeConfig = FeatureConfiguration.tree()
-            .foliageProvider(BlockStateProvider.simple(Material.MANGROVE_LEAVES))
+            .foliageProvider(BlockStateProvider.simple(Material.OAK_LEAVES))
             .trunkProvider(BlockStateProvider.simple(Material.CHERRY_WOOD))
             .belowTrunkProvider(
                 BlockStateProvider.ruleBased()

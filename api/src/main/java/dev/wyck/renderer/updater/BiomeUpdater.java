@@ -116,20 +116,6 @@ public interface BiomeUpdater extends AbstractBiomeRenderer {
     }
 
     /**
-     * Updates the biome of a chunk.
-     * This method is a convenience method that calls the updateChunks method with a list containing the chunk.
-     *
-     * @param chunk The chunk to update.
-     * @since 0.0.1
-     * @deprecated Use {@link #updateChunkAsync(CompletableFuture)} instead.
-     */
-    @AsOf("1.2.0")
-    @Deprecated(since = "2.0.0")
-    default void updateChunk(CompletableFuture<Chunk> chunk) {
-        updateChunkAsync(chunk);
-    }
-
-    /**
      * Updates the biomes of the chunks between two locations.
      * This method is a convenience method that calls the updateChunks method with the chunks between the 'from' and 'to' locations.
      *
@@ -165,23 +151,6 @@ public interface BiomeUpdater extends AbstractBiomeRenderer {
     default void updateChunks(Collection<Chunk> chunks) {
         updateChunksAsync(chunks.stream().map(CompletableFuture::completedFuture).toList());
     }
-
-    /**
-     * Updates the biomes of a list of chunks within a certain distance.
-     * This method sends an update packet to all players within the specified distance of each chunk in the list.
-     * The update packet contains the new biome data for the chunk.
-     *
-     * @param chunks The chunks to update.
-     * @since 0.0.1
-     * @deprecated Use {@link #updateChunksAsync(Collection)} instead.
-     */
-    @AsOf("1.2.0")
-    @Deprecated(forRemoval = true, since = "2.2.0")
-    @ApiStatus.ScheduledForRemoval(inVersion = "3.0.0")
-    default void updateChunks(List<CompletableFuture<Chunk>> chunks) {
-        updateChunksAsync(chunks);
-    }
-
 
     /**
      * Updates the biomes of all chunks within a certain radius of a given chunk.
