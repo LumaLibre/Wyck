@@ -11,12 +11,13 @@ import org.jspecify.annotations.NullMarked;
 public record WeightedStateProviderImpl(@Override WeightedList<BlockData> entries) implements WeightedStateProvider {
     @Override
     public Object toMinecraft() {
-        net.minecraft.util.random.WeightedList.Builder<net.minecraft.world.level.block.state.BlockState> builder = net.minecraft.util.random.WeightedList.builder();
+        net.minecraft.util.random.WeightedList.Builder<net.minecraft.world.level.block.state.BlockState> builder =
+            net.minecraft.util.random.WeightedList.builder();
 
         for (WeightedList.Weighted<BlockData> entry : this.entries.unwrap()) {
             CraftBlockData data = (CraftBlockData) entry.value();
             builder.add(data.getState(), entry.weight());
         }
-        return builder.build();
+        return new net.minecraft.world.level.levelgen.feature.stateproviders.WeightedStateProvider(builder.build());
     }
 }
