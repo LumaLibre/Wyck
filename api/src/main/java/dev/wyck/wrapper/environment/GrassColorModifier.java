@@ -21,7 +21,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("0.0.24")
-@Generated("2026-07-13T07:21:53.856781Z")
+@Generated("2026-07-14T03:30:26.719794Z")
 public enum GrassColorModifier implements WrappedEnumerator<GrassColorModifier> {
 
     NONE("none"),

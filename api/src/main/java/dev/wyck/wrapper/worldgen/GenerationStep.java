@@ -19,7 +19,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.3.0")
-@Generated("2026-07-13T07:21:53.854161Z")
+@Generated("2026-07-14T03:30:26.716022Z")
 public enum GenerationStep implements WrappedEnumerator<GenerationStep> {
 
     RAW_GENERATION("RAW_GENERATION"),

@@ -19,7 +19,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.4.1")
-@Generated("2026-07-13T07:21:53.855030Z")
+@Generated("2026-07-14T03:30:26.717612Z")
 public enum TriState implements WrappedEnumerator<TriState> {
 
     TRUE("TRUE"),

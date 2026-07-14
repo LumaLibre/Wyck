@@ -19,7 +19,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.3.0")
-@Generated("2026-07-13T07:21:53.857489Z")
+@Generated("2026-07-14T03:30:26.720811Z")
 public enum MobCategory implements WrappedEnumerator<MobCategory> {
 
     MONSTER("monster"),

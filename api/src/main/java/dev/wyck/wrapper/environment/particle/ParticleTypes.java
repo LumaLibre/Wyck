@@ -32,6 +32,7 @@ import java.util.Map;
  * @see ParticleCatalog
  * @see ParticleData
  * @since 2.0.0
+ * @version 3.0.0
  * @author Jsinco
  */
 @NullMarked
@@ -165,7 +166,6 @@ public enum ParticleTypes implements WrappedConstant<ParticleTypes> {
     SULFUR_CUBE_GOO("sulfur_cube_goo");
 
     public static final RegisteredConstantTranslator<ParticleTypes> TRANSLATOR = RegisteredConstantTranslator.of(RegistryId.PARTICLE_TYPE, ParticleTypes::resourceKey, ParticleTypes.values());
-    @ApiStatus.Internal
     private static volatile @Nullable Map<String, ParticleTypes> BY_KEY;
 
     private final String key;

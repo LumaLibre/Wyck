@@ -21,7 +21,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.3.0")
-@Generated("2026-07-13T07:21:53.859431Z")
+@Generated("2026-07-14T03:30:26.722786Z")
 public enum WorldCarverType implements WrappedConstant<WorldCarverType> {
 
     CAVE("cave"),

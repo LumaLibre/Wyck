@@ -41,6 +41,8 @@ import dev.wyck.wrapper.worldgen.placement.PlacementModifier;
 import dev.wyck.wrapper.worldgen.stateproviders.BlockStateProvider;
 import dev.wyck.wrapper.worldgen.surface.SurfaceRule;
 import dev.wyck.wrapper.worldgen.valueproviders.IntProvider;
+import net.minecraft.world.level.levelgen.flat.FlatLevelGeneratorPreset;
+import net.minecraft.world.level.levelgen.flat.FlatLevelGeneratorPresets;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.World;

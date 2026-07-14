@@ -7,6 +7,7 @@ import dev.wyck.wrapper.internal.Wrapper;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
+// FIXME: Useless wrapper
 @NullMarked
 @AsOf("3.0.0")
 public interface FluidState extends Wrapper {

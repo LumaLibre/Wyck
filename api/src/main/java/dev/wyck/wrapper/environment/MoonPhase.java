@@ -20,7 +20,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("1.1.0")
-@Generated("2026-07-13T07:21:53.856535Z")
+@Generated("2026-07-14T03:30:26.719383Z")
 public enum MoonPhase implements WrappedEnumerator<MoonPhase> {
 
     FULL_MOON("full_moon"),

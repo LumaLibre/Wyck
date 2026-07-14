@@ -9,7 +9,6 @@ import dev.wyck.wrapper.worldgen.feature.types.ComposedConfiguredFeature;
 import dev.wyck.wrapper.worldgen.feature.types.CustomComposedConfiguredFeature;
 import dev.wyck.wrapper.worldgen.feature.types.ReferencedConfiguredFeature;
 import net.kyori.adventure.key.Keyed;
-import org.checkerframework.checker.units.qual.C;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
@@ -99,8 +98,6 @@ public interface ConfiguredFeature extends Wrapper, Keyed {
 
     /**
      * Composes a registered custom feature with a config instance. The feature
-     * @param customFeature the custom feature to compose
-     * @param config the config instance to place with
      * @return an authored configured feature
      * @param <C> the config type
      * @since 3.0.0

@@ -22,7 +22,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("1.1.0")
-@Generated("2026-07-13T07:21:53.859766Z")
+@Generated("2026-07-14T03:30:26.723152Z")
 public enum Activity implements WrappedConstant<Activity> {
 
     CORE("core"),

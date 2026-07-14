@@ -40,6 +40,7 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.carver.WorldCarver;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.placement.CaveSurface;
+import net.minecraft.world.level.levelgen.structure.BuiltinStructureSets;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.levelgen.NoiseRouterData;
@@ -72,7 +73,8 @@ public final class Generators {
         fluidTypes(),
         featureTypes(),
         worldCarverTypes(),
-        activities()
+        activities(),
+        structureSets()
     );
 
     private static GeneratorSpec configuredFeatures() {
@@ -396,6 +398,22 @@ public final class Generators {
                 "Each enum value carries a vanilla key which the impl module translates to the underlying NMS Activity value."
             ),
             "1.1.0"
+        );
+    }
+
+    private static GeneratorSpec structureSets() {
+        return new ReferenceSpec(
+            "dev.wyck.wrapper.worldgen.structure",
+            "StructureSets",
+            "ResourceKey",
+            "",
+            ResourceKey.class,
+            Generators::keyLocation,
+            List.of(
+                BuiltinStructureSets.class
+            ),
+            "Typed references that point to vanilla's built-in structure sets.",
+            "3.0.0"
         );
     }
 

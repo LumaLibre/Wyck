@@ -19,7 +19,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("3.0.0")
-@Generated("2026-07-13T07:21:53.854504Z")
+@Generated("2026-07-14T03:30:26.716626Z")
 public enum HeightmapType implements WrappedEnumerator<HeightmapType> {
 
     WORLD_SURFACE_WG("WORLD_SURFACE_WG"),
