@@ -1,7 +1,5 @@
 package dev.wyck.wrapper.worldgen.chunk.flat;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.ConstructWireProvider;
 import dev.wyck.keys.ResourceKey;
@@ -10,7 +8,6 @@ import dev.wyck.model.biome.Biomes;
 import dev.wyck.wrapper.internal.Wrapper;
 import dev.wyck.wrapper.worldgen.chunk.ChunkGenerator;
 import dev.wyck.wrapper.worldgen.placement.PlacedFeature;
-import dev.wyck.wrapper.worldgen.placement.PlacedFeatures;
 import dev.wyck.wrapper.worldgen.structure.StructureSets;
 import org.bukkit.Material;
 import org.jetbrains.annotations.ApiStatus;
@@ -364,7 +361,7 @@ public interface FlatLevelGeneratorSettings extends Wrapper {
          */
         @AsOf("3.0.0")
         public Builder structure(ResourceKey... structure) {
-            this.structures.addAll(Lists.newArrayList(structure));
+            this.structures.addAll(List.of(structure));
             return this;
         }
 
