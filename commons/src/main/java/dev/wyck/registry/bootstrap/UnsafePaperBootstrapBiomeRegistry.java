@@ -1,7 +1,7 @@
 package dev.wyck.registry.bootstrap;
 
 import com.google.common.base.Preconditions;
-import dev.wyck.model.biome.Biome;
+import dev.wyck.biome.Biome;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEventType;
 import io.papermc.paper.registry.PaperRegistries;
@@ -20,7 +20,7 @@ import dev.wyck.keys.KeyChains;
 import dev.wyck.registry.BiomeRegistry;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.util.ThrowingRunnable;
-import dev.wyck.wrapper.worldgen.climate.ClimatePoint;
+import dev.wyck.worldgen.climate.ClimatePoint;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.RegistrationInfo;
 import net.minecraft.core.Registry;

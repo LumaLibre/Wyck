@@ -21,8 +21,8 @@ vanilla carver.
 <CodeBlock
     lang="java"
     filename="ExamplePlugin.java"
-    code={`import dev.wyck.wrapper.worldgen.BiomeGenerationSettings;
-import dev.wyck.wrapper.worldgen.carver.Carvers;
+    code={`import dev.wyck.worldgen.BiomeGenerationSettings;
+import dev.wyck.worldgen.carver.Carvers;
 
 BiomeGenerationSettings generation = BiomeGenerationSettings.builder()
     .addCarver(Carvers.CAVE)
@@ -40,11 +40,11 @@ To author your own, pair a carver type with a configuration.
             label: "Cave",
             filename: "ExamplePlugin.java",
             lang: "java",
-            code: `import dev.wyck.wrapper.worldgen.carver.CaveCarverConfiguration;
-import dev.wyck.wrapper.worldgen.carver.ConfiguredWorldCarver;
-import dev.wyck.wrapper.worldgen.valueproviders.FloatProvider;
-import dev.wyck.wrapper.worldgen.valueproviders.HeightProvider;
-import dev.wyck.wrapper.worldgen.valueproviders.VerticalAnchor;
+            code: `import dev.wyck.worldgen.carver.CaveCarverConfiguration;
+import dev.wyck.worldgen.carver.ConfiguredWorldCarver;
+import dev.wyck.worldgen.valueproviders.FloatProvider;
+import dev.wyck.worldgen.valueproviders.HeightProvider;
+import dev.wyck.worldgen.valueproviders.VerticalAnchor;
 import org.bukkit.Material;
 
 import java.util.List;
@@ -66,12 +66,12 @@ ConfiguredWorldCarver cave = ConfiguredWorldCarver.cave(
             label: "Canyon",
             filename: "ExamplePlugin.java",
             lang: "java",
-            code: `import dev.wyck.wrapper.worldgen.carver.CanyonCarverConfiguration;
-import dev.wyck.wrapper.worldgen.carver.CanyonShapeConfiguration;
-import dev.wyck.wrapper.worldgen.carver.ConfiguredWorldCarver;
-import dev.wyck.wrapper.worldgen.valueproviders.FloatProvider;
-import dev.wyck.wrapper.worldgen.valueproviders.HeightProvider;
-import dev.wyck.wrapper.worldgen.valueproviders.VerticalAnchor;
+            code: `import dev.wyck.worldgen.carver.CanyonCarverConfiguration;
+import dev.wyck.worldgen.carver.CanyonShapeConfiguration;
+import dev.wyck.worldgen.carver.ConfiguredWorldCarver;
+import dev.wyck.worldgen.valueproviders.FloatProvider;
+import dev.wyck.worldgen.valueproviders.HeightProvider;
+import dev.wyck.worldgen.valueproviders.VerticalAnchor;
 import org.bukkit.Material;
 
 import java.util.List;

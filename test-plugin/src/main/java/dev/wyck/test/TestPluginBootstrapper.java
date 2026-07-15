@@ -1,18 +1,18 @@
 package dev.wyck.test;
 
 import dev.wyck.util.BukkitBootstrapUtil;
-import dev.wyck.wrapper.worldgen.Decoration;
-import dev.wyck.wrapper.worldgen.valueproviders.IntProvider;
+import dev.wyck.worldgen.Decoration;
+import dev.wyck.worldgen.valueproviders.IntProvider;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.test.worldgen.PillarFeature;
-import dev.wyck.wrapper.biome.BiomeGenerationSettings;
-import dev.wyck.wrapper.worldgen.HeightmapType;
-import dev.wyck.wrapper.worldgen.feature.ConfiguredFeature;
-import dev.wyck.wrapper.worldgen.placement.PlacedFeature;
-import dev.wyck.wrapper.worldgen.placement.PlacedFeatures;
-import dev.wyck.wrapper.worldgen.placement.PlacementModifier;
+import dev.wyck.biome.BiomeGenerationSettings;
+import dev.wyck.worldgen.HeightmapType;
+import dev.wyck.worldgen.feature.ConfiguredFeature;
+import dev.wyck.worldgen.placement.PlacedFeature;
+import dev.wyck.worldgen.placement.PlacedFeatures;
+import dev.wyck.worldgen.placement.PlacementModifier;
 import org.bukkit.Axis;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;

@@ -1,0 +1,22 @@
+package dev.wyck.environment.sounds;
+
+import dev.wyck.environment.sounds.BackgroundMusic;
+import dev.wyck.environment.sounds.Music;
+import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.NullMarked;
+
+import java.util.Optional;
+
+@NullMarked
+@ApiStatus.Internal
+public record BackgroundMusicImpl(@Override Optional<Music> defaultMusic, @Override Optional<Music> creativeMusic, @Override Optional<Music> underwaterMusic) implements BackgroundMusic {
+
+    @Override
+    public Object toMinecraft() {
+        return new net.minecraft.world.attribute.BackgroundMusic(
+            this.defaultMusic.map(Music::asHandle),
+            this.creativeMusic.map(Music::asHandle),
+            this.underwaterMusic.map(Music::asHandle)
+        );
+    }
+}

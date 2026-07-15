@@ -1,7 +1,7 @@
 package dev.wyck.registry.bootstrap;
 
 import com.google.common.base.Preconditions;
-import dev.wyck.model.level.dimension.Dimension;
+import dev.wyck.level.dimension.Dimension;
 import dev.wyck.registry.DimensionRegistry;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEventType;

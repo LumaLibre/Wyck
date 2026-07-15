@@ -1,6 +1,6 @@
 package dev.wyck.v26_1.renderer.packet.handlers;
 
-import dev.wyck.model.biome.Biome;
+import dev.wyck.biome.Biome;
 import dev.wyck.renderer.packet.data.VirtualBiome;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;

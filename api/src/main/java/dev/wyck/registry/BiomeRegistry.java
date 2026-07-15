@@ -1,7 +1,7 @@
 package dev.wyck.registry;
 
 import dev.wyck.annotations.AsOf;
-import dev.wyck.model.biome.Biome;
+import dev.wyck.biome.Biome;
 import dev.wyck.factory.WireProvider;
 import dev.wyck.keys.ResourceKey;
 import org.jetbrains.annotations.ApiStatus;

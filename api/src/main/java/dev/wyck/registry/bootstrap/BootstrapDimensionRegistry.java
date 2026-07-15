@@ -1,6 +1,6 @@
 package dev.wyck.registry.bootstrap;
 
-import dev.wyck.model.level.dimension.Dimension;
+import dev.wyck.level.dimension.Dimension;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.WireProvider;

@@ -1,0 +1,25 @@
+package dev.wyck.worldgen.feature.treedecorators;
+
+import dev.wyck.worldgen.feature.treedecorators.PlaceOnGroundDecorator;
+import dev.wyck.worldgen.stateproviders.BlockStateProvider;
+import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.NullMarked;
+
+@NullMarked
+@ApiStatus.Internal
+public record PlaceOnGroundDecoratorImpl(
+    @Override int tries,
+    @Override int radius,
+    @Override int height,
+    @Override BlockStateProvider blockStateProvider
+) implements PlaceOnGroundDecorator {
+    @Override
+    public Object toMinecraft() {
+        return new net.minecraft.world.level.levelgen.feature.treedecorators.PlaceOnGroundDecorator(
+            tries,
+            radius,
+            height,
+            blockStateProvider.asHandle()
+        );
+    }
+}

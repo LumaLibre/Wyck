@@ -417,8 +417,8 @@ public final class ReferenceGenerator {
         sb.append("package ").append(spec.outputPackage()).append(";\n\n");
         sb.append("import dev.wyck.annotations.AsOf;\n");
         sb.append("import dev.wyck.annotations.Generated;\n");
-        sb.append("import dev.wyck.wrapper.internal.KeyedEnumTranslator;\n");
-        sb.append("import dev.wyck.wrapper.internal.WrappedEnumerator;\n");
+        sb.append("import dev.wyck.wrapper.KeyedEnumTranslator;\n");
+        sb.append("import dev.wyck.wrapper.WrappedEnumerator;\n");
         sb.append("import org.jspecify.annotations.NullMarked;\n\n");
         appendHeader(sb, spec, version);
         sb.append("public enum ").append(outputClass)
@@ -477,8 +477,8 @@ public final class ReferenceGenerator {
         sb.append("import dev.wyck.annotations.Generated;\n");
         sb.append("import dev.wyck.keys.ResourceKey;\n");
         sb.append("import dev.wyck.registry.internal.RegistryId;\n");
-        sb.append("import dev.wyck.wrapper.internal.RegisteredConstantTranslator;\n");
-        sb.append("import dev.wyck.wrapper.internal.WrappedConstant;\n");
+        sb.append("import dev.wyck.wrapper.RegisteredConstantTranslator;\n");
+        sb.append("import dev.wyck.wrapper.WrappedConstant;\n");
         sb.append("import org.jspecify.annotations.NullMarked;\n\n");
         appendHeader(sb, spec, version);
         sb.append("public enum ").append(outputClass)

@@ -2,11 +2,11 @@ package dev.wyck.renderer.packet.data;
 
 import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
-import dev.wyck.model.biome.Biome;
+import dev.wyck.biome.Biome;
 import dev.wyck.keys.KeyChains;
 import dev.wyck.misc.ChunkLocation;
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.model.biome.CustomBiome;
+import dev.wyck.biome.CustomBiome;
 import dev.wyck.renderer.packet.PacketHandler;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

@@ -8,7 +8,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
-import dev.wyck.model.level.dimension.Dimension;
+import dev.wyck.level.dimension.Dimension;
 import io.papermc.paper.datapack.DatapackRegistrar;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.lifecycle.event.registrar.RegistrarEvent;

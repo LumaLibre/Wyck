@@ -22,15 +22,15 @@ which controls the order things generate in. Carvers are not stepped as they run
     filename="ExamplePlugin.java"
     code={`import dev.wyck.model.biome.CustomBiome;
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.wrapper.BiomeSettings;
-import dev.wyck.wrapper.worldgen.BiomeGenerationSettings;
-import dev.wyck.wrapper.worldgen.Decoration;
-import dev.wyck.wrapper.worldgen.HeightmapType;
-import dev.wyck.wrapper.worldgen.placement.PlacementModifier;
-import dev.wyck.wrapper.worldgen.carver.Carvers;
-import dev.wyck.wrapper.worldgen.feature.ConfiguredFeatures;
-import dev.wyck.wrapper.worldgen.placement.PlacedFeature;
-import dev.wyck.wrapper.worldgen.placement.PlacedFeatures;
+import dev.wyck.biomeSettings;
+import dev.wyck.worldgen.BiomeGenerationSettings;
+import dev.wyck.worldgen.Decoration;
+import dev.wyck.worldgen.HeightmapType;
+import dev.wyck.worldgen.placement.PlacementModifier;
+import dev.wyck.worldgen.carver.Carvers;
+import dev.wyck.worldgen.feature.ConfiguredFeatures;
+import dev.wyck.worldgen.placement.PlacedFeature;
+import dev.wyck.worldgen.placement.PlacedFeatures;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ExamplePlugin extends JavaPlugin {
@@ -52,7 +52,6 @@ public class ExamplePlugin extends JavaPlugin {
 
         CustomBiome.builder()
             .resourceKey(ResourceKey.of("test", "custombiome"))
-            .settings(BiomeSettings.defaultSettings())
             .waterColor("#F5F2EB")
             .grassColor("#DBE9EC")
             .generationSettings(generation)

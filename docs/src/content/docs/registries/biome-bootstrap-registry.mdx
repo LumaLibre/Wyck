@@ -38,7 +38,7 @@ import dev.wyck.model.biome.CustomBiome;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.registry.bootstrap.BootstrapBiomeRegistry;
 import dev.wyck.registry.bootstrap.Composer;
-import dev.wyck.wrapper.BiomeSettings;
+import dev.wyck.biomeSettings;
 import dev.wyck.wrapper.entity.BiomeSpawner;
 import dev.wyck.wrapper.entity.MobCategory;
 import dev.wyck.wrapper.entity.data.NaturalSpawner;
@@ -58,7 +58,6 @@ public class ExampleBootstrapper implements PluginBootstrap {
         // #queue(CustomBiome) queues this biome for registration.
         registry.queue(CustomBiome.builder()
             .resourceKey(ResourceKey.of("test", "a"))
-            .settings(BiomeSettings.defaultSettings())
             .fogColor("#FFFFFF")
             .skyColor("#B99DFC")
             .waterColor("#F5F2EB")
@@ -69,7 +68,6 @@ public class ExampleBootstrapper implements PluginBootstrap {
 
         registry.queue(CustomBiome.builder()
             .resourceKey(ResourceKey.of("test", "b"))
-            .settings(BiomeSettings.defaultSettings())
             .fogColor("#DB00FD")
             .skyColor("#2F46FF")
             .waterColor("#000000")

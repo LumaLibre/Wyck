@@ -1,0 +1,27 @@
+package dev.wyck.v26_1.worldgen.surface.condition;
+
+import dev.wyck.biome.Biome;
+import dev.wyck.worldgen.surface.condition.BiomeConditionSource;
+import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.NullMarked;
+
+import java.util.List;
+
+@NullMarked
+@ApiStatus.Internal
+public record BiomeConditionSourceImpl(
+    @Override List<Biome> targets
+) implements BiomeConditionSource {
+    @Override
+    public Object toMinecraft() {
+        @SuppressWarnings("unchecked")
+        net.minecraft.resources.ResourceKey<net.minecraft.world.level.biome.Biome>[] keys = new net.minecraft.resources.ResourceKey[targets.size()];
+
+        for (int i = 0; i < targets.size(); i++) {
+            Biome biome = targets.get(i);
+            keys[i] = net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.BIOME, biome.resourceKey().identifier());
+        }
+
+        return net.minecraft.world.level.levelgen.SurfaceRules.isBiome(keys);
+    }
+}

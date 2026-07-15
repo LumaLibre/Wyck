@@ -3,7 +3,7 @@ package dev.wyck.registry.worldgen;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.WireProvider;
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.wrapper.worldgen.feature.custom.CustomFeature;
+import dev.wyck.worldgen.feature.custom.CustomFeature;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 

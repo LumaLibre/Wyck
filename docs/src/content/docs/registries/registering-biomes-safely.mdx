@@ -44,7 +44,7 @@ import dev.wyck.model.biome.CustomBiome;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.registry.bootstrap.BootstrapBiomeRegistry;
 import dev.wyck.registry.bootstrap.Composer;
-import dev.wyck.wrapper.BiomeSettings;
+import dev.wyck.biomeSettings;
 import org.bukkit.entity.EntityType;
 
 public class ExampleBootstrapper implements PluginBootstrap {
@@ -56,7 +56,6 @@ public class ExampleBootstrapper implements PluginBootstrap {
         registry.deferring(() -> {
             registry.queue(CustomBiome.builder()
                 .resourceKey(ResourceKey.of("test", "custombiome"))
-                .settings(BiomeSettings.defaultSettings())
                 .fogColor("#FFFFFF")
                 .skyColor("#B99DFC")
                 .waterColor("#F5F2EB")
@@ -84,7 +83,7 @@ A simple way to do this is by simply shutting down the server if a biome fails t
     filename="ExamplePlugin.java"
     code={`import dev.wyck.model.biome.CustomBiome;
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.wrapper.BiomeSettings;
+import dev.wyck.biomeSettings;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.logging.Level;
@@ -95,7 +94,6 @@ public class ExamplePlugin extends JavaPlugin {
         try {
             CustomBiome.builder()
                 .resourceKey(ResourceKey.of("test", "custombiome"))
-                .settings(BiomeSettings.defaultSettings())
                 .fogColor("#FFFFFF")
                 .skyColor("#B99DFC")
                 .waterColor("#F5F2EB")

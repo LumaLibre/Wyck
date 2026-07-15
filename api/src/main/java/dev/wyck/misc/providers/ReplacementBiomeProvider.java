@@ -2,7 +2,7 @@ package dev.wyck.misc.providers;
 
 import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
-import dev.wyck.model.biome.Biome;
+import dev.wyck.biome.Biome;
 import org.bukkit.generator.WorldInfo;
 import org.jspecify.annotations.NullMarked;
 

@@ -1,0 +1,22 @@
+package dev.wyck.worldgen.chunk;
+
+import dev.wyck.worldgen.biome.BiomeSource;
+import dev.wyck.worldgen.chunk.ChunkGenerator;
+import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.NullMarked;
+
+@NullMarked
+@ApiStatus.Internal
+public abstract class ChunkGeneratorImpl implements ChunkGenerator {
+
+    protected final BiomeSource biomeSource;
+
+    public ChunkGeneratorImpl(BiomeSource biomeSource) {
+        this.biomeSource = biomeSource;
+    }
+
+    @Override
+    public BiomeSource biomeSource() {
+        return biomeSource;
+    }
+}

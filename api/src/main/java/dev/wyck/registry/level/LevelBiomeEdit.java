@@ -2,7 +2,7 @@ package dev.wyck.registry.level;
 
 import dev.wyck.annotations.AsOf;
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.wrapper.worldgen.climate.ClimatePoint;
+import dev.wyck.worldgen.climate.ClimatePoint;
 
 /**
  * Represents an edit to a dimension's biome distribution, either adding a biome at a climate point or replacing one biome with another.
