@@ -44,6 +44,9 @@ tasks.named<Jar>("jar") {
     enabled = false
 }
 
+tasks.withType<PublishToMavenRepository>().configureEach {
+    dependsOn(tasks.test)
+}
 
 configurations {
     apiElements { outgoing.artifacts.clear(); outgoing.artifact(tasks.shadowJar) }
