@@ -1,4 +1,4 @@
-//2b0b6f18c06ec112fdec7a54ca00da17
+//ff7e70fb38fb4275ddc0bde53a28296f
 package dev.wyck.worldgen.feature;
 
 import dev.wyck.annotations.AsOf;
@@ -22,7 +22,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.3.0")
-@Generated("2026-07-15T07:01:58.787785Z")
+@Generated("2026-07-15T18:48:22.503228Z")
 public enum FeatureType implements WrappedConstant<FeatureType> {
 
     NO_OP("no_op"),

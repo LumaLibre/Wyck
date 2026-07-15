@@ -1,4 +1,4 @@
-//7c626e52488946e113f0e63cc45675ff
+//260eaceec1d47055bc91057f66a14429
 package dev.wyck.worldgen.placement;
 
 import dev.wyck.annotations.AsOf;
@@ -19,7 +19,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.3.0")
-@Generated("2026-07-15T07:01:58.740674Z")
+@Generated("2026-07-15T18:48:22.462003Z")
 public final class PlacedFeatures {
 
     // From: AquaticPlacements 

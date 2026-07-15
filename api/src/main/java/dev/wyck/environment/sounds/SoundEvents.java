@@ -1,4 +1,4 @@
-//2fd62ce4ba80a7f22cb8d8351628d555
+//122378fa5bdd651c08bca514af594f09
 package dev.wyck.environment.sounds;
 
 import dev.wyck.annotations.AsOf;
@@ -19,7 +19,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.4.1")
-@Generated("2026-07-15T07:01:58.753275Z")
+@Generated("2026-07-15T18:48:22.471027Z")
 public final class SoundEvents {
 
     // From: SoundEvents 

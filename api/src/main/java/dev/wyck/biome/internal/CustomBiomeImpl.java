@@ -14,6 +14,11 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
+/**
+ * This implementation is here because it does not compile
+ * against Minecraft internals as of right now.
+ * Do not directly use this class, use {@link CustomBiome}.
+ */
 @NullMarked
 @ApiStatus.Internal
 public class CustomBiomeImpl extends BiomeImpl implements CustomBiome {

@@ -4,6 +4,11 @@ import org.jetbrains.annotations.ApiStatus;
 
 import java.lang.reflect.Field;
 
+/**
+ * Internal class for quick reflective operations.
+ * This class isn't considered public API and may
+ * change at any time.
+ */
 @ApiStatus.Internal
 @SuppressWarnings("unchecked")
 public final class InternalReflectUtil {

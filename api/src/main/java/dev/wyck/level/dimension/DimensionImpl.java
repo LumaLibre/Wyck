@@ -13,11 +13,9 @@ import org.jspecify.annotations.Nullable;
 import java.util.Optional;
 
 /**
- * This class represents a custom dimension type implementation.
- *
- * @author Jsinco
- * @version 2.4.0
- * @since 2.4.0
+ * This implementation is here because it does not compile
+ * against Minecraft internals as of right now.
+ * Do not directly use this class, use {@link Dimension}.
  */
 @NullMarked
 @AsOf("2.4.0")

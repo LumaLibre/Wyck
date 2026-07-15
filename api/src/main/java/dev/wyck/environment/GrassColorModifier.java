@@ -1,4 +1,4 @@
-//76c0457032608d6f53cb7535f3756a1a
+//77d3cd8e2bcaa1e8c728c5822d48e2d7
 package dev.wyck.environment;
 
 import dev.wyck.annotations.AsOf;
@@ -22,7 +22,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("0.0.24")
-@Generated("2026-07-15T07:01:58.785532Z")
+@Generated("2026-07-15T18:48:22.501074Z")
 public enum GrassColorModifier implements WrappedEnumerator<GrassColorModifier> {
 
     NONE("none"),

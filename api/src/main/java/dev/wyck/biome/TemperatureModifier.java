@@ -1,4 +1,4 @@
-//4ce41da62f732037aa1b1902e0ff1cab
+//48cdd0a1176cf05e672432a17669db8c
 package dev.wyck.biome;
 
 import dev.wyck.annotations.AsOf;
@@ -22,7 +22,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("0.0.1")
-@Generated("2026-07-15T07:01:58.785986Z")
+@Generated("2026-07-15T18:48:22.501525Z")
 public enum TemperatureModifier implements WrappedEnumerator<TemperatureModifier> {
 
     NONE("none"),

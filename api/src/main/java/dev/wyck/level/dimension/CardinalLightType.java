@@ -1,4 +1,4 @@
-//552c15f3b5a1139d0cb948ea034b8afd
+//927a924fd3bf4fa9808cba148fea8ff3
 package dev.wyck.level.dimension;
 
 import dev.wyck.annotations.AsOf;
@@ -20,7 +20,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.4.0")
-@Generated("2026-07-15T07:01:58.784562Z")
+@Generated("2026-07-15T18:48:22.499922Z")
 public enum CardinalLightType implements WrappedEnumerator<CardinalLightType> {
 
     DEFAULT("default"),

@@ -1,4 +1,4 @@
-//57dbd8475f9bf6232b0b9b02d6f2ae03
+//e0f080cbf7b88593e491aa8b14922475
 package dev.wyck.worldgen.structure;
 
 import dev.wyck.annotations.AsOf;
@@ -19,7 +19,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("3.0.0")
-@Generated("2026-07-15T07:01:58.790532Z")
+@Generated("2026-07-15T18:48:22.511911Z")
 public final class StructureSets {
 
     // From: BuiltinStructureSets 

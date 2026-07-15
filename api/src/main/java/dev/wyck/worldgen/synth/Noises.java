@@ -1,4 +1,4 @@
-//3cf3148feb5f67fa66b0964b8c69814a
+//f60fa7985ad5b1152b91e154231abd2f
 package dev.wyck.worldgen.synth;
 
 import dev.wyck.annotations.AsOf;
@@ -19,7 +19,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.4.0")
-@Generated("2026-07-15T07:01:58.747430Z")
+@Generated("2026-07-15T18:48:22.466967Z")
 public final class Noises {
 
     // From: Noises 

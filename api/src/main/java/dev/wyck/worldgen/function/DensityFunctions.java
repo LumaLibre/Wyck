@@ -1,4 +1,4 @@
-//90cad37a8015c994247b1eb80710cc51
+//9deded962a8b0da02c2940b039e5f5be
 package dev.wyck.worldgen.function;
 
 import dev.wyck.annotations.AsOf;
@@ -19,7 +19,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.4.0")
-@Generated("2026-07-15T07:01:58.745649Z")
+@Generated("2026-07-15T18:48:22.465689Z")
 public final class DensityFunctions {
 
     // From: NoiseRouterData 

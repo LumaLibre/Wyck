@@ -1,4 +1,4 @@
-//d196df75217d6b08b9f3bdacebd3536d
+//4b70490050dd3fc8b1df8343d883085d
 package dev.wyck.worldgen.material;
 
 import dev.wyck.annotations.AsOf;
@@ -22,7 +22,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.3.0")
-@Generated("2026-07-15T07:01:58.786929Z")
+@Generated("2026-07-15T18:48:22.502488Z")
 public enum FluidType implements WrappedConstant<FluidType> {
 
     EMPTY("empty"),

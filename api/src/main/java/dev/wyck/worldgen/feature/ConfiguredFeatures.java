@@ -1,4 +1,4 @@
-//f9e41b2cd5f0295274f596f24935a442
+//7ee57b0a80be23c7296e1a0e61ff98de
 package dev.wyck.worldgen.feature;
 
 import dev.wyck.annotations.AsOf;
@@ -19,7 +19,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.3.0")
-@Generated("2026-07-15T07:01:58.729613Z")
+@Generated("2026-07-15T18:48:22.453994Z")
 public final class ConfiguredFeatures {
 
     // From: AquaticFeatures 

@@ -1,4 +1,4 @@
-//cc628f9dd5633a12ac6186271507670a
+//d190c751d6b0511321e5c85b051d690e
 package dev.wyck.worldgen.surface.condition;
 
 import dev.wyck.annotations.AsOf;
@@ -23,7 +23,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("3.0.0")
-@Generated("2026-07-15T07:01:58.781337Z")
+@Generated("2026-07-15T18:48:22.497292Z")
 public enum CaveSurface implements WrappedEnumerator<CaveSurface> {
 
     CEILING("CEILING"),

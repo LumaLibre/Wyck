@@ -1,4 +1,4 @@
-//ec3e559a4ed6a6bf7536494b34f918c0
+//c033e10a9a81d3ad84b645c80b8f32ce
 package dev.wyck.environment;
 
 import dev.wyck.annotations.AsOf;
@@ -21,7 +21,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("1.1.0")
-@Generated("2026-07-15T07:01:58.785077Z")
+@Generated("2026-07-15T18:48:22.500402Z")
 public enum MoonPhase implements WrappedEnumerator<MoonPhase> {
 
     FULL_MOON("full_moon"),

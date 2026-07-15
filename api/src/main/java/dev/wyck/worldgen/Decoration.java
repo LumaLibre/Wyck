@@ -1,4 +1,4 @@
-//a85d4002ae1614585eb1558a06eb52e3
+//e02965ee5a13431137575369afa011e4
 package dev.wyck.worldgen;
 
 import dev.wyck.annotations.AsOf;
@@ -20,7 +20,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.3.0")
-@Generated("2026-07-15T07:01:58.779385Z")
+@Generated("2026-07-15T18:48:22.496234Z")
 public enum Decoration implements WrappedEnumerator<Decoration> {
 
     RAW_GENERATION("RAW_GENERATION"),

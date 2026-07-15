@@ -1,4 +1,4 @@
-//5fae2767114132e4c60f12ef13fc1072
+//da9af6912dbe89197a7494a809d3cd3b
 package dev.wyck.level.dimension;
 
 import dev.wyck.annotations.AsOf;
@@ -20,7 +20,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.4.0")
-@Generated("2026-07-15T07:01:58.783695Z")
+@Generated("2026-07-15T18:48:22.499205Z")
 public enum Skybox implements WrappedEnumerator<Skybox> {
 
     NONE("none"),
