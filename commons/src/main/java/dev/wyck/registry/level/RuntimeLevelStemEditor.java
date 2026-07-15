@@ -165,10 +165,8 @@ public final class RuntimeLevelStemEditor implements LevelStemEditor {
         if (current instanceof MultiNoiseBiomeSource multiNoise) {
             return buildMultiNoise(multiNoise, biomes, adds, replacements);
         }
-        if (current instanceof TheEndBiomeSource) {
-            return buildEnd(biomes, replacements);
-        }
-        throw new IllegalStateException("cannot edit dimension " + dimId + ", unsupported biome source type " + current.getClass().getSimpleName() + ", only multi_noise and the_end are supported");
+        // TODO: transient CheckeredColumn, TheEnd are needed for this editor — i dont want people bricking worlds by accident
+        throw new IllegalStateException("cannot edit dimension " + dimId + ", unsupported biome source type " + current.getClass().getSimpleName() + ", only multi_noise is supported currently!");
     }
 
 
@@ -199,12 +197,6 @@ public final class RuntimeLevelStemEditor implements LevelStemEditor {
 
         Either<Climate.ParameterList<Holder<Biome>>, Holder<MultiNoiseBiomeSourceParameterList>> codecSide = liveEither(multiNoise);
         return TransientMultiNoiseBiomeSource.create(codecSide, editedList);
-    }
-
-
-    private static BiomeSource buildEnd(Registry<Biome> biomes, Map<net.minecraft.resources.ResourceKey<Biome>, Holder<Biome>> replacements) {
-        HolderGetter<Biome> substituting = new SubstitutingHolderGetter(biomes, replacements);
-        return TheEndBiomeSource.create(substituting);
     }
 
     private static Object readFeaturesPerStep(ChunkGenerator generator) {
