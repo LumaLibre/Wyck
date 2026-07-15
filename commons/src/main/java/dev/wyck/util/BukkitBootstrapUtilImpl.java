@@ -7,8 +7,10 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Server;
 import org.bukkit.block.data.BlockData;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -27,6 +29,12 @@ public record BukkitBootstrapUtilImpl() implements BukkitBootstrapUtil {
 
     @Override
     public BlockData createBlockData(Material material) {
+        Server server = Bukkit.getServer();
+        //noinspection ConstantConditions <- this can be null
+        if (server != null) {
+            return server.createBlockData(material);
+        }
+
         NamespacedKey namespacedKey = material.getKey();
         ResourceKey<Block> resourceKey = ResourceKey.create(
             Registries.BLOCK,
