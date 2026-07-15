@@ -1,0 +1,38 @@
+package dev.wyck.wrapper.worldgen.valueproviders;
+
+import dev.wyck.annotations.AsOf;
+import dev.wyck.factory.ConstructWireProvider;
+import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.NullMarked;
+
+/**
+ * A constant int provider which always returns the same value.
+ *
+ * @see <a href="https://minecraft.wiki/w/Configured_feature/int_provider">int provider</a>
+ * @since 3.0.0
+ * @version 3.0.0
+ * @author Jsinco
+ */
+@NullMarked
+@AsOf("3.0.0")
+public interface ConstantInt extends IntProvider {
+
+    @ApiStatus.Internal
+    ConstructWireProvider<ConstantInt> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.worldgen.valueproviders.ConstantIntImpl");
+
+    /** A constant int provider which always returns 0. */
+    @AsOf("3.0.0")
+    ConstantInt ZERO = of(0);
+
+    /**
+     * A constant int provider.
+     * @param value the value to return
+     * @return the constant int provider
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
+    static ConstantInt of(int value) {
+        return WIRE.construct(value);
+    }
+
+}

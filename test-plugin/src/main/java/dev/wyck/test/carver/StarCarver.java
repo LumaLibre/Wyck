@@ -4,7 +4,7 @@ import dev.wyck.keys.ResourceKey;
 import dev.wyck.misc.ChunkLocation;
 import dev.wyck.wrapper.worldgen.carver.custom.CarvingContext;
 import dev.wyck.wrapper.worldgen.carver.custom.CustomCarver;
-import dev.wyck.wrapper.worldgen.valueproviders.VerticalAnchor;
+import dev.wyck.wrapper.worldgen.heightproviders.VerticalAnchor;
 import org.bukkit.Material;
 import org.jspecify.annotations.NullMarked;
 

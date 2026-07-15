@@ -1,116 +1,199 @@
 package dev.wyck.wrapper.worldgen.valueproviders;
 
 import dev.wyck.annotations.AsOf;
-import dev.wyck.factory.WireProvider;
-import dev.wyck.wrapper.internal.Wrapper;
-import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 /**
- * Wraps the FloatProvider value-provider family. Sampling occurs
- * Minecraft code side, so this wrapper only carries the bounds/shape parameters.
+ * A provider of a floating-point value.
  *
+ * @see <a href="https://minecraft.wiki/w/Configured_feature/float_provider">float provider</a>
  * @since 2.3.0
- * @version 2.3.0
+ * @version 3.0.0
  * @author Jsinco
  */
 @NullMarked
 @AsOf("2.3.0")
-public sealed interface FloatProvider extends Wrapper permits FloatProvider.Constant, FloatProvider.Uniform, FloatProvider.ClampedNormal, FloatProvider.Trapezoid {
-
-    @ApiStatus.Internal
-    WireProvider<Factory> WIRE = WireProvider.create("dev.wyck.wrapper.worldgen.valueproviders.FloatProviderFactoryImpl");
-
-    @ApiStatus.Internal
-    interface Factory {
-        Object toNms(FloatProvider provider);
-    }
-
-    @AsOf("2.3.0")
-    static FloatProvider constant(float value) {
-        return new Constant(value);
-    }
-
-    @AsOf("2.3.0")
-    static FloatProvider uniform(float minInclusive, float maxExclusive) {
-        return new Uniform(minInclusive, maxExclusive);
-    }
-
-    @AsOf("2.3.0")
-    static FloatProvider clampedNormal(float mean, float deviation, float min, float max) {
-        return new ClampedNormal(mean, deviation, min, max);
-    }
-
-    @AsOf("2.3.0")
-    static FloatProvider trapezoid(float min, float max, float plateau) {
-        return new Trapezoid(min, max, plateau);
-    }
+public interface FloatProvider extends ValueProvider {
 
     /**
+     * The smallest value this provider can yield.
      * @return the smallest value this provider can yield.
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    float minValue();
+    float minInclusive();
 
     /**
+     * The largest value this provider can yield.
      * @return the largest value this provider can yield.
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    float maxValue();
+    float maxInclusive();
 
+    /** @inheritDoc */
     @Override
-    @AsOf("2.3.0")
-    default Object toMinecraft() {
-        return WIRE.get().toNms(this);
+    default double min() {
+        return minInclusive();
     }
 
-    @AsOf("2.3.0")
-    record Constant(float value) implements FloatProvider {
-        @Override
-        public float minValue() {
-            return value;
-        }
-        @Override
-        public float maxValue() {
-            return value;
-        }
+    /** @inheritDoc */
+    @Override
+    default double max() {
+        return maxInclusive();
     }
 
+    /**
+     * Creates a constant float provider.
+     * @param value the value to return
+     * @return a constant float provider
+     * @since 2.3.0
+     */
     @AsOf("2.3.0")
-    record Uniform(float minInclusive, float maxExclusive) implements FloatProvider {
-        @Override
-        public float minValue() {
-            return minInclusive;
-        }
-        @Override
-        public float maxValue() {
-            return maxExclusive;
-        }
+    static ConstantFloat constant(float value) {
+        return ConstantFloat.of(value);
     }
 
+    /**
+     * Creates a uniform float provider.
+     * @param min min inclusive
+     * @param max max exclusive
+     * @return a uniform float provider
+     * @since 2.3.0
+     */
     @AsOf("2.3.0")
-    record ClampedNormal(float mean, float deviation, float min, float max) implements FloatProvider {
-        @Override
-        public float minValue() {
-            return min;
-        }
-        @Override
-        public float maxValue() {
-            return max;
-        }
+    static UniformFloat uniform(float min, float max) {
+        return UniformFloat.of(min, max);
     }
 
+    /**
+     * Creates a new uniform float builder.
+     * @return a new uniform float builder
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
+    static UniformFloat.Builder uniform() {
+        return UniformFloat.builder();
+    }
+
+    /**
+     * Creates a clamped normal float provider.
+     * @param mean the mean of the normal distribution
+     * @param deviation the deviation of the normal distribution
+     * @param min the minimum value to clamp to
+     * @param max the maximum value to clamp to
+     * @return a clamped normal float provider
+     * @since 2.3.0
+     */
     @AsOf("2.3.0")
-    record Trapezoid(float min, float max, float plateau) implements FloatProvider {
-        @Override
-        public float minValue() {
-            return min;
+    static ClampedNormalFloat clampedNormal(float mean, float deviation, float min, float max) {
+        return ClampedNormalFloat.of(min, max, mean, deviation);
+    }
+
+    /**
+     * Creates a new clamped normal float builder.
+     * @return a new clamped normal float builder
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
+    static ClampedNormalFloat.Builder clampedNormal() {
+        return ClampedNormalFloat.builder();
+    }
+
+    /**
+     * Creates a trapezoidal float provider.
+     * @param min the minimum value
+     * @param max the maximum value
+     * @param plateau the range in the middle that has a uniform distribution
+     * @return a trapezoid float provider
+     * @since 2.3.0
+     */
+    @AsOf("2.3.0")
+    static TrapezoidFloat trapezoid(float min, float max, float plateau) {
+        return TrapezoidFloat.of(min, max, plateau);
+    }
+
+    /**
+     * Creates a new trapezoid float builder.
+     * @return a new trapezoid float builder
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
+    static TrapezoidFloat.Builder trapezoid() {
+        return TrapezoidFloat.builder();
+    }
+
+    /**
+     * Common abstract builder for float providers with inclusive bounds.
+     * @param <T> the provider type
+     * @param <S> the builder type
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
+    @SuppressWarnings("unchecked")
+    abstract class FloatProviderBuilder<T extends FloatProvider, S extends FloatProviderBuilder<T, S>> {
+        protected float minInclusive;
+        protected float maxInclusive;
+
+        protected FloatProviderBuilder() {}
+
+        protected FloatProviderBuilder(FloatProvider provider) {
+            this.minInclusive = provider.minInclusive();
+            this.maxInclusive = provider.maxInclusive();
         }
-        @Override
-        public float maxValue() {
-            return max;
+
+        /**
+         * Sets the minimum allowed value.
+         * @param minInclusive the minimum allowed value
+         * @return this builder
+         * @since 3.0.0
+         */
+        @AsOf("3.0.0")
+        public S minInclusive(float minInclusive) {
+            this.minInclusive = minInclusive;
+            return (S) this;
         }
+
+        /**
+         * Sets the maximum allowed value.
+         * @param maxInclusive the maximum allowed value
+         * @return this builder
+         * @since 3.0.0
+         */
+        @AsOf("3.0.0")
+        public S maxInclusive(float maxInclusive) {
+            this.maxInclusive = maxInclusive;
+            return (S) this;
+        }
+
+        /**
+         * Sets the minimum allowed value.
+         * @param min the minimum allowed value
+         * @return this builder
+         * @since 3.0.0
+         */
+        @AsOf("3.0.0")
+        public S min(float min) {
+            return this.minInclusive(min);
+        }
+
+        /**
+         * Sets the maximum allowed value.
+         * @param max the maximum allowed value
+         * @return this builder
+         * @since 3.0.0
+         */
+        @AsOf("3.0.0")
+        public S max(float max) {
+            return this.maxInclusive(max);
+        }
+
+        /**
+         * Builds the provider.
+         * @return the built provider
+         * @since 3.0.0
+         */
+        @AsOf("3.0.0")
+        public abstract T build();
     }
 }

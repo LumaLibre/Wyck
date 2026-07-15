@@ -329,14 +329,14 @@ public interface LargeDripstoneConfiguration extends FeatureConfiguration {
             Preconditions.checkNotNull(columnRadius, "columnRadius must be set");
             Preconditions.checkArgument(columnRadius.minInclusive() >= 1 && columnRadius.maxInclusive() <= 60, "columnRadius must be between 1 and 60");
             Preconditions.checkNotNull(heightScale, "heightScale must be set");
-            Preconditions.checkArgument(heightScale.minValue() >= 0.0F && heightScale.maxValue() <= 20.0F, "heightScale must be between 0.0 and 20.0");
+            Preconditions.checkArgument(heightScale.minInclusive() >= 0.0F && heightScale.maxInclusive() <= 20.0F, "heightScale must be between 0.0 and 20.0");
             Preconditions.checkArgument(maxColumnRadiusToCaveHeightRatio >= 0.1F && maxColumnRadiusToCaveHeightRatio <= 1.0F, "maxColumnRadiusToCaveHeightRatio must be between 0.1 and 1.0");
             Preconditions.checkNotNull(stalactiteBluntness, "stalactiteBluntness must be set");
-            Preconditions.checkArgument(stalactiteBluntness.minValue() >= 0.1F && stalactiteBluntness.maxValue() <= 10.0F, "stalactiteBluntness must be between 0.1 and 10.0");
+            Preconditions.checkArgument(stalactiteBluntness.minInclusive() >= 0.1F && stalactiteBluntness.maxInclusive() <= 10.0F, "stalactiteBluntness must be between 0.1 and 10.0");
             Preconditions.checkNotNull(stalagmiteBluntness, "stalagmiteBluntness must be set");
-            Preconditions.checkArgument(stalagmiteBluntness.minValue() >= 0.1F && stalagmiteBluntness.maxValue() <= 10.0F, "stalagmiteBluntness must be between 0.1 and 10.0");
+            Preconditions.checkArgument(stalagmiteBluntness.minInclusive() >= 0.1F && stalagmiteBluntness.maxInclusive() <= 10.0F, "stalagmiteBluntness must be between 0.1 and 10.0");
             Preconditions.checkNotNull(windSpeed, "windSpeed must be set");
-            Preconditions.checkArgument(windSpeed.minValue() >= 0.0F && windSpeed.maxValue() <= 2.0F, "windSpeed must be between 0.0 and 2.0");
+            Preconditions.checkArgument(windSpeed.minInclusive() >= 0.0F && windSpeed.maxInclusive() <= 2.0F, "windSpeed must be between 0.0 and 2.0");
             Preconditions.checkArgument(minRadiusForWind >= 0 && minRadiusForWind <= 100, "minRadiusForWind must be between 0 and 100");
             Preconditions.checkArgument(minBluntnessForWind >= 0.0F && minBluntnessForWind <= 5.0F, "minBluntnessForWind must be between 0.0 and 5.0");
             return of(

@@ -4,7 +4,7 @@ import dev.wyck.annotations.AsOf;
 import dev.wyck.wrapper.internal.Wrapper;
 import dev.wyck.wrapper.worldgen.blockpredicates.BlockPredicate;
 import dev.wyck.wrapper.worldgen.HeightmapType;
-import dev.wyck.wrapper.worldgen.valueproviders.HeightProvider;
+import dev.wyck.wrapper.worldgen.heightproviders.HeightProvider;
 import dev.wyck.wrapper.worldgen.valueproviders.IntProvider;
 import org.jspecify.annotations.NullMarked;
 

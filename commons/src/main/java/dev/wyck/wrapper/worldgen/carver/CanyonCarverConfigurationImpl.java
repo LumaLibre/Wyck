@@ -2,8 +2,8 @@ package dev.wyck.wrapper.worldgen.carver;
 
 import dev.wyck.util.WorldgenConversions;
 import dev.wyck.wrapper.worldgen.valueproviders.FloatProvider;
-import dev.wyck.wrapper.worldgen.valueproviders.HeightProvider;
-import dev.wyck.wrapper.worldgen.valueproviders.VerticalAnchor;
+import dev.wyck.wrapper.worldgen.heightproviders.HeightProvider;
+import dev.wyck.wrapper.worldgen.heightproviders.VerticalAnchor;
 import org.bukkit.Material;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;

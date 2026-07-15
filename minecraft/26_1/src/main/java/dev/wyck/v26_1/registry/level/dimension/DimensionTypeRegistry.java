@@ -59,7 +59,7 @@ public class DimensionTypeRegistry implements DimensionRegistry {
         InfiniburnImpl infiniburn = (InfiniburnImpl) dimension.infiniburn();
 
         Optional<Holder<WorldClock>> clockHolder = dimension.defaultClock()
-            .map(clock -> (Holder<@NonNull WorldClock>) clock.toMinecraft());
+            .map(clock -> Holder.direct(clock.asHandle()));
 
         return new DimensionType(
             dimension.hasFixedTime(),

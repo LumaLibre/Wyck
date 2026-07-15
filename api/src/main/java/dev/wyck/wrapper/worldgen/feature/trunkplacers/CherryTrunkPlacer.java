@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.ConstructWireProvider;
 import dev.wyck.wrapper.worldgen.valueproviders.IntProvider;
+import dev.wyck.wrapper.worldgen.valueproviders.UniformInt;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
@@ -44,7 +45,7 @@ public interface CherryTrunkPlacer extends TrunkPlacer {
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    IntProvider.Uniform branchStartOffsetFromTop();
+    UniformInt branchStartOffsetFromTop();
 
     /**
      * The offset of the branches from the top between -16 and 16.
@@ -101,7 +102,7 @@ public interface CherryTrunkPlacer extends TrunkPlacer {
     final class Builder extends TrunkPlacerBuilder<Builder, CherryTrunkPlacer> {
         private IntProvider branchCount = IntProvider.constant(1);
         private IntProvider branchHorizontalLength = IntProvider.constant(2);
-        private IntProvider.Uniform branchStartOffsetFromTop = IntProvider.uniform(-16, 0);
+        private UniformInt branchStartOffsetFromTop = IntProvider.uniform(-16, 0);
         private IntProvider branchEndOffsetFromTop = IntProvider.constant(0);
 
         public Builder() {}
@@ -145,7 +146,7 @@ public interface CherryTrunkPlacer extends TrunkPlacer {
          * @since 3.0.0
          */
         @AsOf("3.0.0")
-        public Builder branchStartOffsetFromTop(IntProvider.Uniform branchStartOffsetFromTop) {
+        public Builder branchStartOffsetFromTop(UniformInt branchStartOffsetFromTop) {
             this.branchStartOffsetFromTop = branchStartOffsetFromTop;
             return this;
         }

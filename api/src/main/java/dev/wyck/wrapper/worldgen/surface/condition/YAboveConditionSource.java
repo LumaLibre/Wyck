@@ -3,7 +3,7 @@ package dev.wyck.wrapper.worldgen.surface.condition;
 import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.ConstructWireProvider;
-import dev.wyck.wrapper.worldgen.valueproviders.VerticalAnchor;
+import dev.wyck.wrapper.worldgen.heightproviders.VerticalAnchor;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;

@@ -201,4 +201,27 @@ public final class DimensionImpl implements Dimension {
     public Object toMinecraft() {
         return DimensionRegistry.registry().buildDelegate(this);
     }
+
+    @Override
+    public String toString() {
+        return "DimensionImpl{" +
+            "resourceKey=" + resourceKey +
+            ", hasFixedTime=" + hasFixedTime +
+            ", hasSkyLight=" + hasSkyLight +
+            ", hasCeiling=" + hasCeiling +
+            ", hasEnderDragonFight=" + hasEnderDragonFight +
+            ", coordinateScale=" + coordinateScale +
+            ", minY=" + minY +
+            ", height=" + height +
+            ", logicalHeight=" + logicalHeight +
+            ", infiniburn=" + infiniburn +
+            ", ambientLight=" + ambientLight +
+            ", monsterSettings=" + monsterSettings +
+            ", skybox=" + skybox +
+            ", cardinalLightType=" + cardinalLightType +
+            ", attributes=" + attributes +
+            ", timelines=" + timelines +
+            ", defaultClock=" + defaultClock +
+            '}';
+    }
 }

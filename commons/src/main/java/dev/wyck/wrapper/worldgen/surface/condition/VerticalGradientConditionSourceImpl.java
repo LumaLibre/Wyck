@@ -1,6 +1,6 @@
 package dev.wyck.wrapper.worldgen.surface.condition;
 
-import dev.wyck.wrapper.worldgen.valueproviders.VerticalAnchor;
+import dev.wyck.wrapper.worldgen.heightproviders.VerticalAnchor;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 

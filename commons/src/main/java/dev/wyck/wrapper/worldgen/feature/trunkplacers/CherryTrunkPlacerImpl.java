@@ -1,6 +1,7 @@
 package dev.wyck.wrapper.worldgen.feature.trunkplacers;
 
 import dev.wyck.wrapper.worldgen.valueproviders.IntProvider;
+import dev.wyck.wrapper.worldgen.valueproviders.UniformInt;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
@@ -12,7 +13,7 @@ public record CherryTrunkPlacerImpl(
     @Override int heightRandB,
     @Override IntProvider branchCount,
     @Override IntProvider branchHorizontalLength,
-    @Override IntProvider.Uniform branchStartOffsetFromTop,
+    @Override UniformInt branchStartOffsetFromTop,
     @Override IntProvider branchEndOffsetFromTop
 ) implements CherryTrunkPlacer {
 

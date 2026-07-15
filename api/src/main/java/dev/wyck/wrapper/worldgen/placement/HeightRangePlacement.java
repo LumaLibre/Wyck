@@ -2,7 +2,7 @@ package dev.wyck.wrapper.worldgen.placement;
 
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.ConstructWireProvider;
-import dev.wyck.wrapper.worldgen.valueproviders.HeightProvider;
+import dev.wyck.wrapper.worldgen.heightproviders.HeightProvider;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 

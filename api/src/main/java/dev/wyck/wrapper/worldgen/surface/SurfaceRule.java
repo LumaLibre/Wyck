@@ -22,7 +22,7 @@ import dev.wyck.wrapper.worldgen.surface.rule.BlockRuleSource;
 import dev.wyck.wrapper.worldgen.surface.rule.ConditionRuleSource;
 import dev.wyck.wrapper.worldgen.surface.rule.RuleSource;
 import dev.wyck.wrapper.worldgen.surface.rule.SequenceRuleSource;
-import dev.wyck.wrapper.worldgen.valueproviders.VerticalAnchor;
+import dev.wyck.wrapper.worldgen.heightproviders.VerticalAnchor;
 import org.bukkit.Material;
 import org.jspecify.annotations.NullMarked;
 

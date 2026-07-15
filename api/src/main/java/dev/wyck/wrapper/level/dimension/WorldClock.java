@@ -1,8 +1,9 @@
 package dev.wyck.wrapper.level.dimension;
 
 import dev.wyck.annotations.AsOf;
-import dev.wyck.factory.WireProvider;
+import dev.wyck.factory.ConstructWireProvider;
 import dev.wyck.keys.ResourceKey;
+import dev.wyck.wrapper.internal.Registerable;
 import dev.wyck.wrapper.internal.Wrapper;
 import net.kyori.adventure.key.Keyed;
 import org.jetbrains.annotations.ApiStatus;
@@ -17,26 +18,21 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.4.0")
-public interface WorldClock extends Wrapper, Keyed {
+public interface WorldClock extends Wrapper, Keyed, Registerable<WorldClock> {
 
     @ApiStatus.Internal
-    WireProvider<Factory> WIRE = WireProvider.create("dev.wyck.wrapper.level.dimension.WorldClockFactoryImpl");
+    ConstructWireProvider<WorldClock> WIRE = ConstructWireProvider.create("dev.wyck.wrapper.level.dimension.WorldClockImpl");
 
-    @ApiStatus.Internal
-    interface Factory {
-        WorldClock reference(ResourceKey key);
-    }
-
-    WorldClock OVERWORLD = reference(ResourceKey.minecraft("overworld"));
-    WorldClock THE_END = reference(ResourceKey.minecraft("the_end"));
+    WorldClock OVERWORLD = of("minecraft:overworld");
+    WorldClock THE_END = of("minecraft:the_end");
 
     /**
      * The registry key this clock points at.
      * @return the world clock key
      * @since 2.4.0
      */
-    @AsOf("2.4.0")
     @Override
+    @AsOf("2.4.0")
     ResourceKey key();
 
     /**
@@ -46,7 +42,18 @@ public interface WorldClock extends Wrapper, Keyed {
      * @since 2.4.0
      */
     @AsOf("2.4.0")
-    static WorldClock reference(ResourceKey key) {
-        return WIRE.get().reference(key);
+    static WorldClock of(ResourceKey key) {
+        return WIRE.construct(key);
+    }
+
+    /**
+     * Creates a reference to a registered world clock.
+     * @param key the key of an entry in the world-clock registry
+     * @return a reference to that world clock
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
+    static WorldClock of(String key) {
+        return of(ResourceKey.of(key));
     }
 }

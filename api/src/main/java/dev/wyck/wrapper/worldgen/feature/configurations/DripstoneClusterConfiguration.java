@@ -340,9 +340,9 @@ public interface DripstoneClusterConfiguration extends FeatureConfiguration {
             Preconditions.checkNotNull(dripstoneBlockLayerThickness, "dripstoneBlockLayerThickness must be set");
             Preconditions.checkArgument(dripstoneBlockLayerThickness.minInclusive() >= 0 && dripstoneBlockLayerThickness.maxInclusive() <= 128, "dripstoneBlockLayerThickness must be between 0 and 128");
             Preconditions.checkNotNull(density, "density must be set");
-            Preconditions.checkArgument(density.minValue() >= 0.0F && density.maxValue() <= 2.0F, "density must be between 0.0 and 2.0");
+            Preconditions.checkArgument(density.minInclusive() >= 0.0F && density.maxInclusive() <= 2.0F, "density must be between 0.0 and 2.0");
             Preconditions.checkNotNull(wetness, "wetness must be set");
-            Preconditions.checkArgument(wetness.minValue() >= 0.0F && wetness.maxValue() <= 2.0F, "wetness must be between 0.0 and 2.0");
+            Preconditions.checkArgument(wetness.minInclusive() >= 0.0F && wetness.maxInclusive() <= 2.0F, "wetness must be between 0.0 and 2.0");
             Preconditions.checkArgument(chanceOfDripstoneColumnAtMaxDistanceFromCenter >= 0.0F && chanceOfDripstoneColumnAtMaxDistanceFromCenter <= 1.0F, "chanceOfDripstoneColumnAtMaxDistanceFromCenter must be between 0.0 and 1.0");
             Preconditions.checkArgument(maxDistanceFromEdgeAffectingChanceOfDripstoneColumn >= 1 && maxDistanceFromEdgeAffectingChanceOfDripstoneColumn <= 64, "maxDistanceFromEdgeAffectingChanceOfDripstoneColumn must be between 1 and 64");
             Preconditions.checkArgument(maxDistanceFromCenterAffectingHeightBias >= 1 && maxDistanceFromCenterAffectingHeightBias <= 64, "maxDistanceFromCenterAffectingHeightBias must be between 1 and 64");

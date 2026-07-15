@@ -17,6 +17,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.0.0")
+@ApiStatus.Internal
 public interface ParticleOptionsFactory {
 
     @ApiStatus.Internal
