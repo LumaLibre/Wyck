@@ -1,6 +1,7 @@
 package dev.wyck.wrapper.environment.particle;
 
 import dev.wyck.annotations.AsOf;
+import dev.wyck.util.internal.FriendlyColorUtil;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -21,13 +22,9 @@ public interface ParticleData {
      * @return The integer representation of the color.
      */
     @AsOf("1.1.0")
-    static int parseHex(String color) { // TODO: replace with FriendlyColorUtil.hex
-        if (color.isEmpty()) {
-            return 0;
-        } else if (color.startsWith("#")) {
-            color = color.substring(1);
-        }
-        return Integer.parseInt(color, 16);
+    static int parseHex(String color) {
+        if (color.isEmpty()) return 0;
+        return FriendlyColorUtil.hex(color);
     }
 
     /**
