@@ -40,11 +40,10 @@ because no chunks can be loaded before the bootstrap phase completes. If a biome
     filename="ExampleBootstrapper.java"
     code={`import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
-import dev.wyck.model.biome.CustomBiome;
+import dev.wyck.biome.CustomBiome;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.registry.bootstrap.BootstrapBiomeRegistry;
 import dev.wyck.registry.bootstrap.Composer;
-import dev.wyck.biomeSettings;
 import org.bukkit.entity.EntityType;
 
 public class ExampleBootstrapper implements PluginBootstrap {
@@ -81,9 +80,8 @@ A simple way to do this is by simply shutting down the server if a biome fails t
 <CodeBlock
     lang="java"
     filename="ExamplePlugin.java"
-    code={`import dev.wyck.model.biome.CustomBiome;
+    code={`import dev.wyck.biome.CustomBiome;
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.biomeSettings;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.logging.Level;

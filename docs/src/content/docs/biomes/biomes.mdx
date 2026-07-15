@@ -21,14 +21,14 @@ but you may also omit any of these attributes if you do not wish to use them.
     filename="ExamplePlugin.java"
     code={
 `import dev.wyck.keys.ResourceKey;
-import dev.wyck.model.biome.Biome;
+import dev.wyck.biome.Biome;
 import dev.wyck.example.PillarFeature;
 import dev.wyck.biome.BiomeSpecialEffects;
 import dev.wyck.biome.ClimateSettings;
 import dev.wyck.biome.TemperatureModifier;
-import dev.wyck.wrapper.entity.BiomeSpawner;
-import dev.wyck.wrapper.entity.MobCategory;
-import dev.wyck.wrapper.entity.data.NaturalSpawner;
+import dev.wyck.entity.BiomeSpawner;
+import dev.wyck.entity.MobCategory;
+import dev.wyck.entity.data.NaturalSpawner;
 import dev.wyck.environment.attribute.EnvironmentAttributes;
 import dev.wyck.environment.particle.ParticleCatalog;
 import dev.wyck.environment.particle.ParticleOptions;
@@ -142,9 +142,8 @@ for easier mutation of biomes you're creating.
     lang="java"
     filename="ExamplePlugin.java"
     code={
-`import dev.wyck.model.biome.CustomBiome;
+`import dev.wyck.biome.CustomBiome;
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.biomeSettings;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ExamplePlugin extends JavaPlugin {

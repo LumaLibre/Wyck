@@ -33,7 +33,7 @@ and the server will always be able to load the Minecraft world without your biom
     lang="java"
     filename="ExamplePlugin.java"
     code={
-`import dev.wyck.model.biome.CustomBiome;
+`import dev.wyck.biome.CustomBiome;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.registry.level.LevelStemEditor;
 import dev.wyck.worldgen.BiomeGenerationSettings;
@@ -86,7 +86,7 @@ If you want Wyck to mimic a normal datapack or you anticipate and *want* your bi
     code={
 `import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
-import dev.wyck.model.biome.CustomBiome;
+import dev.wyck.biome.CustomBiome;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.registry.bootstrap.BootstrapBiomeRegistry;
 import dev.wyck.registry.bootstrap.Composer;

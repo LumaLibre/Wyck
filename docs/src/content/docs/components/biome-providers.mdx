@@ -20,7 +20,7 @@ from the ground-up rather than replacing biomes in existing worlds with the [`Bi
 <CodeBlock
     lang="java"
     filename="ExamplePlugin.java"
-    code={`import dev.wyck.model.biome.CustomBiome;
+    code={`import dev.wyck.biome.CustomBiome;
 import dev.wyck.misc.providers.BasicBiomeProvider;
 import dev.wyck.keys.ResourceKey;
 import org.bukkit.WorldCreator;
@@ -60,7 +60,7 @@ Replaces vanilla biomes with custom biomes on a one-to-one basis. At each positi
 <CodeBlock
     lang="java"
     filename="ExamplePlugin.java"
-    code={`import dev.wyck.model.biome.CustomBiome;
+    code={`import dev.wyck.biome.CustomBiome;
 import dev.wyck.misc.providers.ReplacementBiomeProvider;
 import dev.wyck.keys.ResourceKey;
 import org.bukkit.WorldCreator;
@@ -107,7 +107,7 @@ Steps are called concurrently during chunk generation, so each `BiomeStep` must 
 <CodeBlock
     lang="java"
     filename="ExamplePlugin.java"
-    code={`import dev.wyck.model.biome.CustomBiome;
+    code={`import dev.wyck.biome.CustomBiome;
 import dev.wyck.misc.providers.StepsBiomeProvider;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.environment.particle.ParticleTypes;
