@@ -6,17 +6,17 @@ description: A basic tutorial on LevelSpawners in Wyck.
 import CodeBlock from "@/components/CodeBlock.astro";
 import SourceLink from "@/components/SourceLink.astro";
 
-<SourceLink path="wrapper/level/spawner/LevelSpawner.java">LevelSpawner</SourceLink>s are used to control
+<SourceLink path="level/entity/LevelSpawner.java">LevelSpawner</SourceLink>s are used to control
 the spawning of entities around players or specific areas in a world. These are completely separate from [`BiomeSpawner`](/wrapper/biome-spawner)s
 and are tied directly to the world itself. By default, <SourceLink path="level/LevelCreator.java">LevelCreator</SourceLink> will not have
 any spawners attached to it.
 
-In Wyck, you can reference existing built-in <SourceLink path="wrapper/level/spawner/LevelSpawner.java">LevelSpawner</SourceLink>s
+In Wyck, you can reference existing built-in <SourceLink path="level/entity/LevelSpawner.java">LevelSpawner</SourceLink>s
 or author your own.
 
 ## SpawnTick (For Custom Spawners)
 
-A <SourceLink path="wrapper/level/spawner/SpawnTick.java">SpawnTick</SourceLink> is a single tick of spawning for a given
+A <SourceLink path="level/entity/SpawnTick.java">SpawnTick</SourceLink> is a single tick of spawning for a given
 world. It contains the world itself and a boolean indicating whether or not to spawn hostile mobs.
 
 ### Example Usage
@@ -26,7 +26,7 @@ world. It contains the world itself and a boolean indicating whether or not to s
     code={
 `import dev.wyck.keys.ResourceKey;
 import dev.wyck.level.LevelCreator;
-import dev.wyck.level.spawner.LevelSpawner;
+import dev.wyck.level.entity.LevelSpawner;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;

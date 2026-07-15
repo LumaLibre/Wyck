@@ -9,7 +9,7 @@ import CodeBlock from "@/components/CodeBlock.astro";
 import SourceLink from "@/components/SourceLink.astro";
 import CodeTabs from "@/components/CodeTabs.astro";
 
-<SourceLink path="model/biome/Biome.java">Biome</SourceLink>s
+<SourceLink path="biome/Biome.java">Biome</SourceLink>s
 are at the core of Wyck and are used to create biomes that can be rendered to players using the various biome renderers in Wyck.
 
 We provide many different options for customizing your biome visuals and gameplay elements through our builder,
@@ -26,15 +26,15 @@ import dev.wyck.example.PillarFeature;
 import dev.wyck.biome.BiomeSpecialEffects;
 import dev.wyck.biome.ClimateSettings;
 import dev.wyck.biome.TemperatureModifier;
-import dev.wyck.entity.BiomeSpawner;
-import dev.wyck.entity.MobCategory;
-import dev.wyck.entity.data.NaturalSpawner;
+import dev.wyck.biome.entity.BiomeSpawner;
+import dev.wyck.biome.entity.MobCategory;
+import dev.wyck.biome.entity.data.NaturalSpawner;
 import dev.wyck.environment.attribute.EnvironmentAttributes;
 import dev.wyck.environment.particle.ParticleCatalog;
 import dev.wyck.environment.particle.ParticleOptions;
 import dev.wyck.environment.particle.ParticleTypes;
 import dev.wyck.environment.particle.options.BlockParticle;
-import dev.wyck.worldgen.BiomeGenerationSettings;
+import dev.wyck.biome.BiomeGenerationSettings;
 import dev.wyck.worldgen.Decoration;
 import dev.wyck.worldgen.carver.CanyonCarverConfiguration;
 import dev.wyck.worldgen.carver.CanyonShapeConfiguration;
@@ -47,9 +47,9 @@ import dev.wyck.worldgen.placement.PlacedFeature;
 import dev.wyck.worldgen.placement.PlacedFeatures;
 import dev.wyck.worldgen.placement.PlacementModifier;
 import dev.wyck.worldgen.valueproviders.FloatProvider;
-import dev.wyck.worldgen.valueproviders.HeightProvider;
+import dev.wyck.worldgen.heightproviders.HeightProvider;
 import dev.wyck.worldgen.valueproviders.IntProvider;
-import dev.wyck.worldgen.valueproviders.VerticalAnchor;
+import dev.wyck.worldgen.heightproviders.VerticalAnchor;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -133,8 +133,8 @@ Intimidating? Don't worry! Most of that is related to world generation, which yo
 
 ### Friendly Custom Biomes
 
-In addition to the basic <SourceLink path="model/biome/Biome.java">Biome</SourceLink> interface,
-Wyck also provides a friendly <SourceLink path="model/biome/CustomBiome.java">CustomBiome</SourceLink>
+In addition to the basic <SourceLink path="biome/Biome.java">Biome</SourceLink> interface,
+Wyck also provides a friendly <SourceLink path="biome/CustomBiome.java">CustomBiome</SourceLink>
 for easier mutation of biomes you're creating.
 
 ### Example Usage

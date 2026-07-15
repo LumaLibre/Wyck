@@ -7,7 +7,7 @@ sidebar:
 import CodeBlock from "@/components/CodeBlock.astro";
 import SourceLink from "@/components/SourceLink.astro";
 
-<SourceLink path="model/level/LevelCreator.java">LevelCreator</SourceLink>s are Wyck's in-house implementation of Bukkit's [`WorldCreator`](https://jd.papermc.io/paper/26.2/org/bukkit/WorldCreator.html)
+<SourceLink path="level/LevelCreator.java">LevelCreator</SourceLink>s are Wyck's in-house implementation of Bukkit's [`WorldCreator`](https://jd.papermc.io/paper/26.2/org/bukkit/WorldCreator.html)
 that are specifically suited for custom dimensions, biomes, and world generation.
 
 ### Creating a World
@@ -18,10 +18,10 @@ that are specifically suited for custom dimensions, biomes, and world generation
 `import dev.wyck.keys.ResourceKey;
 import dev.wyck.level.LevelCreator;
 import dev.wyck.level.dimension.Dimension;
-import dev.wyck.level.BiomeSource;
-import dev.wyck.level.noise.Noise;
-import dev.wyck.level.noise.chunk.ChunkGenerator;
-import dev.wyck.level.spawner.LevelSpawner;
+import dev.wyck.worldgen.biome.BiomeSource;
+import dev.wyck.worldgen.noise.Noise;
+import dev.wyck.worldgen.chunk.ChunkGenerator;
+import dev.wyck.level.entity.LevelSpawner;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ExamplePlugin extends JavaPlugin {

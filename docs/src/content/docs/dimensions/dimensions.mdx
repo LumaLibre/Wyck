@@ -8,12 +8,12 @@ sidebar:
 import CodeBlock from "@/components/CodeBlock.astro";
 import SourceLink from "@/components/SourceLink.astro";
 
-In Wyck, `dimension_type`s are represented as <SourceLink path="model/level/dimension/Dimension.java">Dimension</SourceLink>s.
+In Wyck, `dimension_type`s are represented as <SourceLink path="level/dimension/Dimension.java">Dimension</SourceLink>s.
 These are used to define the properties of a dimension, such as its environment attributes, whether it has skylight, and its coordinate scale.
 
 ## What is a Dimension?
 
-To be clear, a <SourceLink path="model/level/dimension/Dimension.java">Dimension</SourceLink> in Wyck is not a world.
+To be clear, a <SourceLink path="level/dimension/Dimension.java">Dimension</SourceLink> in Wyck is not a world.
 A dimension type is a set of properties that define how a world behaves, and can be used to create multiple worlds with the same properties,
 kind of like a blueprint! Vanilla refers to these as `dimension_type`s.
 
@@ -26,7 +26,7 @@ kind of like a blueprint! Vanilla refers to these as `dimension_type`s.
 import dev.wyck.level.dimension.Dimension;
 import dev.wyck.environment.BedRule;
 import dev.wyck.environment.attribute.EnvironmentAttributes;
-import dev.wyck.level.clock.WorldClock;
+import dev.wyck.level.dimension.WorldClock;
 import dev.wyck.level.dimension.CardinalLightType;
 import dev.wyck.level.dimension.Infiniburn;
 import dev.wyck.level.dimension.Skybox;
@@ -69,5 +69,5 @@ public class ExamplePlugin extends JavaPlugin {
 ## Using Dimensions
 
 Once you've created your dimension, you can use it to create worlds with the properties you've defined.
-Learn more about <SourceLink path="model/level/LevelCreator.java">LevelCreator</SourceLink> and how to use them
+Learn more about <SourceLink path="level/LevelCreator.java">LevelCreator</SourceLink> and how to use them
 [here](/dimensions/level-creators).

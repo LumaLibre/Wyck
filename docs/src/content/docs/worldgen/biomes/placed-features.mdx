@@ -7,7 +7,7 @@ import CodeBlock from "@/components/CodeBlock.astro";
 import SourceLink from "@/components/SourceLink.astro";
 import CodeTabs from "@/components/CodeTabs.astro";
 
-A <SourceLink path="wrapper/worldgen/placement/PlacedFeature.java" line={24}>PlacedFeature</SourceLink> is a
+A <SourceLink path="worldgen/placement/PlacedFeature.java" line={24}>PlacedFeature</SourceLink> is a
 [configured feature](/wrappers/worldgen/configured-features) together with a list of **placement modifiers** that decide where,
 how often, and under what conditions it should generate.
 
@@ -15,7 +15,7 @@ A placed feature is either a **reference** to one already registered or a custom
 
 ## Referencing Built-in Placed Features
 
-The <SourceLink path="wrapper/worldgen/placement/PlacedFeatures.java">PlacedFeatures</SourceLink> catalog holds typed
+The <SourceLink path="worldgen/placement/PlacedFeatures.java">PlacedFeatures</SourceLink> catalog holds typed
 references to every placeable vanilla feature.
 
 <CodeBlock
@@ -54,7 +54,7 @@ Placement modifiers run in order, each transforming the set of positions the fea
 
 Such as:
 
-* <SourceLink path="wrapper/worldgen/PlacementModifier.java" line={156}>`count(n)`</SourceLink> / `count(IntProvider)`: generate the feature a fixed or variable number of times per chunk.
+* <SourceLink path="worldgen/placement/PlacementModifier.java" line={156}>`count(n)`</SourceLink> / `count(IntProvider)`: generate the feature a fixed or variable number of times per chunk.
 * `rarityFilter(n)`: generate on average once every `n` chunks.
 * `inSquare()`: spread the position randomly within the chunk.
 * `heightmap(HeightmapType)`: place at the surface height of the given heightmap.

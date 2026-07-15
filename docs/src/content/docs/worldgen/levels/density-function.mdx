@@ -10,12 +10,12 @@ Density functions are used in Minecraft world generation to define the shape and
 They determine how different blocks are placed in the world, influencing features such as hills, valleys, caves, and other geological formations.
 
 In Wyck, you can reference density functions that already exist in the game, are registered from datapacks, or author your own using
-the <SourceLink path="wrapper/level/noise/function/DensityFunction.java">DensityFunction</SourceLink> interface.
+the <SourceLink path="worldgen/function/DensityFunction.java">DensityFunction</SourceLink> interface.
 
 
 :::tip
 
-All built-in density functions are available in the <SourceLink path="wrapper/level/noise/function/DensityFunctions.java">DensityFunctions</SourceLink> class,
+All built-in density functions are available in the <SourceLink path="worldgen/function/DensityFunctions.java">DensityFunctions</SourceLink> class,
 and any function registered from a datapack or external source can be referenced using <SourceLink path="level/noise/function/DensityFunction.java#reference">DensityFunction.reference(ResourceKey)</SourceLink>.
 
 :::
@@ -26,9 +26,9 @@ and any function registered from a datapack or external source can be referenced
     filename="ExamplePlugin.java"
     code={
 `import dev.wyck.keys.ResourceKey;
-import dev.wyck.level.noise.NoiseRouter;
-import dev.wyck.level.noise.function.DensityFunction;
-import dev.wyck.level.noise.function.DensityFunctions;
+import dev.wyck.worldgen.noise.NoiseRouter;
+import dev.wyck.worldgen.function.DensityFunction;
+import dev.wyck.worldgen.function.DensityFunctions;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ExamplePlugin extends JavaPlugin {

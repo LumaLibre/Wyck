@@ -11,14 +11,14 @@ import SourceLink from "@/components/SourceLink.astro";
 Adding your biomes to dimensions is an important step in bringing together your custom world generation.
 If you want to use your world generation in an existing world such as `minecraft:overworld`, then this is a necessary step.
 
-The <SourceLink path="registry/dimension/LevelStemEditor.java">LevelStemEditor</SourceLink> and the
+The <SourceLink path="registry/level/LevelStemEditor.java">LevelStemEditor</SourceLink> and the
 <SourceLink path="registry/bootstrap/Composer.java">Composer.DATAPACK</SourceLink> version of the
 <SourceLink path="registry/bootstrap/BootstrapBiomeRegistry.java">BootstrapBiomeRegistry</SourceLink> both have the
 ability to add or replace biomes in dimensions.
 
 ## Using the LevelStemEditor
 
-The <SourceLink path="registry/dimension/LevelStemEditor.java">LevelStemEditor</SourceLink>, in its current state,
+The <SourceLink path="registry/level/LevelStemEditor.java">LevelStemEditor</SourceLink>, in its current state,
 injects and adds biomes to dimensions entirely transiently. This means that if your biome is never saved to the dimension
 and the server will always be able to load the Minecraft world without your biome being registered.
 
@@ -36,7 +36,7 @@ and the server will always be able to load the Minecraft world without your biom
 `import dev.wyck.biome.CustomBiome;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.registry.level.LevelStemEditor;
-import dev.wyck.worldgen.BiomeGenerationSettings;
+import dev.wyck.biome.BiomeGenerationSettings;
 import dev.wyck.worldgen.Decoration;
 import dev.wyck.worldgen.placement.PlacedFeatures;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -90,7 +90,7 @@ import dev.wyck.biome.CustomBiome;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.registry.bootstrap.BootstrapBiomeRegistry;
 import dev.wyck.registry.bootstrap.Composer;
-import dev.wyck.worldgen.BiomeGenerationSettings;
+import dev.wyck.biome.BiomeGenerationSettings;
 import dev.wyck.worldgen.Decoration;
 import dev.wyck.worldgen.placement.PlacedFeatures;
 

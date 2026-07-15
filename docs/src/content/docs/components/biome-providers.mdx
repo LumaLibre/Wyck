@@ -12,9 +12,9 @@ from the ground-up rather than replacing biomes in existing worlds with the [`Bi
 
 ## Basic Biome Provider
 
-#### <SourceLink path="providers/BasicBiomeProvider.java">BasicBiomeProvider</SourceLink>
+#### <SourceLink path="misc/providers/BasicBiomeProvider.java">BasicBiomeProvider</SourceLink>
 
-* <SourceLink path="providers/BasicBiomeProvider.java" line={38}>of(CustomBiome)</SourceLink>: New instance of a BasicBiomeProvider with a single biome.
+* <SourceLink path="misc/providers/BasicBiomeProvider.java" line={38}>of(CustomBiome)</SourceLink>: New instance of a BasicBiomeProvider with a single biome.
 
 ### Example Usage
 <CodeBlock
@@ -48,13 +48,13 @@ public class ExamplePlugin extends JavaPlugin {
 
 ## Replacement Biome Provider
 
-#### <SourceLink path="providers/ReplacementBiomeProvider.java">ReplacementBiomeProvider</SourceLink>
+#### <SourceLink path="misc/providers/ReplacementBiomeProvider.java">ReplacementBiomeProvider</SourceLink>
 
 Replaces vanilla biomes with custom biomes on a one-to-one basis. At each position it asks the world's vanilla provider what biome would normally generate, and swaps in your custom biome if a mapping exists; unmapped biomes pass through unchanged.
 
-* <SourceLink path="providers/ReplacementBiomeProvider.java" line={51}>builder()</SourceLink>: New `Builder` for mapping vanilla biomes to custom replacements.
-* <SourceLink path="providers/ReplacementBiomeProvider.java" line={62}>Builder#replace(Biome, CustomBiome)</SourceLink>: Map a vanilla biome to the custom biome that should replace it.
-* <SourceLink path="providers/ReplacementBiomeProvider.java" line={68}>Builder#build()</SourceLink>: Build the configured `ReplacementBiomeProvider`.
+* <SourceLink path="misc/providers/ReplacementBiomeProvider.java" line={51}>builder()</SourceLink>: New `Builder` for mapping vanilla biomes to custom replacements.
+* <SourceLink path="misc/providers/ReplacementBiomeProvider.java" line={62}>Builder#replace(Biome, CustomBiome)</SourceLink>: Map a vanilla biome to the custom biome that should replace it.
+* <SourceLink path="misc/providers/ReplacementBiomeProvider.java" line={68}>Builder#build()</SourceLink>: Build the configured `ReplacementBiomeProvider`.
 
 ### Example Usage
 <CodeBlock
@@ -91,17 +91,17 @@ public class ExamplePlugin extends JavaPlugin {
 
 ## Steps Biome Provider
 
-#### <SourceLink path="providers/StepsBiomeProvider.java">StepsBiomeProvider</SourceLink>
+#### <SourceLink path="misc/providers/StepsBiomeProvider.java">StepsBiomeProvider</SourceLink>
 
 Determines the biome at each position by running an ordered series of steps. Each step inspects the position and either produces a biome or returns `null` to defer to the next step. The first step to produce a biome wins; if no step matches, the fallback is used, and if no fallback is set, generation defers to the world's vanilla provider.
 
 Steps are called concurrently during chunk generation, so each `BiomeStep` must be pure and free of side effects.
 
-* <SourceLink path="providers/StepsBiomeProvider.java" line={73}>builder()</SourceLink>: New `Builder` for assembling an ordered list of steps.
-* <SourceLink path="providers/StepsBiomeProvider.java" line={92}>Builder#step(BiomeStep, CustomBiome...)</SourceLink>: Full-control step. The lambda returns a biome to place or `null` to defer. Declare every biome the lambda can return via `produces` so the provider can advertise it from `getBiomes(...)`.
-* <SourceLink path="providers/StepsBiomeProvider.java" line={106}>Builder#step(CustomBiome, BiomeCondition)</SourceLink>: Convenience step for a simple position test; the biome is auto-registered as produced.
-* <SourceLink path="providers/StepsBiomeProvider.java" line={119}>Builder#fallback(CustomBiome)</SourceLink>: Biome to use when no step produces one.
-* <SourceLink path="providers/StepsBiomeProvider.java" line={125}>Builder#build()</SourceLink>: Build the configured `StepsBiomeProvider`.
+* <SourceLink path="misc/providers/StepsBiomeProvider.java" line={73}>builder()</SourceLink>: New `Builder` for assembling an ordered list of steps.
+* <SourceLink path="misc/providers/StepsBiomeProvider.java" line={92}>Builder#step(BiomeStep, CustomBiome...)</SourceLink>: Full-control step. The lambda returns a biome to place or `null` to defer. Declare every biome the lambda can return via `produces` so the provider can advertise it from `getBiomes(...)`.
+* <SourceLink path="misc/providers/StepsBiomeProvider.java" line={106}>Builder#step(CustomBiome, BiomeCondition)</SourceLink>: Convenience step for a simple position test; the biome is auto-registered as produced.
+* <SourceLink path="misc/providers/StepsBiomeProvider.java" line={119}>Builder#fallback(CustomBiome)</SourceLink>: Biome to use when no step produces one.
+* <SourceLink path="misc/providers/StepsBiomeProvider.java" line={125}>Builder#build()</SourceLink>: Build the configured `StepsBiomeProvider`.
 
 ### Example Usage
 <CodeBlock

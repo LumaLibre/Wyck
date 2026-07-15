@@ -6,8 +6,8 @@ description: A brief overview of the exposed BiomeSource interface in Wyck.
 import CodeBlock from "@/components/CodeBlock.astro";
 import SourceLink from "@/components/SourceLink.astro";
 
-A <SourceLink path="wrapper/level/BiomeSource.java">BiomeSource</SourceLink>
-dictates how biomes occupy regions in a world. These work in tandem with <SourceLink path="wrapper/level/noise/chunk/ChunkGenerator.java">ChunkGenerator</SourceLink>s
+A <SourceLink path="worldgen/biome/BiomeSource.java">BiomeSource</SourceLink>
+dictates how biomes occupy regions in a world. These work in tandem with <SourceLink path="worldgen/chunk/ChunkGenerator.java">ChunkGenerator</SourceLink>s
 to produce a dimension's terrain.
 
 ## Fixed
@@ -21,7 +21,7 @@ fit for flat worlds, void worlds, or any dimension where biome variety does not 
     code={
         `import dev.wyck.biome.CustomBiome;
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.level.BiomeSource;
+import dev.wyck.worldgen.biome.BiomeSource;
 import org.bukkit.block.Biome;
 
 // a registered custom biome
@@ -62,7 +62,7 @@ about.
     code={
 `import dev.wyck.biome.CustomBiome;
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.level.BiomeSource;
+import dev.wyck.worldgen.biome.BiomeSource;
 import dev.wyck.worldgen.climate.ClimatePoint;
 import dev.wyck.worldgen.climate.ClimateParameter;
 import org.bukkit.block.Biome;

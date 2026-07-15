@@ -6,8 +6,8 @@ description: A basic tutorial on ChunkGenerators in Wyck.
 import CodeBlock from "@/components/CodeBlock.astro";
 import SourceLink from "@/components/SourceLink.astro";
 
-A <SourceLink path="wrapper/level/noise/chunk/ChunkGenerator.java">ChunkGenerator</SourceLink> is
-what a dimension's level stem uses to generate chunks. It combines a <SourceLink path="wrapper/level/BiomeSource.java">BiomeSource</SourceLink>,
+A <SourceLink path="worldgen/chunk/ChunkGenerator.java">ChunkGenerator</SourceLink> is
+what a dimension's level stem uses to generate chunks. It combines a <SourceLink path="worldgen/biome/BiomeSource.java">BiomeSource</SourceLink>,
 which decides which biome occupies each region, along with a set of noise settings which decide how terrain is
 shaped and which blocks fill to the world with.
 
@@ -18,7 +18,7 @@ The generator needs noise settings, and there are two ways to supply them:
 
 - **By reference**: pass a <SourceLink path="keys/ResourceKey.java">ResourceKey</SourceLink> pointing at an
 existing settings entry, such as `minecraft:overworld`, `minecraft:the_nether`, or `minecraft:end`.
-- **Authored**: pass a <SourceLink path="wrapper/level/noise/NoiseGeneratorSettings.java">NoiseGeneratorSettings</SourceLink>,
+- **Authored**: pass a <SourceLink path="worldgen/noise/types/NoiseGeneratorSettings.java">NoiseGeneratorSettings</SourceLink>,
 which bundles a `NoiseRouter` (see the [Noise Routers](/worldgen/level/level-noise-router/) page) together with
 the rest of the generator's configuration.
 
@@ -30,9 +30,9 @@ the rest of the generator's configuration.
 `import dev.wyck.biome.CustomBiome;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.level.LevelCreator;
-import dev.wyck.level.BiomeSource;
-import dev.wyck.level.noise.Noise;
-import dev.wyck.level.noise.chunk.ChunkGenerator;
+import dev.wyck.worldgen.biome.BiomeSource;
+import dev.wyck.worldgen.noise.Noise;
+import dev.wyck.worldgen.chunk.ChunkGenerator;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 

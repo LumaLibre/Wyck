@@ -7,7 +7,7 @@ import CodeBlock from "@/components/CodeBlock.astro";
 import SourceLink from "@/components/SourceLink.astro";
 import CodeTabs from "@/components/CodeTabs.astro";
 
-A <SourceLink path="wrapper/worldgen/feature/ConfiguredFeature.java">ConfiguredFeature</SourceLink> is a feature paired
+A <SourceLink path="worldgen/feature/ConfiguredFeature.java">ConfiguredFeature</SourceLink> is a feature paired
 with a configuration. The *feature* is the algorithm (an ore vein, a tree, a geode) and the *configuration* would be its
 parameters such as which ore, how big, etc.
 
@@ -18,7 +18,7 @@ To use a configured feature in a biome, wrap it in a [placed feature](/worldgen/
 
 ## Referencing Built-in Configured Features
 
-The <SourceLink path="wrapper/worldgen/feature/ConfiguredFeatures.java">ConfiguredFeatures</SourceLink> catalog holds
+The <SourceLink path="worldgen/feature/ConfiguredFeatures.java">ConfiguredFeatures</SourceLink> catalog holds
 typed references to every configured feature vanilla registrar.
 
 ### Example Usage
@@ -40,7 +40,7 @@ ConfiguredFeature byKey = ConfiguredFeature.reference(ResourceKey.minecraft("ore
 Wyck includes wrappers for all of Minecraft's built-in configured features, so you can easily modify
 their configuration without having to create your own custom feature.
 
-All wrappers extend the <SourceLink path="worldgen.feature.configurations/FeatureConfiguration.java">FeatureConfiguration</SourceLink> interface.
+All wrappers extend the <SourceLink path="worldgen/feature/configurations/FeatureConfiguration.java">FeatureConfiguration</SourceLink> interface.
 
 ### Example Usage
 <CodeBlock
@@ -49,8 +49,8 @@ All wrappers extend the <SourceLink path="worldgen.feature.configurations/Featur
     code={
 `import dev.wyck.keys.ResourceKey;
 import dev.wyck.biome.Biome;
-import dev.wyck.worldgen.BiomeGenerationSettings;
-import dev.wyck.worldgen.BlockPredicate;
+import dev.wyck.biome.BiomeGenerationSettings;
+import dev.wyck.worldgen.blockpredicates.BlockPredicate;
 import dev.wyck.worldgen.Decoration;
 import dev.wyck.worldgen.HeightmapType;
 import dev.wyck.worldgen.feature.ConfiguredFeature;
@@ -128,7 +128,7 @@ public class ExamplePlugin extends JavaPlugin {
 
 ## Authoring Configured Features
 
-To author your own configured features, you can extend the <SourceLink path="wrapper/worldgen/feature/custom/CustomFeature.java">CustomFeature</SourceLink> class.
+To author your own configured features, you can extend the <SourceLink path="worldgen/feature/custom/CustomFeature.java">CustomFeature</SourceLink> class.
 And pair it with your own configuration context.
 
 ### Example Usage
@@ -186,7 +186,7 @@ public class PillarFeature extends CustomFeature<@NotNull PillarFeature.PillarCo
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.registry.level.LevelStemEditor;
 import dev.wyck.worldgen.PillarFeature;
-import dev.wyck.worldgen.BiomeGenerationSettings;
+import dev.wyck.biome.BiomeGenerationSettings;
 import dev.wyck.worldgen.Decoration;
 import dev.wyck.worldgen.HeightmapType;
 import dev.wyck.worldgen.feature.ConfiguredFeature;

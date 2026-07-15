@@ -6,9 +6,9 @@ description: Learn how to reference built-in noise or author custom noise genera
 import CodeBlock from "@/components/CodeBlock.astro";
 import SourceLink from "@/components/SourceLink.astro";
 
-<SourceLink path="wrapper/level/noise/Noise.java">Noise</SourceLink> is what a <SourceLink path="wrapper/level/noise/chunk/ChunkGenerator.java">ChunkGenerator</SourceLink>
+<SourceLink path="worldgen/noise/Noise.java">Noise</SourceLink> is what a <SourceLink path="worldgen/chunk/ChunkGenerator.java">ChunkGenerator</SourceLink>
 uses to shape terrain. Wyck provides ways to reference existing noise generators or author your own using
-<SourceLink path="wrapper/level/noise/NoiseGeneratorSettings.java">NoiseGeneratorSettings</SourceLink>.
+<SourceLink path="worldgen/noise/types/NoiseGeneratorSettings.java">NoiseGeneratorSettings</SourceLink>.
 
 ## Referencing Existing Noise
 
@@ -19,7 +19,7 @@ Referencing existing nodes can be done by keys or by convenience methods.
     filename="Examples.java"
     code={
 `import dev.wyck.keys.ResourceKey;
-import dev.wyck.level.noise.Noise;
+import dev.wyck.worldgen.noise.Noise;
 
 Noise overworld = Noise.overworld();
 Noise nether = Noise.nether();
@@ -36,7 +36,7 @@ Noise byKey = Noise.reference(ResourceKey.of("test", "my_noise"));
 ## Authoring Custom Noise
 
 Building your own noise can be done with `Noise.builder()`.
-An authored <SourceLink path="wrapper/level/noise/NoiseGeneratorSettings.java">NoiseGeneratorSettings</SourceLink> is itself an instance of <SourceLink path="wrapper/level/noise/Noise.java">Noise</SourceLink>, so you can hand it straight to a generator
+An authored <SourceLink path="worldgen/noise/types/NoiseGeneratorSettings.java">NoiseGeneratorSettings</SourceLink> is itself an instance of <SourceLink path="worldgen/noise/Noise.java">Noise</SourceLink>, so you can hand it straight to a generator
 without registering anything.
 
 :::note
@@ -49,12 +49,12 @@ without registering anything.
     lang="java"
     filename="ExamplePlugin.java"
     code={
-`import dev.wyck.level.noise.NoiseRouter;
-import dev.wyck.level.noise.Noise;
-import dev.wyck.level.noise.function.DensityFunction;
-import dev.wyck.level.noise.function.DensityFunctions;
-import dev.wyck.level.noise.settings.NoiseSettings;
-import dev.wyck.worldgen.surface.SurfaceCondition;
+`import dev.wyck.worldgen.noise.NoiseRouter;
+import dev.wyck.worldgen.noise.Noise;
+import dev.wyck.worldgen.function.DensityFunction;
+import dev.wyck.worldgen.function.DensityFunctions;
+import dev.wyck.worldgen.noise.NoiseSettings;
+import dev.wyck.worldgen.surface.condition.CaveSurface;
 import dev.wyck.worldgen.surface.SurfaceRule;
 import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -92,7 +92,7 @@ public class ExamplePlugin extends JavaPlugin {
         // grass on top of the column, stone everywhere beneath
         SurfaceRule surfaceRule = SurfaceRule.sequence(List.of(
             SurfaceRule.ifTrue(
-                SurfaceCondition.stoneDepth(0, false, SurfaceCondition.CaveSurface.FLOOR),
+                SurfaceRule.stoneDepth(0, false, CaveSurface.FLOOR),
                 SurfaceRule.block(Material.GRASS_BLOCK)
             ),
             SurfaceRule.block(Material.STONE)
@@ -116,7 +116,7 @@ public class ExamplePlugin extends JavaPlugin {
 
 :::caution
 
-A custom <SourceLink path="wrapper/level/noise/Noise.java">Noise</SourceLink>
+A custom <SourceLink path="worldgen/noise/Noise.java">Noise</SourceLink>
 **must** have a `resourceKey` set in order to be registered.
 
 :::

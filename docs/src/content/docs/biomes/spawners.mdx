@@ -11,12 +11,12 @@ import CodeTabs from "@/components/CodeTabs.astro";
 
 :::note
 
-<SourceLink path="wrapper/entity/BiomeSpawner.java">BiomeSpawner</SourceLink>s modify server-sided behavior and must be physically set in the world.
+<SourceLink path="biome/entity/BiomeSpawner.java">BiomeSpawner</SourceLink>s modify server-sided behavior and must be physically set in the world.
 This means that this API is not compatible with [`PacketHandlers`](/renderers/packet-handler/).
 
 :::
 
-Wyck provides a built-in system for customizing mob spawns inside custom biomes. <SourceLink path="wrapper/entity/BiomeSpawner.java">BiomeSpawner</SourceLink>s
+Wyck provides a built-in system for customizing mob spawns inside custom biomes. <SourceLink path="biome/entity/BiomeSpawner.java">BiomeSpawner</SourceLink>s
 inform the server what mobs to spawn, how many, how likely, and how many concurrently can spawn.
 
 ### Example Usage
@@ -29,9 +29,9 @@ inform the server what mobs to spawn, how many, how likely, and how many concurr
             code:
 `import dev.wyck.biome.CustomBiome;
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.entity.BiomeSpawner;
-import dev.wyck.entity.MobCategory;
-import dev.wyck.entity.data.NaturalSpawner;
+import dev.wyck.biome.entity.BiomeSpawner;
+import dev.wyck.biome.entity.MobCategory;
+import dev.wyck.biome.entity.data.NaturalSpawner;
 import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -60,9 +60,9 @@ public class ExamplePlugin extends JavaPlugin {
             code:
 `import dev.wyck.biome.CustomBiome;
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.entity.BiomeSpawner;
-import dev.wyck.entity.MobCategory;
-import dev.wyck.entity.data.NaturalSpawner;
+import dev.wyck.biome.entity.BiomeSpawner;
+import dev.wyck.biome.entity.MobCategory;
+import dev.wyck.biome.entity.data.NaturalSpawner;
 import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -86,7 +86,7 @@ public class ExamplePlugin extends JavaPlugin {
 
 ## Mob Spawn Costs
 
-Setting <SourceLink path="wrapper/entity/data/SpawnCost.java" line={13}>charge</SourceLink> **lower** and <SourceLink path="wrapper/entity/data/SpawnCost.java" line={13}>energyBudget</SourceLink> **higher** allows more of a specific mob to spawn concurrently.
+Setting <SourceLink path="biome/entity/data/SpawnCost.java" line={13}>charge</SourceLink> **lower** and <SourceLink path="biome/entity/data/SpawnCost.java" line={13}>energyBudget</SourceLink> **higher** allows more of a specific mob to spawn concurrently.
 
 ### Example Usage
 <CodeBlock
@@ -94,10 +94,10 @@ Setting <SourceLink path="wrapper/entity/data/SpawnCost.java" line={13}>charge</
     filename="ExamplePlugin.java"
     code={`import dev.wyck.biome.CustomBiome;
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.entity.BiomeSpawner;
-import dev.wyck.entity.MobCategory;
-import dev.wyck.entity.data.NaturalSpawner;
-import dev.wyck.entity.data.SpawnCost;
+import dev.wyck.biome.entity.BiomeSpawner;
+import dev.wyck.biome.entity.MobCategory;
+import dev.wyck.biome.entity.data.NaturalSpawner;
+import dev.wyck.biome.entity.data.SpawnCost;
 import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.java.JavaPlugin;
 
