@@ -1,6 +1,5 @@
 package dev.wyck.worldgen.surface.rule;
 
-import dev.wyck.worldgen.surface.rule.BandlandsRuleSource;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 

@@ -1,8 +1,8 @@
 package dev.wyck.worldgen.feature.treedecorators;
 
 import dev.wyck.annotations.AsOf;
-import dev.wyck.wrapper.Wrapper;
 import dev.wyck.worldgen.stateproviders.BlockStateProvider;
+import dev.wyck.wrapper.Wrapper;
 import org.jspecify.annotations.NullMarked;
 
 /**

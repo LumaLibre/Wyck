@@ -3,8 +3,6 @@ package dev.wyck.worldgen.placement;
 import dev.wyck.annotations.WireFactory;
 import dev.wyck.util.BootstrapSafeMinecraftRegistries;
 import dev.wyck.util.DatapackPromotion;
-import dev.wyck.worldgen.placement.PlacedFeature;
-import dev.wyck.worldgen.placement.PlacementModifier;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;

@@ -1,6 +1,5 @@
 package dev.wyck.environment.sounds;
 
-import dev.wyck.environment.sounds.SoundEvent;
 import dev.wyck.keys.ResourceKey;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.ApiStatus;

@@ -1,6 +1,5 @@
 package dev.wyck.worldgen.feature.configurations;
 
-import dev.wyck.worldgen.feature.configurations.GeodeConfiguration;
 import dev.wyck.worldgen.feature.configurations.geode.GeodeBlockSettings;
 import dev.wyck.worldgen.feature.configurations.geode.GeodeCrackSettings;
 import dev.wyck.worldgen.feature.configurations.geode.GeodeLayerSettings;

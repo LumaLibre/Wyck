@@ -1,6 +1,5 @@
 package dev.wyck.biome;
 
-import dev.wyck.biome.BiomeGenerationSettings;
 import dev.wyck.worldgen.Decoration;
 import dev.wyck.worldgen.carver.ConfiguredWorldCarver;
 import dev.wyck.worldgen.placement.PlacedFeature;

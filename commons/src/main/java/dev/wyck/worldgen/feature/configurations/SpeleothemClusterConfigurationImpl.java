@@ -1,7 +1,6 @@
 package dev.wyck.worldgen.feature.configurations;
 
 import dev.wyck.util.WorldgenConversions;
-import dev.wyck.worldgen.feature.configurations.SpeleothemClusterConfiguration;
 import dev.wyck.worldgen.valueproviders.FloatProvider;
 import dev.wyck.worldgen.valueproviders.IntProvider;
 import org.bukkit.Material;

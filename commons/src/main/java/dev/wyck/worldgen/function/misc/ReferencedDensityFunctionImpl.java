@@ -2,7 +2,6 @@ package dev.wyck.worldgen.function.misc;
 
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.util.BootstrapSafeMinecraftRegistries;
-import dev.wyck.worldgen.function.misc.ReferencedDensityFunction;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;

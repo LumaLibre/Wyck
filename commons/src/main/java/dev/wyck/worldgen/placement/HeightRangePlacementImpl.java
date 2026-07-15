@@ -1,7 +1,6 @@
 package dev.wyck.worldgen.placement;
 
 import dev.wyck.worldgen.heightproviders.HeightProvider;
-import dev.wyck.worldgen.placement.HeightRangePlacement;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 

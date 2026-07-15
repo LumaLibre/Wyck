@@ -1,8 +1,8 @@
 package dev.wyck.worldgen.function.transformer;
 
 import dev.wyck.annotations.AsOf;
-import dev.wyck.wrapper.Registerable;
 import dev.wyck.worldgen.function.DensityFunction;
+import dev.wyck.wrapper.Registerable;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked

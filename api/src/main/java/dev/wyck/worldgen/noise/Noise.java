@@ -2,10 +2,10 @@ package dev.wyck.worldgen.noise;
 
 import dev.wyck.annotations.AsOf;
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.wrapper.Wrapper;
 import dev.wyck.worldgen.chunk.NoiseBasedChunkGenerator;
 import dev.wyck.worldgen.noise.types.NoiseGeneratorSettings;
 import dev.wyck.worldgen.noise.types.ReferencedNoise;
+import dev.wyck.wrapper.Wrapper;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Optional;

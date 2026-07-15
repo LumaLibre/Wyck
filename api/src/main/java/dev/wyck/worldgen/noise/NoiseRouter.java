@@ -2,8 +2,8 @@ package dev.wyck.worldgen.noise;
 
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.ConstructWireProvider;
-import dev.wyck.wrapper.Wrapper;
 import dev.wyck.worldgen.function.DensityFunction;
+import dev.wyck.wrapper.Wrapper;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.NullUnmarked;

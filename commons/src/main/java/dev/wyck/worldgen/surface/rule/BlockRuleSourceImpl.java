@@ -1,6 +1,5 @@
 package dev.wyck.worldgen.surface.rule;
 
-import dev.wyck.worldgen.surface.rule.BlockRuleSource;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.util.CraftMagicNumbers;
 import org.jetbrains.annotations.ApiStatus;

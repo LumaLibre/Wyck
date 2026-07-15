@@ -1,10 +1,10 @@
 package dev.wyck.level;
 
 import dev.wyck.annotations.AsOf;
-import dev.wyck.level.dimension.Dimension;
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.worldgen.chunk.ChunkGenerator;
+import dev.wyck.level.dimension.Dimension;
 import dev.wyck.level.entity.LevelSpawner;
+import dev.wyck.worldgen.chunk.ChunkGenerator;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.jetbrains.annotations.ApiStatus;

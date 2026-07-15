@@ -7,7 +7,6 @@ import dev.wyck.util.DatapackPromotion;
 import dev.wyck.util.Lazy;
 import dev.wyck.worldgen.carver.CarverConfiguration;
 import dev.wyck.worldgen.carver.WorldCarverType;
-import dev.wyck.worldgen.carver.types.ComposedCarver;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;

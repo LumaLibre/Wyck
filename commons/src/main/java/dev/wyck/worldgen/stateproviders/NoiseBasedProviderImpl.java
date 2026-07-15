@@ -1,6 +1,5 @@
 package dev.wyck.worldgen.stateproviders;
 
-import dev.wyck.worldgen.stateproviders.NoiseBasedProvider;
 import dev.wyck.worldgen.synth.NoiseParameters;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;

@@ -1,16 +1,16 @@
 package dev.wyck.environment.attribute;
 
 import dev.wyck.annotations.AsOf;
+import dev.wyck.biome.Biome;
 import dev.wyck.factory.ConstructWireProvider;
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.biome.Biome;
 import dev.wyck.level.dimension.Dimension;
 import dev.wyck.wrapper.Wrapper;
 import net.kyori.adventure.key.Keyed;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.jetbrains.annotations.ApiStatus;
-import org.jspecify.annotations.Nullable;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Environment attributes control various visual and gameplay features depending on the dimension,

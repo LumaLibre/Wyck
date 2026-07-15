@@ -1,7 +1,6 @@
 package dev.wyck.worldgen.surface.condition;
 
 import dev.wyck.worldgen.heightproviders.VerticalAnchor;
-import dev.wyck.worldgen.surface.condition.YAboveConditionSource;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 

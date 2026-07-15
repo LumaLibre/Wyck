@@ -1,6 +1,5 @@
 package dev.wyck.worldgen.feature.trunkplacers;
 
-import dev.wyck.worldgen.feature.trunkplacers.CherryTrunkPlacer;
 import dev.wyck.worldgen.valueproviders.IntProvider;
 import dev.wyck.worldgen.valueproviders.UniformInt;
 import org.jetbrains.annotations.ApiStatus;

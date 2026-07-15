@@ -1,9 +1,9 @@
 package dev.wyck.worldgen.surface;
 
 import dev.wyck.annotations.AsOf;
-import dev.wyck.keys.ResourceKey;
 import dev.wyck.biome.Biome;
-import dev.wyck.wrapper.Wrapper;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.worldgen.heightproviders.VerticalAnchor;
 import dev.wyck.worldgen.surface.condition.AbovePreliminarySurfaceConditionSource;
 import dev.wyck.worldgen.surface.condition.BiomeConditionSource;
 import dev.wyck.worldgen.surface.condition.CaveSurface;
@@ -22,7 +22,7 @@ import dev.wyck.worldgen.surface.rule.BlockRuleSource;
 import dev.wyck.worldgen.surface.rule.ConditionRuleSource;
 import dev.wyck.worldgen.surface.rule.RuleSource;
 import dev.wyck.worldgen.surface.rule.SequenceRuleSource;
-import dev.wyck.worldgen.heightproviders.VerticalAnchor;
+import dev.wyck.wrapper.Wrapper;
 import org.bukkit.Material;
 import org.jspecify.annotations.NullMarked;
 

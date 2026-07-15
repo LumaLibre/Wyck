@@ -1,6 +1,5 @@
 package dev.wyck.worldgen.ruletest;
 
-import dev.wyck.worldgen.ruletest.AlwaysTrueTest;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 

@@ -1,7 +1,6 @@
 package dev.wyck.worldgen.surface.condition;
 
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.worldgen.surface.condition.NoiseThresholdConditionSource;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 

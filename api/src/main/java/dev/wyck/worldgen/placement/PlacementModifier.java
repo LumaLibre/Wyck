@@ -1,11 +1,11 @@
 package dev.wyck.worldgen.placement;
 
 import dev.wyck.annotations.AsOf;
-import dev.wyck.wrapper.Wrapper;
-import dev.wyck.worldgen.blockpredicates.BlockPredicate;
 import dev.wyck.worldgen.HeightmapType;
+import dev.wyck.worldgen.blockpredicates.BlockPredicate;
 import dev.wyck.worldgen.heightproviders.HeightProvider;
 import dev.wyck.worldgen.valueproviders.IntProvider;
+import dev.wyck.wrapper.Wrapper;
 import org.jspecify.annotations.NullMarked;
 
 /**

@@ -2,10 +2,10 @@ package dev.wyck.keys;
 
 import dev.wyck.annotations.AsOf;
 import dev.wyck.biome.Biome;
-import dev.wyck.level.dimension.Dimension;
 import dev.wyck.environment.sounds.SoundEvent;
-import dev.wyck.worldgen.function.DensityFunction;
+import dev.wyck.level.dimension.Dimension;
 import dev.wyck.worldgen.feature.ConfiguredFeature;
+import dev.wyck.worldgen.function.DensityFunction;
 import dev.wyck.worldgen.placement.PlacedFeature;
 import dev.wyck.worldgen.synth.NoiseParameters;
 import org.jetbrains.annotations.ApiStatus;

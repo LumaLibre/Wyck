@@ -1,6 +1,5 @@
 package dev.wyck.worldgen.noise;
 
-import dev.wyck.worldgen.noise.NoiseSettings;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 

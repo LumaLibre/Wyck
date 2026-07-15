@@ -2,7 +2,6 @@ package dev.wyck.worldgen.function;
 
 import dev.wyck.annotations.AsOf;
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.wrapper.Wrapper;
 import dev.wyck.worldgen.function.misc.EndIslands;
 import dev.wyck.worldgen.function.misc.FindTopSurface;
 import dev.wyck.worldgen.function.misc.Marker;
@@ -21,6 +20,7 @@ import dev.wyck.worldgen.function.simple.ZeroSimpleFunction;
 import dev.wyck.worldgen.function.transformer.ClampedTransformer;
 import dev.wyck.worldgen.function.transformer.MappedTransformer;
 import dev.wyck.worldgen.synth.NoiseParameters;
+import dev.wyck.wrapper.Wrapper;
 import net.kyori.adventure.key.Keyed;
 import org.jspecify.annotations.NullMarked;
 

@@ -2,7 +2,6 @@ package dev.wyck.worldgen.noise;
 
 import com.google.common.base.Preconditions;
 import dev.wyck.worldgen.function.DensityFunction;
-import dev.wyck.worldgen.noise.NoiseRouter;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 

@@ -2,9 +2,9 @@ package dev.wyck.biome.entity;
 
 import dev.wyck.annotations.AsOf;
 import dev.wyck.annotations.WireFactory;
-import dev.wyck.util.WeightedList;
-import dev.wyck.biome.entity.data.SpawnCost;
 import dev.wyck.biome.entity.data.NaturalSpawner;
+import dev.wyck.biome.entity.data.SpawnCost;
+import dev.wyck.util.WeightedList;
 import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;

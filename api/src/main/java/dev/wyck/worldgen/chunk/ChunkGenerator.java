@@ -2,8 +2,8 @@ package dev.wyck.worldgen.chunk;
 
 import dev.wyck.annotations.AsOf;
 import dev.wyck.biome.Biome;
-import dev.wyck.wrapper.Wrapper;
 import dev.wyck.worldgen.biome.BiomeSource;
+import dev.wyck.wrapper.Wrapper;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked

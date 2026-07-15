@@ -1,7 +1,5 @@
 package dev.wyck.worldgen.blockpredicates;
 
-import dev.wyck.worldgen.blockpredicates.BlockPredicate;
-import dev.wyck.worldgen.blockpredicates.NotPredicate;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 

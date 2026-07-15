@@ -1,6 +1,5 @@
 package dev.wyck.worldgen.heightproviders;
 
-import dev.wyck.worldgen.heightproviders.BelowTop;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 

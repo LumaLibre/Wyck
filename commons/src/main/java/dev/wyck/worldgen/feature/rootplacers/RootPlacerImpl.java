@@ -1,7 +1,5 @@
 package dev.wyck.worldgen.feature.rootplacers;
 
-import dev.wyck.worldgen.feature.rootplacers.AboveRootPlacement;
-import dev.wyck.worldgen.feature.rootplacers.RootPlacer;
 import dev.wyck.worldgen.stateproviders.BlockStateProvider;
 import dev.wyck.worldgen.valueproviders.IntProvider;
 import org.jetbrains.annotations.ApiStatus;

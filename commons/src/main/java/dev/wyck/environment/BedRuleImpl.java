@@ -2,7 +2,6 @@ package dev.wyck.environment;
 
 import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
-import dev.wyck.environment.BedRule;
 import dev.wyck.util.BootstrapSafeMinecraftRegistries;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;

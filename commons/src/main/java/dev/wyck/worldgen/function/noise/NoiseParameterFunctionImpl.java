@@ -4,7 +4,6 @@ import dev.wyck.keys.ResourceKey;
 import dev.wyck.registry.internal.RegistryId;
 import dev.wyck.registry.internal.WyckRegistry;
 import dev.wyck.util.Lazy;
-import dev.wyck.worldgen.function.noise.NoiseParameterFunction;
 import dev.wyck.worldgen.synth.NoiseParameters;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.ApiStatus;

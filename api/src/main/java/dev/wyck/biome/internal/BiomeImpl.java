@@ -1,15 +1,15 @@
 package dev.wyck.biome.internal;
 
 import dev.wyck.biome.Biome;
-import dev.wyck.registry.BiomeRegistry;
+import dev.wyck.biome.BiomeGenerationSettings;
 import dev.wyck.biome.BiomeSpecialEffects;
 import dev.wyck.biome.ClimateSettings;
-import io.papermc.paper.registry.RegistryAccess;
-import io.papermc.paper.registry.RegistryKey;
-import dev.wyck.keys.ResourceKey;
 import dev.wyck.biome.entity.BiomeSpawner;
 import dev.wyck.environment.attribute.EnvironmentAttributeMap;
-import dev.wyck.biome.BiomeGenerationSettings;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.registry.BiomeRegistry;
+import io.papermc.paper.registry.RegistryAccess;
+import io.papermc.paper.registry.RegistryKey;
 import net.kyori.adventure.key.Key;
 import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.ApiStatus;

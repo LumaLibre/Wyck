@@ -1,6 +1,5 @@
 package dev.wyck.worldgen.feature.configurations;
 
-import dev.wyck.worldgen.feature.configurations.DeltaFeatureConfiguration;
 import dev.wyck.worldgen.valueproviders.IntProvider;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.block.data.CraftBlockData;

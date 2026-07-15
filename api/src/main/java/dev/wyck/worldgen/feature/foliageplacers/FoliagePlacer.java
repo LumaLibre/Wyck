@@ -2,8 +2,8 @@ package dev.wyck.worldgen.feature.foliageplacers;
 
 import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
-import dev.wyck.wrapper.Wrapper;
 import dev.wyck.worldgen.valueproviders.IntProvider;
+import dev.wyck.wrapper.Wrapper;
 import org.jspecify.annotations.NullMarked;
 
 /**

@@ -1,10 +1,6 @@
 package dev.wyck.environment.particle;
 
 import com.google.common.base.Preconditions;
-import dev.wyck.environment.particle.AmbientParticle;
-import dev.wyck.environment.particle.ParticleData;
-import dev.wyck.environment.particle.ParticleOptions;
-import dev.wyck.environment.particle.ParticleTypes;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;

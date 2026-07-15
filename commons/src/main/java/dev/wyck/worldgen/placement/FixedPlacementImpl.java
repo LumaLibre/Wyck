@@ -1,7 +1,6 @@
 package dev.wyck.worldgen.placement;
 
 import dev.wyck.util.WorldgenConversions;
-import dev.wyck.worldgen.placement.FixedPlacement;
 import org.bukkit.util.BlockVector;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;

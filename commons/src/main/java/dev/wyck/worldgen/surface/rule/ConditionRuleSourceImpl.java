@@ -1,8 +1,6 @@
 package dev.wyck.worldgen.surface.rule;
 
 import dev.wyck.worldgen.surface.condition.ConditionSource;
-import dev.wyck.worldgen.surface.rule.ConditionRuleSource;
-import dev.wyck.worldgen.surface.rule.RuleSource;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 

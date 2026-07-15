@@ -1,11 +1,9 @@
 package dev.wyck.biome.entity;
 
 import dev.wyck.annotations.AsOf;
-import dev.wyck.util.WeightedList;
-import dev.wyck.biome.entity.BiomeSpawner;
-import dev.wyck.biome.entity.MobCategory;
-import dev.wyck.biome.entity.data.SpawnCost;
 import dev.wyck.biome.entity.data.NaturalSpawner;
+import dev.wyck.biome.entity.data.SpawnCost;
+import dev.wyck.util.WeightedList;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.biome.MobSpawnSettings;

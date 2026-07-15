@@ -2,7 +2,6 @@ package dev.wyck.worldgen.noise.types;
 
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.util.BootstrapSafeMinecraftRegistries;
-import dev.wyck.worldgen.noise.types.ReferencedNoise;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 

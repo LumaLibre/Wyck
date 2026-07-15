@@ -1,8 +1,7 @@
 package dev.wyck.worldgen.feature.configurations;
 
-import dev.wyck.worldgen.blockpredicates.BlockPredicate;
 import dev.wyck.util.WorldgenConversions;
-import dev.wyck.worldgen.feature.configurations.BlockColumnConfiguration;
+import dev.wyck.worldgen.blockpredicates.BlockPredicate;
 import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;

@@ -3,8 +3,8 @@ package dev.wyck.environment.attribute;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.util.internal.FriendlyColorUtil;
-import org.jspecify.annotations.NullMarked;
 import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;

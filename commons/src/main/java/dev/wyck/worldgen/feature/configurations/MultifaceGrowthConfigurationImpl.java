@@ -1,7 +1,6 @@
 package dev.wyck.worldgen.feature.configurations;
 
 import dev.wyck.util.WorldgenConversions;
-import dev.wyck.worldgen.feature.configurations.MultifaceGrowthConfiguration;
 import org.bukkit.Material;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;

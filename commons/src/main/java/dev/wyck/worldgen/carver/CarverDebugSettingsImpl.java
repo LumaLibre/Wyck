@@ -1,6 +1,5 @@
 package dev.wyck.worldgen.carver;
 
-import dev.wyck.worldgen.carver.CarverDebugSettings;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.block.data.CraftBlockData;
 import org.jetbrains.annotations.ApiStatus;

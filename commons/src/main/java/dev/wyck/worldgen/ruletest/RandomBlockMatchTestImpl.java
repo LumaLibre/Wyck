@@ -1,6 +1,5 @@
 package dev.wyck.worldgen.ruletest;
 
-import dev.wyck.worldgen.ruletest.RandomBlockMatchTest;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.block.CraftBlockType;
 import org.jetbrains.annotations.ApiStatus;

@@ -1,7 +1,5 @@
 package dev.wyck.worldgen.surface.rule;
 
-import dev.wyck.worldgen.surface.rule.RuleSource;
-import dev.wyck.worldgen.surface.rule.SequenceRuleSource;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 

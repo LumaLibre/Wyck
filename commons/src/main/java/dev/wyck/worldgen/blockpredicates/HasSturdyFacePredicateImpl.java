@@ -1,7 +1,6 @@
 package dev.wyck.worldgen.blockpredicates;
 
 import dev.wyck.util.WorldgenConversions;
-import dev.wyck.worldgen.blockpredicates.HasSturdyFacePredicate;
 import org.bukkit.block.BlockFace;
 import org.bukkit.util.BlockVector;
 import org.jetbrains.annotations.ApiStatus;

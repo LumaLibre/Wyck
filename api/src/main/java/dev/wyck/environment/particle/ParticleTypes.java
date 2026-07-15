@@ -1,8 +1,6 @@
 package dev.wyck.environment.particle;
 
 import dev.wyck.annotations.AsOf;
-import dev.wyck.keys.ResourceKey;
-import dev.wyck.registry.internal.RegistryId;
 import dev.wyck.environment.particle.options.BlockParticle;
 import dev.wyck.environment.particle.options.ColorParticle;
 import dev.wyck.environment.particle.options.DustParticle;
@@ -15,10 +13,12 @@ import dev.wyck.environment.particle.options.SculkChargeParticle;
 import dev.wyck.environment.particle.options.SpellParticle;
 import dev.wyck.environment.particle.options.TrailParticle;
 import dev.wyck.environment.particle.options.VibrationParticle;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.registry.internal.RegistryId;
 import dev.wyck.wrapper.RegisteredConstantTranslator;
 import dev.wyck.wrapper.WrappedConstant;
-import org.jspecify.annotations.Nullable;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;

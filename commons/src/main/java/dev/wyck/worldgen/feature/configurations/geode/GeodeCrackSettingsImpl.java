@@ -1,6 +1,5 @@
 package dev.wyck.worldgen.feature.configurations.geode;
 
-import dev.wyck.worldgen.feature.configurations.geode.GeodeCrackSettings;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 

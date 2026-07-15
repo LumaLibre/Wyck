@@ -1,8 +1,8 @@
 package dev.wyck.registry.level;
 
 import dev.wyck.annotations.AsOf;
-import dev.wyck.level.LevelCreator;
 import dev.wyck.factory.WireProvider;
+import dev.wyck.level.LevelCreator;
 import org.bukkit.World;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;

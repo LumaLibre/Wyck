@@ -1,8 +1,6 @@
 package dev.wyck.worldgen.material;
 
 import com.google.common.base.Preconditions;
-import dev.wyck.worldgen.material.FluidState;
-import dev.wyck.worldgen.material.FluidType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 

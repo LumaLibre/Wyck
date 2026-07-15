@@ -1,7 +1,6 @@
 package dev.wyck.worldgen.feature.treedecorators;
 
 import dev.wyck.util.WorldgenConversions;
-import dev.wyck.worldgen.feature.treedecorators.AttachedToLeavesDecorator;
 import dev.wyck.worldgen.stateproviders.BlockStateProvider;
 import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.ApiStatus;

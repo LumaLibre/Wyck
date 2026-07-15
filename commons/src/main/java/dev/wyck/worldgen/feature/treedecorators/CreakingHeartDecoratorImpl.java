@@ -1,6 +1,5 @@
 package dev.wyck.worldgen.feature.treedecorators;
 
-import dev.wyck.worldgen.feature.treedecorators.CreakingHeartDecorator;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 

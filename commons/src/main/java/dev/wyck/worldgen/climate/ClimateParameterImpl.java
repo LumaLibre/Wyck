@@ -1,6 +1,5 @@
 package dev.wyck.worldgen.climate;
 
-import dev.wyck.worldgen.climate.ClimateParameter;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 

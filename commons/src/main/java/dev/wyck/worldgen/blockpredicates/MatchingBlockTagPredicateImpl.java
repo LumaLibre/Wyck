@@ -2,7 +2,6 @@ package dev.wyck.worldgen.blockpredicates;
 
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.util.WorldgenConversions;
-import dev.wyck.worldgen.blockpredicates.MatchingBlockTagPredicate;
 import org.bukkit.util.BlockVector;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;

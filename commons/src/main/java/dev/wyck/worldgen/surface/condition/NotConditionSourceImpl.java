@@ -1,7 +1,5 @@
 package dev.wyck.worldgen.surface.condition;
 
-import dev.wyck.worldgen.surface.condition.ConditionSource;
-import dev.wyck.worldgen.surface.condition.NotConditionSource;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 

@@ -1,7 +1,5 @@
 package dev.wyck.environment.sounds;
 
-import dev.wyck.environment.sounds.BackgroundMusic;
-import dev.wyck.environment.sounds.Music;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 

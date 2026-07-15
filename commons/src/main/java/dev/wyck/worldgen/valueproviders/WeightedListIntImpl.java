@@ -1,8 +1,6 @@
 package dev.wyck.worldgen.valueproviders;
 
 import dev.wyck.util.WeightedList;
-import dev.wyck.worldgen.valueproviders.IntProvider;
-import dev.wyck.worldgen.valueproviders.WeightedListInt;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 

@@ -1,6 +1,5 @@
 package dev.wyck.worldgen.placement;
 
-import dev.wyck.worldgen.placement.InSquarePlacement;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 

@@ -1,8 +1,7 @@
 package dev.wyck.worldgen.blockpredicates;
 
-import dev.wyck.worldgen.blockpredicates.MatchingFluidsPredicate;
-import dev.wyck.worldgen.material.FluidType;
 import dev.wyck.util.WorldgenConversions;
+import dev.wyck.worldgen.material.FluidType;
 import org.bukkit.util.BlockVector;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;

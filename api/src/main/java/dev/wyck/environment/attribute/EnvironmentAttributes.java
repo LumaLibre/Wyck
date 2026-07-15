@@ -1,20 +1,20 @@
 package dev.wyck.environment.attribute;
 
 import dev.wyck.annotations.AsOf;
-import dev.wyck.keys.ResourceKey;
 import dev.wyck.environment.Activity;
 import dev.wyck.environment.BedRule;
 import dev.wyck.environment.MoonPhase;
 import dev.wyck.environment.TriState;
-import dev.wyck.environment.particle.ParticleCatalog;
 import dev.wyck.environment.particle.AmbientParticle;
+import dev.wyck.environment.particle.ParticleCatalog;
 import dev.wyck.environment.particle.ParticleOptions;
 import dev.wyck.environment.sounds.AmbientSounds;
 import dev.wyck.environment.sounds.BackgroundMusic;
+import dev.wyck.keys.ResourceKey;
 import dev.wyck.wrapper.WrappedConstant;
 import org.jetbrains.annotations.ApiStatus;
-import org.jspecify.annotations.Nullable;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;

@@ -1,7 +1,6 @@
 package dev.wyck.worldgen.feature.configurations;
 
 import dev.wyck.util.WorldgenConversions;
-import dev.wyck.worldgen.feature.configurations.SpeleothemConfiguration;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.block.data.CraftBlockData;

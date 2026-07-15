@@ -1,6 +1,5 @@
 package dev.wyck.level.entity;
 
-import dev.wyck.level.entity.LevelSpawner;
 import net.minecraft.world.entity.ai.village.VillageSiege;
 import net.minecraft.world.entity.npc.CatSpawner;
 import net.minecraft.world.entity.npc.wanderingtrader.WanderingTraderSpawner;

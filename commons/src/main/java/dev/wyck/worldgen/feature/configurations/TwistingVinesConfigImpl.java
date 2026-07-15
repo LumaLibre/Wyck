@@ -1,6 +1,5 @@
 package dev.wyck.worldgen.feature.configurations;
 
-import dev.wyck.worldgen.feature.configurations.TwistingVinesConfig;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 

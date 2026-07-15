@@ -1,10 +1,10 @@
 package dev.wyck.worldgen.chunk.flat;
 
-import dev.wyck.keys.ResourceKey;
 import dev.wyck.biome.Biome;
+import dev.wyck.keys.ResourceKey;
 import dev.wyck.util.BootstrapSafeMinecraftRegistries;
-import dev.wyck.wrapper.Wrapper;
 import dev.wyck.worldgen.placement.PlacedFeature;
+import dev.wyck.wrapper.Wrapper;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 

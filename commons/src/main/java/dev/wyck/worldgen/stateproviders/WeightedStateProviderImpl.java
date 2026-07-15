@@ -1,7 +1,6 @@
 package dev.wyck.worldgen.stateproviders;
 
 import dev.wyck.util.WeightedList;
-import dev.wyck.worldgen.stateproviders.WeightedStateProvider;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.block.data.CraftBlockData;
 import org.jetbrains.annotations.ApiStatus;

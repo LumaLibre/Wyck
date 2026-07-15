@@ -1,6 +1,5 @@
 package dev.wyck.worldgen.feature.configurations;
 
-import dev.wyck.worldgen.feature.configurations.DripstoneClusterConfiguration;
 import dev.wyck.worldgen.valueproviders.FloatProvider;
 import dev.wyck.worldgen.valueproviders.IntProvider;
 import org.jetbrains.annotations.ApiStatus;

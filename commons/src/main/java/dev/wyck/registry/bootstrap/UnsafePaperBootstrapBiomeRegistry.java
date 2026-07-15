@@ -1,7 +1,14 @@
 package dev.wyck.registry.bootstrap;
 
 import com.google.common.base.Preconditions;
+import dev.wyck.annotations.AsOf;
+import dev.wyck.annotations.WireFactory;
 import dev.wyck.biome.Biome;
+import dev.wyck.keys.KeyChains;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.registry.BiomeRegistry;
+import dev.wyck.util.ThrowingRunnable;
+import dev.wyck.worldgen.climate.ClimatePoint;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEventType;
 import io.papermc.paper.registry.PaperRegistries;
@@ -14,13 +21,6 @@ import io.papermc.paper.registry.event.RegistryComposeEventImpl;
 import io.papermc.paper.registry.event.RegistryEventProvider;
 import io.papermc.paper.registry.event.RegistryEventTypeProviderImpl;
 import io.papermc.paper.registry.event.type.RegistryEntryAddEventType;
-import dev.wyck.annotations.AsOf;
-import dev.wyck.annotations.WireFactory;
-import dev.wyck.keys.KeyChains;
-import dev.wyck.registry.BiomeRegistry;
-import dev.wyck.keys.ResourceKey;
-import dev.wyck.util.ThrowingRunnable;
-import dev.wyck.worldgen.climate.ClimatePoint;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.RegistrationInfo;
 import net.minecraft.core.Registry;

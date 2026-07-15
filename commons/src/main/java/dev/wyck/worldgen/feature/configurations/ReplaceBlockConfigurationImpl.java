@@ -1,7 +1,5 @@
 package dev.wyck.worldgen.feature.configurations;
 
-import dev.wyck.worldgen.feature.configurations.OreConfiguration;
-import dev.wyck.worldgen.feature.configurations.ReplaceBlockConfiguration;
 import org.bukkit.craftbukkit.block.data.CraftBlockData;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;

@@ -1,14 +1,14 @@
 package dev.wyck.worldgen.chunk.flat;
 
 import dev.wyck.annotations.AsOf;
-import dev.wyck.factory.ConstructWireProvider;
-import dev.wyck.keys.ResourceKey;
 import dev.wyck.biome.Biome;
 import dev.wyck.biome.Biomes;
-import dev.wyck.wrapper.Wrapper;
+import dev.wyck.factory.ConstructWireProvider;
+import dev.wyck.keys.ResourceKey;
 import dev.wyck.worldgen.chunk.ChunkGenerator;
 import dev.wyck.worldgen.placement.PlacedFeature;
 import dev.wyck.worldgen.structure.StructureSets;
+import dev.wyck.wrapper.Wrapper;
 import org.bukkit.Material;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;

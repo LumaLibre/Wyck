@@ -6,7 +6,6 @@ import dev.wyck.registry.internal.WyckRegistry;
 import dev.wyck.util.Lazy;
 import dev.wyck.worldgen.feature.FeatureType;
 import dev.wyck.worldgen.feature.configurations.FeatureConfiguration;
-import dev.wyck.worldgen.feature.types.ComposedConfiguredFeature;
 import net.kyori.adventure.key.Key;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;

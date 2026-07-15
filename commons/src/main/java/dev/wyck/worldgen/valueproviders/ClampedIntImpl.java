@@ -1,7 +1,5 @@
 package dev.wyck.worldgen.valueproviders;
 
-import dev.wyck.worldgen.valueproviders.ClampedInt;
-import dev.wyck.worldgen.valueproviders.IntProvider;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 

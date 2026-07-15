@@ -1,6 +1,5 @@
 package dev.wyck.worldgen.feature.configurations;
 
-import dev.wyck.worldgen.feature.configurations.BlockPileConfiguration;
 import dev.wyck.worldgen.stateproviders.BlockStateProvider;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;

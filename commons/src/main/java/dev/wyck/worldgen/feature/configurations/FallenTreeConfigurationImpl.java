@@ -1,6 +1,5 @@
 package dev.wyck.worldgen.feature.configurations;
 
-import dev.wyck.worldgen.feature.configurations.FallenTreeConfiguration;
 import dev.wyck.worldgen.feature.treedecorators.TreeDecorator;
 import dev.wyck.worldgen.stateproviders.BlockStateProvider;
 import dev.wyck.worldgen.valueproviders.IntProvider;

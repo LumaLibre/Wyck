@@ -1,6 +1,5 @@
 package dev.wyck.environment.particle;
 
-import dev.wyck.environment.particle.ParticleType;
 import net.minecraft.core.particles.ParticleOptions;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;

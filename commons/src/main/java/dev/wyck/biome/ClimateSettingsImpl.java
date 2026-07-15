@@ -1,7 +1,5 @@
 package dev.wyck.biome;
 
-import dev.wyck.biome.ClimateSettings;
-import dev.wyck.biome.TemperatureModifier;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 

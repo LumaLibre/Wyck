@@ -1,13 +1,13 @@
 package dev.wyck.biome.internal;
 
-import dev.wyck.keys.ResourceKey;
-import dev.wyck.biome.CustomBiome;
-import dev.wyck.renderer.packet.data.BlockReplacement;
+import dev.wyck.biome.BiomeGenerationSettings;
 import dev.wyck.biome.BiomeSpecialEffects;
 import dev.wyck.biome.ClimateSettings;
+import dev.wyck.biome.CustomBiome;
 import dev.wyck.biome.entity.BiomeSpawner;
 import dev.wyck.environment.attribute.EnvironmentAttributeMap;
-import dev.wyck.biome.BiomeGenerationSettings;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.renderer.packet.data.BlockReplacement;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;

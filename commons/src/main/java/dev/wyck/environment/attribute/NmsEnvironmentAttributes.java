@@ -1,7 +1,5 @@
 package dev.wyck.environment.attribute;
 
-import dev.wyck.environment.attribute.EnvironmentAttribute;
-import dev.wyck.environment.attribute.EnvironmentAttributeMap;
 import net.minecraft.world.level.biome.Biome;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;

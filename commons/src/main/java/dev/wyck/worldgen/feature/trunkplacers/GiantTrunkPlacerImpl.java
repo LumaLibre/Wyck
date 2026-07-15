@@ -1,7 +1,6 @@
 package dev.wyck.worldgen.feature.trunkplacers;
 
 import dev.wyck.annotations.AsOf;
-import dev.wyck.worldgen.feature.trunkplacers.GiantTrunkPlacer;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked

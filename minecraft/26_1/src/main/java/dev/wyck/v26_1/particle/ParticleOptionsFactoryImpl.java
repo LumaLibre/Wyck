@@ -2,10 +2,10 @@ package dev.wyck.v26_1.particle;
 
 import dev.wyck.annotations.WireFactory;
 import dev.wyck.environment.particle.ParticleOptions;
+import dev.wyck.environment.particle.ParticleOptionsFactory;
 import dev.wyck.environment.particle.ParticleOptionsImpl;
 import dev.wyck.environment.particle.ParticleType;
 import dev.wyck.environment.particle.ParticleTypeImpl;
-import dev.wyck.environment.particle.ParticleOptionsFactory;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ColorParticleOption;
 import net.minecraft.core.particles.DustColorTransitionOptions;

@@ -1,7 +1,6 @@
 package dev.wyck.worldgen.biome;
 
 import dev.wyck.util.BootstrapSafeMinecraftRegistries;
-import dev.wyck.worldgen.biome.TheEndBiomeSource;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 

@@ -1,7 +1,6 @@
 package dev.wyck.worldgen.feature.rootplacers;
 
 import dev.wyck.annotations.AsOf;
-import dev.wyck.worldgen.feature.rootplacers.AboveRootPlacement;
 import dev.wyck.worldgen.stateproviders.BlockStateProvider;
 import org.jspecify.annotations.NullMarked;
 

@@ -1,6 +1,5 @@
 package dev.wyck.worldgen.feature.trunkplacers;
 
-import dev.wyck.worldgen.feature.trunkplacers.FancyTrunkPlacer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 

@@ -1,7 +1,6 @@
 package dev.wyck.worldgen.stateproviders;
 
 import com.google.common.base.Preconditions;
-import dev.wyck.worldgen.stateproviders.RotatedBlockProvider;
 import net.minecraft.world.level.block.Block;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.util.CraftMagicNumbers;

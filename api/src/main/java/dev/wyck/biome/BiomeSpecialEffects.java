@@ -1,9 +1,9 @@
 package dev.wyck.biome;
 
 import dev.wyck.annotations.AsOf;
+import dev.wyck.environment.GrassColorModifier;
 import dev.wyck.factory.ConstructWireProvider;
 import dev.wyck.util.internal.FriendlyColorUtil;
-import dev.wyck.environment.GrassColorModifier;
 import dev.wyck.wrapper.Wrapper;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NonNull;

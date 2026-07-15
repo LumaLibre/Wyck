@@ -1,9 +1,9 @@
 package dev.wyck.worldgen.biome;
 
 import dev.wyck.annotations.AsOf;
+import dev.wyck.biome.Biome;
 import dev.wyck.factory.ConstructWireProvider;
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.biome.Biome;
 import dev.wyck.worldgen.climate.ClimatePoint;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;

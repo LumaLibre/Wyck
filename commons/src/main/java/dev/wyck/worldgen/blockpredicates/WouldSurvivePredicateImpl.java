@@ -1,7 +1,6 @@
 package dev.wyck.worldgen.blockpredicates;
 
 import dev.wyck.util.WorldgenConversions;
-import dev.wyck.worldgen.blockpredicates.WouldSurvivePredicate;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.block.data.CraftBlockData;
 import org.bukkit.util.BlockVector;

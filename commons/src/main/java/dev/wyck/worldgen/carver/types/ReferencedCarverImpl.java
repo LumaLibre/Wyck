@@ -2,7 +2,6 @@ package dev.wyck.worldgen.carver.types;
 
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.util.BootstrapSafeMinecraftRegistries;
-import dev.wyck.worldgen.carver.types.ReferencedCarver;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 

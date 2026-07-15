@@ -1,7 +1,5 @@
 package dev.wyck.level.entity;
 
-import dev.wyck.level.entity.LevelSpawner;
-import dev.wyck.level.entity.SpawnTick;
 import net.minecraft.world.level.CustomSpawner;
 import org.jspecify.annotations.NullMarked;
 

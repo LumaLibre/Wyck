@@ -2,14 +2,14 @@ package dev.wyck.biome;
 
 import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
-import dev.wyck.keys.KeyChains;
-import dev.wyck.biome.internal.BiomeImpl;
-import dev.wyck.registry.BiomeRegistry;
-import dev.wyck.keys.ResourceKey;
 import dev.wyck.biome.entity.BiomeSpawner;
+import dev.wyck.biome.internal.BiomeImpl;
 import dev.wyck.environment.attribute.EnvironmentAttributeMap;
 import dev.wyck.environment.attribute.EnvironmentAttributeSupplier;
 import dev.wyck.environment.attribute.FriendlyColorSupplier;
+import dev.wyck.keys.KeyChains;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.registry.BiomeRegistry;
 import dev.wyck.wrapper.Wrapper;
 import net.kyori.adventure.key.Keyed;
 import org.jspecify.annotations.NullMarked;

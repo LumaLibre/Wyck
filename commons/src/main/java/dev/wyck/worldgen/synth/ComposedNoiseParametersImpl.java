@@ -4,7 +4,6 @@ import dev.wyck.keys.ResourceKey;
 import dev.wyck.registry.internal.RegistryId;
 import dev.wyck.registry.internal.WyckRegistry;
 import dev.wyck.util.Lazy;
-import dev.wyck.worldgen.synth.ComposedNoiseParameters;
 import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 import net.kyori.adventure.key.Key;
 import net.minecraft.world.level.levelgen.synth.NormalNoise;

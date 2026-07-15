@@ -1,7 +1,6 @@
 package dev.wyck.level.dimension;
 
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.level.dimension.TimelineSet;
 import dev.wyck.util.BootstrapSafeMinecraftRegistries;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;

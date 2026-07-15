@@ -1,10 +1,10 @@
 package dev.wyck.level.dimension;
 
 import dev.wyck.annotations.AsOf;
-import dev.wyck.keys.ResourceKey;
-import dev.wyck.registry.DimensionRegistry;
 import dev.wyck.biome.entity.data.MonsterSettings;
 import dev.wyck.environment.attribute.EnvironmentAttributeMap;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.registry.DimensionRegistry;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;

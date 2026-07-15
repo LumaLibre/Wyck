@@ -2,7 +2,6 @@ package dev.wyck.worldgen.feature.configurations.geode;
 
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.util.WorldgenConversions;
-import dev.wyck.worldgen.feature.configurations.geode.GeodeBlockSettings;
 import dev.wyck.worldgen.stateproviders.BlockStateProvider;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;

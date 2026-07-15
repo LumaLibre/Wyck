@@ -1,7 +1,6 @@
 package dev.wyck.worldgen.feature.configurations;
 
 
-import dev.wyck.worldgen.feature.configurations.TreeConfiguration;
 import dev.wyck.worldgen.feature.featuresize.FeatureSize;
 import dev.wyck.worldgen.feature.foliageplacers.FoliagePlacer;
 import dev.wyck.worldgen.feature.rootplacers.RootPlacer;

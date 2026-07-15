@@ -2,7 +2,6 @@ package dev.wyck.worldgen.feature.types;
 
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.util.BootstrapSafeMinecraftRegistries;
-import dev.wyck.worldgen.feature.types.ReferencedConfiguredFeature;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;

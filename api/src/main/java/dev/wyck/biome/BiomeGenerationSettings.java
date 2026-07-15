@@ -3,11 +3,11 @@ package dev.wyck.biome;
 import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.ConstructWireProvider;
-import dev.wyck.wrapper.Wrapper;
 import dev.wyck.worldgen.Decoration;
 import dev.wyck.worldgen.carver.ConfiguredWorldCarver;
 import dev.wyck.worldgen.carver.custom.CustomCarver;
 import dev.wyck.worldgen.placement.PlacedFeature;
+import dev.wyck.wrapper.Wrapper;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 

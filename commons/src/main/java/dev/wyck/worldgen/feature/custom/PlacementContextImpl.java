@@ -2,7 +2,6 @@ package dev.wyck.worldgen.feature.custom;
 
 import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
-import dev.wyck.worldgen.feature.custom.PlacementContext;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import org.bukkit.block.data.BlockData;

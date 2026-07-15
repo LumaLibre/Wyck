@@ -1,6 +1,5 @@
 package dev.wyck.worldgen.feature.configurations;
 
-import dev.wyck.worldgen.feature.configurations.EndSpikeConfiguration;
 import dev.wyck.worldgen.feature.configurations.end.EndSpike;
 import org.bukkit.util.BlockVector;
 import org.jetbrains.annotations.ApiStatus;

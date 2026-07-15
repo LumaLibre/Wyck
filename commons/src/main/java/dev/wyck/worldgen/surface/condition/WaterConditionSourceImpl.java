@@ -1,6 +1,5 @@
 package dev.wyck.worldgen.surface.condition;
 
-import dev.wyck.worldgen.surface.condition.WaterConditionSource;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
