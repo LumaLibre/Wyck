@@ -12,7 +12,7 @@ import CodeTabs from "@/components/CodeTabs.astro";
 
 ## Generation Steps
 
-Placed features are added under a <SourceLink path="wrapper/worldgen/GenerationStep.java">GenerationStep</SourceLink>,
+Placed features are added under a <SourceLink path="wrapper/worldgen/Decoration.java">Decoration</SourceLink>,
 which controls the order things generate in. Carvers are not stepped as they run in the carving phase of world generation.
 
 ## Example Usage
@@ -24,7 +24,7 @@ which controls the order things generate in. Carvers are not stepped as they run
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.wrapper.BiomeSettings;
 import dev.wyck.wrapper.worldgen.BiomeGenerationSettings;
-import dev.wyck.wrapper.worldgen.GenerationStep;
+import dev.wyck.wrapper.worldgen.Decoration;
 import dev.wyck.wrapper.worldgen.HeightmapType;
 import dev.wyck.wrapper.worldgen.placement.PlacementModifier;
 import dev.wyck.wrapper.worldgen.carver.Carvers;
@@ -40,9 +40,9 @@ public class ExamplePlugin extends JavaPlugin {
             // carve caves using vanilla's cave carver
             .addCarver(Carvers.CAVE)
             // reference a vanilla placed ore feature
-            .addFeature(GenerationStep.UNDERGROUND_ORES, PlacedFeatures.ORE_DIAMOND)
+            .addFeature(Decoration.UNDERGROUND_ORES, PlacedFeatures.ORE_DIAMOND)
             // author a surface flower placement
-            .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeature.of(
+            .addFeature(Decoration.VEGETAL_DECORATION, PlacedFeature.of(
                 ConfiguredFeatures.FLOWER_DEFAULT,
                 PlacementModifier.rarityFilter(8),
                 PlacementModifier.inSquare(),

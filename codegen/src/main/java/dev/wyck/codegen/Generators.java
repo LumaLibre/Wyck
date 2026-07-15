@@ -60,7 +60,7 @@ public final class Generators {
         soundEvents(),
         biomeKeys(),
         dimensionKeys(),
-        generationSteps(),
+        decorations(),
         heightmapTypes(),
         caveSurfaces(),
         tristates(),
@@ -213,13 +213,13 @@ public final class Generators {
         );
     }
 
-    private static GeneratorSpec generationSteps() {
+    private static GeneratorSpec decorations() {
         return new EnumSpec(
             "dev.wyck.wrapper.worldgen",
-            "GenerationStep",
+            "Decoration",
             GenerationStep.Decoration.class,
             Generators::enumName,
-            "Wraps Minecraft's GenerationStep.Decoration.",
+            "Wraps Minecraft's {@code GenerationStep.Decoration}.",
             "2.3.0"
         );
     }

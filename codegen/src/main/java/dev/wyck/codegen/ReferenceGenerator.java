@@ -7,12 +7,16 @@ import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.HexFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -31,6 +35,16 @@ public final class ReferenceGenerator {
     //   @AsOf("1.2.3") \n ClassName()
     private static final Pattern EXISTING_MEMBER = Pattern.compile(
         "@AsOf\\(\"([^\"]+)\"\\)\\s+(?:public\\s+)?(?:[\\w.<>]+\\s+)?(\\w+)\\s*\\("
+    );
+
+    private static final Pattern GENERATED_LINE = Pattern.compile(
+        "(?m)^@Generated\\(\"[^\"]*\"\\)\\n?"
+    );
+
+    private static final String HASH_PREFIX = "//";
+
+    private static final Pattern EXISTING_HASH = Pattern.compile(
+        "\\A" + Pattern.quote(HASH_PREFIX) + "([0-9a-f]+)"
     );
 
     static void main(String[] args) throws Exception {
@@ -56,11 +70,36 @@ public final class ReferenceGenerator {
                 case EnumSpec enumSpec -> generateEnum(enumSpec, version, existingVersions, preservedConstants);
                 case ConstantSpec constantSpec -> generateConstant(constantSpec, version, existingVersions, preservedConstants);
             };
+            String hash = contentHash(source);
+
+            if (hash.equals(existingHash(outputPath))) {
+                System.out.println("up-to-date " + outputPath);
+                continue;
+            }
 
             Files.createDirectories(outputPath.getParent());
-            Files.writeString(outputPath, source);
+            Files.writeString(outputPath, HASH_PREFIX + hash + "\n" + source);
             System.out.println("generated " + outputPath);
         }
+    }
+
+    private static String contentHash(String source) {
+        String canonical = GENERATED_LINE.matcher(source).replaceAll("");
+        try {
+            byte[] digest = MessageDigest.getInstance("SHA-256")
+                .digest(canonical.getBytes(StandardCharsets.UTF_8));
+            return HexFormat.of().formatHex(digest, 0, 16);
+        } catch (NoSuchAlgorithmException e) {
+            throw new AssertionError("SHA-256 unavailable", e);
+        }
+    }
+
+    private static @Nullable String existingHash(Path outputPath) throws Exception {
+        if (!Files.exists(outputPath)) {
+            return null;
+        }
+        Matcher matcher = EXISTING_HASH.matcher(Files.readString(outputPath));
+        return matcher.find() ? matcher.group(1) : null;
     }
 
     private static Map<String, String> readExistingVersions(Path outputPath) throws Exception {

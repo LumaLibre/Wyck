@@ -17,7 +17,7 @@ import dev.wyck.keys.ResourceKey;
 import dev.wyck.registry.bootstrap.BootstrapBiomeRegistry;
 import dev.wyck.registry.bootstrap.Composer;
 import dev.wyck.wrapper.biome.BiomeGenerationSettings;
-import dev.wyck.wrapper.worldgen.GenerationStep;
+import dev.wyck.wrapper.worldgen.Decoration;
 import dev.wyck.wrapper.worldgen.placement.PlacedFeatures;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -29,8 +29,8 @@ public class ExampleBootstrapper implements PluginBootstrap {
         // This must use the 'DATAPACK' composer!
         BootstrapBiomeRegistry registry = BootstrapBiomeRegistry.compose(context, Composer.INJECTOR);
         BiomeGenerationSettings generation = BiomeGenerationSettings.builder()
-            .feature(GenerationStep.VEGETAL_DECORATION, PlacedFeatures.TREES_PLAINS)
-            .feature(GenerationStep.VEGETAL_DECORATION, PlacedFeatures.FALLEN_OAK_TREE)
+            .feature(Decoration.VEGETAL_DECORATION, PlacedFeatures.TREES_PLAINS)
+            .feature(Decoration.VEGETAL_DECORATION, PlacedFeatures.FALLEN_OAK_TREE)
             .build();
 
         ResourceKey myBiomeKey = ResourceKey.of("example", "my_biome2");

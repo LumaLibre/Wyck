@@ -1,3 +1,4 @@
+//9e9c84525b86ea45ed06253b376caf62
 package dev.wyck.model.biome;
 
 import dev.wyck.annotations.AsOf;
@@ -18,7 +19,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("3.0.0")
-@Generated("2026-07-14T03:30:26.712072Z")
+@Generated("2026-07-15T07:01:58.777375Z")
 public final class Biomes {
 
     // From: Biomes 

@@ -1,3 +1,4 @@
+//f1f7445065bfe81d5b8f741e1266851f
 package dev.wyck.wrapper.environment;
 
 import dev.wyck.annotations.AsOf;
@@ -19,7 +20,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.4.1")
-@Generated("2026-07-14T03:30:26.717612Z")
+@Generated("2026-07-15T07:01:58.782251Z")
 public enum TriState implements WrappedEnumerator<TriState> {
 
     TRUE("TRUE"),

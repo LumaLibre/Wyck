@@ -51,7 +51,7 @@ All wrappers extend the <SourceLink path="worldgen.feature.configurations/Featur
 import dev.wyck.model.biome.Biome;
 import dev.wyck.wrapper.worldgen.BiomeGenerationSettings;
 import dev.wyck.wrapper.worldgen.BlockPredicate;
-import dev.wyck.wrapper.worldgen.GenerationStep;
+import dev.wyck.wrapper.worldgen.Decoration;
 import dev.wyck.wrapper.worldgen.HeightmapType;
 import dev.wyck.wrapper.worldgen.feature.ConfiguredFeature;
 import dev.wyck.wrapper.worldgen.feature.FeatureType;
@@ -110,7 +110,7 @@ public class ExamplePlugin extends JavaPlugin {
             .resourceKey(ResourceKey.of("test:biome"))
             .generationSettings(
                 BiomeGenerationSettings.builder()
-                    .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeature.builder()
+                    .addFeature(Decoration.VEGETAL_DECORATION, PlacedFeature.builder()
                         .feature(ConfiguredFeature.of(FeatureType.TREE, treeConfig))
                         .modifier(PlacementModifier.rarityFilter(1))
                         .modifier(PlacementModifier.inSquare())
@@ -187,7 +187,7 @@ import dev.wyck.keys.ResourceKey;
 import dev.wyck.registry.level.LevelStemEditor;
 import dev.wyck.worldgen.PillarFeature;
 import dev.wyck.wrapper.worldgen.BiomeGenerationSettings;
-import dev.wyck.wrapper.worldgen.GenerationStep;
+import dev.wyck.wrapper.worldgen.Decoration;
 import dev.wyck.wrapper.worldgen.HeightmapType;
 import dev.wyck.wrapper.worldgen.feature.ConfiguredFeature;
 import dev.wyck.wrapper.worldgen.feature.custom.CustomFeature;
@@ -224,10 +224,10 @@ public class ExamplePlugin extends JavaPlugin {
 
 
         BiomeGenerationSettings generation = BiomeGenerationSettings.builder()
-            .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeatures.TREES_PLAINS)
-            .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeatures.FALLEN_OAK_TREE)
-            .addFeature(GenerationStep.VEGETAL_DECORATION, tallPlaced)
-            .addFeature(GenerationStep.VEGETAL_DECORATION, shortPlaced)
+            .addFeature(Decoration.VEGETAL_DECORATION, PlacedFeatures.TREES_PLAINS)
+            .addFeature(Decoration.VEGETAL_DECORATION, PlacedFeatures.FALLEN_OAK_TREE)
+            .addFeature(Decoration.VEGETAL_DECORATION, tallPlaced)
+            .addFeature(Decoration.VEGETAL_DECORATION, shortPlaced)
             .build();
         ResourceKey myBiomeKey = ResourceKey.of("example", "my_biome");
         CustomBiome.builder(myBiomeKey)

@@ -5,7 +5,7 @@ import dev.wyck.model.biome.Biome;
 import dev.wyck.wrapper.biome.BiomeSpecialEffects;
 import dev.wyck.wrapper.biome.BiomeGenerationSettings;
 import dev.wyck.wrapper.worldgen.blockpredicates.BlockPredicate;
-import dev.wyck.wrapper.worldgen.GenerationStep;
+import dev.wyck.wrapper.worldgen.Decoration;
 import dev.wyck.wrapper.worldgen.HeightmapType;
 import dev.wyck.wrapper.worldgen.feature.ConfiguredFeature;
 import dev.wyck.wrapper.worldgen.feature.FeatureType;
@@ -79,7 +79,7 @@ public class ExamplePlugin extends JavaPlugin {
                 .build())
             .generationSettings(
                 BiomeGenerationSettings.builder()
-                    .feature(GenerationStep.VEGETAL_DECORATION, PlacedFeature.builder()
+                    .feature(Decoration.VEGETAL_DECORATION, PlacedFeature.builder()
                         .feature(ConfiguredFeature.of(FeatureType.TREE, treeConfig))
                         .modifier(PlacementModifier.rarityFilter(1))
                         .modifier(PlacementModifier.inSquare())

@@ -1,3 +1,4 @@
+//a85d4002ae1614585eb1558a06eb52e3
 package dev.wyck.wrapper.worldgen;
 
 import dev.wyck.annotations.AsOf;
@@ -10,7 +11,7 @@ import org.jspecify.annotations.NullMarked;
  * Auto-generated. Do not modify!
  * Run ./gradlew generateSources to regenerate.
  * <p>
- * Wraps Minecraft's GenerationStep.Decoration.
+ * Wraps Minecraft's {@code GenerationStep.Decoration}.
  * </p>
  *
  * @since 2.3.0
@@ -19,8 +20,8 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.3.0")
-@Generated("2026-07-14T03:30:26.716022Z")
-public enum GenerationStep implements WrappedEnumerator<GenerationStep> {
+@Generated("2026-07-15T07:01:58.779385Z")
+public enum Decoration implements WrappedEnumerator<Decoration> {
 
     RAW_GENERATION("RAW_GENERATION"),
     LAKES("LAKES"),
@@ -34,12 +35,12 @@ public enum GenerationStep implements WrappedEnumerator<GenerationStep> {
     VEGETAL_DECORATION("VEGETAL_DECORATION"),
     TOP_LAYER_MODIFICATION("TOP_LAYER_MODIFICATION");
 
-    public static final KeyedEnumTranslator<GenerationStep> TRANSLATOR = KeyedEnumTranslator.byKey(GenerationStep::getKey, GenerationStep.values());
+    public static final KeyedEnumTranslator<Decoration> TRANSLATOR = KeyedEnumTranslator.byKey(Decoration::getKey, Decoration.values());
 
     private final String key;
 
     @AsOf("2.3.0")
-    GenerationStep(String key) {
+    Decoration(String key) {
         this.key = key;
     }
 
@@ -55,7 +56,7 @@ public enum GenerationStep implements WrappedEnumerator<GenerationStep> {
 
     @Override
     @AsOf("2.3.0")
-    public KeyedEnumTranslator<GenerationStep> translator() {
+    public KeyedEnumTranslator<Decoration> translator() {
         return TRANSLATOR;
     }
 }

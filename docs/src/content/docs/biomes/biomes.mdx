@@ -35,7 +35,7 @@ import dev.wyck.wrapper.environment.particle.ParticleOptions;
 import dev.wyck.wrapper.environment.particle.ParticleTypes;
 import dev.wyck.wrapper.environment.particle.options.BlockParticle;
 import dev.wyck.wrapper.worldgen.BiomeGenerationSettings;
-import dev.wyck.wrapper.worldgen.GenerationStep;
+import dev.wyck.wrapper.worldgen.Decoration;
 import dev.wyck.wrapper.worldgen.carver.CanyonCarverConfiguration;
 import dev.wyck.wrapper.worldgen.carver.CanyonShapeConfiguration;
 import dev.wyck.wrapper.worldgen.carver.ConfiguredWorldCarver;
@@ -109,16 +109,16 @@ public class ExamplePlugin extends JavaPlugin {
                             .build())
                         .build())
                     )
-                    .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeature.builder()
+                    .addFeature(Decoration.VEGETAL_DECORATION, PlacedFeature.builder()
                         .feature(new PillarFeature().register(), Pillarfeature.configurations.defaults()) // Declared in another class from my plugin
                         .modifier(PlacementModifier.count(1))
                         .build())
-                    .addFeature(GenerationStep.TOP_LAYER_MODIFICATION, PlacedFeature.builder()
+                    .addFeature(Decoration.TOP_LAYER_MODIFICATION, PlacedFeature.builder()
                         .feature(ConfiguredFeatures.PILE_SNOW) // Or use one that's already registered
                         .modifier(PlacementModifier.count(1))
                         .build())
-                    .addFeature(GenerationStep.UNDERGROUND_ORES, PlacedFeatures.ORE_IRON_SMALL)
-                    .addFeature(GenerationStep.RAW_GENERATION, PlacedFeature.builder()
+                    .addFeature(Decoration.UNDERGROUND_ORES, PlacedFeatures.ORE_IRON_SMALL)
+                    .addFeature(Decoration.RAW_GENERATION, PlacedFeature.builder()
                         .feature(ConfiguredFeature.vanilla(FeatureType.VEGETATION_PATCH, FeatureConfiguration.count(IntProvider.constant(3))))
                         .modifier(PlacementModifier.count(1))
                         .build())

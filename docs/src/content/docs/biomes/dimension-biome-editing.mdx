@@ -37,7 +37,7 @@ and the server will always be able to load the Minecraft world without your biom
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.registry.level.LevelStemEditor;
 import dev.wyck.wrapper.worldgen.BiomeGenerationSettings;
-import dev.wyck.wrapper.worldgen.GenerationStep;
+import dev.wyck.wrapper.worldgen.Decoration;
 import dev.wyck.wrapper.worldgen.placement.PlacedFeatures;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -45,8 +45,8 @@ public class ExamplePlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         BiomeGenerationSettings generation = BiomeGenerationSettings.builder()
-            .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeatures.TREES_PLAINS)
-            .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeatures.FALLEN_OAK_TREE)
+            .addFeature(Decoration.VEGETAL_DECORATION, PlacedFeatures.TREES_PLAINS)
+            .addFeature(Decoration.VEGETAL_DECORATION, PlacedFeatures.FALLEN_OAK_TREE)
             .build();
 
         ResourceKey myBiomeKey = ResourceKey.of("example", "my_biome");
@@ -91,7 +91,7 @@ import dev.wyck.keys.ResourceKey;
 import dev.wyck.registry.bootstrap.BootstrapBiomeRegistry;
 import dev.wyck.registry.bootstrap.Composer;
 import dev.wyck.wrapper.worldgen.BiomeGenerationSettings;
-import dev.wyck.wrapper.worldgen.GenerationStep;
+import dev.wyck.wrapper.worldgen.Decoration;
 import dev.wyck.wrapper.worldgen.placement.PlacedFeatures;
 
 public class ExampleBootstrapper implements PluginBootstrap {
@@ -100,8 +100,8 @@ public class ExampleBootstrapper implements PluginBootstrap {
         // This must use the 'DATAPACK' composer!
         BootstrapBiomeRegistry registry = BootstrapBiomeRegistry.compose(context, Composer.DATAPACK);
         BiomeGenerationSettings generation = BiomeGenerationSettings.builder()
-            .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeatures.TREES_PLAINS)
-            .addFeature(GenerationStep.VEGETAL_DECORATION, PlacedFeatures.FALLEN_OAK_TREE)
+            .addFeature(Decoration.VEGETAL_DECORATION, PlacedFeatures.TREES_PLAINS)
+            .addFeature(Decoration.VEGETAL_DECORATION, PlacedFeatures.FALLEN_OAK_TREE)
             .build();
 
         ResourceKey myBiomeKey = ResourceKey.of("example", "my_biome");

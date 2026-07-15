@@ -1,3 +1,4 @@
+//42c32203b390f60bd4870927a81d57e5
 package dev.wyck.wrapper.worldgen;
 
 import dev.wyck.annotations.AsOf;
@@ -19,7 +20,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("3.0.0")
-@Generated("2026-07-14T03:30:26.716626Z")
+@Generated("2026-07-15T07:01:58.780426Z")
 public enum HeightmapType implements WrappedEnumerator<HeightmapType> {
 
     WORLD_SURFACE_WG("WORLD_SURFACE_WG"),

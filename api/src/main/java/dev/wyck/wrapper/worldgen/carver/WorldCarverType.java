@@ -1,3 +1,4 @@
+//97df77a7acdc201f413218f223109fb8
 package dev.wyck.wrapper.worldgen.carver;
 
 import dev.wyck.annotations.AsOf;
@@ -21,7 +22,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.3.0")
-@Generated("2026-07-14T03:30:26.722786Z")
+@Generated("2026-07-15T07:01:58.789074Z")
 public enum WorldCarverType implements WrappedConstant<WorldCarverType> {
 
     CAVE("cave"),

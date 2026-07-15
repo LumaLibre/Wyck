@@ -1,14 +1,13 @@
 package dev.wyck.test;
 
 import dev.wyck.util.BukkitBootstrapUtil;
-import dev.wyck.wrapper.worldgen.feature.custom.CustomFeature;
+import dev.wyck.wrapper.worldgen.Decoration;
 import dev.wyck.wrapper.worldgen.valueproviders.IntProvider;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.test.worldgen.PillarFeature;
 import dev.wyck.wrapper.biome.BiomeGenerationSettings;
-import dev.wyck.wrapper.worldgen.GenerationStep;
 import dev.wyck.wrapper.worldgen.HeightmapType;
 import dev.wyck.wrapper.worldgen.feature.ConfiguredFeature;
 import dev.wyck.wrapper.worldgen.placement.PlacedFeature;
@@ -55,10 +54,10 @@ public class TestPluginBootstrapper implements PluginBootstrap {
 
 
         newGen = BiomeGenerationSettings.builder()
-            .feature(GenerationStep.VEGETAL_DECORATION, PlacedFeatures.TREES_PLAINS)
-            .feature(GenerationStep.VEGETAL_DECORATION, PlacedFeatures.FALLEN_OAK_TREE)
-            .feature(GenerationStep.VEGETAL_DECORATION, tallPlaced)
-            .feature(GenerationStep.VEGETAL_DECORATION, shortPlaced)
+            .feature(Decoration.VEGETAL_DECORATION, PlacedFeatures.TREES_PLAINS)
+            .feature(Decoration.VEGETAL_DECORATION, PlacedFeatures.FALLEN_OAK_TREE)
+            .feature(Decoration.VEGETAL_DECORATION, tallPlaced)
+            .feature(Decoration.VEGETAL_DECORATION, shortPlaced)
             .build();
     }
 }

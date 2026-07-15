@@ -1,3 +1,4 @@
+//81b6074b61ad87a3d43066aa5631aaba
 package dev.wyck.wrapper.biome.entity;
 
 import dev.wyck.annotations.AsOf;
@@ -19,7 +20,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.3.0")
-@Generated("2026-07-14T03:30:26.720811Z")
+@Generated("2026-07-15T07:01:58.786440Z")
 public enum MobCategory implements WrappedEnumerator<MobCategory> {
 
     MONSTER("monster"),

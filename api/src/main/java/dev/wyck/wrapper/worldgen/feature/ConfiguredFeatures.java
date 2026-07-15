@@ -1,3 +1,4 @@
+//f9e41b2cd5f0295274f596f24935a442
 package dev.wyck.wrapper.worldgen.feature;
 
 import dev.wyck.annotations.AsOf;
@@ -18,7 +19,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.3.0")
-@Generated("2026-07-14T03:30:26.678790Z")
+@Generated("2026-07-15T07:01:58.729613Z")
 public final class ConfiguredFeatures {
 
     // From: AquaticFeatures 

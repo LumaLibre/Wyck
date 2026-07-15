@@ -1,6 +1,6 @@
 package dev.wyck.wrapper.biome;
 
-import dev.wyck.wrapper.worldgen.GenerationStep;
+import dev.wyck.wrapper.worldgen.Decoration;
 import dev.wyck.wrapper.worldgen.carver.ConfiguredWorldCarver;
 import dev.wyck.wrapper.worldgen.placement.PlacedFeature;
 import org.jetbrains.annotations.ApiStatus;
@@ -14,14 +14,14 @@ import java.util.Map;
 @ApiStatus.Internal
 public record BiomeGenerationSettingsImpl(
     List<ConfiguredWorldCarver> carvers,
-    Map<GenerationStep, List<PlacedFeature>> features
+    Map<Decoration, List<PlacedFeature>> features
 ) implements BiomeGenerationSettings {
 
     public BiomeGenerationSettingsImpl {
         carvers = List.copyOf(carvers);
         // deep-copy the per-step lists so the map and its values are both immutable
-        Map<GenerationStep, List<PlacedFeature>> copied = new EnumMap<>(GenerationStep.class);
-        for (Map.Entry<GenerationStep, List<PlacedFeature>> entry : features.entrySet()) {
+        Map<Decoration, List<PlacedFeature>> copied = new EnumMap<>(Decoration.class);
+        for (Map.Entry<Decoration, List<PlacedFeature>> entry : features.entrySet()) {
             copied.put(entry.getKey(), List.copyOf(entry.getValue()));
         }
         features = Map.copyOf(copied);
@@ -35,7 +35,7 @@ public record BiomeGenerationSettingsImpl(
             builder.addCarver(carver.asHandle());
         }
 
-        for (Map.Entry<GenerationStep, List<PlacedFeature>> entry : this.features.entrySet()) {
+        for (Map.Entry<Decoration, List<PlacedFeature>> entry : this.features.entrySet()) {
             net.minecraft.world.level.levelgen.GenerationStep.Decoration step = entry.getKey().toNms(net.minecraft.world.level.levelgen.GenerationStep.Decoration.class);
             for (PlacedFeature feature : entry.getValue()) {
                 builder.addFeature(step, feature.asHandle());

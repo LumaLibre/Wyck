@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.ConstructWireProvider;
 import dev.wyck.wrapper.internal.Wrapper;
-import dev.wyck.wrapper.worldgen.GenerationStep;
+import dev.wyck.wrapper.worldgen.Decoration;
 import dev.wyck.wrapper.worldgen.carver.ConfiguredWorldCarver;
 import dev.wyck.wrapper.worldgen.carver.custom.CustomCarver;
 import dev.wyck.wrapper.worldgen.placement.PlacedFeature;
@@ -45,7 +45,7 @@ public interface BiomeGenerationSettings extends Wrapper {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    Map<GenerationStep, List<PlacedFeature>> features();
+    Map<Decoration, List<PlacedFeature>> features();
 
     /**
      * Converts this object back to a builder.
@@ -65,7 +65,7 @@ public interface BiomeGenerationSettings extends Wrapper {
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    static BiomeGenerationSettings of(List<ConfiguredWorldCarver> carvers, Map<GenerationStep, List<PlacedFeature>> features) {
+    static BiomeGenerationSettings of(List<ConfiguredWorldCarver> carvers, Map<Decoration, List<PlacedFeature>> features) {
         return WIRE.construct(carvers, features);
     }
 
@@ -99,14 +99,14 @@ public interface BiomeGenerationSettings extends Wrapper {
     final class Builder {
 
         private List<ConfiguredWorldCarver> carvers = new ArrayList<>();
-        private Map<GenerationStep, List<PlacedFeature>> features  = new EnumMap<>(GenerationStep.class);
+        private Map<Decoration, List<PlacedFeature>> features  = new EnumMap<>(Decoration.class);
 
         public Builder() {}
 
         public Builder(BiomeGenerationSettings settings) {
             this.carvers.addAll(settings.carvers());
             // undo deep copy
-            for (Map.Entry<GenerationStep, List<PlacedFeature>> entry : settings.features().entrySet()) {
+            for (Map.Entry<Decoration, List<PlacedFeature>> entry : settings.features().entrySet()) {
                 this.features.put(entry.getKey(), new ArrayList<>(entry.getValue()));
             }
         }
@@ -142,7 +142,7 @@ public interface BiomeGenerationSettings extends Wrapper {
          * @since 3.0.0
          */
         @AsOf("3.0.0")
-        public Builder features(Map<GenerationStep, List<PlacedFeature>> features) {
+        public Builder features(Map<Decoration, List<PlacedFeature>> features) {
             this.features = features;
             return this;
         }
@@ -184,7 +184,7 @@ public interface BiomeGenerationSettings extends Wrapper {
          * @since 2.3.0
          */
         @AsOf("2.3.0")
-        public Builder feature(GenerationStep step, PlacedFeature feature) {
+        public Builder feature(Decoration step, PlacedFeature feature) {
             Preconditions.checkNotNull(step, "step");
             Preconditions.checkNotNull(feature, "feature");
             this.features.computeIfAbsent(step, s -> new ArrayList<>()).add(feature);

@@ -1,3 +1,4 @@
+//7e9b8e0f3bf9ef540b5027ee932332b2
 package dev.wyck.model.level.dimension;
 
 import dev.wyck.annotations.AsOf;
@@ -18,7 +19,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("3.0.0")
-@Generated("2026-07-14T03:30:26.712990Z")
+@Generated("2026-07-15T07:01:58.778376Z")
 public final class Dimensions {
 
     // From: BuiltinDimensionTypes 

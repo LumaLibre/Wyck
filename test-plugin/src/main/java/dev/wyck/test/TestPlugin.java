@@ -25,7 +25,7 @@ import dev.wyck.wrapper.worldgen.function.DensityFunction;
 import dev.wyck.wrapper.worldgen.noise.NoiseSettings;
 import dev.wyck.wrapper.biome.BiomeGenerationSettings;
 import dev.wyck.wrapper.worldgen.blockpredicates.BlockPredicate;
-import dev.wyck.wrapper.worldgen.GenerationStep;
+import dev.wyck.wrapper.worldgen.Decoration;
 import dev.wyck.wrapper.worldgen.HeightmapType;
 import dev.wyck.wrapper.worldgen.carver.ConfiguredWorldCarver;
 import dev.wyck.wrapper.worldgen.feature.ConfiguredFeature;
@@ -41,8 +41,6 @@ import dev.wyck.wrapper.worldgen.placement.PlacementModifier;
 import dev.wyck.wrapper.worldgen.stateproviders.BlockStateProvider;
 import dev.wyck.wrapper.worldgen.surface.SurfaceRule;
 import dev.wyck.wrapper.worldgen.valueproviders.IntProvider;
-import net.minecraft.world.level.levelgen.flat.FlatLevelGeneratorPreset;
-import net.minecraft.world.level.levelgen.flat.FlatLevelGeneratorPresets;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.World;
@@ -120,7 +118,7 @@ public class TestPlugin extends JavaPlugin implements Listener {
                 .build())
             .generationSettings(
                 BiomeGenerationSettings.builder()
-                    .feature(GenerationStep.VEGETAL_DECORATION, PlacedFeature.builder()
+                    .feature(Decoration.VEGETAL_DECORATION, PlacedFeature.builder()
                         .feature(ConfiguredFeature.of(FeatureType.TREE, treeConfig))
                         .modifier(PlacementModifier.rarityFilter(1))
                         .modifier(PlacementModifier.inSquare())

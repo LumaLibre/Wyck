@@ -1,3 +1,4 @@
+//6180dcf697626cda31ff4ea3e50c8b9c
 package dev.wyck.wrapper.environment;
 
 import dev.wyck.annotations.AsOf;
@@ -22,7 +23,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("1.1.0")
-@Generated("2026-07-14T03:30:26.723152Z")
+@Generated("2026-07-15T07:01:58.789561Z")
 public enum Activity implements WrappedConstant<Activity> {
 
     CORE("core"),
