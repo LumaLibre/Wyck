@@ -3,6 +3,8 @@ package dev.wyck.wrapper.worldgen.blockpredicates;
 import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.ConstructWireProvider;
+import dev.wyck.util.BukkitBootstrapUtil;
+import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.util.BlockVector;
 import org.jetbrains.annotations.ApiStatus;
@@ -70,7 +72,30 @@ public interface WouldSurvivePredicate extends BlockPredicate {
      */
     @AsOf("3.0.0")
     static WouldSurvivePredicate of(BlockData state) {
-        return WIRE.construct(new BlockVector(0, 0, 0), state);
+        return of(new BlockVector(0, 0, 0), state);
+    }
+
+    /**
+     * Creates a new would survive predicate.
+     * @param offset the offset
+     * @param material the material to test
+     * @return the would survive predicate
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
+    static WouldSurvivePredicate of(BlockVector offset, Material material) {
+        return of(offset, BukkitBootstrapUtil.util().createBlockData(material));
+    }
+
+    /**
+     * Creates a new would survive predicate with a zero offset.
+     * @param material the material to test
+     * @return the would survive predicate
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
+    static WouldSurvivePredicate of(Material material) {
+        return of(new BlockVector(0, 0, 0), material);
     }
 
     /**
@@ -115,6 +140,18 @@ public interface WouldSurvivePredicate extends BlockPredicate {
         @AsOf("3.0.0")
         public Builder state(BlockData state) {
             this.state = state;
+            return this;
+        }
+
+        /**
+         * Sets the block state to test.
+         * @param material the material
+         * @return this builder
+         * @since 3.0.0
+         */
+        @AsOf("3.0.0")
+        public Builder state(Material material) {
+            this.state = BukkitBootstrapUtil.util().createBlockData(material);
             return this;
         }
 
