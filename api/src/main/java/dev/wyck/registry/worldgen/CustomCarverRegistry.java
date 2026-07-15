@@ -3,7 +3,7 @@ package dev.wyck.registry.worldgen;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.WireProvider;
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.wrapper.worldgen.carver.custom.CustomCarver;
+import dev.wyck.worldgen.carver.custom.CustomCarver;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 

@@ -1,13 +1,13 @@
 package dev.wyck.registry.bootstrap;
 
-import dev.wyck.model.biome.Biome;
-import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import dev.wyck.annotations.AsOf;
+import dev.wyck.biome.Biome;
 import dev.wyck.factory.WireProvider;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.registry.level.LevelStemEditor;
 import dev.wyck.util.ThrowingRunnable;
-import dev.wyck.wrapper.worldgen.climate.ClimatePoint;
+import dev.wyck.worldgen.climate.ClimatePoint;
+import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 

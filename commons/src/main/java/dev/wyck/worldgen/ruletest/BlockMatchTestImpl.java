@@ -1,0 +1,17 @@
+package dev.wyck.worldgen.ruletest;
+
+import org.bukkit.Material;
+import org.bukkit.craftbukkit.block.CraftBlockType;
+import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.NullMarked;
+
+@NullMarked
+@ApiStatus.Internal
+public record BlockMatchTestImpl(@Override Material block) implements BlockMatchTest {
+    @Override
+    public Object toMinecraft() {
+        return new net.minecraft.world.level.levelgen.structure.templatesystem.BlockMatchTest(
+            CraftBlockType.bukkitToMinecraft(block)
+        );
+    }
+}

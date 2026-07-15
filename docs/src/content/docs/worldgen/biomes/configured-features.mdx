@@ -25,8 +25,8 @@ typed references to every configured feature vanilla registrar.
 <CodeBlock
     lang="java"
     filename="ExamplePlugin.java"
-    code={`import dev.wyck.wrapper.worldgen.feature.ConfiguredFeature;
-import dev.wyck.wrapper.worldgen.feature.ConfiguredFeatures;
+    code={`import dev.wyck.worldgen.feature.ConfiguredFeature;
+import dev.wyck.worldgen.feature.ConfiguredFeatures;
 
 // a reference straight from the catalog
 ConfiguredFeature largeDiamonds = ConfiguredFeatures.ORE_DIAMOND_LARGE;
@@ -48,22 +48,22 @@ All wrappers extend the <SourceLink path="worldgen.feature.configurations/Featur
     filename="ExamplePlugin.java"
     code={
 `import dev.wyck.keys.ResourceKey;
-import dev.wyck.model.biome.Biome;
-import dev.wyck.wrapper.worldgen.BiomeGenerationSettings;
-import dev.wyck.wrapper.worldgen.BlockPredicate;
-import dev.wyck.wrapper.worldgen.Decoration;
-import dev.wyck.wrapper.worldgen.HeightmapType;
-import dev.wyck.wrapper.worldgen.feature.ConfiguredFeature;
-import dev.wyck.wrapper.worldgen.feature.FeatureType;
-import dev.wyck.wrapper.worldgen.feature.configurations.FeatureConfiguration;
-import dev.wyck.wrapper.worldgen.feature.configurations.TreeConfiguration;
-import dev.wyck.wrapper.worldgen.feature.featuresize.TwoLayersFeatureSize;
-import dev.wyck.wrapper.worldgen.feature.foliageplacers.PineFoliagePlacer;
-import dev.wyck.wrapper.worldgen.feature.trunkplacers.StraightTrunkPlacer;
-import dev.wyck.wrapper.worldgen.placement.PlacedFeature;
-import dev.wyck.wrapper.worldgen.placement.PlacementModifier;
-import dev.wyck.wrapper.worldgen.stateproviders.BlockStateProvider;
-import dev.wyck.wrapper.worldgen.valueproviders.IntProvider;
+import dev.wyck.biome.Biome;
+import dev.wyck.worldgen.BiomeGenerationSettings;
+import dev.wyck.worldgen.BlockPredicate;
+import dev.wyck.worldgen.Decoration;
+import dev.wyck.worldgen.HeightmapType;
+import dev.wyck.worldgen.feature.ConfiguredFeature;
+import dev.wyck.worldgen.feature.FeatureType;
+import dev.wyck.worldgen.feature.configurations.FeatureConfiguration;
+import dev.wyck.worldgen.feature.configurations.TreeConfiguration;
+import dev.wyck.worldgen.feature.featuresize.TwoLayersFeatureSize;
+import dev.wyck.worldgen.feature.foliageplacers.PineFoliagePlacer;
+import dev.wyck.worldgen.feature.trunkplacers.StraightTrunkPlacer;
+import dev.wyck.worldgen.placement.PlacedFeature;
+import dev.wyck.worldgen.placement.PlacementModifier;
+import dev.wyck.worldgen.stateproviders.BlockStateProvider;
+import dev.wyck.worldgen.valueproviders.IntProvider;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -138,8 +138,8 @@ And pair it with your own configuration context.
             label: "PillarFeature.java",
             lang: "java",
             code:
-`import dev.wyck.wrapper.worldgen.feature.custom.CustomFeature;
-import dev.wyck.wrapper.worldgen.feature.custom.PlacementContext;
+`import dev.wyck.worldgen.feature.custom.CustomFeature;
+import dev.wyck.worldgen.feature.custom.PlacementContext;
 import org.bukkit.Material;
 import org.bukkit.util.BlockVector;
 import org.jspecify.annotations.NonNull;
@@ -182,18 +182,18 @@ public class PillarFeature extends CustomFeature<@NotNull PillarFeature.PillarCo
             label: "ExamplePlugin.java",
             lang: "java",
             code:
-`import dev.wyck.model.biome.CustomBiome;
+`import dev.wyck.biome.CustomBiome;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.registry.level.LevelStemEditor;
 import dev.wyck.worldgen.PillarFeature;
-import dev.wyck.wrapper.worldgen.BiomeGenerationSettings;
-import dev.wyck.wrapper.worldgen.Decoration;
-import dev.wyck.wrapper.worldgen.HeightmapType;
-import dev.wyck.wrapper.worldgen.feature.ConfiguredFeature;
-import dev.wyck.wrapper.worldgen.feature.custom.CustomFeature;
-import dev.wyck.wrapper.worldgen.placement.PlacedFeature;
-import dev.wyck.wrapper.worldgen.placement.PlacedFeatures;
-import dev.wyck.wrapper.worldgen.placement.PlacementModifier;
+import dev.wyck.worldgen.BiomeGenerationSettings;
+import dev.wyck.worldgen.Decoration;
+import dev.wyck.worldgen.HeightmapType;
+import dev.wyck.worldgen.feature.ConfiguredFeature;
+import dev.wyck.worldgen.feature.custom.CustomFeature;
+import dev.wyck.worldgen.placement.PlacedFeature;
+import dev.wyck.worldgen.placement.PlacedFeatures;
+import dev.wyck.worldgen.placement.PlacementModifier;
 import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
 

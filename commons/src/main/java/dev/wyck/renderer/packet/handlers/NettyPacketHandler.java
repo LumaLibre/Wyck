@@ -1,19 +1,19 @@
 package dev.wyck.renderer.packet.handlers;
 
+import dev.wyck.annotations.AsOf;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.misc.ChunkLocation;
+import dev.wyck.renderer.packet.PacketHandler;
+import dev.wyck.renderer.packet.VirtualBiomeCollector;
+import dev.wyck.renderer.packet.VirtualBiomeResolver;
+import dev.wyck.renderer.packet.data.BlockReplacement;
+import dev.wyck.renderer.packet.data.VirtualBiome;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.ChannelPromise;
 import io.papermc.paper.network.ChannelInitializeListenerHolder;
-import dev.wyck.annotations.AsOf;
-import dev.wyck.misc.ChunkLocation;
-import dev.wyck.keys.ResourceKey;
-import dev.wyck.renderer.packet.PacketHandler;
-import dev.wyck.renderer.packet.VirtualBiomeResolver;
-import dev.wyck.renderer.packet.VirtualBiomeCollector;
-import dev.wyck.renderer.packet.data.BlockReplacement;
-import dev.wyck.renderer.packet.data.VirtualBiome;
 import net.kyori.adventure.key.Key;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;

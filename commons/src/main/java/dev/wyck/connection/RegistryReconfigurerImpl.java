@@ -1,11 +1,11 @@
 package dev.wyck.connection;
 
 import com.mojang.authlib.GameProfile;
+import dev.wyck.exceptions.HorriblePlayerLoginEvent;
 import io.papermc.paper.connection.PaperCommonConnection;
 import io.papermc.paper.connection.PaperPlayerConfigurationConnection;
 import io.papermc.paper.connection.PlayerConfigurationConnection;
 import io.papermc.paper.event.connection.configuration.PlayerConnectionReconfigureEvent;
-import dev.wyck.exceptions.HorriblePlayerLoginEvent;
 import net.minecraft.core.LayeredRegistryAccess;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.common.ClientboundUpdateTagsPacket;

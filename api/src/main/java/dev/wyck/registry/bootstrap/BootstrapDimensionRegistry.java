@@ -1,10 +1,10 @@
 package dev.wyck.registry.bootstrap;
 
-import dev.wyck.model.level.dimension.Dimension;
-import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.WireProvider;
+import dev.wyck.level.dimension.Dimension;
 import dev.wyck.util.ThrowingRunnable;
+import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 

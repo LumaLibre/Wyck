@@ -3,7 +3,7 @@ package dev.wyck.util;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.annotations.MinecraftUtil;
 import dev.wyck.factory.ConstructWireProvider;
-import dev.wyck.wrapper.internal.Wrapper;
+import dev.wyck.wrapper.Wrapper;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 

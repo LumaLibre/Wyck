@@ -21,35 +21,35 @@ but you may also omit any of these attributes if you do not wish to use them.
     filename="ExamplePlugin.java"
     code={
 `import dev.wyck.keys.ResourceKey;
-import dev.wyck.model.biome.Biome;
+import dev.wyck.biome.Biome;
 import dev.wyck.example.PillarFeature;
-import dev.wyck.wrapper.biome.BiomeSpecialEffects;
-import dev.wyck.wrapper.biome.ClimateSettings;
-import dev.wyck.wrapper.biome.TemperatureModifier;
-import dev.wyck.wrapper.entity.BiomeSpawner;
-import dev.wyck.wrapper.entity.MobCategory;
-import dev.wyck.wrapper.entity.data.NaturalSpawner;
-import dev.wyck.wrapper.environment.attribute.EnvironmentAttributes;
-import dev.wyck.wrapper.environment.particle.ParticleCatalog;
-import dev.wyck.wrapper.environment.particle.ParticleOptions;
-import dev.wyck.wrapper.environment.particle.ParticleTypes;
-import dev.wyck.wrapper.environment.particle.options.BlockParticle;
-import dev.wyck.wrapper.worldgen.BiomeGenerationSettings;
-import dev.wyck.wrapper.worldgen.Decoration;
-import dev.wyck.wrapper.worldgen.carver.CanyonCarverConfiguration;
-import dev.wyck.wrapper.worldgen.carver.CanyonShapeConfiguration;
-import dev.wyck.wrapper.worldgen.carver.ConfiguredWorldCarver;
-import dev.wyck.wrapper.worldgen.feature.ConfiguredFeature;
-import dev.wyck.wrapper.worldgen.feature.ConfiguredFeatures;
-import dev.wyck.wrapper.worldgen.feature.FeatureType;
-import dev.wyck.wrapper.worldgen.feature.configurations.FeatureConfiguration;
-import dev.wyck.wrapper.worldgen.placement.PlacedFeature;
-import dev.wyck.wrapper.worldgen.placement.PlacedFeatures;
-import dev.wyck.wrapper.worldgen.placement.PlacementModifier;
-import dev.wyck.wrapper.worldgen.valueproviders.FloatProvider;
-import dev.wyck.wrapper.worldgen.valueproviders.HeightProvider;
-import dev.wyck.wrapper.worldgen.valueproviders.IntProvider;
-import dev.wyck.wrapper.worldgen.valueproviders.VerticalAnchor;
+import dev.wyck.biome.BiomeSpecialEffects;
+import dev.wyck.biome.ClimateSettings;
+import dev.wyck.biome.TemperatureModifier;
+import dev.wyck.entity.BiomeSpawner;
+import dev.wyck.entity.MobCategory;
+import dev.wyck.entity.data.NaturalSpawner;
+import dev.wyck.environment.attribute.EnvironmentAttributes;
+import dev.wyck.environment.particle.ParticleCatalog;
+import dev.wyck.environment.particle.ParticleOptions;
+import dev.wyck.environment.particle.ParticleTypes;
+import dev.wyck.environment.particle.options.BlockParticle;
+import dev.wyck.worldgen.BiomeGenerationSettings;
+import dev.wyck.worldgen.Decoration;
+import dev.wyck.worldgen.carver.CanyonCarverConfiguration;
+import dev.wyck.worldgen.carver.CanyonShapeConfiguration;
+import dev.wyck.worldgen.carver.ConfiguredWorldCarver;
+import dev.wyck.worldgen.feature.ConfiguredFeature;
+import dev.wyck.worldgen.feature.ConfiguredFeatures;
+import dev.wyck.worldgen.feature.FeatureType;
+import dev.wyck.worldgen.feature.configurations.FeatureConfiguration;
+import dev.wyck.worldgen.placement.PlacedFeature;
+import dev.wyck.worldgen.placement.PlacedFeatures;
+import dev.wyck.worldgen.placement.PlacementModifier;
+import dev.wyck.worldgen.valueproviders.FloatProvider;
+import dev.wyck.worldgen.valueproviders.HeightProvider;
+import dev.wyck.worldgen.valueproviders.IntProvider;
+import dev.wyck.worldgen.valueproviders.VerticalAnchor;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -142,9 +142,8 @@ for easier mutation of biomes you're creating.
     lang="java"
     filename="ExamplePlugin.java"
     code={
-`import dev.wyck.model.biome.CustomBiome;
+`import dev.wyck.biome.CustomBiome;
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.wrapper.BiomeSettings;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ExamplePlugin extends JavaPlugin {

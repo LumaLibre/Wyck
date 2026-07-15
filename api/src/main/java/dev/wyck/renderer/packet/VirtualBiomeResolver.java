@@ -1,8 +1,8 @@
 package dev.wyck.renderer.packet;
 
 import dev.wyck.annotations.AsOf;
-import dev.wyck.renderer.packet.data.VirtualBiome;
 import dev.wyck.renderer.packet.data.SnapshotChunkData;
+import dev.wyck.renderer.packet.data.VirtualBiome;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;

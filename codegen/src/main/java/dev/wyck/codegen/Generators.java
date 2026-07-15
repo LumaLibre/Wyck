@@ -79,7 +79,7 @@ public final class Generators {
 
     private static GeneratorSpec configuredFeatures() {
         return new ReferenceSpec(
-            "dev.wyck.wrapper.worldgen.feature",
+            "dev.wyck.worldgen.feature",
             "ConfiguredFeatures",
             "ConfiguredFeature",
             "ConfiguredFeature.reference",
@@ -104,7 +104,7 @@ public final class Generators {
 
     private static GeneratorSpec placedFeatures() {
         return new ReferenceSpec(
-            "dev.wyck.wrapper.worldgen.placement",
+            "dev.wyck.worldgen.placement",
             "PlacedFeatures",
             "PlacedFeature",
             "PlacedFeature.reference",
@@ -129,7 +129,7 @@ public final class Generators {
 
     private static GeneratorSpec densityFunctions() {
         return new ReferenceSpec(
-            "dev.wyck.wrapper.worldgen.function",
+            "dev.wyck.worldgen.function",
             "DensityFunctions",
             "DensityFunction",
             "DensityFunction.reference",
@@ -146,7 +146,7 @@ public final class Generators {
 
     private static GeneratorSpec noiseParameters() {
         return new ReferenceSpec(
-            "dev.wyck.wrapper.worldgen.synth",
+            "dev.wyck.worldgen.synth",
             "Noises",
             "NoiseParameters",
             "NoiseParameters.reference",
@@ -163,7 +163,7 @@ public final class Generators {
 
     private static GeneratorSpec soundEvents() {
         return new ReferenceSpec(
-            "dev.wyck.wrapper.environment.sounds",
+            "dev.wyck.environment.sounds",
             "SoundEvents",
             "SoundEvent",
             "SoundEvent.variableRange",
@@ -181,7 +181,7 @@ public final class Generators {
 
     private static GeneratorSpec biomeKeys() {
         return new ReferenceSpec(
-            "dev.wyck.model.biome",
+            "dev.wyck.biome",
             "Biomes",
             "Biome",
             "Biome.reference",
@@ -198,7 +198,7 @@ public final class Generators {
 
     private static GeneratorSpec dimensionKeys() {
         return new ReferenceSpec(
-            "dev.wyck.model.level.dimension",
+            "dev.wyck.level.dimension",
             "Dimensions",
             "Dimension",
             "Dimension.reference",
@@ -215,7 +215,7 @@ public final class Generators {
 
     private static GeneratorSpec decorations() {
         return new EnumSpec(
-            "dev.wyck.wrapper.worldgen",
+            "dev.wyck.worldgen",
             "Decoration",
             GenerationStep.Decoration.class,
             Generators::enumName,
@@ -226,7 +226,7 @@ public final class Generators {
 
     private static GeneratorSpec heightmapTypes() {
         return new EnumSpec(
-            "dev.wyck.wrapper.worldgen",
+            "dev.wyck.worldgen",
             "HeightmapType",
             Heightmap.Types.class,
             Generators::enumName,
@@ -237,7 +237,7 @@ public final class Generators {
 
     private static GeneratorSpec caveSurfaces() {
         return new EnumSpec(
-            "dev.wyck.wrapper.worldgen.surface.condition",
+            "dev.wyck.worldgen.surface.condition",
             "CaveSurface",
             CaveSurface.class,
             List.of(
@@ -253,7 +253,7 @@ public final class Generators {
 
     private static GeneratorSpec tristates() {
         return new EnumSpec(
-            "dev.wyck.wrapper.environment",
+            "dev.wyck.environment",
             "TriState",
             TriState.class,
             "Represents a tri-state value, which can be true, false, or default.",
@@ -263,7 +263,7 @@ public final class Generators {
 
     private static GeneratorSpec skyboxes() {
         return new EnumSpec(
-            "dev.wyck.wrapper.level.dimension",
+            "dev.wyck.level.dimension",
             "Skybox",
             DimensionType.Skybox.class,
             Generators::serializedName,
@@ -274,7 +274,7 @@ public final class Generators {
 
     private static GeneratorSpec cardinalLightTypes() {
         return new EnumSpec(
-            "dev.wyck.wrapper.level.dimension",
+            "dev.wyck.level.dimension",
             "CardinalLightType",
             CardinalLighting.Type.class,
             Generators::serializedName,
@@ -285,7 +285,7 @@ public final class Generators {
 
     private static GeneratorSpec moonPhases() {
         return new EnumSpec(
-            "dev.wyck.wrapper.environment",
+            "dev.wyck.environment",
             "MoonPhase",
             MoonPhase.class,
             Generators::serializedName,
@@ -299,7 +299,7 @@ public final class Generators {
 
     private static GeneratorSpec grassColorModifiers() {
         return new EnumSpec(
-            "dev.wyck.wrapper.environment",
+            "dev.wyck.environment",
             "GrassColorModifier",
             BiomeSpecialEffects.GrassColorModifier.class,
             Generators::serializedName,
@@ -314,7 +314,7 @@ public final class Generators {
 
     private static GeneratorSpec temperatureModifiers() {
         return new EnumSpec(
-            "dev.wyck.wrapper.biome",
+            "dev.wyck.biome",
             "TemperatureModifier",
             Biome.TemperatureModifier.class,
             Generators::serializedName,
@@ -329,7 +329,7 @@ public final class Generators {
 
     private static GeneratorSpec mobCategories() {
         return new EnumSpec(
-            "dev.wyck.wrapper.biome.entity",
+            "dev.wyck.biome.entity",
             "MobCategory",
             MobCategory.class,
             Generators::serializedName,
@@ -340,7 +340,7 @@ public final class Generators {
 
     private static GeneratorSpec fluidTypes() {
         return new ConstantSpec(
-            "dev.wyck.wrapper.worldgen.material",
+            "dev.wyck.worldgen.material",
             "FluidType",
             Fluid.class,
             Generators::fluidLocation,
@@ -355,7 +355,7 @@ public final class Generators {
 
     private static GeneratorSpec featureTypes() {
         return new ConstantSpec(
-            "dev.wyck.wrapper.worldgen.feature",
+            "dev.wyck.worldgen.feature",
             "FeatureType",
             Feature.class,
             Generators::featureLocation,
@@ -370,7 +370,7 @@ public final class Generators {
 
     private static GeneratorSpec worldCarverTypes() {
         return new ConstantSpec(
-            "dev.wyck.wrapper.worldgen.carver",
+            "dev.wyck.worldgen.carver",
             "WorldCarverType",
             WorldCarver.class,
             Generators::worldCarverLocation,
@@ -385,7 +385,7 @@ public final class Generators {
 
     private static GeneratorSpec activities() {
         return new ConstantSpec(
-            "dev.wyck.wrapper.environment",
+            "dev.wyck.environment",
             "Activity",
             Activity.class,
             Generators::activityLocation,
@@ -403,7 +403,7 @@ public final class Generators {
 
     private static GeneratorSpec structureSets() {
         return new ReferenceSpec(
-            "dev.wyck.wrapper.worldgen.structure",
+            "dev.wyck.worldgen.structure",
             "StructureSets",
             "ResourceKey",
             "",

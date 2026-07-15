@@ -1,10 +1,10 @@
 package dev.wyck.connection;
 
-import io.papermc.paper.connection.PlayerConfigurationConnection;
 import dev.wyck.Wyck;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.exceptions.HorriblePlayerLoginEvent;
 import dev.wyck.factory.WireProvider;
+import io.papermc.paper.connection.PlayerConfigurationConnection;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.ApiStatus;

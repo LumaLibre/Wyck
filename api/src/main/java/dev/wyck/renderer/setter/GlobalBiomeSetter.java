@@ -2,7 +2,7 @@ package dev.wyck.renderer.setter;
 
 import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
-import dev.wyck.model.biome.Biome;
+import dev.wyck.biome.Biome;
 import dev.wyck.misc.PointRange3D;
 import dev.wyck.renderer.updater.BiomeUpdater;
 import org.bukkit.Chunk;

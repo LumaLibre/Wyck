@@ -1,9 +1,9 @@
 package dev.wyck.registry;
 
 import dev.wyck.annotations.AsOf;
-import dev.wyck.keys.ResourceKey;
-import dev.wyck.model.level.dimension.Dimension;
 import dev.wyck.factory.WireProvider;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.level.dimension.Dimension;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 

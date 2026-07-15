@@ -1,24 +1,24 @@
 package dev.wyck.test;
 
-import dev.wyck.model.level.dimension.Dimension;
+import dev.wyck.level.dimension.Dimension;
 import dev.wyck.registry.bootstrap.BootstrapDimensionRegistry;
-import dev.wyck.wrapper.environment.BedRule;
-import dev.wyck.wrapper.environment.attribute.EnvironmentAttributes;
-import dev.wyck.wrapper.environment.particle.ParticleTypes;
-import dev.wyck.wrapper.environment.particle.options.DustParticle;
-import dev.wyck.wrapper.level.dimension.WorldClock;
-import dev.wyck.wrapper.level.dimension.CardinalLightType;
-import dev.wyck.wrapper.level.dimension.Infiniburn;
-import dev.wyck.wrapper.level.dimension.Skybox;
+import dev.wyck.environment.BedRule;
+import dev.wyck.environment.attribute.EnvironmentAttributes;
+import dev.wyck.environment.particle.ParticleTypes;
+import dev.wyck.environment.particle.options.DustParticle;
+import dev.wyck.level.dimension.WorldClock;
+import dev.wyck.level.dimension.CardinalLightType;
+import dev.wyck.level.dimension.Infiniburn;
+import dev.wyck.level.dimension.Skybox;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
-import dev.wyck.model.biome.CustomBiome;
+import dev.wyck.biome.CustomBiome;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.registry.bootstrap.BootstrapBiomeRegistry;
 import dev.wyck.registry.bootstrap.Composer;
-import dev.wyck.wrapper.biome.BiomeGenerationSettings;
-import dev.wyck.wrapper.worldgen.Decoration;
-import dev.wyck.wrapper.worldgen.placement.PlacedFeatures;
+import dev.wyck.biome.BiomeGenerationSettings;
+import dev.wyck.worldgen.Decoration;
+import dev.wyck.worldgen.placement.PlacedFeatures;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 

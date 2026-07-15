@@ -6,6 +6,11 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
+/**
+ * Internal utility class for handling hex colors.
+ * Please be aware that methods in this class can
+ * change without warning.
+ */
 @AsOf("3.0.0")
 @ApiStatus.Internal
 public final class FriendlyColorUtil {

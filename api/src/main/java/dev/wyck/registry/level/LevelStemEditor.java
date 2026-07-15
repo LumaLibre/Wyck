@@ -4,7 +4,7 @@ import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.WireProvider;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.registry.bootstrap.BootstrapBiomeRegistry;
-import dev.wyck.wrapper.worldgen.climate.ClimatePoint;
+import dev.wyck.worldgen.climate.ClimatePoint;
 import org.bukkit.World;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;

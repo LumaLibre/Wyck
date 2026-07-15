@@ -1,11 +1,11 @@
 package dev.wyck.renderer.packet;
 
 import dev.wyck.annotations.AsOf;
-import dev.wyck.model.biome.Biome;
-import dev.wyck.misc.ChunkLocation;
+import dev.wyck.biome.Biome;
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.renderer.packet.data.VirtualBiome;
+import dev.wyck.misc.ChunkLocation;
 import dev.wyck.renderer.packet.data.SnapshotChunkData;
+import dev.wyck.renderer.packet.data.VirtualBiome;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;

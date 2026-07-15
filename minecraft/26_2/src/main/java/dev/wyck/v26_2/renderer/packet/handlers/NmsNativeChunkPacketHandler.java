@@ -1,16 +1,16 @@
 package dev.wyck.v26_2.renderer.packet.handlers;
 
-import dev.wyck.renderer.packet.data.VirtualBiome;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import dev.wyck.annotations.WireFactory;
 import dev.wyck.misc.ChunkLocation;
 import dev.wyck.renderer.packet.PacketHandler;
 import dev.wyck.renderer.packet.VirtualBiomeResolver;
 import dev.wyck.renderer.packet.data.BlockReplacement;
 import dev.wyck.renderer.packet.data.SnapshotChunkData;
+import dev.wyck.renderer.packet.data.VirtualBiome;
 import dev.wyck.renderer.packet.handlers.NativeChunkPacketHandler;
 import dev.wyck.v26_2.renderer.packet.handlers.data.NmsSnapshotChunkData;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import net.minecraft.core.Holder;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.game.ClientboundLevelChunkPacketData;

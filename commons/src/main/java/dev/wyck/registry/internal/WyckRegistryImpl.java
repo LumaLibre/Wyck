@@ -1,11 +1,10 @@
 package dev.wyck.registry.internal;
 
 import com.google.common.base.Preconditions;
-import dev.wyck.annotations.AsOf;
-import io.papermc.paper.registry.RegistryKey;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.util.BootstrapSafeMinecraftRegistries;
 import dev.wyck.util.ThrowingRunnable;
+import io.papermc.paper.registry.RegistryKey;
 import net.minecraft.core.Holder;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
