@@ -25,6 +25,7 @@ public final class WyckPlugin extends JavaPlugin implements Wyck {
 
     public static boolean STOPPING = false;
     private static final String CONFIG_FILE = "settings.yml";
+    private static final String METRICS_TOKEN = "1fad62f4a237fd41d17d1d328ccd12bd"; // not sensitive
 
     private final PacketHandlerFactoryPluginImpl handlerFactory;
     private final WyckPluginConfig config;
@@ -60,7 +61,7 @@ public final class WyckPlugin extends JavaPlugin implements Wyck {
         this.handlerFactory.enableDeferredHandlers();
 
         if (this.config.metrics()) {
-            this.metrics = new BukkitContext.Factory(this, BuildInfo.METRICS_TOKEN)
+            this.metrics = new BukkitContext.Factory(this, METRICS_TOKEN)
                 .metrics(factory -> factory
                     .addMetric(Metric.string("forced_injector", () -> config.forcedInjector().toString()))
                     .addMetric(Metric.number("registered_biomes", KeyChains.BIOMES::size))

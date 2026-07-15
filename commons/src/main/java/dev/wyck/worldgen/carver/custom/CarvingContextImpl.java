@@ -202,7 +202,7 @@ public final class CarvingContextImpl<C> implements CarvingContext<C> {
     }
 
     @Override
-    @Deprecated
+    @SuppressWarnings("deprecation")
     public Optional<BlockData> topMaterial(int x, int y, int z, boolean underFluid) {
         return this.handle.topMaterial(this.biomeGetter, this.chunk, this.scratch.set(x, y, z), underFluid)
             .map(CraftBlockData::createData);
