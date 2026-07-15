@@ -126,4 +126,16 @@ public class BiomeImpl implements Biome {
     public Object toMinecraft() {
         return BiomeRegistry.registry().buildDelegate(this);
     }
+
+    @Override
+    public String toString() {
+        return "BiomeImpl{" +
+            "resourceKey=" + resourceKey +
+            ", climateSettings=" + climateSettings +
+            ", specialEffects=" + specialEffects +
+            ", attributes=" + attributes +
+            ", biomeSpawner=" + biomeSpawner +
+            ", generationSettings=" + generationSettings +
+            '}';
+    }
 }

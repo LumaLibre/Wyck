@@ -109,4 +109,20 @@ public final class LevelCreatorImpl implements LevelCreator {
     public @Nullable World bukkitWorld() {
         return Bukkit.getWorld(levelKey);
     }
+
+    @Override
+    public String toString() {
+        return "LevelCreatorImpl{" +
+            "levelKey=" + levelKey +
+            ", dimension=" + dimension +
+            ", generator=" + generator +
+            ", seed=" + seed +
+            ", generateStructures=" + generateStructures +
+            ", bonusChest=" + bonusChest +
+            ", environment=" + environment +
+            ", persistence=" + persistence +
+            ", spawners=" + spawners +
+            ", name='" + name + '\'' +
+            '}';
+    }
 }

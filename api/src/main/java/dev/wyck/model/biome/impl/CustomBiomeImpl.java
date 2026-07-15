@@ -57,4 +57,11 @@ public class CustomBiomeImpl extends BiomeImpl implements CustomBiome {
         if (!this.blockReplacements.equals(otherBiome.blockReplacements())) return false;
         return super.isSimilar(otherBiome);
     }
+
+    @Override
+    public String toString() {
+        return "CustomBiomeImpl{" +
+                "blockReplacements=" + blockReplacements +
+                "} " + super.toString();
+    }
 }
