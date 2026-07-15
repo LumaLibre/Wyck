@@ -3,9 +3,10 @@ package dev.wyck.registry.bootstrap;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.biome.Biome;
 import dev.wyck.factory.WireProvider;
-import dev.wyck.keys.ResourceKey;
+import dev.wyck.level.dimension.Dimension;
 import dev.wyck.registry.level.LevelStemEditor;
 import dev.wyck.util.ThrowingRunnable;
+import dev.wyck.worldgen.chunk.ChunkGenerator;
 import dev.wyck.worldgen.climate.ClimatePoint;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import org.jetbrains.annotations.ApiStatus;
@@ -102,11 +103,11 @@ public interface BootstrapBiomeRegistry {
      * @param placement the climate point to place the biome at
      * @return this registry instance
      * @throws UnsupportedOperationException if the implementation does not support this operation
-     * @see LevelStemEditor#addToDimension(ResourceKey, ResourceKey, ClimatePoint)
+     * @see LevelStemEditor#chunkGenerator(ChunkGenerator)
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    BootstrapBiomeRegistry addToDimension(ResourceKey dimension, ResourceKey target, ClimatePoint placement) throws UnsupportedOperationException;
+    BootstrapBiomeRegistry addToDimension(Dimension dimension, Biome target, ClimatePoint placement) throws UnsupportedOperationException;
 
     /**
      * Replaces a biome in a dimension.
@@ -115,9 +116,9 @@ public interface BootstrapBiomeRegistry {
      * @param replacement the biome to replace with
      * @return this registry instance
      * @throws UnsupportedOperationException if the implementation does not support this operation
-     * @see LevelStemEditor#replaceInDimension(ResourceKey, ResourceKey, ResourceKey)
+     * @see LevelStemEditor#chunkGenerator(ChunkGenerator)
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    BootstrapBiomeRegistry replaceInDimension(ResourceKey dimension, ResourceKey target, ResourceKey replacement) throws UnsupportedOperationException;
+    BootstrapBiomeRegistry replaceInDimension(Dimension dimension, Biome target, Biome replacement) throws UnsupportedOperationException;
 }

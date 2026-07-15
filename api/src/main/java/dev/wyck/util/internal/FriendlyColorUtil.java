@@ -15,6 +15,8 @@ import org.jspecify.annotations.Nullable;
 @ApiStatus.Internal
 public final class FriendlyColorUtil {
 
+    private FriendlyColorUtil() {}
+
     @AsOf("3.0.0")
     public static @Nullable Integer hexOrNull(@Nullable String color) {
         if (color == null || color.isEmpty()) return null;

@@ -6,6 +6,7 @@ import dev.wyck.annotations.WireFactory;
 import dev.wyck.biome.Biome;
 import dev.wyck.keys.KeyChains;
 import dev.wyck.keys.ResourceKey;
+import dev.wyck.level.dimension.Dimension;
 import dev.wyck.registry.BiomeRegistry;
 import dev.wyck.util.ThrowingRunnable;
 import dev.wyck.worldgen.climate.ClimatePoint;
@@ -211,13 +212,13 @@ public final class UnsafePaperBootstrapBiomeRegistry implements BootstrapBiomeRe
 
 
     @Override
-    public BootstrapBiomeRegistry replaceInDimension(ResourceKey dimension, ResourceKey target, ResourceKey replacement) {
-        throw new UnsupportedOperationException("Unsupported. dev.wyck.registry.dimension.DimensionEditor.");
+    public BootstrapBiomeRegistry addToDimension(Dimension dimension, Biome target, ClimatePoint placement) {
+        throw new UnsupportedOperationException();
     }
 
     @Override
-    public BootstrapBiomeRegistry addToDimension(ResourceKey dimension, ResourceKey target, ClimatePoint placement) {
-        throw new UnsupportedOperationException("Unsupported. dev.wyck.registry.dimension.DimensionEditor.");
+    public BootstrapBiomeRegistry replaceInDimension(Dimension dimension, Biome target, Biome replacement) {
+        throw new UnsupportedOperationException();
     }
 
     private static net.minecraft.resources.ResourceKey<net.minecraft.world.level.biome.Biome> nmsKeyOf(Biome cb) {

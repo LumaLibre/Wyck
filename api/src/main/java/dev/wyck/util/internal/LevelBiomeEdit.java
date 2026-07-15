@@ -1,8 +1,9 @@
-package dev.wyck.registry.level;
+package dev.wyck.util.internal;
 
 import dev.wyck.annotations.AsOf;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.worldgen.climate.ClimatePoint;
+import org.jetbrains.annotations.ApiStatus;
 
 /**
  * Represents an edit to a dimension's biome distribution, either adding a biome at a climate point or replacing one biome with another.
@@ -12,6 +13,7 @@ import dev.wyck.worldgen.climate.ClimatePoint;
  * @author Jsinco
  */
 @AsOf("2.3.0")
+@ApiStatus.Internal
 public sealed interface LevelBiomeEdit permits LevelBiomeEdit.Add, LevelBiomeEdit.Replace {
 
     /**

@@ -14,8 +14,9 @@ import dev.wyck.annotations.WireFactory;
 import dev.wyck.biome.Biome;
 import dev.wyck.keys.KeyChains;
 import dev.wyck.keys.ResourceKey;
+import dev.wyck.level.dimension.Dimension;
 import dev.wyck.registry.BiomeRegistry;
-import dev.wyck.registry.level.LevelBiomeEdit;
+import dev.wyck.util.internal.LevelBiomeEdit;
 import dev.wyck.util.BootstrapSafeMinecraftRegistries;
 import dev.wyck.util.DatapackPromotion;
 import dev.wyck.util.DimensionSources;
@@ -115,15 +116,15 @@ public final class DatapackBootstrapBiomeRegistry implements BootstrapBiomeRegis
 
     @Override
     @AsOf("2.3.0")
-    public BootstrapBiomeRegistry addToDimension(ResourceKey dimension, ResourceKey biome, ClimatePoint placement) {
-        this.dimensionEdits.add(new LevelBiomeEdit.Add(dimension, biome, placement));
+    public BootstrapBiomeRegistry addToDimension(Dimension dimension, Biome biome, ClimatePoint placement) {
+        this.dimensionEdits.add(new LevelBiomeEdit.Add(dimension.resourceKey(), biome.resourceKey(), placement));
         return this;
     }
 
     @Override
     @AsOf("2.3.0")
-    public BootstrapBiomeRegistry replaceInDimension(ResourceKey dimension, ResourceKey target, ResourceKey replacement) {
-        this.dimensionEdits.add(new LevelBiomeEdit.Replace(dimension, target, replacement));
+    public BootstrapBiomeRegistry replaceInDimension(Dimension dimension, Biome target, Biome replacement) {
+        this.dimensionEdits.add(new LevelBiomeEdit.Replace(dimension.resourceKey(), target.resourceKey(), replacement.resourceKey()));
         return this;
     }
 

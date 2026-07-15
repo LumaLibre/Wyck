@@ -3,7 +3,7 @@ package dev.wyck.util;
 import com.mojang.datafixers.util.Pair;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.registry.level.LevelBiomeEdit;
+import dev.wyck.util.internal.LevelBiomeEdit;
 import dev.wyck.registry.level.RuntimeLevelStemEditor;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;

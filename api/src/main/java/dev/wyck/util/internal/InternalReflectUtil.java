@@ -13,19 +13,43 @@ import java.lang.reflect.Field;
 @SuppressWarnings("unchecked")
 public final class InternalReflectUtil {
 
-    public static <T> T getFieldValue(Object instance, String fieldName) {
-        Class<?> current = instance.getClass();
+    private InternalReflectUtil() {}
+
+    public static Field field(Class<?> owner, String fieldName) {
+        Class<?> current = owner;
         while (current != null) {
             try {
                 Field field = current.getDeclaredField(fieldName);
                 field.setAccessible(true);
-                return (T) field.get(instance);
+                return field;
             } catch (NoSuchFieldException e) {
                 current = current.getSuperclass();
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException(e);
             }
         }
-        throw new RuntimeException("no field '" + fieldName + "' on " + instance.getClass());
+        throw new RuntimeException("no field '" + fieldName + "' on " + owner);
+    }
+
+    public static <T> T get(Field field, Object instance) {
+        try {
+            return (T) field.get(instance);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException("failed to read field '" + field.getName() + "'", e);
+        }
+    }
+
+    public static void set(Field field, Object instance, Object value) {
+        try {
+            field.set(instance, value);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException("failed to set field '" + field.getName() + "'", e);
+        }
+    }
+
+    public static <T> T getFieldValue(Object instance, String fieldName) {
+        return get(field(instance.getClass(), fieldName), instance);
+    }
+
+    public static void setFieldValue(Object instance, String fieldName, Object value) {
+        set(field(instance.getClass(), fieldName), instance, value);
     }
 }
