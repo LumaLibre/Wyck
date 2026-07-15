@@ -360,4 +360,14 @@ public interface FeatureConfiguration extends Wrapper {
     static TwistingVinesConfig.Builder twistingVines() {
         return TwistingVinesConfig.builder();
     }
+
+    /**
+     * Creates a builder for a {@link LakeFeatureConfiguration}.
+     * @return a new lake feature configuration builder
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
+    static LakeFeatureConfiguration.Builder lake() {
+        return LakeFeatureConfiguration.builder();
+    }
 }
