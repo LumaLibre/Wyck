@@ -350,6 +350,30 @@ public interface GeodeBlockSettings extends Wrapper {
         }
 
         /**
+         * Sets the blocks listing which blocks the geode cannot replace.
+         * @param cannotReplace the block tag of blocks that cannot be replaced
+         * @return this builder
+         * @since 3.1.0
+         */
+        @AsOf("3.1.0")
+        public Builder cannotReplace(ResourceKey cannotReplace) {
+            this.cannotReplace = Either.right(TagKey.blocks(cannotReplace));
+            return this;
+        }
+
+        /**
+         * Sets the block tag listing invalid blocks near which the geode will not generate.
+         * @param invalidBlocks the block tag of invalid blocks
+         * @return this builder
+         * @since 3.1.0
+         */
+        @AsOf("3.1.0")
+        public Builder invalidBlocks(ResourceKey invalidBlocks) {
+            this.invalidBlocks = Either.right(TagKey.blocks(invalidBlocks));
+            return this;
+        }
+
+        /**
          * Builds the settings.
          * @return the settings
          * @since 3.0.0
