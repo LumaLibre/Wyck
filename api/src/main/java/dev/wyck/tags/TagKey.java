@@ -83,11 +83,10 @@ public interface TagKey extends Wrapper {
      * @param registry the registry the tag belongs to
      * @param key the tag identifier
      * @return a new tag key
-     * @param <T> the Bukkit type of the tag's elements
      * @since 3.1.0
      */
-    @ApiStatus.Internal
     @AsOf("3.1.0")
+    @ApiStatus.Internal
     static TagKey of(RegistryId registry, ResourceKey key) {
         return WIRE.construct(registry, key);
     }

@@ -384,9 +384,9 @@ public interface FeatureConfiguration extends Wrapper {
     /**
      * Creates a builder for a {@link TemplateFeatureConfiguration}.
      * @return a new template feature configuration builder
-     * @since 3.0.0
+     * @since 3.0.1
      */
-    @AsOf("3.0.0")
+    @AsOf("3.0.1")
     static TemplateFeatureConfiguration.Builder templateFeature() {
         return TemplateFeatureConfiguration.builder();
     }
@@ -394,9 +394,9 @@ public interface FeatureConfiguration extends Wrapper {
     /**
      * Creates a builder for an {@link UnderwaterMagmaConfiguration}.
      * @return a new underwater magma configuration builder
-     * @since 3.0.0
+     * @since 3.0.1
      */
-    @AsOf("3.0.0")
+    @AsOf("3.0.1")
     static UnderwaterMagmaConfiguration.Builder underwaterMagma() {
         return UnderwaterMagmaConfiguration.builder();
     }
@@ -404,9 +404,9 @@ public interface FeatureConfiguration extends Wrapper {
     /**
      * Creates a builder for a {@link VegetationPatchConfiguration}.
      * @return a new vegetation patch configuration builder
-     * @since 3.0.0
+     * @since 3.0.1
      */
-    @AsOf("3.0.0")
+    @AsOf("3.0.1")
     static VegetationPatchConfiguration.Builder vegetationPatch() {
         return VegetationPatchConfiguration.builder();
     }
@@ -414,9 +414,9 @@ public interface FeatureConfiguration extends Wrapper {
     /**
      * Creates a builder for a {@link WeightedRandomFeatureConfiguration}.
      * @return a new weighted random feature configuration builder
-     * @since 3.0.0
+     * @since 3.0.1
      */
-    @AsOf("3.0.0")
+    @AsOf("3.0.1")
     static WeightedRandomFeatureConfiguration.Builder weightedRandom() {
         return WeightedRandomFeatureConfiguration.builder();
     }

@@ -24,12 +24,12 @@ import java.util.Set;
  * from a floor or down from a ceiling. Used by vanilla for lush cave floors and dripleaf patches.
  *
  * @see <a href="https://minecraft.wiki/w/Vegetation_Patch">Vegetation Patch</a>
- * @since 3.1.0
- * @version 3.1.0
+ * @since 3.0.1
+ * @version 3.0.1
  * @author Jsinco
  */
 @NullMarked
-@AsOf("3.1.0")
+@AsOf("3.0.1")
 public interface VegetationPatchConfiguration extends FeatureConfiguration {
 
     @ApiStatus.Internal
@@ -46,81 +46,81 @@ public interface VegetationPatchConfiguration extends FeatureConfiguration {
     /**
      * The block used to build the patch (the "ground").
      * @return the ground state provider
-     * @since 3.1.0
+     * @since 3.0.1
      */
-    @AsOf("3.1.0")
+    @AsOf("3.0.1")
     BlockStateProvider groundState();
 
     /**
      * The placed feature to place on top of each found position.
      * @return the vegetation feature
-     * @since 3.1.0
+     * @since 3.0.1
      */
-    @AsOf("3.1.0")
+    @AsOf("3.0.1")
     PlacedFeature vegetationFeature();
 
     /**
      * Which surface to search from and place against, either {@link CaveSurface#FLOOR} or {@link CaveSurface#CEILING}.
      * @return the surface
-     * @since 3.1.0
+     * @since 3.0.1
      */
-    @AsOf("3.1.0")
+    @AsOf("3.0.1")
     CaveSurface surface();
 
     /**
      * The number of blocks the patch replaces per column, between 1 and 128.
      * @return the depth
-     * @since 3.1.0
+     * @since 3.0.1
      */
-    @AsOf("3.1.0")
+    @AsOf("3.0.1")
     IntProvider depth();
 
     /**
      * The chance to add one extra block to the {@link #depth()} of a column, between 0.0 and 1.0.
      * @return the extra bottom block chance
-     * @since 3.1.0
+     * @since 3.0.1
      */
-    @AsOf("3.1.0")
+    @AsOf("3.0.1")
     float extraBottomBlockChance();
 
     /**
      * The vertical distance a column searches for an available position, between 1 and 256.
      * @return the vertical range
-     * @since 3.1.0
+     * @since 3.0.1
      */
-    @AsOf("3.1.0")
+    @AsOf("3.0.1")
     int verticalRange();
 
     /**
      * The chance of placing the {@link #vegetationFeature()} on a found position, between 0.0 and 1.0.
      * @return the vegetation chance
-     * @since 3.1.0
+     * @since 3.0.1
      */
-    @AsOf("3.1.0")
+    @AsOf("3.0.1")
     float vegetationChance();
 
     /**
      * The XZ radius searched for available positions. The x and z radii are sampled independently from this provider.
      * @return the xz radius
-     * @since 3.1.0
+     * @since 3.0.1
      */
-    @AsOf("3.1.0")
+    @AsOf("3.0.1")
     IntProvider xzRadius();
 
     /**
      * The chance to add a search position adjacent to the initial rectangle, between 0.0 and 1.0.
      * @return the extra edge column chance
-     * @since 3.1.0
+     * @since 3.0.1
      */
-    @AsOf("3.1.0")
+    @AsOf("3.0.1")
     float extraEdgeColumnChance();
 
     /**
      * Converts this object back to a builder.
      * @return a new builder with the same values as this object
-     * @since 3.1.0
+     * @since 3.0.1
      */
-    @AsOf("3.1.0")
+    @AsOf("3.0.1")
     default Builder toBuilder() {
         return new Builder(this);
     }
@@ -138,9 +138,9 @@ public interface VegetationPatchConfiguration extends FeatureConfiguration {
      * @param xzRadius the XZ radius searched for available positions
      * @param extraEdgeColumnChance the chance to add a search position adjacent to the initial rectangle
      * @return a new vegetation patch configuration
-     * @since 3.1.0
+     * @since 3.0.1
      */
-    @AsOf("3.1.0")
+    @AsOf("3.0.1")
     static VegetationPatchConfiguration of(
         TagSet<Material> replaceable,
         BlockStateProvider groundState,
@@ -159,20 +159,20 @@ public interface VegetationPatchConfiguration extends FeatureConfiguration {
     /**
      * Creates a new builder.
      * @return a new builder
-     * @since 3.1.0
+     * @since 3.0.1
      */
-    @AsOf("3.1.0")
+    @AsOf("3.0.1")
     static Builder builder() {
         return new Builder();
     }
 
     /**
      * Builder for {@link VegetationPatchConfiguration}.
-     * @since 3.1.0
-     * @version 3.1.0
+     * @since 3.0.1
+     * @version 3.0.1
      * @author Jsinco
      */
-    @AsOf("3.1.0")
+    @AsOf("3.0.1")
     final class Builder {
         private Either<Set<Material>, TagKey> replaceable = Either.left(new HashSet<>());
         private @Nullable BlockStateProvider groundState;
@@ -228,9 +228,9 @@ public interface VegetationPatchConfiguration extends FeatureConfiguration {
          * Sets the block used to build the patch.
          * @param groundState the ground state provider
          * @return this builder
-         * @since 3.1.0
+         * @since 3.0.1
          */
-        @AsOf("3.1.0")
+        @AsOf("3.0.1")
         public Builder groundState(BlockStateProvider groundState) {
             this.groundState = groundState;
             return this;
@@ -240,9 +240,9 @@ public interface VegetationPatchConfiguration extends FeatureConfiguration {
          * Sets the placed feature to place on top of each found position.
          * @param vegetationFeature the vegetation feature
          * @return this builder
-         * @since 3.1.0
+         * @since 3.0.1
          */
-        @AsOf("3.1.0")
+        @AsOf("3.0.1")
         public Builder vegetationFeature(PlacedFeature vegetationFeature) {
             this.vegetationFeature = vegetationFeature;
             return this;
@@ -252,9 +252,9 @@ public interface VegetationPatchConfiguration extends FeatureConfiguration {
          * Sets which surface to search from and place against.
          * @param surface the surface
          * @return this builder
-         * @since 3.1.0
+         * @since 3.0.1
          */
-        @AsOf("3.1.0")
+        @AsOf("3.0.1")
         public Builder surface(CaveSurface surface) {
             this.surface = surface;
             return this;
@@ -264,9 +264,9 @@ public interface VegetationPatchConfiguration extends FeatureConfiguration {
          * Sets the number of blocks the patch replaces per column.
          * @param depth the depth, between 1 and 128
          * @return this builder
-         * @since 3.1.0
+         * @since 3.0.1
          */
-        @AsOf("3.1.0")
+        @AsOf("3.0.1")
         public Builder depth(IntProvider depth) {
             this.depth = depth;
             return this;
@@ -276,9 +276,9 @@ public interface VegetationPatchConfiguration extends FeatureConfiguration {
          * Sets the chance to add one extra block to the depth of a column.
          * @param extraBottomBlockChance the extra bottom block chance, between 0.0 and 1.0
          * @return this builder
-         * @since 3.1.0
+         * @since 3.0.1
          */
-        @AsOf("3.1.0")
+        @AsOf("3.0.1")
         public Builder extraBottomBlockChance(float extraBottomBlockChance) {
             this.extraBottomBlockChance = extraBottomBlockChance;
             return this;
@@ -288,9 +288,9 @@ public interface VegetationPatchConfiguration extends FeatureConfiguration {
          * Sets the vertical distance a column searches for an available position.
          * @param verticalRange the vertical range, between 1 and 256
          * @return this builder
-         * @since 3.1.0
+         * @since 3.0.1
          */
-        @AsOf("3.1.0")
+        @AsOf("3.0.1")
         public Builder verticalRange(int verticalRange) {
             this.verticalRange = verticalRange;
             return this;
@@ -300,9 +300,9 @@ public interface VegetationPatchConfiguration extends FeatureConfiguration {
          * Sets the chance of placing the vegetation feature on a found position.
          * @param vegetationChance the vegetation chance, between 0.0 and 1.0
          * @return this builder
-         * @since 3.1.0
+         * @since 3.0.1
          */
-        @AsOf("3.1.0")
+        @AsOf("3.0.1")
         public Builder vegetationChance(float vegetationChance) {
             this.vegetationChance = vegetationChance;
             return this;
@@ -312,9 +312,9 @@ public interface VegetationPatchConfiguration extends FeatureConfiguration {
          * Sets the XZ radius searched for available positions.
          * @param xzRadius the xz radius
          * @return this builder
-         * @since 3.1.0
+         * @since 3.0.1
          */
-        @AsOf("3.1.0")
+        @AsOf("3.0.1")
         public Builder xzRadius(IntProvider xzRadius) {
             this.xzRadius = xzRadius;
             return this;
@@ -324,9 +324,9 @@ public interface VegetationPatchConfiguration extends FeatureConfiguration {
          * Sets the chance to add a search position adjacent to the initial rectangle.
          * @param extraEdgeColumnChance the extra edge column chance, between 0.0 and 1.0
          * @return this builder
-         * @since 3.1.0
+         * @since 3.0.1
          */
-        @AsOf("3.1.0")
+        @AsOf("3.0.1")
         public Builder extraEdgeColumnChance(float extraEdgeColumnChance) {
             this.extraEdgeColumnChance = extraEdgeColumnChance;
             return this;
@@ -352,9 +352,7 @@ public interface VegetationPatchConfiguration extends FeatureConfiguration {
          * @param replaceable the replaceable tag
          * @return this builder
          * @since 3.1.0
-         * @deprecated Wyck will soon no longer support multiple versions of Minecraft.
          */
-        @Deprecated
         @AsOf("3.1.0")
         public Builder replaceable(ResourceKey replaceable) {
             this.replaceable = Either.right(TagKey.blocks(replaceable));
@@ -364,9 +362,9 @@ public interface VegetationPatchConfiguration extends FeatureConfiguration {
         /**
          * Builds the vegetation patch configuration.
          * @return the vegetation patch configuration
-         * @since 3.1.0
+         * @since 3.0.1
          */
-        @AsOf("3.1.0")
+        @AsOf("3.0.1")
         public VegetationPatchConfiguration build() {
             Preconditions.checkNotNull(groundState, "groundState must be set");
             Preconditions.checkNotNull(vegetationFeature, "vegetationFeature must be set");

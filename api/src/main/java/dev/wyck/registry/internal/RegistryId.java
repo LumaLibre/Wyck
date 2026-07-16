@@ -11,9 +11,6 @@ import java.util.stream.Stream;
 @ApiStatus.Internal
 public enum RegistryId {
     // minor TODO: sort these
-    BLOCK("block"),
-    ITEM("item"),
-    ENTITY_TYPE("entity_type"),
     BIOME("worldgen/biome"),
     FEATURE("worldgen/feature"),
     DIMENSION_TYPE("dimension_type"),
@@ -28,7 +25,9 @@ public enum RegistryId {
     CONFIGURED_FEATURE("worldgen/configured_feature"),
     DENSITY_FUNCTION("worldgen/density_function"),
     ACTIVITY("activity"),
-    WORLD_CLOCK("world_clock");
+    WORLD_CLOCK("world_clock"),
+    BLOCK("block"),
+    ENTITY_TYPE("entity_type");
 
     private final List<ResourceKey> keys;
 

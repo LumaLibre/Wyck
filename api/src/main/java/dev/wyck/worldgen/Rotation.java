@@ -15,12 +15,12 @@ import org.jspecify.annotations.NullMarked;
  * </p>
  * @see <a href="https://minecraft.wiki/w/Template_pool">Template pool</a>
  *
- * @since 3.1.0
- * @version 3.1.0
+ * @since 3.0.1
+ * @version 3.0.1
  * @author Wyck codegen
  */
 @NullMarked
-@AsOf("3.1.0")
+@AsOf("3.0.1")
 @Generated("2026-07-16T08:25:35.507016Z")
 public enum Rotation implements WrappedEnumerator<Rotation> {
 
@@ -33,7 +33,7 @@ public enum Rotation implements WrappedEnumerator<Rotation> {
 
     private final String key;
 
-    @AsOf("3.1.0")
+    @AsOf("3.0.1")
     Rotation(String key) {
         this.key = key;
     }
@@ -41,15 +41,15 @@ public enum Rotation implements WrappedEnumerator<Rotation> {
     /**
      * The vanilla name for this Rotation value.
      * @return the vanilla key for this enum value
-     * @since 3.1.0
+     * @since 3.0.1
      */
-    @AsOf("3.1.0")
+    @AsOf("3.0.1")
     public String getKey() {
         return this.key;
     }
 
     @Override
-    @AsOf("3.1.0")
+    @AsOf("3.0.1")
     public KeyedEnumTranslator<Rotation> translator() {
         return TRANSLATOR;
     }
