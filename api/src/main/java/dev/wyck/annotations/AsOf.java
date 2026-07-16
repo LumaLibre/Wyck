@@ -36,7 +36,7 @@ import java.lang.annotation.Target;
     ElementType.FIELD
 })
 @ApiStatus.Internal
-@Retention(RetentionPolicy.RUNTIME)
+@Retention(RetentionPolicy.CLASS)
 public @interface AsOf {
 
     /**

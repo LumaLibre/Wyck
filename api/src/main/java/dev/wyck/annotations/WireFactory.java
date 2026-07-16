@@ -18,6 +18,6 @@ import java.lang.annotation.Target;
 @AsOf("2.0.0")
 @ApiStatus.Internal
 @Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
+@Retention(RetentionPolicy.CLASS)
 public @interface WireFactory {
 }
