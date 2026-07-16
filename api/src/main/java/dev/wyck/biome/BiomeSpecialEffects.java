@@ -255,6 +255,72 @@ public interface BiomeSpecialEffects extends Wrapper {
         }
 
         /**
+         * Sets the foliage color override of the biome.
+         * @param foliageColor the foliage color override of the biome
+         * @return this builder
+         * @since 3.0.0
+         */
+        @AsOf("3.0.0")
+        public Builder foliageColor(@Nullable Integer foliageColor) {
+            return foliageColorOverride(foliageColor);
+        }
+
+        /**
+         * Sets the foliage color override of the biome.
+         * @param foliageColor the foliage color override of the biome, as a hex string
+         * @return this builder
+         * @since 3.0.0
+         */
+        @AsOf("3.0.0")
+        public Builder foliageColor(@Nullable String foliageColor) {
+            return foliageColorOverride(foliageColor);
+        }
+
+        /**
+         * Sets the dry foliage color override of the biome.
+         * @param dryFoliageColor the dry foliage color override of the biome
+         * @return this builder
+         * @since 3.0.0
+         */
+        @AsOf("3.0.0")
+        public Builder dryFoliageColor(@Nullable Integer dryFoliageColor) {
+            return dryFoliageColorOverride(dryFoliageColor);
+        }
+
+        /**
+         * Sets the dry foliage color override of the biome.
+         * @param dryFoliageColor the dry foliage color override of the biome, as a hex string
+         * @return this builder
+         * @since 3.0.0
+         */
+        @AsOf("3.0.0")
+        public Builder dryFoliageColor(@Nullable String dryFoliageColor) {
+            return dryFoliageColorOverride(dryFoliageColor);
+        }
+
+        /**
+         * Sets the grass color override of the biome.
+         * @param grassColor the grass color override of the biome
+         * @return this builder
+         * @since 3.0.0
+         */
+        @AsOf("3.0.0")
+        public Builder grassColor(@Nullable Integer grassColor) {
+            return grassColorOverride(grassColor);
+        }
+
+        /**
+         * Sets the grass color override of the biome.
+         * @param grassColor the grass color override of the biome, as a hex string
+         * @return this builder
+         * @since 3.0.0
+         */
+        @AsOf("3.0.0")
+        public Builder grassColor(@Nullable String grassColor) {
+            return grassColorOverride(grassColor);
+        }
+
+        /**
          * Builds a new BiomeSpecialEffects instance.
          * @return a new BiomeSpecialEffects instance
          * @since 3.0.0
