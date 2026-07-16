@@ -1,14 +1,13 @@
 ---
 title: Getting Started
 description: A guide to getting started with Wyck, including installation instructions and a quick overview of the API.
-# TODO: Change latest snapshot to latest release once we have a stable release
 ---
 
 import Versions from "@/components/Versions.astro";
-import {getLatestRelease, getLatestSnapshot} from "@/utils/versions.ts";
+import {getLatestRelease} from "@/utils/versions.ts";
 import CodeTabs from "@/components/CodeTabs.astro";
 
-export const latestRelease = await getLatestSnapshot();
+export const latestRelease = await getLatestRelease();
 
 Wyck is a custom biome, dimension, and world generation API for [Paper](https://papermc.io/software/paper) servers without the use of datapacks.
 
