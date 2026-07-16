@@ -16,9 +16,4 @@ public class MissingPacketManipulatorLibraryException extends RuntimeException {
     public MissingPacketManipulatorLibraryException(String message) {
         super(message);
     }
-
-    @AsOf("0.0.6")
-    public MissingPacketManipulatorLibraryException(String message, Throwable cause) {
-        super(message, cause);
-    }
 }

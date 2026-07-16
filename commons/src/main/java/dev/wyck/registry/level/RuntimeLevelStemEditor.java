@@ -1,6 +1,5 @@
 package dev.wyck.registry.level;
 
-import dev.wyck.exceptions.BadDimensionTypeGeometry;
 import dev.wyck.level.dimension.Dimension;
 import dev.wyck.util.internal.InternalReflectUtil;
 import dev.wyck.worldgen.chunk.ChunkGenerator;
@@ -105,10 +104,10 @@ public final class RuntimeLevelStemEditor implements LevelStemEditor {
         DimensionType oldType = oldHolder.value();
         DimensionType newType = newHolder.value();
 
-
-        if (oldType.minY() != newType.minY() || oldType.height() != newType.height() || oldType.logicalHeight() != newType.logicalHeight()) {
-            throw BadDimensionTypeGeometry.dimensionType(dimId.toString(), oldType.minY(), newType.minY(), oldType.height(), newType.height(), oldType.logicalHeight(), newType.logicalHeight());
-        }
+        // TODO: figure out what to do about starlight
+        //if (oldType.minY() != newType.minY() || oldType.height() != newType.height() || oldType.logicalHeight() != newType.logicalHeight()) {
+        //    throw IllegalDimensionGeometry.dimensionType(dimId.toString(), oldType.minY(), newType.minY(), oldType.height(), newType.height(), oldType.logicalHeight(), newType.logicalHeight());
+        //}
 
         this.dimensionTypeSnapshots.putIfAbsent(level, oldHolder);
 
@@ -124,16 +123,12 @@ public final class RuntimeLevelStemEditor implements LevelStemEditor {
 
         net.minecraft.world.level.chunk.ChunkGenerator newGenerator = edit.asHandle();
 
-
-        int genMinY = newGenerator.getMinY();
-        int genHeight = newGenerator.getGenDepth();
-        if (genMinY != level.getMinY() || genHeight != level.getHeight()) {
-            throw BadDimensionTypeGeometry.chunkGenerator(
-                dimId.toString(),
-                level.getMinY(), genMinY,
-                level.getHeight(), genHeight
-            );
-        }
+        // TODO: figure out what to do about starlight
+        //int genMinY = newGenerator.getMinY();
+        //int genHeight = newGenerator.getGenDepth();
+        //if (genMinY != level.getMinY() || genHeight != level.getHeight()) {
+        //    throw IllegalDimensionGeometry.chunkGenerator(dimId.toString(), level.getMinY(), genMinY, level.getHeight(), genHeight);
+        //}
 
         ChunkMap chunkMap = level.getChunkSource().chunkMap;
         RegistryAccess registries = level.registryAccess();
