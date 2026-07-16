@@ -101,10 +101,9 @@ public final class RuntimeLevelStemEditor implements LevelStemEditor {
         Holder<DimensionType> newHolder = registry.getOrThrow(net.minecraft.resources.ResourceKey.create(Registries.DIMENSION_TYPE, edit.resourceKey().identifier()));
         Holder<DimensionType> oldHolder = level.dimensionTypeRegistration();
 
-        DimensionType oldType = oldHolder.value();
-        DimensionType newType = newHolder.value();
-
         // TODO: figure out what to do about starlight
+        //DimensionType oldType = oldHolder.value();
+        //DimensionType newType = newHolder.value();
         //if (oldType.minY() != newType.minY() || oldType.height() != newType.height() || oldType.logicalHeight() != newType.logicalHeight()) {
         //    throw IllegalDimensionGeometry.dimensionType(dimId.toString(), oldType.minY(), newType.minY(), oldType.height(), newType.height(), oldType.logicalHeight(), newType.logicalHeight());
         //}
