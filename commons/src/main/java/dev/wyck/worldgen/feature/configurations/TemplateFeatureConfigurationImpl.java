@@ -1,6 +1,7 @@
 package dev.wyck.worldgen.feature.configurations;
 
 import dev.wyck.util.WeightedList;
+import dev.wyck.worldgen.Rotation;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
