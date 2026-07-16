@@ -1,0 +1,51 @@
+---
+title: Height Providers
+description: Learn about vertical anchors and height providers, the value providers used to place worldgen features and carvers vertically.
+sidebar:
+    order: 3
+---
+
+import CodeBlock from "@/components/CodeBlock.astro";
+import SourceLink from "@/components/SourceLink.astro";
+
+When worldgen needs a Y position, we use **height providers** rather than raw numbers. A height provider is built from
+one or more **vertical anchors**, so the same configuration resolves correctly no matter a world's minimum and maximum
+build height. These types show up on carvers, placement modifiers, and feature configurations.
+
+For general number providers, see [Value Providers](/worldgen/value-providers/).
+
+## VerticalAnchor
+
+A <SourceLink path="worldgen/heightproviders/VerticalAnchor.java">VerticalAnchor</SourceLink> describes a single Y
+position relative to the world. Because it is resolved against the world's height limits, the same anchor works in the
+overworld, nether, or a custom dimension with a different build range.
+
+<CodeBlock
+    lang="java"
+    filename="ExamplePlugin.java"
+    code={
+`import dev.wyck.worldgen.heightproviders.VerticalAnchor;
+
+VerticalAnchor.absolute(64); // exactly Y=64
+VerticalAnchor.aboveBottom(8); // 8 blocks above the world's minimum height
+VerticalAnchor.belowTop(1); // 1 block below the world's maximum height
+VerticalAnchor.bottom(); // the world's minimum height
+VerticalAnchor.top(); // the world's maximum height`}
+/>
+
+## HeightProvider
+
+A <SourceLink path="worldgen/heightproviders/HeightProvider.java">HeightProvider</SourceLink> produces a Y position by
+combining vertical anchors, either as a constant or sampled from a distribution.
+
+<CodeBlock
+    lang="java"
+    filename="ExamplePlugin.java"
+    code={`import dev.wyck.worldgen.heightproviders.HeightProvider;
+import dev.wyck.worldgen.heightproviders.VerticalAnchor;
+
+HeightProvider.constant(VerticalAnchor.absolute(64)); // always Y=64
+HeightProvider.uniform(VerticalAnchor.aboveBottom(8), VerticalAnchor.absolute(180)); // evenly in range
+HeightProvider.trapezoid(VerticalAnchor.absolute(0), VerticalAnchor.absolute(128), 0); // trapezoidal
+HeightProvider.biasedToBottom(VerticalAnchor.bottom(), VerticalAnchor.absolute(128), 20); // skewed low`}
+/>

@@ -1,0 +1,62 @@
+---
+title: Rule Tests
+description: Learn about rule tests, the block-matching predicates that decide which blocks worldgen features are allowed to replace.
+sidebar:
+    order: 6
+---
+
+import CodeBlock from "@/components/CodeBlock.astro";
+import SourceLink from "@/components/SourceLink.astro";
+
+:::note
+Not to be confused with [block predicates](/worldgen/block-predicates/)!
+:::
+
+A <SourceLink path="worldgen/ruletest/RuleTest.java">RuleTest</SourceLink> decides whether a feature is allowed to
+replace the block already at a position.
+
+## Available Rule Tests
+
+| Factory | Matches when |
+| --- | --- |
+| `alwaysTrue()` | Always — replace any block. |
+| `blockMatch(Material)` | The existing block is exactly this block. |
+| `blockStateMatch(BlockData)` | The existing block state matches exactly (including properties). |
+| `tagMatch(tag)` | The existing block is in the given block tag. |
+| `randomBlockMatch(Material, probability)` | The block matches **and** a random roll passes. |
+| `randomBlockStateMatch(BlockData, probability)` | The block state matches **and** a random roll passes. |
+
+<CodeBlock
+    lang="java"
+    filename="ExamplePlugin.java"
+    code={
+`import dev.wyck.worldgen.ruletest.RuleTest;
+import org.bukkit.Material;
+
+RuleTest.alwaysTrue();
+RuleTest.blockMatch(Material.STONE); // only replace stone
+RuleTest.tagMatch(org.bukkit.Tag.BASE_STONE_OVERWORLD); // deepslate, tuff, stone, ...
+RuleTest.randomBlockMatch(Material.NETHERRACK, 0.3f); // netherrack, 30% of the time`}
+/>
+
+## Using Rule Tests in an Ore Feature
+
+<CodeBlock
+    lang="java"
+    filename="ExamplePlugin.java"
+    code={
+`import dev.wyck.worldgen.feature.ConfiguredFeature;
+import dev.wyck.worldgen.feature.FeatureType;
+import dev.wyck.worldgen.feature.configurations.OreConfiguration;
+import dev.wyck.worldgen.ruletest.RuleTest;
+import org.bukkit.Material;
+
+OreConfiguration ore = OreConfiguration.builder()
+    .target(RuleTest.blockMatch(Material.STONE), Material.DIAMOND_ORE.createBlockData())
+    .target(RuleTest.blockMatch(Material.DEEPSLATE), Material.DEEPSLATE_DIAMOND_ORE.createBlockData())
+    .size(8) // blocks per vein
+    .discardChanceOnAirExposure(1.0f) // never generate exposed to air
+    .build();
+
+ConfiguredFeature diamonds = ConfiguredFeature.of(FeatureType.ORE, ore);`}
+/>

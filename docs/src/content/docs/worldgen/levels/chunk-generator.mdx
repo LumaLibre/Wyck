@@ -33,6 +33,7 @@ import dev.wyck.level.LevelCreator;
 import dev.wyck.worldgen.biome.BiomeSource;
 import dev.wyck.worldgen.noise.Noise;
 import dev.wyck.worldgen.chunk.ChunkGenerator;
+import dev.wyck.worldgen.chunk.NoiseBasedChunkGenerator;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -50,7 +51,7 @@ public class ExamplePlugin extends JavaPlugin {
 
 
         // Floating islands with a single fixed custom biome
-        ChunkGenerator generator = ChunkGenerator.of(
+        ChunkGenerator generator = NoiseBasedChunkGenerator.of(
             BiomeSource.fixed(biome),
             Noise.floatingIslands()
         );
@@ -59,6 +60,56 @@ public class ExamplePlugin extends JavaPlugin {
             .levelKey(ResourceKey.of("test", "example"))
             .generator(generator)
             .create(); // Done!
+    }
+}`}
+/>
+
+## Flat Generators
+
+A flat generator stacks fixed layers of blocks instead of shaping terrain with noise. Its layers, biome, decorations,
+and lakes are described by a <SourceLink path="worldgen/chunk/flat/FlatLevelGeneratorSettings.java">FlatLevelGeneratorSettings</SourceLink>.
+The interface ships the vanilla presets: `CLASSIC_FLAT`, `TUNNELERS_DREAM`, `WATER_WORLD`, `OVERWORLD`,
+`SNOWY_KINGDOM`, `DESERT`, and more... Or you can just author your own with the builder.
+
+Build the generator with `ChunkGenerator.flat()`.
+
+<CodeBlock
+    lang="java"
+    filename="ExamplePlugin.java"
+    code={
+`import dev.wyck.keys.ResourceKey;
+import dev.wyck.level.LevelCreator;
+import dev.wyck.worldgen.biome.BiomeSource;
+import dev.wyck.worldgen.chunk.ChunkGenerator;
+import dev.wyck.worldgen.chunk.flat.FlatLevelGeneratorSettings;
+import dev.wyck.biome.Biomes;
+import org.bukkit.Material;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class ExamplePlugin extends JavaPlugin {
+    @Override
+    public void onEnable() {
+        // Author custom layers from the bottom up.
+        FlatLevelGeneratorSettings settings = FlatLevelGeneratorSettings.builder()
+            .layer(Material.BEDROCK, 1)
+            .layer(Material.STONE, 32)
+            .layer(Material.DIRT, 3)
+            .layer(Material.GRASS_BLOCK, 1)
+            .biome(Biomes.PLAINS)
+            .decoration(true) // run features (trees, grass, ores, ...)
+            .addLakes(true)
+            .build();
+
+        // ...or reuse a vanilla preset: FlatLevelGeneratorSettings.CLASSIC_FLAT
+
+        ChunkGenerator generator = ChunkGenerator.flat()
+            .settings(settings)
+            .build();
+
+        LevelCreator.builder()
+            .levelKey(ResourceKey.of("test", "superflat"))
+            .generator(generator)
+            .create();
     }
 }`}
 />

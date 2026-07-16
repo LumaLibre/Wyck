@@ -19,10 +19,10 @@ fit for flat worlds, void worlds, or any dimension where biome variety does not 
     lang="java"
     filename="Examples.java"
     code={
-        `import dev.wyck.biome.CustomBiome;
+        `import dev.wyck.biome.Biomes;
+import dev.wyck.biome.CustomBiome;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.worldgen.biome.BiomeSource;
-import org.bukkit.block.Biome;
 
 // a registered custom biome
 CustomBiome biome = CustomBiome.builder()
@@ -35,7 +35,7 @@ CustomBiome biome = CustomBiome.builder()
 BiomeSource custom = BiomeSource.fixed(biome);
 
 // or a vanilla biome
-BiomeSource vanilla = BiomeSource.fixed(Biome.PLAINS);
+BiomeSource vanilla = BiomeSource.fixed(Biomes.PLAINS);
 
 // or by key
 BiomeSource byKey = BiomeSource.fixed(ResourceKey.of("minecraft", "desert"));
@@ -60,12 +60,12 @@ about.
     lang="java"
     filename="ExamplePlugin.java"
     code={
-`import dev.wyck.biome.CustomBiome;
+`import dev.wyck.biome.Biomes;
+import dev.wyck.biome.CustomBiome;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.worldgen.biome.BiomeSource;
 import dev.wyck.worldgen.climate.ClimatePoint;
 import dev.wyck.worldgen.climate.ClimateParameter;
-import org.bukkit.block.Biome;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ExamplePlugin extends JavaPlugin {
@@ -92,11 +92,55 @@ public class ExamplePlugin extends JavaPlugin {
         BiomeSource source = BiomeSource.multiNoise()
             .add(ResourceKey.of("minecraft", "plains"), withArgsClimate) // wins in hot, wet regions
             .add(biome, zeroBuilderClimate) // wins in cold, dry regions
-            .add(Biome.JUNGLE, builderClimate) // fills everywhere else
+            .add(Biomes.JUNGLE, builderClimate) // fills everywhere else
             .build(); // Done!
     }
 }`}
 />
+
+## Presets
+
+<SourceLink path="worldgen/biome/BiomeSource.java">BiomeSource</SourceLink>
+exposes ready-made multi-noise presets that mirror how Minecraft populates each dimension, plus `theEnd()` for the End's radial layout.
+
+<CodeBlock
+    lang="java"
+    filename="Examples.java"
+    code={
+`import dev.wyck.worldgen.biome.BiomeSource;
+
+BiomeSource overworld = BiomeSource.overworld(); // the vanilla overworld climate distribution
+BiomeSource nether = BiomeSource.nether(); // the vanilla nether biomes
+BiomeSource end = BiomeSource.theEnd(); // the End's central-island + outer-islands layout
+`}
+/>
+
+## Checkered Column
+
+A <SourceLink path="worldgen/biome/CheckeredColumnBiomeSource.java">checkered column</SourceLink> source lays biomes
+out in a repeating checkerboard, cycling through the biomes you give it. Datapack developers use it for debugging biome-specific
+generation because every biome is guaranteed to appear in a predictable grid.
+
+The `size` controls how wide each cell is: `0` makes each cell a single chunk, and every increment doubles the
+width, valid values are `0`–`62`.
+
+<CodeBlock
+    lang="java"
+    filename="Examples.java"
+    code={
+`import dev.wyck.biome.Biomes;
+import dev.wyck.worldgen.biome.BiomeSource;
+
+BiomeSource checkered = BiomeSource.checkeredColumn()
+    .biome(Biomes.PLAINS)
+    .biome(Biomes.DESERT)
+    .biome(Biomes.JUNGLE)
+    .size(2) // each cell is 4 chunks wide (0 -> 1, 1 -> 2, 2 -> 4, ...)
+    .build();
+`}
+/>
+
+## Using a Biome Source
 
 Once built, you can pass the biome source to a generator and the generator to a <SourceLink path="level/LevelCreator.java">LevelCreator</SourceLink>.
 
@@ -104,7 +148,7 @@ Once built, you can pass the biome source to a generator and the generator to a 
     lang="java"
     filename="ExamplePlugin.java"
     code={
-`ChunkGenerator generator = ChunkGenerator.of(source, Noise.overworld());
+`ChunkGenerator generator = NoiseBasedChunkGenerator.of(source, Noise.overworld());
 
 World world = LevelCreator.builder()
     .levelKey(ResourceKey.of("test", "example"))

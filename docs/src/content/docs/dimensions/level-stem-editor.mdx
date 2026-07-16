@@ -1,0 +1,80 @@
+---
+title: Level Stem Editor
+description: Swap a loaded world's chunk generator or dimension type at runtime with the LevelStemEditor.
+sidebar:
+    order: 4
+---
+
+import CodeBlock from "@/components/CodeBlock.astro";
+import SourceLink from "@/components/SourceLink.astro";
+
+The <SourceLink path="registry/level/LevelStemEditor.java">LevelStemEditor</SourceLink> swaps the
+[chunk generator](/worldgen/levels/chunk-generator/) and/or the
+[dimension type](/dimensions/dimensions/) of **the already-loaded** world at runtime.
+We don't recommend using it for production servers, but it can be useful for testing or debugging worldgen.
+
+:::caution
+Level stem edits are **transient**, they swap live references and are never written to disk. It is not recommended for
+production servers. To add or replace biomes in a dimension persistently, use the
+[Biome Bootstrap Registry](/registries/biome-bootstrap-registry/)'s `addToDimension` / `replaceInDimension` with the
+`DATAPACK` composer instead, **or create a brand-new dimension**.
+:::
+
+## How it works
+
+Create an editor with `LevelStemEditor.create()`, queue the pieces you want to swap, then `apply(World)` it to each world
+you want to affect. Only chunks generated *after* the swap use the new generator. Already-generated chunks keep their existing terrain.
+
+## Example Usage
+
+<CodeBlock
+    lang="java"
+    filename="ExamplePlugin.java"
+    code={
+`import dev.wyck.registry.level.LevelStemEditor;
+import dev.wyck.worldgen.biome.BiomeSource;
+import dev.wyck.worldgen.chunk.ChunkGenerator;
+import dev.wyck.worldgen.chunk.NoiseBasedChunkGenerator;
+import dev.wyck.worldgen.noise.Noise;
+import org.bukkit.Bukkit;
+import org.bukkit.World;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class ExamplePlugin extends JavaPlugin {
+    @Override
+    public void onEnable() {
+        // Nether-style terrain and biomes.
+        ChunkGenerator generator = NoiseBasedChunkGenerator.of(BiomeSource.nether(), Noise.nether());
+
+        LevelStemEditor editor = LevelStemEditor.create()
+            .chunkGenerator(generator);
+
+        // Apply to every loaded world (newly generated chunks use the new generator).
+        for (World world : Bukkit.getWorlds()) {
+            editor.apply(world);
+        }
+    }
+}`}
+/>
+
+## Reverting an Edit
+
+Keep a reference to the editor and call `restore(World)` to put a world back the way it was.
+
+<CodeBlock
+    lang="java"
+    filename="ExamplePlugin.java"
+    code={
+`import dev.wyck.registry.level.LevelStemEditor;
+import org.bukkit.Bukkit;
+import org.bukkit.World;
+
+World world = Bukkit.getWorlds().get(0);
+
+LevelStemEditor editor = LevelStemEditor.create()
+    .chunkGenerator(generator)
+    .apply(world);
+
+// ...later, restore the original generator and dimension type:
+editor.restore(world);`}
+/>

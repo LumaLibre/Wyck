@@ -1,0 +1,122 @@
+---
+title: Block Predicates
+description: Learn about block predicates, the tests worldgen uses to decide whether a block position is a valid place to generate.
+sidebar:
+    order: 5
+---
+
+import CodeBlock from "@/components/CodeBlock.astro";
+import SourceLink from "@/components/SourceLink.astro";
+
+A <SourceLink path="worldgen/blockpredicates/BlockPredicate.java">BlockPredicate</SourceLink> is a test for the state of
+a block at (or near) a given position in the world. Vanilla worldgen uses them to decide whether a spot is a valid place
+to generate something. For example, only placing a tree on a block a sapling would survive on, or only carving where the world is solid.
+
+Predicates are consumed by the <SourceLink path="worldgen/placement/PlacementModifier.java">PlacementModifier</SourceLink>
+`blockPredicateFilter` when building [placed features](/worldgen/biomes/placed-features/), and by various configured
+features directly.
+
+
+## Available Predicates
+
+| Factory | Matches when |
+| --- | --- |
+| `alwaysTrue()` | Always (no restriction). |
+| `matchingBlocks()` | The block at the offset is one of the given <SourceLink path="worldgen/blockpredicates/MatchingBlocksPredicate.java" code={false}>materials</SourceLink>. |
+| `matchingBlockTag(tag)` | The block at the offset is in the given <SourceLink path="worldgen/blockpredicates/MatchingBlockTagPredicate.java" code={false}>block tag</SourceLink>. |
+| `matchingFluids()` | The fluid at the offset is one of the given <SourceLink path="worldgen/blockpredicates/MatchingFluidsPredicate.java" code={false}>fluids</SourceLink>. |
+| `matchingBiomes()` | The <SourceLink path="worldgen/blockpredicates/MatchingBiomesPredicate.java" code={false}>biome</SourceLink> at the position is one of the given biomes. |
+| `replaceable()` | The block at the offset can be <SourceLink path="worldgen/blockpredicates/ReplaceablePredicate.java" code={false}>replaced</SourceLink> by placement. |
+| `wouldSurvive()` | A given block state <SourceLink path="worldgen/blockpredicates/WouldSurvivePredicate.java" code={false}>would survive</SourceLink> if placed at the offset. |
+| `hasSturdyFace()` | The block at the offset has a <SourceLink path="worldgen/blockpredicates/HasSturdyFacePredicate.java" code={false}>full, sturdy face</SourceLink> on a given side. |
+| `insideWorldBounds()` | The position (with offset) is within the world's <SourceLink path="worldgen/blockpredicates/InsideWorldBoundsPredicate.java" code={false}>height limits</SourceLink>. |
+| `allOf()` / `anyOf()` | All / at least one child predicate matches. |
+| `not(predicate)` | The wrapped predicate does **not** match. |
+
+<CodeBlock
+    lang="java"
+    filename="ExamplePlugin.java"
+    code={
+`import dev.wyck.worldgen.blockpredicates.BlockPredicate;
+import org.bukkit.Material;
+import org.bukkit.util.BlockVector;
+
+// Always matches — the default "no restriction" predicate.
+BlockPredicate.alwaysTrue();
+
+// The block one below is grass or dirt.
+BlockPredicate.matchingBlocks()
+    .offset(new BlockVector(0, -1, 0))
+    .block(Material.GRASS_BLOCK, Material.DIRT)
+    .build();
+
+// The candidate position itself is replaceable (air, water, tall grass, ...).
+BlockPredicate.replaceable().build();
+
+// A sapling placed here would survive.
+BlockPredicate.wouldSurvive()
+    .state(Material.OAK_SAPLING)
+    .build();
+
+// The position is within the world's build height.
+BlockPredicate.insideWorldBounds().build();`}
+/>
+
+## Combining Predicates
+
+Predicates compose. Use `allOf` / `anyOf` to combine several, and `not` (or `.not()`) to invert one.
+
+<CodeBlock
+    lang="java"
+    filename="ExamplePlugin.java"
+    code={
+`import dev.wyck.worldgen.blockpredicates.BlockPredicate;
+import org.bukkit.Material;
+import org.bukkit.util.BlockVector;
+
+BlockPredicate onGrass = BlockPredicate.matchingBlocks()
+    .offset(new BlockVector(0, -1, 0))
+    .block(Material.GRASS_BLOCK)
+    .build();
+
+BlockPredicate hereReplaceable = BlockPredicate.replaceable().build();
+
+// Match only when this spot is replaceable AND the block below is grass.
+BlockPredicate predicate = BlockPredicate.allOf()
+    .predicate(hereReplaceable)
+    .predicate(onGrass)
+    .build();
+
+// Invert any predicate with not().
+BlockPredicate notOnGrass = onGrass.not();`}
+/>
+
+## Using a Predicate in Placement
+
+Wrap a predicate in `PlacementModifier.blockPredicateFilter(...)` to drop any generation attempt whose position fails the
+test.
+
+<CodeBlock
+    lang="java"
+    filename="ExamplePlugin.java"
+    code={
+`import dev.wyck.worldgen.blockpredicates.BlockPredicate;
+import dev.wyck.worldgen.feature.ConfiguredFeature;
+import dev.wyck.worldgen.placement.PlacedFeature;
+import dev.wyck.worldgen.placement.PlacementModifier;
+import org.bukkit.Material;
+import org.bukkit.util.BlockVector;
+
+BlockPredicate onSand = BlockPredicate.matchingBlocks()
+    .offset(new BlockVector(0, -1, 0))
+    .block(Material.SAND, Material.RED_SAND)
+    .build();
+
+PlacedFeature placed = PlacedFeature.builder()
+    .feature(configuredFeature) // your ConfiguredFeature
+    .modifier(PlacementModifier.count(4))
+    .modifier(PlacementModifier.inSquare())
+    .modifier(PlacementModifier.blockPredicateFilter(onSand)) // only over sand
+    .modifier(PlacementModifier.biomeFilter())
+    .build();`}
+/>

@@ -184,13 +184,17 @@ public class PillarFeature extends CustomFeature<@NotNull PillarFeature.PillarCo
             code:
 `import dev.wyck.biome.CustomBiome;
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.registry.level.LevelStemEditor;
+import dev.wyck.level.LevelCreator;
 import dev.wyck.worldgen.PillarFeature;
 import dev.wyck.biome.BiomeGenerationSettings;
 import dev.wyck.worldgen.Decoration;
 import dev.wyck.worldgen.HeightmapType;
+import dev.wyck.worldgen.biome.BiomeSource;
+import dev.wyck.worldgen.chunk.ChunkGenerator;
+import dev.wyck.worldgen.chunk.NoiseBasedChunkGenerator;
 import dev.wyck.worldgen.feature.ConfiguredFeature;
 import dev.wyck.worldgen.feature.custom.CustomFeature;
+import dev.wyck.worldgen.noise.Noise;
 import dev.wyck.worldgen.placement.PlacedFeature;
 import dev.wyck.worldgen.placement.PlacedFeatures;
 import dev.wyck.worldgen.placement.PlacementModifier;
@@ -200,11 +204,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class ExamplePlugin extends JavaPlugin {
     @Override
     public void onEnable() {
-        ResourceKey pillar = ResourceKey.of("example", "pillar");
+        ResourceKey pillarKey = ResourceKey.of("example", "pillar");
 
-        CustomFeature.register(pillar, new PillarFeature());
-        ConfiguredFeature tallFeature  = ConfiguredFeature.customFeature(pillar, new PillarFeature.PillarConfig(Material.OBSIDIAN, Material.GLOWSTONE, 10, 15));
-        ConfiguredFeature shortFeature = ConfiguredFeature.customFeature(pillar, new PillarFeature.PillarConfig(Material.BLACKSTONE, Material.SHROOMLIGHT, 3, 5));
+        CustomFeature<PillarFeature.PillarConfig> pillar = CustomFeature.register(pillarKey, new PillarFeature());
+        ConfiguredFeature tallFeature  = ConfiguredFeature.custom(pillar, new PillarFeature.PillarConfig(Material.OBSIDIAN, Material.GLOWSTONE, 10, 15));
+        ConfiguredFeature shortFeature = ConfiguredFeature.custom(pillar, new PillarFeature.PillarConfig(Material.BLACKSTONE, Material.SHROOMLIGHT, 3, 5));
 
         PlacedFeature tallPlaced = PlacedFeature.builder()
             .feature(tallFeature)
@@ -239,11 +243,12 @@ public class ExamplePlugin extends JavaPlugin {
             .generationSettings(generation)
             .register();
 
-        LevelStemEditor dimensionEditor = LevelStemEditor.create();
-        ResourceKey overworldKey = ResourceKey.of("minecraft", "overworld");
-        ResourceKey plains = ResourceKey.of("minecraft", "plains");
-        dimensionEditor.replaceInDimension(overworldKey, plains, myBiomeKey);
-        dimensionEditor.apply(); // Applies to all loaded worlds
+        // Generate a world that uses this biome so the feature is visible in-game.
+        ChunkGenerator generator = NoiseBasedChunkGenerator.of(BiomeSource.fixed(myBiomeKey), Noise.overworld());
+        LevelCreator.builder()
+            .levelKey(ResourceKey.of("example", "pillars"))
+            .generator(generator)
+            .create();
     }
 }`,
         },

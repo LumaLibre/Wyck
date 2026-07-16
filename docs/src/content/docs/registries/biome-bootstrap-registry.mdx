@@ -79,3 +79,51 @@ public class ExampleBootstrapper implements PluginBootstrap {
     }
 }`}
 />
+
+## Adding Biomes to Existing Dimensions
+
+:::note
+These operations require the `DATAPACK` composer. Because changes are written into Wyck's generated transient
+datapack, a world edited this way expects your biome to be present. If the plugin is removed, that world will fail to
+load. For non-persistent edits at runtime, see the [Level Stem Editor](/dimensions/level-stem-editor/) instead.
+:::
+
+<CodeBlock
+    lang="java"
+    filename="ExampleBootstrapper.java"
+    code={`import io.papermc.paper.plugin.bootstrap.BootstrapContext;
+import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
+import dev.wyck.biome.Biome;
+import dev.wyck.biome.CustomBiome;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.level.dimension.Dimension;
+import dev.wyck.registry.bootstrap.BootstrapBiomeRegistry;
+import dev.wyck.registry.bootstrap.Composer;
+import dev.wyck.worldgen.climate.ClimatePoint;
+
+public class ExampleBootstrapper implements PluginBootstrap {
+    @Override
+    public void bootstrap(BootstrapContext context) {
+        // Dimension editing requires the DATAPACK composer.
+        BootstrapBiomeRegistry registry = BootstrapBiomeRegistry.compose(context, Composer.DATAPACK);
+
+        CustomBiome myBiome = CustomBiome.builder(ResourceKey.of("example", "my_biome"))
+            .fogColor("#DB00FD")
+            .skyColor("#2F46FF")
+            .waterColor("#00FFD0")
+            .grassColor("#D1D13A")
+            .foliageColor("#FF6A00")
+            .build();
+        registry.queue(myBiome);
+
+        Dimension overworld = Dimension.reference(ResourceKey.of("minecraft", "overworld"));
+
+        // Add the biome to the overworld at a hot, humid climate point.
+        registry.addToDimension(overworld, myBiome, ClimatePoint.of(1.8f, 1.2f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f));
+
+        // ...or replace every plains biome in the overworld with it.
+        Biome plains = Biome.reference(ResourceKey.of("minecraft", "plains"));
+        registry.replaceInDimension(overworld, plains, myBiome);
+    }
+}`}
+/>

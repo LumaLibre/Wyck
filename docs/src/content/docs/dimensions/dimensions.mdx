@@ -66,6 +66,46 @@ public class ExamplePlugin extends JavaPlugin {
 }`}
 />
 
+## World Clocks & Timelines
+
+A dimension controls how time behaves through three related properties:
+
+- **`hasFixedTime(boolean)`**: when `true`, the sun and moon freeze in place (like the End or Nether). Set the actual
+frozen time-of-day on the worlds created from this dimension.
+- **`defaultClock(WorldClock)`**: a <SourceLink path="level/dimension/WorldClock.java">WorldClock</SourceLink>
+drives the day/night cycle. Use the built-ins `WorldClock.OVERWORLD` (a normal cycle) or `WorldClock.THE_END`
+(fixed), or `WorldClock.of("namespace:key")` to reference a custom one.
+- **`timelines(TimelineSet)`**: a <SourceLink path="level/dimension/TimelineSet.java">TimelineSet</SourceLink> lists
+the scheduled "timelines" (day, moon phases, villager schedules, ...) that run in the dimension.
+
+<CodeBlock
+    lang="java"
+    filename="ExamplePlugin.java"
+    code={
+`import dev.wyck.level.dimension.Dimension;
+import dev.wyck.level.dimension.TimelineSet;
+import dev.wyck.level.dimension.WorldClock;
+
+// A dimension that runs the normal overworld day/night cycle and schedules.
+Dimension.builder()
+    .hasFixedTime(false)
+    .defaultClock(WorldClock.OVERWORLD)
+    .timelines(TimelineSet.OVERWORLD) // day + moon + villager_schedule
+    // ...other properties
+    .register();
+
+// A timeless dimension: frozen sky, no scheduled timelines.
+Dimension.builder()
+    .hasFixedTime(true)
+    .defaultClock(WorldClock.THE_END)
+    .timelines(TimelineSet.EMPTY)
+    // ...other properties
+    .register();
+
+// A custom set of timelines by key.
+TimelineSet custom = TimelineSet.of(TimelineSet.OVERWORLD_DAY, TimelineSet.MOON);`}
+/>
+
 ## Using Dimensions
 
 Once you've created your dimension, you can use it to create worlds with the properties you've defined.

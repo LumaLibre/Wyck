@@ -1,6 +1,6 @@
 ---
 title: Value Providers
-description: Learn about the value providers used throughout Wyck worldgen, including vertical anchors and number providers.
+description: Learn about the number providers used throughout Wyck worldgen, including IntProvider and FloatProvider.
 sidebar:
     order: 2
 ---
@@ -8,24 +8,11 @@ sidebar:
 import CodeBlock from "@/components/CodeBlock.astro";
 import SourceLink from "@/components/SourceLink.astro";
 
-World generation rarely uses plain numbers. Rather, we use **value providers**, small objects that produce a number, a height,
-or a vertical position, sometimes randomly.
+World generation rarely uses plain numbers. Rather, we use **value providers**, small objects that produce a number,
+sometimes constant and sometimes sampled from a distribution. Carvers, features, and placement modifiers all take value
+providers instead of raw `int`s or `float`s so the same configuration can vary naturally across the world.
 
-## VerticalAnchor
-
-A <SourceLink path="worldgen/heightproviders/VerticalAnchor.java">VerticalAnchor</SourceLink> describes a single Y
-position relative to the world.
-
-<CodeBlock
-    lang="java"
-    filename="ExamplePlugin.java"
-    code={
-`import dev.wyck.worldgen.heightproviders.VerticalAnchor;
-
-VerticalAnchor.absolute(64); // exactly Y=64
-VerticalAnchor.aboveBottom(8); // 8 blocks above the world's minimum height
-VerticalAnchor.belowTop(1); // 1 block below the world's maximum height`}
-/>
+For providers that produce a Y position, see [Height Providers](/worldgen/height-providers/).
 
 ## IntProvider
 
@@ -39,8 +26,11 @@ either constant or sampled from a distribution.
 `import dev.wyck.worldgen.valueproviders.IntProvider;
 
 IntProvider.constant(4); // always 4
-IntProvider.uniform(2, 8); // evenly between 2 and 8
-IntProvider.triangle(6); // triangular distribution centered with spread 6`}
+IntProvider.uniform(2, 8); // evenly between 2 and 8 (inclusive)
+IntProvider.triangle(6); // triangular distribution with spread 6
+IntProvider.trapezoid(0, 16, 4); // trapezoidal distribution with a flat plateau
+IntProvider.biasedToBottom(2, 8); // skewed toward the lower end
+IntProvider.clampedNormal(2, 8, 5.0f, 1.5f); // normal distribution clamped to [2, 8]`}
 />
 
 ## FloatProvider
@@ -56,20 +46,30 @@ equivalent, used for radii, scales, and probabilities inside carvers and feature
 
 FloatProvider.constant(3.0f); // always 3.0
 FloatProvider.uniform(0.1f, 0.9f); // evenly between 0.1 and 0.9
-FloatProvider.trapezoid(0.0f, 6.0f, 2.0f); // trapezoidal distribution`}
+FloatProvider.trapezoid(0.0f, 6.0f, 2.0f); // trapezoidal distribution
+FloatProvider.clampedNormal(0.5f, 0.1f, 0.0f, 1.0f); // normal distribution clamped to [0.0, 1.0]`}
 />
 
-## HeightProvider
+## WeightedList
 
-A <SourceLink path="worldgen/heightproviders/HeightProvider.java">HeightProvider</SourceLink> produces a Y
-position by combining vertical anchors.
+A <SourceLink path="util/WeightedList.java">WeightedList</SourceLink> is a generic pool of entries, each with an
+integer weight, that samples one entry at random. Several providers accept one to pick between whole sub-providers —
+for example `IntProvider.weightedList(...)` and
+[`HeightProvider.weightedList(...)`](/worldgen/height-providers/) — and it also shows up in tree decorators and
+foliage configuration.
 
 <CodeBlock
     lang="java"
     filename="ExamplePlugin.java"
-    code={`import dev.wyck.worldgen.heightproviders.HeightProvider;
-import dev.wyck.worldgen.heightproviders.VerticalAnchor;
+    code={
+`import dev.wyck.util.WeightedList;
+import dev.wyck.worldgen.valueproviders.IntProvider;
 
-HeightProvider.uniform(VerticalAnchor.aboveBottom(8), VerticalAnchor.absolute(180));
-HeightProvider.trapezoid(VerticalAnchor.absolute(0), VerticalAnchor.absolute(128), 0);`}
+// Higher weight = chosen more often. Here 8 is picked roughly twice as often as 24.
+WeightedList<IntProvider> counts = WeightedList.<IntProvider>builder()
+    .add(IntProvider.constant(8), 2)
+    .add(IntProvider.uniform(16, 24), 1)
+    .build();
+
+IntProvider count = IntProvider.weightedList(counts);`}
 />
