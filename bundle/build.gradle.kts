@@ -54,7 +54,6 @@ configurations {
 }
 
 tasks.shadowJar {
-    relocate("org.objectweb.asm", "dev.wyck.asm")
     exclude("com/google/**")
     minimize {
         exclude(project(":api"))

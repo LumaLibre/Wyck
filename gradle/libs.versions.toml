@@ -14,7 +14,6 @@ spongepowered-configurate = "4.2.0"
 faststats = "0.26.1"
 lombok = "9.5.0"
 modrinth-minotaur = "2.+"
-asm = "9.7.1"
 junit = "5.11.4"
 
 [plugins]
@@ -34,7 +33,6 @@ google-guava = { group = "com.google.guava", name = "guava", version.ref = "goog
 paper-api = { group = "io.papermc.paper", name = "paper-api", version.ref = "minecraft-v1-m21-r11" }
 spongepowered-configurate-yaml = { group = "org.spongepowered", name = "configurate-yaml", version.ref = "spongepowered-configurate" }
 faststats-metrics = { group = "dev.faststats.metrics", name = "bukkit", version.ref = "faststats" }
-org-ow2-asm = { group = "org.ow2.asm", name = "asm", version.ref = "asm" }
 junit-bom = { group = "org.junit", name = "junit-bom", version.ref = "junit" }
 junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter" }
 junit-platform-launcher = { group = "org.junit.platform", name = "junit-platform-launcher" }

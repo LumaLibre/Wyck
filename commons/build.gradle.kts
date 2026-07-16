@@ -5,7 +5,6 @@ plugins {
 dependencies {
     val libs = rootProject.libs
     api(project(":api"))
-    implementation(libs.org.ow2.asm)
     compileOnly(libs.protocollib)
     compileOnly(libs.packetevents)
 

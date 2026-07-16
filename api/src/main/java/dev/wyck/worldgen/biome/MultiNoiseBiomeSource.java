@@ -27,14 +27,6 @@ public interface MultiNoiseBiomeSource extends BiomeSource {
     List<Entry> biomes();
 
     /**
-     * Whether to use Wyck's ASM transient biome source.
-     * @return whether to use Wyck's ASM transient biome source
-     * @since 3.0.0
-     */
-    @AsOf("3.0.0")
-    boolean isTransient();
-
-    /**
      * Converts this object back to a builder.
      * @return a builder with the same values as this object
      * @since 3.0.0
@@ -47,24 +39,12 @@ public interface MultiNoiseBiomeSource extends BiomeSource {
     /**
      * Creates a new multi noise biome source.
      * @param biomes the biomes and their climate points
-     * @param isTransient whether to use Wyck's ASM transient biome source
-     * @return the multi noise biome source
-     * @since 3.0.0
-     */
-    @AsOf("3.0.0")
-    static MultiNoiseBiomeSource of(List<Entry> biomes, boolean isTransient) {
-        return WIRE.construct(biomes, isTransient);
-    }
-
-    /**
-     * Creates a new multi noise biome source.
-     * @param biomes the biomes and their climate points
      * @return the multi noise biome source
      * @since 3.0.0
      */
     @AsOf("3.0.0")
     static MultiNoiseBiomeSource of(List<Entry> biomes) {
-        return of(biomes, false);
+        return WIRE.construct(biomes);
     }
 
     /**
@@ -86,13 +66,11 @@ public interface MultiNoiseBiomeSource extends BiomeSource {
     final class Builder {
 
         private final List<Entry> biomes = new ArrayList<>();
-        private boolean isTransient = false;
 
         public Builder() {}
 
         public Builder(MultiNoiseBiomeSource source) {
             this.biomes.addAll(source.biomes());
-            this.isTransient = source.isTransient();
         }
 
         /**
@@ -122,25 +100,13 @@ public interface MultiNoiseBiomeSource extends BiomeSource {
         }
 
         /**
-         * Sets whether to use Wyck's ASM transient biome source.
-         * @param isTransient whether to use Wyck's ASM transient biome source
-         * @return this builder
-         * @since 3.0.0
-         */
-        @AsOf("3.0.0")
-        public Builder isTransient(boolean isTransient) {
-            this.isTransient = isTransient;
-            return this;
-        }
-
-        /**
          * Builds the multi noise biome source.
          * @return the multi noise biome source
          * @since 3.0.0
          */
         @AsOf("3.0.0")
         public MultiNoiseBiomeSource build() {
-            return of(biomes, isTransient);
+            return of(biomes);
         }
     }
 

@@ -1,6 +1,5 @@
 package dev.wyck.worldgen.biome;
 
-import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
 import dev.wyck.util.BootstrapSafeMinecraftRegistries;
 import org.jetbrains.annotations.ApiStatus;
@@ -11,10 +10,7 @@ import java.util.List;
 
 @NullMarked
 @ApiStatus.Internal
-public record MultiNoiseBiomeSourceImpl(
-    @Override List<Entry> biomes,
-    @Override boolean isTransient
-) implements MultiNoiseBiomeSource {
+public record MultiNoiseBiomeSourceImpl(@Override List<Entry> biomes) implements MultiNoiseBiomeSource {
     @Override
     public Object toMinecraft() {
         net.minecraft.core.Registry<net.minecraft.world.level.biome.Biome> biomesRegistry = BootstrapSafeMinecraftRegistries.mappedRegistry(net.minecraft.core.registries.Registries.BIOME);
@@ -28,11 +24,6 @@ public record MultiNoiseBiomeSourceImpl(
         }
 
         net.minecraft.world.level.biome.Climate.ParameterList<net.minecraft.core.Holder<net.minecraft.world.level.biome.Biome>> parameterList = new net.minecraft.world.level.biome.Climate.ParameterList<>(list);
-
-        if (this.isTransient) {
-            return TransientMultiNoiseBiomeSource.create(Either.left(parameterList), parameterList);
-        } else {
-            return net.minecraft.world.level.biome.MultiNoiseBiomeSource.createFromList(parameterList);
-        }
+        return net.minecraft.world.level.biome.MultiNoiseBiomeSource.createFromList(parameterList);
     }
 }

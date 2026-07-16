@@ -31,7 +31,6 @@ dependencies {
 tasks {
     shadowJar {
         relocate("dev.faststats", "dev.wyck.metrics")
-        relocate("org.objectweb.asm", "dev.wyck.asm")
         exclude("com/google/**")
 
         minimize {
