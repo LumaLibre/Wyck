@@ -11,14 +11,6 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public record VanillaLevelSpawnerImpl(Kind kind) implements LevelSpawner {
 
-    public enum Kind {
-        PHANTOM,
-        PATROL,
-        CAT,
-        VILLAGE_SIEGE,
-        WANDERING_TRADER
-    }
-
     @Override
     public Object toMinecraft(Object savedDataStorage) {
         return switch (kind) {

@@ -2,6 +2,7 @@ package dev.wyck.codegen;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.data.worldgen.Carvers;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.data.worldgen.features.AquaticFeatures;
@@ -74,7 +75,8 @@ public final class Generators {
         featureTypes(),
         worldCarverTypes(),
         activities(),
-        structureSets()
+        structureSets(),
+        carvers()
     );
 
     private static GeneratorSpec configuredFeatures() {
@@ -416,6 +418,23 @@ public final class Generators {
             "3.0.0"
         );
     }
+
+    private static GeneratorSpec carvers() {
+        return new ReferenceSpec(
+            "dev.wyck.worldgen.carver",
+            "Carvers",
+            "ConfiguredWorldCarver",
+            "ConfiguredWorldCarver.reference",
+            ResourceKey.class,
+            Generators::keyLocation,
+            List.of(
+                Carvers.class
+            ),
+            "Typed references to the built-in configured carvers registered by vanilla.",
+            "2.3.0"
+        );
+    }
+
 
     private static @Nullable Identifier fluidLocation(Object entry) {
         if (entry instanceof Fluid fluid) {
