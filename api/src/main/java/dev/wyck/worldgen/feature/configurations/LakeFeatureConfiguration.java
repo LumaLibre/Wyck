@@ -23,7 +23,7 @@ import org.jspecify.annotations.Nullable;
 public interface LakeFeatureConfiguration extends FeatureConfiguration {
 
     @ApiStatus.Internal
-    ConstructWireProvider<LakeFeatureConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.feature.configurations.LakeFeatureConfigurationImpl");
+    ConstructWireProvider<LakeFeatureConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.*?.worldgen.feature.configurations.LakeFeatureConfigurationImpl");
 
     /**
      * The block to use for the fluid of the lake.

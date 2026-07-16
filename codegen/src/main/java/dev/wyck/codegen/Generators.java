@@ -34,6 +34,7 @@ import net.minecraft.world.level.MoonPhase;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeSpecialEffects;
 import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.levelgen.GenerationStep;
@@ -64,6 +65,7 @@ public final class Generators {
         decorations(),
         heightmapTypes(),
         caveSurfaces(),
+        rotations(),
         tristates(),
         skyboxes(),
         cardinalLightTypes(),
@@ -250,6 +252,21 @@ public final class Generators {
                 "@see <a href=\"https://minecraft.wiki/w/Surface_rule#Surface_conditions\">Surface rule (surface conditions)</a>"
             ),
             "3.0.0"
+        );
+    }
+
+    private static GeneratorSpec rotations() {
+        return new EnumSpec(
+            "dev.wyck.worldgen",
+            "Rotation",
+            Rotation.class,
+            Generators::enumName,
+            List.of(
+                "A rotation applied to a structure template, in 90-degree steps about the Y axis.",
+                "",
+                "@see <a href=\"https://minecraft.wiki/w/Template_pool\">Template pool</a>"
+            ),
+            "3.0.1"
         );
     }
 

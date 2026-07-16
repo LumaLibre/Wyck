@@ -19,6 +19,16 @@ public interface FeatureConfiguration extends Wrapper {
     NoneFeatureConfiguration NONE = NoneFeatureConfiguration.INSTANCE; // vanilla
 
     /**
+     * Gets the {@link NoneFeatureConfiguration} instance.
+     * @return the none feature configuration
+     * @since 3.0.1
+     */
+    @AsOf("3.0.1")
+    static NoneFeatureConfiguration none() {
+        return NONE;
+    }
+
+    /**
      * Creates a builder for a {@link BlockBlobConfiguration}.
      * @return a new block blob configuration builder
      * @since 3.0.0
@@ -369,5 +379,45 @@ public interface FeatureConfiguration extends Wrapper {
     @AsOf("3.0.0")
     static LakeFeatureConfiguration.Builder lake() {
         return LakeFeatureConfiguration.builder();
+    }
+
+    /**
+     * Creates a builder for a {@link TemplateFeatureConfiguration}.
+     * @return a new template feature configuration builder
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
+    static TemplateFeatureConfiguration.Builder templateFeature() {
+        return TemplateFeatureConfiguration.builder();
+    }
+
+    /**
+     * Creates a builder for an {@link UnderwaterMagmaConfiguration}.
+     * @return a new underwater magma configuration builder
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
+    static UnderwaterMagmaConfiguration.Builder underwaterMagma() {
+        return UnderwaterMagmaConfiguration.builder();
+    }
+
+    /**
+     * Creates a builder for a {@link VegetationPatchConfiguration}.
+     * @return a new vegetation patch configuration builder
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
+    static VegetationPatchConfiguration.Builder vegetationPatch() {
+        return VegetationPatchConfiguration.builder();
+    }
+
+    /**
+     * Creates a builder for a {@link WeightedRandomFeatureConfiguration}.
+     * @return a new weighted random feature configuration builder
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
+    static WeightedRandomFeatureConfiguration.Builder weightedRandom() {
+        return WeightedRandomFeatureConfiguration.builder();
     }
 }
