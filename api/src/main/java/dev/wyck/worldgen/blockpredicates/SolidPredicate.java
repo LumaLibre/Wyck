@@ -78,6 +78,13 @@ public interface SolidPredicate extends BlockPredicate {
         return new Builder();
     }
 
+    /**
+     * Builder for {@link SolidPredicate}.
+     * @since 3.0.0
+     * @version 3.0.0
+     * @author Jsinco
+     */
+    @AsOf("3.0.0")
     final class Builder {
         private BlockVector offset = new BlockVector(0, 0, 0);
 
@@ -96,6 +103,22 @@ public interface SolidPredicate extends BlockPredicate {
         @AsOf("3.0.0")
         public Builder offset(BlockVector offset) {
             this.offset = offset;
+            return this;
+        }
+
+        // Friendly
+
+        /**
+         * Sets the offset.
+         * @param x the x offset
+         * @param y the y offset
+         * @param z the z offset
+         * @return this builder
+         * @since 3.0.0
+         */
+        @AsOf("3.0.0")
+        public Builder offset(int x, int y, int z) {
+            this.offset = new BlockVector(x, y, z);
             return this;
         }
 

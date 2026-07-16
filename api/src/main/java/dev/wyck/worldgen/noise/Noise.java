@@ -120,4 +120,14 @@ public interface Noise extends Wrapper {
     static Noise caves() {
         return CAVES;
     }
+
+    /**
+     * The large biomes noise function.
+     * @return the large biomes noise function
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
+    static Noise largeBiomes() {
+        return LARGE_BIOMES;
+    }
 }

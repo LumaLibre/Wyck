@@ -127,6 +127,19 @@ public interface FixedPlacement extends PlacementModifier {
         }
 
         /**
+         * Adds a single position to the builder.
+         * @param x the x coordinate
+         * @param y the y coordinate
+         * @param z the z coordinate
+         * @return this builder
+         * @since 3.0.0
+         */
+        @AsOf("3.0.0")
+        public Builder position(int x, int y, int z) {
+            return position(new BlockVector(x, y, z));
+        }
+
+        /**
          * Builds the fixed placement.
          * @return the fixed placement
          * @since 3.0.0

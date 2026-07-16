@@ -70,6 +70,13 @@ public interface InsideWorldBoundsPredicate extends BlockPredicate {
         return new Builder();
     }
 
+    /**
+     * Builder for {@link InsideWorldBoundsPredicate}.
+     * @since 3.0.0
+     * @version 3.0.0
+     * @author Jsinco
+     */
+    @AsOf("3.0.0")
     final class Builder {
         private BlockVector offset = new BlockVector(0, 0, 0);
 
@@ -89,6 +96,21 @@ public interface InsideWorldBoundsPredicate extends BlockPredicate {
         public Builder offset(BlockVector offset) {
             this.offset = offset;
             return this;
+        }
+
+        // Friendly
+
+        /**
+         * Sets the offset.
+         * @param x the x-coordinate of the offset
+         * @param y the y-coordinate of the offset
+         * @param z the z-coordinate of the offset
+         * @return this builder
+         * @since 3.0.0
+         */
+        @AsOf("3.0.0")
+        public Builder offset(int x, int y, int z) {
+            return offset(new BlockVector(x, y, z));
         }
 
         /**

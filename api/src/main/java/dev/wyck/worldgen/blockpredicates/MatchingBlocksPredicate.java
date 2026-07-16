@@ -85,6 +85,13 @@ public interface MatchingBlocksPredicate extends BlockPredicate {
         return new Builder();
     }
 
+    /**
+     * Builder for {@link MatchingBlocksPredicate}.
+     * @since 3.0.0
+     * @version 3.0.0
+     * @author Jsinco
+     */
+    @AsOf("3.0.0")
     final class Builder {
         private BlockVector offset = new BlockVector(0, 0, 0);
         private List<Material> blocks = new ArrayList<>();
@@ -154,6 +161,19 @@ public interface MatchingBlocksPredicate extends BlockPredicate {
         public Builder block(Material... blocks) {
             Collections.addAll(this.blocks, blocks);
             return this;
+        }
+
+        /**
+         * Sets the offset.
+         * @param x the x offset
+         * @param y the y offset
+         * @param z the z offset
+         * @return this builder
+         * @since 3.0.0
+         */
+        @AsOf("3.0.0")
+        public Builder offset(int x, int y, int z) {
+            return offset(new BlockVector(x, y, z));
         }
 
         /**

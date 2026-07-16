@@ -108,6 +108,13 @@ public interface MatchingBlockTagPredicate extends BlockPredicate {
         return new Builder();
     }
 
+    /**
+     * Builder for {@link MatchingBlockTagPredicate}.
+     * @since 3.0.0
+     * @version 3.0.0
+     * @author Jsinco
+     */
+    @AsOf("3.0.0")
     final class Builder {
         private BlockVector offset = new BlockVector(0, 0, 0);
         private @Nullable ResourceKey tag;

@@ -72,6 +72,13 @@ public interface HasSturdyFacePredicate extends BlockPredicate {
         return new Builder();
     }
 
+    /**
+     * Builder for {@link HasSturdyFacePredicate}.
+     * @since 3.0.0
+     * @version 3.0.0
+     * @author Jsinco
+     */
+    @AsOf("3.0.0")
     final class Builder {
         private BlockVector offset = new BlockVector(0, 0, 0);
         private @Nullable BlockFace direction;
@@ -105,6 +112,21 @@ public interface HasSturdyFacePredicate extends BlockPredicate {
         public Builder direction(BlockFace direction) {
             this.direction = direction;
             return this;
+        }
+
+        // Friendly
+
+        /**
+         * Sets the offset.
+         * @param x the x offset
+         * @param y the y offset
+         * @param z the z offset
+         * @return this builder
+         * @since 3.0.0
+         */
+        @AsOf("3.0.0")
+        public Builder offset(int x, int y, int z) {
+            return offset(new BlockVector(x, y, z));
         }
 
         /**

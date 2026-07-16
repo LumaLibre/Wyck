@@ -91,6 +91,22 @@ public interface ReplaceablePredicate extends BlockPredicate {
             return this;
         }
 
+        // Friendly
+
+        /**
+         * Sets the offset.
+         * @param x the x offset
+         * @param y the y offset
+         * @param z the z offset
+         * @return this builder
+         * @since 3.0.0
+         */
+        @AsOf("3.0.0")
+        public Builder offset(int x, int y, int z) {
+            this.offset = new BlockVector(x, y, z);
+            return this;
+        }
+
         /**
          * Builds the replaceable predicate.
          * @return the replaceable predicate
