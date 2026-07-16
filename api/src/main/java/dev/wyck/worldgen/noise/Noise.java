@@ -24,11 +24,12 @@ import java.util.Optional;
 public interface Noise extends Wrapper {
 
     Noise OVERWORLD = reference(ResourceKey.minecraft("overworld"));
-    Noise NETHER = reference(ResourceKey.minecraft("the_nether"));
+    Noise NETHER = reference(ResourceKey.minecraft("nether"));
     Noise END = reference(ResourceKey.minecraft("end"));
     Noise FLOATING_ISLANDS = reference(ResourceKey.minecraft("floating_islands"));
     Noise AMPLIFIED = reference(ResourceKey.minecraft("amplified"));
     Noise CAVES = reference(ResourceKey.minecraft("caves"));
+    Noise LARGE_BIOMES = reference(ResourceKey.minecraft("large_biomes"));
 
     /**
      * The key of the noise function.
