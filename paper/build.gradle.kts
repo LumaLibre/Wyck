@@ -84,7 +84,7 @@ paper {
 
 modrinth {
     token.set(System.getenv("MODRINTH_TOKEN"))
-    projectId.set("biomesapi")
+    projectId.set("wyck")
 
     val version = project.version.toString()
 
