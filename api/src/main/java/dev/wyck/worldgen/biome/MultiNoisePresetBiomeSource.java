@@ -22,8 +22,8 @@ public interface MultiNoisePresetBiomeSource extends BiomeSource, Keyed {
     @ApiStatus.Internal
     ConstructWireProvider<MultiNoisePresetBiomeSource> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.biome.MultiNoisePresetBiomeSourceImpl");
 
-    MultiNoisePresetBiomeSource OVERWORLD = MultiNoisePresetBiomeSource.of(ResourceKey.of("overworld"));
-    MultiNoisePresetBiomeSource NETHER = MultiNoisePresetBiomeSource.of(ResourceKey.of("nether"));
+    MultiNoisePresetBiomeSource OVERWORLD = MultiNoisePresetBiomeSource.of(ResourceKey.minecraft("overworld"));
+    MultiNoisePresetBiomeSource NETHER = MultiNoisePresetBiomeSource.of(ResourceKey.minecraft("nether"));
 
     /**
      * A reference to a hardcoded parameter list preset.

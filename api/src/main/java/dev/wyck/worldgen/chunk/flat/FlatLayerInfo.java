@@ -62,7 +62,7 @@ public interface FlatLayerInfo extends Wrapper {
     @AsOf("3.0.0")
     static FlatLayerInfo of(Material block, int height) {
         Preconditions.checkArgument(height >= 0 && height <= Y_MAX, "height must be between 0 and 4064");
-        return WIRE.construct(height, block);
+        return WIRE.construct(block, height);
     }
 
     /**
