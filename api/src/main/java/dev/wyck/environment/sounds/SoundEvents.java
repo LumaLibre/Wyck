@@ -13,11 +13,13 @@ import org.jspecify.annotations.NullMarked;
  * Typed references that point to vanilla's sound events.
  * </p>
  *
+ * @deprecated Use {@link BukkitSoundEvent} instead.
  * @since 2.4.1
  * @version 3.0.0
  * @author Wyck codegen
  */
 @NullMarked
+@Deprecated
 @AsOf("2.4.1")
 @Generated("2026-07-15T18:48:22.471027Z")
 public final class SoundEvents {

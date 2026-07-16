@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.ConstructWireProvider;
 import dev.wyck.wrapper.Wrapper;
+import org.bukkit.Sound;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -66,6 +67,20 @@ public interface Music extends Wrapper {
     @AsOf("2.4.1")
     static Music of(SoundEvent sound, int minDelay, int maxDelay, boolean replaceCurrentMusic) {
         return WIRE.construct(sound, minDelay, maxDelay, replaceCurrentMusic);
+    }
+
+    /**
+     * Creates a new music record.
+     * @param bukkitSound the sound of the music
+     * @param minDelay the minimum delay of the music
+     * @param maxDelay the maximum delay of the music
+     * @param replaceCurrentMusic whether the music should replace the current music
+     * @return a new music record
+     * @since 3.0.1
+     */
+    @AsOf("3.0.1")
+    static Music of(Sound bukkitSound, int minDelay, int maxDelay, boolean replaceCurrentMusic) {
+        return of(BukkitSoundEvent.variableRange(bukkitSound), minDelay, maxDelay, replaceCurrentMusic);
     }
 
     /**
@@ -138,6 +153,19 @@ public interface Music extends Wrapper {
         public Builder replaceCurrentMusic(boolean replaceCurrentMusic) {
             this.replaceCurrentMusic = replaceCurrentMusic;
             return this;
+        }
+
+        // Friendly
+
+        /**
+         * Sets the sound of the music.
+         * @param bukkitSound the sound of the music
+         * @return this builder
+         * @since 3.0.1
+         */
+        @AsOf("3.0.1")
+        public Builder sound(Sound bukkitSound) {
+            return sound(BukkitSoundEvent.variableRange(bukkitSound));
         }
 
         /**
