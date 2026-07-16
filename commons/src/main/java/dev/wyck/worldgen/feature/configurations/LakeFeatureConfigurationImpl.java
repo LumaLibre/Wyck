@@ -1,5 +1,6 @@
 package dev.wyck.worldgen.feature.configurations;
 
+import com.google.common.base.Preconditions;
 import dev.wyck.worldgen.blockpredicates.BlockPredicate;
 import dev.wyck.worldgen.stateproviders.BlockStateProvider;
 import org.jetbrains.annotations.ApiStatus;
@@ -14,6 +15,12 @@ public record LakeFeatureConfigurationImpl(
     @Override BlockPredicate canReplaceWithAirOrFluid,
     @Override BlockPredicate canReplaceWithBarrier
 ) implements LakeFeatureConfiguration {
+
+    public LakeFeatureConfigurationImpl {
+        Preconditions.checkNotNull(canPlaceFeature, "canPlaceFeature cannot be null");
+        Preconditions.checkNotNull(canReplaceWithAirOrFluid, "canReplaceWithAirOrFluid cannot be null");
+        Preconditions.checkNotNull(canReplaceWithBarrier, "canReplaceWithBarrier cannot be null");
+    }
 
     @Override
     @SuppressWarnings("deprecation")
