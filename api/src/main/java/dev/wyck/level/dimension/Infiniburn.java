@@ -4,6 +4,8 @@ import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.ConstructWireProvider;
 import dev.wyck.keys.ResourceKey;
+import dev.wyck.tags.TagKey;
+import dev.wyck.tags.TagSet;
 import dev.wyck.wrapper.Wrapper;
 import org.bukkit.Material;
 import org.bukkit.Tag;
@@ -12,7 +14,6 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -33,20 +34,13 @@ public interface Infiniburn extends Wrapper {
     Infiniburn END = of(ResourceKey.minecraft("infiniburn_end"));
 
     /**
-     * The blocks that can burn infinitely in this dimension.
-     * @return the blocks that can burn in this dimension
-     * @since 3.0.0
+     * The tag or set of blocks that can burn infinitely in this
+     * dimension.
+     * @return the tag or set of blocks that can burn in this dimension
+     * @since 3.1.0
      */
-    @AsOf("3.0.0")
-    Set<Material> blocks();
-
-    /**
-     * The tag of blocks that can burn infinitely in this dimension. This should point at a tag in the {@code tags/blocks} registry.
-     * @return the tag of blocks that can burn in this dimension
-     * @since 2.4.0
-     */
-    @AsOf("2.4.0")
-    Optional<ResourceKey> tag();
+    @AsOf("3.1.0")
+    TagSet<Material> blocks();
 
     /**
      * Creates a new builder for this infiniburn.
@@ -66,8 +60,8 @@ public interface Infiniburn extends Wrapper {
      * @since 2.4.0
      */
     @AsOf("2.4.0")
-    static Infiniburn of(Set<Material> blocks, @Nullable ResourceKey tag) {
-        return WIRE.construct(blocks, Optional.ofNullable(tag));
+    static Infiniburn of(TagSet<Material> blocks) {
+        return WIRE.construct(blocks);
     }
 
     /**
@@ -78,7 +72,7 @@ public interface Infiniburn extends Wrapper {
      */
     @AsOf("3.0.0")
     static Infiniburn of(Set<Material> blocks) {
-        return of(blocks, null);
+        return of(TagSet.ofBlocks(blocks));
     }
 
     /**
@@ -89,7 +83,7 @@ public interface Infiniburn extends Wrapper {
      */
     @AsOf("2.4.0")
     static Infiniburn of(ResourceKey key) {
-        return of(Set.of(), key);
+        return of(TagSet.ofBlockTag(key));
     }
 
     /**
@@ -122,13 +116,17 @@ public interface Infiniburn extends Wrapper {
     @AsOf("3.0.0")
     final class Builder {
         private Set<Material> blocks = new HashSet<>();
-        private @Nullable ResourceKey tag;
+        private @Nullable TagKey tag;
 
         private Builder() {}
 
         public Builder(Infiniburn infiniburn) {
-            this.blocks.addAll(infiniburn.blocks());
-            this.tag = infiniburn.tag().orElse(null);
+            infiniburn.blocks()
+                .value()
+                .fold(
+                    set -> blocks.addAll(set),
+                    tag -> this.tag = tag
+                );
         }
 
         /**
@@ -144,14 +142,14 @@ public interface Infiniburn extends Wrapper {
         }
 
         /**
-         * Sets the tag of blocks that can burn infinitely in this dimension.
-         * @param tag the tag of blocks that can burn infinitely in this dimension
+         * Sets the tagKey of blocks that can burn infinitely in this dimension.
+         * @param tagKey the tagKey key of blocks that can burn infinitely in this dimension
          * @return this builder
-         * @since 3.0.0
+         * @since 3.1.0
          */
-        @AsOf("3.0.0")
-        public Builder tag(@Nullable ResourceKey tag) {
-            this.tag = tag;
+        @AsOf("3.1.0")
+        public Builder tag(@Nullable TagKey tagKey) {
+            this.tag = tagKey;
             return this;
         }
 
@@ -177,7 +175,19 @@ public interface Infiniburn extends Wrapper {
          */
         @AsOf("3.0.0")
         public Builder tag(Tag<Material> tag) {
-            this.tag = ResourceKey.of(tag.getKey().namespace(), tag.getKey().value());
+            this.tag = TagKey.blocks(tag);
+            return this;
+        }
+
+        /**
+         * Sets the tag of blocks that can burn infinitely in this dimension.
+         * @param tag the tag of blocks that can burn infinitely in this dimension
+         * @return this builder
+         * @since 3.0.0
+         */
+        @AsOf("3.0.0")
+        public Builder tag(ResourceKey tag) {
+            this.tag = TagKey.blocks(tag);
             return this;
         }
 
@@ -188,7 +198,13 @@ public interface Infiniburn extends Wrapper {
          */
         @AsOf("3.0.0")
         public Infiniburn build() {
-            return of(blocks, tag);
+            boolean hasBlocks = !blocks.isEmpty();
+            boolean hasTag = tag != null;
+
+            Preconditions.checkArgument(hasBlocks || hasTag, "blocks or tag must be set");
+            Preconditions.checkArgument(!(hasBlocks && hasTag), "blocks and tag cannot be set at the same time");
+
+            return of(hasTag ? TagSet.ofBlockTag(tag) : TagSet.ofBlocks(blocks));
         }
     }
 }

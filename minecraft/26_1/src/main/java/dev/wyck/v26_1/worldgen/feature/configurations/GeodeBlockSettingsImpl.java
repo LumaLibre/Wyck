@@ -1,7 +1,7 @@
 package dev.wyck.v26_1.worldgen.feature.configurations;
 
 import com.google.common.base.Preconditions;
-import dev.wyck.keys.ResourceKey;
+import dev.wyck.tags.TagSet;
 import dev.wyck.worldgen.feature.configurations.geode.GeodeBlockSettings;
 import dev.wyck.worldgen.stateproviders.BlockStateProvider;
 import org.bukkit.Material;
@@ -9,11 +9,9 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.block.data.CraftBlockData;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @NullMarked
 @ApiStatus.Internal
@@ -24,15 +22,13 @@ public record GeodeBlockSettingsImpl(
     @Override BlockStateProvider middleLayerProvider,
     @Override BlockStateProvider outerLayerProvider,
     @Override List<BlockData> innerPlacements,
-    @Override Set<Material> cannotReplace,
-    @Override Set<Material> invalidBlocks,
-    @Override @Nullable ResourceKey legacy$cannotReplace,
-    @Override @Nullable ResourceKey legacy$invalidBlocks
+    @Override TagSet<Material> cannotReplace,
+    @Override TagSet<Material> invalidBlocks
 ) implements GeodeBlockSettings {
     @Override
     public Object toMinecraft() {
-        Preconditions.checkNotNull(legacy$cannotReplace, "legacy$cannotReplace");
-        Preconditions.checkNotNull(legacy$invalidBlocks, "legacy$invalidBlocks");
+        Preconditions.checkState(cannotReplace.isTag(), "cannotReplace must be a tag in this version of Minecraft");
+        Preconditions.checkState(invalidBlocks.isTag(), "invalidBlocks must be a tag in this version of Minecraft");
         List<net.minecraft.world.level.block.state.BlockState> placements = new ArrayList<>(innerPlacements.size());
         for (BlockData data : innerPlacements) {
             placements.add(((CraftBlockData) data).getState());
@@ -45,13 +41,8 @@ public record GeodeBlockSettingsImpl(
             middleLayerProvider.asHandle(),
             outerLayerProvider.asHandle(),
             placements,
-            toBlockTag(legacy$cannotReplace),
-            toBlockTag(legacy$invalidBlocks)
+            cannotReplace.asTagKey(),
+            invalidBlocks.asTagKey()
         );
-    }
-
-    private static net.minecraft.tags.TagKey<net.minecraft.world.level.block.Block> toBlockTag(ResourceKey key) {
-        net.minecraft.resources.Identifier location = key.asHandle();
-        return net.minecraft.tags.TagKey.create(net.minecraft.core.registries.Registries.BLOCK, location);
     }
 }

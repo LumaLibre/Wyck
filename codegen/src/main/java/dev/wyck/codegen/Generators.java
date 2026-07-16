@@ -266,7 +266,7 @@ public final class Generators {
                 "",
                 "@see <a href=\"https://minecraft.wiki/w/Template_pool\">Template pool</a>"
             ),
-            "3.0.1"
+            "3.1.0"
         );
     }
 

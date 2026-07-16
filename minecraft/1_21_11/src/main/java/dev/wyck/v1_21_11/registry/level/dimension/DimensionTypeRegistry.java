@@ -10,6 +10,7 @@ import dev.wyck.keys.ResourceKey;
 import dev.wyck.level.dimension.Dimension;
 import dev.wyck.level.dimension.InfiniburnImpl;
 import dev.wyck.registry.DimensionRegistry;
+import dev.wyck.registry.internal.RegistryId;
 import dev.wyck.registry.internal.WyckRegistry;
 import dev.wyck.util.BootstrapSafeMinecraftRegistries;
 import dev.wyck.util.Lazy;
@@ -37,7 +38,7 @@ import java.util.Map;
 @SuppressWarnings("unchecked")
 public class DimensionTypeRegistry implements DimensionRegistry {
 
-    private final Lazy<WyckRegistry> dimensionTypeRegistry = WyckRegistry.lazy("dimension_type");
+    private final Lazy<WyckRegistry> dimensionTypeRegistry = WyckRegistry.lazy(RegistryId.DIMENSION_TYPE);
 
     @Override
     public DimensionType buildDelegate(Dimension dimension) {

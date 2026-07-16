@@ -21,9 +21,9 @@ public interface FeatureConfiguration extends Wrapper {
     /**
      * Gets the {@link NoneFeatureConfiguration} instance.
      * @return the none feature configuration
-     * @since 3.0.1
+     * @since 3.1.0
      */
-    @AsOf("3.0.1")
+    @AsOf("3.1.0")
     static NoneFeatureConfiguration none() {
         return NONE;
     }

@@ -4,6 +4,9 @@ import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.ConstructWireProvider;
 import dev.wyck.keys.ResourceKey;
+import dev.wyck.tags.TagKey;
+import dev.wyck.tags.TagSet;
+import dev.wyck.util.Either;
 import dev.wyck.worldgen.placement.PlacedFeature;
 import dev.wyck.worldgen.stateproviders.BlockStateProvider;
 import dev.wyck.worldgen.surface.condition.CaveSurface;
@@ -21,12 +24,12 @@ import java.util.Set;
  * from a floor or down from a ceiling. Used by vanilla for lush cave floors and dripleaf patches.
  *
  * @see <a href="https://minecraft.wiki/w/Vegetation_Patch">Vegetation Patch</a>
- * @since 3.0.1
- * @version 3.0.1
+ * @since 3.1.0
+ * @version 3.1.0
  * @author Jsinco
  */
 @NullMarked
-@AsOf("3.0.1")
+@AsOf("3.1.0")
 public interface VegetationPatchConfiguration extends FeatureConfiguration {
 
     @ApiStatus.Internal
@@ -35,99 +38,89 @@ public interface VegetationPatchConfiguration extends FeatureConfiguration {
     /**
      * The blocks that the patch is allowed to replace.
      * @return the replaceable materials
-     * @since 3.0.1
+     * @since 3.1.0
      */
-    @AsOf("3.0.1")
-    Set<Material> replaceable();
+    @AsOf("3.1.0")
+    TagSet<Material> replaceable();
 
     /**
      * The block used to build the patch (the "ground").
      * @return the ground state provider
-     * @since 3.0.1
+     * @since 3.1.0
      */
-    @AsOf("3.0.1")
+    @AsOf("3.1.0")
     BlockStateProvider groundState();
 
     /**
      * The placed feature to place on top of each found position.
      * @return the vegetation feature
-     * @since 3.0.1
+     * @since 3.1.0
      */
-    @AsOf("3.0.1")
+    @AsOf("3.1.0")
     PlacedFeature vegetationFeature();
 
     /**
      * Which surface to search from and place against, either {@link CaveSurface#FLOOR} or {@link CaveSurface#CEILING}.
      * @return the surface
-     * @since 3.0.1
+     * @since 3.1.0
      */
-    @AsOf("3.0.1")
+    @AsOf("3.1.0")
     CaveSurface surface();
 
     /**
      * The number of blocks the patch replaces per column, between 1 and 128.
      * @return the depth
-     * @since 3.0.1
+     * @since 3.1.0
      */
-    @AsOf("3.0.1")
+    @AsOf("3.1.0")
     IntProvider depth();
 
     /**
      * The chance to add one extra block to the {@link #depth()} of a column, between 0.0 and 1.0.
      * @return the extra bottom block chance
-     * @since 3.0.1
+     * @since 3.1.0
      */
-    @AsOf("3.0.1")
+    @AsOf("3.1.0")
     float extraBottomBlockChance();
 
     /**
      * The vertical distance a column searches for an available position, between 1 and 256.
      * @return the vertical range
-     * @since 3.0.1
+     * @since 3.1.0
      */
-    @AsOf("3.0.1")
+    @AsOf("3.1.0")
     int verticalRange();
 
     /**
      * The chance of placing the {@link #vegetationFeature()} on a found position, between 0.0 and 1.0.
      * @return the vegetation chance
-     * @since 3.0.1
+     * @since 3.1.0
      */
-    @AsOf("3.0.1")
+    @AsOf("3.1.0")
     float vegetationChance();
 
     /**
      * The XZ radius searched for available positions. The x and z radii are sampled independently from this provider.
      * @return the xz radius
-     * @since 3.0.1
+     * @since 3.1.0
      */
-    @AsOf("3.0.1")
+    @AsOf("3.1.0")
     IntProvider xzRadius();
 
     /**
      * The chance to add a search position adjacent to the initial rectangle, between 0.0 and 1.0.
      * @return the extra edge column chance
-     * @since 3.0.1
+     * @since 3.1.0
      */
-    @AsOf("3.0.1")
+    @AsOf("3.1.0")
     float extraEdgeColumnChance();
-
-    /**
-     * A block tag of blocks that the patch is allowed to replace.
-     * @return the replaceable tag
-     * @since 3.0.1
-     * @deprecated Wyck will soon no longer support multiple versions of Minecraft.
-     */
-    @Deprecated
-    @AsOf("3.0.1")
-    @Nullable ResourceKey legacy$replaceable();
 
     /**
      * Converts this object back to a builder.
      * @return a new builder with the same values as this object
-     * @since 3.0.1
+     * @since 3.1.0
      */
-    @AsOf("3.0.1")
+    @AsOf("3.1.0")
     default Builder toBuilder() {
         return new Builder(this);
     }
@@ -144,13 +137,12 @@ public interface VegetationPatchConfiguration extends FeatureConfiguration {
      * @param vegetationChance the chance of placing the vegetation feature on a found position
      * @param xzRadius the XZ radius searched for available positions
      * @param extraEdgeColumnChance the chance to add a search position adjacent to the initial rectangle
-     * @param legacy$replaceable a block tag of blocks that the patch is allowed to replace
      * @return a new vegetation patch configuration
-     * @since 3.0.1
+     * @since 3.1.0
      */
-    @AsOf("3.0.1")
+    @AsOf("3.1.0")
     static VegetationPatchConfiguration of(
-        Set<Material> replaceable,
+        TagSet<Material> replaceable,
         BlockStateProvider groundState,
         PlacedFeature vegetationFeature,
         CaveSurface surface,
@@ -159,31 +151,30 @@ public interface VegetationPatchConfiguration extends FeatureConfiguration {
         int verticalRange,
         float vegetationChance,
         IntProvider xzRadius,
-        float extraEdgeColumnChance,
-        @Nullable ResourceKey legacy$replaceable
+        float extraEdgeColumnChance
     ) {
-        return WIRE.construct(replaceable, groundState, vegetationFeature, surface, depth, extraBottomBlockChance, verticalRange, vegetationChance, xzRadius, extraEdgeColumnChance, legacy$replaceable);
+        return WIRE.construct(replaceable, groundState, vegetationFeature, surface, depth, extraBottomBlockChance, verticalRange, vegetationChance, xzRadius, extraEdgeColumnChance);
     }
 
     /**
      * Creates a new builder.
      * @return a new builder
-     * @since 3.0.1
+     * @since 3.1.0
      */
-    @AsOf("3.0.1")
+    @AsOf("3.1.0")
     static Builder builder() {
         return new Builder();
     }
 
     /**
      * Builder for {@link VegetationPatchConfiguration}.
-     * @since 3.0.1
-     * @version 3.0.1
+     * @since 3.1.0
+     * @version 3.1.0
      * @author Jsinco
      */
-    @AsOf("3.0.1")
+    @AsOf("3.1.0")
     final class Builder {
-        private Set<Material> replaceable = new HashSet<>();
+        private Either<Set<Material>, TagKey> replaceable = Either.left(new HashSet<>());
         private @Nullable BlockStateProvider groundState;
         private @Nullable PlacedFeature vegetationFeature;
         private CaveSurface surface = CaveSurface.FLOOR;
@@ -193,12 +184,11 @@ public interface VegetationPatchConfiguration extends FeatureConfiguration {
         private float vegetationChance = 0.0F;
         private @Nullable IntProvider xzRadius;
         private float extraEdgeColumnChance = 0.0F;
-        private @Nullable ResourceKey legacy$replaceable;
 
         public Builder() {}
 
         public Builder(VegetationPatchConfiguration configuration) {
-            this.replaceable = configuration.replaceable();
+            this.replaceable = configuration.replaceable().value();
             this.groundState = configuration.groundState();
             this.vegetationFeature = configuration.vegetationFeature();
             this.surface = configuration.surface();
@@ -208,18 +198,29 @@ public interface VegetationPatchConfiguration extends FeatureConfiguration {
             this.vegetationChance = configuration.vegetationChance();
             this.xzRadius = configuration.xzRadius();
             this.extraEdgeColumnChance = configuration.extraEdgeColumnChance();
-            this.legacy$replaceable = configuration.legacy$replaceable();
         }
 
         /**
          * Sets the blocks that the patch is allowed to replace.
          * @param replaceable the replaceable materials
          * @return this builder
-         * @since 3.0.1
+         * @since 3.1.0
          */
-        @AsOf("3.0.1")
+        @AsOf("3.1.0")
         public Builder replaceable(Set<Material> replaceable) {
-            this.replaceable = replaceable;
+            this.replaceable = Either.left(replaceable);
+            return this;
+        }
+
+        /**
+         * Sets the blocks that the patch is allowed to replace.
+         * @param replaceable the replaceable materials
+         * @return this builder
+         * @since 3.1.0
+         */
+        @AsOf("3.1.0")
+        public Builder replaceable(TagKey replaceable) {
+            this.replaceable = Either.right(replaceable);
             return this;
         }
 
@@ -227,9 +228,9 @@ public interface VegetationPatchConfiguration extends FeatureConfiguration {
          * Sets the block used to build the patch.
          * @param groundState the ground state provider
          * @return this builder
-         * @since 3.0.1
+         * @since 3.1.0
          */
-        @AsOf("3.0.1")
+        @AsOf("3.1.0")
         public Builder groundState(BlockStateProvider groundState) {
             this.groundState = groundState;
             return this;
@@ -239,9 +240,9 @@ public interface VegetationPatchConfiguration extends FeatureConfiguration {
          * Sets the placed feature to place on top of each found position.
          * @param vegetationFeature the vegetation feature
          * @return this builder
-         * @since 3.0.1
+         * @since 3.1.0
          */
-        @AsOf("3.0.1")
+        @AsOf("3.1.0")
         public Builder vegetationFeature(PlacedFeature vegetationFeature) {
             this.vegetationFeature = vegetationFeature;
             return this;
@@ -251,9 +252,9 @@ public interface VegetationPatchConfiguration extends FeatureConfiguration {
          * Sets which surface to search from and place against.
          * @param surface the surface
          * @return this builder
-         * @since 3.0.1
+         * @since 3.1.0
          */
-        @AsOf("3.0.1")
+        @AsOf("3.1.0")
         public Builder surface(CaveSurface surface) {
             this.surface = surface;
             return this;
@@ -263,9 +264,9 @@ public interface VegetationPatchConfiguration extends FeatureConfiguration {
          * Sets the number of blocks the patch replaces per column.
          * @param depth the depth, between 1 and 128
          * @return this builder
-         * @since 3.0.1
+         * @since 3.1.0
          */
-        @AsOf("3.0.1")
+        @AsOf("3.1.0")
         public Builder depth(IntProvider depth) {
             this.depth = depth;
             return this;
@@ -275,9 +276,9 @@ public interface VegetationPatchConfiguration extends FeatureConfiguration {
          * Sets the chance to add one extra block to the depth of a column.
          * @param extraBottomBlockChance the extra bottom block chance, between 0.0 and 1.0
          * @return this builder
-         * @since 3.0.1
+         * @since 3.1.0
          */
-        @AsOf("3.0.1")
+        @AsOf("3.1.0")
         public Builder extraBottomBlockChance(float extraBottomBlockChance) {
             this.extraBottomBlockChance = extraBottomBlockChance;
             return this;
@@ -287,9 +288,9 @@ public interface VegetationPatchConfiguration extends FeatureConfiguration {
          * Sets the vertical distance a column searches for an available position.
          * @param verticalRange the vertical range, between 1 and 256
          * @return this builder
-         * @since 3.0.1
+         * @since 3.1.0
          */
-        @AsOf("3.0.1")
+        @AsOf("3.1.0")
         public Builder verticalRange(int verticalRange) {
             this.verticalRange = verticalRange;
             return this;
@@ -299,9 +300,9 @@ public interface VegetationPatchConfiguration extends FeatureConfiguration {
          * Sets the chance of placing the vegetation feature on a found position.
          * @param vegetationChance the vegetation chance, between 0.0 and 1.0
          * @return this builder
-         * @since 3.0.1
+         * @since 3.1.0
          */
-        @AsOf("3.0.1")
+        @AsOf("3.1.0")
         public Builder vegetationChance(float vegetationChance) {
             this.vegetationChance = vegetationChance;
             return this;
@@ -311,9 +312,9 @@ public interface VegetationPatchConfiguration extends FeatureConfiguration {
          * Sets the XZ radius searched for available positions.
          * @param xzRadius the xz radius
          * @return this builder
-         * @since 3.0.1
+         * @since 3.1.0
          */
-        @AsOf("3.0.1")
+        @AsOf("3.1.0")
         public Builder xzRadius(IntProvider xzRadius) {
             this.xzRadius = xzRadius;
             return this;
@@ -323,25 +324,11 @@ public interface VegetationPatchConfiguration extends FeatureConfiguration {
          * Sets the chance to add a search position adjacent to the initial rectangle.
          * @param extraEdgeColumnChance the extra edge column chance, between 0.0 and 1.0
          * @return this builder
-         * @since 3.0.1
+         * @since 3.1.0
          */
-        @AsOf("3.0.1")
+        @AsOf("3.1.0")
         public Builder extraEdgeColumnChance(float extraEdgeColumnChance) {
             this.extraEdgeColumnChance = extraEdgeColumnChance;
-            return this;
-        }
-
-        /**
-         * Sets a block tag of blocks that the patch is allowed to replace.
-         * @param legacy$replaceable the replaceable tag
-         * @return this builder
-         * @since 3.0.1
-         * @deprecated Wyck will soon no longer support multiple versions of Minecraft.
-         */
-        @Deprecated
-        @AsOf("3.0.1")
-        public Builder legacy$replaceable(@Nullable ResourceKey legacy$replaceable) {
-            this.legacy$replaceable = legacy$replaceable;
             return this;
         }
 
@@ -351,20 +338,35 @@ public interface VegetationPatchConfiguration extends FeatureConfiguration {
          * Adds materials to the replaceable set.
          * @param replaceable the materials to add
          * @return this builder
-         * @since 3.0.1
+         * @since 3.1.0
          */
-        @AsOf("3.0.1")
+        @AsOf("3.1.0")
         public Builder replaceable(Material... replaceable) {
-            this.replaceable.addAll(Set.of(replaceable));
+            this.replaceable = this.replaceable.leftOrElse(new HashSet<>())
+                .consumeLeft(set -> set.addAll(Set.of(replaceable)));
+            return this;
+        }
+
+        /**
+         * Sets a block tag of blocks that the patch is allowed to replace.
+         * @param replaceable the replaceable tag
+         * @return this builder
+         * @since 3.1.0
+         * @deprecated Wyck will soon no longer support multiple versions of Minecraft.
+         */
+        @Deprecated
+        @AsOf("3.1.0")
+        public Builder replaceable(ResourceKey replaceable) {
+            this.replaceable = Either.right(TagKey.blocks(replaceable));
             return this;
         }
 
         /**
          * Builds the vegetation patch configuration.
          * @return the vegetation patch configuration
-         * @since 3.0.1
+         * @since 3.1.0
          */
-        @AsOf("3.0.1")
+        @AsOf("3.1.0")
         public VegetationPatchConfiguration build() {
             Preconditions.checkNotNull(groundState, "groundState must be set");
             Preconditions.checkNotNull(vegetationFeature, "vegetationFeature must be set");
@@ -374,7 +376,18 @@ public interface VegetationPatchConfiguration extends FeatureConfiguration {
             Preconditions.checkArgument(verticalRange >= 1 && verticalRange <= 256, "verticalRange must be between 1 and 256");
             Preconditions.checkArgument(vegetationChance >= 0.0F && vegetationChance <= 1.0F, "vegetationChance must be between 0.0 and 1.0");
             Preconditions.checkArgument(extraEdgeColumnChance >= 0.0F && extraEdgeColumnChance <= 1.0F, "extraEdgeColumnChance must be between 0.0 and 1.0");
-            return of(replaceable, groundState, vegetationFeature, surface, depth, extraBottomBlockChance, verticalRange, vegetationChance, xzRadius, extraEdgeColumnChance, legacy$replaceable);
+            return of(
+                TagSet.blocks(replaceable),
+                groundState,
+                vegetationFeature,
+                surface,
+                depth,
+                extraBottomBlockChance,
+                verticalRange,
+                vegetationChance,
+                xzRadius,
+                extraEdgeColumnChance
+            );
         }
     }
 }

@@ -13,12 +13,12 @@ import org.jspecify.annotations.NullMarked;
  * feature more likely to be chosen.
  *
  * @see CompositeFeatureConfiguration for an equal-chance variant.
- * @since 3.0.1
- * @version 3.0.1
+ * @since 3.1.0
+ * @version 3.1.0
  * @author Jsinco
  */
 @NullMarked
-@AsOf("3.0.1")
+@AsOf("3.1.0")
 public interface WeightedRandomFeatureConfiguration extends FeatureConfiguration {
 
     @ApiStatus.Internal
@@ -27,17 +27,17 @@ public interface WeightedRandomFeatureConfiguration extends FeatureConfiguration
     /**
      * The weighted list of features to choose from.
      * @return the weighted features
-     * @since 3.0.1
+     * @since 3.1.0
      */
-    @AsOf("3.0.1")
+    @AsOf("3.1.0")
     WeightedList<PlacedFeature> features();
 
     /**
      * Converts this object back to a builder.
      * @return a new builder with the same values as this object
-     * @since 3.0.1
+     * @since 3.1.0
      */
-    @AsOf("3.0.1")
+    @AsOf("3.1.0")
     default Builder toBuilder() {
         return new Builder(this);
     }
@@ -46,9 +46,9 @@ public interface WeightedRandomFeatureConfiguration extends FeatureConfiguration
      * Creates a new weighted random feature configuration.
      * @param features the weighted list of features to choose from
      * @return a new weighted random feature configuration
-     * @since 3.0.1
+     * @since 3.1.0
      */
-    @AsOf("3.0.1")
+    @AsOf("3.1.0")
     static WeightedRandomFeatureConfiguration of(WeightedList<PlacedFeature> features) {
         return WIRE.construct(features);
     }
@@ -56,20 +56,20 @@ public interface WeightedRandomFeatureConfiguration extends FeatureConfiguration
     /**
      * Creates a new builder.
      * @return a new builder
-     * @since 3.0.1
+     * @since 3.1.0
      */
-    @AsOf("3.0.1")
+    @AsOf("3.1.0")
     static Builder builder() {
         return new Builder();
     }
 
     /**
      * Builder for {@link WeightedRandomFeatureConfiguration}.
-     * @since 3.0.1
-     * @version 3.0.1
+     * @since 3.1.0
+     * @version 3.1.0
      * @author Jsinco
      */
-    @AsOf("3.0.1")
+    @AsOf("3.1.0")
     final class Builder {
         private final WeightedList.Builder<PlacedFeature> features = WeightedList.builder();
 
@@ -85,9 +85,9 @@ public interface WeightedRandomFeatureConfiguration extends FeatureConfiguration
          * Adds a feature with a weight of 1.
          * @param feature the feature to add
          * @return this builder
-         * @since 3.0.1
+         * @since 3.1.0
          */
-        @AsOf("3.0.1")
+        @AsOf("3.1.0")
         public Builder feature(PlacedFeature feature) {
             this.features.add(feature);
             return this;
@@ -98,9 +98,9 @@ public interface WeightedRandomFeatureConfiguration extends FeatureConfiguration
          * @param feature the feature to add
          * @param weight the weight of the feature
          * @return this builder
-         * @since 3.0.1
+         * @since 3.1.0
          */
-        @AsOf("3.0.1")
+        @AsOf("3.1.0")
         public Builder feature(PlacedFeature feature, int weight) {
             this.features.add(feature, weight);
             return this;
@@ -109,9 +109,9 @@ public interface WeightedRandomFeatureConfiguration extends FeatureConfiguration
         /**
          * Builds the weighted random feature configuration.
          * @return the weighted random feature configuration
-         * @since 3.0.1
+         * @since 3.1.0
          */
-        @AsOf("3.0.1")
+        @AsOf("3.1.0")
         public WeightedRandomFeatureConfiguration build() {
             WeightedList<PlacedFeature> built = features.build();
             Preconditions.checkArgument(!built.isEmpty(), "features must not be empty");

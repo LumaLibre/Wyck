@@ -1,47 +1,29 @@
 package dev.wyck.level.dimension;
 
-import dev.wyck.keys.ResourceKey;
-import dev.wyck.util.BootstrapSafeMinecraftRegistries;
-import dev.wyck.util.WorldgenConversions;
-import net.minecraft.core.HolderSet;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.Identifier;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.level.block.Block;
+import dev.wyck.tags.TagSet;
+import dev.wyck.tags.TagSetImpl;
 import org.bukkit.Material;
 import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
-
-import java.util.Optional;
-import java.util.Set;
 
 @NullMarked
 @ApiStatus.Internal
 public record InfiniburnImpl(
-    @Override Set<Material> blocks,
-    @Override Optional<ResourceKey> tag
+    @Override TagSet<Material> blocks
 ) implements Infiniburn {
     @Override
     public Object toMinecraft() {
-        return this.asHolderSet();
+        return blocks.toMinecraft();
     }
 
-    public TagKey<Block> asTagKey() {
-        Identifier id = tag.orElseThrow().identifier();
-        return TagKey.create(Registries.BLOCK, id);
+    @ApiStatus.Obsolete
+    public net.minecraft.tags.TagKey<net.minecraft.world.level.block.Block> asTagKey() {
+        return ((TagSetImpl<@NonNull Material, net.minecraft.world.level.block.@NonNull Block>) blocks).asTagKey();
     }
 
-    public HolderSet<Block> asHolderSet() {
-        if (blocks.isEmpty() && tag.isEmpty()) {
-            throw new IllegalStateException("Infiniburn must have either blocks or a tag");
-        }
-
-        if (!blocks.isEmpty()) {
-            return WorldgenConversions.toBlockHolderSet(blocks);
-        }
-
-        Registry<Block> registry = BootstrapSafeMinecraftRegistries.mappedRegistry(Registries.BLOCK);
-        return registry.getOrThrow(this.asTagKey());
+    @ApiStatus.Obsolete
+    public net.minecraft.core.HolderSet<net.minecraft.world.level.block.Block> asHolderSet() {
+        return ((TagSetImpl<@NonNull Material, net.minecraft.world.level.block.@NonNull Block>) blocks).asHolderSet();
     }
 }

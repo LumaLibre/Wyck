@@ -1,7 +1,7 @@
 package dev.wyck.v26_1.worldgen.feature.configurations;
 
 import com.google.common.base.Preconditions;
-import dev.wyck.keys.ResourceKey;
+import dev.wyck.tags.TagSet;
 import dev.wyck.worldgen.blockpredicates.BlockPredicate;
 import dev.wyck.worldgen.feature.configurations.RootSystemConfiguration;
 import dev.wyck.worldgen.placement.PlacedFeature;
@@ -9,9 +9,6 @@ import dev.wyck.worldgen.stateproviders.BlockStateProvider;
 import org.bukkit.Material;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
-
-import java.util.Set;
 
 @NullMarked
 @ApiStatus.Internal
@@ -21,7 +18,7 @@ public record RootSystemConfigurationImpl(
     @Override int levelTestDistance,
     @Override int maxLevelDeviation,
     @Override int rootRadius,
-    @Override Set<Material> rootReplaceable,
+    @Override TagSet<Material> rootReplaceable,
     @Override BlockStateProvider rootStateProvider,
     @Override int rootPlacementAttempts,
     @Override int rootColumnMaxHeight,
@@ -30,23 +27,18 @@ public record RootSystemConfigurationImpl(
     @Override BlockStateProvider hangingRootStateProvider,
     @Override int hangingRootPlacementAttempts,
     @Override int allowedVerticalWaterForTree,
-    @Override BlockPredicate allowedTreePosition,
-    @Override @Nullable ResourceKey legacy$rootReplaceable
+    @Override BlockPredicate allowedTreePosition
 ) implements RootSystemConfiguration {
     @Override
     public Object toMinecraft() {
-        Preconditions.checkNotNull(legacy$rootReplaceable, "legacy$rootReplaceable");
+        Preconditions.checkState(rootReplaceable.isTag(), "rootReplaceable must be a tag in this version of Minecraft");
         net.minecraft.core.Holder<net.minecraft.world.level.levelgen.placement.PlacedFeature> feature = treeFeature.asHandle();
-
-        net.minecraft.resources.Identifier location = legacy$rootReplaceable.asHandle();
-        net.minecraft.tags.TagKey<net.minecraft.world.level.block.Block> replaceable =
-            net.minecraft.tags.TagKey.create(net.minecraft.core.registries.Registries.BLOCK, location);
 
         return new net.minecraft.world.level.levelgen.feature.configurations.RootSystemConfiguration(
             feature,
             requiredVerticalSpaceForTree,
             rootRadius,
-            replaceable,
+            rootReplaceable.asTagKey(),
             rootStateProvider.asHandle(),
             rootPlacementAttempts,
             rootColumnMaxHeight,

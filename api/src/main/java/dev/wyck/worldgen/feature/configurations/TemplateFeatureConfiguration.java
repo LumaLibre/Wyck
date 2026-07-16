@@ -16,12 +16,12 @@ import java.util.List;
  * a set of rotations.
  *
  * @see <a href="https://minecraft.wiki/w/Template_pool">Template pool</a>
- * @since 3.0.1
- * @version 3.0.1
+ * @since 3.1.0
+ * @version 3.1.0
  * @author Jsinco
  */
 @NullMarked
-@AsOf("3.0.1")
+@AsOf("3.1.0")
 public interface TemplateFeatureConfiguration extends FeatureConfiguration {
 
     @ApiStatus.Internal
@@ -30,17 +30,17 @@ public interface TemplateFeatureConfiguration extends FeatureConfiguration {
     /**
      * The weighted list of templates to choose from.
      * @return the weighted templates
-     * @since 3.0.1
+     * @since 3.1.0
      */
-    @AsOf("3.0.1")
+    @AsOf("3.1.0")
     WeightedList<TemplateEntry> templates();
 
     /**
      * Converts this object back to a builder.
      * @return a new builder with the same values as this object
-     * @since 3.0.1
+     * @since 3.1.0
      */
-    @AsOf("3.0.1")
+    @AsOf("3.1.0")
     default Builder toBuilder() {
         return new Builder(this);
     }
@@ -49,9 +49,9 @@ public interface TemplateFeatureConfiguration extends FeatureConfiguration {
      * Creates a new template feature configuration.
      * @param templates the weighted list of templates to choose from
      * @return a new template feature configuration
-     * @since 3.0.1
+     * @since 3.1.0
      */
-    @AsOf("3.0.1")
+    @AsOf("3.1.0")
     static TemplateFeatureConfiguration of(WeightedList<TemplateEntry> templates) {
         return WIRE.construct(templates);
     }
@@ -59,9 +59,9 @@ public interface TemplateFeatureConfiguration extends FeatureConfiguration {
     /**
      * Creates a new builder.
      * @return a new builder
-     * @since 3.0.1
+     * @since 3.1.0
      */
-    @AsOf("3.0.1")
+    @AsOf("3.1.0")
     static Builder builder() {
         return new Builder();
     }
@@ -71,9 +71,9 @@ public interface TemplateFeatureConfiguration extends FeatureConfiguration {
      *
      * @param template the resource key of the structure template
      * @param rotations the rotations this template may be placed with
-     * @since 3.0.1
+     * @since 3.1.0
      */
-    @AsOf("3.0.1")
+    @AsOf("3.1.0")
     record TemplateEntry(ResourceKey template, List<Rotation> rotations) {
 
         public TemplateEntry {
@@ -84,9 +84,9 @@ public interface TemplateFeatureConfiguration extends FeatureConfiguration {
          * Creates a template entry that allows every rotation.
          * @param template the resource key of the structure template
          * @return a new template entry
-         * @since 3.0.1
+         * @since 3.1.0
          */
-        @AsOf("3.0.1")
+        @AsOf("3.1.0")
         public static TemplateEntry of(ResourceKey template) {
             return new TemplateEntry(template, List.of(Rotation.values()));
         }
@@ -96,9 +96,9 @@ public interface TemplateFeatureConfiguration extends FeatureConfiguration {
          * @param template the resource key of the structure template
          * @param rotations the rotations this template may be placed with
          * @return a new template entry
-         * @since 3.0.1
+         * @since 3.1.0
          */
-        @AsOf("3.0.1")
+        @AsOf("3.1.0")
         public static TemplateEntry of(ResourceKey template, Rotation... rotations) {
             return new TemplateEntry(template, List.of(rotations));
         }
@@ -106,11 +106,11 @@ public interface TemplateFeatureConfiguration extends FeatureConfiguration {
 
     /**
      * Builder for {@link TemplateFeatureConfiguration}.
-     * @since 3.0.1
-     * @version 3.0.1
+     * @since 3.1.0
+     * @version 3.1.0
      * @author Jsinco
      */
-    @AsOf("3.0.1")
+    @AsOf("3.1.0")
     final class Builder {
         private final WeightedList.Builder<TemplateEntry> templates = WeightedList.builder();
 
@@ -126,9 +126,9 @@ public interface TemplateFeatureConfiguration extends FeatureConfiguration {
          * Adds a template entry with a weight of 1.
          * @param template the template entry to add
          * @return this builder
-         * @since 3.0.1
+         * @since 3.1.0
          */
-        @AsOf("3.0.1")
+        @AsOf("3.1.0")
         public Builder template(TemplateEntry template) {
             this.templates.add(template);
             return this;
@@ -139,9 +139,9 @@ public interface TemplateFeatureConfiguration extends FeatureConfiguration {
          * @param template the template entry to add
          * @param weight the weight of the template entry
          * @return this builder
-         * @since 3.0.1
+         * @since 3.1.0
          */
-        @AsOf("3.0.1")
+        @AsOf("3.1.0")
         public Builder template(TemplateEntry template, int weight) {
             this.templates.add(template, weight);
             return this;
@@ -150,9 +150,9 @@ public interface TemplateFeatureConfiguration extends FeatureConfiguration {
         /**
          * Builds the template feature configuration.
          * @return the template feature configuration
-         * @since 3.0.1
+         * @since 3.1.0
          */
-        @AsOf("3.0.1")
+        @AsOf("3.1.0")
         public TemplateFeatureConfiguration build() {
             WeightedList<TemplateEntry> built = templates.build();
             Preconditions.checkArgument(!built.isEmpty(), "templates must not be empty");
