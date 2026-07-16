@@ -11,6 +11,7 @@ import dev.wyck.worldgen.blockpredicates.BlockPredicate;
 import dev.wyck.worldgen.placement.PlacedFeature;
 import dev.wyck.worldgen.stateproviders.BlockStateProvider;
 import org.bukkit.Material;
+import org.bukkit.Tag;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -466,13 +467,37 @@ public interface RootSystemConfiguration extends FeatureConfiguration {
         }
 
         /**
-         * Adds a tag of materials to the root replaceable list.
+         * Adds a tag of materials to the root-replaceable list.
          * @param rootReplaceable the tag of materials to add
          * @return this builder
          * @since 3.1.0
          */
         @AsOf("3.1.0")
         public Builder rootReplaceable(ResourceKey rootReplaceable) {
+            this.rootReplaceable = Either.right(TagKey.blocks(rootReplaceable));
+            return this;
+        }
+
+        /**
+         * Adds a tag of materials to the root-replaceable list.
+         * @param rootReplaceable the tag of materials to add
+         * @return this builder
+         * @since 3.1.0
+         */
+        @AsOf("3.1.0")
+        public Builder rootReplaceable(TagSet<Material> rootReplaceable) {
+            this.rootReplaceable = rootReplaceable.value();
+            return this;
+        }
+
+        /**
+         * Adds a tag of materials to the root-replaceable list.
+         * @param rootReplaceable the tag of materials to add
+         * @return this builder
+         * @since 3.1.0
+         */
+        @AsOf("3.1.0")
+        public Builder rootReplaceable(Tag<Material> rootReplaceable) {
             this.rootReplaceable = Either.right(TagKey.blocks(rootReplaceable));
             return this;
         }

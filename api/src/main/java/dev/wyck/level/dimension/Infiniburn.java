@@ -6,12 +6,12 @@ import dev.wyck.factory.ConstructWireProvider;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.tags.TagKey;
 import dev.wyck.tags.TagSet;
+import dev.wyck.util.Either;
 import dev.wyck.wrapper.Wrapper;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -115,18 +115,12 @@ public interface Infiniburn extends Wrapper {
      */
     @AsOf("3.0.0")
     final class Builder {
-        private Set<Material> blocks = new HashSet<>();
-        private @Nullable TagKey tag;
+        private Either<Set<Material>, TagKey> blocks = Either.left(new HashSet<>());
 
         private Builder() {}
 
         public Builder(Infiniburn infiniburn) {
-            infiniburn.blocks()
-                .value()
-                .fold(
-                    set -> blocks.addAll(set),
-                    tag -> this.tag = tag
-                );
+            this.blocks = infiniburn.blocks().value();
         }
 
         /**
@@ -137,7 +131,7 @@ public interface Infiniburn extends Wrapper {
          */
         @AsOf("3.0.0")
         public Builder blocks(Set<Material> blocks) {
-            this.blocks = blocks;
+            this.blocks = Either.left(blocks);
             return this;
         }
 
@@ -148,8 +142,8 @@ public interface Infiniburn extends Wrapper {
          * @since 3.1.0
          */
         @AsOf("3.1.0")
-        public Builder tag(@Nullable TagKey tagKey) {
-            this.tag = tagKey;
+        public Builder blocks(TagKey tagKey) {
+            this.blocks = Either.right(tagKey);
             return this;
         }
 
@@ -159,11 +153,25 @@ public interface Infiniburn extends Wrapper {
          * Adds a block to the list of blocks that can burn infinitely in this dimension.
          * @param block the block to add
          * @return this builder
+         * @since 3.1.0
+         */
+        @AsOf("3.1.0")
+        public Builder blocks(Material... block) {
+            this.blocks = this.blocks.leftOrElse(new HashSet<>())
+                .consumeLeft(set -> set.addAll(Set.of(block)));
+            return this;
+        }
+
+        /**
+         * Adds a block to the list of blocks that can burn infinitely in this dimension.
+         * @param block the block to add
+         * @return this builder
          * @since 3.0.0
          */
         @AsOf("3.0.0")
         public Builder block(Material block) {
-            this.blocks.add(block);
+            this.blocks = this.blocks.leftOrElse(new HashSet<>())
+                .consumeLeft(set -> set.add(block));
             return this;
         }
 
@@ -174,8 +182,8 @@ public interface Infiniburn extends Wrapper {
          * @since 3.0.0
          */
         @AsOf("3.0.0")
-        public Builder tag(Tag<Material> tag) {
-            this.tag = TagKey.blocks(tag);
+        public Builder blocks(Tag<Material> tag) {
+            this.blocks = Either.right(TagKey.blocks(tag));
             return this;
         }
 
@@ -186,8 +194,20 @@ public interface Infiniburn extends Wrapper {
          * @since 3.0.0
          */
         @AsOf("3.0.0")
-        public Builder tag(ResourceKey tag) {
-            this.tag = TagKey.blocks(tag);
+        public Builder blocks(ResourceKey tag) {
+            this.blocks = Either.right(TagKey.blocks(tag));
+            return this;
+        }
+
+        /**
+         * Sets the tag of blocks that can burn infinitely in this dimension.
+         * @param tagSet the tag of blocks that can burn infinitely in this dimension
+         * @return this builder
+         * @since 3.1.0
+         */
+        @AsOf("3.1.0")
+        public Builder blocks(TagSet<Material> tagSet) {
+            this.blocks = tagSet.value();
             return this;
         }
 
@@ -198,13 +218,7 @@ public interface Infiniburn extends Wrapper {
          */
         @AsOf("3.0.0")
         public Infiniburn build() {
-            boolean hasBlocks = !blocks.isEmpty();
-            boolean hasTag = tag != null;
-
-            Preconditions.checkArgument(hasBlocks || hasTag, "blocks or tag must be set");
-            Preconditions.checkArgument(!(hasBlocks && hasTag), "blocks and tag cannot be set at the same time");
-
-            return of(hasTag ? TagSet.ofBlockTag(tag) : TagSet.ofBlocks(blocks));
+            return of(TagSet.blocks(blocks));
         }
     }
 }

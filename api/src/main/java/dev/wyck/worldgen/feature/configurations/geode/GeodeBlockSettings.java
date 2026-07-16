@@ -374,6 +374,54 @@ public interface GeodeBlockSettings extends Wrapper {
         }
 
         /**
+         * Sets the blocks listing which blocks the geode cannot replace.
+         * @param cannotReplace the block tag of blocks that cannot be replaced
+         * @return this builder
+         * @since 3.1.0
+         */
+        @AsOf("3.1.0")
+        public Builder cannotReplace(TagSet<Material> cannotReplace) {
+            this.invalidBlocks = cannotReplace.value();
+            return this;
+        }
+
+        /**
+         * Sets the block tag listing invalid blocks near which the geode will not generate.
+         * @param cannotReplace the block tag of invalid blocks
+         * @return this builder
+         * @since 3.1.0
+         */
+        @AsOf("3.1.0")
+        public Builder invalidBlocks(TagSet<Material> cannotReplace) {
+            this.invalidBlocks = cannotReplace.value();
+            return this;
+        }
+
+        /**
+         * Sets the blocks listing which blocks the geode cannot replace.
+         * @param cannotReplace the block tag of blocks that cannot be replaced
+         * @return this builder
+         * @since 3.1.0
+         */
+        @AsOf("3.1.0")
+        public Builder cannotReplace(Tag<Material> cannotReplace) {
+            this.invalidBlocks = Either.right(TagKey.blocks(cannotReplace));
+            return this;
+        }
+
+        /**
+         * Sets the block tag listing invalid blocks near which the geode will not generate.
+         * @param cannotReplace the block tag of invalid blocks
+         * @return this builder
+         * @since 3.1.0
+         */
+        @AsOf("3.1.0")
+        public Builder invalidBlocks(Tag<Material> cannotReplace) {
+            this.invalidBlocks = Either.right(TagKey.blocks(cannotReplace));
+            return this;
+        }
+
+        /**
          * Builds the settings.
          * @return the settings
          * @since 3.0.0

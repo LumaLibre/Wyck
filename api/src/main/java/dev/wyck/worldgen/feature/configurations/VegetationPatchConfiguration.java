@@ -12,6 +12,7 @@ import dev.wyck.worldgen.stateproviders.BlockStateProvider;
 import dev.wyck.worldgen.surface.condition.CaveSurface;
 import dev.wyck.worldgen.valueproviders.IntProvider;
 import org.bukkit.Material;
+import org.bukkit.Tag;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -355,6 +356,30 @@ public interface VegetationPatchConfiguration extends FeatureConfiguration {
          */
         @AsOf("3.1.0")
         public Builder replaceable(ResourceKey replaceable) {
+            this.replaceable = Either.right(TagKey.blocks(replaceable));
+            return this;
+        }
+
+        /**
+         * Sets a block tag of blocks that the patch is allowed to replace.
+         * @param replaceable the replaceable tag
+         * @return this builder
+         * @since 3.1.0
+         */
+        @AsOf("3.1.0")
+        public Builder replaceable(TagSet<Material> replaceable) {
+            this.replaceable = replaceable.value();
+            return this;
+        }
+
+        /**
+         * Sets a block tag of blocks that the patch is allowed to replace.
+         * @param replaceable the replaceable tag
+         * @return this builder
+         * @since 3.1.0
+         */
+        @AsOf("3.1.0")
+        public Builder replaceable(Tag<Material> replaceable) {
             this.replaceable = Either.right(TagKey.blocks(replaceable));
             return this;
         }
