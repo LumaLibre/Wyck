@@ -4,7 +4,6 @@ import com.google.common.base.Preconditions;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.util.BootstrapSafeMinecraftRegistries;
 import dev.wyck.util.ThrowingRunnable;
-import io.papermc.paper.registry.RegistryKey;
 import net.minecraft.core.Holder;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
@@ -14,10 +13,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 @NullMarked
 public class WyckRegistryImpl<U> implements WyckRegistry {
@@ -153,22 +149,4 @@ public class WyckRegistryImpl<U> implements WyckRegistry {
         String id = key.asString();
         return BootstrapSafeMinecraftRegistries.mappedRegistryOrNull(id);
     }
-
-    private static Map<String, RegistryKey<?>> indexPaperRegistryKeys() {
-        Map<String, RegistryKey<?>> index = new HashMap<>();
-        for (Field field : RegistryKey.class.getFields()) {
-            int modifiers = field.getModifiers();
-            if (!Modifier.isStatic(modifiers) || !RegistryKey.class.isAssignableFrom(field.getType())) {
-                continue;
-            }
-            try {
-                RegistryKey<?> registryKey = (RegistryKey<?>) field.get(null);
-                index.put(registryKey.key().asString(), registryKey);
-            } catch (IllegalAccessException exception) {
-                throw new IllegalStateException("Unable to read RegistryKey." + field.getName(), exception);
-            }
-        }
-        return Map.copyOf(index);
-    }
-
 }

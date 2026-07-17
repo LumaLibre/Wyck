@@ -23,7 +23,7 @@ import org.jspecify.annotations.Nullable;
 public interface LakeFeatureConfiguration extends FeatureConfiguration {
 
     @ApiStatus.Internal
-    ConstructWireProvider<LakeFeatureConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.feature.configurations.LakeFeatureConfigurationImpl");
+    ConstructWireProvider<LakeFeatureConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.*?.worldgen.feature.configurations.LakeFeatureConfigurationImpl");
 
     /**
      * The block to use for the fluid of the lake.
@@ -194,9 +194,11 @@ public interface LakeFeatureConfiguration extends FeatureConfiguration {
         public LakeFeatureConfiguration build() {
             Preconditions.checkNotNull(fluid, "fluid must be set");
             Preconditions.checkNotNull(barrier, "barrier must be set");
-            Preconditions.checkNotNull(canPlaceOn, "canPlaceOn must be set");
-            Preconditions.checkNotNull(canReplaceWithAirOrFluid, "canReplaceWithAirOrFluid must be set");
-            Preconditions.checkNotNull(canReplaceWithBarrier, "canReplaceWithBarrier must be set");
+            // these can be null on older versions
+            //Preconditions.checkNotNull(canPlaceOn, "canPlaceOn must be set");
+            //Preconditions.checkNotNull(canReplaceWithAirOrFluid, "canReplaceWithAirOrFluid must be set");
+            //Preconditions.checkNotNull(canReplaceWithBarrier, "canReplaceWithBarrier must be set");
+            //noinspection ConstantConditions
             return create(fluid, barrier, canPlaceOn, canReplaceWithAirOrFluid, canReplaceWithBarrier);
         }
     }

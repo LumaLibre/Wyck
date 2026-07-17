@@ -88,7 +88,7 @@ public enum FeatureType implements WrappedConstant<FeatureType> {
     LARGE_DRIPSTONE("large_dripstone"),
     SPELEOTHEM("speleothem"),
     SCULK_PATCH("sculk_patch"),
-    @Deprecated(since = "3.0.0")
+    @AsOf("2.3.0") // valid api for older versions, annotation here so codegen doesnt nuke it
     POINTED_DRIPSTONE("pointed_dripstone");
 
     public static final RegisteredConstantTranslator<FeatureType> TRANSLATOR = RegisteredConstantTranslator.of(RegistryId.FEATURE, FeatureType::resourceKey, FeatureType.values());

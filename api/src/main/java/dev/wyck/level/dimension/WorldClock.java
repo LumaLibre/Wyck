@@ -23,8 +23,8 @@ public interface WorldClock extends Wrapper, Keyed, Registerable<WorldClock> {
     @ApiStatus.Internal
     ConstructWireProvider<WorldClock> WIRE = ConstructWireProvider.create("dev.wyck.level.dimension.WorldClockImpl");
 
-    WorldClock OVERWORLD = of("minecraft:overworld");
-    WorldClock THE_END = of("minecraft:the_end");
+    WorldClock OVERWORLD = of(ResourceKey.minecraft("overworld"));
+    WorldClock THE_END = of(ResourceKey.minecraft("the_end"));
 
     /**
      * The registry key this clock points at.

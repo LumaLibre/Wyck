@@ -25,7 +25,9 @@ public enum RegistryId {
     CONFIGURED_FEATURE("worldgen/configured_feature"),
     DENSITY_FUNCTION("worldgen/density_function"),
     ACTIVITY("activity"),
-    WORLD_CLOCK("world_clock");
+    WORLD_CLOCK("world_clock"),
+    BLOCK("block"),
+    ENTITY_TYPE("entity_type");
 
     private final List<ResourceKey> keys;
 

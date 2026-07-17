@@ -1,6 +1,7 @@
 package dev.wyck.worldgen.feature.configurations.geode;
 
 import dev.wyck.keys.ResourceKey;
+import dev.wyck.tags.TagSet;
 import dev.wyck.util.WorldgenConversions;
 import dev.wyck.worldgen.stateproviders.BlockStateProvider;
 import org.bukkit.Material;
@@ -23,10 +24,8 @@ public record GeodeBlockSettingsImpl(
     @Override BlockStateProvider middleLayerProvider,
     @Override BlockStateProvider outerLayerProvider,
     @Override List<BlockData> innerPlacements,
-    @Override Set<Material> cannotReplace,
-    @Override Set<Material> invalidBlocks,
-    @Override @Nullable ResourceKey legacy$cannotReplace,
-    @Override @Nullable ResourceKey legacy$invalidBlocks
+    @Override TagSet<Material> cannotReplace,
+    @Override TagSet<Material> invalidBlocks
 ) implements GeodeBlockSettings {
     @Override
     public Object toMinecraft() {
@@ -42,8 +41,8 @@ public record GeodeBlockSettingsImpl(
             middleLayerProvider.asHandle(),
             outerLayerProvider.asHandle(),
             placements,
-            WorldgenConversions.toBlockHolderSet(cannotReplace),
-            WorldgenConversions.toBlockHolderSet(invalidBlocks)
+            cannotReplace.asHolderSet(),
+            invalidBlocks.asHolderSet()
         );
     }
 }

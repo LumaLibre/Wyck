@@ -41,10 +41,15 @@ public final class ReferenceGenerator {
         "(?m)^@Generated\\(\"[^\"]*\"\\)\\n?"
     );
 
+
+    private static final Pattern VERSION_LINE = Pattern.compile(
+        "(?m)^\\s*\\*\\s*@version\\b[^\\n]*\\n?"
+    );
+
     private static final String HASH_PREFIX = "//";
 
-    private static final Pattern EXISTING_HASH = Pattern.compile(
-        "\\A" + Pattern.quote(HASH_PREFIX) + "([0-9a-f]+)"
+    private static final Pattern LEADING_HASH_LINE = Pattern.compile(
+        "\\A" + Pattern.quote(HASH_PREFIX) + "[0-9a-f]+\\n?"
     );
 
     static void main(String[] args) throws Exception {
@@ -70,36 +75,39 @@ public final class ReferenceGenerator {
                 case EnumSpec enumSpec -> generateEnum(enumSpec, version, existingVersions, preservedConstants);
                 case ConstantSpec constantSpec -> generateConstant(constantSpec, version, existingVersions, preservedConstants);
             };
-            String hash = contentHash(source);
 
-            if (hash.equals(existingHash(outputPath))) {
+            if (isUpToDate(outputPath, source)) {
                 System.out.println("up-to-date " + outputPath);
                 continue;
             }
 
             Files.createDirectories(outputPath.getParent());
-            Files.writeString(outputPath, HASH_PREFIX + hash + "\n" + source);
+            Files.writeString(outputPath, HASH_PREFIX + contentHash(source) + "\n" + source);
             System.out.println("generated " + outputPath);
         }
     }
 
     private static String contentHash(String source) {
-        String canonical = GENERATED_LINE.matcher(source).replaceAll("");
         try {
             byte[] digest = MessageDigest.getInstance("SHA-256")
-                .digest(canonical.getBytes(StandardCharsets.UTF_8));
+                .digest(canonical(source).getBytes(StandardCharsets.UTF_8));
             return HexFormat.of().formatHex(digest, 0, 16);
         } catch (NoSuchAlgorithmException e) {
             throw new AssertionError("SHA-256 unavailable", e);
         }
     }
 
-    private static @Nullable String existingHash(Path outputPath) throws Exception {
+    private static String canonical(String source) {
+        String stripped = LEADING_HASH_LINE.matcher(source).replaceFirst("");
+        stripped = GENERATED_LINE.matcher(stripped).replaceAll("");
+        return VERSION_LINE.matcher(stripped).replaceAll("");
+    }
+
+    private static boolean isUpToDate(Path outputPath, String newSource) throws Exception {
         if (!Files.exists(outputPath)) {
-            return null;
+            return false;
         }
-        Matcher matcher = EXISTING_HASH.matcher(Files.readString(outputPath));
-        return matcher.find() ? matcher.group(1) : null;
+        return canonical(Files.readString(outputPath)).equals(canonical(newSource));
     }
 
     private static Map<String, String> readExistingVersions(Path outputPath) throws Exception {
