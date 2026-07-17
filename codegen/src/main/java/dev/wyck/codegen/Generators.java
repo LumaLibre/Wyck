@@ -1,6 +1,5 @@
 package dev.wyck.codegen;
 
-import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.worldgen.Carvers;
 import net.minecraft.resources.Identifier;
@@ -23,8 +22,6 @@ import net.minecraft.data.worldgen.placement.OrePlacements;
 import net.minecraft.data.worldgen.placement.TreePlacements;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.data.worldgen.placement.VillagePlacements;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.util.TriState;
 import net.minecraft.world.entity.MobCategory;
@@ -49,7 +46,6 @@ import net.minecraft.world.level.levelgen.NoiseRouterData;
 import net.minecraft.world.level.levelgen.Noises;
 import org.jspecify.annotations.Nullable;
 
-import java.lang.reflect.Field;
 import java.util.List;
 
 public final class Generators {
@@ -59,7 +55,6 @@ public final class Generators {
         placedFeatures(),
         densityFunctions(),
         noiseParameters(),
-        soundEvents(),
         biomeKeys(),
         dimensionKeys(),
         decorations(),
@@ -162,24 +157,6 @@ public final class Generators {
             "Typed references that point to vanilla's noise parameters.",
             "2.4.0",
             "NOISE"
-        );
-    }
-
-    private static GeneratorSpec soundEvents() {
-        return new ReferenceSpec(
-            "dev.wyck.environment.sounds",
-            "SoundEvents",
-            "SoundEvent",
-            "SoundEvent.variableRange",
-            SoundEvent.class,
-            Generators::soundLocation,
-            List.of(
-                SoundEvents.class
-            ),
-            "Typed references that point to vanilla's sound events.",
-            "2.4.1",
-            "SOUND_EVENTS",
-            Generators::isSoundField
         );
     }
 
@@ -486,24 +463,6 @@ public final class Generators {
             return resourceKey.identifier();
         }
         return null;
-    }
-
-    private static boolean isSoundField(Field field) {
-        Class<?> type = field.getType();
-        return net.minecraft.sounds.SoundEvent.class.isAssignableFrom(type) || Holder.class.isAssignableFrom(type);
-    }
-
-    private static @Nullable Identifier soundLocation(Object entry) {
-        net.minecraft.sounds.SoundEvent event = null;
-        if (entry instanceof net.minecraft.sounds.SoundEvent se) {
-            event = se;
-        } else if (entry instanceof Holder<?> holder && holder.value() instanceof net.minecraft.sounds.SoundEvent se) {
-            event = se;
-        }
-        if (event == null) {
-            return null;
-        }
-        return BuiltInRegistries.SOUND_EVENT.getKey(event);
     }
 
     /**
