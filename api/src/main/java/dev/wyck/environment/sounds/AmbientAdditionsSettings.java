@@ -5,6 +5,7 @@ import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.ConstructWireProvider;
 import dev.wyck.factory.WireProvider;
 import dev.wyck.wrapper.Wrapper;
+import org.bukkit.Sound;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -52,6 +53,18 @@ public interface AmbientAdditionsSettings extends Wrapper {
     }
 
     /**
+     * Creates a new ambient additions settings record.
+     * @param bukkitSound the sound event to play
+     * @param tickChance the chance of the sound event to play per tick
+     * @return a new ambient additions settings record
+     * @since 3.0.1
+     */
+    @AsOf("3.0.1")
+    static AmbientAdditionsSettings of(Sound bukkitSound, double tickChance) {
+        return of(BukkitSoundEvent.variableRange(bukkitSound), tickChance);
+    }
+
+    /**
      * Creates a new ambient additions settings record builder.
      * @return a new ambient additions settings record builder
      * @since 2.4.1
@@ -94,6 +107,19 @@ public interface AmbientAdditionsSettings extends Wrapper {
         public Builder tickChance(double tickChance) {
             this.tickChance = tickChance;
             return this;
+        }
+
+        // Friendly
+
+        /**
+         * Sets the sound event to play.
+         * @param bukkitSound the sound event to play
+         * @return this builder
+         * @since 3.0.1
+         */
+        @AsOf("3.0.1")
+        public Builder sound(Sound bukkitSound) {
+            return soundEvent(BukkitSoundEvent.variableRange(bukkitSound));
         }
 
         /**

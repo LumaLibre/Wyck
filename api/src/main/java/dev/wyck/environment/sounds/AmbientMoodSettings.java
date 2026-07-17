@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.ConstructWireProvider;
 import dev.wyck.wrapper.Wrapper;
+import org.bukkit.Sound;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -60,6 +61,20 @@ public interface AmbientMoodSettings extends Wrapper {
     @AsOf("2.4.1")
     static AmbientMoodSettings of(SoundEvent soundEvent, int tickDelay, int blockSearchExtent, double soundPositionOffset) {
         return WIRE.construct(soundEvent, tickDelay, blockSearchExtent, soundPositionOffset);
+    }
+
+    /**
+     * Creates a new ambient mood settings record.
+     * @param bukkitSound the sound event of the ambient mood settings
+     * @param tickDelay the tick delay of the ambient mood settings
+     * @param blockSearchExtent the block search extent of the ambient mood settings
+     * @param soundPositionOffset the sound position offset of the ambient mood settings
+     * @return a new ambient mood settings record
+     * @since 3.0.1
+     */
+    @AsOf("3.0.1")
+    static AmbientMoodSettings of(Sound bukkitSound, int tickDelay, int blockSearchExtent, double soundPositionOffset) {
+        return of(BukkitSoundEvent.variableRange(bukkitSound), tickDelay, blockSearchExtent, soundPositionOffset);
     }
 
     /**
@@ -131,6 +146,19 @@ public interface AmbientMoodSettings extends Wrapper {
         public Builder soundPositionOffset(double soundPositionOffset) {
             this.soundPositionOffset = soundPositionOffset;
             return this;
+        }
+
+        // Friendly
+
+        /**
+         * Sets the sound event of the ambient mood settings.
+         * @param bukkitSound the sound event of the ambient mood settings
+         * @return this builder
+         * @since 3.0.1
+         */
+        @AsOf("3.0.1")
+        public Builder soundEvent(Sound bukkitSound) {
+            return soundEvent(BukkitSoundEvent.variableRange(bukkitSound));
         }
 
         /**
