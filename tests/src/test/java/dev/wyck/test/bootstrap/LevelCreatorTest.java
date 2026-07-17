@@ -1,4 +1,4 @@
-package dev.wyck.test;
+package dev.wyck.test.bootstrap;
 
 import dev.wyck.biome.Biomes;
 import dev.wyck.keys.ResourceKey;

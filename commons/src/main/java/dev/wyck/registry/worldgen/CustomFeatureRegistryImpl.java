@@ -26,7 +26,7 @@ public final class CustomFeatureRegistryImpl implements CustomFeatureRegistry {
     @SuppressWarnings({"unchecked", "rawtypes"})
     public void register(ResourceKey key, CustomFeature<?> feature) {
         CustomFeatureBridge<?> bridge = new CustomFeatureBridge(feature, feature.configSupplier());
-        Identifier id = (Identifier) key.resourceLocation();
+        Identifier id = key.identifier();
 
         this.featureRegistry.get().whileUnfrozen(() -> Registry.register(BuiltInRegistries.FEATURE, id, bridge));
     }

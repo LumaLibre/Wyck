@@ -26,9 +26,8 @@ val deleteTestWorlds by tasks.registering(Delete::class) {
     })
 }
 
-tasks.test {
+tasks.withType<Test>().configureEach {
     useJUnitPlatform()
-    forkEvery = 1
 
     jvmArgs(
         "-XX:+EnableDynamicAgentLoading",
@@ -37,11 +36,18 @@ tasks.test {
         "-Xshare:off",
     )
 
+
+    systemProperty("repo.root", rootProject.projectDir.absolutePath)
+
     testLogging {
         events("passed", "skipped", "failed")
         exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
         showStandardStreams = false
     }
+}
+
+tasks.test {
+    forkEvery = 1
 
     workingDir = testServerDir
     doFirst { testServerDir.mkdirs() }
@@ -51,6 +57,16 @@ tasks.test {
     }
 
     finalizedBy(deleteTestWorlds)
+}
+
+val wireProviderTest by tasks.registering(Test::class) {
+    description = "Checks wire providers are correctly resolved typed."
+    group = "verification"
+
+    testClassesDirs = sourceSets["test"].output.classesDirs
+    classpath = sourceSets["test"].runtimeClasspath
+
+    filter { includeTestsMatching("*WireProviderResolutionTest") }
 }
 
 tasks.jar {

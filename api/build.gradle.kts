@@ -37,6 +37,7 @@ tasks.javadoc {
             "https://jd.papermc.io/paper/26.2/",
             "https://jd.papermc.io/adventure/5.1.1/",
             "https://jspecify.dev/docs/api/",
+            "https://javadoc.io/doc/org.jetbrains/annotations-java5/20.1.0/",
         )
         addBooleanOption("html5", true)
         use(true)

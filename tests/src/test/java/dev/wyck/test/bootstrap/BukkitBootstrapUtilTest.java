@@ -1,4 +1,4 @@
-package dev.wyck.test;
+package dev.wyck.test.bootstrap;
 
 import dev.wyck.util.BukkitBootstrapUtil;
 import org.bukkit.Material;

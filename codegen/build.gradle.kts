@@ -31,3 +31,7 @@ tasks.register<JavaExec>("generateSources") {
 
     dependsOn(tasks.compileJava)
 }
+
+tasks.jar {
+    enabled = false
+}

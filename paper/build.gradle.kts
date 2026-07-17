@@ -94,3 +94,8 @@ modrinth {
     gameVersions.addAll(supported)
     loaders.addAll("paper", "purpur", "folia")
 }
+
+
+tasks.named("modrinth") {
+    dependsOn(":tests:test") // no live for rn
+}

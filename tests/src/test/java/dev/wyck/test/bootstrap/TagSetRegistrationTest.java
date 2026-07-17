@@ -1,4 +1,4 @@
-package dev.wyck.test;
+package dev.wyck.test.bootstrap;
 
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.tags.TagSet;

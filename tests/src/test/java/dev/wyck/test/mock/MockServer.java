@@ -1,7 +1,7 @@
 package dev.wyck.test.mock;
 
 import com.mojang.serialization.Lifecycle;
-import dev.wyck.test.MinecraftBootstrap;
+import dev.wyck.test.bootstrap.MinecraftBootstrap;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.RegistrationInfo;

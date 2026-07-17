@@ -13,15 +13,6 @@ dependencies {
     for (project in minecraftProjects) {
         api(project(path = "${minecraft}:${project}"))
     }
-
-    testImplementation(platform(libs.junit.bom))
-    testImplementation(libs.junit.jupiter)
-    testRuntimeOnly(libs.junit.platform.launcher)
-}
-
-tasks.test {
-    useJUnitPlatform()
-    systemProperty("repo.root", rootProject.projectDir.absolutePath)
 }
 
 java {
@@ -45,7 +36,7 @@ tasks.named<Jar>("jar") {
 }
 
 tasks.withType<PublishToMavenRepository>().configureEach {
-    dependsOn(tasks.test)
+    dependsOn(":tests:wireProviderTest")
 }
 
 configurations {

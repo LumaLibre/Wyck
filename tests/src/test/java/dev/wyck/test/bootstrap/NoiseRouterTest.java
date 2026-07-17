@@ -1,4 +1,4 @@
-package dev.wyck.test;
+package dev.wyck.test.bootstrap;
 
 import dev.wyck.worldgen.function.simple.ConstantSimpleFunction;
 import dev.wyck.worldgen.noise.NoiseRouter;

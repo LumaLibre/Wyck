@@ -52,7 +52,7 @@ gradle.taskGraph.whenReady {
 }
 
 tasks.jar {
-    archiveBaseName.set("${project.name}-Parent")
+    enabled = false
 }
 
 fun gitShortCommitHash(): String =

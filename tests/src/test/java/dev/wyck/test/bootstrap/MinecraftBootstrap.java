@@ -1,4 +1,4 @@
-package dev.wyck.test;
+package dev.wyck.test.bootstrap;
 
 import net.minecraft.SharedConstants;
 import net.minecraft.server.Bootstrap;
