@@ -162,6 +162,17 @@ public interface AmbientMoodSettings extends Wrapper {
         }
 
         /**
+         * Sets the sound event of the ambient mood settings.
+         * @param soundKey the sound event of the ambient mood settings
+         * @return this builder
+         * @since 3.1.0
+         */
+        @AsOf("3.1.0")
+        public Builder soundEvent(String soundKey) {
+            return soundEvent(SoundEvent.variableRange(soundKey));
+        }
+
+        /**
          * Builds the ambient mood settings record.
          * @return the ambient mood settings record
          * @since 2.4.1

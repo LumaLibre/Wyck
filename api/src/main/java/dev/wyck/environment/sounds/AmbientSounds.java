@@ -3,6 +3,7 @@ package dev.wyck.environment.sounds;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.ConstructWireProvider;
 import dev.wyck.wrapper.Wrapper;
+import org.bukkit.Sound;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -121,6 +122,54 @@ public interface AmbientSounds extends Wrapper {
         public Builder addition(AmbientAdditionsSettings... additions) {
             Collections.addAll(this.additions, additions);
             return this;
+        }
+
+        // Friendly
+
+        /**
+         * Sets the loop sound event.
+         * @param bukkitSound the loop sound event
+         * @return this builder
+         * @since 3.1.0
+         */
+        @AsOf("3.1.0")
+        public Builder loop(Sound bukkitSound) {
+            return loop(BukkitSoundEvent.variableRange(bukkitSound));
+        }
+
+        /**
+         * Sets the loop sound event.
+         * @param bukkitSound the loop sound event
+         * @param range the range of the sound
+         * @return this builder
+         * @since 3.1.0
+         */
+        @AsOf("3.1.0")
+        public Builder loop(Sound bukkitSound, float range) {
+            return loop(BukkitSoundEvent.fixedRange(bukkitSound, range));
+        }
+
+        /**
+         * Sets the loop sound event.
+         * @param soundKey the loop sound event
+         * @return this builder
+         * @since 3.1.0
+         */
+        @AsOf("3.1.0")
+        public Builder loop(String soundKey) {
+            return loop(SoundEvent.variableRange(soundKey));
+        }
+
+        /**
+         * Sets the loop sound event.
+         * @param soundKey the loop sound event
+         * @param range the range of the sound
+         * @return this builder
+         * @since 3.1.0
+         */
+        @AsOf("3.1.0")
+        public Builder loop(String soundKey, float range) {
+            return loop(SoundEvent.fixedRange(soundKey, range));
         }
 
         /**

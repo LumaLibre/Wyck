@@ -123,6 +123,41 @@ public interface AmbientAdditionsSettings extends Wrapper {
         }
 
         /**
+         * Sets the sound event to play.
+         * @param bukkitSound the sound event to play
+         * @param range the range of the sound
+         * @return this builder
+         * @since 3.1.0
+         */
+        @AsOf("3.1.0")
+        public Builder sound(Sound bukkitSound, float range) {
+            return soundEvent(BukkitSoundEvent.fixedRange(bukkitSound, range));
+        }
+
+        /**
+         * Sets the sound event to play.
+         * @param soundKey the sound event to play
+         * @return this builder
+         * @since 3.1.0
+         */
+        @AsOf("3.1.0")
+        public Builder sound(String soundKey) {
+            return soundEvent(SoundEvent.variableRange(soundKey));
+        }
+
+        /**
+         * Sets the sound event to play.
+         * @param soundKey the sound event to play
+         * @param range the range of the sound
+         * @return this builder
+         * @since 3.1.0
+         */
+        @AsOf("3.1.0")
+        public Builder sound(String soundKey, float range) {
+            return soundEvent(SoundEvent.fixedRange(soundKey, range));
+        }
+
+        /**
          * Builds the ambient additions settings record.
          * @return the ambient additions settings record
          * @since 2.4.1
