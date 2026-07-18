@@ -87,6 +87,6 @@ public interface TagKey extends Wrapper {
     @AsOf("3.1.0")
     @ApiStatus.Internal
     static TagKey of(RegistryId registry, ResourceKey key) {
-        return WIRE.construct(registry, key);
+        return WIRE.construct(key, registry);
     }
 }
