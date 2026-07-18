@@ -73,7 +73,7 @@ public interface SoundEvent extends Wrapper, Keyed {
      */
     @AsOf("3.1.0")
     static SoundEvent variableRange(String key) {
-        return variableRange(ResourceKey.of(key));
+        return variableRange(ResourceKey.minecraft(key));
     }
 
     /**
@@ -85,7 +85,7 @@ public interface SoundEvent extends Wrapper, Keyed {
      */
     @AsOf("3.1.0")
     static SoundEvent fixedRange(String key, float range) {
-        return fixedRange(ResourceKey.of(key), range);
+        return fixedRange(ResourceKey.minecraft(key), range);
     }
 
     /**
