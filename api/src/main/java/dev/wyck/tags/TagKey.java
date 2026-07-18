@@ -39,9 +39,8 @@ public interface TagKey extends Wrapper {
      * @return the registry discriminator
      * @since 3.1.0
      */
-    @ApiStatus.Internal
     @AsOf("3.1.0")
-    RegistryId registry();
+    RegistryId registryId();
 
     /**
      * Creates a block tag key from its identifier.

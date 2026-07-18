@@ -12,13 +12,11 @@ import org.jspecify.annotations.Nullable;
 /**
  * Dripstone feature found in caves.
  *
- * @deprecated Wyck will no longer support multiple versions of Minecraft soon.
  * @see <a href="https://minecraft.wiki/w/Dripstone_(feature)">Dripstone (feature)</a>
  * @since 3.0.0
  * @version 3.0.0
  * @author Jsinco
  */
-@Deprecated
 @NullMarked
 @AsOf("3.0.0")
 public interface DripstoneClusterConfiguration extends FeatureConfiguration {

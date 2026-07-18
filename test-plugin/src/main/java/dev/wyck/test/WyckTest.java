@@ -48,5 +48,15 @@ public final class WyckTest extends JavaPlugin implements Listener {
         World overworld = Bukkit.getWorld(Key.key("minecraft", "overworld"));
         Preconditions.checkNotNull(overworld, "overworld");
         editor.apply(overworld);
+
+        TagSet<Material> test = TagSet.blocks()
+            .resourceKey(ResourceKey.of("wyck:testing"))
+            .value(Material.NAME_TAG)
+            .value(Material.ACACIA_LOG)
+            .register()
+            .toBuilder()
+            .resourceKey(ResourceKey.of("wyck:testing2"))
+            .value(Material.ACACIA_DOOR)
+            .register();
     }
 }

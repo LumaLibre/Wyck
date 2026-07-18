@@ -30,6 +30,18 @@ public record SpeleothemClusterConfigurationImpl(
 ) implements SpeleothemClusterConfiguration {
     @Override
     public Object toMinecraft() {
-        throw new UnsupportedOperationException("Doesn't exist in this Minecraft version.");
+        return new net.minecraft.world.level.levelgen.feature.configurations.DripstoneClusterConfiguration(
+            floorToCeilingSearchRange,
+            height.asHandle(),
+            radius.asHandle(),
+            maxStalagmiteStalactiteHeightDiff,
+            heightDeviation,
+            speleothemBlockLayerThickness.asHandle(),
+            density.asHandle(),
+            wetness.asHandle(),
+            chanceOfSpeleothemAtMaxDistanceFromCenter,
+            maxDistanceFromEdgeAffectingChanceOfSpeleothem,
+            maxDistanceFromCenterAffectingHeightBias
+        );
     }
 }

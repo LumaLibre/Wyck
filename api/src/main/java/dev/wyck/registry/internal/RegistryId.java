@@ -8,26 +8,24 @@ import java.util.List;
 import java.util.stream.Stream;
 
 @AsOf("2.4.0")
-@ApiStatus.Internal
 public enum RegistryId {
-    // minor TODO: sort these
+    ACTIVITY("activity"),
     BIOME("worldgen/biome"),
-    FEATURE("worldgen/feature"),
-    DIMENSION_TYPE("dimension_type"),
-    DIMENSION("dimension"),
-    NOISE_SETTINGS("worldgen/noise_settings"),
-    PARTICLE_TYPE("particle_type"),
-    ENVIRONMENT_ATTRIBUTE("environment_attribute"),
-    FLUID("fluid"),
-    CONFIGURED_CARVER("worldgen/configured_carver"),
+    BLOCK("block"),
     CARVER("worldgen/carver"),
-    NOISE("worldgen/noise"),
+    CONFIGURED_CARVER("worldgen/configured_carver"),
     CONFIGURED_FEATURE("worldgen/configured_feature"),
     DENSITY_FUNCTION("worldgen/density_function"),
-    ACTIVITY("activity"),
-    WORLD_CLOCK("world_clock"),
-    BLOCK("block"),
-    ENTITY_TYPE("entity_type");
+    DIMENSION("dimension"),
+    DIMENSION_TYPE("dimension_type"),
+    ENTITY_TYPE("entity_type"),
+    ENVIRONMENT_ATTRIBUTE("environment_attribute"),
+    FEATURE("worldgen/feature"),
+    FLUID("fluid"),
+    NOISE("worldgen/noise"),
+    NOISE_SETTINGS("worldgen/noise_settings"),
+    PARTICLE_TYPE("particle_type"),
+    WORLD_CLOCK("world_clock");
 
     private final List<ResourceKey> keys;
 
@@ -35,7 +33,14 @@ public enum RegistryId {
         this.keys = Stream.of(keys).map(ResourceKey::minecraft).toList();
     }
 
+    /**
+     * The keys associated with this registry id.
+     * @apiNote Internal API, this value may change at any time.
+     * @return the keys associated with this registry id
+     * @since 2.4.0
+     */
     @AsOf("2.4.0")
+    @ApiStatus.Internal
     public List<ResourceKey> keys() {
         return keys;
     }

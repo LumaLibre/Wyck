@@ -110,15 +110,34 @@ public interface FeatureConfiguration extends Wrapper {
     }
 
     /**
+     * Creates a builder for a {@link PointedDripstoneConfiguration}.
+     * @apiNote This is {@link SpeleothemConfiguration} in 26.2+.
+     * @return a new pointed dripstone configuration builder
+     * @since 3.1.0
+     */
+    @AsOf("3.1.0")
+    static PointedDripstoneConfiguration.Builder pointedDripstone() {
+        return PointedDripstoneConfiguration.builder();
+    }
+
+    /**
      * Creates a builder for a {@link DripstoneClusterConfiguration}.
-     * @deprecated Wyck will no longer support multiple versions of Minecraft soon.
      * @return a new dripstone cluster configuration builder
      * @since 3.0.0
      */
-    @Deprecated
     @AsOf("3.0.0")
     static DripstoneClusterConfiguration.Builder dripstoneCluster() {
         return DripstoneClusterConfiguration.builder();
+    }
+
+    /**
+     * Creates a builder for a {@link SpeleothemConfiguration}.
+     * @return a new pointed dripstone configuration builder
+     * @since 3.0.0
+     */
+    @AsOf("3.0.0")
+    static SpeleothemConfiguration.Builder speleothem() {
+        return SpeleothemConfiguration.builder();
     }
 
     /**
@@ -229,16 +248,6 @@ public interface FeatureConfiguration extends Wrapper {
     @AsOf("3.0.0")
     static OreConfiguration.Builder ore() {
         return OreConfiguration.builder();
-    }
-
-    /**
-     * Creates a builder for a {@link SpeleothemConfiguration}.
-     * @return a new pointed dripstone configuration builder
-     * @since 3.0.0
-     */
-    @AsOf("3.0.0")
-    static SpeleothemConfiguration.Builder speleothem() {
-        return SpeleothemConfiguration.builder();
     }
 
     /**

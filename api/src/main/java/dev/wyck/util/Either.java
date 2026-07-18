@@ -184,4 +184,14 @@ public sealed interface Either<L, R> permits Either.Left, Either.Right { // can 
         }
         return this;
     }
+
+    /**
+     * Checks if this either is empty.
+     * @return true if this either is empty
+     * @since 3.1.0
+     */
+    @AsOf("3.1.0")
+    default boolean empty() {
+        return left().isEmpty() && right().isEmpty();
+    }
 }

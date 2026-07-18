@@ -6,13 +6,13 @@ import dev.wyck.registry.internal.RegistryId;
 import dev.wyck.registry.internal.WyckRegistry;
 import dev.wyck.util.Either;
 import dev.wyck.util.Lazy;
+import dev.wyck.util.WorldgenConversions;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -26,14 +26,14 @@ import java.util.Set;
 public final class TagSetImpl<T extends Keyed, U> implements TagSet<T> {
 
     private final @Nullable ResourceKey resourceKey;
-    private final RegistryId registryId;
     private final Either<Set<T>, TagKey> value;
+    private final RegistryId registryId;
     private final Lazy<WyckRegistry> registry;
 
     public TagSetImpl(@Nullable ResourceKey resourceKey, RegistryId registryId, Either<Set<T>, TagKey> value) {
         this.resourceKey = resourceKey;
-        this.registryId = registryId;
         this.value = value;
+        this.registryId = registryId;
         this.registry = WyckRegistry.lazy(registryId);
     }
 
@@ -46,14 +46,12 @@ public final class TagSetImpl<T extends Keyed, U> implements TagSet<T> {
             elements -> {
                 net.minecraft.resources.ResourceKey<? extends net.minecraft.core.Registry<U>> registryKey = nmsRegistry.key();
 
-                List<net.minecraft.core.Holder<U>> holders = new ArrayList<>(elements.size());
-                for (T element : elements) {
+                return WorldgenConversions.toHolderSet(elements, (element) -> {
                     Key kyoriKey = element.key();
                     net.minecraft.resources.Identifier id = net.minecraft.resources.Identifier.fromNamespaceAndPath(kyoriKey.namespace(), kyoriKey.value());
                     net.minecraft.resources.ResourceKey<U> elementKey = net.minecraft.resources.ResourceKey.create(registryKey, id);
-                    holders.add(nmsRegistry.getOrThrow(elementKey));
-                }
-                return net.minecraft.core.HolderSet.direct(holders);
+                    return nmsRegistry.getOrThrow(elementKey);
+                });
             },
             tagKey -> {
                 return nmsRegistry.getOrThrow((net.minecraft.tags.TagKey<U>) tagKey.toMinecraft());
@@ -118,13 +116,13 @@ public final class TagSetImpl<T extends Keyed, U> implements TagSet<T> {
     }
 
     @Override
-    public RegistryId registryId() {
-        return this.registryId;
+    public Either<Set<T>, TagKey> value() {
+        return this.value;
     }
 
     @Override
-    public Either<Set<T>, TagKey> value() {
-        return this.value;
+    public RegistryId registryId() {
+        return this.registryId;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package dev.wyck.tags;
 
+import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.ConstructWireProvider;
 import dev.wyck.keys.ResourceKey;
@@ -14,6 +15,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -43,21 +45,20 @@ public interface TagSet<T extends Keyed> extends Wrapper, Keyed, Registerable<Ta
     Optional<ResourceKey> resourceKey();
 
     /**
+     * The registry the elements of this tag set resolve against.
+     * @return the registry discriminator
+     * @since 3.1.0
+     */
+    @AsOf("3.1.0")
+    RegistryId registryId();
+
+    /**
      * The contents of this tag set: either an explicit set of elements, or a reference to a named tag.
      * @return the set of values contained in this tag set
      * @since 3.1.0
      */
     @AsOf("3.1.0")
     Either<Set<T>, TagKey> value();
-
-    /**
-     * The registry the elements of this tag set resolve against.
-     * @return the registry discriminator
-     * @since 3.1.0
-     */
-    @AsOf("3.1.0")
-    @ApiStatus.Internal
-    RegistryId registryId();
 
     /**
      * If this is a holder set, returns the underlying set.
@@ -170,17 +171,6 @@ public interface TagSet<T extends Keyed> extends Wrapper, Keyed, Registerable<Ta
     }
 
     /**
-     * Creates a tag set referencing a Bukkit block {@link Tag}.
-     * @param tag the Bukkit block tag
-     * @return a new block tag set
-     * @since 3.1.0
-     */
-    @AsOf("3.1.0")
-    static TagSet<Material> ofBlockTag(Tag<Material> tag) {
-        return ofTag(TagKey.blocks(tag));
-    }
-
-    /**
      * Creates a tag set referencing the given named tag.
      * @param tag the tag key
      * @return a new tag set
@@ -190,7 +180,7 @@ public interface TagSet<T extends Keyed> extends Wrapper, Keyed, Registerable<Ta
     @AsOf("3.1.0")
     @SuppressWarnings("unchecked")
     static <T extends Keyed> TagSet<T> ofTag(TagKey tag) {
-        return (TagSet<T>) WIRE.construct(null, tag.registry(), Either.right(tag));
+        return (TagSet<T>) WIRE.construct(null, tag.registryId(), Either.right(tag));
     }
 
     /**
@@ -204,17 +194,6 @@ public interface TagSet<T extends Keyed> extends Wrapper, Keyed, Registerable<Ta
         return of(null, RegistryId.BLOCK, value);
     }
 
-    /**
-     * Creates a block tag set from an {@link Either} of explicit materials or a named tag.
-     * @param resourceKey the resource key of the tag set
-     * @param value either the explicit block materials, or a named block tag
-     * @return a new block tag set
-     * @since 3.1.0
-     */
-    @AsOf("3.1.0")
-    static TagSet<Material> ofBlocks(@Nullable ResourceKey resourceKey, Either<Set<Material>, TagKey> value) {
-        return of(resourceKey, RegistryId.BLOCK, value);
-    }
 
     @ApiStatus.Internal
     @SuppressWarnings("unchecked")
@@ -222,18 +201,202 @@ public interface TagSet<T extends Keyed> extends Wrapper, Keyed, Registerable<Ta
         return (TagSet<T>) WIRE.construct(resourceKey, registry, Either.left(elements));
     }
 
-    /**
-     * Creates a tag set from an {@link Either} of explicit elements or a named tag.
-     * @param resourceKey the resource key of the tag set, or {@code null}
-     * @param registry the registry the elements resolve against
-     * @param value either the explicit elements or a named tag
-     * @return a new tag set
-     * @param <T> the Bukkit type of the elements
-     * @since 3.1.0
-     */
     @ApiStatus.Internal
     @SuppressWarnings("unchecked")
     static <T extends Keyed> TagSet<T> of(@Nullable ResourceKey resourceKey, RegistryId registry, Either<Set<T>, TagKey> value) {
         return (TagSet<T>) WIRE.construct(resourceKey, registry, value);
+    }
+
+    /**
+     * Creates a new builder from this tag set.
+     * @return a new builder
+     * @since 3.1.0
+     */
+    @AsOf("3.1.0")
+    default Builder<T> toBuilder() {
+        return new Builder<>(this);
+    }
+
+    /**
+     * Creates a new builder.
+     * @return a new builder
+     * @param <T> the Bukkit type of the elements
+     * @since 3.1.0
+     */
+    @AsOf("3.1.0")
+    static <T extends Keyed> Builder<T> builder() {
+        return new Builder<>();
+    }
+
+    /**
+     * Creates a new builder for block tag sets.
+     * @return a new builder
+     * @since 3.1.0
+     */
+    @AsOf("3.1.0")
+    static Builder<Material> blocks() {
+        return new Builder<>(RegistryId.BLOCK);
+    }
+
+    /**
+     * Creates a new builder.
+     * @param <T> the Bukkit type of the elements
+     * @since 3.1.0
+     * @version 3.1.0
+     * @author Jsinco
+     */
+    @AsOf("3.1.0")
+    final class Builder<T extends Keyed> {
+        private @Nullable ResourceKey resourceKey = null;
+        private @Nullable RegistryId registry = null;
+        private Either<Set<T>, TagKey> value = Either.left(new HashSet<>());
+
+        public Builder() {}
+
+        public Builder(RegistryId registry) {
+            this.registry = registry;
+        }
+
+        public Builder(TagSet<T> tagSet) {
+            this.resourceKey = tagSet.resourceKey().orElse(null);
+            this.registry = tagSet.registryId();
+            this.value = tagSet.value();
+        }
+
+        /**
+         * Sets the resource key of the tag set.
+         * @param resourceKey the resource key of the tag set
+         * @return this builder
+         * @since 3.1.0
+         */
+        @AsOf("3.1.0")
+        public Builder<T> resourceKey(ResourceKey resourceKey) {
+            this.resourceKey = resourceKey;
+            return this;
+        }
+
+        /**
+         * Sets the registry discriminator of the tag set.
+         * @param registry the registry discriminator of the tag set
+         * @return this builder
+         * @since 3.1.0
+         */
+        @AsOf("3.1.0")
+        public Builder<T> registry(RegistryId registry) {
+            this.registry = registry;
+            return this;
+        }
+
+        /**
+         * Sets the value of the tag set.
+         * @param value the value of the tag set
+         * @return this builder
+         * @since 3.1.0
+         */
+        @AsOf("3.1.0")
+        public Builder<T> values(Set<T> value) {
+            this.value = Either.left(value);
+            return this;
+        }
+
+        /**
+         * Sets the value of the tag set.
+         * @param value the value of the tag set
+         * @return this builder
+         * @since 3.1.0
+         */
+        @AsOf("3.1.0")
+        public Builder<T> values(TagKey value) {
+            this.value = Either.right(value);
+            return this;
+        }
+
+        // Friendly
+
+        /**
+         * Sets the value of the tag set.
+         * @param value the value of the tag set
+         * @return this builder
+         * @since 3.1.0
+         */
+        @AsOf("3.1.0")
+        public Builder<T> values(T... value) {
+            this.value = Either.left(new HashSet<>(Set.of(value)));
+            return this;
+        }
+
+        /**
+         * Sets the value of the tag set.
+         * @param value the value of the tag set
+         * @return this builder
+         * @since 3.1.0
+         */
+        @AsOf("3.1.0")
+        public Builder<T> value(T value) {
+            this.value = this.value.leftOrElse(new HashSet<>())
+                .consumeLeft(set -> set.add(value));
+            return this;
+        }
+
+        /**
+         * Sets the value of the tag set.
+         * @param tagKey the key of the tag set
+         * @return this builder
+         * @since 3.1.0
+         */
+        @AsOf("3.1.0")
+        public Builder<T> value(ResourceKey tagKey) {
+            Preconditions.checkState(registry != null, "Registry must be set before setting a tag key using this override!");
+            this.value = Either.right(TagKey.of(registry, tagKey));
+            return this;
+        }
+
+        /**
+         * Sets the value of the tag set.
+         * @param tag the tag set
+         * @return this builder
+         * @since 3.1.0
+         */
+        @AsOf("3.1.0")
+        public Builder<T> value(Tag<Material> tag) {
+            Preconditions.checkState(registry != null, "Registry must be set before setting a tag key using this override!");
+            this.value = Either.right(TagKey.of(registry, tag));
+            return this;
+        }
+
+        /**
+         * Sets the value of the tag set.
+         * @param tagSet the tag set
+         * @return this builder
+         * @since 3.1.0
+         */
+        @AsOf("3.1.0")
+        public Builder<T> value(TagSet<T> tagSet) {
+            Preconditions.checkState(registry != null, "Registry must be set before setting a tag key using this override!");
+            this.value = Either.right(TagKey.of(registry, tagSet.resourceKey().orElseThrow()));
+            return this;
+        }
+
+        /**
+         * Builds a new tag set.
+         * @return the new tag set
+         * @since 3.1.0
+         */
+        @AsOf("3.1.0")
+        public TagSet<T> build() {
+            Preconditions.checkState(registry != null, "Registry must be set before building a tag set!");
+            Preconditions.checkState(!value.empty(), "Tag set must have a value!");
+            return of(resourceKey, registry, value);
+        }
+
+        /**
+         * Registers the tag set to the registry.
+         * @return the registered tag set
+         * @since 3.1.0
+         */
+        @AsOf("3.1.0")
+        public TagSet<T> register() {
+            return build().register();
+        }
     }
 }
