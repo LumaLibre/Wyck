@@ -1,0 +1,99 @@
+---
+title: Tags
+description: Learn about tag keys and tag sets in Wyck.
+---
+
+import CodeBlock from "@/components/CodeBlock.astro";
+import SourceLink from "@/components/SourceLink.astro";
+
+Wyck models Minecraft tags with two types:
+
+* <SourceLink path="tags/TagKey.java">TagKey</SourceLink>: a *named reference* to a tag, like `minecraft:logs`. It points at a tag and does not carry its contents.
+* <SourceLink path="tags/TagSet.java">TagSet</SourceLink>: a group of entries that is *either* an explicit set of elements *or* a reference to a named tag.
+
+<SourceLink path="tags/TagSet.java">TagSet</SourceLink> wraps vanilla's `HolderSet` and `TagKey`, which is either an inline list, or a tag. Anywhere worldgen accepts a
+group of blocks, it accepts either form.
+
+## Tag Keys
+
+A <SourceLink path="tags/TagKey.java">TagKey</SourceLink> is a <SourceLink path="keys/ResourceKey.java">ResourceKey</SourceLink>
+plus the registry the tag lives in.
+
+<CodeBlock
+    lang="java"
+    filename="Examples.java"
+    code={
+`import dev.wyck.tags.TagKey;
+import dev.wyck.keys.ResourceKey;
+import org.bukkit.Tag;
+
+// Reference a vanilla tag by identifier.
+TagKey logs = TagKey.blocks(ResourceKey.of("minecraft:logs"));
+
+// Or reuse a Bukkit tag constant.
+TagKey leaves = TagKey.blocks(Tag.LEAVES);`
+    }
+/>
+
+## Tag Sets
+
+A <SourceLink path="tags/TagSet.java">TagSet</SourceLink> holds one of two things, and
+<SourceLink path="tags/TagSet.java">isBlockSet()</SourceLink> or <SourceLink path="tags/TagSet.java">isTag()</SourceLink>
+tell you which:
+
+* **A set of elements**: listed explicitly, e.g. stone and dirt.
+* **A tag reference**: a <SourceLink path="tags/TagKey.java">TagKey</SourceLink> pointing at a named tag.
+
+<CodeBlock
+    lang="java"
+    filename="Examples.java"
+    code={
+`import dev.wyck.tags.TagSet;
+import dev.wyck.keys.ResourceKey;
+import org.bukkit.Material;
+
+// An explicit set of blocks — no name, so it cannot be registered.
+TagSet<Material> ores = TagSet.ofBlocks(Material.IRON_ORE, Material.GOLD_ORE);
+
+// A reference to a tag that already exists.
+TagSet<Material> logs = TagSet.ofBlockTag(ResourceKey.of("minecraft:logs"));`
+    }
+/>
+
+## Registering a Tag Set
+
+<SourceLink path="tags/TagSet.java">register()</SourceLink> binds a named set of elements into the registry as a new
+tag, afterwards the tag behaves like any other tag.
+
+<CodeBlock
+    lang="java"
+    filename="Examples.java"
+    code={
+        `import dev.wyck.tags.TagSet;
+import dev.wyck.keys.ResourceKey;
+import org.bukkit.Material;
+
+TagSet.ofBlocks(ResourceKey.of("wyck:test_tag"), Material.STONE, Material.DIRT)
+    .register();
+
+        // Now referenceable like any other tag.
+        TagSet<Material> reference = TagSet.ofBlockTag(ResourceKey.of("wyck:test_tag"));`
+    }
+/>
+
+**Here's an example of creating (and registering) a <SourceLink path="tags/TagSet.java">TagSet</SourceLink> with a builder:**
+
+<CodeBlock
+    lang="java"
+    filename="Examples.java"
+    code={
+`import dev.wyck.tags.TagSet;
+import dev.wyck.keys.ResourceKey;
+import org.bukkit.Material;
+
+TagSet<Material> tag = TagSet.blocks()
+    .resourceKey(ResourceKey.of("wyck:my_tag"))
+    .values(Material.STONE, Material.DIRT)
+    .register(); // Use #build() instead if you don't want to register it!`
+    }
+/>
