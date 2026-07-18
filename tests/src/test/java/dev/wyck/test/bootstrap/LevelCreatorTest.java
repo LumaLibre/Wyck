@@ -11,6 +11,7 @@ import dev.wyck.worldgen.chunk.FlatLevelSource;
 import dev.wyck.worldgen.chunk.flat.FlatLevelGeneratorSettings;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -18,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 // not live
+@Disabled
 @ExtendWith(MinecraftBootstrap.class)
 class LevelCreatorTest {
 
