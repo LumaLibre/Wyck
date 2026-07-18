@@ -20,7 +20,7 @@ import org.jspecify.annotations.NullMarked;
 public interface PointedDripstoneConfiguration extends FeatureConfiguration {
 
     @ApiStatus.Internal
-    ConstructWireProvider<PointedDripstoneConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.*?.worldgen.feature.config.PointedDripstoneConfigurationImpl");
+    ConstructWireProvider<PointedDripstoneConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.*?.worldgen.feature.configurations.PointedDripstoneConfigurationImpl");
 
     /**
      * Probability for double-block dripstone between 0.0 and 1.0.
