@@ -84,6 +84,20 @@ public interface Music extends Wrapper {
     }
 
     /**
+     * Creates a new music record.
+     * @param soundKey the sound of the music
+     * @param minDelay the minimum delay of the music
+     * @param maxDelay the maximum delay of the music
+     * @param replaceCurrentMusic whether the music should replace the current music
+     * @return a new music record
+     * @since 3.1.0
+     */
+    @AsOf("3.1.0")
+    static Music of(String soundKey, int minDelay, int maxDelay, boolean replaceCurrentMusic) {
+        return of(SoundEvent.variableRange(soundKey), minDelay, maxDelay, replaceCurrentMusic);
+    }
+
+    /**
      * Creates a new music record builder.
      * @return a new music record builder
      * @since 2.4.1
@@ -166,6 +180,40 @@ public interface Music extends Wrapper {
         @AsOf("3.0.1")
         public Builder sound(Sound bukkitSound) {
             return sound(BukkitSoundEvent.variableRange(bukkitSound));
+        }
+
+        /**
+         * Sets the sound of the music.
+         * @param bukkitSound the sound of the music
+         * @param range the range of the sound
+         * @return this builder
+         * @since 3.1.0
+         */
+        @AsOf("3.1.0")
+        public Builder sound(Sound bukkitSound, float range) {
+            return sound(BukkitSoundEvent.fixedRange(bukkitSound, range));
+        }
+
+        /**
+         * Sets the sound of the music.
+         * @param soundKey the sound of the music
+         * @return this builder
+         * @since 3.1.0
+         */
+        @AsOf("3.1.0")
+        public Builder sound(String soundKey) {
+            return sound(SoundEvent.variableRange(soundKey));
+        }
+
+        /**
+         * Sets the sound of the music.
+         * @param soundKey the sound of the music
+         * @return this builder
+         * @since 3.1.0
+         */
+        @AsOf("3.1.0")
+        public Builder sound(String soundKey, float range) {
+            return sound(SoundEvent.fixedRange(soundKey, range));
         }
 
         /**

@@ -6,6 +6,7 @@ import dev.wyck.factory.WireProvider;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.wrapper.Wrapper;
 import net.kyori.adventure.key.Keyed;
+import org.bukkit.Sound;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
@@ -14,7 +15,7 @@ import java.util.Optional;
 /**
  * Wraps a Minecraft SoundEvent.
  *
- * @version 2.4.1
+ * @version 3.1.0
  * @since 2.4.1
  * @author Jsinco
  */
@@ -62,5 +63,51 @@ public interface SoundEvent extends Wrapper, Keyed {
     @AsOf("2.4.1")
     static SoundEvent fixedRange(ResourceKey location, float range) {
         return WIRE.construct(location, Optional.of(range));
+    }
+
+    /**
+     * Creates a new sound event with a variable range.
+     * @param key the key of the sound event
+     * @return a new sound event with a variable range
+     * @since 3.1.0
+     */
+    @AsOf("3.1.0")
+    static SoundEvent variableRange(String key) {
+        return variableRange(ResourceKey.of(key));
+    }
+
+    /**
+     * Creates a new sound event with a fixed range.
+     * @param key the key of the sound event
+     * @param range the range of the sound event
+     * @return a new sound event with a fixed range
+     * @since 3.1.0
+     */
+    @AsOf("3.1.0")
+    static SoundEvent fixedRange(String key, float range) {
+        return fixedRange(ResourceKey.of(key), range);
+    }
+
+    /**
+     * Creates a new BukkitSoundEvent with a variable range.
+     * @param sound the sound event to create a BukkitSoundEvent from
+     * @return a new BukkitSoundEvent with a variable range
+     * @since 3.1.0
+     */
+    @AsOf("3.1.0")
+    static BukkitSoundEvent variableRange(Sound sound) {
+        return BukkitSoundEvent.variableRange(sound);
+    }
+
+    /**
+     * Creates a new BukkitSoundEvent with a fixed range.
+     * @param sound the sound event to create a BukkitSoundEvent from
+     * @param range the range of the sound event
+     * @return a new BukkitSoundEvent with a fixed range
+     * @since 3.1.0
+     */
+    @AsOf("3.1.0")
+    static BukkitSoundEvent fixedRange(Sound sound, float range) {
+        return BukkitSoundEvent.fixedRange(sound, range);
     }
 }
