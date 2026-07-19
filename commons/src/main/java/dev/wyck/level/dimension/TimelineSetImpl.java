@@ -16,6 +16,7 @@ import java.util.List;
 
 @NullMarked
 @ApiStatus.Internal
+@Deprecated(forRemoval = true)
 public record TimelineSetImpl(List<ResourceKey> timelines) implements TimelineSet {
 
     @Override

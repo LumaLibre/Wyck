@@ -10,6 +10,7 @@ import java.util.List;
 @NullMarked
 @WireFactory
 @ApiStatus.Internal
+@Deprecated(forRemoval = true)
 public class TimelineSetFactoryImpl implements TimelineSetImpl.Factory {
     @Override
     public TimelineSetImpl create(List<ResourceKey> keys) {

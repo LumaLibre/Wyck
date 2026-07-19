@@ -26,8 +26,9 @@ import java.util.regex.Pattern;
 public final class ReferenceGenerator {
 
     // matches: @AsOf("1.2.3") \n public static final SomeType FIELD_NAME =
+    // (modifiers are optional: interface constants are emitted without them)
     private static final Pattern EXISTING_FIELD = Pattern.compile(
-        "@AsOf\\(\"([^\"]+)\"\\)\\s+public\\s+static\\s+final\\s+\\w+\\s+(\\w+)\\s*="
+        "@AsOf\\(\"([^\"]+)\"\\)\\s+(?:public\\s+static\\s+final\\s+)?\\w+\\s+(\\w+)\\s*="
     );
 
     // matches: methods and constructors
@@ -343,9 +344,15 @@ public final class ReferenceGenerator {
         sb.append("import dev.wyck.annotations.AsOf;\n");
         sb.append("import dev.wyck.annotations.Generated;\n");
         sb.append("import dev.wyck.keys.ResourceKey;\n");
+        if (spec.asInterface()) {
+            sb.append("import org.jetbrains.annotations.ApiStatus;\n");
+        }
         sb.append("import org.jspecify.annotations.NullMarked;\n\n");
         appendHeader(sb, spec, version);
-        sb.append("public final class ").append(spec.outputClass()).append(" {\n\n");
+        if (spec.asInterface()) {
+            sb.append("@ApiStatus.NonExtendable\n");
+        }
+        sb.append(spec.asInterface() ? "public interface " : "public final class ").append(spec.outputClass()).append(" {\n\n");
 
         // guards against duplicate field names across source classes
         Set<String> emittedNames = new HashSet<>();
@@ -385,7 +392,7 @@ public final class ReferenceGenerator {
                 String fieldVersion = existingVersions.getOrDefault(field.getName(), spec.since());
 
                 sb.append("    @AsOf(\"").append(fieldVersion).append("\")\n");
-                sb.append("    public static final ").append(spec.typeSimpleName()).append(" ")
+                sb.append("    ").append(spec.asInterface() ? "" : "public static final ").append(spec.typeSimpleName()).append(" ")
                     .append(field.getName())
                     .append(" = reference(\"")
                     .append(key.getPath())
@@ -407,10 +414,13 @@ public final class ReferenceGenerator {
             sb.append("        return keyed;\n");
         }
 
-        sb.append("    }\n\n");
-        sb.append("    private ").append(spec.outputClass()).append("() {\n");
-        sb.append("        throw new UnsupportedOperationException(\"Not intended for instantiation\");\n");
         sb.append("    }\n");
+        if (!spec.asInterface()) {
+            sb.append("\n");
+            sb.append("    private ").append(spec.outputClass()).append("() {\n");
+            sb.append("        throw new UnsupportedOperationException(\"Not intended for instantiation\");\n");
+            sb.append("    }\n");
+        }
         sb.append("}\n");
 
         return sb.toString();

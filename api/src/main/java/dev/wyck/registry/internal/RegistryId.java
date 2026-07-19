@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 @AsOf("2.4.0")
+@ApiStatus.Experimental
 public enum RegistryId {
     ACTIVITY("activity"),
     BIOME("worldgen/biome"),
@@ -15,6 +16,7 @@ public enum RegistryId {
     CARVER("worldgen/carver"),
     CONFIGURED_CARVER("worldgen/configured_carver"),
     CONFIGURED_FEATURE("worldgen/configured_feature"),
+    CLOCK_TIME_MARKER("clock_time_marker"),
     DENSITY_FUNCTION("worldgen/density_function"),
     DIMENSION("dimension"),
     DIMENSION_TYPE("dimension_type"),
@@ -25,6 +27,7 @@ public enum RegistryId {
     NOISE("worldgen/noise"),
     NOISE_SETTINGS("worldgen/noise_settings"),
     PARTICLE_TYPE("particle_type"),
+    TIMELINE("timeline"),
     WORLD_CLOCK("world_clock");
 
     private final List<ResourceKey> keys;

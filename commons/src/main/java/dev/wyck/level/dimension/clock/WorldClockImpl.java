@@ -1,4 +1,4 @@
-package dev.wyck.level.dimension;
+package dev.wyck.level.dimension.clock;
 
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.registry.internal.RegistryId;

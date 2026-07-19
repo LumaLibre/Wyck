@@ -1,4 +1,4 @@
-package dev.wyck.level.dimension;
+package dev.wyck.level.dimension.clock;
 
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.ConstructWireProvider;
@@ -21,7 +21,7 @@ import org.jspecify.annotations.NullMarked;
 public interface WorldClock extends Wrapper, Keyed, Registerable<WorldClock> {
 
     @ApiStatus.Internal
-    ConstructWireProvider<WorldClock> WIRE = ConstructWireProvider.create("dev.wyck.level.dimension.WorldClockImpl");
+    ConstructWireProvider<WorldClock> WIRE = ConstructWireProvider.create("dev.wyck.level.dimension.clock.WorldClockImpl");
 
     WorldClock OVERWORLD = of(ResourceKey.minecraft("overworld"));
     WorldClock THE_END = of(ResourceKey.minecraft("the_end"));

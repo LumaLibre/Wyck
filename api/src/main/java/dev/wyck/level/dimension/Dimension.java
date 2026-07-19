@@ -8,13 +8,21 @@ import dev.wyck.environment.attribute.EnvironmentAttributeSupplier;
 import dev.wyck.environment.attribute.FriendlyColorSupplier;
 import dev.wyck.keys.KeyChains;
 import dev.wyck.keys.ResourceKey;
+import dev.wyck.level.dimension.clock.WorldClock;
+import dev.wyck.level.dimension.timeline.Timeline;
 import dev.wyck.registry.DimensionRegistry;
+import dev.wyck.tags.TagKey;
+import dev.wyck.tags.TagSet;
+import dev.wyck.util.Either;
 import dev.wyck.wrapper.Wrapper;
 import net.kyori.adventure.key.Keyed;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 /**
@@ -151,10 +159,10 @@ public interface Dimension extends Keyed, Wrapper {
     /**
      * The timelines of this dimension type.
      * @return the timelines of this dimension type.
-     * @since 2.4.0
+     * @since 3.2.0
      */
-    @AsOf("2.4.0")
-    TimelineSet timelines();
+    @AsOf("3.2.0")
+    TagSet<Timeline> timelines();
 
     /**
      * The default clock of this dimension type.
@@ -266,7 +274,7 @@ public interface Dimension extends Keyed, Wrapper {
         private Skybox skybox = Skybox.OVERWORLD;
         private CardinalLightType cardinalLightType = CardinalLightType.DEFAULT;
         private EnvironmentAttributeMap attributes = EnvironmentAttributeMap.EMPTY;
-        private TimelineSet timelines = TimelineSet.EMPTY;
+        private Either<Set<Timeline>, TagKey> timelines = Either.left(new HashSet<>());
         private @Nullable WorldClock defaultClock = null;
 
         @AsOf("2.4.0")
@@ -288,124 +296,292 @@ public interface Dimension extends Keyed, Wrapper {
             this.skybox = dimension.skybox();
             this.cardinalLightType = dimension.cardinalLightType();
             this.attributes = dimension.attributes();
-            this.timelines = dimension.timelines();
+            this.timelines = dimension.timelines().value();
             this.defaultClock = dimension.defaultClock().orElse(null);
         }
 
+        /**
+         * Sets the resource key of this dimension type.
+         * @param resourceKey the resource key of this dimension type.
+         * @return this builder
+         * @since 2.4.0
+         */
         @AsOf("2.4.0")
         public Builder resourceKey(ResourceKey resourceKey) {
             this.resourceKey = resourceKey;
             return this;
         }
 
+        /**
+         * Sets whether this dimension type has a fixed time.
+         * @param hasFixedTime whether this dimension type has a fixed time.
+         * @return this builder
+         * @since 2.4.0
+         */
         @AsOf("2.4.0")
         public Builder hasFixedTime(boolean hasFixedTime) {
             this.hasFixedTime = hasFixedTime;
             return this;
         }
 
+        /**
+         * If there should be light that comes from the sky.
+         * @param hasSkyLight whether this dimension type has sky light.
+         * @return this builder
+         * @since 2.4.0
+         */
         @AsOf("2.4.0")
         public Builder hasSkyLight(boolean hasSkyLight) {
             this.hasSkyLight = hasSkyLight;
             return this;
         }
 
+        /**
+         * Sets whether this dimension type has a ceiling (e.g., the nether).
+         * @param hasCeiling whether this dimension type has a ceiling.
+         * @return this builder
+         * @since 2.4.0
+         */
         @AsOf("2.4.0")
         public Builder hasCeiling(boolean hasCeiling) {
             this.hasCeiling = hasCeiling;
             return this;
         }
 
+        /**
+         * Sets whether this dimension type has an ender dragon fight.
+         * @param hasEnderDragonFight whether this dimension type has an ender dragon fight.
+         * @return this builder
+         * @since 2.4.0
+         */
         @AsOf("2.4.0")
         public Builder hasEnderDragonFight(boolean hasEnderDragonFight) {
             this.hasEnderDragonFight = hasEnderDragonFight;
             return this;
         }
 
+        /**
+         * Sets the coordinate scale of this dimension type.
+         * @param coordinateScale the coordinate scale of this dimension type.
+         * @return this builder
+         * @since 2.4.0
+         */
         @AsOf("2.4.0")
         public Builder coordinateScale(double coordinateScale) {
             this.coordinateScale = coordinateScale;
             return this;
         }
 
+        /**
+         * Sets the minimum Y of this dimension type.
+         * @param minY the minimum Y of this dimension type.
+         * @return this builder
+         * @since 2.4.0
+         */
         @AsOf("2.4.0")
         public Builder minY(int minY) {
             this.minY = minY;
             return this;
         }
 
+        /**
+         * Sets the height of this dimension type.
+         * @param height the height of this dimension type.
+         * @return this builder
+         * @since 2.4.0
+         */
         @AsOf("2.4.0")
         public Builder height(int height) {
             this.height = height;
             return this;
         }
 
+        /**
+         * Sets the logical height of this dimension type.
+         * @param logicalHeight the logical height of this dimension type.
+         * @return this builder
+         * @since 2.4.0
+         */
         @AsOf("2.4.0")
         public Builder logicalHeight(int logicalHeight) {
             this.logicalHeight = logicalHeight;
             return this;
         }
 
+        /**
+         * Sets the infiniburn of this dimension type.
+         * @param infiniburn the infiniburn of this dimension type.
+         * @return this builder
+         * @since 2.4.0
+         */
         @AsOf("2.4.0")
         public Builder infiniburn(Infiniburn infiniburn) {
             this.infiniburn = infiniburn;
             return this;
         }
 
+        /**
+         * Sets the ambient light of this dimension type.
+         * @param ambientLight the ambient light level of this dimension type.
+         * @return this builder
+         * @since 2.4.0
+         */
         @AsOf("2.4.0")
         public Builder ambientLight(float ambientLight) {
             this.ambientLight = ambientLight;
             return this;
         }
 
+        /**
+         * Sets the monster settings of this dimension type.
+         * @param monsterSettings the monster settings of this dimension type.
+         * @return this builder
+         * @since 2.4.0
+         */
         @AsOf("2.4.0")
         public Builder monsterSettings(MonsterSettings monsterSettings) {
             this.monsterSettings = monsterSettings;
             return this;
         }
 
+        /**
+         * Sets the skybox of this dimension type.
+         * @param skybox the skybox of this dimension type
+         * @return this builder
+         * @since 2.4.0
+         */
         @AsOf("2.4.0")
         public Builder skybox(Skybox skybox) {
             this.skybox = skybox;
             return this;
         }
 
+        /**
+         * Sets the cardinal light type of this dimension type.
+         * @param cardinalLightType the cardinal light type of this dimension type
+         * @return this builder
+         * @since 2.4.0
+         */
         @AsOf("2.4.0")
         public Builder cardinalLightType(CardinalLightType cardinalLightType) {
             this.cardinalLightType = cardinalLightType;
             return this;
         }
 
+        /**
+         * Sets the attributes of this dimension type.
+         * @param attributes the attributes of this dimension type
+         * @return this builder
+         * @since 2.4.0
+         */
         @AsOf("2.4.0")
         public Builder attributes(EnvironmentAttributeMap attributes) {
             this.attributes = attributes;
             return this;
         }
 
+        /**
+         * Adds an attribute to this dimension type.
+         * @param supplier the attribute supplier
+         * @param value the value of the attribute
+         * @return this builder
+         * @param <V> the type of the attribute value
+         * @since 2.4.0
+         */
         @AsOf("2.4.0")
         public <V> Builder attribute(EnvironmentAttributeSupplier<V> supplier, V value) {
             this.attributes = this.attributes.with(supplier, value);
             return this;
         }
 
+        /**
+         * Adds a color attribute to this dimension type.
+         * @param supplier the color attribute supplier
+         * @param hex the hex value of the color attribute
+         * @return this builder
+         * @since 2.4.0
+         */
         @AsOf("2.4.0")
         public Builder attribute(FriendlyColorSupplier supplier, String hex) {
             this.attributes = this.attributes.with(supplier, hex);
             return this;
         }
 
-        @AsOf("2.4.0")
-        public Builder timelines(TimelineSet timelines) {
-            this.timelines = timelines;
+        /**
+         * Sets the timelines of this dimension type.
+         * @param timelines the timelines of this dimension type
+         * @return this builder
+         * @since 3.2.0
+         */
+        @AsOf("3.2.0")
+        public Builder timelines(Set<Timeline> timelines) {
+            this.timelines = Either.left(timelines);
             return this;
         }
 
+        /**
+         * Sets the tagKey of timelines of this dimension type.
+         * @param timelines the tagKey of timelines of this dimension type
+         * @return this builder
+         * @since 3.2.0
+         */
+        @AsOf("3.2.0")
+        public Builder timelines(TagKey timelines) {
+            this.timelines = Either.right(timelines);
+            return this;
+        }
+
+        /**
+         * Sets the default clock of this dimension type.
+         * @param defaultClock the default clock of this dimension type
+         * @return this builder
+         * @since 2.4.0
+         */
         @AsOf("2.4.0")
         public Builder defaultClock(@Nullable WorldClock defaultClock) {
             this.defaultClock = defaultClock;
             return this;
         }
 
+        /**
+         * Adds a timeline to this dimension type.
+         * @param timeline the timeline to add
+         * @return this builder
+         * @since 3.2.0
+         */
+        @AsOf("3.2.0")
+        public Builder timeline(Timeline timeline) {
+            this.timelines = this.timelines.leftOrElse(new HashSet<>())
+                .consumeLeft(set -> set.add(timeline));
+            return this;
+        }
+
+        /**
+         * Adds a timeline to this dimension type.
+         * @deprecated Use {@link #timeline(Timeline)} instead.
+         * @param timelines the timelines to add
+         * @return this builder
+         * @since 3.2.0
+         */
+        @AsOf("2.4.0")
+        @SuppressWarnings("removal")
+        @Deprecated(forRemoval = true, since = "3.2.0")
+        public Builder timelines(TimelineSet timelines) {
+            this.timelines = Either.left(
+                timelines.timelines()
+                    .stream()
+                    .map(Timeline::reference)
+                    .collect(Collectors.toSet())
+            );
+            return this;
+        }
+
+        /**
+         * Builds a new {@link Dimension} with the given properties.
+         * @return a new {@link Dimension} with the given properties.
+         * @throws IllegalArgumentException if the properties are invalid
+         * @since 2.4.0
+         */
         @AsOf("2.4.0")
         public Dimension build() {
             Preconditions.checkArgument(resourceKey != null, "Resource key must be set");
@@ -431,7 +607,7 @@ public interface Dimension extends Keyed, Wrapper {
                 skybox,
                 cardinalLightType,
                 attributes,
-                timelines,
+                TagSet.timelines(timelines),
                 defaultClock
             );
         }

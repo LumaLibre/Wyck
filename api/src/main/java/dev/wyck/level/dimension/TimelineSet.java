@@ -18,6 +18,7 @@ import java.util.List;
  */
 @NullMarked
 @AsOf("2.4.0")
+@Deprecated(forRemoval = true, since = "3.2.0")
 public interface TimelineSet extends Wrapper {
 
     @ApiStatus.Internal

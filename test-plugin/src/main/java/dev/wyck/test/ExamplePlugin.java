@@ -1,5 +1,6 @@
 package dev.wyck.test;
 
+import dev.wyck.environment.attribute.EnvironmentAttributes;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.biome.Biome;
 import dev.wyck.biome.BiomeSpecialEffects;
@@ -21,6 +22,14 @@ import dev.wyck.worldgen.placement.PlacedFeature;
 import dev.wyck.worldgen.placement.PlacementModifier;
 import dev.wyck.worldgen.stateproviders.BlockStateProvider;
 import dev.wyck.worldgen.valueproviders.IntProvider;
+import dev.wyck.util.BootstrapSafeMinecraftRegistries;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.mojang.serialization.JsonOps;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.RegistryOps;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.BlockFace;
@@ -72,11 +81,13 @@ public class ExamplePlugin extends JavaPlugin {
             .build();
 
         // Using it in a biome
+        ResourceKey biomeKey = ResourceKey.of("test:biome");
         Biome.builder()
-            .resourceKey(ResourceKey.of("test:biome"))
+            .resourceKey(biomeKey)
             .specialEffects(BiomeSpecialEffects.builder()
                 .foliageColorOverride("#8b69ca")
                 .build())
+            .attribute(EnvironmentAttributes.SUNRISE_SUNSET_COLOR, "#ff0000")
             .generationSettings(
                 BiomeGenerationSettings.builder()
                     .feature(Decoration.VEGETAL_DECORATION, PlacedFeature.builder()
@@ -91,10 +102,40 @@ public class ExamplePlugin extends JavaPlugin {
             )
             .register();
 
+        dumpBiomeJson(biomeKey);
+
         DensityFunction densityFunction = DensityFunctions.PILLARS
             .add(DensityFunctions.CONTINENTS_LARGE)
             .mul(DensityFunction.constant(10f))
             .blendDensity()
             .register();
+    }
+
+    /**
+     * Reads a biome back out of the live registry and prints it as the JSON vanilla's own codec
+     * produces — i.e. what the biome would look like as a datapack file. Useful for checking that a
+     * builder actually produced the shape you meant.
+     */
+    private void dumpBiomeJson(ResourceKey key) {
+        Registry<net.minecraft.world.level.biome.Biome> registry =
+            BootstrapSafeMinecraftRegistries.mappedRegistry(Registries.BIOME);
+
+        // ResourceKey#identifier is generic, so pin the type or getValue's overloads are ambiguous.
+        Identifier id = key.identifier();
+        net.minecraft.world.level.biome.Biome biome = registry.getValue(id);
+        if (biome == null) {
+            getLogger().warning("Biome " + key + " is not in the registry, nothing to dump");
+            return;
+        }
+
+        // Generation settings hold registry references (placed features, carvers), so the codec needs
+        // a registry-aware ops to encode them — plain JsonOps would fail on the holders.
+        RegistryOps<JsonElement> ops = BootstrapSafeMinecraftRegistries.serialization()
+            .createSerializationContext(JsonOps.INSTANCE);
+
+        net.minecraft.world.level.biome.Biome.DIRECT_CODEC.encodeStart(ops, biome)
+            .resultOrPartial(error -> getLogger().warning("Could not encode biome " + key + ": " + error))
+            .ifPresent(json -> System.out.println(
+                "[wyck] " + key + " =\n" + new GsonBuilder().setPrettyPrinting().create().toJson(json)));
     }
 }

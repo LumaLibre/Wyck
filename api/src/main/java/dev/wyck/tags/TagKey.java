@@ -65,6 +65,17 @@ public interface TagKey extends Wrapper {
     }
 
     /**
+     * Creates a timeline tag key from its identifier.
+     * @param key the tag identifier
+     * @return a new timeline tag key
+     * @since 3.2.0
+     */
+    @AsOf("3.2.0")
+    static TagKey timelines(ResourceKey key) {
+        return of(RegistryId.TIMELINE, key);
+    }
+
+    /**
      * Creates a tag key from a Bukkit {@link Tag}, resolving against the given registry.
      * @param registry the registry the tag belongs to
      * @param tag the Bukkit tag

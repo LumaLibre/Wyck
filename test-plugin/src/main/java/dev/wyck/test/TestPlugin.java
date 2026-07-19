@@ -11,7 +11,7 @@ import dev.wyck.test.carver.StarConfig;
 import dev.wyck.biome.BiomeSpecialEffects;
 import dev.wyck.environment.attribute.EnvironmentAttributes;
 import dev.wyck.worldgen.biome.BiomeSource;
-import dev.wyck.level.dimension.WorldClock;
+import dev.wyck.level.dimension.clock.WorldClock;
 import dev.wyck.level.dimension.Skybox;
 import dev.wyck.worldgen.noise.Noise;
 import dev.wyck.worldgen.noise.types.NoiseGeneratorSettings;

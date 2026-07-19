@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.ConstructWireProvider;
 import dev.wyck.keys.ResourceKey;
+import dev.wyck.level.dimension.timeline.Timeline;
 import dev.wyck.registry.internal.RegistryId;
 import dev.wyck.util.Either;
 import dev.wyck.wrapper.Registerable;
@@ -194,6 +195,16 @@ public interface TagSet<T extends Keyed> extends Wrapper, Keyed, Registerable<Ta
         return of(null, RegistryId.BLOCK, value);
     }
 
+    /**
+     * Creates a tag set from an {@link Either} of explicit tags or a named tag.
+     * @param value either the explicit timelines, or a named timeline tag
+     * @return a new tag set
+     * @since 3.2.0
+     */
+    @AsOf("3.2.0")
+    static TagSet<Timeline> timelines(Either<Set<Timeline>, TagKey> value) {
+        return of(null, RegistryId.TIMELINE, value);
+    }
 
     @ApiStatus.Internal
     @SuppressWarnings("unchecked")
@@ -236,6 +247,16 @@ public interface TagSet<T extends Keyed> extends Wrapper, Keyed, Registerable<Ta
     @AsOf("3.1.0")
     static Builder<Material> blocks() {
         return new Builder<>(RegistryId.BLOCK);
+    }
+
+    /**
+     * Creates a new builder for timeline tag sets.
+     * @return a new builder
+     * @since 3.2.0
+     */
+    @AsOf("3.2.0")
+    static Builder<Timeline> timelines() {
+        return new Builder<>(RegistryId.TIMELINE);
     }
 
     /**

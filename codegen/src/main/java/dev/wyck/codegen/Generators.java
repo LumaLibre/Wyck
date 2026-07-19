@@ -22,8 +22,11 @@ import net.minecraft.data.worldgen.placement.OrePlacements;
 import net.minecraft.data.worldgen.placement.TreePlacements;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.data.worldgen.placement.VillagePlacements;
+import com.mojang.serialization.JsonOps;
+import net.minecraft.util.EasingType;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.util.TriState;
+import net.minecraft.world.attribute.modifier.AttributeModifier;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.level.CardinalLighting;
@@ -73,7 +76,9 @@ public final class Generators {
         worldCarverTypes(),
         activities(),
         structureSets(),
-        carvers()
+        carvers(),
+        environmentAttributeOperationIds(),
+        easingTypes()
     );
 
     private static GeneratorSpec configuredFeatures() {
@@ -426,6 +431,46 @@ public final class Generators {
             ),
             "Typed references to the built-in configured carvers registered by vanilla.",
             "2.3.0"
+        );
+    }
+
+    private static GeneratorSpec easingTypes() {
+        return new ReferenceSpec(
+            "dev.wyck.level.timeline",
+            "EasingType",
+            "Easing",
+            "Easing.of",
+            EasingType.class,
+            Generators::easingLocation,
+            List.of(EasingType.class),
+            "The easing functions vanilla registers for timeline keyframe tracks.\n"
+                + "Inherited by {@link dev.wyck.level.timeline.Easing}, which is where these are used from.",
+            "3.2.0"
+        ).asConstantsInterface();
+    }
+
+    private static @Nullable Identifier easingLocation(Object entry) {
+        if (!(entry instanceof EasingType easing)) {
+            return null;
+        }
+        // The simple-easing registry keeps its id map private; the codec is the supported way out.
+        return EasingType.CODEC.encodeStart(JsonOps.INSTANCE, easing)
+            .result()
+            .filter(json -> json.isJsonPrimitive() && json.getAsJsonPrimitive().isString())
+            .map(json -> Identifier.withDefaultNamespace(json.getAsString()))
+            .orElse(null);
+    }
+
+    private static GeneratorSpec environmentAttributeOperationIds() {
+        return new EnumSpec(
+            "dev.wyck.environment.attribute.modifier",
+            "AttributeOperation",
+            AttributeModifier.OperationId.class,
+            Generators::serializedName,
+            List.of(
+                "Modifiers for environment attribute timelines."
+            ),
+            "3.2.0"
         );
     }
 

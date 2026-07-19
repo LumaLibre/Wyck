@@ -6,7 +6,7 @@ import dev.wyck.environment.BedRule;
 import dev.wyck.environment.attribute.EnvironmentAttributes;
 import dev.wyck.environment.particle.ParticleTypes;
 import dev.wyck.environment.particle.options.DustParticle;
-import dev.wyck.level.dimension.WorldClock;
+import dev.wyck.level.dimension.clock.WorldClock;
 import dev.wyck.level.dimension.CardinalLightType;
 import dev.wyck.level.dimension.Infiniburn;
 import dev.wyck.level.dimension.Skybox;

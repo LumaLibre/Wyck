@@ -4,7 +4,10 @@ import dev.wyck.annotations.AsOf;
 import dev.wyck.biome.entity.data.MonsterSettings;
 import dev.wyck.environment.attribute.EnvironmentAttributeMap;
 import dev.wyck.keys.ResourceKey;
+import dev.wyck.level.dimension.clock.WorldClock;
+import dev.wyck.level.dimension.timeline.Timeline;
 import dev.wyck.registry.DimensionRegistry;
+import dev.wyck.tags.TagSet;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -38,7 +41,7 @@ public final class DimensionImpl implements Dimension {
     private final Skybox skybox;
     private final CardinalLightType cardinalLightType;
     private final EnvironmentAttributeMap attributes;
-    private final TimelineSet timelines;
+    private final TagSet<Timeline> timelines;
     private final @Nullable WorldClock defaultClock;
 
     @AsOf("2.4.0")
@@ -58,7 +61,7 @@ public final class DimensionImpl implements Dimension {
             Skybox skybox,
             CardinalLightType cardinalLightType,
             EnvironmentAttributeMap attributes,
-            TimelineSet timelines,
+            TagSet<Timeline> timelines,
             @Nullable WorldClock defaultClock
     ) {
         this.resourceKey = resourceKey;
@@ -156,7 +159,7 @@ public final class DimensionImpl implements Dimension {
     }
 
     @Override
-    public TimelineSet timelines() {
+    public TagSet<Timeline> timelines() {
         return timelines;
     }
 

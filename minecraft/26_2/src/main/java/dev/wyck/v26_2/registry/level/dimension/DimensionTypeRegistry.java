@@ -77,7 +77,7 @@ public class DimensionTypeRegistry implements DimensionRegistry {
             dimension.skybox().toNms(net.minecraft.world.level.dimension.DimensionType.Skybox.class),
             dimension.cardinalLightType().toNms(CardinalLighting.Type.class),
             attributeBuilder.build(),
-            (HolderSet<@NonNull Timeline>) dimension.timelines().toMinecraft(),
+            dimension.timelines().asHolderSet(),
             clockHolder
         );
     }
