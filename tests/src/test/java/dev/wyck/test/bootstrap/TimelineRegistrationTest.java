@@ -8,7 +8,7 @@ import dev.wyck.keys.ResourceKey;
 import dev.wyck.level.dimension.clock.TimeMarker;
 import dev.wyck.level.dimension.clock.WorldClock;
 import dev.wyck.level.dimension.timeline.Easing;
-import dev.wyck.level.dimension.timeline.types.ComposedTimeline;
+import dev.wyck.level.dimension.timeline.Timeline;
 import dev.wyck.util.BootstrapSafeMinecraftRegistries;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
@@ -45,7 +45,7 @@ class TimelineRegistrationTest {
     void registerWritesTheTimelineIntoTheTimelineRegistry() {
         ResourceKey key = ResourceKey.of("wyck:test_day");
 
-        ComposedTimeline.builder()
+        Timeline.builder()
             .key(key)
             .clock(WorldClock.OVERWORLD)
             .periodTicks(24000)
@@ -76,7 +76,7 @@ class TimelineRegistrationTest {
     void colorTracksEncodeTheirModifierAndHexValues() {
         ResourceKey key = ResourceKey.of("wyck:test_fog");
 
-        ComposedTimeline.builder()
+        Timeline.builder()
             .key(key)
             .clock(WorldClock.OVERWORLD)
             .periodTicks(24000)
@@ -97,7 +97,7 @@ class TimelineRegistrationTest {
     void booleanTracksEncodeTheirModifier() {
         ResourceKey key = ResourceKey.of("wyck:test_fireflies");
 
-        ComposedTimeline.builder()
+        Timeline.builder()
             .key(key)
             .clock(WorldClock.OVERWORLD)
             .periodTicks(24000)
@@ -120,7 +120,7 @@ class TimelineRegistrationTest {
     void alphaBlendKeyframesCarryTheirAlpha() {
         ResourceKey key = ResourceKey.of("wyck:test_alpha");
 
-        ComposedTimeline.builder()
+        Timeline.builder()
             .key(key)
             .clock(WorldClock.OVERWORLD)
             .periodTicks(24000)
@@ -138,7 +138,7 @@ class TimelineRegistrationTest {
 
     @Test
     void anOperationTheAttributeDoesNotSupportIsRejected() {
-        ComposedTimeline timeline = ComposedTimeline.builder()
+        Timeline timeline = Timeline.builder()
             .key(ResourceKey.of("wyck:test_bad_operation"))
             .clock(WorldClock.OVERWORLD)
             .track(EnvironmentAttributes.FIREFLY_BUSH_SOUNDS, AttributeOperation.MULTIPLY, track -> track.keyframe(0, true))

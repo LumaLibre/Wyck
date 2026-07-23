@@ -9,6 +9,7 @@ import dev.wyck.keys.ResourceKey;
 import dev.wyck.level.LevelCreator;
 import dev.wyck.level.StemPersistence;
 import dev.wyck.level.entity.LevelSpawner;
+import dev.wyck.registry.internal.RegistryId;
 import dev.wyck.registry.internal.WyckRegistry;
 import dev.wyck.registry.level.LevelFactory;
 import dev.wyck.util.Lazy;
@@ -54,7 +55,7 @@ import java.util.List;
 @ApiStatus.Internal
 public final class SimpleLevelFactory implements LevelFactory {
 
-    private final Lazy<WyckRegistry> levelStemRegistry = WyckRegistry.lazy("dimension");
+    private final Lazy<WyckRegistry> levelStemRegistry = WyckRegistry.lazy(RegistryId.DIMENSION);
 
     @Override
     public World createWorld(LevelCreator world) {
