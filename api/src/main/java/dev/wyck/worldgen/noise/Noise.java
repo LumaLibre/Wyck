@@ -41,6 +41,7 @@ public interface Noise extends Wrapper {
     Optional<ResourceKey> resourceKey();
 
     /**
+     * Creates a new noise generator settings builder.
      * @return a new noise generator settings builder
      * @since 2.4.0
      */

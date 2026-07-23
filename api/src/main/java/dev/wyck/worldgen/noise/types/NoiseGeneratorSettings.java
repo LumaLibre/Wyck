@@ -372,7 +372,7 @@ public interface NoiseGeneratorSettings extends Noise, Registerable<NoiseGenerat
         }
 
         /**
-         * Adds a spawn target.
+         * Builds the noise generator settings.
          * @return this builder
          * @since 2.4.0
          */
