@@ -7,16 +7,10 @@ import com.mojang.serialization.Lifecycle;
 import dev.wyck.annotations.WireFactory;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.level.LevelCreator;
-import dev.wyck.level.StemPersistence;
 import dev.wyck.level.entity.LevelSpawner;
-import dev.wyck.registry.internal.RegistryId;
-import dev.wyck.registry.internal.WyckRegistry;
 import dev.wyck.registry.level.LevelFactory;
-import dev.wyck.util.Lazy;
 import dev.wyck.worldgen.chunk.CraftBukkitChunkGeneratorImpl;
 import io.papermc.paper.FeatureHooks;
-import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
@@ -29,8 +23,6 @@ import net.minecraft.world.level.CustomSpawner;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelSettings;
 import net.minecraft.world.level.biome.BiomeManager;
-import net.minecraft.world.level.chunk.ChunkGenerator;
-import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.levelgen.WorldDimensions;
@@ -43,7 +35,6 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.CraftServer;
 import org.jetbrains.annotations.ApiStatus;
-import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 
 import java.io.IOException;
@@ -55,17 +46,13 @@ import java.util.List;
 @ApiStatus.Internal
 public final class SimpleLevelFactory implements LevelFactory {
 
-    private final Lazy<WyckRegistry> levelStemRegistry = WyckRegistry.lazy(RegistryId.DIMENSION);
-
     @Override
+    @SuppressWarnings("removal")
     public World createWorld(LevelCreator world) {
         Preconditions.checkNotNull(world, "world cannot be null");
 
         CraftServer server = (CraftServer) Bukkit.getServer();
         MinecraftServer minecraftServer = server.getServer();
-
-        ResourceKey localKey = world.dimension().resourceKey();
-        Identifier typeId = localKey.asHandle();
 
         ResourceKey levelKey = world.resourceKey();
         Identifier levelId = (Identifier) levelKey.toMinecraft();
@@ -74,15 +61,10 @@ public final class SimpleLevelFactory implements LevelFactory {
         net.minecraft.resources.ResourceKey<LevelStem> stemKey = net.minecraft.resources.ResourceKey.create(Registries.LEVEL_STEM, levelId);
         net.minecraft.resources.ResourceKey<Level> dimensionKey = net.minecraft.resources.ResourceKey.create(Registries.DIMENSION, stemKey.identifier());
 
-        Holder<DimensionType> typeHolder = minecraftServer.registryAccess()
-            .lookupOrThrow(Registries.DIMENSION_TYPE)
-            .getOrThrow(net.minecraft.resources.ResourceKey.create(Registries.DIMENSION_TYPE, typeId));
+        LevelStem stem = world.levelStem().asHandle();
 
-        ChunkGenerator generator = (ChunkGenerator) world.generator().toMinecraft();
-        LevelStem stem = new LevelStem(typeHolder, generator);
-
-        if (world.persistence() == StemPersistence.PERSISTENT) {
-            registerStem(levelId, stem);
+        if (world.persistence() == dev.wyck.level.StemPersistence.PERSISTENT) {
+            world.levelStem().register();
         }
 
         NamespacedKey bukkitKey = new NamespacedKey(levelKey.namespace(), levelKey.path());
@@ -108,7 +90,7 @@ public final class SimpleLevelFactory implements LevelFactory {
         WorldOptions worldOptions = new WorldOptions(world.seed(), world.generateStructures(), world.bonusChest());
 
         DedicatedServerProperties.WorldDimensionData properties =
-            new DedicatedServerProperties.WorldDimensionData(new JsonObject(), "normal");
+            new DedicatedServerProperties.WorldDimensionData(new JsonObject(), world.type().getKey());
         WorldDimensions baseDimensions = properties.create(context.datapackWorldgen());
         WorldDimensions worldDimensions = withStem(baseDimensions, stemKey, stem);
 
@@ -176,15 +158,5 @@ public final class SimpleLevelFactory implements LevelFactory {
         builder.putAll(base.dimensions());
         builder.put(key, stem);
         return new WorldDimensions(builder.buildKeepingLast());
-    }
-
-    @SuppressWarnings("unchecked")
-    private void registerStem(Identifier id, LevelStem stem) {
-        levelStemRegistry.get().whileUnfrozen(r -> {
-            Registry<LevelStem> registry = (Registry<@NonNull LevelStem>) r.toMinecraft();
-            if (!registry.containsKey(id)) {
-                Registry.register(registry, id, stem);
-            }
-        });
     }
 }

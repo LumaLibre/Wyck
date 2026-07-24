@@ -557,26 +557,6 @@ public interface Dimension extends Keyed, Wrapper {
         }
 
         /**
-         * Adds a timeline to this dimension type.
-         * @deprecated Use {@link #timeline(Timeline)} instead.
-         * @param timelines the timelines to add
-         * @return this builder
-         * @since 3.2.0
-         */
-        @AsOf("2.4.0")
-        @SuppressWarnings("removal")
-        @Deprecated(forRemoval = true, since = "3.2.0")
-        public Builder timelines(TimelineSet timelines) {
-            this.timelines = Either.left(
-                timelines.timelines()
-                    .stream()
-                    .map(Timeline::reference)
-                    .collect(Collectors.toSet())
-            );
-            return this;
-        }
-
-        /**
          * Builds a new {@link Dimension} with the given properties.
          * @return a new {@link Dimension} with the given properties.
          * @throws IllegalArgumentException if the properties are invalid

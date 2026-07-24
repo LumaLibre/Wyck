@@ -42,6 +42,7 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.carver.WorldCarver;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.placement.CaveSurface;
+import net.minecraft.world.level.levelgen.presets.WorldPresets;
 import net.minecraft.world.level.levelgen.structure.BuiltinStructureSets;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
@@ -469,6 +470,19 @@ public final class Generators {
             Generators::serializedName,
             List.of(
                 "Modifiers for environment attribute timelines."
+            ),
+            "3.2.0"
+        );
+    }
+
+    private static GeneratorSpec levelTypes() {
+        return new EnumSpec(
+            "dev.wyck.level",
+            "LevelType",
+            WorldPresets.class,
+            Generators::serializedName,
+            List.of(
+                "The level types that vanilla registers for world generation presets."
             ),
             "3.2.0"
         );

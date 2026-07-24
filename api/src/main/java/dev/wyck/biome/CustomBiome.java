@@ -473,6 +473,12 @@ public interface CustomBiome extends Biome {
             return this;
         }
 
+        @AsOf("3.3.0")
+        public Builder particles(ParticleCatalog particleCatalog) {
+            this.particleCatalog = particleCatalog.toBuilder();
+            return this;
+        }
+
         // Block replacement builder methods
 
         /**

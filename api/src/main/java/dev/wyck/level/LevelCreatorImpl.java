@@ -2,9 +2,8 @@ package dev.wyck.level;
 
 import dev.wyck.annotations.AsOf;
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.level.dimension.Dimension;
+import dev.wyck.level.dimension.LevelStem;
 import dev.wyck.level.entity.LevelSpawner;
-import dev.wyck.worldgen.chunk.ChunkGenerator;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.jetbrains.annotations.ApiStatus;
@@ -24,31 +23,32 @@ import java.util.List;
 public final class LevelCreatorImpl implements LevelCreator {
 
     private final ResourceKey levelKey;
-    private final Dimension dimension;
-    private final ChunkGenerator generator;
+    private final LevelStem levelStem;
     private final long seed;
     private final boolean generateStructures;
     private final boolean bonusChest;
     private final World.Environment environment;
+    @SuppressWarnings("removal")
     private final StemPersistence persistence;
     private final List<LevelSpawner> spawners;
     private final @Nullable String name;
+    private final LevelType type;
 
+    @SuppressWarnings("removal")
     public LevelCreatorImpl(
         ResourceKey levelKey,
-        Dimension dimension,
-        ChunkGenerator generator,
+        LevelStem levelStem,
         long seed,
         boolean generateStructures,
         boolean bonusChest,
         World.Environment environment,
         StemPersistence persistence,
         List<LevelSpawner> spawners,
-        @Nullable String name
+        @Nullable String name,
+        LevelType type
     ) {
         this.levelKey = levelKey;
-        this.dimension = dimension;
-        this.generator = generator;
+        this.levelStem = levelStem;
         this.seed = seed;
         this.generateStructures = generateStructures;
         this.bonusChest = bonusChest;
@@ -56,6 +56,7 @@ public final class LevelCreatorImpl implements LevelCreator {
         this.persistence = persistence;
         this.spawners = spawners;
         this.name = name;
+        this.type = type;
     }
 
     @Override
@@ -64,13 +65,8 @@ public final class LevelCreatorImpl implements LevelCreator {
     }
 
     @Override
-    public Dimension dimension() {
-        return dimension;
-    }
-
-    @Override
-    public ChunkGenerator generator() {
-        return generator;
+    public LevelStem levelStem() {
+        return levelStem;
     }
 
     @Override
@@ -94,6 +90,7 @@ public final class LevelCreatorImpl implements LevelCreator {
     }
 
     @Override
+    @SuppressWarnings("removal")
     public StemPersistence persistence() {
         return persistence;
     }
@@ -111,6 +108,11 @@ public final class LevelCreatorImpl implements LevelCreator {
     }
 
     @Override
+    public LevelType type() {
+        return this.type;
+    }
+
+    @Override
     public @Nullable World bukkitWorld() {
         return Bukkit.getWorld(levelKey);
     }
@@ -119,8 +121,7 @@ public final class LevelCreatorImpl implements LevelCreator {
     public String toString() {
         return "LevelCreatorImpl{" +
             "levelKey=" + levelKey +
-            ", dimension=" + dimension +
-            ", generator=" + generator +
+            ", levelStem=" + levelStem +
             ", seed=" + seed +
             ", generateStructures=" + generateStructures +
             ", bonusChest=" + bonusChest +
@@ -128,6 +129,7 @@ public final class LevelCreatorImpl implements LevelCreator {
             ", persistence=" + persistence +
             ", spawners=" + spawners +
             ", name='" + name + '\'' +
+            ", type=" + type +
             '}';
     }
 }

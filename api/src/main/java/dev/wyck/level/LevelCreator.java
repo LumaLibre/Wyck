@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.level.dimension.Dimension;
+import dev.wyck.level.dimension.LevelStem;
 import dev.wyck.level.entity.LevelSpawner;
 import dev.wyck.registry.level.LevelFactory;
 import dev.wyck.worldgen.chunk.ChunkGenerator;
@@ -36,23 +37,38 @@ public interface LevelCreator {
     @AsOf("2.4.0")
     ResourceKey resourceKey();
 
+    /**
+     * The level stem of the world.
+     * @return the level stem of the world
+     * @since 3.3.0
+     */
+    @AsOf("3.3.0")
+    LevelStem levelStem();
 
     /**
      * The dimension of the world.
+     * @deprecated Use {@link #levelStem()} instead.
      * @return the dimension of the world
      * @since 2.4.0
      */
+    @Deprecated
     @AsOf("2.4.0")
-    Dimension dimension();
+    default Dimension dimension() {
+        return levelStem().dimension();
+    }
 
 
     /**
      * The chunk generator to use for the world.
+     * @deprecated Use {@link #levelStem()} instead.
      * @return the chunk generator to use for the world.
      * @since 2.4.0
      */
+    @Deprecated
     @AsOf("2.4.0")
-    ChunkGenerator generator();
+    default ChunkGenerator generator() {
+        return levelStem().chunkGenerator();
+    }
 
     /**
      * The seed to use for the world.
@@ -90,10 +106,14 @@ public interface LevelCreator {
 
     /**
      * The persistence of the world.
+     * @deprecated Use {@link #levelStem()} and {@link LevelStem#register()} instead.
      * @return the persistence of the world.
      * @since 2.4.0
      */
     @AsOf("2.4.0")
+    @SuppressWarnings("removal")
+    @Deprecated(forRemoval = true, since = "3.3.0")
+    @ApiStatus.ScheduledForRemoval(inVersion = "3.4.0")
     StemPersistence persistence();
 
     /**
@@ -111,6 +131,15 @@ public interface LevelCreator {
      */
     @AsOf("3.0.0")
     String name();
+
+    /**
+     * Used only to control client-sided behavior.
+     * This enum has no representation of how a world actually behaves or is generated.
+     * @return the type of the world
+     * @since 3.3.0
+     */
+    @AsOf("3.3.0")
+    LevelType type();
 
     /**
      * Converts this {@link LevelCreator} to a {@link World}.
@@ -161,12 +190,18 @@ public interface LevelCreator {
         return builder().resourceKey(levelKey);
     }
 
+    /**
+     * Builder for {@link LevelCreator}.
+     * @since 2.4.0
+     * @version 2.4.0
+     * @author Jsinco
+     */
     @AsOf("2.4.0")
+    @SuppressWarnings("removal")
     final class Builder {
 
         private @Nullable ResourceKey levelKey = null;
-        private @Nullable Dimension dimension = null;
-        private @Nullable ChunkGenerator generator = null;
+        private @Nullable LevelStem levelStem = null;
         private long seed = ThreadLocalRandom.current().nextLong();
         private boolean generateStructures = true;
         private boolean bonusChest = false;
@@ -174,21 +209,25 @@ public interface LevelCreator {
         private StemPersistence persistence = StemPersistence.TRANSIENT;
         private List<LevelSpawner> spawners = new ArrayList<>();
         private @Nullable String name = null;
+        private LevelType type = LevelType.NORMAL;
+
+        private @Nullable Dimension friendly$Dimension = null;
+        private @Nullable ChunkGenerator friendly$ChunkGenerator = null;
 
         @AsOf("2.4.0")
         public Builder() {}
 
         public Builder(LevelCreator other) {
             this.levelKey = other.resourceKey();
-            this.dimension = other.dimension();
-            this.generator = other.generator();
+            this.levelStem = other.levelStem();
             this.seed = other.seed();
             this.generateStructures = other.generateStructures();
             this.bonusChest = other.bonusChest();
             this.environment = other.environment();
             this.persistence = other.persistence();
-            this.spawners = new ArrayList<>(other.spawners());
+            this.spawners.addAll(other.spawners());
             this.name = other.name();
+            this.type = other.type();
         }
 
         /**
@@ -204,38 +243,14 @@ public interface LevelCreator {
         }
 
         /**
-         * Sets the dimension of the world.
-         * @param dimension the dimension of the world
+         * Sets the level stem of the world.
+         * @param levelStem the level stem of the world
          * @return this builder
-         * @since 2.4.0
+         * @since 3.3.0
          */
-        @AsOf("2.4.0")
-        public Builder dimension(Dimension dimension) {
-            this.dimension = dimension;
-            return this;
-        }
-
-        /**
-         * Sets the dimension of the world.
-         * @param resourceKey the resource key of the dimension
-         * @return this builder
-         * @since 2.4.0
-         */
-        @AsOf("2.4.0")
-        public Builder dimension(ResourceKey resourceKey) {
-            this.dimension = Dimension.reference(resourceKey);
-            return this;
-        }
-
-        /**
-         * Sets the chunk generator of the world.
-         * @param generator the chunk generator of the world
-         * @return this builder
-         * @since 2.4.0
-         */
-        @AsOf("2.4.0")
-        public Builder generator(ChunkGenerator generator) {
-            this.generator = generator;
+        @AsOf("3.3.0")
+        public Builder levelStem(LevelStem levelStem) {
+            this.levelStem = levelStem;
             return this;
         }
 
@@ -292,8 +307,11 @@ public interface LevelCreator {
          * @param persistence the persistence of the world
          * @return this builder
          * @since 2.4.0
+         * @deprecated Use {@link #levelStem()} and {@link LevelStem#register()} instead.
          */
         @AsOf("2.4.0")
+        @Deprecated(forRemoval = true, since = "3.3.0")
+        @ApiStatus.ScheduledForRemoval(inVersion = "3.4.0")
         public Builder persistence(StemPersistence persistence) {
             this.persistence = persistence;
             return this;
@@ -320,6 +338,18 @@ public interface LevelCreator {
         @AsOf("3.0.0")
         public Builder name(@Nullable String name) {
             this.name = name;
+            return this;
+        }
+
+        /**
+         * Sets the type of the world.
+         * @param type the type of the world
+         * @return this builder
+         * @since 3.3.0
+         */
+        @AsOf("3.3.0")
+        public Builder type(LevelType type) {
+            this.type = type;
             return this;
         }
 
@@ -360,25 +390,88 @@ public interface LevelCreator {
             return this;
         }
 
+        /**
+         * Sets the dimension of the world.
+         * @param dimension the dimension of the world
+         * @return this builder
+         * @since 2.4.0
+         */
+        @AsOf("2.4.0")
+        public Builder dimension(Dimension dimension) {
+            this.friendly$Dimension = dimension;
+            return this;
+        }
+
+        /**
+         * Sets the dimension of the world.
+         * @param resourceKey the resource key of the dimension
+         * @return this builder
+         * @since 2.4.0
+         */
+        @AsOf("2.4.0")
+        public Builder dimension(ResourceKey resourceKey) {
+            return dimension(Dimension.reference(resourceKey));
+        }
+
+        /**
+         * Sets the chunk generator of the world.
+         * @param generator the chunk generator of the world
+         * @return this builder
+         * @since 2.4.0
+         */
+        @AsOf("2.4.0")
+        public Builder generator(ChunkGenerator generator) {
+            this.friendly$ChunkGenerator = generator;
+            return this;
+        }
+
+        /**
+         * Sets the level stem of the world.
+         * @param levelStem the level stem of the world
+         * @return this builder
+         * @since 3.3.0
+         */
+        @AsOf("3.3.0")
+        public Builder stem(LevelStem levelStem) {
+            this.levelStem = levelStem;
+            return this;
+        }
+
+        /**
+         * Builds the {@link LevelCreator} with the specified properties.
+         * @return the constructed level creator
+         * @since 2.4.0
+         */
         @AsOf("2.4.0")
         public LevelCreator build() {
-            Preconditions.checkArgument(levelKey != null, "levelKey must be set");
-            Preconditions.checkArgument(generator != null, "generator must be set");
-            Preconditions.checkArgument(dimension != null,  "dimension must be set");
+            Preconditions.checkNotNull(levelKey, "levelKey must be set");
+
+            if (levelStem == null && (friendly$Dimension != null || friendly$ChunkGenerator != null)) {
+                Preconditions.checkNotNull(friendly$Dimension, "dimension must be set if chunk generator is set");
+                Preconditions.checkNotNull(friendly$ChunkGenerator, "chunk generator must be set if dimension is set");
+                levelStem = LevelStem.of(friendly$Dimension, friendly$ChunkGenerator);
+            }
+
+            Preconditions.checkNotNull(levelStem, "levelStem must be set");
             return new LevelCreatorImpl(
                 levelKey,
-                dimension,
-                generator,
+                levelStem,
                 seed,
                 generateStructures,
                 bonusChest,
                 environment,
                 persistence,
                 spawners,
-                name
+                name,
+                type
             );
         }
 
+        /**
+         * Creates a new bukkit world from the built level creator.
+         * @return a new {@link World} from the built {@link LevelCreator}
+         * @since 2.4.0
+         */
         @AsOf("2.4.0")
         public World create() {
             return build().create();

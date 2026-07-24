@@ -18,7 +18,6 @@ public enum RegistryId {
     CONFIGURED_FEATURE("worldgen/configured_feature"),
     CLOCK_TIME_MARKER("clock_time_marker"),
     DENSITY_FUNCTION("worldgen/density_function"),
-    DIMENSION("dimension"),
     DIMENSION_TYPE("dimension_type"),
     ENTITY_TYPE("entity_type"),
     ENVIRONMENT_ATTRIBUTE("environment_attribute"),
@@ -26,6 +25,7 @@ public enum RegistryId {
     FLUID("fluid"),
     NOISE("worldgen/noise"),
     NOISE_SETTINGS("worldgen/noise_settings"),
+    LEVEL_STEM("dimension"),
     PARTICLE_TYPE("particle_type"),
     TIMELINE("timeline"),
     WORLD_CLOCK("world_clock");
