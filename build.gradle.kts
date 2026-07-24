@@ -8,7 +8,7 @@ plugins {
 }
 
 val isSnapshot: Boolean = project.hasProperty("snapshot") || System.getProperty("snapshot")?.toBoolean() == true
-val stable = "3.2.0"
+val stable = "3.3.0"
 
 allprojects {
     apply(plugin = "java-library")
