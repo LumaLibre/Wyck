@@ -9,6 +9,7 @@ import dev.wyck.keys.KeyChains;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.level.dimension.Dimension;
 import dev.wyck.level.dimension.InfiniburnImpl;
+import dev.wyck.level.dimension.clock.WorldClockImpl;
 import dev.wyck.registry.DimensionRegistry;
 import dev.wyck.registry.internal.RegistryId;
 import dev.wyck.registry.internal.WyckRegistry;
@@ -26,7 +27,6 @@ import net.minecraft.world.level.CardinalLighting;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.timeline.Timeline;
 import org.jetbrains.annotations.ApiStatus;
-import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 
 import java.lang.reflect.Field;
@@ -60,7 +60,7 @@ public class DimensionTypeRegistry implements DimensionRegistry {
         InfiniburnImpl infiniburn = (InfiniburnImpl) dimension.infiniburn();
 
         Optional<Holder<WorldClock>> clockHolder = dimension.defaultClock()
-            .map(clock -> Holder.direct(clock.asHandle()));
+            .map(clock -> ((WorldClockImpl) clock).toMinecraft());
 
         return new DimensionType(
             dimension.hasFixedTime(),

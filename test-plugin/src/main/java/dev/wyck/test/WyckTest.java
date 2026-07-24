@@ -1,23 +1,29 @@
 package dev.wyck.test;
 
 import com.google.common.base.Preconditions;
+import dev.wyck.biome.Biome;
+import dev.wyck.biome.Biomes;
 import dev.wyck.biome.CustomBiome;
 import dev.wyck.keys.ResourceKey;
+import dev.wyck.level.LevelCreator;
+import dev.wyck.level.LevelType;
+import dev.wyck.level.dimension.Dimension;
+import dev.wyck.level.dimension.Dimensions;
 import dev.wyck.registry.level.LevelStemEditor;
 import dev.wyck.tags.TagSet;
-import dev.wyck.util.BootstrapSafeMinecraftRegistries;
 import dev.wyck.worldgen.biome.BiomeSource;
 import dev.wyck.worldgen.chunk.ChunkGenerator;
+import dev.wyck.worldgen.chunk.FlatLevelSource;
+import dev.wyck.worldgen.chunk.flat.FlatLevelGeneratorSettings;
+import dev.wyck.worldgen.climate.ClimateParameter;
+import dev.wyck.worldgen.climate.ClimatePoint;
 import dev.wyck.worldgen.noise.Noise;
 import net.kyori.adventure.key.Key;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.world.level.block.Block;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jspecify.annotations.NonNull;
 
 public final class WyckTest extends JavaPlugin implements Listener {
 
@@ -25,11 +31,27 @@ public final class WyckTest extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
-        net.minecraft.core.Registry<Block> nms = BootstrapSafeMinecraftRegistries.mappedRegistry(Registries.BLOCK);
-        TagSet<@NonNull Material> tag = TagSet.ofBlocks(ResourceKey.of("wyck:test_tag"), Material.STONE, Material.DIRT);
-        tag.register();
 
-        nms.getTags().forEach(a -> System.out.println(a.key()));
+        // there are more settings on climate points that im not exhaustively listing out
+        BiomeSource multiNoise = BiomeSource.multiNoise()
+            .add(Biomes.RIVER, ClimatePoint.builder().depth(ClimateParameter.span(1.0f, 1.5f)).build())
+            .add(Biome.builder(ResourceKey.of("wyck:custombiome")).build(), ClimatePoint.builder().erosion(ClimateParameter.span(0.0f, 0.5f)).build())
+            .build();
+
+        ChunkGenerator flatGenerator = FlatLevelSource.builder()
+            .settings(FlatLevelGeneratorSettings.THE_VOID) // You can make your own, if you prefer
+            .biomeSource(BiomeSource.fixed(Biomes.THE_VOID))
+            .build();
+
+        Dimension dimension = Dimensions.OVERWORLD;
+
+        World world = LevelCreator.builder()
+            .levelKey(ResourceKey.of("wyck:test_world"))
+            .generator(flatGenerator)
+            .dimension(dimension)
+            .type(LevelType.FLAT)
+            .environment(World.Environment.NORMAL) // doesn't really do anything, just bukkit nonsense — you can omit if it not needed
+            .create();
 
 
         CustomBiome biome = CustomBiome.builder()
@@ -51,7 +73,7 @@ public final class WyckTest extends JavaPlugin implements Listener {
 
         TagSet<Material> test = TagSet.blocks()
             .resourceKey(ResourceKey.of("wyck:testing"))
-            .value(Material.NAME_TAG)
+            .value(Material.DIAMOND_ORE)
             .value(Material.ACACIA_LOG)
             .register()
             .toBuilder()

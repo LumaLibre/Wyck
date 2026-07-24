@@ -9,6 +9,7 @@ import dev.wyck.util.Lazy;
 import dev.wyck.util.WorldgenConversions;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -54,7 +55,17 @@ public final class TagSetImpl<T extends Keyed, U> implements TagSet<T> {
                 });
             },
             tagKey -> {
-                return nmsRegistry.getOrThrow((net.minecraft.tags.TagKey<U>) tagKey.toMinecraft());
+                net.minecraft.tags.TagKey<U> tag = (net.minecraft.tags.TagKey<U>) tagKey.toMinecraft();
+                Optional<net.minecraft.core.HolderSet.Named<U>> bound = nmsRegistry.get(tag);
+                if (bound.isPresent()) {
+                    return bound.get();
+                }
+
+                //noinspection ConstantConditions
+                if (Bukkit.getServer() == null) { // TODO: checking bootstrap utility
+                    return net.minecraft.core.HolderSet.emptyNamed(nmsRegistry, tag);
+                }
+                return nmsRegistry.getOrThrow(tag);
             }
         );
     }

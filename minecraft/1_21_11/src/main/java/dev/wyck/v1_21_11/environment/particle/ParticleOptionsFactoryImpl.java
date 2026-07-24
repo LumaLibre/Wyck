@@ -1,4 +1,4 @@
-package dev.wyck.v1_21_11.particle;
+package dev.wyck.v1_21_11.environment.particle;
 
 import dev.wyck.annotations.WireFactory;
 import dev.wyck.environment.particle.ParticleOptions;

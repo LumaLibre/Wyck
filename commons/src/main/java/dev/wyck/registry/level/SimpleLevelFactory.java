@@ -2,21 +2,21 @@ package dev.wyck.registry.level;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
-import com.google.gson.JsonObject;
 import dev.wyck.annotations.WireFactory;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.level.LevelCreator;
+import dev.wyck.level.LevelType;
 import dev.wyck.level.entity.LevelSpawner;
 import dev.wyck.util.internal.InternalReflectUtil;
 import dev.wyck.worldgen.chunk.CraftBukkitChunkGeneratorImpl;
 import io.papermc.paper.FeatureHooks;
 import io.papermc.paper.world.PaperWorldLoader;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.WorldLoader;
-import net.minecraft.server.dedicated.DedicatedServerProperties;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.CustomSpawner;
 import net.minecraft.world.level.Level;
@@ -25,6 +25,8 @@ import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.levelgen.WorldDimensions;
 import net.minecraft.world.level.levelgen.WorldGenSettings;
 import net.minecraft.world.level.levelgen.WorldOptions;
+import net.minecraft.world.level.levelgen.presets.WorldPreset;
+import net.minecraft.world.level.levelgen.presets.WorldPresets;
 import net.minecraft.world.level.storage.LevelResource;
 import net.minecraft.world.level.storage.PrimaryLevelData;
 import net.minecraft.world.level.storage.SavedDataStorage;
@@ -36,6 +38,7 @@ import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @NullMarked
 @WireFactory
@@ -71,8 +74,7 @@ public final class SimpleLevelFactory implements LevelFactory {
         WorldLoader.DataLoadContext context = minecraftServer.worldLoaderContext;
         WorldOptions worldOptions = new WorldOptions(world.seed(), world.generateStructures(), world.bonusChest());
 
-        DedicatedServerProperties.WorldDimensionData properties = new DedicatedServerProperties.WorldDimensionData(new JsonObject(), world.type().getKey());
-        WorldDimensions baseDimensions = properties.create(context.datapackWorldgen());
+        WorldDimensions baseDimensions = presetDimensions(context, world.type());
         WorldDimensions worldDimensions = withStem(baseDimensions, stemKey, stem);
 
         Registry<LevelStem> stemRegistry = context.datapackDimensions().lookupOrThrow(Registries.LEVEL_STEM);
@@ -125,6 +127,18 @@ public final class SimpleLevelFactory implements LevelFactory {
         minecraftServer.prepareLevel(serverLevel);
 
         return serverLevel.getWorld();
+    }
+
+    // TODO: just wrap WorldPreset
+    private static WorldDimensions presetDimensions(WorldLoader.DataLoadContext context, LevelType type) {
+        HolderLookup.RegistryLookup<WorldPreset> presets = context.datapackWorldgen().lookupOrThrow(Registries.WORLD_PRESET);
+        return Optional.ofNullable(Identifier.tryParse(type.getKey()))
+            .map(id -> net.minecraft.resources.ResourceKey.create(Registries.WORLD_PRESET, id))
+            .flatMap(presets::get)
+            .or(() -> presets.get(WorldPresets.NORMAL))
+            .orElseThrow(() -> new IllegalStateException("Invalid datapack contents: can't find world preset " + type.getKey()))
+            .value()
+            .createWorldDimensions();
     }
 
     private static WorldDimensions withStem(WorldDimensions base, net.minecraft.resources.ResourceKey<LevelStem> key, LevelStem stem) {

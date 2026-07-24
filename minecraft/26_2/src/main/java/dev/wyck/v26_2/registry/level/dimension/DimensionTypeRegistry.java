@@ -10,13 +10,13 @@ import dev.wyck.keys.KeyChains;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.level.dimension.Dimension;
 import dev.wyck.level.dimension.InfiniburnImpl;
+import dev.wyck.level.dimension.clock.WorldClockImpl;
 import dev.wyck.registry.DimensionRegistry;
 import dev.wyck.registry.internal.RegistryId;
 import dev.wyck.registry.internal.WyckRegistry;
 import dev.wyck.util.BootstrapSafeMinecraftRegistries;
 import dev.wyck.util.Lazy;
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderSet;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
@@ -25,8 +25,6 @@ import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.clock.WorldClock;
 import net.minecraft.world.level.CardinalLighting;
 import net.minecraft.world.level.dimension.DimensionType;
-import net.minecraft.world.timeline.Timeline;
-import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 
 import java.lang.reflect.Field;
@@ -60,7 +58,7 @@ public class DimensionTypeRegistry implements DimensionRegistry {
 
         InfiniburnImpl infiniburn = (InfiniburnImpl) dimension.infiniburn();
         Optional<Holder<WorldClock>> clockHolder = dimension.defaultClock()
-            .map(clock -> (Holder<@NonNull WorldClock>) clock.toMinecraft());
+            .map(clock -> ((WorldClockImpl) clock).toMinecraft());
 
         return new DimensionType(
             dimension.hasFixedTime(),

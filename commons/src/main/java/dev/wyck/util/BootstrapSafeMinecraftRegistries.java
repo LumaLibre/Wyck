@@ -109,10 +109,19 @@ public final class BootstrapSafeMinecraftRegistries {
 
     /**
      * A provider suitable for minting {@link net.minecraft.resources.RegistryOps} during bootstrap.
-     * Prefers materialized registries so holders resolved via {@link #mappedRegistry} serialize
-     * against their owning registry; falls through to {@link #vanilla()} for everything else. At
-     * runtime this is simply the live server's registry access. Lookups consult the materialization
-     * cache at call time, so mint ops after building the objects you intend to encode.
+     * Resolves in the same order as {@link #getter} and {@link #mappedRegistryOrNull} so that the
+     * owner a codec checks against is the very registry the holder was resolved from: static
+     * built-in registries first, then materialized ones, then {@link #vanilla()}.
+     *
+     * <p>The static-registry step is not an optimization. {@link #vanilla()} hands back a datagen
+     * lookup for {@code minecraft:block} and friends -- a {@code RegistrySetBuilder} wrapper that
+     * owns no holders -- so every {@link net.minecraft.core.Holder} the rest of this library
+     * resolves from {@link BuiltInRegistries} would fail {@code canSerializeIn} against it with
+     * "is not valid in current registry set".
+     *
+     * <p>At runtime this is simply the live server's registry access. Lookups consult the
+     * materialization cache at call time, so mint ops after building the objects you intend to
+     * encode.
      */
     @AsOf("2.4.0")
     @SuppressWarnings("ConstantValue")
@@ -130,6 +139,10 @@ public final class BootstrapSafeMinecraftRegistries {
             @Override
             @SuppressWarnings("unchecked")
             public <T> Optional<? extends HolderLookup.RegistryLookup<T>> lookup(ResourceKey<? extends Registry<? extends T>> key) {
+                Registry<?> builtin = staticRegistry(key.identifier());
+                if (builtin != null) {
+                    return Optional.of((HolderLookup.RegistryLookup<T>) builtin);
+                }
                 Registry<?> materialized = MATERIALIZED.get(key);
                 if (materialized != null) {
                     return Optional.of((HolderLookup.RegistryLookup<T>) materialized);

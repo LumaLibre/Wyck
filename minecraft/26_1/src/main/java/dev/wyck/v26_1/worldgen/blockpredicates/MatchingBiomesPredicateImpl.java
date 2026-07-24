@@ -1,4 +1,4 @@
-package dev.wyck.v26_1.blockpredicates;
+package dev.wyck.v26_1.worldgen.blockpredicates;
 
 import dev.wyck.biome.Biome;
 import dev.wyck.worldgen.blockpredicates.MatchingBiomesPredicate;

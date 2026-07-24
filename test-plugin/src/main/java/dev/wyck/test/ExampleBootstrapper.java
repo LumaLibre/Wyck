@@ -8,7 +8,6 @@ import dev.wyck.environment.particle.ParticleTypes;
 import dev.wyck.environment.particle.options.DustParticle;
 import dev.wyck.level.dimension.clock.WorldClock;
 import dev.wyck.level.dimension.CardinalLightType;
-import dev.wyck.level.dimension.Infiniburn;
 import dev.wyck.level.dimension.Skybox;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
@@ -27,7 +26,7 @@ public class ExampleBootstrapper implements PluginBootstrap {
     public void bootstrap(BootstrapContext context) {
 
         // This must use the 'DATAPACK' composer!
-        BootstrapBiomeRegistry registry = BootstrapBiomeRegistry.compose(context, Composer.INJECTOR);
+        BootstrapBiomeRegistry registry = BootstrapBiomeRegistry.compose(context, Composer.DATAPACK);
         BiomeGenerationSettings generation = BiomeGenerationSettings.builder()
             .feature(Decoration.VEGETAL_DECORATION, PlacedFeatures.TREES_PLAINS)
             .feature(Decoration.VEGETAL_DECORATION, PlacedFeatures.FALLEN_OAK_TREE)
@@ -47,7 +46,7 @@ public class ExampleBootstrapper implements PluginBootstrap {
                 .build()
         );
 
-        BootstrapDimensionRegistry dimRegistry = BootstrapDimensionRegistry.compose(context, Composer.INJECTOR);
+        BootstrapDimensionRegistry dimRegistry = BootstrapDimensionRegistry.compose(context, Composer.DATAPACK);
 
         dimRegistry.queue(
             Dimension.builder()
@@ -59,7 +58,6 @@ public class ExampleBootstrapper implements PluginBootstrap {
                 .hasFixedTime(false)
                 .hasEnderDragonFight(false)
                 .skybox(Skybox.END)
-                .infiniburn(Infiniburn.of(ResourceKey.minecraft("sand"))) // Make sand burn infinitely
                 .minY(-64)
                 .height(800)
                 .logicalHeight(800)

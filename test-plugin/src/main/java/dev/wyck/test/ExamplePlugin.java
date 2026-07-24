@@ -18,6 +18,7 @@ import dev.wyck.worldgen.feature.treedecorators.TreeDecorator;
 import dev.wyck.worldgen.feature.trunkplacers.TrunkPlacer;
 import dev.wyck.worldgen.function.DensityFunction;
 import dev.wyck.worldgen.function.DensityFunctions;
+import dev.wyck.worldgen.function.misc.Marker;
 import dev.wyck.worldgen.placement.PlacedFeature;
 import dev.wyck.worldgen.placement.PlacementModifier;
 import dev.wyck.worldgen.stateproviders.BlockStateProvider;
@@ -104,11 +105,13 @@ public class ExamplePlugin extends JavaPlugin {
 
         dumpBiomeJson(biomeKey);
 
-        DensityFunction densityFunction = DensityFunctions.PILLARS
-            .add(DensityFunctions.CONTINENTS_LARGE)
-            .mul(DensityFunction.constant(10f))
-            .blendDensity()
-            .register();
+        DensityFunction densityFunction = Marker.of(
+            ResourceKey.of("test:example_density"),
+            Marker.Type.BLEND_DENSITY,
+            DensityFunctions.PILLARS
+                .add(DensityFunctions.CONTINENTS_LARGE)
+                .mul(DensityFunction.constant(10f))
+        ).register();
     }
 
     /**
