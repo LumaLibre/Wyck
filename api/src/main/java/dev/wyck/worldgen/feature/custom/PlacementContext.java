@@ -1,6 +1,7 @@
 package dev.wyck.worldgen.feature.custom;
 
 import dev.wyck.annotations.AsOf;
+import dev.wyck.worldgen.WorldContext;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Entity;
 import org.bukkit.util.BlockVector;
@@ -13,9 +14,9 @@ import java.util.Random;
  * The placement surface handed to a CustomFeature during world generation.
  *
  * @param <C> the feature's configuration type
- * @since 2.3.0
- * @version 2.3.0
  * @author Jsinco
+ * @version 2.3.0
+ * @since 2.3.0
  */
 @NullMarked
 @AsOf("2.3.0")
@@ -143,4 +144,12 @@ public interface PlacementContext<C> {
     default boolean addFreshEntity(Entity entity) {
         return addFreshEntity(entity, null);
     }
+
+    /**
+     * Gets the world info context for this placement
+     * @return information about the current world this feature will be placed in
+     * @since 3.4.0
+     */
+    @AsOf("3.4.0")
+    WorldContext worldContext();
 }

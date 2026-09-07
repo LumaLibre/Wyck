@@ -2,7 +2,12 @@ package dev.wyck.worldgen.feature.custom;
 
 import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
+import dev.wyck.keys.ResourceKeyImpl;
+import dev.wyck.level.dimension.Dimension;
+import dev.wyck.worldgen.WorldContext;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.Identifier;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.block.data.CraftBlockData;
@@ -86,5 +91,23 @@ public final class PlacementContextImpl<C> implements PlacementContext<C> {
 
         net.minecraft.world.entity.Entity nmsEntity = ((CraftEntity) entity).getHandle();
         return this.handle.level().addFreshEntity(nmsEntity, reason);
+    }
+
+    @Override
+    public WorldContext worldContext() {
+        ServerLevel level = this.handle.level().getLevel();
+        Identifier levelId = level.dimension().identifier();
+        Identifier dimensionTypeId = level.dimensionTypeRegistration().unwrapKey().orElseThrow().identifier();
+
+        return new WorldContext(
+            new ResourceKeyImpl(levelId),
+            level.uuid,
+            level.getSeed(),
+            level.getMinY(),
+            level.getMaxY(),
+            Dimension.reference(new ResourceKeyImpl(dimensionTypeId)),
+            level.bukkitName,
+            level.getWorld().getEnvironment()
+        );
     }
 }
