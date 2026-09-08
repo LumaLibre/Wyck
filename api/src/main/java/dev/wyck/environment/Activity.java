@@ -1,4 +1,3 @@
-//798dc3444abb82995c6eaeae09e5c73e
 package dev.wyck.environment;
 
 import dev.wyck.annotations.AsOf;
@@ -7,6 +6,8 @@ import dev.wyck.keys.ResourceKey;
 import dev.wyck.registry.internal.RegistryId;
 import dev.wyck.wrapper.RegisteredConstantTranslator;
 import dev.wyck.wrapper.WrappedConstant;
+import java.lang.Override;
+import java.lang.String;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -17,48 +18,80 @@ import org.jspecify.annotations.NullMarked;
  * Each enum value carries a vanilla key which the impl module translates to the underlying NMS Activity value.
  * </p>
  *
+ *
  * @since 1.1.0
- * @version 3.0.0
+ * @version 3.4.0
  * @author Wyck codegen
  */
 @NullMarked
 @AsOf("1.1.0")
-@Generated("2026-07-15T18:48:22.504995Z")
+@Generated("2026-09-08T15:00:53.419083900Z")
 public enum Activity implements WrappedConstant<Activity> {
-
     CORE("core"),
+
     IDLE("idle"),
+
     WORK("work"),
+
     PLAY("play"),
+
     REST("rest"),
+
     MEET("meet"),
+
     PANIC("panic"),
+
     RAID("raid"),
+
     PRE_RAID("pre_raid"),
+
     HIDE("hide"),
+
     FIGHT("fight"),
+
     CELEBRATE("celebrate"),
+
     ADMIRE_ITEM("admire_item"),
+
     AVOID("avoid"),
+
     RIDE("ride"),
+
     PLAY_DEAD("play_dead"),
+
     LONG_JUMP("long_jump"),
+
     RAM("ram"),
+
     TONGUE("tongue"),
+
     SWIM("swim"),
+
     LAY_SPAWN("lay_spawn"),
+
     SNIFF("sniff"),
+
     INVESTIGATE("investigate"),
+
     ROAR("roar"),
+
     EMERGE("emerge"),
+
     DIG("dig");
 
     public static final RegisteredConstantTranslator<Activity> TRANSLATOR = RegisteredConstantTranslator.of(RegistryId.ACTIVITY, Activity::resourceKey, Activity.values());
+
     private final String key;
 
     @AsOf("1.1.0")
     Activity(String key) {
         this.key = key;
+    }
+
+    @AsOf("1.1.0")
+    @Override
+    public RegisteredConstantTranslator<Activity> translator() {
+        return TRANSLATOR;
     }
 
     /**
@@ -74,11 +107,5 @@ public enum Activity implements WrappedConstant<Activity> {
     @AsOf("1.1.0")
     public ResourceKey resourceKey() {
         return ResourceKey.minecraft(this.key);
-    }
-
-    @Override
-    @AsOf("1.1.0")
-    public RegisteredConstantTranslator<Activity> translator() {
-        return TRANSLATOR;
     }
 }

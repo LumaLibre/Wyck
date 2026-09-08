@@ -1,114 +1,83 @@
 package dev.wyck.codegen;
 
+import com.palantir.javapoet.AnnotationSpec;
+import com.palantir.javapoet.ClassName;
+import com.palantir.javapoet.CodeBlock;
+import com.palantir.javapoet.FieldSpec;
+import com.palantir.javapoet.JavaFile;
+import com.palantir.javapoet.MethodSpec;
+import com.palantir.javapoet.ParameterSpec;
+import com.palantir.javapoet.ParameterizedTypeName;
+import com.palantir.javapoet.TypeSpec;
 import net.minecraft.SharedConstants;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.Bootstrap;
+import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.HexFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public final class ReferenceGenerator {
 
     // matches: @AsOf("1.2.3") \n public static final SomeType FIELD_NAME =
     // (modifiers are optional: interface constants are emitted without them)
     private static final Pattern EXISTING_FIELD = Pattern.compile(
-        "@AsOf\\(\"([^\"]+)\"\\)\\s+(?:public\\s+static\\s+final\\s+)?\\w+\\s+(\\w+)\\s*="
+            "@AsOf\\(\"([^\"]+)\"\\)\\s+(?:public\\s+static\\s+final\\s+)?\\w+\\s+(\\w+)\\s*="
     );
 
     // matches: methods and constructors
     //   @AsOf("1.2.3") \n public ReturnType<Generic> methodName(
     //   @AsOf("1.2.3") \n ClassName()
     private static final Pattern EXISTING_MEMBER = Pattern.compile(
-        "@AsOf\\(\"([^\"]+)\"\\)\\s+(?:public\\s+)?(?:[\\w.<>]+\\s+)?(\\w+)\\s*\\("
+            "@AsOf\\(\"([^\"]+)\"\\)\\s+(?:public\\s+)?(?:[\\w.<>]+\\s+)?(\\w+)\\s*\\("
     );
-
-    private static final Pattern GENERATED_LINE = Pattern.compile(
-        "(?m)^@Generated\\(\"[^\"]*\"\\)\\n?"
-    );
-
-
-    private static final Pattern VERSION_LINE = Pattern.compile(
-        "(?m)^\\s*\\*\\s*@version\\b[^\\n]*\\n?"
-    );
-
-    private static final String HASH_PREFIX = "//";
-
-    private static final Pattern LEADING_HASH_LINE = Pattern.compile(
-        "\\A" + Pattern.quote(HASH_PREFIX) + "[0-9a-f]+\\n?"
-    );
+    private static final Pattern AS_OF_RE = Pattern.compile("@AsOf\\((.*)\\)");
 
     static void main(String[] args) throws Exception {
         String outputRoot = args[0];
         String version = args[1];
-
-        // necessary inits
-        SharedConstants.tryDetectVersion();
-        Bootstrap.bootStrap();
-
-        for (GeneratorSpec spec : Generators.ALL) {
-            Path outputPath = Path.of(
-                outputRoot,
-                spec.outputPackage().replace('.', '/'),
-                spec.outputClass() + ".java"
-            );
-
-            Map<String, String> existingVersions = readExistingVersions(outputPath);
-            List<String> preservedConstants = readPreservedConstants(outputPath);
-
-            String source = switch (spec) {
-                case ReferenceSpec ref -> generateReference(ref, version, existingVersions);
-                case EnumSpec enumSpec -> generateEnum(enumSpec, version, existingVersions, preservedConstants);
-                case ConstantSpec constantSpec -> generateConstant(constantSpec, version, existingVersions, preservedConstants);
-            };
-
-            if (isUpToDate(outputPath, source)) {
-                System.out.println("up-to-date " + outputPath);
-                continue;
-            }
-
-            Files.createDirectories(outputPath.getParent());
-            Files.writeString(outputPath, HASH_PREFIX + contentHash(source) + "\n" + source);
-            System.out.println("generated " + outputPath);
-        }
-    }
-
-    private static String contentHash(String source) {
+        Path outputRootPath = Path.of(outputRoot);
         try {
-            byte[] digest = MessageDigest.getInstance("SHA-256")
-                .digest(canonical(source).getBytes(StandardCharsets.UTF_8));
-            return HexFormat.of().formatHex(digest, 0, 16);
-        } catch (NoSuchAlgorithmException e) {
-            throw new AssertionError("SHA-256 unavailable", e);
-        }
-    }
+            // necessary inits
+            SharedConstants.tryDetectVersion();
+            Bootstrap.bootStrap();
 
-    private static String canonical(String source) {
-        String stripped = LEADING_HASH_LINE.matcher(source).replaceFirst("");
-        stripped = GENERATED_LINE.matcher(stripped).replaceAll("");
-        return VERSION_LINE.matcher(stripped).replaceAll("");
-    }
+            for (GeneratorSpec spec : Generators.ALL) {
+                Path outputPath = Path.of(
+                        outputRoot,
+                        spec.outputClass().packageName().replace('.', '/'),
+                        spec.outputClass().simpleName() + ".java"
+                );
 
-    private static boolean isUpToDate(Path outputPath, String newSource) throws Exception {
-        if (!Files.exists(outputPath)) {
-            return false;
+                Map<String, String> existingVersions = readExistingVersions(outputPath);
+                List<String> preservedConstants = readPreservedConstants(outputPath);
+
+                TypeSpec typeSpec = createTypeSpec(spec, version, existingVersions, preservedConstants);
+                JavaFile javaFile = JavaFile.builder(spec.outputClass().packageName(), typeSpec)
+                        .indent("    ")
+                        .build();
+                javaFile.writeTo(outputRootPath);
+                System.out.println("generated " + outputPath);
+            }
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+            System.exit(1);
         }
-        return canonical(Files.readString(outputPath)).equals(canonical(newSource));
+
     }
 
     private static Map<String, String> readExistingVersions(Path outputPath) throws Exception {
@@ -236,8 +205,8 @@ public final class ReferenceGenerator {
                 continue;
             }
             boolean annotated = trimmed.lines()
-                .map(String::strip)
-                .anyMatch(line -> line.startsWith("@"));
+                    .map(String::strip)
+                    .anyMatch(line -> line.startsWith("@"));
             if (annotated) {
                 preserved.add(trimmed);
             }
@@ -264,13 +233,77 @@ public final class ReferenceGenerator {
         return null;
     }
 
-    /**
-     * Appends preserved manual constants (re-indented) after the reflected
-     * ones, skipping any whose name the current generation already emitted.
-     */
-    private static void appendConstants(StringBuilder sb, List<String> generated, List<String> preservedConstants, Set<String> emittedNames) {
-        List<String> blocks = new ArrayList<>(generated);
+    private static TypeSpec createTypeSpec(GeneratorSpec generatorSpec, String version, Map<String, String> existingVersions, List<String> preservedConstants) throws IllegalAccessException {
+        TypeSpec.Builder typeSpec;
+        if (generatorSpec instanceof ReferenceSpec referenceSpec) {
+            if (referenceSpec.asInterface()) {
+                typeSpec = TypeSpec.interfaceBuilder(referenceSpec.outputClass())
+                        .addModifiers(javax.lang.model.element.Modifier.PUBLIC)
+                        .addAnnotation(ApiStatus.NonExtendable.class);
+            } else {
+                typeSpec = TypeSpec.classBuilder(referenceSpec.outputClass())
+                        .addModifiers(javax.lang.model.element.Modifier.FINAL, javax.lang.model.element.Modifier.PUBLIC)
+                        .addMethod(MethodSpec.constructorBuilder()
+                                .addCode("throw new $T(\"Not intended for instantiation\");", UnsupportedOperationException.class)
+                                .build()
+                        );
+            }
+        } else {
+            typeSpec = TypeSpec.enumBuilder(generatorSpec.outputClass());
+            if (generatorSpec instanceof ConstantSpec constantSpec) {
+                typeSpec.addSuperinterface(ParameterizedTypeName.get(
+                        ClassName.get("dev.wyck.wrapper", "WrappedConstant"),
+                        constantSpec.outputClass()
+                ));
+            } else if (generatorSpec instanceof EnumSpec constantSpec) {
+                typeSpec.addSuperinterface(ParameterizedTypeName.get(
+                        ClassName.get("dev.wyck.wrapper", "WrappedEnumerator"),
+                        constantSpec.outputClass()
+                ));
+            }
+        }
+        typeSpec.addModifiers(javax.lang.model.element.Modifier.PUBLIC);
+        String header = """
+                Auto-generated. Do not modify!
+                Run ./gradlew generateSources to regenerate.
+                <p>
+                %s
+                </p>
+                
+                %s
+                @since %s
+                @version %s
+                @author Wyck codegen
+                """.formatted(
+                generatorSpec.javadoc().lines()
+                        .filter(line -> !line.startsWith("@") && !line.isEmpty())
+                        .collect(Collectors.joining("\n")),
+                generatorSpec.javadoc().lines()
+                        .filter(line -> line.startsWith("@"))
+                        .collect(Collectors.joining("\n")),
+                generatorSpec.since(),
+                version
+        );
+        typeSpec.addJavadoc(header);
+        typeSpec.addAnnotation(AnnotationSpec.builder(NullMarked.class).build());
+        typeSpec.addAnnotation(AnnotationSpec.builder(ClassName.get("dev.wyck.annotations", "AsOf"))
+                .addMember("value", "$S", generatorSpec.since())
+                .build()
+        );
+        typeSpec.addAnnotation(AnnotationSpec.builder(ClassName.get("dev.wyck.annotations", "Generated"))
+                .addMember("value", "$S", Instant.now().toString())
+                .build()
+        );
+        switch (generatorSpec) {
+            case ConstantSpec constantSpec ->
+                    appendConstantFields(constantSpec, typeSpec, preservedConstants, existingVersions);
+            case EnumSpec enumSpec -> appendEnumFields(enumSpec, typeSpec, preservedConstants, existingVersions);
+            case ReferenceSpec referenceSpec -> appendReferenceFields(referenceSpec, typeSpec, existingVersions);
+        }
+        return typeSpec.build();
+    }
 
+    private static void appendPreservedEnumConstants(TypeSpec.Builder typeSpec, List<String> preservedConstants, Set<String> emittedNames) {
         for (String entry : preservedConstants) {
             String name = preservedConstantName(entry);
             if (name == null) {
@@ -281,103 +314,218 @@ public final class ReferenceGenerator {
                 System.err.println("warning: manual constant " + name + " now exists in vanilla again, dropping the manual copy");
                 continue;
             }
-            blocks.add(entry.lines()
-                .map(line -> {
-                    String stripped = line.strip();
-                    if (stripped.isEmpty()) {
-                        return "";
-                    }
-                    // javadoc continuation lines get one extra space so the asterisks align
-                    return (stripped.startsWith("*") ? "     " : "    ") + stripped;
-                })
-                .reduce((a, b) -> a + "\n" + b)
-                .orElse(entry));
-        }
-
-        for (int i = 0; i < blocks.size(); i++) {
-            sb.append(blocks.get(i))
-                .append(i == blocks.size() - 1 ? ";" : ",")
-                .append("\n");
-        }
-    }
-
-    private static void appendHeader(StringBuilder sb, GeneratorSpec spec, String version) {
-        List<String> prose = new ArrayList<>();
-        List<String> tags = new ArrayList<>();
-        boolean inTags = false;
-        for (String line : spec.javadoc().lines().toList()) {
-            if (line.startsWith("@")) {
-                inTags = true;
+            Matcher asOfMatcher = AS_OF_RE.matcher(entry);
+            if (!asOfMatcher.find()) {
+                continue;
             }
-            (inTags ? tags : prose).add(line);
+            String since = asOfMatcher.group(1);
+            Matcher parameterMatcher = Pattern.compile("%s\\((.*)\\)".formatted(name)).matcher(entry);
+            if (!parameterMatcher.find()) {
+                typeSpec.addEnumConstant(name, TypeSpec.anonymousClassBuilder(
+                                ""
+                        ).addAnnotation(AnnotationSpec.builder(ClassName.get("dev.wyck.annotations", "AsOf"))
+                                .addMember("value", "$L", since)
+                                .build()
+                        ).build()
+                );
+            } else {
+                typeSpec.addEnumConstant(name, TypeSpec.anonymousClassBuilder(parameterMatcher.group(1))
+                        .addAnnotation(AnnotationSpec.builder(ClassName.get("dev.wyck.annotations", "AsOf"))
+                                .addMember("value", "$L", since)
+                                .build()
+                        ).build()
+                );
+            }
         }
-        // drop blank separator lines left dangling at the end of the prose
-        while (!prose.isEmpty() && prose.getLast().isBlank()) {
-            prose.removeLast();
-        }
-
-        sb.append("/**\n");
-        sb.append(" * Auto-generated. Do not modify!\n");
-        sb.append(" * Run ./gradlew generateSources to regenerate.\n");
-        sb.append(" * <p>\n");
-        for (String line : prose) {
-            sb.append(line.isBlank() ? " *" : " * " + line).append("\n");
-        }
-        sb.append(" * </p>\n");
-        for (String line : tags) {
-            sb.append(" * ").append(line).append("\n");
-        }
-        sb.append(" *\n");
-        sb.append(" * @since ").append(spec.since()).append("\n");
-        sb.append(" * @version ").append(version).append("\n");
-        sb.append(" * @author Wyck codegen\n");
-        sb.append(" */\n");
-        sb.append("@NullMarked\n");
-        sb.append("@AsOf(\"").append(spec.since()).append("\")\n");
-        sb.append("@Generated(\"").append(Instant.now().toString()).append("\")\n");
     }
 
-    private static String generateReference(ReferenceSpec spec, String version, Map<String, String> existingVersions) throws IllegalAccessException {
-        StringBuilder sb = new StringBuilder();
+    private static void appendEnumConstructor(TypeSpec.Builder typeSpec, GeneratorSpec generatorSpec, Map<String, String> existingVersions) {
+        typeSpec.addField(FieldSpec.builder(String.class, "key", javax.lang.model.element.Modifier.PRIVATE, javax.lang.model.element.Modifier.FINAL)
+                .build()
+        );
+        typeSpec.addMethod(MethodSpec.constructorBuilder()
+                .addAnnotation(
+                        AnnotationSpec.builder(ClassName.get("dev.wyck.annotations", "AsOf"))
+                                .addMember("value", "$S", memberVersion(existingVersions, generatorSpec.outputClass().simpleName(), generatorSpec))
+                                .build()
+                )
+                .addParameter(String.class, "key")
+                .addCode("this.key = key;")
+                .build()
+        );
+    }
 
-        sb.append("package ").append(spec.outputPackage()).append(";\n\n");
-        sb.append("import dev.wyck.annotations.AsOf;\n");
-        sb.append("import dev.wyck.annotations.Generated;\n");
-        sb.append("import dev.wyck.keys.ResourceKey;\n");
-        if (spec.asInterface()) {
-            sb.append("import org.jetbrains.annotations.ApiStatus;\n");
-        }
-        sb.append("import org.jspecify.annotations.NullMarked;\n\n");
-        appendHeader(sb, spec, version);
-        if (spec.asInterface()) {
-            sb.append("@ApiStatus.NonExtendable\n");
-        }
-        sb.append(spec.asInterface() ? "public interface " : "public final class ").append(spec.outputClass()).append(" {\n\n");
-
-        // guards against duplicate field names across source classes
+    private static void appendConstantFields(ConstantSpec constantSpec, TypeSpec.Builder typeSpec, List<String> preservedConstants, Map<String, String> existingVersions) throws IllegalAccessException {
         Set<String> emittedNames = new HashSet<>();
 
-        for (Class<?> sourceClass : spec.sourceClasses()) {
-            sb.append("    // From: ").append(sourceClass.getSimpleName()).append(" \n");
-
+        for (Class<?> sourceClass : constantSpec.sourceClasses()) {
             for (Field field : sourceClass.getDeclaredFields()) {
                 // only static fields
                 if (!Modifier.isStatic(field.getModifiers())) {
                     continue;
                 }
 
-                if (spec.fieldFilter() != null) {
-                    if (!spec.fieldFilter().test(field)) {
+                if (constantSpec.fieldFilter() != null) {
+                    if (!constantSpec.fieldFilter().test(field)) {
                         continue;
                     }
-                } else if (!spec.registryType().isAssignableFrom(field.getType())) {
+                } else if (!constantSpec.registryType().isAssignableFrom(field.getType())) {
                     continue;
                 }
 
                 field.setAccessible(true);
                 Object entry = field.get(null);
 
-                Identifier key = spec.registryLookup().apply(entry);
+                Identifier key = constantSpec.registryLookup().apply(entry);
+                if (key == null) {
+                    System.err.println("warning: no registry key for " + field.getName() + ", skipping");
+                    continue;
+                }
+
+                if (!emittedNames.add(field.getName())) {
+                    System.err.println("warning: duplicate field name " + field.getName() + " in " + sourceClass.getSimpleName() + ", skipping");
+                    continue;
+                }
+
+                typeSpec.addEnumConstant(field.getName(), TypeSpec.anonymousClassBuilder("$S", key.getPath())
+                        .build());
+            }
+        }
+        appendPreservedEnumConstants(typeSpec, preservedConstants, emittedNames);
+        ClassName self = constantSpec.outputClass();
+        ParameterizedTypeName translatorType = ParameterizedTypeName.get(
+                ClassName.get("dev.wyck.wrapper", "RegisteredConstantTranslator"),
+                self
+        );
+        typeSpec.addField(FieldSpec.builder(translatorType, "TRANSLATOR", javax.lang.model.element.Modifier.PUBLIC, javax.lang.model.element.Modifier.STATIC, javax.lang.model.element.Modifier.FINAL)
+                .initializer("$T.of($T.%s, $T::resourceKey, $T.values())"
+                                .formatted(constantSpec.registryId()),
+                        ClassName.get("dev.wyck.wrapper", "RegisteredConstantTranslator"),
+                        ClassName.get("dev.wyck.registry.internal", "RegistryId"),
+                        self,
+                        self
+                ).build()
+        );
+        typeSpec.addMethod(MethodSpec.methodBuilder("translator")
+                .addAnnotation(
+                        AnnotationSpec.builder(ClassName.get("dev.wyck.annotations", "AsOf"))
+                                .addMember("value", "$S", memberVersion(existingVersions, "translator", constantSpec))
+                                .build()
+                ).addAnnotation(Override.class)
+                .returns(translatorType)
+                .addModifiers(javax.lang.model.element.Modifier.PUBLIC)
+                .addCode("return TRANSLATOR;")
+                .build()
+        );
+        appendEnumConstructor(typeSpec, constantSpec, existingVersions);
+        typeSpec.addMethod(MethodSpec.methodBuilder("key")
+                .addAnnotation(
+                        AnnotationSpec.builder(ClassName.get("dev.wyck.annotations", "AsOf"))
+                                .addMember("value", "$S", memberVersion(existingVersions, "key", constantSpec))
+                                .build()
+                )
+                .returns(String.class)
+                .addCode("return this.key;")
+                .addModifiers(javax.lang.model.element.Modifier.PUBLIC)
+                .addJavadoc("""
+                        The vanilla registry path for this activity.
+                        @return the registry path for this activity
+                        @since $L
+                        """, memberVersion(existingVersions, "key", constantSpec))
+                .build()
+        );
+        typeSpec.addMethod(MethodSpec.methodBuilder("resourceKey")
+                .addAnnotation(
+                        AnnotationSpec.builder(ClassName.get("dev.wyck.annotations", "AsOf"))
+                                .addMember("value", "$S", memberVersion(existingVersions, "resourceKey", constantSpec))
+                                .build()
+                )
+                .returns(ClassName.get("dev.wyck.keys", "ResourceKey"))
+                .addModifiers(javax.lang.model.element.Modifier.PUBLIC)
+                .addCode("return $T.minecraft(this.key);", ClassName.get("dev.wyck.keys", "ResourceKey"))
+                .build()
+        );
+    }
+
+    private static void appendEnumFields(EnumSpec enumSpec, TypeSpec.Builder typeSpec, List<String> preservedConstants, Map<String, String> existingVersions) {
+        Enum<?>[] constants = enumSpec.sourceEnum().getEnumConstants();
+        Set<String> emittedNames = new HashSet<>();
+        for (Enum<?> constant : constants) {
+            String key = enumSpec.keyExtractor().apply(constant);
+            typeSpec.addEnumConstant(constant.name(), TypeSpec.anonymousClassBuilder("$S", key)
+                    .build()
+            );
+            emittedNames.add(constant.name());
+        }
+        appendPreservedEnumConstants(typeSpec, preservedConstants, emittedNames);
+        ClassName self = enumSpec.outputClass();
+        ParameterizedTypeName translatorType = ParameterizedTypeName.get(
+                ClassName.get("dev.wyck.wrapper", "KeyedEnumTranslator"),
+                self
+        );
+        typeSpec.addField(FieldSpec.builder(translatorType, "TRANSLATOR", javax.lang.model.element.Modifier.PUBLIC, javax.lang.model.element.Modifier.STATIC, javax.lang.model.element.Modifier.FINAL)
+                .initializer("$T.byKey($T::getKey, $T.values())",
+                        ClassName.get("dev.wyck.wrapper", "KeyedEnumTranslator"),
+                        self,
+                        self
+                ).build()
+        );
+        typeSpec.addMethod(MethodSpec.methodBuilder("translator")
+                .addAnnotation(
+                        AnnotationSpec.builder(ClassName.get("dev.wyck.annotations", "AsOf"))
+                                .addMember("value", "$S", memberVersion(existingVersions, "translator", enumSpec))
+                                .build()
+                ).addAnnotation(Override.class)
+                .returns(translatorType)
+                .addCode("return TRANSLATOR;")
+                .addModifiers(javax.lang.model.element.Modifier.PUBLIC)
+                .build()
+        );
+        typeSpec.addMethod(MethodSpec.methodBuilder("getKey")
+                .addAnnotation(
+                        AnnotationSpec.builder(ClassName.get("dev.wyck.annotations", "AsOf"))
+                                .addMember("value", "$S", memberVersion(existingVersions, "key", enumSpec))
+                                .build()
+                )
+                .returns(String.class)
+                .addCode("return this.key;")
+                .addModifiers(javax.lang.model.element.Modifier.PUBLIC)
+                .addJavadoc("""
+                                 The vanilla name for this $L
+                                 @return the vanilla key for this enum value
+                                 @since $L
+                                """,
+                        enumSpec.sourceEnum().getSimpleName(),
+                        memberVersion(existingVersions, "key", enumSpec)
+                )
+                .build()
+        );
+        appendEnumConstructor(typeSpec, enumSpec, existingVersions);
+    }
+
+    private static void appendReferenceFields(ReferenceSpec referenceSpec, TypeSpec.Builder typeSpec, Map<String, String> existingVersions) throws IllegalAccessException {
+        // guards against duplicate field names across source classes
+        Set<String> emittedNames = new HashSet<>();
+        for (Class<?> sourceClass : referenceSpec.sourceClasses()) {
+            CodeBlock firstComment = CodeBlock.of("From: $L", sourceClass.getSimpleName());
+            for (Field field : sourceClass.getDeclaredFields()) {
+                // only static fields
+                if (!Modifier.isStatic(field.getModifiers())) {
+                    continue;
+                }
+
+                if (referenceSpec.fieldFilter() != null) {
+                    if (!referenceSpec.fieldFilter().test(field)) {
+                        continue;
+                    }
+                } else if (!referenceSpec.registryType().isAssignableFrom(field.getType())) {
+                    continue;
+                }
+
+                field.setAccessible(true);
+                Object entry = field.get(null);
+
+                Identifier key = referenceSpec.registryLookup().apply(entry);
                 if (key == null) {
                     System.err.println("warning: no registry key for " + field.getName() + ", skipping");
                     continue;
@@ -389,193 +537,49 @@ public final class ReferenceGenerator {
                 }
 
                 // existing fields keep their original @AsOf; new fields get the current version
-                String fieldVersion = existingVersions.getOrDefault(field.getName(), spec.since());
-
-                sb.append("    @AsOf(\"").append(fieldVersion).append("\")\n");
-                sb.append("    ").append(spec.asInterface() ? "" : "public static final ").append(spec.typeSimpleName()).append(" ")
-                    .append(field.getName())
-                    .append(" = reference(\"")
-                    .append(key.getPath())
-                    .append("\");\n");
+                String fieldVersion = existingVersions.getOrDefault(field.getName(), referenceSpec.since());
+                FieldSpec.Builder fieldSpec = FieldSpec.builder(referenceSpec.typeClass(), field.getName())
+                        .addAnnotation(AnnotationSpec.builder(ClassName.get("dev.wyck.annotations", "AsOf"))
+                                .addMember("value", "$S", fieldVersion)
+                                .build()
+                        )
+                        .initializer("reference($S)", key.getPath())
+                        .addModifiers(javax.lang.model.element.Modifier.PUBLIC, javax.lang.model.element.Modifier.STATIC, javax.lang.model.element.Modifier.FINAL);
+                if (firstComment != null) {
+                    fieldSpec.addJavadoc(firstComment);
+                    firstComment = null;
+                }
+                typeSpec.addField(fieldSpec.build());
             }
-
-            sb.append("\n");
         }
-
-        sb.append("    private static ").append(spec.typeSimpleName())
-            .append(" reference(String path) {\n");
-
-        if (spec.keyChain() == null) {
-            sb.append("        return ").append(spec.referenceCall()).append("(ResourceKey.minecraft(path));\n");
+        CodeBlock referenceCode;
+        ClassName typeName = referenceSpec.typeClass();
+        ClassName resourceKey = ClassName.get("dev.wyck.keys", "ResourceKey");
+        if (referenceSpec.typeClass().equals(resourceKey)) {
+            referenceCode = CodeBlock.of("return $T.minecraft(path);", resourceKey);
+        } else if (referenceSpec.keyChain() == null) {
+            referenceCode = CodeBlock.of("return $T.reference($T.minecraft(path));",
+                    typeName,
+                    resourceKey
+            );
         } else {
-            sb.append("        ").append(spec.typeSimpleName()).append(" keyed = ")
-                .append(spec.referenceCall()).append("(ResourceKey.minecraft(path));\n");
-            sb.append("        dev.wyck.keys.KeyChains.").append(spec.keyChain()).append(".append(keyed);\n");
-            sb.append("        return keyed;\n");
+            referenceCode = CodeBlock.builder().addStatement("$T keyed = $T.reference($T.minecraft(path))",
+                            typeName,
+                            typeName,
+                            resourceKey
+                    ).addStatement("$T.$L.append(keyed)",
+                            ClassName.get("dev.wyck.keys", "KeyChains"),
+                            referenceSpec.keyChain()
+                    ).addStatement("return keyed")
+                    .build();
         }
-
-        sb.append("    }\n");
-        if (!spec.asInterface()) {
-            sb.append("\n");
-            sb.append("    private ").append(spec.outputClass()).append("() {\n");
-            sb.append("        throw new UnsupportedOperationException(\"Not intended for instantiation\");\n");
-            sb.append("    }\n");
-        }
-        sb.append("}\n");
-
-        return sb.toString();
-    }
-
-    private static String generateEnum(EnumSpec spec, String version, Map<String, String> existingVersions, List<String> preservedConstants) {
-        Enum<?>[] constants = spec.sourceEnum().getEnumConstants();
-        String outputClass = spec.outputClass();
-
-        StringBuilder sb = new StringBuilder();
-
-        sb.append("package ").append(spec.outputPackage()).append(";\n\n");
-        sb.append("import dev.wyck.annotations.AsOf;\n");
-        sb.append("import dev.wyck.annotations.Generated;\n");
-        sb.append("import dev.wyck.wrapper.KeyedEnumTranslator;\n");
-        sb.append("import dev.wyck.wrapper.WrappedEnumerator;\n");
-        sb.append("import org.jspecify.annotations.NullMarked;\n\n");
-        appendHeader(sb, spec, version);
-        sb.append("public enum ").append(outputClass)
-            .append(" implements WrappedEnumerator<").append(outputClass).append("> {\n\n");
-
-        List<String> generated = new ArrayList<>();
-        Set<String> emittedNames = new HashSet<>();
-        for (Enum<?> constant : constants) {
-            String key = spec.keyExtractor().apply(constant);
-            generated.add("    " + constant.name() + "(\"" + key + "\")");
-            emittedNames.add(constant.name());
-        }
-        appendConstants(sb, generated, preservedConstants, emittedNames);
-
-        sb.append("\n");
-        sb.append("    public static final KeyedEnumTranslator<").append(outputClass)
-            .append("> TRANSLATOR = KeyedEnumTranslator.byKey(")
-            .append(outputClass).append("::getKey, ")
-            .append(outputClass).append(".values());\n\n");
-
-        sb.append("    private final String key;\n\n");
-
-        sb.append("    @AsOf(\"").append(memberVersion(existingVersions, outputClass, spec)).append("\")\n");
-        sb.append("    ").append(outputClass).append("(String key) {\n");
-        sb.append("        this.key = key;\n");
-        sb.append("    }\n\n");
-
-        sb.append("    /**\n");
-        sb.append("     * The vanilla name for this ").append(spec.sourceEnum().getSimpleName()).append(" value.\n");
-        sb.append("     * @return the vanilla key for this enum value\n");
-        sb.append("     * @since ").append(memberVersion(existingVersions, "getKey", spec)).append("\n");
-        sb.append("     */\n");
-        sb.append("    @AsOf(\"").append(memberVersion(existingVersions, "getKey", spec)).append("\")\n");
-        sb.append("    public String getKey() {\n");
-        sb.append("        return this.key;\n");
-        sb.append("    }\n\n");
-
-        sb.append("    @Override\n");
-        sb.append("    @AsOf(\"").append(memberVersion(existingVersions, "translator", spec)).append("\")\n");
-        sb.append("    public KeyedEnumTranslator<").append(outputClass).append("> translator() {\n");
-        sb.append("        return TRANSLATOR;\n");
-        sb.append("    }\n");
-        sb.append("}\n");
-
-        return sb.toString();
-    }
-
-    private static String generateConstant(ConstantSpec spec, String version, Map<String, String> existingVersions, List<String> preservedConstants) throws IllegalAccessException {
-        String outputClass = spec.outputClass();
-        String typeName = spec.registryType().getSimpleName().toLowerCase();
-
-        StringBuilder sb = new StringBuilder();
-
-        sb.append("package ").append(spec.outputPackage()).append(";\n\n");
-        sb.append("import dev.wyck.annotations.AsOf;\n");
-        sb.append("import dev.wyck.annotations.Generated;\n");
-        sb.append("import dev.wyck.keys.ResourceKey;\n");
-        sb.append("import dev.wyck.registry.internal.RegistryId;\n");
-        sb.append("import dev.wyck.wrapper.RegisteredConstantTranslator;\n");
-        sb.append("import dev.wyck.wrapper.WrappedConstant;\n");
-        sb.append("import org.jspecify.annotations.NullMarked;\n\n");
-        appendHeader(sb, spec, version);
-        sb.append("public enum ").append(outputClass)
-            .append(" implements WrappedConstant<").append(outputClass).append("> {\n\n");
-
-        List<String> generated = new ArrayList<>();
-        Set<String> emittedNames = new HashSet<>();
-
-        for (Class<?> sourceClass : spec.sourceClasses()) {
-            for (Field field : sourceClass.getDeclaredFields()) {
-                // only static fields
-                if (!Modifier.isStatic(field.getModifiers())) {
-                    continue;
-                }
-
-                if (spec.fieldFilter() != null) {
-                    if (!spec.fieldFilter().test(field)) {
-                        continue;
-                    }
-                } else if (!spec.registryType().isAssignableFrom(field.getType())) {
-                    continue;
-                }
-
-                field.setAccessible(true);
-                Object entry = field.get(null);
-
-                Identifier key = spec.registryLookup().apply(entry);
-                if (key == null) {
-                    System.err.println("warning: no registry key for " + field.getName() + ", skipping");
-                    continue;
-                }
-
-                if (!emittedNames.add(field.getName())) {
-                    System.err.println("warning: duplicate field name " + field.getName() + " in " + sourceClass.getSimpleName() + ", skipping");
-                    continue;
-                }
-
-                generated.add("    " + field.getName() + "(\"" + key.getPath() + "\")");
-            }
-        }
-
-        appendConstants(sb, generated, preservedConstants, emittedNames);
-
-        sb.append("\n");
-        sb.append("    public static final RegisteredConstantTranslator<").append(outputClass)
-            .append("> TRANSLATOR = RegisteredConstantTranslator.of(RegistryId.").append(spec.registryId())
-            .append(", ").append(outputClass).append("::resourceKey, ")
-            .append(outputClass).append(".values());\n");
-
-        sb.append("    private final String key;\n\n");
-
-        sb.append("    @AsOf(\"").append(memberVersion(existingVersions, outputClass, spec)).append("\")\n");
-        sb.append("    ").append(outputClass).append("(String key) {\n");
-        sb.append("        this.key = key;\n");
-        sb.append("    }\n\n");
-
-        sb.append("    /**\n");
-        sb.append("     * The vanilla registry path for this ").append(typeName).append(".\n");
-        sb.append("     * @return the registry path for this ").append(typeName).append("\n");
-        sb.append("     * @since ").append(memberVersion(existingVersions, "key", spec)).append("\n");
-        sb.append("     */\n");
-        sb.append("    @AsOf(\"").append(memberVersion(existingVersions, "key", spec)).append("\")\n");
-        sb.append("    public String key() {\n");
-        sb.append("        return this.key;\n");
-        sb.append("    }\n\n");
-
-        sb.append("    @AsOf(\"").append(memberVersion(existingVersions, "resourceKey", spec)).append("\")\n");
-        sb.append("    public ResourceKey resourceKey() {\n");
-        sb.append("        return ResourceKey.minecraft(this.key);\n");
-        sb.append("    }\n\n");
-
-        sb.append("    @Override\n");
-        sb.append("    @AsOf(\"").append(memberVersion(existingVersions, "translator", spec)).append("\")\n");
-        sb.append("    public RegisteredConstantTranslator<").append(outputClass).append("> translator() {\n");
-        sb.append("        return TRANSLATOR;\n");
-        sb.append("    }\n");
-        sb.append("}\n");
-
-        return sb.toString();
+        typeSpec.addMethod(MethodSpec.methodBuilder("reference")
+                .addModifiers(javax.lang.model.element.Modifier.PRIVATE, javax.lang.model.element.Modifier.STATIC)
+                .addParameter(ParameterSpec.builder(String.class, "path").build())
+                .returns(typeName)
+                .addCode(referenceCode)
+                .build()
+        );
     }
 
     // existing members keep their original @AsOf; new members get the spec's since version

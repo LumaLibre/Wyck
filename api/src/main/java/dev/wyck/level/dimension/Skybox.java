@@ -1,10 +1,11 @@
-//da9af6912dbe89197a7494a809d3cd3b
 package dev.wyck.level.dimension;
 
 import dev.wyck.annotations.AsOf;
 import dev.wyck.annotations.Generated;
 import dev.wyck.wrapper.KeyedEnumTranslator;
 import dev.wyck.wrapper.WrappedEnumerator;
+import java.lang.Override;
+import java.lang.String;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -14,17 +15,19 @@ import org.jspecify.annotations.NullMarked;
  * Skybox type, as it appears in Minecraft.
  * </p>
  *
+ *
  * @since 2.4.0
- * @version 3.0.0
+ * @version 3.4.0
  * @author Wyck codegen
  */
 @NullMarked
 @AsOf("2.4.0")
-@Generated("2026-07-15T18:48:22.499205Z")
+@Generated("2026-09-08T15:00:53.397339Z")
 public enum Skybox implements WrappedEnumerator<Skybox> {
-
     NONE("none"),
+
     OVERWORLD("overworld"),
+
     END("end");
 
     public static final KeyedEnumTranslator<Skybox> TRANSLATOR = KeyedEnumTranslator.byKey(Skybox::getKey, Skybox.values());
@@ -36,19 +39,19 @@ public enum Skybox implements WrappedEnumerator<Skybox> {
         this.key = key;
     }
 
+    @AsOf("2.4.0")
+    @Override
+    public KeyedEnumTranslator<Skybox> translator() {
+        return TRANSLATOR;
+    }
+
     /**
-     * The vanilla name for this Skybox value.
-     * @return the vanilla key for this enum value
-     * @since 2.4.0
+     *  The vanilla name for this Skybox
+     *  @return the vanilla key for this enum value
+     *  @since 2.4.0
      */
     @AsOf("2.4.0")
     public String getKey() {
         return this.key;
-    }
-
-    @Override
-    @AsOf("2.4.0")
-    public KeyedEnumTranslator<Skybox> translator() {
-        return TRANSLATOR;
     }
 }

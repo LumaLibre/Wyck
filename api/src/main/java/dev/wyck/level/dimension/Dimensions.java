@@ -1,9 +1,11 @@
-//d78af7385519e25fc31390bab40dd2b6
 package dev.wyck.level.dimension;
 
 import dev.wyck.annotations.AsOf;
 import dev.wyck.annotations.Generated;
+import dev.wyck.keys.KeyChains;
 import dev.wyck.keys.ResourceKey;
+import java.lang.String;
+import java.lang.UnsupportedOperationException;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -13,32 +15,37 @@ import org.jspecify.annotations.NullMarked;
  * Typed references that point to vanilla's dimensions.
  * </p>
  *
+ *
  * @since 3.0.0
- * @version 3.0.0
+ * @version 3.4.0
  * @author Wyck codegen
  */
 @NullMarked
 @AsOf("3.0.0")
-@Generated("2026-07-15T18:48:22.494923Z")
+@Generated("2026-09-08T15:00:53.380959400Z")
 public final class Dimensions {
-
-    // From: BuiltinDimensionTypes 
+    /**
+     * From: BuiltinDimensionTypes
+     */
     @AsOf("3.0.0")
     public static final Dimension OVERWORLD = reference("overworld");
+
     @AsOf("3.0.0")
     public static final Dimension NETHER = reference("the_nether");
+
     @AsOf("3.0.0")
     public static final Dimension END = reference("the_end");
+
     @AsOf("3.0.0")
     public static final Dimension OVERWORLD_CAVES = reference("overworld_caves");
 
-    private static Dimension reference(String path) {
-        Dimension keyed = Dimension.reference(ResourceKey.minecraft(path));
-        dev.wyck.keys.KeyChains.DIMENSIONS.append(keyed);
-        return keyed;
+    Dimensions() {
+        throw new UnsupportedOperationException("Not intended for instantiation");
     }
 
-    private Dimensions() {
-        throw new UnsupportedOperationException("Not intended for instantiation");
+    private static Dimension reference(String path) {
+        Dimension keyed = Dimension.reference(ResourceKey.minecraft(path));
+        KeyChains.DIMENSIONS.append(keyed);
+        return keyed;
     }
 }

@@ -1,5 +1,7 @@
 package dev.wyck.codegen;
 
+import com.palantir.javapoet.ClassName;
+
 import java.util.List;
 import java.util.function.Function;
 
@@ -16,20 +18,20 @@ import java.util.function.Function;
  *                     {@code StringRepresentable#getSerializedName()}.
  */
 public record EnumSpec(
-    String outputPackage,
-    String outputClass,
-    Class<? extends Enum<?>> sourceEnum,
-    Function<Enum<?>, String> keyExtractor,
-    String javadoc,
-    String since
+        String outputPackage,
+        String outputSimpleClassName,
+        Class<? extends Enum<?>> sourceEnum,
+        Function<Enum<?>, String> keyExtractor,
+        String javadoc,
+        String since
 ) implements GeneratorSpec {
 
     public EnumSpec(
-        String outputPackage,
-        String outputClass,
-        Class<? extends Enum<?>> sourceEnum,
-        String javadoc,
-        String since
+            String outputPackage,
+            String outputClass,
+            Class<? extends Enum<?>> sourceEnum,
+            String javadoc,
+            String since
     ) {
         this(outputPackage, outputClass, sourceEnum, Generators::enumName, javadoc, since);
     }
@@ -40,23 +42,28 @@ public record EnumSpec(
      * after the closing {@code </p>}.
      */
     public EnumSpec(
-        String outputPackage,
-        String outputClass,
-        Class<? extends Enum<?>> sourceEnum,
-        List<String> javadocLines,
-        String since
+            String outputPackage,
+            String outputClass,
+            Class<? extends Enum<?>> sourceEnum,
+            List<String> javadocLines,
+            String since
     ) {
         this(outputPackage, outputClass, sourceEnum, Generators::enumName, String.join("\n", javadocLines), since);
     }
 
     public EnumSpec(
-        String outputPackage,
-        String outputClass,
-        Class<? extends Enum<?>> sourceEnum,
-        Function<Enum<?>, String> keyExtractor,
-        List<String> javadocLines,
-        String since
+            String outputPackage,
+            String outputClass,
+            Class<? extends Enum<?>> sourceEnum,
+            Function<Enum<?>, String> keyExtractor,
+            List<String> javadocLines,
+            String since
     ) {
         this(outputPackage, outputClass, sourceEnum, keyExtractor, String.join("\n", javadocLines), since);
+    }
+
+    @Override
+    public ClassName outputClass() {
+        return ClassName.get(outputPackage, outputSimpleClassName);
     }
 }

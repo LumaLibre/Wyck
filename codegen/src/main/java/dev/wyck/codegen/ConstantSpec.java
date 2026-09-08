@@ -1,5 +1,6 @@
 package dev.wyck.codegen;
 
+import com.palantir.javapoet.ClassName;
 import net.minecraft.resources.Identifier;
 import org.jspecify.annotations.Nullable;
 
@@ -25,26 +26,26 @@ import java.util.function.Predicate;
  *                       {@code "FLUID"}
  */
 public record ConstantSpec(
-    String outputPackage,
-    String outputClass,
-    Class<?> registryType,
-    Function<Object, Identifier> registryLookup,
-    List<Class<?>> sourceClasses,
-    String registryId,
-    String javadoc,
-    String since,
-    @Nullable Predicate<Field> fieldFilter
-) implements GeneratorSpec {
-
-    public ConstantSpec(
         String outputPackage,
-        String outputClass,
+        String outputSimpleClassName,
         Class<?> registryType,
         Function<Object, Identifier> registryLookup,
         List<Class<?>> sourceClasses,
         String registryId,
         String javadoc,
-        String since
+        String since,
+        @Nullable Predicate<Field> fieldFilter
+) implements GeneratorSpec {
+
+    public ConstantSpec(
+            String outputPackage,
+            String outputClass,
+            Class<?> registryType,
+            Function<Object, Identifier> registryLookup,
+            List<Class<?>> sourceClasses,
+            String registryId,
+            String javadoc,
+            String since
     ) {
         this(outputPackage, outputClass, registryType, registryLookup, sourceClasses, registryId, javadoc, since, null);
     }
@@ -55,15 +56,20 @@ public record ConstantSpec(
      * after the closing {@code </p>}.
      */
     public ConstantSpec(
-        String outputPackage,
-        String outputClass,
-        Class<?> registryType,
-        Function<Object, Identifier> registryLookup,
-        List<Class<?>> sourceClasses,
-        String registryId,
-        List<String> javadocLines,
-        String since
+            String outputPackage,
+            String outputClass,
+            Class<?> registryType,
+            Function<Object, Identifier> registryLookup,
+            List<Class<?>> sourceClasses,
+            String registryId,
+            List<String> javadocLines,
+            String since
     ) {
         this(outputPackage, outputClass, registryType, registryLookup, sourceClasses, registryId, String.join("\n", javadocLines), since, null);
+    }
+
+    @Override
+    public ClassName outputClass() {
+        return ClassName.get(outputPackage, outputSimpleClassName);
     }
 }

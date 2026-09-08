@@ -1,10 +1,11 @@
-//927a924fd3bf4fa9808cba148fea8ff3
 package dev.wyck.level.dimension;
 
 import dev.wyck.annotations.AsOf;
 import dev.wyck.annotations.Generated;
 import dev.wyck.wrapper.KeyedEnumTranslator;
 import dev.wyck.wrapper.WrappedEnumerator;
+import java.lang.Override;
+import java.lang.String;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -14,16 +15,17 @@ import org.jspecify.annotations.NullMarked;
  * Cardinal light type, as it appears in Minecraft.
  * </p>
  *
+ *
  * @since 2.4.0
- * @version 3.0.0
+ * @version 3.4.0
  * @author Wyck codegen
  */
 @NullMarked
 @AsOf("2.4.0")
-@Generated("2026-07-15T18:48:22.499922Z")
+@Generated("2026-09-08T15:00:53.400317300Z")
 public enum CardinalLightType implements WrappedEnumerator<CardinalLightType> {
-
     DEFAULT("default"),
+
     NETHER("nether");
 
     public static final KeyedEnumTranslator<CardinalLightType> TRANSLATOR = KeyedEnumTranslator.byKey(CardinalLightType::getKey, CardinalLightType.values());
@@ -35,19 +37,19 @@ public enum CardinalLightType implements WrappedEnumerator<CardinalLightType> {
         this.key = key;
     }
 
+    @AsOf("2.4.0")
+    @Override
+    public KeyedEnumTranslator<CardinalLightType> translator() {
+        return TRANSLATOR;
+    }
+
     /**
-     * The vanilla name for this Type value.
-     * @return the vanilla key for this enum value
-     * @since 2.4.0
+     *  The vanilla name for this Type
+     *  @return the vanilla key for this enum value
+     *  @since 2.4.0
      */
     @AsOf("2.4.0")
     public String getKey() {
         return this.key;
-    }
-
-    @Override
-    @AsOf("2.4.0")
-    public KeyedEnumTranslator<CardinalLightType> translator() {
-        return TRANSLATOR;
     }
 }

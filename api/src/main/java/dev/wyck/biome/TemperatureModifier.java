@@ -1,10 +1,11 @@
-//48cdd0a1176cf05e672432a17669db8c
 package dev.wyck.biome;
 
 import dev.wyck.annotations.AsOf;
 import dev.wyck.annotations.Generated;
 import dev.wyck.wrapper.KeyedEnumTranslator;
 import dev.wyck.wrapper.WrappedEnumerator;
+import java.lang.Override;
+import java.lang.String;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -16,16 +17,17 @@ import org.jspecify.annotations.NullMarked;
  * Each enum value carries a vanilla key, retrievable via {@link #getKey()}, which the impl module translates to the underlying NMS value.
  * </p>
  *
+ *
  * @since 0.0.1
- * @version 3.0.0
+ * @version 3.4.0
  * @author Wyck codegen
  */
 @NullMarked
 @AsOf("0.0.1")
-@Generated("2026-07-15T18:48:22.501525Z")
+@Generated("2026-09-08T15:00:53.405987500Z")
 public enum TemperatureModifier implements WrappedEnumerator<TemperatureModifier> {
-
     NONE("none"),
+
     FROZEN("frozen");
 
     public static final KeyedEnumTranslator<TemperatureModifier> TRANSLATOR = KeyedEnumTranslator.byKey(TemperatureModifier::getKey, TemperatureModifier.values());
@@ -37,19 +39,19 @@ public enum TemperatureModifier implements WrappedEnumerator<TemperatureModifier
         this.key = key;
     }
 
+    @AsOf("0.0.1")
+    @Override
+    public KeyedEnumTranslator<TemperatureModifier> translator() {
+        return TRANSLATOR;
+    }
+
     /**
-     * The vanilla name for this TemperatureModifier value.
-     * @return the vanilla key for this enum value
-     * @since 0.0.1
+     *  The vanilla name for this TemperatureModifier
+     *  @return the vanilla key for this enum value
+     *  @since 0.0.1
      */
     @AsOf("0.0.1")
     public String getKey() {
         return this.key;
-    }
-
-    @Override
-    @AsOf("0.0.1")
-    public KeyedEnumTranslator<TemperatureModifier> translator() {
-        return TRANSLATOR;
     }
 }
