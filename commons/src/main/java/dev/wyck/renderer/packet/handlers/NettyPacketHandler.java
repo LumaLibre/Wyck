@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -87,7 +88,15 @@ public class NettyPacketHandler implements PacketHandler {
     @Override
     public PacketHandler unregister() {
         ChannelInitializeListenerHolder.removeListener(listenerKey);
-        clearBiomes(); // todo: change?
+
+        for (Player online : Bukkit.getOnlinePlayers()) {
+            Channel channel = channelOf(online);
+            if (channel != null) {
+                ejectChannel(channel);
+            }
+        }
+
+        clearBiomes();
         return this;
     }
 
@@ -113,6 +122,22 @@ public class NettyPacketHandler implements PacketHandler {
                 LOGGER.log(Level.WARNING, "Failed to inject Netty handler", e);
             }
         });
+    }
+
+    @SuppressWarnings("resource")
+    private void ejectChannel(Channel channel) {
+        if (!channel.isOpen()) {
+            return;
+        }
+        try {
+            channel.eventLoop().execute(() -> {
+                ChannelPipeline pipeline = channel.pipeline();
+                if (pipeline.get(handlerName) != null) {
+                    pipeline.remove(handlerName);
+                }
+            });
+        } catch (RejectedExecutionException _) {
+        }
     }
 
     private static @Nullable Channel channelOf(Player player) {
