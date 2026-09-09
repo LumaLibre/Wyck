@@ -11,6 +11,8 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.IdentityHashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @NullMarked
@@ -19,6 +21,8 @@ public final class NmsSnapshotChunkData implements SnapshotChunkData {
 
     private final ChunkLocation location;
     private final LevelChunkSection[] sections;
+
+    private final Map<Holder<net.minecraft.world.level.biome.Biome>, Biome> bukkitBiomes = new IdentityHashMap<>();
 
     private @Nullable Biome center;
 
@@ -36,9 +40,7 @@ public final class NmsSnapshotChunkData implements SnapshotChunkData {
     public Biome centerBiome() {
         Biome c = this.center;
         if (c == null) {
-            Holder<net.minecraft.world.level.biome.Biome> holder =
-                    sections[0].getNoiseBiome(CENTER_NOISE_XZ, 0, CENTER_NOISE_XZ);
-            c = CraftBiome.minecraftHolderToBukkit(holder);
+            c = toBukkit(sections[0].getNoiseBiome(CENTER_NOISE_XZ, 0, CENTER_NOISE_XZ));
             this.center = c;
         }
         return c;
@@ -46,11 +48,12 @@ public final class NmsSnapshotChunkData implements SnapshotChunkData {
 
     @Override
     public Biome biomeAt(int x, int y, int z) {
-        int sectionIdx = y >> 4;
-        LevelChunkSection section = sections[sectionIdx];
-        Holder<net.minecraft.world.level.biome.Biome> holder =
-                section.getNoiseBiome((x & 15) >> 2, (y & 15) >> 2, (z & 15) >> 2);
-        return CraftBiome.minecraftHolderToBukkit(holder);
+        LevelChunkSection section = sections[y >> 4];
+        return toBukkit(section.getNoiseBiome((x & 15) >> 2, (y & 15) >> 2, (z & 15) >> 2));
+    }
+
+    private Biome toBukkit(Holder<net.minecraft.world.level.biome.Biome> holder) {
+        return bukkitBiomes.computeIfAbsent(holder, CraftBiome::minecraftHolderToBukkit);
     }
 
     @Override

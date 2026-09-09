@@ -15,6 +15,7 @@ import io.netty.channel.ChannelPipeline;
 import io.netty.channel.ChannelPromise;
 import io.papermc.paper.network.ChannelInitializeListenerHolder;
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.KeyPattern;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
 import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
@@ -32,7 +33,9 @@ import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -57,14 +60,14 @@ public class NettyPacketHandler implements PacketHandler {
     private final Key listenerKey;
 
     @AsOf("2.1.0")
-    public NettyPacketHandler(String name, VirtualBiomeCollector collector) {
+    public NettyPacketHandler(@KeyPattern.Value String name, VirtualBiomeCollector collector) {
         this.collector = collector;
         this.handlerName = name + "_wyck_handler";
         this.listenerKey = Key.key("wyck", name + "_channel_init");
     }
 
     @AsOf("2.1.0")
-    public NettyPacketHandler(String name) {
+    public NettyPacketHandler(@KeyPattern.Value String name) {
         this(name, new VirtualBiomeCollector());
     }
 
@@ -163,6 +166,8 @@ public class NettyPacketHandler implements PacketHandler {
         private static final @Nullable Field SECTION_POS_FIELD = findFieldByType(ClientboundSectionBlocksUpdatePacket.class, SectionPos.class, "sectionPos");
         private static final @Nullable Field SECTION_POSITIONS_FIELD = findFieldByType(ClientboundSectionBlocksUpdatePacket.class, short[].class, "positions");
         private static final @Nullable Field SECTION_STATES_FIELD = findFieldByType(ClientboundSectionBlocksUpdatePacket.class, BlockState[].class, "states");
+
+        private static final Map<Material, BlockState> MATERIAL_STATES = new ConcurrentHashMap<>();
 
         private final VirtualBiomeCollector collector;
 
@@ -301,7 +306,9 @@ public class NettyPacketHandler implements PacketHandler {
 
         private static @Nullable BlockState materialToState(@Nullable Material material) {
             if (material == null || !material.isBlock()) return null;
-            return ((CraftBlockData) Bukkit.createBlockData(material)).getState();
+            return MATERIAL_STATES.computeIfAbsent(
+                material, key -> ((CraftBlockData) Bukkit.createBlockData(key)).getState()
+            );
         }
     }
 }

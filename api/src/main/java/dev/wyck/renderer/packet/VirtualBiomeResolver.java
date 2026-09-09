@@ -37,4 +37,9 @@ public interface VirtualBiomeResolver {
      */
     @AsOf("3.3.0")
     @Nullable VirtualBiome resolve(SnapshotChunkData chunkData, int localQuartX, int localQuartY, int localQuartZ);
+
+    @AsOf("3.4.0")
+    default boolean positionDependent() {
+        return true;
+    }
 }
