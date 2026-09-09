@@ -62,8 +62,11 @@ public interface RegisteredConstantTranslator<W> {
                 Map<Object, W> map = new IdentityHashMap<>();
                 WyckRegistry frozen = this.registry.get();
                 for (W wrapper : values) {
-                    ResourceKey key = keyExtractor.apply(wrapper);
-                    map.put(Preconditions.checkNotNull(frozen.retrieve(key), "Registry value for %s is null", key), wrapper);
+                    Object value = frozen.retrieve(keyExtractor.apply(wrapper));
+                    if (value == null) {
+                        continue;
+                    }
+                    map.put(value, wrapper);
                 }
                 return map;
             });

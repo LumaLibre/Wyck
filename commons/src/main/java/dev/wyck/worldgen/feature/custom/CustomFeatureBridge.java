@@ -22,6 +22,10 @@ public final class CustomFeatureBridge<C> extends Feature<CustomFeatureBridge.Ho
         this.delegate = delegate;
     }
 
+    public CustomFeature<C> delegate() {
+        return this.delegate;
+    }
+
     private static <C> Codec<Holder<C>> codec(Supplier<C> configSupplier) {
         return MapCodec.unit(() -> new Holder<>(configSupplier.get())).codec();
     }
