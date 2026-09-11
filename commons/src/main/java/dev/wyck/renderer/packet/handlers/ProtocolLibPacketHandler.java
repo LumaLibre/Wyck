@@ -210,13 +210,20 @@ public class ProtocolLibPacketHandler implements PacketHandler {
             if (positions.length != wrappedBlockDatas.length) {
                 return;
             }
+
+            VirtualBiomeCollector.BlockResolver resolver = context.collector.blockResolverFor(
+                player, ChunkLocation.of(sectionPosition.getX(), sectionPosition.getZ()));
+            if (resolver == null) {
+                return;
+            }
+
             boolean modified = false;
             for (int i = 0; i < wrappedBlockDatas.length; i++) {
                 short packedPosition = positions[i];
                 int blockX = (sectionPosition.getX() << 4) + ((packedPosition >> 8) & 15);
                 int blockY = (sectionPosition.getY() << 4) + (packedPosition & 15);
                 int blockZ = (sectionPosition.getZ() << 4) + ((packedPosition >> 4) & 15);
-                VirtualBiome override = context.collector.bestBiomeFor(player, blockX, blockY, blockZ);
+                VirtualBiome override = resolver.resolveAt(blockX, blockY, blockZ);
                 if (override == null || override.blockReplacements().isEmpty()) {
                     continue;
                 }

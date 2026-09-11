@@ -25,21 +25,23 @@ import java.util.function.BiPredicate;
  * The {@link Biome} must exist and be registered, but phony custom biomes are never
  * actually set to any chunks and only exist for packet sending purposes.
  *
- * <p>Three conditions control where this biome applies:
+ * <p>Four conditions control where this biome applies:
  * <ul>
- *   <li>{@link #conditional()} — the inexpensive, biome-independent spatial gate
+ *   <li>{@link #conditional()}: relatively inexpensive, biome-independent spatial gate
  *       ({@code (player, chunkLocation)}). Evaluated <em>before</em> the chunk is decoded, so put
  *       world/permission/region checks here.</li>
- *   <li>{@link #biomeCondition()} — optional, biome-aware refinement
+ *   <li>{@link #biomeCondition()}: optional, biome-aware refinement
  *       ({@code (player, snapshotChunkData)}). Evaluated <em>after</em> decoding, only for chunks
  *       that passed the spatial gate. May be {@code null}, in which case it always passes.</li>
- *   <li>{@link #positionCondition()} — optional, quart-resolution refinement evaluated for every
+ *   <li>{@link #positionCondition()}: optional, quart-resolution refinement evaluated for every
  *       biome cell after the chunk-level conditions pass.</li>
+ *   <li>{@link #wholeChunkCondition()}: optional, names the chunks this biome covers in full
+ *       ({@code (player, chunkLocation)}), letting the renderer skip the cell pass for them.</li>
  * </ul>
  *
  * @author Jsinco
  * @since 0.0.6
- * @version 3.3.0
+ * @version 3.4.0
  */
 @NullMarked
 @AsOf("2.2.0")
@@ -50,6 +52,7 @@ public final class VirtualBiome {
     private final BiPredicate<Player, ChunkLocation> conditional;
     private final @Nullable BiPredicate<Player, SnapshotChunkData> biomeCondition;
     private final @Nullable BiPredicate<Player, BiomePosition> positionCondition;
+    private final @Nullable BiPredicate<Player, ChunkLocation> wholeChunkCondition;
     private final PacketHandler.Priority priority;
 
     /**
@@ -71,11 +74,36 @@ public final class VirtualBiome {
         @Nullable BiPredicate<Player, BiomePosition> positionCondition,
         PacketHandler.Priority priority
     ) {
+        this(biomeResourceKey, blockReplacements, conditional, biomeCondition, positionCondition, null, priority);
+    }
+
+    /**
+     * Creates a virtual biome that can declare whole chunks exempt from its cell pass.
+     * @param biomeResourceKey the biome to render
+     * @param blockReplacements the client-side block replacements
+     * @param conditional the inexpensive chunk-level condition
+     * @param biomeCondition the condition evaluated against decoded chunk data
+     * @param positionCondition the condition evaluated for every biome cell
+     * @param wholeChunkCondition the condition declaring a chunk uniformly covered
+     * @param priority the priority used when multiple biomes match
+     * @since 3.4.0
+     */
+    @AsOf("3.4.0")
+    public VirtualBiome(
+        ResourceKey biomeResourceKey,
+        List<BlockReplacement> blockReplacements,
+        BiPredicate<Player, ChunkLocation> conditional,
+        @Nullable BiPredicate<Player, SnapshotChunkData> biomeCondition,
+        @Nullable BiPredicate<Player, BiomePosition> positionCondition,
+        @Nullable BiPredicate<Player, ChunkLocation> wholeChunkCondition,
+        PacketHandler.Priority priority
+    ) {
         this.biomeResourceKey = biomeResourceKey;
         this.blockReplacements = blockReplacements;
         this.conditional = conditional;
         this.biomeCondition = biomeCondition;
         this.positionCondition = positionCondition;
+        this.wholeChunkCondition = wholeChunkCondition;
         this.priority = priority;
     }
 
@@ -147,6 +175,16 @@ public final class VirtualBiome {
     @AsOf("3.3.0")
     public @Nullable BiPredicate<Player, BiomePosition> positionCondition() {
         return this.positionCondition;
+    }
+
+    /**
+     * Gets the condition declaring that this biome covers a whole chunk.
+     * @return the whole-chunk condition, or null if the cell pass is always required
+     * @since 3.4.0
+     */
+    @AsOf("3.4.0")
+    public @Nullable BiPredicate<Player, ChunkLocation> wholeChunkCondition() {
+        return this.wholeChunkCondition;
     }
 
     /**
@@ -230,6 +268,7 @@ public final class VirtualBiome {
         private BiPredicate<Player, ChunkLocation> conditional = (player, chunkLocation) -> true;
         private @Nullable BiPredicate<Player, SnapshotChunkData> biomeCondition = null;
         private @Nullable BiPredicate<Player, BiomePosition> positionCondition = null;
+        private @Nullable BiPredicate<Player, ChunkLocation> wholeChunkCondition = null;
         private PacketHandler.Priority priority = PacketHandler.Priority.NORMAL;
 
         public Builder() {}
@@ -240,6 +279,7 @@ public final class VirtualBiome {
             this.conditional = other.conditional();
             this.biomeCondition = other.biomeCondition();
             this.positionCondition = other.positionCondition();
+            this.wholeChunkCondition = other.wholeChunkCondition();
             this.priority = other.priority();
         }
 
@@ -309,6 +349,18 @@ public final class VirtualBiome {
             return this;
         }
 
+        /**
+         * Sets the whole-chunk condition.
+         * @param wholeChunkCondition the whole-chunk condition, or null to always resolve per cell
+         * @return this builder
+         * @since 3.4.0
+         */
+        @AsOf("3.4.0")
+        public Builder wholeChunkCondition(@Nullable BiPredicate<Player, ChunkLocation> wholeChunkCondition) {
+            this.wholeChunkCondition = wholeChunkCondition;
+            return this;
+        }
+
         @AsOf("0.0.6")
         public Builder priority(PacketHandler.Priority priority) {
             this.priority = priority;
@@ -318,7 +370,7 @@ public final class VirtualBiome {
         @AsOf("0.0.6")
         public VirtualBiome build() {
             Preconditions.checkNotNull(biomeResourceKey, "biome cannot be null");
-            return new VirtualBiome(biomeResourceKey, blockReplacements, conditional, biomeCondition, positionCondition, priority);
+            return new VirtualBiome(biomeResourceKey, blockReplacements, conditional, biomeCondition, positionCondition, wholeChunkCondition, priority);
         }
     }
 }

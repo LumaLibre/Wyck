@@ -279,13 +279,19 @@ public class NettyPacketHandler implements PacketHandler {
                 BlockState[] states = (BlockState[]) SECTION_STATES_FIELD.get(packet);
                 if (positions == null || states == null || states.length == 0 || positions.length != states.length) return;
 
+                VirtualBiomeCollector.BlockResolver resolver = collector.blockResolverFor(
+                    player, ChunkLocation.of(sectionPos.x(), sectionPos.z()));
+                if (resolver == null) {
+                    return;
+                }
+
                 boolean modified = false;
                 for (int i = 0; i < states.length; i++) {
                     short packedPosition = positions[i];
                     int blockX = sectionPos.relativeToBlockX(packedPosition);
                     int blockY = sectionPos.relativeToBlockY(packedPosition);
                     int blockZ = sectionPos.relativeToBlockZ(packedPosition);
-                    VirtualBiome override = collector.bestBiomeFor(player, blockX, blockY, blockZ);
+                    VirtualBiome override = resolver.resolveAt(blockX, blockY, blockZ);
                     if (override == null || override.blockReplacements().isEmpty()) {
                         continue;
                     }

@@ -184,6 +184,65 @@ public class VirtualBiomeCollector {
         return null;
     }
 
+    // TODO: javadoc
+    @AsOf("3.4.0")
+    public @Nullable BlockResolver blockResolverFor(Player player, ChunkLocation chunkLocation) {
+        VirtualBiome[] candidates = spatialCandidates(player, chunkLocation);
+        if (candidates.length == 0) {
+            return null;
+        }
+        return new BlockResolver(candidates, player, chunkLocation, player.getWorld().getMinHeight() >> 2);
+    }
+
+    // TODO: javadoc
+    @AsOf("3.4.0")
+    public static final class BlockResolver {
+
+        private final VirtualBiome[] candidates;
+        private final Player player;
+        private final ChunkLocation chunkLocation;
+        private final int minQuartY;
+        private final boolean positionDependent;
+
+        private int lastQuartX = Integer.MIN_VALUE;
+        private int lastQuartY;
+        private int lastQuartZ;
+        private @Nullable VirtualBiome lastResolved;
+
+        private BlockResolver(VirtualBiome[] candidates, Player player, ChunkLocation chunkLocation, int minQuartY) {
+            this.candidates = candidates;
+            this.player = player;
+            this.chunkLocation = chunkLocation;
+            this.minQuartY = minQuartY;
+            this.positionDependent = anyPositionDependent(candidates);
+        }
+
+        @AsOf("3.4.0")
+        public @Nullable VirtualBiome resolveAt(int blockX, int blockY, int blockZ) {
+            if (!this.positionDependent) {
+                return this.candidates[0];
+            }
+
+            int quartX = blockX >> 2;
+            int quartY = blockY >> 2;
+            int quartZ = blockZ >> 2;
+            if (quartX == this.lastQuartX && quartY == this.lastQuartY && quartZ == this.lastQuartZ) {
+                return this.lastResolved;
+            }
+
+            BiomePosition position = BiomePosition.fromBlock(
+                this.chunkLocation, this.minQuartY, blockX, blockY, blockZ
+            );
+            VirtualBiome resolved = bestMatching(this.candidates, this.player, position);
+
+            this.lastQuartX = quartX;
+            this.lastQuartY = quartY;
+            this.lastQuartZ = quartZ;
+            this.lastResolved = resolved;
+            return resolved;
+        }
+    }
+
     /**
      * Picks the 'best' custom biome for the given player and chunk location (spatial only).
      * @param player the player
@@ -215,14 +274,23 @@ public class VirtualBiomeCollector {
             return null;
         }
 
+        VirtualBiome top = candidates[0];
+        if (top.biomeCondition() == null && coversWholeChunk(top, player, chunkLocation)) {
+            return new UniformResolver(top);
+        }
+
         if (!anyPositionDependent(candidates)) {
-            if (!anyBiomeDependent(candidates)) {
-                // Priority-sorted, so the winner is fixed for the whole chunk.
-                return new UniformResolver(candidates[0]);
-            }
             return new ChunkWideResolver(candidates, player);
         }
         return new PerCellResolver(candidates, player, chunkLocation, player.getWorld().getMinHeight() >> 2);
+    }
+
+    private static boolean coversWholeChunk(VirtualBiome biome, Player player, ChunkLocation chunkLocation) {
+        if (biome.positionCondition() == null) {
+            return true;
+        }
+        BiPredicate<Player, ChunkLocation> wholeChunk = biome.wholeChunkCondition();
+        return wholeChunk != null && wholeChunk.test(player, chunkLocation);
     }
 
     private VirtualBiome[] spatialCandidates(Player player, ChunkLocation chunkLocation) {
