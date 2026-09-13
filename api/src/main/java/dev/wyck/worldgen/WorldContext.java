@@ -3,9 +3,11 @@ package dev.wyck.worldgen;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.level.dimension.Dimension;
+import dev.wyck.worldgen.chunk.ChunkGenerator;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
 import org.bukkit.World;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.UUID;
@@ -19,6 +21,7 @@ import java.util.UUID;
  * @param seed the world's seed
  * @param minHeight the world's minimum height
  * @param maxHeight the world's maximum height
+ * @param chunkGenerator the world's chunk generator
  * @param dimension the world's dimension
  * @param bukkitName the world's name, obsolete
  * @param environment the world's environment
@@ -35,21 +38,36 @@ public record WorldContext(
     int minHeight,
     int maxHeight,
     Dimension dimension,
+    ChunkGenerator chunkGenerator,
     String bukkitName,
     World.Environment environment
-    // TODO: Vanilla BiomeSource
 ) implements Keyed {
+
+    @ApiStatus.Internal
+    public WorldContext {}
 
     @Override
     public Key key() {
         return this.resourceKey;
     }
 
+    @AsOf("3.4.0")
     public String name() {
         return this.bukkitName;
     }
 
+    @AsOf("3.4.0")
     public UUID uid() {
         return this.uuid;
+    }
+
+    @AsOf("3.4.0")
+    public UUID uniqueId() {
+        return this.uuid;
+    }
+
+    @AsOf("3.4.0")
+    public ChunkGenerator generator() {
+        return this.chunkGenerator;
     }
 }

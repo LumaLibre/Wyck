@@ -5,6 +5,7 @@ import dev.wyck.annotations.AsOf;
 import dev.wyck.keys.ResourceKeyImpl;
 import dev.wyck.level.dimension.Dimension;
 import dev.wyck.worldgen.WorldContext;
+import dev.wyck.worldgen.chunk.ChunkGenerator;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
@@ -106,6 +107,7 @@ public final class PlacementContextImpl<C> implements PlacementContext<C> {
             level.getMinY(),
             level.getMaxY(),
             Dimension.reference(new ResourceKeyImpl(dimensionTypeId)),
+            ChunkGenerator.decode(level.getChunkSource().getGenerator()),
             level.bukkitName,
             level.getWorld().getEnvironment()
         );
