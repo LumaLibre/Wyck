@@ -22,28 +22,18 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.3.0")
-@Generated("2026-09-08T15:00:53.385391500Z")
+@Generated("2026-09-13T05:38:38.750274Z")
 public enum Decoration implements WrappedEnumerator<Decoration> {
     RAW_GENERATION("RAW_GENERATION"),
-
     LAKES("LAKES"),
-
     LOCAL_MODIFICATIONS("LOCAL_MODIFICATIONS"),
-
     UNDERGROUND_STRUCTURES("UNDERGROUND_STRUCTURES"),
-
     SURFACE_STRUCTURES("SURFACE_STRUCTURES"),
-
     STRONGHOLDS("STRONGHOLDS"),
-
     UNDERGROUND_ORES("UNDERGROUND_ORES"),
-
     UNDERGROUND_DECORATION("UNDERGROUND_DECORATION"),
-
     FLUID_SPRINGS("FLUID_SPRINGS"),
-
     VEGETAL_DECORATION("VEGETAL_DECORATION"),
-
     TOP_LAYER_MODIFICATION("TOP_LAYER_MODIFICATION");
 
     public static final KeyedEnumTranslator<Decoration> TRANSLATOR = KeyedEnumTranslator.byKey(Decoration::getKey, Decoration.values());

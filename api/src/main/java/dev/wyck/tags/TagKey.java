@@ -73,6 +73,17 @@ public interface TagKey extends Wrapper {
     }
 
     /**
+     * Creates a biome tag key from its identifier.
+     * @param key the tag identifier
+     * @return a new biome tag key
+     * @since 3.4.0
+     */
+    @AsOf("3.4.0")
+    static TagKey biomes(ResourceKey key) {
+        return of(RegistryId.BIOME, key);
+    }
+
+    /**
      * Creates a tag key from a Bukkit {@link Tag}, resolving against the given registry.
      * @param registry the registry the tag belongs to
      * @param tag the Bukkit tag

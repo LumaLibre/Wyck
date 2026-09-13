@@ -22,10 +22,9 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.4.0")
-@Generated("2026-09-08T15:00:53.400317300Z")
+@Generated("2026-09-13T05:38:38.755845Z")
 public enum CardinalLightType implements WrappedEnumerator<CardinalLightType> {
     DEFAULT("default"),
-
     NETHER("nether");
 
     public static final KeyedEnumTranslator<CardinalLightType> TRANSLATOR = KeyedEnumTranslator.byKey(CardinalLightType::getKey, CardinalLightType.values());

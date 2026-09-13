@@ -3,9 +3,9 @@ package dev.wyck.worldgen.feature.configurations;
 import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.ConstructWireProvider;
-import dev.wyck.keys.ResourceKey;
 import dev.wyck.util.WeightedList;
 import dev.wyck.worldgen.Rotation;
+import dev.wyck.worldgen.structure.templatesystem.StructureTemplate;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
@@ -68,12 +68,12 @@ public interface TemplateFeatureConfiguration extends FeatureConfiguration {
     /**
      * A single template entry: a structure template and the rotations it is allowed to be placed with.
      *
-     * @param template the resource key of the structure template
+     * @param template the structure template
      * @param rotations the rotations this template may be placed with
      * @since 3.0.1
      */
     @AsOf("3.0.1")
-    record TemplateEntry(ResourceKey template, List<Rotation> rotations) {
+    record TemplateEntry(StructureTemplate template, List<Rotation> rotations) {
 
         public TemplateEntry {
             rotations = List.copyOf(rotations);
@@ -81,24 +81,24 @@ public interface TemplateFeatureConfiguration extends FeatureConfiguration {
 
         /**
          * Creates a template entry that allows every rotation.
-         * @param template the resource key of the structure template
+         * @param template the structure template
          * @return a new template entry
          * @since 3.0.1
          */
         @AsOf("3.0.1")
-        public static TemplateEntry of(ResourceKey template) {
+        public static TemplateEntry of(StructureTemplate template) {
             return new TemplateEntry(template, List.of(Rotation.values()));
         }
 
         /**
          * Creates a template entry with the given rotations.
-         * @param template the resource key of the structure template
+         * @param template the structure template
          * @param rotations the rotations this template may be placed with
          * @return a new template entry
          * @since 3.0.1
          */
         @AsOf("3.0.1")
-        public static TemplateEntry of(ResourceKey template, Rotation... rotations) {
+        public static TemplateEntry of(StructureTemplate template, Rotation... rotations) {
             return new TemplateEntry(template, List.of(rotations));
         }
     }

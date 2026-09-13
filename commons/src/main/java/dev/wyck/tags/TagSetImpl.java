@@ -16,6 +16,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -101,6 +102,15 @@ public final class TagSetImpl<T extends Keyed, U> implements TagSet<T> {
 
     @Override
     public TagSet<T> register() {
+        return bind(false);
+    }
+
+    @Override
+    public TagSet<T> append() {
+        return bind(true);
+    }
+
+    private TagSet<T> bind(boolean merge) {
         Preconditions.checkState(resourceKey != null, "cannot register a TagSet without a resourceKey");
         Preconditions.checkState(value.left().isPresent(), "cannot register a TagSet that has no contents to bind to");
 
@@ -108,14 +118,19 @@ public final class TagSetImpl<T extends Keyed, U> implements TagSet<T> {
         net.minecraft.resources.Identifier identifier = resourceKey.identifier();
         net.minecraft.tags.TagKey<U> newTag = net.minecraft.tags.TagKey.create(nms.key(), identifier);
 
-        // snapshot every currently bound tag so we don't wipe them
         Map<net.minecraft.tags.TagKey<U>, List<net.minecraft.core.Holder<U>>> merged = new HashMap<>();
         nms.getTags().forEach(named -> merged.put(named.key(), named.stream().toList()));
 
-        Preconditions.checkArgument(!merged.containsKey(newTag), "tag already exists: " + identifier);
-        merged.put(newTag, this.asHolderSet().stream().toList());
+        List<net.minecraft.core.Holder<U>> bound = merged.get(newTag);
+        if (merge) {
+            Set<net.minecraft.core.Holder<U>> union = new LinkedHashSet<>(bound == null ? List.of() : bound);
+            union.addAll(this.asHolderSet().stream().toList());
+            merged.put(newTag, List.copyOf(union));
+        } else {
+            Preconditions.checkArgument(bound == null, "tag already exists: " + identifier);
+            merged.put(newTag, this.asHolderSet().stream().toList());
+        }
 
-        // rebind the union
         net.minecraft.tags.TagLoader.LoadResult<U> result = new net.minecraft.tags.TagLoader.LoadResult<>(nms.key(), merged);
         nms.prepareTagReload(result).apply();
         return this;

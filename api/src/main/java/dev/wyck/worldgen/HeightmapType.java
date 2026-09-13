@@ -22,18 +22,13 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("3.0.0")
-@Generated("2026-09-08T15:00:53.387479400Z")
+@Generated("2026-09-13T05:38:38.751280Z")
 public enum HeightmapType implements WrappedEnumerator<HeightmapType> {
     WORLD_SURFACE_WG("WORLD_SURFACE_WG"),
-
     WORLD_SURFACE("WORLD_SURFACE"),
-
     OCEAN_FLOOR_WG("OCEAN_FLOOR_WG"),
-
     OCEAN_FLOOR("OCEAN_FLOOR"),
-
     MOTION_BLOCKING("MOTION_BLOCKING"),
-
     MOTION_BLOCKING_NO_LEAVES("MOTION_BLOCKING_NO_LEAVES");
 
     public static final KeyedEnumTranslator<HeightmapType> TRANSLATOR = KeyedEnumTranslator.byKey(HeightmapType::getKey, HeightmapType.values());

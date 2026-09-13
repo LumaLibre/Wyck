@@ -28,6 +28,11 @@ public enum RegistryId {
     LEVEL_STEM("dimension"),
     PARTICLE_TYPE("particle_type"),
     PLACED_FEATURE("worldgen/placed_feature"),
+    PROCESSOR_LIST("worldgen/processor_list"),
+    STRUCTURE("worldgen/structure"),
+    STRUCTURE_SET("worldgen/structure_set"),
+    STRUCTURE_TYPE("worldgen/structure_type"),
+    TEMPLATE_POOL("worldgen/template_pool"),
     TIMELINE("timeline"),
     WORLD_CLOCK("world_clock");
 

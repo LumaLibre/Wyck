@@ -92,7 +92,7 @@ class ParticleDecodeTest {
     }
 
     @Test
-    void packedColoursSurviveTheGettersThatSplitThemIntoFloats() {
+    void packedColorsSurviveTheGettersThatSplitThemIntoFloats() {
         AmbientParticle entityEffect = decode(
             ColorParticleOption.create(net.minecraft.core.particles.ParticleTypes.ENTITY_EFFECT, 0xFF112233), 1.0f);
         assertEquals(0xFF112233, assertInstanceOf(ColorParticle.class, entityEffect.particleData()).color());

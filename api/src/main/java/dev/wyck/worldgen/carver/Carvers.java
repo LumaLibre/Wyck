@@ -21,20 +21,15 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.3.0")
-@Generated("2026-09-08T15:00:53.424153600Z")
+@Generated("2026-09-13T05:38:38.769600Z")
 public final class Carvers {
-    /**
-     * From: Carvers
-     */
+    // From: Carvers
     @AsOf("2.3.0")
     public static final ConfiguredWorldCarver CAVE = reference("cave");
-
     @AsOf("2.3.0")
     public static final ConfiguredWorldCarver CAVE_EXTRA_UNDERGROUND = reference("cave_extra_underground");
-
     @AsOf("2.3.0")
     public static final ConfiguredWorldCarver CANYON = reference("canyon");
-
     @AsOf("2.3.0")
     public static final ConfiguredWorldCarver NETHER_CAVE = reference("nether_cave");
 

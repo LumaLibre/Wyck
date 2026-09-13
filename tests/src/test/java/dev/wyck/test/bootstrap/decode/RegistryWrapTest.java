@@ -11,6 +11,10 @@ import dev.wyck.worldgen.function.DensityFunction;
 import dev.wyck.worldgen.noise.Noise;
 import dev.wyck.worldgen.noise.types.NoiseGeneratorSettings;
 import dev.wyck.worldgen.placement.PlacedFeature;
+import dev.wyck.worldgen.structure.templatesystem.ProcessorList;
+import dev.wyck.worldgen.structure.Structure;
+import dev.wyck.worldgen.structure.StructureSet;
+import dev.wyck.worldgen.structure.pools.TemplatePool;
 import dev.wyck.worldgen.synth.NoiseParameters;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,7 +33,8 @@ class RegistryWrapTest {
     void everyReferenceFactoryHasAMatchingWrapMethod() throws ReflectiveOperationException {
         for (Class<?> type : List.of(
             Biome.class, Dimension.class, Timeline.class, Noise.class, ConfiguredWorldCarver.class,
-            DensityFunction.class, NoiseParameters.class, ConfiguredFeature.class, PlacedFeature.class
+            DensityFunction.class, NoiseParameters.class, ConfiguredFeature.class, PlacedFeature.class,
+            Structure.class, StructureSet.class, ProcessorList.class, TemplatePool.class
         )) {
             assertNotNull(type.getDeclaredMethod("reference", ResourceKey.class));
             assertNotNull(type.getDeclaredMethod("wrap"));
@@ -47,6 +52,9 @@ class RegistryWrapTest {
         assertInstanceOf(ConfiguredFeature.class, ConfiguredFeature.reference(ResourceKey.minecraft("seagrass_short")).wrap());
         assertInstanceOf(PlacedFeature.Composed.class, PlacedFeature.reference(ResourceKey.minecraft("seagrass_warm")).wrap());
         assertInstanceOf(DensityFunction.class, DensityFunction.reference(ResourceKey.minecraft("overworld/continents")).wrap());
+        assertEquals(ResourceKey.minecraft("igloo"), Structure.reference(ResourceKey.minecraft("igloo")).wrap().key());
+        assertEquals(ResourceKey.minecraft("igloos"), StructureSet.reference(ResourceKey.minecraft("igloos")).wrap().key());
+        assertEquals(ResourceKey.minecraft("village/plains/town_centers"), TemplatePool.reference(ResourceKey.minecraft("village/plains/town_centers")).wrap().key());
     }
 
     @Test

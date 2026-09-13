@@ -24,10 +24,9 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("0.0.1")
-@Generated("2026-09-08T15:00:53.405987500Z")
+@Generated("2026-09-13T05:38:38.758433Z")
 public enum TemperatureModifier implements WrappedEnumerator<TemperatureModifier> {
     NONE("none"),
-
     FROZEN("frozen");
 
     public static final KeyedEnumTranslator<TemperatureModifier> TRANSLATOR = KeyedEnumTranslator.byKey(TemperatureModifier::getKey, TemperatureModifier.values());

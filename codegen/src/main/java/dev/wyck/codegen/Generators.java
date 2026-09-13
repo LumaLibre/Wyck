@@ -46,6 +46,8 @@ import net.minecraft.world.level.levelgen.carver.WorldCarver;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.placement.CaveSurface;
 import net.minecraft.world.level.levelgen.structure.BuiltinStructureSets;
+import net.minecraft.world.level.levelgen.structure.BuiltinStructures;
+import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import org.jspecify.annotations.Nullable;
@@ -76,6 +78,8 @@ public final class Generators {
             featureTypes(),
             worldCarverTypes(),
             activities(),
+            structureTypes(),
+            structures(),
             structureSets(),
             carvers(),
             environmentAttributeOperationIds(),
@@ -391,10 +395,39 @@ public final class Generators {
         );
     }
 
+    private static GeneratorSpec structureTypes() {
+        return new ConstantSpec(
+                "dev.wyck.worldgen.structure",
+                "StructureType",
+                StructureType.class,
+                Generators::structureTypeLocation,
+                List.of(
+                        StructureType.class
+                ),
+                "STRUCTURE_TYPE",
+                "Typed references to the built-in structure types, the algorithms in the {@code STRUCTURE_TYPE} registry.",
+                "3.4.0"
+        );
+    }
+
+    private static GeneratorSpec structures() {
+        return new ReferenceSpec(
+                ClassName.get("dev.wyck.worldgen.structure", "Structures"),
+                ClassName.get("dev.wyck.worldgen.structure", "Structure"),
+                ResourceKey.class,
+                Generators::keyLocation,
+                List.of(
+                        BuiltinStructures.class
+                ),
+                "Typed references that point to vanilla's built-in structures.",
+                "3.4.0"
+        );
+    }
+
     private static GeneratorSpec structureSets() {
         return new ReferenceSpec(
                 ClassName.get("dev.wyck.worldgen.structure", "StructureSets"),
-                ClassName.get("dev.wyck.keys", "ResourceKey"),
+                ClassName.get("dev.wyck.worldgen.structure", "StructureSet"),
                 ResourceKey.class,
                 Generators::keyLocation,
                 List.of(
@@ -467,6 +500,13 @@ public final class Generators {
     private static @Nullable Identifier featureLocation(Object entry) {
         if (entry instanceof Feature<?> feature) {
             return BuiltInRegistries.FEATURE.getKey(feature);
+        }
+        return null;
+    }
+
+    private static @Nullable Identifier structureTypeLocation(Object entry) {
+        if (entry instanceof StructureType<?> type) {
+            return BuiltInRegistries.STRUCTURE_TYPE.getKey(type);
         }
         return null;
     }

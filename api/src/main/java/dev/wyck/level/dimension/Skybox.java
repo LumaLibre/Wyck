@@ -22,12 +22,10 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.4.0")
-@Generated("2026-09-08T15:00:53.397339Z")
+@Generated("2026-09-13T05:38:38.754511Z")
 public enum Skybox implements WrappedEnumerator<Skybox> {
     NONE("none"),
-
     OVERWORLD("overworld"),
-
     END("end");
 
     public static final KeyedEnumTranslator<Skybox> TRANSLATOR = KeyedEnumTranslator.byKey(Skybox::getKey, Skybox.values());

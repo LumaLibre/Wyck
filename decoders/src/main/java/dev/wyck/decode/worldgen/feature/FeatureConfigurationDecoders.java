@@ -44,6 +44,8 @@ import dev.wyck.worldgen.feature.configurations.TreeConfiguration;
 import dev.wyck.worldgen.feature.configurations.TemplateFeatureConfiguration;
 import dev.wyck.worldgen.feature.configurations.GeodeConfiguration;
 import dev.wyck.worldgen.feature.configurations.FossilFeatureConfiguration;
+import dev.wyck.worldgen.structure.templatesystem.ProcessorList;
+import dev.wyck.worldgen.structure.templatesystem.StructureTemplate;
 import dev.wyck.worldgen.feature.configurations.HugeFungusConfiguration;
 import dev.wyck.worldgen.feature.configurations.geode.GeodeBlockSettings;
 import dev.wyck.worldgen.feature.configurations.geode.GeodeCrackSettings;
@@ -357,7 +359,7 @@ public final class FeatureConfigurationDecoders extends DecoderRegistry<FeatureC
                 configuration(configured);
             return TemplateFeatureConfiguration.of(Decoders.weighted(config.templates(), entry ->
                 new TemplateFeatureConfiguration.TemplateEntry(
-                    Decoders.key(entry.template()),
+                    StructureTemplate.of(Decoders.key(entry.template())),
                     entry.rotations().stream().map(Rotation.TRANSLATOR::fromNms).toList()
                 )
             ));
@@ -388,10 +390,10 @@ public final class FeatureConfigurationDecoders extends DecoderRegistry<FeatureC
             var config = (net.minecraft.world.level.levelgen.feature.FossilFeatureConfiguration)
                 configuration(configured);
             return FossilFeatureConfiguration.of(
-                config.fossilStructures.stream().map(Decoders::key).toList(),
-                config.overlayStructures.stream().map(Decoders::key).toList(),
-                Decoders.referenceKey(config.fossilProcessors),
-                Decoders.referenceKey(config.overlayProcessors),
+                config.fossilStructures.stream().map(Decoders::key).map(StructureTemplate::of).toList(),
+                config.overlayStructures.stream().map(Decoders::key).map(StructureTemplate::of).toList(),
+                ProcessorList.decode(config.fossilProcessors),
+                ProcessorList.decode(config.overlayProcessors),
                 config.maxEmptyCornersAllowed
             );
         });

@@ -24,16 +24,12 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.3.0")
-@Generated("2026-09-08T15:00:53.410115700Z")
+@Generated("2026-09-13T05:38:38.759740Z")
 public enum FluidType implements WrappedConstant<FluidType> {
     EMPTY("empty"),
-
     FLOWING_WATER("flowing_water"),
-
     WATER("water"),
-
     FLOWING_LAVA("flowing_lava"),
-
     LAVA("lava");
 
     public static final RegisteredConstantTranslator<FluidType> TRANSLATOR = RegisteredConstantTranslator.of(RegistryId.FLUID, FluidType::resourceKey, FluidType.values());

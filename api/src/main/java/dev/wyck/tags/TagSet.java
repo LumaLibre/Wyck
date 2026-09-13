@@ -2,6 +2,7 @@ package dev.wyck.tags;
 
 import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
+import dev.wyck.biome.Biome;
 import dev.wyck.factory.ConstructWireProvider;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.level.dimension.timeline.Timeline;
@@ -34,6 +35,17 @@ import java.util.Set;
 @NullMarked
 @AsOf("3.1.0")
 public interface TagSet<T extends Keyed> extends Wrapper, Keyed, Registerable<TagSet<T>> {
+
+    /**
+     * Binds this tag set under its own key, which nothing else may have claimed.
+     * @return this tag set
+     * @throws IllegalArgumentException if a tag is already bound under this key; use {@link #append()}
+     *         to add to one instead
+     * @since 3.1.0
+     */
+    @Override
+    @AsOf("3.1.0")
+    TagSet<T> register();
 
     /**
      * The key of the tag set.
@@ -79,6 +91,33 @@ public interface TagSet<T extends Keyed> extends Wrapper, Keyed, Registerable<Ta
      */
     @AsOf("3.1.0")
     <U> U asTagKey();
+
+    /**
+     * Binds this tag set's elements into the tag already bound under its key, keeping everything
+     * that tag already held, and creating the tag if nothing is bound under that key yet.
+     *
+     * <p>This is the additive counterpart to {@link #register()}, which insists on a key nothing has
+     * claimed. Use it to add to a tag Minecraft or another plugin owns — putting a custom biome into
+     * {@code minecraft:has_structure/village_plains} so villages generate there, for instance.</p>
+     *
+     * <p>A tag the registry has handed out before is rebound in place, so whatever holds it already
+     * sees the new members straight away: a structure loaded from a data pack resolved its biome tag
+     * through the registry, so appending to that tag retargets the structure in a world that is
+     * already running, with nothing reloaded. A tag that exists only because Wyck created it, and
+     * that nothing has looked up, is replaced rather than rebound — re-read it after appending
+     * instead of holding the set across calls.</p>
+     *
+     * <p>Additive membership in a {@code minecraft:} tag is not an override: it only ever changes
+     * behavior where the elements it adds are present, so adding your own biomes to a vanilla biome
+     * tag cannot affect a world those biomes do not occur in.</p>
+     *
+     * @return this tag set
+     * @throws IllegalStateException if this tag set has no resource key, or references a named tag
+     *         instead of holding explicit elements
+     * @since 3.4.0
+     */
+    @AsOf("3.4.0")
+    TagSet<T> append();
 
     /**
      * Checks if this is a block tag set.
@@ -169,6 +208,74 @@ public interface TagSet<T extends Keyed> extends Wrapper, Keyed, Registerable<Ta
     }
 
     /**
+     * Creates a tag set of explicit biomes.
+     * @param resourceKey the resource key of the tag set
+     * @param biomes the biomes
+     * @return a new biome tag set
+     * @since 3.4.0
+     */
+    @AsOf("3.4.0")
+    static TagSet<Biome> ofBiomes(@Nullable ResourceKey resourceKey, Biome... biomes) {
+        return of(resourceKey, RegistryId.BIOME, Set.of(biomes));
+    }
+
+    /**
+     * Creates a tag set of explicit biomes.
+     * @param resourceKey the resource key of the tag set
+     * @param biomes the biomes
+     * @return a new biome tag set
+     * @since 3.4.0
+     */
+    @AsOf("3.4.0")
+    static TagSet<Biome> ofBiomes(@Nullable ResourceKey resourceKey, Set<Biome> biomes) {
+        return of(resourceKey, RegistryId.BIOME, biomes);
+    }
+
+    /**
+     * Creates a tag set of explicit biomes.
+     * @param biomes the biomes
+     * @return a new biome tag set
+     * @since 3.4.0
+     */
+    @AsOf("3.4.0")
+    static TagSet<Biome> ofBiomes(Set<Biome> biomes) {
+        return of(null, RegistryId.BIOME, biomes);
+    }
+
+    /**
+     * Creates a tag set of explicit biomes.
+     * @param biomes the biomes
+     * @return a new biome tag set
+     * @since 3.4.0
+     */
+    @AsOf("3.4.0")
+    static TagSet<Biome> ofBiomes(Biome... biomes) {
+        return of(null, RegistryId.BIOME, Set.of(biomes));
+    }
+
+    /**
+     * Creates a tag set referencing a named biome tag.
+     * @param tag the biome tag key
+     * @return a new biome tag set
+     * @since 3.4.0
+     */
+    @AsOf("3.4.0")
+    static TagSet<Biome> ofBiomeTag(TagKey tag) {
+        return ofTag(tag);
+    }
+
+    /**
+     * Creates a tag set referencing a named biome tag.
+     * @param key the biome tag identifier
+     * @return a new biome tag set
+     * @since 3.4.0
+     */
+    @AsOf("3.4.0")
+    static TagSet<Biome> ofBiomeTag(ResourceKey key) {
+        return ofTag(TagKey.biomes(key));
+    }
+
+    /**
      * Creates a tag set referencing the given named tag.
      * @param tag the tag key
      * @return a new tag set
@@ -203,6 +310,17 @@ public interface TagSet<T extends Keyed> extends Wrapper, Keyed, Registerable<Ta
         return of(null, RegistryId.TIMELINE, value);
     }
 
+    /**
+     * Creates a biome tag set from an {@link Either} of explicit biomes or a named tag.
+     * @param value either the explicit biomes, or a named biome tag
+     * @return a new biome tag set
+     * @since 3.4.0
+     */
+    @AsOf("3.4.0")
+    static TagSet<Biome> biomes(Either<Set<Biome>, TagKey> value) {
+        return of(null, RegistryId.BIOME, value);
+    }
+
     @ApiStatus.Internal
     @SuppressWarnings("unchecked")
     static <T extends Keyed> TagSet<T> of(@Nullable ResourceKey resourceKey, RegistryId registry, Set<T> elements) {
@@ -228,6 +346,20 @@ public interface TagSet<T extends Keyed> extends Wrapper, Keyed, Registerable<Ta
     static TagSet<Material> decodeBlocks(Object minecraftHolderSet) {
         record Holder() {
             static final Decoder<TagSet<Material>> DECODER = Decoder.create("dev.wyck.decode.tags.BlockTagSetDecoder");
+        }
+        return Holder.DECODER.decode(minecraftHolderSet);
+    }
+
+    /**
+     * Reads a Minecraft biome holder set, preserving a named tag when present.
+     * @param minecraftHolderSet the Minecraft biome holder set
+     * @return the decoded biome tag set
+     * @since 3.4.0
+     */
+    @AsOf("3.4.0")
+    static TagSet<Biome> decodeBiomes(Object minecraftHolderSet) {
+        record Holder() {
+            static final Decoder<TagSet<Biome>> DECODER = Decoder.create("dev.wyck.decode.tags.BiomeTagSetDecoder");
         }
         return Holder.DECODER.decode(minecraftHolderSet);
     }
@@ -271,6 +403,16 @@ public interface TagSet<T extends Keyed> extends Wrapper, Keyed, Registerable<Ta
     @AsOf("3.2.0")
     static Builder<Timeline> timelines() {
         return new Builder<>(RegistryId.TIMELINE);
+    }
+
+    /**
+     * Creates a new builder for biome tag sets.
+     * @return a new builder
+     * @since 3.4.0
+     */
+    @AsOf("3.4.0")
+    static Builder<Biome> biomes() {
+        return new Builder<>(RegistryId.BIOME);
     }
 
     /**

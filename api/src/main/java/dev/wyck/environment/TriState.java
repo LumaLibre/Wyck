@@ -22,12 +22,10 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.4.1")
-@Generated("2026-09-08T15:00:53.395321500Z")
+@Generated("2026-09-13T05:38:38.753694Z")
 public enum TriState implements WrappedEnumerator<TriState> {
     TRUE("TRUE"),
-
     FALSE("FALSE"),
-
     DEFAULT("DEFAULT");
 
     public static final KeyedEnumTranslator<TriState> TRANSLATOR = KeyedEnumTranslator.byKey(TriState::getKey, TriState.values());

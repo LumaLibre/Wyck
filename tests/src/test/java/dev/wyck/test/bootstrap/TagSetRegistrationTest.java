@@ -21,6 +21,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -95,6 +96,75 @@ class TagSetRegistrationTest {
         tag.register();
 
         assertEquals(nmsTag("wyck:key_tag"), tag.<TagKey<Block>>asTagKey());
+    }
+
+    @Test
+    void appendAddsToATagInTheMinecraftNamespaceWithoutDroppingItsMembers() {
+        // bootstrap binds vanilla's tag keys but leaves them empty -- real contents arrive with the
+        // data packs -- so the members that have to survive the append are seeded here
+        TagSet.ofBlocks(ResourceKey.of("minecraft:mineable/pickaxe"), Material.STONE).append();
+        Set<Block> before = contents("minecraft:mineable/pickaxe");
+        assertTrue(before.contains(Blocks.STONE));
+
+        TagSet.ofBlocks(ResourceKey.of("minecraft:mineable/pickaxe"), Material.DEEPSLATE).append();
+
+        Set<Block> after = contents("minecraft:mineable/pickaxe");
+        assertTrue(after.containsAll(before), "append dropped members the tag already had");
+        assertTrue(after.contains(Blocks.DEEPSLATE), "append did not add the new member");
+    }
+
+    @Test
+    void appendRebindsAVanillaSetInPlace() {
+        // the payoff: a tag Minecraft has handed out lives in the registry's frozenTags, and
+        // prepareTagReload rebinds that very HolderSet.Named rather than replacing it. So a value
+        // holding the tag already -- a loaded structure's biomes, for instance -- sees the addition
+        // with no reload and nothing re-resolved.
+        HolderSet.Named<Block> handedOut = boundTag("minecraft:mineable/pickaxe");
+
+        TagSet.ofBlocks(ResourceKey.of("minecraft:mineable/pickaxe"), Material.GOLD_ORE).append();
+
+        assertSame(handedOut, boundTag("minecraft:mineable/pickaxe"), "append replaced the set instead of rebinding it");
+        assertTrue(handedOut.stream().map(Holder::value).anyMatch(block -> block == Blocks.GOLD_ORE),
+                "the set handed out earlier did not see the appended member");
+    }
+
+    @Test
+    void appendCreatesTheTagWhenNothingIsBound() {
+        TagSet.ofBlocks(ResourceKey.of("wyck:appended_from_nothing"), Material.STONE).append();
+
+        assertEquals(Set.of(Blocks.STONE), contents("wyck:appended_from_nothing"));
+    }
+
+    @Test
+    void appendDoesNotDuplicateExistingMembers() {
+        TagSet.ofBlocks(ResourceKey.of("wyck:no_duplicates"), Material.STONE).register();
+        TagSet.ofBlocks(ResourceKey.of("wyck:no_duplicates"), Material.STONE, Material.DIRT).append();
+
+        assertEquals(2, boundTag("wyck:no_duplicates").size());
+        assertEquals(Set.of(Blocks.STONE, Blocks.DIRT), contents("wyck:no_duplicates"));
+    }
+
+    @Test
+    void appendLeavesOtherTagsBound() {
+        Set<TagKey<Block>> before = boundTagKeys();
+
+        TagSet.ofBlocks(ResourceKey.of("minecraft:dirt"), Material.STONE).append();
+
+        Set<TagKey<Block>> dropped = new HashSet<>(before);
+        dropped.removeAll(boundTagKeys());
+        assertEquals(Set.of(), dropped, "append() unbound tags that were already there");
+    }
+
+    @Test
+    void appendingATagReferenceIsRejected() {
+        TagSet<Material> reference = TagSet.ofBlockTag(ResourceKey.of("minecraft:dirt"));
+
+        assertThrows(IllegalStateException.class, reference::append);
+    }
+
+    @Test
+    void appendingWithoutAResourceKeyIsRejected() {
+        assertThrows(IllegalStateException.class, () -> TagSet.ofBlocks(Material.STONE).append());
     }
 
     @Test

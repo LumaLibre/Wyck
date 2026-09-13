@@ -22,34 +22,21 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("3.2.0")
-@Generated("2026-09-08T15:00:53.426148Z")
+@Generated("2026-09-13T05:38:38.770215Z")
 public enum AttributeOperation implements WrappedEnumerator<AttributeOperation> {
     OVERRIDE("override"),
-
     ALPHA_BLEND("alpha_blend"),
-
     ADD("add"),
-
     SUBTRACT("subtract"),
-
     MULTIPLY("multiply"),
-
     BLEND_TO_GRAY("blend_to_gray"),
-
     MINIMUM("minimum"),
-
     MAXIMUM("maximum"),
-
     AND("and"),
-
     NAND("nand"),
-
     OR("or"),
-
     NOR("nor"),
-
     XOR("xor"),
-
     XNOR("xnor");
 
     public static final KeyedEnumTranslator<AttributeOperation> TRANSLATOR = KeyedEnumTranslator.byKey(AttributeOperation::getKey, AttributeOperation.values());

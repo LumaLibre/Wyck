@@ -4,9 +4,9 @@ import dev.wyck.annotations.AsOf;
 import dev.wyck.biome.Biome;
 import dev.wyck.biome.Biomes;
 import dev.wyck.factory.ConstructWireProvider;
-import dev.wyck.keys.ResourceKey;
 import dev.wyck.worldgen.chunk.ChunkGenerator;
 import dev.wyck.worldgen.placement.PlacedFeature;
+import dev.wyck.worldgen.structure.StructureSet;
 import dev.wyck.worldgen.structure.StructureSets;
 import dev.wyck.wrapper.Wrapper;
 import dev.wyck.wrapper.decode.Decoder;
@@ -173,14 +173,13 @@ public interface FlatLevelGeneratorSettings extends Wrapper {
     List<PlacedFeature> lakes();
 
     /**
-     * Keys of structures to generate.
-     * @apiNote This field may change at any time when the structure API is introduced.
-     * @return the keys of structures to generate
+     * The structure sets to generate, replacing the registry's full set when present.
+     * @return the structure sets to generate
      * @since 3.0.0
      */
     @AsOf("3.0.0")
     @ApiStatus.Experimental
-    Optional<Set<ResourceKey>> structures();
+    Optional<Set<StructureSet>> structures();
 
     /**
      * Converts this object back to a builder.
@@ -200,12 +199,12 @@ public interface FlatLevelGeneratorSettings extends Wrapper {
      * @param biome the biome
      * @param fallbackBiome the fallback biome
      * @param lakes the lakes to generate
-     * @param structures the keys of structures to generate
+     * @param structures the structure sets to generate
      * @return a new FlatLevelGeneratorSettings
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    static FlatLevelGeneratorSettings of(List<FlatLayerInfo> layers, boolean decoration, boolean addLakes, Biome biome, Biome fallbackBiome, List<PlacedFeature> lakes, @Nullable Set<ResourceKey> structures) {
+    static FlatLevelGeneratorSettings of(List<FlatLayerInfo> layers, boolean decoration, boolean addLakes, Biome biome, Biome fallbackBiome, List<PlacedFeature> lakes, @Nullable Set<StructureSet> structures) {
         record Holder() {
             static final ConstructWireProvider<FlatLevelGeneratorSettings> WIRE = ConstructWireProvider.construct("dev.wyck.worldgen.chunk.flat.FlatLevelGeneratorSettingsImpl");
         }
@@ -250,7 +249,7 @@ public interface FlatLevelGeneratorSettings extends Wrapper {
         private Biome biome = Biomes.PLAINS;
         private Biome fallbackBiome = Biomes.PLAINS;
         private List<PlacedFeature> lakes = new ArrayList<>();
-        private @Nullable Set<ResourceKey> structures = null;
+        private @Nullable Set<StructureSet> structures = null;
 
         public Builder() {}
 
@@ -336,13 +335,13 @@ public interface FlatLevelGeneratorSettings extends Wrapper {
         }
 
         /**
-         * Sets the keys of structures to generate.
-         * @param structures the keys of structures to generate
+         * Sets the structure sets to generate.
+         * @param structures the structure sets to generate
          * @return this builder
          * @since 3.0.0
          */
         @AsOf("3.0.0")
-        public Builder structures(Set<ResourceKey> structures) {
+        public Builder structures(Set<StructureSet> structures) {
             this.structures = structures;
             return this;
         }
@@ -375,13 +374,13 @@ public interface FlatLevelGeneratorSettings extends Wrapper {
         }
 
         /**
-         * Adds a structure to the list of structures.
-         * @param structure the structure to add
+         * Adds structure sets to the structure sets to generate.
+         * @param structure the structure sets to add
          * @return this builder
          * @since 3.0.0
          */
         @AsOf("3.0.0")
-        public Builder structure(ResourceKey... structure) {
+        public Builder structure(StructureSet... structure) {
             if (this.structures == null) {
                 this.structures = new HashSet<>();
             }

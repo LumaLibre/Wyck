@@ -2,9 +2,9 @@ package dev.wyck.worldgen.chunk.flat;
 
 import com.google.common.base.Suppliers;
 import dev.wyck.biome.Biome;
-import dev.wyck.keys.ResourceKey;
 import dev.wyck.util.BootstrapSafeMinecraftRegistries;
 import dev.wyck.worldgen.placement.PlacedFeature;
+import dev.wyck.worldgen.structure.StructureSet;
 import dev.wyck.wrapper.Wrapper;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -24,19 +24,18 @@ public record FlatLevelGeneratorSettingsImpl(
     @Override Biome biome,
     @Override Biome fallbackBiome,
     @Override List<PlacedFeature> lakes,
-    @Override Optional<Set<ResourceKey>> structures
+    @Override Optional<Set<StructureSet>> structures
 ) implements FlatLevelGeneratorSettings {
 
     @Override
     public Object toMinecraft() {
-        net.minecraft.core.HolderGetter<net.minecraft.world.level.levelgen.structure.StructureSet> structureSets = BootstrapSafeMinecraftRegistries.getter(net.minecraft.core.registries.Registries.STRUCTURE_SET);
         net.minecraft.core.Registry<net.minecraft.world.level.biome.Biome> biomes =
             BootstrapSafeMinecraftRegistries.mappedRegistry(net.minecraft.core.registries.Registries.BIOME);
 
         Optional<net.minecraft.core.HolderSet<net.minecraft.world.level.levelgen.structure.StructureSet>> structuresHolder = this.structures.map(structs ->
-            net.minecraft.core.HolderSet.direct(structs.stream().map(it ->
-                structureSets.getOrThrow(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.STRUCTURE_SET, it.identifier()))
-            ).toList())
+            net.minecraft.core.HolderSet.direct(structs.stream()
+                .map(it -> it.<net.minecraft.core.Holder<net.minecraft.world.level.levelgen.structure.StructureSet>>asHandle())
+                .toList())
         );
 
         net.minecraft.core.Holder<net.minecraft.world.level.biome.Biome> biomeHolder = biomes

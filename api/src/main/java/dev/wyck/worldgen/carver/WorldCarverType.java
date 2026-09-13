@@ -24,12 +24,10 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.3.0")
-@Generated("2026-09-08T15:00:53.416573700Z")
+@Generated("2026-09-13T05:38:38.764684Z")
 public enum WorldCarverType implements WrappedConstant<WorldCarverType> {
     CAVE("cave"),
-
     NETHER_CAVE("nether_cave"),
-
     CANYON("canyon");
 
     public static final RegisteredConstantTranslator<WorldCarverType> TRANSLATOR = RegisteredConstantTranslator.of(RegistryId.CARVER, WorldCarverType::resourceKey, WorldCarverType.values());

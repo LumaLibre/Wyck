@@ -22,20 +22,15 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("3.0.0")
-@Generated("2026-09-08T15:00:53.380959400Z")
+@Generated("2026-09-13T05:38:38.749036Z")
 public final class Dimensions {
-    /**
-     * From: BuiltinDimensionTypes
-     */
+    // From: BuiltinDimensionTypes
     @AsOf("3.0.0")
     public static final Dimension OVERWORLD = reference("overworld");
-
     @AsOf("3.0.0")
     public static final Dimension NETHER = reference("the_nether");
-
     @AsOf("3.0.0")
     public static final Dimension END = reference("the_end");
-
     @AsOf("3.0.0")
     public static final Dimension OVERWORLD_CAVES = reference("overworld_caves");
 

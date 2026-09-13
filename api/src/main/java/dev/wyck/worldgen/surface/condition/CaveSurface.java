@@ -24,10 +24,9 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("3.0.0")
-@Generated("2026-09-08T15:00:53.390394300Z")
+@Generated("2026-09-13T05:38:38.751992Z")
 public enum CaveSurface implements WrappedEnumerator<CaveSurface> {
     CEILING("CEILING"),
-
     FLOOR("FLOOR");
 
     public static final KeyedEnumTranslator<CaveSurface> TRANSLATOR = KeyedEnumTranslator.byKey(CaveSurface::getKey, CaveSurface.values());

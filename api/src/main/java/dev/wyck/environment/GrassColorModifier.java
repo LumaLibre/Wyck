@@ -24,12 +24,10 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("0.0.24")
-@Generated("2026-09-08T15:00:53.403990300Z")
+@Generated("2026-09-13T05:38:38.757824Z")
 public enum GrassColorModifier implements WrappedEnumerator<GrassColorModifier> {
     NONE("none"),
-
     DARK_FOREST("dark_forest"),
-
     SWAMP("swamp");
 
     public static final KeyedEnumTranslator<GrassColorModifier> TRANSLATOR = KeyedEnumTranslator.byKey(GrassColorModifier::getKey, GrassColorModifier.values());

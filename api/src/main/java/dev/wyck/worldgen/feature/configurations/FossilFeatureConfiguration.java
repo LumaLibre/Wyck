@@ -3,7 +3,8 @@ package dev.wyck.worldgen.feature.configurations;
 import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.ConstructWireProvider;
-import dev.wyck.keys.ResourceKey;
+import dev.wyck.worldgen.structure.templatesystem.ProcessorList;
+import dev.wyck.worldgen.structure.templatesystem.StructureTemplate;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -25,40 +26,36 @@ import java.util.List;
 public interface FossilFeatureConfiguration extends FeatureConfiguration {
 
     /**
-     * Gets the list of resource keys for fossil structures.
-     * @apiNote This value will change when Wyck wraps structures.
-     * @return A list of resource keys representing fossil structures.
+     * Gets the templates the fossil skeleton is stamped from.
+     * @return the fossil templates
      * @since 3.3.0
      */
     @AsOf("3.3.0")
-    List<ResourceKey> fossilStructures();
+    List<StructureTemplate> fossilStructures();
 
     /**
-     * Gets the list of resource keys for overlay structures.
-     * @apiNote This value will change when Wyck wraps structures.
-     * @return A list of resource keys representing overlay structures.
+     * Gets the templates layered over the fossil, one per fossil template.
+     * @return the overlay templates
      * @since 3.3.0
      */
     @AsOf("3.3.0")
-    List<ResourceKey> overlayStructures();
+    List<StructureTemplate> overlayStructures();
 
     /**
-     * Gets the resource key for fossil processors.
-     * @apiNote This value will change when Wyck wraps structure processors.
-     * @return A resource key representing fossil processors.
+     * Gets the processors the fossil templates are run through.
+     * @return the fossil processor list
      * @since 3.3.0
      */
     @AsOf("3.3.0")
-    ResourceKey fossilProcessors();
+    ProcessorList fossilProcessors();
 
     /**
-     * Gets the resource key for overlay processors.
-     * @apiNote This value will change when Wyck wraps structure processors.
-     * @return A resource key representing overlay processors.
+     * Gets the processors the overlay templates are run through.
+     * @return the overlay processor list
      * @since 3.3.0
      */
     @AsOf("3.3.0")
-    ResourceKey overlayProcessors();
+    ProcessorList overlayProcessors();
 
     /**
      * Gets the maximum number of empty corners allowed in the fossil feature configuration.
@@ -80,16 +77,16 @@ public interface FossilFeatureConfiguration extends FeatureConfiguration {
 
     /**
      * Creates a new instance of {@link FossilFeatureConfiguration} with the specified parameters.
-     * @param fossilStructures A list of resource keys for fossil structures.
-     * @param overlayStructures A list of resource keys for overlay structures.
-     * @param fossilProcessors A resource key for fossil processors.
-     * @param overlayProcessors A resource key for overlay processors.
+     * @param fossilStructures the templates the fossil skeleton is stamped from.
+     * @param overlayStructures the templates layered over the fossil.
+     * @param fossilProcessors the processors the fossil templates are run through.
+     * @param overlayProcessors the processors the overlay templates are run through.
      * @param maxEmptyCornersAllowed The maximum number of empty corners allowed.
      * @return A new instance of {@link FossilFeatureConfiguration}.
      * @since 3.3.0
      */
     @AsOf("3.3.0")
-    static FossilFeatureConfiguration of(List<ResourceKey> fossilStructures, List<ResourceKey> overlayStructures, ResourceKey fossilProcessors, ResourceKey overlayProcessors, int maxEmptyCornersAllowed) {
+    static FossilFeatureConfiguration of(List<StructureTemplate> fossilStructures, List<StructureTemplate> overlayStructures, ProcessorList fossilProcessors, ProcessorList overlayProcessors, int maxEmptyCornersAllowed) {
         record Holder() {
             static final ConstructWireProvider<FossilFeatureConfiguration> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.feature.configurations.FossilFeatureConfigurationImpl");
         }
@@ -114,10 +111,10 @@ public interface FossilFeatureConfiguration extends FeatureConfiguration {
      */
     @AsOf("3.3.0")
     final class Builder {
-        private List<ResourceKey> fossilStructures = new ArrayList<>();
-        private List<ResourceKey> overlayStructures = new ArrayList<>();
-        private @Nullable ResourceKey fossilProcessors;
-        private @Nullable ResourceKey overlayProcessors;
+        private List<StructureTemplate> fossilStructures = new ArrayList<>();
+        private List<StructureTemplate> overlayStructures = new ArrayList<>();
+        private @Nullable ProcessorList fossilProcessors;
+        private @Nullable ProcessorList overlayProcessors;
         private int maxEmptyCornersAllowed;
 
         public Builder() {}
@@ -137,7 +134,7 @@ public interface FossilFeatureConfiguration extends FeatureConfiguration {
          * @since 3.3.0
          */
         @AsOf("3.3.0")
-        public Builder fossilStructures(List<ResourceKey> fossilStructures) {
+        public Builder fossilStructures(List<StructureTemplate> fossilStructures) {
             this.fossilStructures = fossilStructures;
             return this;
         }
@@ -149,7 +146,7 @@ public interface FossilFeatureConfiguration extends FeatureConfiguration {
          * @since 3.3.0
          */
         @AsOf("3.3.0")
-        public Builder overlayStructures(List<ResourceKey> overlayStructures) {
+        public Builder overlayStructures(List<StructureTemplate> overlayStructures) {
             this.overlayStructures = overlayStructures;
             return this;
         }
@@ -161,7 +158,7 @@ public interface FossilFeatureConfiguration extends FeatureConfiguration {
          * @since 3.3.0
          */
         @AsOf("3.3.0")
-        public Builder fossilProcessors(ResourceKey fossilProcessors) {
+        public Builder fossilProcessors(ProcessorList fossilProcessors) {
             this.fossilProcessors = fossilProcessors;
             return this;
         }
@@ -173,7 +170,7 @@ public interface FossilFeatureConfiguration extends FeatureConfiguration {
          * @since 3.3.0
          */
         @AsOf("3.3.0")
-        public Builder overlayProcessors(ResourceKey overlayProcessors) {
+        public Builder overlayProcessors(ProcessorList overlayProcessors) {
             this.overlayProcessors = overlayProcessors;
             return this;
         }
@@ -199,7 +196,7 @@ public interface FossilFeatureConfiguration extends FeatureConfiguration {
          * @since 3.3.0
          */
         @AsOf("3.3.0")
-        public Builder fossilStructure(ResourceKey fossilStructure) {
+        public Builder fossilStructure(StructureTemplate fossilStructure) {
             this.fossilStructures.add(fossilStructure);
             return this;
         }
@@ -211,7 +208,7 @@ public interface FossilFeatureConfiguration extends FeatureConfiguration {
          * @since 3.3.0
          */
         @AsOf("3.3.0")
-        public Builder overlayStructure(ResourceKey overlayStructure) {
+        public Builder overlayStructure(StructureTemplate overlayStructure) {
             this.overlayStructures.add(overlayStructure);
             return this;
         }

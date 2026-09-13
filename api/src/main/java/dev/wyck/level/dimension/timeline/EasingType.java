@@ -23,104 +23,71 @@ import org.jspecify.annotations.NullMarked;
 @ApiStatus.NonExtendable
 @NullMarked
 @AsOf("3.2.0")
-@Generated("2026-09-08T15:00:53.429645300Z")
+@Generated("2026-09-13T05:38:38.771964Z")
 public interface EasingType {
-    /**
-     * From: EasingType
-     */
+    // From: EasingType
     @AsOf("3.2.0")
     Easing CONSTANT = reference("constant");
-
     @AsOf("3.2.0")
     Easing LINEAR = reference("linear");
-
     @AsOf("3.2.0")
     Easing IN_BACK = reference("in_back");
-
     @AsOf("3.2.0")
     Easing IN_BOUNCE = reference("in_bounce");
-
     @AsOf("3.2.0")
     Easing IN_CIRC = reference("in_circ");
-
     @AsOf("3.2.0")
     Easing IN_CUBIC = reference("in_cubic");
-
     @AsOf("3.2.0")
     Easing IN_ELASTIC = reference("in_elastic");
-
     @AsOf("3.2.0")
     Easing IN_EXPO = reference("in_expo");
-
     @AsOf("3.2.0")
     Easing IN_QUAD = reference("in_quad");
-
     @AsOf("3.2.0")
     Easing IN_QUART = reference("in_quart");
-
     @AsOf("3.2.0")
     Easing IN_QUINT = reference("in_quint");
-
     @AsOf("3.2.0")
     Easing IN_SINE = reference("in_sine");
-
     @AsOf("3.2.0")
     Easing IN_OUT_BACK = reference("in_out_back");
-
     @AsOf("3.2.0")
     Easing IN_OUT_BOUNCE = reference("in_out_bounce");
-
     @AsOf("3.2.0")
     Easing IN_OUT_CIRC = reference("in_out_circ");
-
     @AsOf("3.2.0")
     Easing IN_OUT_CUBIC = reference("in_out_cubic");
-
     @AsOf("3.2.0")
     Easing IN_OUT_ELASTIC = reference("in_out_elastic");
-
     @AsOf("3.2.0")
     Easing IN_OUT_EXPO = reference("in_out_expo");
-
     @AsOf("3.2.0")
     Easing IN_OUT_QUAD = reference("in_out_quad");
-
     @AsOf("3.2.0")
     Easing IN_OUT_QUART = reference("in_out_quart");
-
     @AsOf("3.2.0")
     Easing IN_OUT_QUINT = reference("in_out_quint");
-
     @AsOf("3.2.0")
     Easing IN_OUT_SINE = reference("in_out_sine");
-
     @AsOf("3.2.0")
     Easing OUT_BACK = reference("out_back");
-
     @AsOf("3.2.0")
     Easing OUT_BOUNCE = reference("out_bounce");
-
     @AsOf("3.2.0")
     Easing OUT_CIRC = reference("out_circ");
-
     @AsOf("3.2.0")
     Easing OUT_CUBIC = reference("out_cubic");
-
     @AsOf("3.2.0")
     Easing OUT_ELASTIC = reference("out_elastic");
-
     @AsOf("3.2.0")
     Easing OUT_EXPO = reference("out_expo");
-
     @AsOf("3.2.0")
     Easing OUT_QUAD = reference("out_quad");
-
     @AsOf("3.2.0")
     Easing OUT_QUART = reference("out_quart");
-
     @AsOf("3.2.0")
     Easing OUT_QUINT = reference("out_quint");
-
     @AsOf("3.2.0")
     Easing OUT_SINE = reference("out_sine");
 

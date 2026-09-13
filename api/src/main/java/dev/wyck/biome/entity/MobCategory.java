@@ -22,22 +22,15 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.3.0")
-@Generated("2026-09-08T15:00:53.408082100Z")
+@Generated("2026-09-13T05:38:38.759131Z")
 public enum MobCategory implements WrappedEnumerator<MobCategory> {
     MONSTER("monster"),
-
     CREATURE("creature"),
-
     AMBIENT("ambient"),
-
     AXOLOTLS("axolotls"),
-
     UNDERGROUND_WATER_CREATURE("underground_water_creature"),
-
     WATER_CREATURE("water_creature"),
-
     WATER_AMBIENT("water_ambient"),
-
     MISC("misc");
 
     public static final KeyedEnumTranslator<MobCategory> TRANSLATOR = KeyedEnumTranslator.byKey(MobCategory::getKey, MobCategory.values());

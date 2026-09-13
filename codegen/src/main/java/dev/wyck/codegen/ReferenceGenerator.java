@@ -47,10 +47,23 @@ public final class ReferenceGenerator {
     );
     private static final Pattern AS_OF_RE = Pattern.compile("@AsOf\\((.*)\\)");
 
+    // matches: an enum constant entry: NAME, NAME("key"), NAME(...);
+    private static final Pattern CONSTANT_ENTRY = Pattern.compile("^[A-Z][A-Z0-9_]*\\s*(?:\\(.*\\))?\\s*[,;]$");
+
+    // matches: a constant field declaration, with or without interface-implied modifiers
+    private static final Pattern CONSTANT_FIELD = Pattern.compile(
+            "^(?:public\\s+static\\s+final\\s+)?[\\w.<>\\[\\]]+\\s+[A-Za-z_$][\\w$]*\\s*="
+    );
+
+    // JavaPoet can only attach javadoc to a field, so each ReferenceSpec section header is emitted as
+    // javadoc and rewritten into a line comment by tighten
+    private static final Pattern SECTION_JAVADOC = Pattern.compile(
+            "(?m)^([ \\t]*)/\\*\\*\\n[ \\t]*\\* (From: [^\\n]+)\\n[ \\t]*\\*/"
+    );
+
     static void main(String[] args) throws Exception {
         String outputRoot = args[0];
         String version = args[1];
-        Path outputRootPath = Path.of(outputRoot);
         try {
             // necessary inits
             SharedConstants.tryDetectVersion();
@@ -70,7 +83,8 @@ public final class ReferenceGenerator {
                 JavaFile javaFile = JavaFile.builder(spec.outputClass().packageName(), typeSpec)
                         .indent("    ")
                         .build();
-                javaFile.writeTo(outputRootPath);
+                Files.createDirectories(outputPath.getParent());
+                Files.writeString(outputPath, tighten(javaFile.toString()));
                 System.out.println("generated " + outputPath);
             }
         } catch (Throwable throwable) {
@@ -78,6 +92,40 @@ public final class ReferenceGenerator {
             System.exit(1);
         }
 
+    }
+
+    private static String tighten(String source) {
+        List<String> lines = SECTION_JAVADOC.matcher(source).replaceAll("$1// $2").lines().toList();
+        StringBuilder tightened = new StringBuilder();
+        for (int i = 0; i < lines.size(); i++) {
+            String line = lines.get(i);
+            if (line.isBlank() && startsConstant(lines, i + 1)) {
+                continue;
+            }
+            tightened.append(line).append('\n');
+        }
+        return tightened.toString();
+    }
+
+    private static boolean startsConstant(List<String> lines, int index) {
+        if (index >= lines.size()) {
+            return false;
+        }
+        String first = lines.get(index).strip();
+        if (CONSTANT_ENTRY.matcher(first).find()) {
+            return true;
+        }
+        if (!first.startsWith("@AsOf(")) {
+            return false;
+        }
+        for (int i = index + 1; i < lines.size(); i++) {
+            String line = lines.get(i).strip();
+            if (line.startsWith("@")) {
+                continue;
+            }
+            return CONSTANT_ENTRY.matcher(line).find() || CONSTANT_FIELD.matcher(line).find();
+        }
+        return false;
     }
 
     private static Map<String, String> readExistingVersions(Path outputPath) throws Exception {

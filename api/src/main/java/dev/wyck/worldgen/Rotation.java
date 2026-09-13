@@ -22,14 +22,11 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("3.0.1")
-@Generated("2026-09-08T15:00:53.392389900Z")
+@Generated("2026-09-13T05:38:38.752888Z")
 public enum Rotation implements WrappedEnumerator<Rotation> {
     NONE("NONE"),
-
     CLOCKWISE_90("CLOCKWISE_90"),
-
     CLOCKWISE_180("CLOCKWISE_180"),
-
     COUNTERCLOCKWISE_90("COUNTERCLOCKWISE_90");
 
     public static final KeyedEnumTranslator<Rotation> TRANSLATOR = KeyedEnumTranslator.byKey(Rotation::getKey, Rotation.values());

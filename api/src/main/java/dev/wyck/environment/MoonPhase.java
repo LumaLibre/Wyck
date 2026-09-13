@@ -23,22 +23,15 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("1.1.0")
-@Generated("2026-09-08T15:00:53.402784900Z")
+@Generated("2026-09-13T05:38:38.757053Z")
 public enum MoonPhase implements WrappedEnumerator<MoonPhase> {
     FULL_MOON("full_moon"),
-
     WANING_GIBBOUS("waning_gibbous"),
-
     THIRD_QUARTER("third_quarter"),
-
     WANING_CRESCENT("waning_crescent"),
-
     NEW_MOON("new_moon"),
-
     WAXING_CRESCENT("waxing_crescent"),
-
     FIRST_QUARTER("first_quarter"),
-
     WAXING_GIBBOUS("waxing_gibbous");
 
     public static final KeyedEnumTranslator<MoonPhase> TRANSLATOR = KeyedEnumTranslator.byKey(MoonPhase::getKey, MoonPhase.values());
