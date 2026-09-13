@@ -7,7 +7,7 @@ sidebar:
 
 :::note
 
-[`BiomeGenerationSettings`](/worldgen/biome-generation-settings) and subsequently all worldgen api from Wyck is not compatible
+[`BiomeGenerationSettings`](/worldgen/biomes/biome-generation-settings/) and subsequently all worldgen api from Wyck is not compatible
 with [`PacketHandler`](/renderers/packet-handler)s, you have to physically set your biomes in the world for them to modify world generation!
 
 :::
@@ -25,8 +25,8 @@ terrain generation is inherently tied to biomes themselves, although you may reu
 
 A biome's generation is described by three kinds of components, which Wyck wraps separately:
 
-* [**Carvers**](/worldgen/carvers) cut caves, canyons, and ravines into already-generated terrain.
-* [**Configured features**](/worldgen/configured-features) describe *what* to generate, such as an ore vein or a tree, by pairing a feature with its configuration.
-* [**Placed features**](/worldgen/placed-features) wrap a configured feature with placement rules that decide *where* and *how often* it generates.
+* [**Carvers**](/worldgen/biomes/carvers/) cut caves, canyons, and ravines into already-generated terrain.
+* [**Configured features**](/worldgen/biomes/configured-features/) describe *what* to generate, such as an ore vein or a tree, by pairing a feature with its configuration.
+* [**Placed features**](/worldgen/biomes/placed-features/) wrap a configured feature with placement rules that decide *where* and *how often* it generates.
 
-These come together in [**biome generation settings**](/worldgen/biome-generation-settings), which is attached to a custom biome.
+These come together in [**biome generation settings**](/worldgen/biomes/biome-generation-settings/), which is attached to a custom biome.

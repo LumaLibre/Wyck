@@ -1,0 +1,59 @@
+---
+title: Processors
+description: Learn how processor lists change the blocks of a structure template as it's placed.
+---
+
+import CodeBlock from "@/components/CodeBlock.astro";
+import SourceLink from "@/components/SourceLink.astro";
+
+A <SourceLink path="worldgen/structure/templatesystem/ProcessorList.java">ProcessorList</SourceLink> is a list of
+<SourceLink path="worldgen/structure/templatesystem/processor/StructureProcessor.java">StructureProcessor</SourceLink>s
+that every block of a template passes through as it is placed.
+
+## Processor Lists
+
+A processor list is either a reference to a registered list or a list you create. `ProcessorList.EMPTY` runs no processors.
+
+<CodeBlock
+    lang="java"
+    filename="ExamplePlugin.java"
+    code={`import dev.wyck.keys.ResourceKey;
+import dev.wyck.worldgen.structure.templatesystem.ProcessorList;
+import dev.wyck.worldgen.structure.templatesystem.processor.StructureProcessor;
+
+// A vanilla list
+ProcessorList mossy = ProcessorList.reference(ResourceKey.minecraft("mossify_10_percent"));
+
+// A list used only by one element, no registration needed
+ProcessorList aged = ProcessorList.of(StructureProcessor.blockAge(0.4F));
+
+// A named list shared between elements
+ProcessorList.builder()
+    .resourceKey(ResourceKey.of("wyck", "weathered"))
+    .processor(StructureProcessor.blockAge(0.4F))
+    .processor(StructureProcessor.blockRot(0.9F))
+    .build()
+    .register();`}
+/>
+
+## Processor Rules
+
+A <SourceLink path="worldgen/structure/templatesystem/processor/ProcessorRule.java">ProcessorRule</SourceLink> replaces a
+template block with `outputState` when all of its tests pass.
+
+<CodeBlock
+    lang="java"
+    filename="ExamplePlugin.java"
+    code={`import dev.wyck.worldgen.ruletest.RuleTest;
+import dev.wyck.worldgen.structure.templatesystem.processor.ProcessorRule;
+import dev.wyck.worldgen.structure.templatesystem.processor.StructureProcessor;
+import org.bukkit.Material;
+
+StructureProcessor mossify = StructureProcessor.rule(
+    ProcessorRule.builder(RuleTest.randomBlockMatch(Material.COBBLESTONE, 0.1F), Material.MOSSY_COBBLESTONE.createBlockData())
+        .build(),
+    ProcessorRule.builder(RuleTest.blockMatch(Material.GLASS_PANE), Material.AIR.createBlockData())
+        .locationPredicate(RuleTest.blockMatch(Material.WATER))
+        .build()
+);`}
+/>

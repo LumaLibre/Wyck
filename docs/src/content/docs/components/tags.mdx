@@ -97,3 +97,26 @@ TagSet<Material> tag = TagSet.blocks()
     .register(); // Use #build() instead if you don't want to register it!`
     }
 />
+
+## Adding to an Existing Tag
+
+<SourceLink path="tags/TagSet.java">append()</SourceLink> adds a named set of elements to the tag already registered under
+that key, keeping the tag's existing entries. If no tag exists under the key, it creates one.
+
+Anything already using the tag sees the new entries, including structures in worlds that are already loaded.
+
+<CodeBlock
+    lang="java"
+    filename="Examples.java"
+    code={
+`import dev.wyck.biome.Biome;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.tags.TagSet;
+
+TagSet.ofBiomes(
+    ResourceKey.of("minecraft", "has_structure/village_plains"),
+    Biome.reference(ResourceKey.of("wyck", "example"))
+).append();`
+    }
+/>
+
