@@ -8,6 +8,7 @@ import dev.wyck.renderer.packet.VirtualBiomeCollector;
 import dev.wyck.renderer.packet.VirtualBiomeResolver;
 import dev.wyck.renderer.packet.data.BlockReplacement;
 import dev.wyck.renderer.packet.data.VirtualBiome;
+import dev.wyck.util.internal.InternalReflectUtil;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -187,7 +188,6 @@ public class NettyPacketHandler implements PacketHandler {
 
         private static final Logger LOGGER = Logger.getLogger(NettyChannelHandler.class.getName());
 
-        private static final @Nullable Field BLOCK_UPDATE_STATE_FIELD = findFieldByType(ClientboundBlockUpdatePacket.class, BlockState.class, "blockState");
         private static final @Nullable Field SECTION_POS_FIELD = findFieldByType(ClientboundSectionBlocksUpdatePacket.class, SectionPos.class, "sectionPos");
         private static final @Nullable Field SECTION_POSITIONS_FIELD = findFieldByType(ClientboundSectionBlocksUpdatePacket.class, short[].class, "positions");
         private static final @Nullable Field SECTION_STATES_FIELD = findFieldByType(ClientboundSectionBlocksUpdatePacket.class, BlockState[].class, "states");
@@ -204,23 +204,27 @@ public class NettyPacketHandler implements PacketHandler {
 
         @Override
         public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
+            // The server can broadcast one packet instance to several players, so every rewrite
+            // below returns a copy for this player instead of touching the packet it was given.
+            Object outbound = msg;
             try {
                 if (player == null) {
                     player = resolvePlayer(ctx.channel());
                 }
                 if (player != null) {
                     if (msg instanceof ClientboundLevelChunkWithLightPacket chunkPacket) {
-                        handleChunkPacket(player, chunkPacket);
+                        outbound = handleChunkPacket(player, chunkPacket);
                     } else if (msg instanceof ClientboundBlockUpdatePacket blockPacket) {
-                        handleBlockUpdate(player, blockPacket);
+                        outbound = handleBlockUpdate(player, blockPacket);
                     } else if (msg instanceof ClientboundSectionBlocksUpdatePacket sectionPacket) {
-                        handleSectionUpdate(player, sectionPacket);
+                        outbound = handleSectionUpdate(player, sectionPacket);
                     }
                 }
             } catch (Throwable t) {
                 LOGGER.log(Level.WARNING, "Failed to process outbound packet", t);
+                outbound = msg;
             }
-            super.write(ctx, msg, promise);
+            super.write(ctx, outbound, promise);
         }
 
         private static @Nullable Player resolvePlayer(Channel channel) {
@@ -233,25 +237,24 @@ public class NettyPacketHandler implements PacketHandler {
             return null;
         }
 
-        private void handleChunkPacket(Player player, ClientboundLevelChunkWithLightPacket packet) {
+        private Object handleChunkPacket(Player player, ClientboundLevelChunkWithLightPacket packet) {
             ChunkLocation loc = ChunkLocation.of(packet.getX(), packet.getZ());
 
             VirtualBiomeResolver resolver = collector.resolverFor(player, loc);
-            if (resolver == null) return;
+            if (resolver == null) return packet;
 
             int sectionCount = (player.getWorld().getMaxHeight() - player.getWorld().getMinHeight()) >> 4;
-            NativeChunkPacketHandler.instance().modifyChunkBiomes(packet.getChunkData(), loc, resolver, sectionCount);
+            Object rewritten = NativeChunkPacketHandler.instance().rewriteChunkPacket(packet, loc, resolver, sectionCount);
+            return rewritten != null ? rewritten : packet;
         }
 
-        private void handleBlockUpdate(Player player, ClientboundBlockUpdatePacket packet) {
-            if (BLOCK_UPDATE_STATE_FIELD == null) return;
-
+        private Object handleBlockUpdate(Player player, ClientboundBlockUpdatePacket packet) {
             BlockPos pos = packet.getPos();
             VirtualBiome override = collector.bestBiomeFor(player, pos.getX(), pos.getY(), pos.getZ());
-            if (override == null) return;
+            if (override == null) return packet;
 
             List<BlockReplacement> replacements = override.blockReplacements();
-            if (replacements.isEmpty()) return;
+            if (replacements.isEmpty()) return packet;
 
             BlockState state = packet.getBlockState();
             Material currentMat = state.getBukkitMaterial();
@@ -259,33 +262,29 @@ public class NettyPacketHandler implements PacketHandler {
             for (BlockReplacement r : replacements) {
                 if (currentMat == r.originalBlock()) {
                     BlockState replaced = materialToState(r.replacementBlock());
-                    if (replaced == null) return;
-                    try {
-                        BLOCK_UPDATE_STATE_FIELD.set(packet, replaced);
-                    } catch (IllegalAccessException e) {
-                        LOGGER.log(Level.WARNING, "Failed to rewrite block update", e);
-                    }
-                    return;
+                    return replaced != null ? new ClientboundBlockUpdatePacket(pos, replaced) : packet;
                 }
             }
+            return packet;
         }
 
-        private void handleSectionUpdate(Player player, ClientboundSectionBlocksUpdatePacket packet) {
-            if (SECTION_POS_FIELD == null || SECTION_POSITIONS_FIELD == null || SECTION_STATES_FIELD == null) return;
+        private Object handleSectionUpdate(Player player, ClientboundSectionBlocksUpdatePacket packet) {
+            if (SECTION_POS_FIELD == null || SECTION_POSITIONS_FIELD == null || SECTION_STATES_FIELD == null) return packet;
 
             try {
                 SectionPos sectionPos = (SectionPos) SECTION_POS_FIELD.get(packet);
                 short[] positions = (short[]) SECTION_POSITIONS_FIELD.get(packet);
                 BlockState[] states = (BlockState[]) SECTION_STATES_FIELD.get(packet);
-                if (positions == null || states == null || states.length == 0 || positions.length != states.length) return;
+                if (positions == null || states == null || states.length == 0 || positions.length != states.length) return packet;
 
                 VirtualBiomeCollector.BlockResolver resolver = collector.blockResolverFor(
                     player, ChunkLocation.of(sectionPos.x(), sectionPos.z()));
                 if (resolver == null) {
-                    return;
+                    return packet;
                 }
 
-                boolean modified = false;
+                // copied on first change, since the array belongs to a packet other players may share
+                BlockState @Nullable [] rewritten = null;
                 for (int i = 0; i < states.length; i++) {
                     short packedPosition = positions[i];
                     int blockX = sectionPos.relativeToBlockX(packedPosition);
@@ -300,19 +299,25 @@ public class NettyPacketHandler implements PacketHandler {
                         if (mat == r.originalBlock()) {
                             BlockState replaced = materialToState(r.replacementBlock());
                             if (replaced != null) {
-                                states[i] = replaced;
-                                modified = true;
+                                if (rewritten == null) {
+                                    rewritten = states.clone();
+                                }
+                                rewritten[i] = replaced;
                             }
                             break;
                         }
                     }
                 }
 
-                if (modified) {
-                    SECTION_STATES_FIELD.set(packet, states);
+                if (rewritten == null) {
+                    return packet;
                 }
+                ClientboundSectionBlocksUpdatePacket copy = InternalReflectUtil.shallowCopy(packet);
+                SECTION_STATES_FIELD.set(copy, rewritten);
+                return copy;
             } catch (IllegalAccessException e) {
                 LOGGER.log(Level.WARNING, "Failed to rewrite section block update", e);
+                return packet;
             }
         }
 

@@ -8,6 +8,7 @@ import dev.wyck.renderer.packet.data.BlockReplacement;
 import dev.wyck.renderer.packet.data.SnapshotChunkData;
 import dev.wyck.renderer.packet.data.VirtualBiome;
 import dev.wyck.renderer.packet.handlers.NativeChunkPacketHandler;
+import dev.wyck.util.internal.InternalReflectUtil;
 import dev.wyck.v1_21_11.renderer.packet.data.NmsSnapshotChunkData;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -15,6 +16,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.game.ClientboundLevelChunkPacketData;
+import net.minecraft.network.protocol.game.ClientboundLevelChunkWithLightPacket;
 import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -42,6 +44,7 @@ public final class NmsNativeChunkPacketHandler implements NativeChunkPacketHandl
     private static final int BIOME_CELLS_PER_SECTION = CHUNK_SECTIONS * CHUNK_SECTIONS * CHUNK_SECTIONS;
 
     private static final Field CHUNK_BUFFER_FIELD = resolveChunkBufferField();
+    private static final Field CHUNK_DATA_FIELD = InternalReflectUtil.field(ClientboundLevelChunkWithLightPacket.class, "chunkData");
 
     private static volatile @Nullable PaletteCache paletteCache;
 
@@ -49,6 +52,32 @@ public final class NmsNativeChunkPacketHandler implements NativeChunkPacketHandl
     public void modifyChunkBiomes(Object chunkDataObj, ChunkLocation chunkLocation, VirtualBiomeResolver resolver, int sectionCount) {
         ClientboundLevelChunkPacketData chunkData = (ClientboundLevelChunkPacketData) chunkDataObj;
 
+        byte[] rewritten = rewriteSections(chunkData, chunkLocation, resolver, sectionCount);
+        if (rewritten != null) {
+            writeChunkBuffer(chunkData, rewritten);
+        }
+    }
+
+    @Override
+    public @Nullable Object rewriteChunkPacket(Object packetObj, ChunkLocation chunkLocation, VirtualBiomeResolver resolver, int sectionCount) {
+        ClientboundLevelChunkWithLightPacket packet = (ClientboundLevelChunkWithLightPacket) packetObj;
+
+        byte[] rewritten = rewriteSections(packet.getChunkData(), chunkLocation, resolver, sectionCount);
+        if (rewritten == null) {
+            return null;
+        }
+
+        // Only the section buffer varies per player. Heightmaps, block entities and light stay
+        // shared with the original, which other recipients may still be encoding.
+        ClientboundLevelChunkPacketData chunkData = InternalReflectUtil.shallowCopy(packet.getChunkData());
+        writeChunkBuffer(chunkData, rewritten);
+
+        ClientboundLevelChunkWithLightPacket copy = InternalReflectUtil.shallowCopy(packet);
+        InternalReflectUtil.set(CHUNK_DATA_FIELD, copy, chunkData);
+        return copy;
+    }
+
+    private static byte @Nullable [] rewriteSections(ClientboundLevelChunkPacketData chunkData, ChunkLocation chunkLocation, VirtualBiomeResolver resolver, int sectionCount) {
         LevelChunkSection[] sections = extractChunkSections(chunkData, sectionCount);
         SnapshotChunkData snapshot = new NmsSnapshotChunkData(chunkLocation, sections);
 
@@ -56,11 +85,7 @@ public final class NmsNativeChunkPacketHandler implements NativeChunkPacketHandl
             ? applyPerCell(sections, snapshot, resolver)
             : applyChunkWide(sections, snapshot, resolver);
 
-        if (!modified) {
-            return;
-        }
-
-        writeChunkBuffer(chunkData, serializeChunkSections(sections));
+        return modified ? serializeChunkSections(sections) : null;
     }
 
     private static boolean applyChunkWide(LevelChunkSection[] sections, SnapshotChunkData snapshot, VirtualBiomeResolver resolver) {

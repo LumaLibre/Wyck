@@ -18,7 +18,7 @@ import dev.wyck.renderer.packet.VirtualBiomeCollector;
 import dev.wyck.renderer.packet.VirtualBiomeResolver;
 import dev.wyck.renderer.packet.data.BlockReplacement;
 import dev.wyck.renderer.packet.data.VirtualBiome;
-import net.minecraft.network.protocol.game.ClientboundLevelChunkPacketData;
+import dev.wyck.util.internal.InternalReflectUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.ApiStatus;
@@ -137,9 +137,13 @@ public class ProtocolLibPacketHandler implements PacketHandler {
             }
 
             int sectionCount = (player.getWorld().getMaxHeight() - player.getWorld().getMinHeight()) >> 4;
-            ClientboundLevelChunkPacketData chunkData = packet.getSpecificModifier(ClientboundLevelChunkPacketData.class).read(0);
 
-            NativeChunkPacketHandler.instance().modifyChunkBiomes(chunkData, chunkLocation, resolver, sectionCount);
+            // The server can hand one packet instance to several players, so the rewrite goes into
+            // a copy for this player and the original stays as it was for everyone else.
+            Object rewritten = NativeChunkPacketHandler.instance().rewriteChunkPacket(packet.getHandle(), chunkLocation, resolver, sectionCount);
+            if (rewritten != null) {
+                event.setPacket(PacketContainer.fromPacket(rewritten));
+            }
         }
     }
 
@@ -180,7 +184,10 @@ public class ProtocolLibPacketHandler implements PacketHandler {
             for (BlockReplacement replacement : blockReplacements) {
                 if (wrappedBlockData.getType() == replacement.originalBlock()) {
                     wrappedBlockData.setType(replacement.replacementBlock());
-                    packet.getBlockData().write(0, wrappedBlockData);
+                    // vary a copy: the same packet may be on its way to other players
+                    PacketContainer copy = PacketContainer.fromPacket(InternalReflectUtil.shallowCopy(packet.getHandle()));
+                    copy.getBlockData().write(0, wrappedBlockData);
+                    event.setPacket(copy);
                     break;
                 }
             }
@@ -239,7 +246,10 @@ public class ProtocolLibPacketHandler implements PacketHandler {
             }
 
             if (modified) {
-                packet.getBlockDataArrays().write(0, wrappedBlockDatas);
+                // vary a copy: the same packet may be on its way to other players
+                PacketContainer copy = PacketContainer.fromPacket(InternalReflectUtil.shallowCopy(packet.getHandle()));
+                copy.getBlockDataArrays().write(0, wrappedBlockDatas);
+                event.setPacket(copy);
             }
         }
     }
