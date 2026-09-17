@@ -3,7 +3,7 @@ package dev.wyck.keys;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.biome.Biome;
 import dev.wyck.level.dimension.Dimension;
-import dev.wyck.worldgen.feature.ConfiguredFeature;
+import dev.wyck.worldgen.feature.Feature;
 import dev.wyck.worldgen.function.DensityFunction;
 import dev.wyck.worldgen.placement.PlacedFeature;
 import dev.wyck.worldgen.synth.NoiseParameters;
@@ -27,7 +27,7 @@ public interface KeyChains {
     KeyChain<Dimension> DIMENSIONS = KeyChain.mutable();
 
     @AsOf("2.4.0")
-    KeyChain<ConfiguredFeature> CONFIGURED_FEATURES = KeyChain.mutable();
+    KeyChain<Feature> CONFIGURED_FEATURES = KeyChain.mutable();
 
     @AsOf("2.4.0")
     KeyChain<PlacedFeature> PLACED_FEATURES = KeyChain.mutable();
@@ -61,7 +61,7 @@ public interface KeyChains {
      * @since 2.4.0
      */
     @AsOf("2.4.0")
-    static KeyChain<ConfiguredFeature> configuredFeatures() {
+    static KeyChain<Feature> configuredFeatures() {
         return CONFIGURED_FEATURES;
     }
 

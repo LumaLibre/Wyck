@@ -1,6 +1,5 @@
 package dev.wyck.biome.entity;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.biome.entity.data.NaturalSpawner;
@@ -26,11 +25,9 @@ import java.util.Map;
 @AsOf("2.3.0")
 public interface BiomeSpawner extends Wrapper {
 
-    float DEFAULT_CREATURE_GENERATION_PROBABILITY = 0.1F;
-
     @ApiStatus.Internal
     interface Factory {
-        BiomeSpawner create(Map<MobCategory, WeightedList.Builder<NaturalSpawner>> spawners, Map<EntityType, SpawnCost> mobSpawnCosts, float creatureGenerationProbability);
+        BiomeSpawner create(Map<MobCategory, WeightedList.Builder<NaturalSpawner>> spawners, Map<EntityType, SpawnCost> mobSpawnCosts);
     }
 
     /**
@@ -48,14 +45,6 @@ public interface BiomeSpawner extends Wrapper {
      */
     @AsOf("2.3.0")
     Map<EntityType, SpawnCost> mobSpawnCosts();
-
-    /**
-     * Gets the creature generation probability.
-     * @return the creature generation probability
-     * @since 2.3.0
-     */
-    @AsOf("2.3.0")
-    float creatureGenerationProbability();
 
     /**
      * Creates a new builder from this BiomeSpawner.
@@ -110,13 +99,11 @@ public interface BiomeSpawner extends Wrapper {
 
         private final Map<MobCategory, WeightedList.Builder<NaturalSpawner>> spawners;
         private final Map<EntityType, SpawnCost> mobSpawnCosts;
-        private float creatureGenerationProbability;
 
         @AsOf("2.3.0")
         public Builder() {
             this.spawners = Maps.newLinkedHashMap();
             this.mobSpawnCosts = Maps.newLinkedHashMap();
-            this.creatureGenerationProbability = DEFAULT_CREATURE_GENERATION_PROBABILITY;
         }
 
         @AsOf("2.3.0")
@@ -130,7 +117,6 @@ public interface BiomeSpawner extends Wrapper {
                 this.spawners.put(entry.getKey(), builder);
             }
             this.mobSpawnCosts = Maps.newLinkedHashMap(biomeSpawner.mobSpawnCosts());
-            this.creatureGenerationProbability = biomeSpawner.creatureGenerationProbability();
         }
 
         /**
@@ -231,30 +217,16 @@ public interface BiomeSpawner extends Wrapper {
         }
 
         /**
-         * Sets the creature generation probability. Default is 0.1F.
-         * Range between 0.0F - 0.9999999F.
-         * @param creatureGenerationProbability The probability of spawning a creature.
-         * @return The builder instance.
-         * @since 2.3.0
-         */
-        @AsOf("2.3.0")
-        public Builder creatureGenerationProbability(float creatureGenerationProbability) {
-            this.creatureGenerationProbability = creatureGenerationProbability;
-            return this;
-        }
-
-        /**
          * Builds the BiomeSpawner.
          * @return The built BiomeSpawner.
          * @since 2.3.0
          */
         @AsOf("2.3.0")
         public BiomeSpawner build() {
-            Preconditions.checkArgument(creatureGenerationProbability >= 0.0F && creatureGenerationProbability <= 1.0F, "creatureGenerationProbability must be between 0.0 and 1.0");
             record Holder() {
                 static final WireProvider<Factory> WIRE = WireProvider.create("dev.wyck.biome.entity.BiomeSpawnerFactoryImpl");
             }
-            return Holder.WIRE.get().create(spawners, mobSpawnCosts, creatureGenerationProbability);
+            return Holder.WIRE.get().create(spawners, mobSpawnCosts);
         }
     }
 }

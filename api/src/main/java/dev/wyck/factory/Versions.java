@@ -17,9 +17,10 @@ import org.jspecify.annotations.NullMarked;
 @AsOf("2.0.0")
 public enum Versions {
     V1_21_10(Version.of(Version.Type.UNSUPPORTED, "v1_21_10", "1.21.9", "1.21.10")),
-    V1_21_11(Version.of(Version.Type.SUPPORTED, "v1_21_11", "1.21.11")),
-    V26_1(Version.of(Version.Type.SUPPORTED, "v26_1", "26.1", "26.1.1", "26.1.2")),
-    V26_2(Version.of(Version.Type.SUPPORTED, "v26_2", "26.2"));
+    V1_21_11(Version.of(Version.Type.UNSUPPORTED, "v1_21_11", "1.21.11")),
+    V26_1(Version.of(Version.Type.UNSUPPORTED, "v26_1", "26.1", "26.1.1", "26.1.2")),
+    V26_2(Version.of(Version.Type.UNSUPPORTED, "v26_2", "26.2")),
+    V26_3(Version.of(Version.Type.SUPPORTED, "v26_3", "26.3"));
 
     public static final Version ACTIVE = active();
 

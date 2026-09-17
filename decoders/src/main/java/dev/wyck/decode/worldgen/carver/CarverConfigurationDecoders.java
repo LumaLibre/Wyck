@@ -1,10 +1,10 @@
 package dev.wyck.decode.worldgen.carver;
 
 import dev.wyck.decode.Decoders;
-import dev.wyck.worldgen.carver.CanyonCarverConfiguration;
+import dev.wyck.worldgen.carver.CanyonWorldCarver;
 import dev.wyck.worldgen.carver.CarverConfiguration;
 import dev.wyck.worldgen.carver.CarverDebugSettings;
-import dev.wyck.worldgen.carver.CaveCarverConfiguration;
+import dev.wyck.worldgen.carver.CaveWorldCarver;
 import dev.wyck.worldgen.heightproviders.HeightProvider;
 import dev.wyck.worldgen.heightproviders.VerticalAnchor;
 import dev.wyck.worldgen.valueproviders.FloatProvider;
@@ -25,13 +25,13 @@ public final class CarverConfigurationDecoders extends DecoderRegistry<CarverCon
 
     @Override
     protected dev.wyck.keys.ResourceKey discriminate(Object minecraftObject) {
-        net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver<?> configured = Decoders.value(minecraftObject);
+        net.minecraft.world.level.levelgen.carver.WorldCarver<?> configured = Decoders.value(minecraftObject);
         return Decoders.registryKey(BuiltInRegistries.CARVER, configured.worldCarver());
     }
 
     private CarverConfiguration cave(Object minecraftObject) {
-        net.minecraft.world.level.levelgen.carver.CaveCarverConfiguration config = config(minecraftObject);
-        return CaveCarverConfiguration.of(
+        net.minecraft.world.level.levelgen.carver.CaveWorldCarver config = config(minecraftObject);
+        return CaveWorldCarver.of(
             config.probability,
             HeightProvider.decode(config.y),
             FloatProvider.decode(config.yScale),
@@ -45,8 +45,8 @@ public final class CarverConfigurationDecoders extends DecoderRegistry<CarverCon
     }
 
     private CarverConfiguration canyon(Object minecraftObject) {
-        net.minecraft.world.level.levelgen.carver.CanyonCarverConfiguration config = config(minecraftObject);
-        return CanyonCarverConfiguration.of(
+        net.minecraft.world.level.levelgen.carver.CanyonWorldCarver config = config(minecraftObject);
+        return CanyonWorldCarver.of(
             config.probability,
             HeightProvider.decode(config.y),
             FloatProvider.decode(config.yScale),
@@ -54,12 +54,12 @@ public final class CarverConfigurationDecoders extends DecoderRegistry<CarverCon
             CarverDebugSettings.decode(config.debugSettings),
             Decoders.materials(config.replaceable),
             FloatProvider.decode(config.verticalRotation),
-            CanyonCarverConfiguration.CanyonShapeConfiguration.decode(config.shape)
+            new CanyonShapeDecoder().decode(config.shape)
         );
     }
 
     @SuppressWarnings("unchecked")
     private static <T extends net.minecraft.world.level.levelgen.carver.CarverConfiguration> T config(Object minecraftObject) {
-        return (T) ((net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver<?>) Decoders.value(minecraftObject)).config();
+        return (T) ((net.minecraft.world.level.levelgen.carver.WorldCarver<?>) Decoders.value(minecraftObject)).config();
     }
 }

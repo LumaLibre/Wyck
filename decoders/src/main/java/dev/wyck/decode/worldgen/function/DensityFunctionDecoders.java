@@ -22,7 +22,7 @@ import dev.wyck.worldgen.synth.NoiseParameters;
 import dev.wyck.wrapper.decode.DecoderRegistry;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.world.level.levelgen.DensityFunctions;
+import net.minecraft.world.level.levelgen.densityfunction.DensityFunctions;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
@@ -30,7 +30,7 @@ import java.util.Locale;
 
 @NullMarked
 @ApiStatus.Internal
-public final class DensityFunctionDecoders extends DecoderRegistry<DensityFunction, net.minecraft.world.level.levelgen.DensityFunction> {
+public final class DensityFunctionDecoders extends DecoderRegistry<DensityFunction, net.minecraft.world.level.levelgen.densityfunction.DensityFunction> {
 
     public static final ResourceKey REFERENCE = ResourceKey.wyck("reference");
 
@@ -107,16 +107,16 @@ public final class DensityFunctionDecoders extends DecoderRegistry<DensityFuncti
     }
 
     @Override
-    protected net.minecraft.world.level.levelgen.DensityFunction normalize(net.minecraft.world.level.levelgen.DensityFunction minecraftObject) {
-        net.minecraft.world.level.levelgen.DensityFunction current = minecraftObject;
-        while (current instanceof DensityFunctions.HolderHolder(Holder<net.minecraft.world.level.levelgen.DensityFunction> function) && !(function instanceof Holder.Reference<?>)) {
+    protected net.minecraft.world.level.levelgen.densityfunction.DensityFunction normalize(net.minecraft.world.level.levelgen.densityfunction.DensityFunction minecraftObject) {
+        net.minecraft.world.level.levelgen.densityfunction.DensityFunction current = minecraftObject;
+        while (current instanceof DensityFunctions.HolderHolder(Holder<net.minecraft.world.level.levelgen.densityfunction.DensityFunction> function) && !(function instanceof Holder.Reference<?>)) {
             current = function.value();
         }
         return current;
     }
 
     @Override
-    protected ResourceKey discriminate(net.minecraft.world.level.levelgen.DensityFunction minecraftObject) {
+    protected ResourceKey discriminate(net.minecraft.world.level.levelgen.densityfunction.DensityFunction minecraftObject) {
         if (minecraftObject instanceof DensityFunctions.HolderHolder) {
             return REFERENCE;
         }
@@ -125,17 +125,17 @@ public final class DensityFunctionDecoders extends DecoderRegistry<DensityFuncti
         );
     }
 
-    private DensityFunction reference(net.minecraft.world.level.levelgen.DensityFunction minecraftObject) {
-        Holder<net.minecraft.world.level.levelgen.DensityFunction> holder =
+    private DensityFunction reference(net.minecraft.world.level.levelgen.densityfunction.DensityFunction minecraftObject) {
+        Holder<net.minecraft.world.level.levelgen.densityfunction.DensityFunction> holder =
             ((DensityFunctions.HolderHolder) minecraftObject).function();
         return ReferencedDensityFunction.of(Decoders.key(
-            ((Holder.Reference<net.minecraft.world.level.levelgen.DensityFunction>) holder).key().identifier()
+            ((Holder.Reference<net.minecraft.world.level.levelgen.densityfunction.DensityFunction>) holder).key().identifier()
         ));
     }
 
-    private DensityFunction shiftedNoise(net.minecraft.world.level.levelgen.DensityFunction minecraftObject) {
+    private DensityFunction shiftedNoise(net.minecraft.world.level.levelgen.densityfunction.DensityFunction minecraftObject) {
         DensityFunctionNodes.Node node = node(minecraftObject);
-        net.minecraft.world.level.levelgen.DensityFunction shiftY = node.child(1);
+        net.minecraft.world.level.levelgen.densityfunction.DensityFunction shiftY = node.child(1);
         boolean flat = node.asDouble("y_scale") == 0.0
             && shiftY.minValue() == 0.0 && shiftY.maxValue() == 0.0;
         if (!flat) {
@@ -152,7 +152,7 @@ public final class DensityFunctionDecoders extends DecoderRegistry<DensityFuncti
     }
 
     private static DensityFunctionNodes.Node node(
-        net.minecraft.world.level.levelgen.DensityFunction minecraftObject
+        net.minecraft.world.level.levelgen.densityfunction.DensityFunction minecraftObject
     ) {
         return DensityFunctionNodes.read(minecraftObject);
     }

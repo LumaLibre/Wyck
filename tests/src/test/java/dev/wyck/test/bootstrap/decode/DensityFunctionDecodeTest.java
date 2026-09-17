@@ -22,7 +22,7 @@ import net.minecraft.resources.RegistryOps;
 import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
 import net.minecraft.world.level.levelgen.NoiseRouter;
 import net.minecraft.world.level.levelgen.RandomState;
-import net.minecraft.world.level.levelgen.DensityFunctions;
+import net.minecraft.world.level.levelgen.densityfunction.DensityFunctions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.jspecify.annotations.NullMarked;
@@ -55,7 +55,7 @@ class DensityFunctionDecodeTest {
         return Holder.INSTANCE;
     }
 
-    private static JsonElement encode(net.minecraft.world.level.levelgen.DensityFunction function) {
+    private static JsonElement encode(net.minecraft.world.level.levelgen.densityfunction.DensityFunction function) {
         RegistryOps<JsonElement> ops = BootstrapSafeMinecraftRegistries.serialization()
             .createSerializationContext(JsonOps.INSTANCE);
         return DensityFunctions.DIRECT_CODEC.encodeStart(ops, function).getOrThrow(IllegalStateException::new);
@@ -162,22 +162,22 @@ class DensityFunctionDecodeTest {
     void registeredNoiseParametersRemainReferencesWhenRandomStateWiresTheRouter() {
         ResourceKey key = ResourceKey.of("wyck_test:random_state_noise");
         NoiseParameters parameters = NoiseParameters.of(key, -4, List.of(1.0, 0.5)).register();
-        net.minecraft.world.level.levelgen.DensityFunction customNoise =
+        net.minecraft.world.level.levelgen.densityfunction.DensityFunction customNoise =
             DensityFunction.noise(parameters, 1.0, 1.0).asHandle();
 
         var registryKey = net.minecraft.resources.ResourceKey.create(Registries.NOISE, key.identifier());
-        AtomicReference<net.minecraft.core.Holder<net.minecraft.world.level.levelgen.synth.NormalNoise.NoiseParameters>> noiseData = new AtomicReference<>();
-        customNoise.mapAll(new net.minecraft.world.level.levelgen.DensityFunction.Visitor() {
+        AtomicReference<net.minecraft.core.Holder<net.minecraft.world.level.levelgen.synth.NormalNoise.Parameters>> noiseData = new AtomicReference<>();
+        customNoise.mapAll(new net.minecraft.world.level.levelgen.densityfunction.DensityFunction.Visitor() {
             @Override
-            public net.minecraft.world.level.levelgen.DensityFunction apply(
-                net.minecraft.world.level.levelgen.DensityFunction function
+            public net.minecraft.world.level.levelgen.densityfunction.DensityFunction apply(
+                net.minecraft.world.level.levelgen.densityfunction.DensityFunction function
             ) {
                 return function;
             }
 
             @Override
-            public net.minecraft.world.level.levelgen.DensityFunction.NoiseHolder visitNoise(
-                net.minecraft.world.level.levelgen.DensityFunction.NoiseHolder noise
+            public net.minecraft.world.level.levelgen.densityfunction.DensityFunction.NoiseHolder visitNoise(
+                net.minecraft.world.level.levelgen.densityfunction.DensityFunction.NoiseHolder noise
             ) {
                 noiseData.set(noise.noiseData());
                 return noise;
@@ -240,7 +240,7 @@ class DensityFunctionDecodeTest {
 
         net.minecraft.world.level.levelgen.NoiseRouter router = settings.noiseRouter();
 
-        for (net.minecraft.world.level.levelgen.DensityFunction slot : List.of(
+        for (net.minecraft.world.level.levelgen.densityfunction.DensityFunction slot : List.of(
             router.barrierNoise(), router.fluidLevelFloodednessNoise(), router.fluidLevelSpreadNoise(),
             router.lavaNoise(), router.temperature(), router.vegetation(), router.continents(),
             router.erosion(), router.depth(), router.ridges(), router.preliminarySurfaceLevel(),

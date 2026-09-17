@@ -34,7 +34,7 @@ tasks.javadoc {
         docEncoding = "UTF-8"
         links(
             "https://docs.oracle.com/en/java/javase/25/docs/api/",
-            "https://jd.papermc.io/paper/26.2/",
+            "https://jd.papermc.io/paper/26.3/",
             "https://jd.papermc.io/adventure/5.1.1/",
             "https://jspecify.dev/docs/api/",
             "https://javadoc.io/doc/org.jetbrains/annotations-java5/20.1.0/",

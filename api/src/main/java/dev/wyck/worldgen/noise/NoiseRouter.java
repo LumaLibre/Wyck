@@ -6,17 +6,13 @@ import dev.wyck.worldgen.function.DensityFunction;
 import dev.wyck.wrapper.Wrapper;
 import dev.wyck.wrapper.decode.Decoder;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.NullUnmarked;
 
 /**
- * The noise router is a collection of density functions.
- * Density functions compute a value for each block position.
- * They are used for terrain generation, biome layout, aquifers, ore veins, and more.
- * A noise router is a part of a dimension's noise settings.
+ * The density-function routes used by Minecraft 26.3 terrain generation.
+ * Aquifer density functions are represented separately by {@link AquiferSettings}.
  *
- * @see <a href="https://minecraft.wiki/w/Noise_router">Noise router</a>
  * @since 2.4.0
- * @version 3.0.0
+ * @version 4.0.0
  * @author Jsinco
  */
 @NullMarked
@@ -24,41 +20,7 @@ import org.jspecify.annotations.NullUnmarked;
 public interface NoiseRouter extends Wrapper {
 
     /**
-     * Affects whether aquifers and open cave areas are separated; larger values make separation more likely.
-     * @return the barrier density function
-     * @since 2.4.0
-     */
-    @AsOf("2.4.0")
-    DensityFunction barrier();
-
-    /**
-     * Affects the probability of an aquifer generating liquid in a cave; larger values make liquid more likely.
-     * The value is clamped to the range {@code [-1.0, 1.0]}.
-     * @return the fluid level floodedness density function
-     * @since 2.4.0
-     */
-    @AsOf("2.4.0")
-    DensityFunction fluidLevelFloodedness();
-
-    /**
-     * Affects the height of an aquifer's liquid surface at a horizontal position; smaller values favor lower heights.
-     * @return the fluid level spread density function
-     * @since 2.4.0
-     */
-    @AsOf("2.4.0")
-    DensityFunction fluidLevelSpread();
-
-    /**
-     * Affects whether an aquifer uses lava instead of water; the threshold is {@code 0.3}.
-     * @return the lava density function
-     * @since 2.4.0
-     */
-    @AsOf("2.4.0")
-    DensityFunction lava();
-
-    /**
-     * The temperature values, used for biome placement only. Like the other climate slots, this does not
-     * affect terrain shape.
+     * The density function used for the temperature climate axis.
      * @return the temperature density function
      * @since 2.4.0
      */
@@ -66,7 +28,7 @@ public interface NoiseRouter extends Wrapper {
     DensityFunction temperature();
 
     /**
-     * The humidity values, used for biome placement only.
+     * The density function used for the vegetation climate axis.
      * @return the vegetation density function
      * @since 2.4.0
      */
@@ -74,15 +36,15 @@ public interface NoiseRouter extends Wrapper {
     DensityFunction vegetation();
 
     /**
-     * The continentalness values, used for biome placement only.
-     * @return the continents density function
+     * The density function used for the continentalness climate axis.
+     * @return the continentalness density function
      * @since 2.4.0
      */
     @AsOf("2.4.0")
     DensityFunction continents();
 
     /**
-     * The erosion values, used for biome placement and aquifer generation.
+     * The density function used for the erosion climate axis.
      * @return the erosion density function
      * @since 2.4.0
      */
@@ -90,7 +52,7 @@ public interface NoiseRouter extends Wrapper {
     DensityFunction erosion();
 
     /**
-     * The depth values, used for biome placement and aquifer generation.
+     * The density function used for the depth climate axis.
      * @return the depth density function
      * @since 2.4.0
      */
@@ -98,7 +60,7 @@ public interface NoiseRouter extends Wrapper {
     DensityFunction depth();
 
     /**
-     * The weirdness values, used for biome placement only.
+     * The density function used for the ridges climate axis.
      * @return the ridges density function
      * @since 2.4.0
      */
@@ -106,138 +68,90 @@ public interface NoiseRouter extends Wrapper {
     DensityFunction ridges();
 
     /**
-     * A 2D density function (sampled at {@code Y=0}) giving the Y-level of the preliminary surface,
-     * generally below the actual terrain height. Used by aquifer generation and surface rules.
-     * @return the preliminary surface level density function
-     * @since 2.4.0
+     * The density function used to estimate the terrain surface level in a chunk.
+     * @return the chunk surface-level density function
+     * @since 4.0.0
      */
-    @AsOf("2.4.0")
-    DensityFunction preliminarySurfaceLevel();
+    @AsOf("4.0.0")
+    DensityFunction chunkSurfaceLevel();
 
     /**
-     * The main density function deciding whether each position is solid or air. Where positive, the
-     * default block is placed (later replaceable by surface rules); otherwise air or fluid is placed by
-     * the aquifer logic.
-     * @return the final density density function
+     * The final density function used to decide whether terrain is solid.
+     * @return the final terrain density function
      * @since 2.4.0
      */
     @AsOf("2.4.0")
     DensityFunction finalDensity();
 
     /**
-     * Affects ore vein type, vertical range and richness, selecting between copper and iron veins by
-     * Y-level and noise value.
-     * @return the vein toggle density function
-     * @since 2.4.0
-     */
-    @AsOf("2.4.0")
-    DensityFunction veinToggle();
-
-    /**
-     * Controls which blocks belong to a vein. At or above {@code 0.0} the block is not part of a vein;
-     * below {@code 0.0} it has a 30% chance to be replaced by the vein's filler or an ore block.
-     * @return the vein ridged density function
-     * @since 2.4.0
-     */
-    @AsOf("2.4.0")
-    DensityFunction veinRidged();
-
-    /**
-     * Affects which blocks in a vein become ore blocks rather than the vein's stone block.
-     * @return the vein gap density function
-     * @since 2.4.0
-     */
-    @AsOf("2.4.0")
-    DensityFunction veinGap();
-
-    /**
      * Converts this noise router back to a builder.
-     * @return a new builder with these values
-     * @since 3.3.0
+     * @return a builder containing this router's values
+     * @since 3.0.0
      */
-    @AsOf("3.3.0")
+    @AsOf("3.0.0")
     default Builder toBuilder() {
         return new Builder(this);
     }
 
     /**
-     * Creates a new noise router from its density function slots.
-     *
-     * @param barrier the barrier density function
-     * @param fluidLevelFloodedness the fluid level floodedness density function
-     * @param fluidLevelSpread the fluid level spread density function
-     * @param lava the lava density function
+     * Creates a noise router.
      * @param temperature the temperature density function
      * @param vegetation the vegetation density function
-     * @param continents the continents density function
+     * @param continents the continentalness density function
      * @param erosion the erosion density function
      * @param depth the depth density function
      * @param ridges the ridges density function
-     * @param preliminarySurfaceLevel the preliminary surface level density function
-     * @param finalDensity the final density density function
-     * @param veinToggle the vein toggle density function
-     * @param veinRidged the vein ridged density function
-     * @param veinGap the vein gap density function
+     * @param chunkSurfaceLevel the chunk surface-level density function
+     * @param finalDensity the final terrain density function
      * @return a new noise router
-     * @since 2.4.0
+     * @since 4.0.0
      */
-    @AsOf("2.4.0")
+    @AsOf("4.0.0")
     static NoiseRouter of(
-        DensityFunction barrier,
-        DensityFunction fluidLevelFloodedness,
-        DensityFunction fluidLevelSpread,
-        DensityFunction lava,
         DensityFunction temperature,
         DensityFunction vegetation,
         DensityFunction continents,
         DensityFunction erosion,
         DensityFunction depth,
         DensityFunction ridges,
-        DensityFunction preliminarySurfaceLevel,
-        DensityFunction finalDensity,
-        DensityFunction veinToggle,
-        DensityFunction veinRidged,
-        DensityFunction veinGap
+        DensityFunction chunkSurfaceLevel,
+        DensityFunction finalDensity
     ) {
         record Holder() {
-            static final ConstructWireProvider<NoiseRouter> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.noise.NoiseRouterImpl");
+            static final ConstructWireProvider<NoiseRouter> WIRE = ConstructWireProvider.create(
+                "dev.wyck.*?.worldgen.noise.NoiseRouterImpl"
+            );
         }
         return Holder.WIRE.construct(
-            barrier,
-            fluidLevelFloodedness,
-            fluidLevelSpread,
-            lava,
             temperature,
             vegetation,
             continents,
             erosion,
             depth,
             ridges,
-            preliminarySurfaceLevel,
-            finalDensity,
-            veinToggle,
-            veinRidged,
-            veinGap
+            chunkSurfaceLevel,
+            finalDensity
         );
     }
 
     /**
      * Reads a Minecraft noise router.
-     * @param minecraftRouter the noise router to read
+     * @param minecraftRouter the Minecraft noise router to read
      * @return the decoded noise router
      * @since 3.3.0
      */
     @AsOf("3.3.0")
     static NoiseRouter decode(Object minecraftRouter) {
         record Holder() {
-            static final Decoder<NoiseRouter> DECODER = Decoder.create("dev.wyck.decode.worldgen.noise.NoiseRouterDecoder");
+            static final Decoder<NoiseRouter> DECODER = Decoder.create(
+                "dev.wyck.decode.worldgen.noise.NoiseRouterDecoder"
+            );
         }
         return Holder.DECODER.decode(minecraftRouter);
     }
 
     /**
-     * Creates a builder for a noise router.
-     *
+     * Creates a new noise router builder.
      * @return a new builder
      * @since 2.4.0
      */
@@ -247,100 +161,45 @@ public interface NoiseRouter extends Wrapper {
     }
 
     /**
-     * Builder for a {@link NoiseRouter}. Each slot defaults to {@link DensityFunction#zero()} until set.
+     * Builder for {@link NoiseRouter}.
      *
      * @since 2.4.0
+     * @version 4.0.0
+     * @author Jsinco
      */
-    @NullUnmarked
     @AsOf("2.4.0")
     final class Builder {
-
-        private DensityFunction barrier = DensityFunction.zero();
-        private DensityFunction fluidLevelFloodedness = DensityFunction.zero();
-        private DensityFunction fluidLevelSpread = DensityFunction.zero();
-        private DensityFunction lava = DensityFunction.zero();
         private DensityFunction temperature = DensityFunction.zero();
         private DensityFunction vegetation = DensityFunction.zero();
         private DensityFunction continents = DensityFunction.zero();
         private DensityFunction erosion = DensityFunction.zero();
         private DensityFunction depth = DensityFunction.zero();
         private DensityFunction ridges = DensityFunction.zero();
-        private DensityFunction preliminarySurfaceLevel = DensityFunction.zero();
+        private DensityFunction chunkSurfaceLevel = DensityFunction.zero();
         private DensityFunction finalDensity = DensityFunction.zero();
-        private DensityFunction veinToggle = DensityFunction.zero();
-        private DensityFunction veinRidged = DensityFunction.zero();
-        private DensityFunction veinGap = DensityFunction.zero();
 
         public Builder() {}
 
+        /**
+         * Creates a builder containing the values of an existing noise router.
+         * @param router the noise router to copy
+         * @since 3.0.0
+         */
+        @AsOf("3.0.0")
         public Builder(NoiseRouter router) {
-            this.barrier = router.barrier();
-            this.fluidLevelFloodedness = router.fluidLevelFloodedness();
-            this.fluidLevelSpread = router.fluidLevelSpread();
-            this.lava = router.lava();
             this.temperature = router.temperature();
             this.vegetation = router.vegetation();
             this.continents = router.continents();
             this.erosion = router.erosion();
             this.depth = router.depth();
             this.ridges = router.ridges();
-            this.preliminarySurfaceLevel = router.preliminarySurfaceLevel();
+            this.chunkSurfaceLevel = router.chunkSurfaceLevel();
             this.finalDensity = router.finalDensity();
-            this.veinToggle = router.veinToggle();
-            this.veinRidged = router.veinRidged();
-            this.veinGap = router.veinGap();
         }
 
         /**
-         * Sets the {@linkplain NoiseRouter#barrier() barrier} slot.
-         * @param barrier the barrier density function
-         * @return this builder
-         * @since 2.4.0
-         */
-        @AsOf("2.4.0")
-        public Builder barrier(DensityFunction barrier) {
-            this.barrier = barrier;
-            return this;
-        }
 
-        /**
-         * Sets the {@linkplain NoiseRouter#fluidLevelFloodedness() fluid level floodedness} slot.
-         * @param fluidLevelFloodedness the fluid level floodedness density function
-         * @return this builder
-         * @since 2.4.0
-         */
-        @AsOf("2.4.0")
-        public Builder fluidLevelFloodedness(DensityFunction fluidLevelFloodedness) {
-            this.fluidLevelFloodedness = fluidLevelFloodedness;
-            return this;
-        }
-
-        /**
-         * Sets the {@linkplain NoiseRouter#fluidLevelSpread() fluid level spread} slot.
-         * @param fluidLevelSpread the fluid level spread density function
-         * @return this builder
-         * @since 2.4.0
-         */
-        @AsOf("2.4.0")
-        public Builder fluidLevelSpread(DensityFunction fluidLevelSpread) {
-            this.fluidLevelSpread = fluidLevelSpread;
-            return this;
-        }
-
-        /**
-         * Sets the {@linkplain NoiseRouter#lava() lava} slot.
-         * @param lava the lava density function
-         * @return this builder
-         * @since 2.4.0
-         */
-        @AsOf("2.4.0")
-        public Builder lava(DensityFunction lava) {
-            this.lava = lava;
-            return this;
-        }
-
-        /**
-         * Sets the {@linkplain NoiseRouter#temperature() temperature} slot.
+         * Sets the temperature density function.
          * @param temperature the temperature density function
          * @return this builder
          * @since 2.4.0
@@ -352,7 +211,8 @@ public interface NoiseRouter extends Wrapper {
         }
 
         /**
-         * Sets the {@linkplain NoiseRouter#vegetation() vegetation} slot.
+
+         * Sets the vegetation density function.
          * @param vegetation the vegetation density function
          * @return this builder
          * @since 2.4.0
@@ -364,8 +224,9 @@ public interface NoiseRouter extends Wrapper {
         }
 
         /**
-         * Sets the {@linkplain NoiseRouter#continents() continents} slot.
-         * @param continents the continents density function
+
+         * Sets the continentalness density function.
+         * @param continents the continentalness density function
          * @return this builder
          * @since 2.4.0
          */
@@ -376,7 +237,8 @@ public interface NoiseRouter extends Wrapper {
         }
 
         /**
-         * Sets the {@linkplain NoiseRouter#erosion() erosion} slot.
+
+         * Sets the erosion density function.
          * @param erosion the erosion density function
          * @return this builder
          * @since 2.4.0
@@ -388,7 +250,8 @@ public interface NoiseRouter extends Wrapper {
         }
 
         /**
-         * Sets the {@linkplain NoiseRouter#depth() depth} slot.
+
+         * Sets the depth density function.
          * @param depth the depth density function
          * @return this builder
          * @since 2.4.0
@@ -400,7 +263,8 @@ public interface NoiseRouter extends Wrapper {
         }
 
         /**
-         * Sets the {@linkplain NoiseRouter#ridges() ridges} slot.
+
+         * Sets the ridges density function.
          * @param ridges the ridges density function
          * @return this builder
          * @since 2.4.0
@@ -412,20 +276,22 @@ public interface NoiseRouter extends Wrapper {
         }
 
         /**
-         * Sets the {@linkplain NoiseRouter#preliminarySurfaceLevel() preliminary surface level} slot.
-         * @param preliminarySurfaceLevel the preliminary surface level density function
+
+         * Sets the chunk surface-level density function.
+         * @param chunkSurfaceLevel the chunk surface-level density function
          * @return this builder
-         * @since 2.4.0
+         * @since 4.0.0
          */
-        @AsOf("2.4.0")
-        public Builder preliminarySurfaceLevel(DensityFunction preliminarySurfaceLevel) {
-            this.preliminarySurfaceLevel = preliminarySurfaceLevel;
+        @AsOf("4.0.0")
+        public Builder chunkSurfaceLevel(DensityFunction chunkSurfaceLevel) {
+            this.chunkSurfaceLevel = chunkSurfaceLevel;
             return this;
         }
 
         /**
-         * Sets the {@linkplain NoiseRouter#finalDensity() final density} slot.
-         * @param finalDensity the final density density function
+
+         * Sets the final terrain density function.
+         * @param finalDensity the final terrain density function
          * @return this builder
          * @since 2.4.0
          */
@@ -436,64 +302,21 @@ public interface NoiseRouter extends Wrapper {
         }
 
         /**
-         * Sets the {@linkplain NoiseRouter#veinToggle() vein toggle} slot.
-         * @param veinToggle the vein toggle density function
-         * @return this builder
-         * @since 2.4.0
-         */
-        @AsOf("2.4.0")
-        public Builder veinToggle(DensityFunction veinToggle) {
-            this.veinToggle = veinToggle;
-            return this;
-        }
-
-        /**
-         * Sets the {@linkplain NoiseRouter#veinRidged() vein ridged} slot.
-         * @param veinRidged the vein ridged density function
-         * @return this builder
-         * @since 2.4.0
-         */
-        @AsOf("2.4.0")
-        public Builder veinRidged(DensityFunction veinRidged) {
-            this.veinRidged = veinRidged;
-            return this;
-        }
-
-        /**
-         * Sets the {@linkplain NoiseRouter#veinGap() vein gap} slot.
-         * @param veinGap the vein gap density function
-         * @return this builder
-         * @since 2.4.0
-         */
-        @AsOf("2.4.0")
-        public Builder veinGap(DensityFunction veinGap) {
-            this.veinGap = veinGap;
-            return this;
-        }
-
-        /**
          * Builds the noise router.
          * @return the noise router
          * @since 2.4.0
          */
         @AsOf("2.4.0")
         public NoiseRouter build() {
-            return of(
-                this.barrier,
-                this.fluidLevelFloodedness,
-                this.fluidLevelSpread,
-                this.lava,
-                this.temperature,
-                this.vegetation,
-                this.continents,
-                this.erosion,
-                this.depth,
-                this.ridges,
-                this.preliminarySurfaceLevel,
-                this.finalDensity,
-                this.veinToggle,
-                this.veinRidged,
-                this.veinGap
+            return NoiseRouter.of(
+                temperature,
+                vegetation,
+                continents,
+                erosion,
+                depth,
+                ridges,
+                chunkSurfaceLevel,
+                finalDensity
             );
         }
     }

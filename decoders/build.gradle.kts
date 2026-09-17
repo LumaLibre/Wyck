@@ -5,7 +5,7 @@ plugins {
 dependencies {
     val libs = rootProject.libs
     api(project(":api"))
-    api(project(":commons"))
+    api(project(":runtime"))
 
-    paperweight.paperDevBundle(libs.versions.minecraft.v26.m2)
+    paperweight.paperDevBundle(libs.versions.minecraft.v26.m3)
 }

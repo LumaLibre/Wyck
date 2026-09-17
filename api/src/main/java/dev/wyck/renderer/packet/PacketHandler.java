@@ -34,7 +34,7 @@ public interface PacketHandler extends AbstractBiomeRenderer {
     WireProvider<Factory> WIRE = WireProvider.create("dev.wyck.renderer.packet.PacketHandlerFactoryImpl");
 
     /**
-     * Factory contract for constructing PacketHandler instances. Implemented by the commons module.
+     * Factory contract for constructing PacketHandler instances. Implemented by the runtime module.
      */
     @ApiStatus.Internal
     interface Factory {

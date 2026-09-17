@@ -1,18 +1,6 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 val bundledSourceProjects = listOf(":api")
-val minecraft = ":minecraft"
-val minecraftProjects = project(minecraft)
-    .subprojects
-    .map { it.name }
-val minecraftArtifactIds = mapOf(
-    "1_21_11" to "wyck-1.21.11",
-    "26_1" to "wyck-26.1",
-    "26_2" to "wyck-26.2",
-)
-check(minecraftProjects.toSet() == minecraftArtifactIds.keys) {
-    "Every Minecraft module must have an artifact ID: ${minecraftProjects.toSet() - minecraftArtifactIds.keys}"
-}
 
 data class ModulePublication(
     val name: String,
@@ -23,22 +11,15 @@ data class ModulePublication(
 
 val modulePublications = listOf(
     ModulePublication("wyckApi", "wyck-api", ":api"),
-    ModulePublication("wyckCommons", "wyck-commons", ":commons", listOf("wyck-api")),
+    ModulePublication("wyckRuntime", "wyck-runtime", ":runtime", listOf("wyck-api")),
     ModulePublication(
         "wyckDecoders",
         "wyck-decoders",
         ":decoders",
-        listOf("wyck-api", "wyck-commons"),
+        listOf("wyck-api", "wyck-runtime"),
     ),
-) + minecraftProjects.map { name ->
-    ModulePublication(
-        "wyckMinecraft${name.replaceFirstChar(Char::uppercaseChar)}",
-        minecraftArtifactIds.getValue(name),
-        "${minecraft}:${name}",
-        listOf("wyck-commons"),
-    )
-}
-val wyckVanillaProjects = listOf(":api", ":commons") + minecraftProjects.map { "${minecraft}:${it}" }
+)
+val wyckVanillaProjects = listOf(":api", ":runtime")
 
 val wyckVanilla by configurations.creating {
     isCanBeConsumed = false
@@ -48,13 +29,8 @@ val wyckVanilla by configurations.creating {
 dependencies {
     val libs = rootProject.libs
     api(project(":api"))
-    api(project(":commons"))
+    api(project(":runtime"))
     api(project(":decoders"))
-
-    // NMS Implementations
-    for (project in minecraftProjects) {
-        api(project(path = "${minecraft}:${project}"))
-    }
 
     wyckVanillaProjects.forEach { path ->
         add(wyckVanilla.name, project(path))
@@ -122,11 +98,8 @@ tasks.shadowJar {
     exclude("com/google/**")
     minimize {
         exclude(project(":api"))
-        exclude(project(":commons"))
+        exclude(project(":runtime"))
         exclude(project(":decoders"))
-        for (project in minecraftProjects) {
-            exclude(project("${minecraft}:${project}"))
-        }
         exclude("META-INF/**")
     }
 }

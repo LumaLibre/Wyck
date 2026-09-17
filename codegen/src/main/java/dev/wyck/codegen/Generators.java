@@ -88,7 +88,7 @@ public final class Generators {
 
     private static GeneratorSpec configuredFeatures() {
         return new ReferenceSpec(
-                ClassName.get("dev.wyck.worldgen.feature", "ConfiguredFeatures"),
+                ClassName.get("dev.wyck.worldgen.feature", "Features"),
                 ClassName.get("dev.wyck.worldgen.feature", "ConfiguredFeature"),
                 ResourceKey.class,
                 Generators::keyLocation,
@@ -441,7 +441,7 @@ public final class Generators {
     private static GeneratorSpec carvers() {
         return new ReferenceSpec(
                 ClassName.get("dev.wyck.worldgen.carver", "Carvers"),
-                ClassName.get("dev.wyck.worldgen.carver", "ConfiguredWorldCarver"),
+                ClassName.get("dev.wyck.worldgen.carver", "WorldCarver"),
                 ResourceKey.class,
                 Generators::keyLocation,
                 List.of(

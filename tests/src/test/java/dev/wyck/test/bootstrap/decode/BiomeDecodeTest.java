@@ -12,7 +12,7 @@ import dev.wyck.test.bootstrap.MinecraftBootstrap;
 import dev.wyck.util.BootstrapSafeMinecraftRegistries;
 import dev.wyck.worldgen.Decoration;
 import dev.wyck.worldgen.carver.types.ReferencedCarver;
-import dev.wyck.worldgen.feature.types.ReferencedConfiguredFeature;
+import dev.wyck.worldgen.feature.types.ReferencedFeature;
 import dev.wyck.worldgen.placement.PlacedFeature;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
@@ -95,7 +95,7 @@ class BiomeDecodeTest {
                 .orElseThrow();
         PlacedFeature.Composed decoded = assertInstanceOf(PlacedFeature.Composed.class,
             PlacedFeature.decode(Holder.direct(feature.value())));
-        assertInstanceOf(ReferencedConfiguredFeature.class, decoded.feature());
+        assertInstanceOf(ReferencedFeature.class, decoded.feature());
         assertEquals(feature.value().placement().size(), decoded.placement().size());
     }
 

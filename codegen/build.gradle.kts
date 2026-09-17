@@ -7,7 +7,7 @@ plugins {
 group = "dev.wyck.codegen"
 
 dependencies {
-    paperweight.paperDevBundle(libs.versions.minecraft.v26.m2)
+    paperweight.paperDevBundle(libs.versions.minecraft.v26.m3)
     implementation("com.palantir.javapoet:javapoet:0.19.0")
     implementation("org.jetbrains:annotations:26.1.0")
 }

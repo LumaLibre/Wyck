@@ -27,7 +27,6 @@ import org.jspecify.annotations.NullMarked;
 @Generated("2026-09-13T05:38:38.764684Z")
 public enum WorldCarverType implements WrappedConstant<WorldCarverType> {
     CAVE("cave"),
-    NETHER_CAVE("nether_cave"),
     CANYON("canyon");
 
     public static final RegisteredConstantTranslator<WorldCarverType> TRANSLATOR = RegisteredConstantTranslator.of(RegistryId.CARVER, WorldCarverType::resourceKey, WorldCarverType.values());

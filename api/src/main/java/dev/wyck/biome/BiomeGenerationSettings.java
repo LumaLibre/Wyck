@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.ConstructWireProvider;
 import dev.wyck.worldgen.Decoration;
-import dev.wyck.worldgen.carver.ConfiguredWorldCarver;
+import dev.wyck.worldgen.carver.WorldCarver;
 import dev.wyck.worldgen.carver.custom.CustomCarver;
 import dev.wyck.worldgen.placement.PlacedFeature;
 import dev.wyck.wrapper.Wrapper;
@@ -34,7 +34,7 @@ public interface BiomeGenerationSettings extends Wrapper {
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    List<ConfiguredWorldCarver> carvers();
+    List<WorldCarver> carvers();
 
     /**
      * The placed features applied to this biome's generation, grouped by step.
@@ -62,7 +62,7 @@ public interface BiomeGenerationSettings extends Wrapper {
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    static BiomeGenerationSettings of(List<ConfiguredWorldCarver> carvers, Map<Decoration, List<PlacedFeature>> features) {
+    static BiomeGenerationSettings of(List<WorldCarver> carvers, Map<Decoration, List<PlacedFeature>> features) {
         record Holder() {
             static final ConstructWireProvider<BiomeGenerationSettings> WIRE = ConstructWireProvider.create("dev.wyck.biome.BiomeGenerationSettingsImpl");
         }
@@ -112,7 +112,7 @@ public interface BiomeGenerationSettings extends Wrapper {
     @AsOf("2.3.0")
     final class Builder {
 
-        private List<ConfiguredWorldCarver> carvers = new ArrayList<>();
+        private List<WorldCarver> carvers = new ArrayList<>();
         private Map<Decoration, List<PlacedFeature>> features  = new EnumMap<>(Decoration.class);
 
         public Builder() {}
@@ -132,7 +132,7 @@ public interface BiomeGenerationSettings extends Wrapper {
          * @since 3.0.0
          */
         @AsOf("3.0.0")
-        public Builder carvers(List<ConfiguredWorldCarver> carvers) {
+        public Builder carvers(List<WorldCarver> carvers) {
             this.carvers = carvers;
             return this;
         }
@@ -144,7 +144,7 @@ public interface BiomeGenerationSettings extends Wrapper {
          * @since 3.0.0
          */
         @AsOf("3.0.0")
-        public Builder carvers(ConfiguredWorldCarver... carvers) {
+        public Builder carvers(WorldCarver... carvers) {
             this.carvers = new ArrayList<>(List.of(carvers));
             return this;
         }
@@ -168,7 +168,7 @@ public interface BiomeGenerationSettings extends Wrapper {
          * @since 2.3.0
          */
         @AsOf("2.3.0")
-        public Builder carver(ConfiguredWorldCarver carver) {
+        public Builder carver(WorldCarver carver) {
             Preconditions.checkNotNull(carver, "carver");
             this.carvers.add(carver);
             return this;
@@ -186,7 +186,7 @@ public interface BiomeGenerationSettings extends Wrapper {
         public <C> Builder carver(CustomCarver<C> carver, C config) {
             Preconditions.checkNotNull(carver, "carver");
             Preconditions.checkNotNull(config, "config");
-            this.carvers.add(ConfiguredWorldCarver.custom(carver, config));
+            this.carvers.add(WorldCarver.custom(carver, config));
             return this;
         }
 

@@ -36,11 +36,11 @@ To author one, pass a [configured feature](/wrappers/worldgen/configured-feature
     filename="ExamplePlugin.java"
     code={`import dev.wyck.worldgen.HeightmapType;
 import dev.wyck.worldgen.placement.PlacementModifier;
-import dev.wyck.worldgen.feature.ConfiguredFeatures;
+import dev.wyck.worldgen.feature.Features;
 import dev.wyck.worldgen.placement.PlacedFeature;
 
 PlacedFeature flowers = PlacedFeature.of(
-    ConfiguredFeatures.FLOWER_DEFAULT,
+    Features.FLOWER_DEFAULT,
     PlacementModifier.rarityFilter(8),
     PlacementModifier.inSquare(),
     PlacementModifier.heightmap(HeightmapType.MOTION_BLOCKING),

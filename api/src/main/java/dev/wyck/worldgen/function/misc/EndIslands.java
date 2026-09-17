@@ -16,7 +16,7 @@ import java.util.Optional;
  *
  * @see <a href="https://minecraft.wiki/w/Density_function#end_islands">Density function - end_islands</a>
  * @since 3.0.0
- * @version 3.0.0
+ * @version 4.0.0
  * @author Jsinco
  */
 @NullMarked
@@ -24,36 +24,28 @@ import java.util.Optional;
 public interface EndIslands extends DensityFunction, Registerable<EndIslands> {
 
     /**
-     * The seed used to generate the end islands noise.
-     * @return the seed
-     * @since 3.0.0
-     */
-    @AsOf("3.0.0")
-    long seed();
-
-    /**
      * Creates a new end islands density function.
      * @param resourceKey the resource key, or null
-     * @param seed the seed used to generate the end islands noise
      * @return a new end islands density function
-     * @since 3.0.0
+     * @since 4.0.0
      */
-    @AsOf("3.0.0")
-    static EndIslands of(@Nullable ResourceKey resourceKey, long seed) {
+    @AsOf("4.0.0")
+    static EndIslands of(@Nullable ResourceKey resourceKey) {
         record Holder() {
-            static final ConstructWireProvider<EndIslands> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.function.misc.EndIslandsImpl");
+            static final ConstructWireProvider<EndIslands> WIRE = ConstructWireProvider.create(
+                "dev.wyck.*?.worldgen.function.misc.EndIslandsImpl"
+            );
         }
-        return Holder.WIRE.construct(Optional.ofNullable(resourceKey), seed);
+        return Holder.WIRE.construct(Optional.ofNullable(resourceKey));
     }
 
     /**
      * Creates a new end islands density function.
-     * @param seed the seed used to generate the end islands noise
      * @return a new end islands density function
-     * @since 3.0.0
+     * @since 4.0.0
      */
-    @AsOf("3.0.0")
-    static EndIslands of(long seed) {
-        return of(null, seed);
+    @AsOf("4.0.0")
+    static EndIslands of() {
+        return of(null);
     }
 }

@@ -2,7 +2,7 @@ package dev.wyck.test.bootstrap;
 
 import dev.wyck.worldgen.function.simple.ConstantSimpleFunction;
 import dev.wyck.worldgen.noise.NoiseRouter;
-import net.minecraft.world.level.levelgen.DensityFunction.SinglePointContext;
+import net.minecraft.world.level.levelgen.densityfunction.DensityFunction.SinglePointContext;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -35,7 +35,7 @@ class NoiseRouterTest {
                 .asHandle();
     }
 
-    private static void assertSlot(double expected, net.minecraft.world.level.levelgen.DensityFunction slot, String name) {
+    private static void assertSlot(double expected, net.minecraft.world.level.levelgen.densityfunction.DensityFunction slot, String name) {
         assertEquals(expected, slot.compute(ORIGIN), EXACT,
                 () -> "router slot '" + name + "' carries the function meant for slot #" + (int) slot.compute(ORIGIN));
     }

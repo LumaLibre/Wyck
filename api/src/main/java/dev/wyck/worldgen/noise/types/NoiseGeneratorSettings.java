@@ -2,15 +2,14 @@ package dev.wyck.worldgen.noise.types;
 
 import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
-import dev.wyck.biome.entity.BiomeSpawner;
 import dev.wyck.factory.ConstructWireProvider;
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.level.entity.LevelSpawner;
 import dev.wyck.util.BukkitBootstrapUtil;
-import dev.wyck.worldgen.climate.ClimatePoint;
+import dev.wyck.worldgen.noise.AquiferSettings;
 import dev.wyck.worldgen.noise.Noise;
 import dev.wyck.worldgen.noise.NoiseRouter;
 import dev.wyck.worldgen.noise.NoiseSettings;
+import dev.wyck.worldgen.noise.SpawnTargetPoint;
 import dev.wyck.worldgen.surface.SurfaceRule;
 import dev.wyck.wrapper.Registerable;
 import org.bukkit.Material;
@@ -19,16 +18,15 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 /**
- * Noise settings are for generating the shape of the terrain and noise caves and what blocks the terrain is generated with.
+ * The settings used by a noise-based chunk generator.
  *
- * @see <a href="https://minecraft.wiki/w/Noise_settings">Noise settings</a>
- * @version 2.4.0
  * @since 2.4.0
+ * @version 4.0.0
  * @author Jsinco
  */
 @NullMarked
@@ -36,136 +34,149 @@ import java.util.Optional;
 public interface NoiseGeneratorSettings extends Noise, Registerable<NoiseGeneratorSettings> {
 
     /**
-     * Fields for world generation.
+     * The vertical bounds used by the noise generator.
      * @return the noise settings
-     * @since 3.0.0
+     * @since 2.4.0
      */
-    @AsOf("3.0.0")
-    NoiseSettings noiseSettings(); // codec name: noise
+    @AsOf("2.4.0")
+    NoiseSettings noiseSettings();
 
     /**
-     * The default block used for the terrain.
-     * @return the default block
-     * @since 3.0.0
+     * The default block used for solid terrain.
+     * @return the default terrain block
+     * @since 2.4.0
      */
-    @AsOf("3.0.0")
+    @AsOf("2.4.0")
     BlockData defaultBlock();
 
     /**
-     * The default block used for seas and lakes.
-     * @return the default fluid
-     * @since 3.0.0
+     * The default fluid used below the generated fluid level.
+     * @return the default fluid block data
+     * @since 2.4.0
      */
-    @AsOf("3.0.0")
+    @AsOf("2.4.0")
     BlockData defaultFluid();
 
     /**
-     * The noise router routes density functions to noise parameters used for world generation.
+     * The density functions routed into terrain generation.
      * @return the noise router
-     * @since 3.0.0
+     * @since 2.4.0
      */
-    @AsOf("3.0.0")
+    @AsOf("2.4.0")
     NoiseRouter noiseRouter();
 
     /**
-     * The main surface rule to place blocks in the terrain.
+     * The surface rule applied after terrain density is generated.
      * @return the surface rule
-     * @since 3.0.0
+     * @since 2.4.0
      */
-    @AsOf("3.0.0")
+    @AsOf("2.4.0")
     SurfaceRule surfaceRule();
 
     /**
-     * A list of climate parameters to specify the points around which the player tries to spawn.
-     * The player spawns near the location where this value is smallest.
-     * @return the spawn target
-     * @since 3.0.0
+     * The climate targets used to select suitable player spawn locations.
+     * @return an immutable list of spawn target points
+     * @since 4.0.0
      */
-    @AsOf("3.0.0")
-    List<ClimatePoint> spawnTarget();
+    @AsOf("4.0.0")
+    List<SpawnTargetPoint> spawnTarget();
 
     /**
-     * The sea level in this dimension.
-     * Note that this value only affects world generation.
-     * The sea level for mob spawning is a fixed value 63.
+     * The default sea level.
      * @return the sea level
-     * @since 3.0.0
+     * @since 2.4.0
      */
-    @AsOf("3.0.0")
+    @AsOf("2.4.0")
     int seaLevel();
 
     /**
-     * Disables creature spawning upon chunk generation.
-     * @deprecated Deprecated in Minecraft.
-     * Likely replacement would be an empty {@link BiomeSpawner} and {@link LevelSpawner}.
+     * Whether mob generation is disabled for this generator.
      * @return whether mob generation is disabled
-     * @since 3.0.0
+     * @deprecated retained for compatibility with Minecraft's deprecated setting
+     * @since 2.4.0
      */
     @Deprecated
-    @AsOf("3.0.0")
+    @AsOf("2.4.0")
     boolean disableMobGeneration();
 
     /**
-     * Whether aquifers generate. If set to false, almost all caves below sea level are filled with water.
-     * @return whether aquifers generate
-     * @since 3.0.0
+     * The optional aquifer density-function settings.
+     * @return the aquifer settings, if aquifers are enabled
+     * @since 4.0.0
      */
-    @AsOf("3.0.0")
-    boolean aquifersEnabled();
+    @AsOf("4.0.0")
+    Optional<AquiferSettings> aquifers();
 
     /**
-     * Whether ore veins generate.
-     * @return whether ore veins generate
-     * @since 3.0.0
+     * Whether terrain generation uses Minecraft's legacy random source.
+     * @return whether the legacy random source is used
+     * @since 2.4.0
      */
-    @AsOf("3.0.0")
-    boolean oreVeinsEnabled();
-
-    /**
-     * Whether to use the old random number generator from before 1.18 for world generation.
-     * @return whether to use the old random number generator
-     * @since 3.0.0
-     */
-    @AsOf("3.0.0")
+    @AsOf("2.4.0")
     boolean useLegacyRandomSource();
 
     /**
-     * Converts this object back to a builder.
-     * @return A new builder with these values
-     * @since 3.3.0
+     * Converts these generator settings back to a builder.
+     * @return a builder containing these settings
+     * @since 3.0.0
      */
-    @AsOf("3.3.0")
+    @AsOf("3.0.0")
     default Builder toBuilder() {
         return new Builder(this);
     }
 
     /**
-     * Creates a new noise generator settings.
-     * @param resourceKey the resource key to register this noise generator settings with
-     * @param noiseSettings the noise settings
-     * @param defaultBlock the default block
-     * @param defaultFluid the default fluid
-     * @param noiseRouter the noise router
-     * @param surfaceRule the surface rule
-     * @param spawnTarget the spawn target
-     * @param seaLevel the sea level
-     * @param disableMobGeneration whether to disable mob generation
-     * @param aquifersEnabled whether aquifers generate
-     * @param oreVeinsEnabled whether ore veins generate
-     * @param useLegacyRandomSource whether to use the old random number generator
-     * @return a new noise generator settings
-     * @since 3.0.0
+     * Creates noise generator settings.
+     * @param resourceKey the registry key, or null for an unregistered value
+     * @param noiseSettings the vertical noise bounds
+     * @param defaultBlock the default solid terrain block
+     * @param defaultFluid the default fluid block data
+     * @param noiseRouter the terrain density-function routes
+     * @param surfaceRule the terrain surface rule
+     * @param spawnTarget the player-spawn climate targets
+     * @param seaLevel the default sea level
+     * @param disableMobGeneration whether mob generation is disabled
+     * @param aquifers the aquifer settings, or null to disable aquifers
+     * @param useLegacyRandomSource whether to use Minecraft's legacy random source
+     * @return new noise generator settings
+     * @since 4.0.0
      */
-    @AsOf("3.0.0")
-    static NoiseGeneratorSettings of(@Nullable ResourceKey resourceKey, NoiseSettings noiseSettings, BlockData defaultBlock, BlockData defaultFluid, NoiseRouter noiseRouter, SurfaceRule surfaceRule, List<ClimatePoint> spawnTarget, int seaLevel, boolean disableMobGeneration, boolean aquifersEnabled, boolean oreVeinsEnabled, boolean useLegacyRandomSource) {
+    @AsOf("4.0.0")
+    static NoiseGeneratorSettings of(
+        @Nullable ResourceKey resourceKey,
+        NoiseSettings noiseSettings,
+        BlockData defaultBlock,
+        BlockData defaultFluid,
+        NoiseRouter noiseRouter,
+        SurfaceRule surfaceRule,
+        List<SpawnTargetPoint> spawnTarget,
+        int seaLevel,
+        boolean disableMobGeneration,
+        @Nullable AquiferSettings aquifers,
+        boolean useLegacyRandomSource
+    ) {
         record Holder() {
-            static final ConstructWireProvider<NoiseGeneratorSettings> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.noise.types.NoiseGeneratorSettingsImpl");
+            static final ConstructWireProvider<NoiseGeneratorSettings> WIRE = ConstructWireProvider.create(
+                "dev.wyck.*?.worldgen.noise.types.NoiseGeneratorSettingsImpl"
+            );
         }
-        return Holder.WIRE.construct(Optional.ofNullable(resourceKey), noiseSettings, defaultBlock, defaultFluid, noiseRouter, surfaceRule, spawnTarget, seaLevel, disableMobGeneration, aquifersEnabled, oreVeinsEnabled, useLegacyRandomSource);
+        return Holder.WIRE.construct(
+            Optional.ofNullable(resourceKey),
+            noiseSettings,
+            defaultBlock,
+            defaultFluid,
+            noiseRouter,
+            surfaceRule,
+            List.copyOf(spawnTarget),
+            seaLevel,
+            disableMobGeneration,
+            Optional.ofNullable(aquifers),
+            useLegacyRandomSource
+        );
     }
 
     /**
-     * Creates a new builder.
+     * Creates a new noise generator settings builder.
      * @return a new builder
      * @since 2.4.0
      */
@@ -176,27 +187,33 @@ public interface NoiseGeneratorSettings extends Noise, Registerable<NoiseGenerat
 
     /**
      * Builder for {@link NoiseGeneratorSettings}.
+     *
      * @since 2.4.0
-     * @version 2.4.0
+     * @version 4.0.0
      * @author Jsinco
      */
     @AsOf("2.4.0")
     final class Builder {
-        private @Nullable ResourceKey resourceKey = null;
+        private @Nullable ResourceKey resourceKey;
         private NoiseSettings noiseSettings = NoiseSettings.OVERWORLD;
         private BlockData defaultBlock = BukkitBootstrapUtil.util().createBlockData(Material.STONE);
         private BlockData defaultFluid = BukkitBootstrapUtil.util().createBlockData(Material.WATER);
-        private @Nullable NoiseRouter noiseRouter = null;
-        private @Nullable SurfaceRule surfaceRule = null;
-        private List<ClimatePoint> spawnTarget = new ArrayList<>();
+        private @Nullable NoiseRouter noiseRouter;
+        private @Nullable SurfaceRule surfaceRule;
+        private List<SpawnTargetPoint> spawnTarget = new ArrayList<>();
         private int seaLevel = 63;
-        private boolean disableMobGeneration = false;
-        private boolean aquifersEnabled = true;
-        private boolean oreVeinsEnabled = true;
-        private boolean useLegacyRandomSource = false;
+        private boolean disableMobGeneration;
+        private @Nullable AquiferSettings aquifers;
+        private boolean useLegacyRandomSource;
 
         public Builder() {}
 
+        /**
+         * Creates a builder containing the values of existing generator settings.
+         * @param settings the generator settings to copy
+         * @since 3.0.0
+         */
+        @AsOf("3.0.0")
         public Builder(NoiseGeneratorSettings settings) {
             this.resourceKey = settings.resourceKey().orElse(null);
             this.noiseSettings = settings.noiseSettings();
@@ -207,14 +224,14 @@ public interface NoiseGeneratorSettings extends Noise, Registerable<NoiseGenerat
             this.spawnTarget = new ArrayList<>(settings.spawnTarget());
             this.seaLevel = settings.seaLevel();
             this.disableMobGeneration = settings.disableMobGeneration();
-            this.aquifersEnabled = settings.aquifersEnabled();
-            this.oreVeinsEnabled = settings.oreVeinsEnabled();
+            this.aquifers = settings.aquifers().orElse(null);
             this.useLegacyRandomSource = settings.useLegacyRandomSource();
         }
 
         /**
-         * Sets the resource key for this object.
-         * @param resourceKey the resource key
+
+         * Sets the registry key.
+         * @param resourceKey the registry key, or null for an unregistered value
          * @return this builder
          * @since 2.4.0
          */
@@ -225,7 +242,8 @@ public interface NoiseGeneratorSettings extends Noise, Registerable<NoiseGenerat
         }
 
         /**
-         * Sets the noise settings.
+
+         * Sets the vertical noise bounds.
          * @param noiseSettings the noise settings
          * @return this builder
          * @since 2.4.0
@@ -237,31 +255,60 @@ public interface NoiseGeneratorSettings extends Noise, Registerable<NoiseGenerat
         }
 
         /**
-         * Sets the default block.
-         * @param defaultBlock the default block
+
+         * Sets the default solid terrain block.
+         * @param defaultBlock the default terrain block
          * @return this builder
-         * @since 3.0.0
+         * @since 2.4.0
          */
-        @AsOf("3.0.0")
+        @AsOf("2.4.0")
         public Builder defaultBlock(BlockData defaultBlock) {
             this.defaultBlock = defaultBlock;
             return this;
         }
 
         /**
-         * Sets the default fluid.
-         * @param defaultFluid the default fluid
+
+         * Sets the default solid terrain material.
+         * @param defaultBlock the default terrain material
          * @return this builder
-         * @since 3.0.0
+         * @since 2.4.0
          */
-        @AsOf("3.0.0")
+        @AsOf("2.4.0")
+        public Builder defaultBlock(Material defaultBlock) {
+            this.defaultBlock = BukkitBootstrapUtil.util().createBlockData(defaultBlock);
+            return this;
+        }
+
+        /**
+
+         * Sets the default fluid block data.
+         * @param defaultFluid the default fluid block data
+         * @return this builder
+         * @since 2.4.0
+         */
+        @AsOf("2.4.0")
         public Builder defaultFluid(BlockData defaultFluid) {
             this.defaultFluid = defaultFluid;
             return this;
         }
 
         /**
-         * Sets the noise router.
+
+         * Sets the default fluid material.
+         * @param defaultFluid the default fluid material
+         * @return this builder
+         * @since 2.4.0
+         */
+        @AsOf("2.4.0")
+        public Builder defaultFluid(Material defaultFluid) {
+            this.defaultFluid = BukkitBootstrapUtil.util().createBlockData(defaultFluid);
+            return this;
+        }
+
+        /**
+
+         * Sets the terrain density-function routes.
          * @param noiseRouter the noise router
          * @return this builder
          * @since 2.4.0
@@ -273,7 +320,8 @@ public interface NoiseGeneratorSettings extends Noise, Registerable<NoiseGenerat
         }
 
         /**
-         * Sets the surface rule.
+
+         * Sets the terrain surface rule.
          * @param surfaceRule the surface rule
          * @return this builder
          * @since 2.4.0
@@ -285,19 +333,34 @@ public interface NoiseGeneratorSettings extends Noise, Registerable<NoiseGenerat
         }
 
         /**
-         * Sets the spawn target.
-         * @param spawnTarget the spawn target
+
+         * Replaces the player-spawn target list.
+         * @param spawnTarget the player-spawn target points
          * @return this builder
-         * @since 2.4.0
+         * @since 4.0.0
          */
-        @AsOf("2.4.0")
-        public Builder spawnTarget(List<ClimatePoint> spawnTarget) {
-            this.spawnTarget = List.copyOf(spawnTarget);
+        @AsOf("4.0.0")
+        public Builder spawnTarget(List<SpawnTargetPoint> spawnTarget) {
+            this.spawnTarget = new ArrayList<>(spawnTarget);
             return this;
         }
 
         /**
-         * Sets the sea level.
+
+         * Adds player-spawn target points.
+         * @param spawnTarget the player-spawn target points to add
+         * @return this builder
+         * @since 4.0.0
+         */
+        @AsOf("4.0.0")
+        public Builder spawnTarget(SpawnTargetPoint... spawnTarget) {
+            this.spawnTarget.addAll(Arrays.asList(spawnTarget));
+            return this;
+        }
+
+        /**
+
+         * Sets the default sea level.
          * @param seaLevel the sea level
          * @return this builder
          * @since 2.4.0
@@ -309,10 +372,11 @@ public interface NoiseGeneratorSettings extends Noise, Registerable<NoiseGenerat
         }
 
         /**
-         * Sets whether to disable mob generation.
-         * @deprecated Deprecated in Minecraft.
-         * @param disableMobGeneration whether to disable mob generation
+
+         * Sets whether mob generation is disabled.
+         * @param disableMobGeneration whether mob generation is disabled
          * @return this builder
+         * @deprecated retained for compatibility with Minecraft's deprecated setting
          * @since 2.4.0
          */
         @Deprecated
@@ -323,32 +387,22 @@ public interface NoiseGeneratorSettings extends Noise, Registerable<NoiseGenerat
         }
 
         /**
-         * Sets whether aquifers generate.
-         * @param aquifersEnabled whether aquifers generate
+
+         * Sets the aquifer settings.
+         * @param aquifers the aquifer settings, or null to disable aquifers
          * @return this builder
-         * @since 2.4.0
+         * @since 4.0.0
          */
-        @AsOf("2.4.0")
-        public Builder aquifersEnabled(boolean aquifersEnabled) {
-            this.aquifersEnabled = aquifersEnabled;
+        @AsOf("4.0.0")
+        public Builder aquifers(@Nullable AquiferSettings aquifers) {
+            this.aquifers = aquifers;
             return this;
         }
 
         /**
-         * Sets whether ore veins generate.
-         * @param oreVeinsEnabled whether ore veins generate
-         * @return this builder
-         * @since 2.4.0
-         */
-        @AsOf("2.4.0")
-        public Builder oreVeinsEnabled(boolean oreVeinsEnabled) {
-            this.oreVeinsEnabled = oreVeinsEnabled;
-            return this;
-        }
 
-        /**
-         * Sets whether to use the old random number generator from before 1.18 for world generation.
-         * @param useLegacyRandomSource whether to use the old random number generator
+         * Sets whether Minecraft's legacy random source is used.
+         * @param useLegacyRandomSource whether the legacy random source is used
          * @return this builder
          * @since 2.4.0
          */
@@ -358,54 +412,16 @@ public interface NoiseGeneratorSettings extends Noise, Registerable<NoiseGenerat
             return this;
         }
 
-        // Friendly
-
-        /**
-         * Sets the default block.
-         * @param defaultBlock the default block
-         * @return this builder
-         * @since 2.4.0
-         */
-        @AsOf("2.4.0")
-        public Builder defaultBlock(Material defaultBlock) {
-            this.defaultBlock = BukkitBootstrapUtil.util().createBlockData(defaultBlock);
-            return this;
-        }
-
-        /**
-         * Sets the default fluid.
-         * @param defaultFluid the default fluid
-         * @return this builder
-         * @since 2.4.0
-         */
-        @AsOf("2.4.0")
-        public Builder defaultFluid(Material defaultFluid) {
-            this.defaultFluid = BukkitBootstrapUtil.util().createBlockData(defaultFluid);
-            return this;
-        }
-
-        /**
-         * Adds a spawn target.
-         * @param spawnTarget the spawn target
-         * @return this builder
-         * @since 3.0.0
-         */
-        @AsOf("3.0.0")
-        public Builder spawnTarget(ClimatePoint... spawnTarget) {
-            Collections.addAll(this.spawnTarget, spawnTarget);
-            return this;
-        }
-
         /**
          * Builds the noise generator settings.
-         * @return this builder
+         * @return the noise generator settings
          * @since 2.4.0
          */
         @AsOf("2.4.0")
         public NoiseGeneratorSettings build() {
-            Preconditions.checkArgument(this.noiseRouter != null, "noiseRouter must be set");
-            Preconditions.checkArgument(this.surfaceRule != null, "surfaceRule must be set");
-            return of(
+            Preconditions.checkNotNull(noiseRouter, "noiseRouter must be set");
+            Preconditions.checkNotNull(surfaceRule, "surfaceRule must be set");
+            return NoiseGeneratorSettings.of(
                 resourceKey,
                 noiseSettings,
                 defaultBlock,
@@ -415,15 +431,14 @@ public interface NoiseGeneratorSettings extends Noise, Registerable<NoiseGenerat
                 spawnTarget,
                 seaLevel,
                 disableMobGeneration,
-                aquifersEnabled,
-                oreVeinsEnabled,
+                aquifers,
                 useLegacyRandomSource
             );
         }
 
         /**
-         * Registers this noise generator settings with the registry.
-         * @return this noise generator settings
+         * Builds and registers the noise generator settings.
+         * @return the registered noise generator settings
          * @since 2.4.0
          */
         @AsOf("2.4.0")

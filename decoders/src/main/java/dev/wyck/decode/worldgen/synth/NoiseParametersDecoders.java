@@ -5,7 +5,7 @@ import dev.wyck.keys.ResourceKey;
 import dev.wyck.worldgen.synth.NoiseParameters;
 import dev.wyck.wrapper.decode.DecoderRegistry;
 import net.minecraft.core.Holder;
-import net.minecraft.world.level.levelgen.DensityFunction;
+import net.minecraft.world.level.levelgen.densityfunction.DensityFunction;
 import net.minecraft.world.level.levelgen.synth.NormalNoise;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;

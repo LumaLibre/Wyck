@@ -18,18 +18,18 @@ To use a configured feature in a biome, wrap it in a [placed feature](/worldgen/
 
 ## Referencing Built-in Configured Features
 
-The <SourceLink path="worldgen/feature/ConfiguredFeatures.java">ConfiguredFeatures</SourceLink> catalog holds
+The <SourceLink path="worldgen/feature/Features.java">Features</SourceLink> catalog holds
 typed references to every configured feature vanilla registrar.
 
 ### Example Usage
 <CodeBlock
     lang="java"
     filename="ExamplePlugin.java"
-    code={`import dev.wyck.worldgen.feature.ConfiguredFeature;
-import dev.wyck.worldgen.feature.ConfiguredFeatures;
+    code={`import dev.wyck.worldgen.feature.Feature;
+import dev.wyck.worldgen.feature.Features;
 
 // a reference straight from the catalog
-ConfiguredFeature largeDiamonds = ConfiguredFeatures.ORE_DIAMOND_LARGE;
+ConfiguredFeature largeDiamonds = Features.ORE_DIAMOND_LARGE;
 
 // or by key
 ConfiguredFeature byKey = ConfiguredFeature.reference(ResourceKey.minecraft("ore_diamond_large"));`}
@@ -53,10 +53,10 @@ import dev.wyck.biome.BiomeGenerationSettings;
 import dev.wyck.worldgen.blockpredicates.BlockPredicate;
 import dev.wyck.worldgen.Decoration;
 import dev.wyck.worldgen.HeightmapType;
-import dev.wyck.worldgen.feature.ConfiguredFeature;
+import dev.wyck.worldgen.feature.Feature;
 import dev.wyck.worldgen.feature.FeatureType;
 import dev.wyck.worldgen.feature.configurations.FeatureConfiguration;
-import dev.wyck.worldgen.feature.configurations.TreeConfiguration;
+import dev.wyck.worldgen.feature.configurations.TreeFeature;
 import dev.wyck.worldgen.feature.featuresize.TwoLayersFeatureSize;
 import dev.wyck.worldgen.feature.foliageplacers.PineFoliagePlacer;
 import dev.wyck.worldgen.feature.trunkplacers.StraightTrunkPlacer;
@@ -72,7 +72,7 @@ public class ExamplePlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         // Making a tall spruce tree
-        TreeConfiguration treeConfig = FeatureConfiguration.tree()
+        TreeFeature treeConfig = FeatureConfiguration.tree()
             .foliageProvider(BlockStateProvider.simple(Material.SPRUCE_LEAVES))
             .trunkProvider(BlockStateProvider.simple(Material.SPRUCE_LOG))
             .belowTrunkProvider(
@@ -192,7 +192,7 @@ import dev.wyck.worldgen.HeightmapType;
 import dev.wyck.worldgen.biome.BiomeSource;
 import dev.wyck.worldgen.chunk.ChunkGenerator;
 import dev.wyck.worldgen.chunk.NoiseBasedChunkGenerator;
-import dev.wyck.worldgen.feature.ConfiguredFeature;
+import dev.wyck.worldgen.feature.Feature;
 import dev.wyck.worldgen.feature.custom.CustomFeature;
 import dev.wyck.worldgen.noise.Noise;
 import dev.wyck.worldgen.placement.PlacedFeature;

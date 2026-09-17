@@ -9,7 +9,7 @@ import CodeTabs from "@/components/CodeTabs.astro";
 
 Carvers are responsible for 'carving' out areas of a world to create caves, canyons, ravines, and other underground features.
 
-A <SourceLink path="worldgen/carver/ConfiguredWorldCarver.java">ConfiguredWorldCarver</SourceLink> is either a
+A <SourceLink path="worldgen/carver/WorldCarver.java">WorldCarver</SourceLink> is either a
 **reference** to a carver already in the game, or a **custom** carver you may author from a
 carver type and a configuration. Both are added to a biome through its [generation settings](/worldgen/biome-generation-settings).
 
@@ -40,15 +40,15 @@ To author your own, pair a carver type with a configuration.
             label: "Cave",
             filename: "ExamplePlugin.java",
             lang: "java",
-            code: `import dev.wyck.worldgen.carver.CaveCarverConfiguration;
-import dev.wyck.worldgen.carver.ConfiguredWorldCarver;
+            code: `import dev.wyck.worldgen.carver.CaveWorldCarver;
+import dev.wyck.worldgen.carver.WorldCarver;
 import dev.wyck.worldgen.valueproviders.FloatProvider;
 import dev.wyck.worldgen.heightproviders.HeightProvider;
 import dev.wyck.worldgen.heightproviders.VerticalAnchor;
 import org.bukkit.Material;
 
-ConfiguredWorldCarver cave = ConfiguredWorldCarver.cave(
-    CaveCarverConfiguration.builder()
+WorldCarver cave = WorldCarver.cave(
+    CaveWorldCarver.builder()
         .probability(0.15f)
         .y(HeightProvider.uniform(VerticalAnchor.aboveBottom(8), VerticalAnchor.absolute(180)))
         .yScale(FloatProvider.uniform(0.1f, 0.9f))
@@ -64,23 +64,23 @@ ConfiguredWorldCarver cave = ConfiguredWorldCarver.cave(
             label: "Canyon",
             filename: "ExamplePlugin.java",
             lang: "java",
-            code: `import dev.wyck.worldgen.carver.CanyonCarverConfiguration;
-import dev.wyck.worldgen.carver.CanyonCarverConfiguration.CanyonShapeConfiguration;
-import dev.wyck.worldgen.carver.ConfiguredWorldCarver;
+            code: `import dev.wyck.worldgen.carver.CanyonWorldCarver;
+import dev.wyck.worldgen.carver.CanyonWorldCarver.Shape;
+import dev.wyck.worldgen.carver.WorldCarver;
 import dev.wyck.worldgen.valueproviders.FloatProvider;
 import dev.wyck.worldgen.heightproviders.HeightProvider;
 import dev.wyck.worldgen.heightproviders.VerticalAnchor;
 import org.bukkit.Material;
 
-ConfiguredWorldCarver canyon = ConfiguredWorldCarver.canyon(
-    CanyonCarverConfiguration.builder()
+WorldCarver canyon = WorldCarver.canyon(
+    CanyonWorldCarver.builder()
         .probability(0.02f)
         .y(HeightProvider.uniform(VerticalAnchor.absolute(10), VerticalAnchor.absolute(67)))
         .yScale(FloatProvider.constant(3.0f))
         .lavaLevel(VerticalAnchor.aboveBottom(8))
         .replaceable(Material.STONE, Material.DEEPSLATE)
         .verticalRotation(FloatProvider.uniform(-0.125f, 0.125f))
-        .shape(CanyonShapeConfiguration.builder()
+        .shape(Shape.builder()
             .distanceFactor(FloatProvider.uniform(0.75f, 1.0f))
             .thickness(FloatProvider.trapezoid(0.0f, 6.0f, 2.0f))
             .widthSmoothness(3)

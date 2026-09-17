@@ -9,7 +9,7 @@ import dev.wyck.worldgen.function.transformer.ClampedTransformer;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.level.levelgen.DensityFunction.SinglePointContext;
+import net.minecraft.world.level.levelgen.densityfunction.DensityFunction.SinglePointContext;
 import org.jspecify.annotations.NullMarked;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,7 +25,7 @@ class DensityFunctionTest {
     private static final double EXACT = 0.0;
 
     private static double compute(DensityFunction function) {
-        return function.<net.minecraft.world.level.levelgen.DensityFunction>asHandle().compute(ORIGIN);
+        return function.<net.minecraft.world.level.levelgen.densityfunction.DensityFunction>asHandle().compute(ORIGIN);
     }
 
     @Test
@@ -86,7 +86,7 @@ class DensityFunctionTest {
 
     @Test
     void aClampReportsItsRangeToVanilla() {
-        net.minecraft.world.level.levelgen.DensityFunction clamped =
+        net.minecraft.world.level.levelgen.densityfunction.DensityFunction clamped =
                 ClampedTransformer.of(ConstantSimpleFunction.of(0.5), -2.0, 3.0).asHandle();
 
         assertEquals(-2.0, clamped.minValue(), EXACT);
@@ -98,9 +98,9 @@ class DensityFunctionTest {
         ConstantSimpleFunction densityFunction = ConstantSimpleFunction.of(ResourceKey.of("wyck:constant"), 1.0);
         densityFunction.register();
 
-        Registry<net.minecraft.world.level.levelgen.DensityFunction> registry =
+        Registry<net.minecraft.world.level.levelgen.densityfunction.DensityFunction> registry =
                 BootstrapSafeMinecraftRegistries.mappedRegistry(Registries.DENSITY_FUNCTION);
-        net.minecraft.world.level.levelgen.DensityFunction registered =
+        net.minecraft.world.level.levelgen.densityfunction.DensityFunction registered =
                 registry.getValue(Identifier.parse("wyck:constant"));
 
         assertNotNull(registered, "density function never landed in worldgen/density_function");
@@ -111,7 +111,7 @@ class DensityFunctionTest {
     void registeringADensityFunctionLeavesVanillaOnesAlone() {
         ConstantSimpleFunction.of(ResourceKey.of("wyck:coexist"), 2.0).register();
 
-        Registry<net.minecraft.world.level.levelgen.DensityFunction> registry =
+        Registry<net.minecraft.world.level.levelgen.densityfunction.DensityFunction> registry =
                 BootstrapSafeMinecraftRegistries.mappedRegistry(Registries.DENSITY_FUNCTION);
 
         assertNotNull(registry.getValue(Identifier.parse("wyck:coexist")));

@@ -5,7 +5,7 @@ import dev.wyck.keys.ResourceKey;
 import dev.wyck.test.bootstrap.MinecraftBootstrap;
 import dev.wyck.util.BootstrapSafeMinecraftRegistries;
 import dev.wyck.worldgen.carver.CarverConfiguration;
-import dev.wyck.worldgen.carver.ConfiguredWorldCarver;
+import dev.wyck.worldgen.carver.WorldCarver;
 import dev.wyck.worldgen.carver.types.ComposedCarver;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -35,10 +35,10 @@ class CarverDecodeTest {
     void everyVanillaConfiguredCarverDecodesInline() {
         var registry = BootstrapSafeMinecraftRegistries.mappedRegistry(Registries.CONFIGURED_CARVER);
         registry.entrySet().forEach(entry -> {
-            net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver<?> configured =
+            net.minecraft.world.level.levelgen.carver.WorldCarver<?> configured =
                 withDirectReplaceable(entry.getValue());
             ComposedCarver decoded = assertInstanceOf(ComposedCarver.class,
-                ConfiguredWorldCarver.decode(Holder.direct(configured)));
+                WorldCarver.decode(Holder.direct(configured)));
             ResourceKey expectedType = Decoders.registryKey(
                 BuiltInRegistries.CARVER, configured.worldCarver());
             assertEquals(expectedType, decoded.type().resourceKey());
@@ -47,22 +47,22 @@ class CarverDecodeTest {
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
-    private static net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver<?> withDirectReplaceable(
-        net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver<?> configured
+    private static net.minecraft.world.level.levelgen.carver.WorldCarver<?> withDirectReplaceable(
+        net.minecraft.world.level.levelgen.carver.WorldCarver<?> configured
     ) {
         var original = configured.config();
         var replaceable = HolderSet.direct(BuiltInRegistries.BLOCK.wrapAsHolder(Blocks.STONE));
         net.minecraft.world.level.levelgen.carver.CarverConfiguration copy;
-        if (original instanceof net.minecraft.world.level.levelgen.carver.CaveCarverConfiguration cave) {
-            copy = new net.minecraft.world.level.levelgen.carver.CaveCarverConfiguration(
+        if (original instanceof net.minecraft.world.level.levelgen.carver.CaveWorldCarver cave) {
+            copy = new net.minecraft.world.level.levelgen.carver.CaveWorldCarver(
                 cave.probability, cave.y, cave.yScale, cave.lavaLevel, cave.debugSettings, replaceable,
                 cave.horizontalRadiusMultiplier, cave.verticalRadiusMultiplier, cave.floorLevel);
         } else {
-            var canyon = (net.minecraft.world.level.levelgen.carver.CanyonCarverConfiguration) original;
-            copy = new net.minecraft.world.level.levelgen.carver.CanyonCarverConfiguration(
+            var canyon = (net.minecraft.world.level.levelgen.carver.CanyonWorldCarver) original;
+            copy = new net.minecraft.world.level.levelgen.carver.CanyonWorldCarver(
                 canyon.probability, canyon.y, canyon.yScale, canyon.lavaLevel, canyon.debugSettings, replaceable,
                 canyon.verticalRotation, canyon.shape);
         }
-        return new net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver(configured.worldCarver(), copy);
+        return new net.minecraft.world.level.levelgen.carver.WorldCarver(configured.worldCarver(), copy);
     }
 }

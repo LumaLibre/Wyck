@@ -40,6 +40,22 @@ public interface Marker extends DensityFunction, Registerable<Marker> {
     DensityFunction input();
 
     /**
+     * Horizontal cell size used by interpolated markers.
+     * @return horizontal cell size
+     * @since 4.0.0
+     */
+    @AsOf("4.0.0")
+    int cellSizeHorizontal();
+
+    /**
+     * Vertical cell size used by interpolated markers.
+     * @return vertical cell size
+     * @since 4.0.0
+     */
+    @AsOf("4.0.0")
+    int cellSizeVertical();
+
+    /**
      * Creates a new marker.
      * @param resourceKey the resource key, or null
      * @param type the type of the marker
@@ -48,11 +64,11 @@ public interface Marker extends DensityFunction, Registerable<Marker> {
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    static Marker of(@Nullable ResourceKey resourceKey, Type type, DensityFunction input) {
+    static Marker of(@Nullable ResourceKey resourceKey, Type type, DensityFunction input, int cellSizeHorizontal, int cellSizeVertical) {
         record Holder() {
             static final ConstructWireProvider<Marker> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.function.misc.MarkerImpl");
         }
-        return Holder.WIRE.construct(Optional.ofNullable(resourceKey), type, input);
+        return Holder.WIRE.construct(Optional.ofNullable(resourceKey), type, input, cellSizeHorizontal, cellSizeVertical);
     }
 
     /**
@@ -63,7 +79,7 @@ public interface Marker extends DensityFunction, Registerable<Marker> {
      * @since 3.0.0
      */
     static Marker of(Type type, DensityFunction input) {
-        return of(null, type, input);
+        return of(null, type, input, 4, 8);
     }
 
     /**
@@ -74,7 +90,20 @@ public interface Marker extends DensityFunction, Registerable<Marker> {
      */
     @AsOf("3.0.0")
     static Marker interpolated(DensityFunction input) {
-        return of(Type.INTERPOLATED, input);
+        return interpolated(input, 4, 8);
+    }
+
+    /**
+     * Interpolates using explicit horizontal and vertical cell sizes.
+     * @param input the input density function
+     * @param cellSizeHorizontal horizontal cell size
+     * @param cellSizeVertical vertical cell size
+     * @return the marker
+     * @since 4.0.0
+     */
+    @AsOf("4.0.0")
+    static Marker interpolated(DensityFunction input, int cellSizeHorizontal, int cellSizeVertical) {
+        return of(null, Type.INTERPOLATED, input, cellSizeHorizontal, cellSizeVertical);
     }
 
     /**
@@ -85,7 +114,7 @@ public interface Marker extends DensityFunction, Registerable<Marker> {
      */
     @AsOf("3.0.0")
     static Marker flatCache(DensityFunction input) {
-        return of(Type.FLAT_CACHE, input);
+        return cache(input);
     }
 
     /**
@@ -96,7 +125,7 @@ public interface Marker extends DensityFunction, Registerable<Marker> {
      */
     @AsOf("3.0.0")
     static Marker cache2d(DensityFunction input) {
-        return of(Type.CACHE_2D, input);
+        return cache(input);
     }
 
     /**
@@ -107,7 +136,7 @@ public interface Marker extends DensityFunction, Registerable<Marker> {
      */
     @AsOf("3.0.0")
     static Marker cacheOnce(DensityFunction input) {
-        return of(Type.CACHE_ONCE, input);
+        return cache(input);
     }
 
     /**
@@ -118,7 +147,18 @@ public interface Marker extends DensityFunction, Registerable<Marker> {
      */
     @AsOf("3.0.0")
     static Marker cacheAllInCell(DensityFunction input) {
-        return of(Type.CACHE_ALL_IN_CELL, input);
+        return cache(input);
+    }
+
+    /**
+     * Caches the input density function using Minecraft's current cache implementation.
+     * @param input the input density function
+     * @return the marker
+     * @since 4.0.0
+     */
+    @AsOf("4.0.0")
+    static Marker cache(DensityFunction input) {
+        return of(Type.CACHE, input);
     }
 
     /**
@@ -138,10 +178,7 @@ public interface Marker extends DensityFunction, Registerable<Marker> {
      */
     enum Type {
         INTERPOLATED,
-        FLAT_CACHE,
-        CACHE_2D,
-        CACHE_ONCE,
-        CACHE_ALL_IN_CELL,
+        CACHE,
         BLEND_DENSITY // Yes, this function is actually here in the vanilla implementation.
     }
 }

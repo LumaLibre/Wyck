@@ -5,7 +5,7 @@ import dev.wyck.keys.ResourceKey;
 import dev.wyck.util.BukkitBootstrapUtil;
 import dev.wyck.worldgen.Decoration;
 import dev.wyck.worldgen.HeightmapType;
-import dev.wyck.worldgen.feature.ConfiguredFeature;
+import dev.wyck.worldgen.feature.Feature;
 import dev.wyck.worldgen.placement.PlacedFeature;
 import dev.wyck.worldgen.placement.PlacedFeatures;
 import dev.wyck.worldgen.placement.PlacementModifier;
@@ -31,8 +31,8 @@ public class TestPluginBootstrapper implements PluginBootstrap {
         System.out.println(orientable);
 
         PillarFeature feat = new PillarFeature().registerAs(PILLAR_KEY);
-        ConfiguredFeature tallFeature = ConfiguredFeature.custom(feat, new PillarFeature.PillarConfig(Material.OBSIDIAN, Material.GLOWSTONE, 10, 15));
-        ConfiguredFeature shortFeature = ConfiguredFeature.custom(feat, new PillarFeature.PillarConfig(Material.BLACKSTONE, Material.SHROOMLIGHT, 3, 5));
+        Feature tallFeature = Feature.custom(feat, new PillarFeature.PillarConfig(Material.OBSIDIAN, Material.GLOWSTONE, 10, 15));
+        Feature shortFeature = Feature.custom(feat, new PillarFeature.PillarConfig(Material.BLACKSTONE, Material.SHROOMLIGHT, 3, 5));
 
 
         PlacedFeature tallPlaced = PlacedFeature.builder()

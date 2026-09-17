@@ -14,8 +14,6 @@ public enum RegistryId {
     BIOME("worldgen/biome"),
     BLOCK("block"),
     CARVER("worldgen/carver"),
-    CONFIGURED_CARVER("worldgen/configured_carver"),
-    CONFIGURED_FEATURE("worldgen/configured_feature"),
     CLOCK_TIME_MARKER("clock_time_marker"),
     DENSITY_FUNCTION("worldgen/density_function"),
     DIMENSION_TYPE("dimension_type"),

@@ -4,7 +4,7 @@ import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.ConstructWireProvider;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.worldgen.carver.Carvers;
-import dev.wyck.worldgen.carver.ConfiguredWorldCarver;
+import dev.wyck.worldgen.carver.WorldCarver;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -17,7 +17,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("3.0.0")
-public interface ReferencedCarver extends ConfiguredWorldCarver {
+public interface ReferencedCarver extends WorldCarver {
 
     /**
      * Creates a new reference to the given carver.
@@ -28,7 +28,7 @@ public interface ReferencedCarver extends ConfiguredWorldCarver {
     @AsOf("3.0.0")
     static ReferencedCarver of(ResourceKey key) {
         record Holder() {
-            static final ConstructWireProvider<ReferencedCarver> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.carver.types.ReferencedCarverImpl");
+            static final ConstructWireProvider<ReferencedCarver> WIRE = ConstructWireProvider.create("dev.wyck.*?.worldgen.carver.types.ReferencedCarverImpl");
         }
         return Holder.WIRE.construct(key);
     }

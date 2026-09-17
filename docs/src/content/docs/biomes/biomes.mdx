@@ -36,11 +36,11 @@ import dev.wyck.environment.particle.ParticleTypes;
 import dev.wyck.environment.particle.options.BlockParticle;
 import dev.wyck.biome.BiomeGenerationSettings;
 import dev.wyck.worldgen.Decoration;
-import dev.wyck.worldgen.carver.CanyonCarverConfiguration;
-import dev.wyck.worldgen.carver.CanyonShapeConfiguration;
-import dev.wyck.worldgen.carver.ConfiguredWorldCarver;
-import dev.wyck.worldgen.feature.ConfiguredFeature;
-import dev.wyck.worldgen.feature.ConfiguredFeatures;
+import dev.wyck.worldgen.carver.CanyonWorldCarver;
+import dev.wyck.worldgen.carver.CanyonWorldCarver.Shape;
+import dev.wyck.worldgen.carver.WorldCarver;
+import dev.wyck.worldgen.feature.Feature;
+import dev.wyck.worldgen.feature.Features;
 import dev.wyck.worldgen.feature.FeatureType;
 import dev.wyck.worldgen.feature.configurations.FeatureConfiguration;
 import dev.wyck.worldgen.placement.PlacedFeature;
@@ -92,14 +92,14 @@ public class ExamplePlugin extends JavaPlugin {
             // Worldgen
             .generationSettings(
                 BiomeGenerationSettings.builder()
-                    .addCarver(ConfiguredWorldCarver.canyon(CanyonCarverConfiguration.builder()
+                    .addCarver(WorldCarver.canyon(CanyonWorldCarver.builder()
                         .probability(0.9f)
                         .y(HeightProvider.biasedToBottom(VerticalAnchor.bottom(), VerticalAnchor.bottom(), 20))
                         .yScale(FloatProvider.constant(1.0f))
                         .lavaLevel(VerticalAnchor.absolute(63))
                         .replaceable(List.of(Material.STONE, Material.DIRT, Material.GRASS_BLOCK))
                         .verticalRotation(FloatProvider.constant(0.0f))
-                        .shape(CanyonShapeConfiguration.builder()
+                        .shape(Shape.builder()
                             .distanceFactor(FloatProvider.constant(5f))
                             .thickness(FloatProvider.constant(0.1f))
                             .widthSmoothness(30)
@@ -114,7 +114,7 @@ public class ExamplePlugin extends JavaPlugin {
                         .modifier(PlacementModifier.count(1))
                         .build())
                     .addFeature(Decoration.TOP_LAYER_MODIFICATION, PlacedFeature.builder()
-                        .feature(ConfiguredFeatures.PILE_SNOW) // Or use one that's already registered
+                        .feature(Features.PILE_SNOW) // Or use one that's already registered
                         .modifier(PlacementModifier.count(1))
                         .build())
                     .addFeature(Decoration.UNDERGROUND_ORES, PlacedFeatures.ORE_IRON_SMALL)

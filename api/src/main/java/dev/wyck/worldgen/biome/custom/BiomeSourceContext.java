@@ -4,8 +4,6 @@ import dev.wyck.annotations.AsOf;
 import dev.wyck.worldgen.climate.ClimatePoint;
 import org.jspecify.annotations.NullMarked;
 
-import java.util.List;
-
 /**
  * The sampling context handed to a {@link CustomBiomeSource} while Minecraft determines a biome.
  * Coordinates supplied by Minecraft are quart positions, where one unit represents four blocks.
@@ -73,18 +71,10 @@ public interface BiomeSourceContext {
     }
 
     /**
-     * Gets the ranges produced by Minecraft's climate sampler as a climate point.
-     * @return the climate sampler ranges
+     * Samples Minecraft's climate values at this context's position.
+     * @return the sampled climate point
      * @since 3.3.0
      */
     @AsOf("3.3.0")
-    ClimatePoint climateBounds();
-
-    /**
-     * Gets the spawn-target climate points carried by Minecraft's climate sampler.
-     * @return the spawn-target climate points
-     * @since 3.3.0
-     */
-    @AsOf("3.3.0")
-    List<ClimatePoint> spawnTarget();
+    ClimatePoint climate();
 }

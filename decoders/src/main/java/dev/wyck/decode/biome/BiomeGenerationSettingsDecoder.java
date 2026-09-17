@@ -2,7 +2,7 @@ package dev.wyck.decode.biome;
 
 import dev.wyck.biome.BiomeGenerationSettings;
 import dev.wyck.worldgen.Decoration;
-import dev.wyck.worldgen.carver.ConfiguredWorldCarver;
+import dev.wyck.worldgen.carver.WorldCarver;
 import dev.wyck.worldgen.placement.PlacedFeature;
 import dev.wyck.wrapper.decode.Decodable;
 import net.minecraft.core.Holder;
@@ -21,9 +21,9 @@ public final class BiomeGenerationSettingsDecoder implements Decodable<BiomeGene
 
     @Override
     public BiomeGenerationSettings decode(net.minecraft.world.level.biome.BiomeGenerationSettings settings) {
-        List<ConfiguredWorldCarver> carvers = new ArrayList<>();
-        for (Holder<net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver<?>> carver : settings.getCarvers()) {
-            carvers.add(ConfiguredWorldCarver.decode(carver));
+        List<WorldCarver> carvers = new ArrayList<>();
+        for (Holder<net.minecraft.world.level.levelgen.carver.WorldCarver<?>> carver : settings.getCarvers()) {
+            carvers.add(WorldCarver.decode(carver));
         }
 
         Decoration[] steps = Decoration.values();

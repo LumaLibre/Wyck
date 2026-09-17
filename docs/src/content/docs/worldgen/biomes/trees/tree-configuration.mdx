@@ -6,7 +6,7 @@ description: Using Minecraft's built-in tree configurations in Wyck.
 import CodeBlock from "@/components/CodeBlock.astro";
 import SourceLink from "@/components/SourceLink.astro";
 
-A <SourceLink path="worldgen/feature/configurations/TreeConfiguration.java">TreeConfiguration</SourceLink>
+A <SourceLink path="worldgen/feature/configurations/TreeFeature.java">TreeFeature</SourceLink>
 is a built-in configuration in Minecraft that allows you to create trees with various shapes and sizes.
 In Wyck, you can use this configuration to create custom trees for your biomes.
 
@@ -29,7 +29,7 @@ Tree configurations are made up of several components that branch off into separ
     code={
 `import dev.wyck.worldgen.blockpredicates.BlockPredicate;
 import dev.wyck.worldgen.feature.configurations.FeatureConfiguration;
-import dev.wyck.worldgen.feature.configurations.TreeConfiguration;
+import dev.wyck.worldgen.feature.configurations.TreeFeature;
 import dev.wyck.worldgen.feature.featuresize.FeatureSize;
 import dev.wyck.worldgen.feature.foliageplacers.FoliagePlacer;
 import dev.wyck.worldgen.feature.trunkplacers.TrunkPlacer;
@@ -43,7 +43,7 @@ public class ExamplePlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         // Making a tall spruce tree
-        TreeConfiguration treeConfig = FeatureConfiguration.tree()
+        TreeFeature treeConfig = FeatureConfiguration.tree()
             .foliageProvider(BlockStateProvider.simple(Material.SPRUCE_LEAVES))
             .trunkProvider(BlockStateProvider.simple(Material.SPRUCE_LOG))
             .belowTrunkProvider(

@@ -40,12 +40,20 @@ public interface BedRule extends Wrapper {
     Rule canSetSpawn();
 
     /**
-     * Whether the bed explodes when used in this environment.
-     * @return whether the bed explodes when used in this environment
-     * @since 1.1.0
+     * Whether the bed is destroyed when used in this environment.
+     * @return whether the bed is destroyed on use
+     * @since 4.0.0
      */
-    @AsOf("1.1.0")
-    boolean explodes();
+    @AsOf("4.0.0")
+    boolean destroyOnUse();
+
+    /**
+     * Whether the bed is destroyed when a player leaves it.
+     * @return whether the bed is destroyed on leave
+     * @since 4.0.0
+     */
+    @AsOf("4.0.0")
+    boolean destroyOnLeave();
 
     /**
      * The error message displayed when a player tries to use the bed inappropriately.
@@ -69,17 +77,18 @@ public interface BedRule extends Wrapper {
      * Creates a new BedRule instance.
      * @param canSleep the rule for sleeping in the bed
      * @param canSetSpawn the rule for setting the spawn point using the bed
-     * @param explodes whether the bed explodes when used in this environment
+     * @param destroyOnUse whether the bed is destroyed when used
+     * @param destroyOnLeave whether the bed is destroyed when left
      * @param errorMessage the error message displayed when a player tries to use the bed inappropriately, or null if no error message is set
      * @return a new BedRule instance
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    static BedRule of(Rule canSleep, Rule canSetSpawn, boolean explodes, @Nullable Component errorMessage) {
+    static BedRule of(Rule canSleep, Rule canSetSpawn, boolean destroyOnUse, boolean destroyOnLeave, @Nullable Component errorMessage) {
         record Holder() {
             static final ConstructWireProvider<BedRule> WIRE = ConstructWireProvider.construct("dev.wyck.environment.BedRuleImpl");
         }
-        return Holder.WIRE.construct(canSleep, canSetSpawn, explodes, Optional.ofNullable(errorMessage));
+        return Holder.WIRE.construct(canSleep, canSetSpawn, destroyOnUse, destroyOnLeave, Optional.ofNullable(errorMessage));
     }
 
     /**
@@ -160,7 +169,8 @@ public interface BedRule extends Wrapper {
     final class Builder {
         private Rule canSleep = Rule.WHEN_DARK;
         private Rule canSetSpawn = Rule.ALWAYS;
-        private boolean explodes = false;
+        private boolean destroyOnUse = false;
+        private boolean destroyOnLeave = false;
         private @Nullable Component errorMessage = Component.text("You can only sleep at night or during thunderstorms");
 
         public Builder() {}
@@ -168,7 +178,8 @@ public interface BedRule extends Wrapper {
         public Builder(BedRule bedRule) {
             this.canSleep = bedRule.canSleep();
             this.canSetSpawn = bedRule.canSetSpawn();
-            this.explodes = bedRule.explodes();
+            this.destroyOnUse = bedRule.destroyOnUse();
+            this.destroyOnLeave = bedRule.destroyOnLeave();
             this.errorMessage = bedRule.errorMessage().orElse(null);
         }
 
@@ -197,14 +208,26 @@ public interface BedRule extends Wrapper {
         }
 
         /**
-         * Sets whether the bed explodes when used in this environment.
-         * @param explodes whether the bed explodes when used in this environment
+         * Sets whether the bed is destroyed when used in this environment.
+         * @param destroyOnUse whether the bed is destroyed on use
          * @return this builder, for chaining
-         * @since 1.1.0
+         * @since 4.0.0
          */
-        @AsOf("1.1.0")
-        public Builder explodes(boolean explodes) {
-            this.explodes = explodes;
+        @AsOf("4.0.0")
+        public Builder destroyOnUse(boolean destroyOnUse) {
+            this.destroyOnUse = destroyOnUse;
+            return this;
+        }
+
+        /**
+         * Sets whether the bed is destroyed when a player leaves it.
+         * @param destroyOnLeave whether the bed is destroyed on leave
+         * @return this builder, for chaining
+         * @since 4.0.0
+         */
+        @AsOf("4.0.0")
+        public Builder destroyOnLeave(boolean destroyOnLeave) {
+            this.destroyOnLeave = destroyOnLeave;
             return this;
         }
 
@@ -227,7 +250,7 @@ public interface BedRule extends Wrapper {
          */
         @AsOf("1.1.0")
         public BedRule build() {
-            return of(canSleep, canSetSpawn, explodes, errorMessage);
+            return of(canSleep, canSetSpawn, destroyOnUse, destroyOnLeave, errorMessage);
         }
     }
 }

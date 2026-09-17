@@ -4,250 +4,188 @@ import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.registry.worldgen.CustomCarverRegistry;
-import dev.wyck.worldgen.heightproviders.HeightProvider;
-import dev.wyck.worldgen.heightproviders.VerticalAnchor;
-import dev.wyck.worldgen.valueproviders.FloatProvider;
 import dev.wyck.wrapper.Registerable;
-import org.bukkit.Material;
-import org.bukkit.block.data.BlockData;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Random;
-import java.util.Set;
 import java.util.function.Supplier;
 
 /**
- * Base class for an authored world carver with its own carving algorithm.
+ * A custom implementation of Minecraft 26.3's direct, mask-only carver contract.
  *
- * @param <C> the configuration type carried to {@link #carve(CarvingContext)}
- * @since 3.0.0
- * @version 3.0.0
+ * @param <C> the custom carver configuration type
+ * @since 4.0.0
+ * @version 4.0.0
  * @author Jsinco
  */
 @NullMarked
-@AsOf("3.0.0")
+@AsOf("4.0.0")
 @ApiStatus.Experimental
 public abstract class CustomCarver<C> implements Cloneable, Registerable<CustomCarver<C>> {
-
     private final Supplier<C> configSupplier;
     private @Nullable ResourceKey key;
 
     /**
-     * Creates a new CustomCarver with the given configuration supplier.
-     * @param configSupplier the configuration supplier
-     * @since 3.0.0
+     * Creates an unregistered custom carver.
+     * @param configSupplier a supplier of fresh configuration instances
+     * @since 4.0.0
      */
-    @AsOf("3.0.0")
+    @AsOf("4.0.0")
     protected CustomCarver(Supplier<C> configSupplier) {
-        this.configSupplier = configSupplier;
+        this(configSupplier, null);
     }
 
     /**
-     * Creates a new CustomCarver with the given configuration supplier and registry key.
-     * @param configSupplier the configuration supplier
-     * @param key the key to register this carver under
-     * @since 3.0.0
+     * Creates a custom carver with an optional registry key.
+     * @param configSupplier a supplier of fresh configuration instances
+     * @param key the registry key, or null for an unregistered carver
+     * @since 4.0.0
      */
-    @AsOf("3.0.0")
+    @AsOf("4.0.0")
     protected CustomCarver(Supplier<C> configSupplier, @Nullable ResourceKey key) {
         this.configSupplier = configSupplier;
         this.key = key;
     }
 
     /**
-     * Carves the chunk described by the context.
-     * <p>
-     * <b>This should return true if anything was carved.</b>
-     *
-     * @param context the carving surface
-     * @return whether carving occurred
-     * @since 3.0.0
+     * Marks positions in the active target chunk as carved.
+     * @param context the current carving context
+     * @return whether this carver marked at least one position
+     * @since 4.0.0
      */
-    @AsOf("3.0.0")
+    @AsOf("4.0.0")
     public abstract boolean carve(CarvingContext<C> context);
 
     /**
-     * Whether the given chunk should originate a carve. Called once per chunk in
-     * range before {@link #carve(CarvingContext)}.
-     *
-     * @param config a fresh configuration instance
-     * @param random a random seeded for this chunk
-     * @return whether to carve from this chunk
-     * @since 3.0.0
+     * Determines whether this carver starts in a candidate chunk.
+     * @param config the custom carver configuration
+     * @param random the random source for the candidate chunk
+     * @return whether the carver starts in the chunk
+     * @since 4.0.0
      */
-    @AsOf("3.0.0")
+    @AsOf("4.0.0")
     public boolean isStartChunk(C config, Random random) {
-        return random.nextFloat() <= this.probability();
+        return random.nextFloat() <= probability();
     }
 
     /**
-     * Whether {@link CarvingContext#carveEllipsoid} may replace the given state.
-     * Ignored by carves that write blocks directly.
-     *
-     * @return whether the state is replaceable
-     * @since 3.0.0
+     * The horizontal chunk range this carver may reach from its source chunk.
+     * @return the carver range in chunks
+     * @since 4.0.0
      */
-    @AsOf("3.0.0")
-    public boolean canReplaceBlock(C config, BlockData state) {
-        return this.replaceable().contains(state.getMaterial());
-    }
-
-    /**
-     * @return the chunk radius this carver may reach into
-     * @since 3.0.0
-     */
-    @AsOf("3.0.0")
+    @AsOf("4.0.0")
     public int range() {
         return 4;
     }
 
     /**
-     * @return the per-chunk chance this carver originates a carve
-     * @since 3.0.0
+     * The default probability used by {@link #isStartChunk(Object, Random)}.
+     * @return the carver start probability
+     * @since 4.0.0
      */
-    @AsOf("3.0.0")
+    @AsOf("4.0.0")
     public float probability() {
         return 0.15F;
     }
 
     /**
-     * The y-level below which {@link CarvingContext#carveEllipsoid} places lava
-     * rather than consulting the aquifer.
-     *
-     * @return the lava level anchor
-     * @since 3.0.0
+     * The registry key assigned to this carver.
+     * @return the carver registry key
+     * @throws NullPointerException if this carver has no registry key
+     * @since 4.0.0
      */
-    @AsOf("3.0.0")
-    public VerticalAnchor lavaLevel() {
-        return VerticalAnchor.aboveBottom(8);
-    }
-
-    /**
-     * @return the materials {@link CarvingContext#carveEllipsoid} may replace
-     * @since 3.0.0
-     */
-    @AsOf("3.0.0")
-    public Set<Material> replaceable() {
-        return Set.of(Material.STONE, Material.DEEPSLATE, Material.DIRT, Material.GRASS_BLOCK, Material.GRAVEL, Material.TUFF);
-    }
-
-    /**
-     * The nominal y-band of this carver. Purely descriptive: it populates the
-     * underlying configuration so vanilla tooling reports something sane, and is
-     * never sampled by Wyck. Sample your own y from {@link CarvingContext#random()}.
-     *
-     * @return the height provider
-     * @since 3.0.0
-     */
-    @AsOf("3.0.0")
-    public HeightProvider y() {
-        return HeightProvider.uniform(VerticalAnchor.aboveBottom(8), VerticalAnchor.absolute(180));
-    }
-
-    /**
-     * @return the nominal vertical scale of this carver
-     * @since 3.0.0
-     */
-    @AsOf("3.0.0")
-    public FloatProvider yScale() {
-        return FloatProvider.constant(1.0F);
-    }
-
-    @AsOf("3.0.0")
+    @AsOf("4.0.0")
     public ResourceKey key() {
-        return Preconditions.checkNotNull(this.key, "key shouldn't be null at this point");
+        return Preconditions.checkNotNull(key, "carver has no registry key");
     }
 
     /**
-     * Internal method to get this carver's key without failing on absence.
-     * @return the key, or null if unregistered
-     * @since 3.0.0
+     * Returns the nullable registry key used by the runtime bridge.
+     * @return the registry key, or null when unregistered
+     * @since 4.0.0
      */
-    @AsOf("3.0.0")
+    @AsOf("4.0.0")
     @ApiStatus.Internal
     public final @Nullable ResourceKey resourceKey() {
-        return this.key;
+        return key;
     }
 
     /**
-     * Internal method to get the configuration supplier.
+     * Returns the configuration supplier used by the runtime bridge.
      * @return the configuration supplier
-     * @since 3.0.0
+     * @since 4.0.0
      */
-    @AsOf("3.0.0")
+    @AsOf("4.0.0")
     @ApiStatus.Internal
     public final Supplier<C> configSupplier() {
-        return this.configSupplier;
+        return configSupplier;
     }
 
     /**
-     * Internal method to create a new configuration instance.
-     * @return a new instance of the configuration type
-     * @since 3.0.0
+     * Creates a fresh configuration instance for the runtime bridge.
+     * @return a fresh configuration instance
+     * @since 4.0.0
      */
-    @AsOf("3.0.0")
+    @AsOf("4.0.0")
     @ApiStatus.Internal
     public final C newConfig() {
-        return this.configSupplier.get();
+        return configSupplier.get();
     }
 
     /**
-     * Registers this carver into the CARVER registry under the key of this carver.
-     * @return this carver
-     * @since 3.0.0
+     * Registers this carver using its assigned registry key.
+     * @return this registered carver
+     * @throws NullPointerException if this carver has no registry key
+     * @since 4.0.0
      */
-    @AsOf("3.0.0")
+    @Override
+    @AsOf("4.0.0")
     public final CustomCarver<C> register() {
-        Preconditions.checkNotNull(this.key, "key must not be null when registering");
-        CustomCarverRegistry.registry().register(this.key, this);
+        CustomCarverRegistry.registry().register(
+            Preconditions.checkNotNull(key, "key must be set"),
+            this
+        );
         return this;
     }
 
     /**
-     * Registers this carver into the CARVER registry under the given key.
-     * Must be called during the bootstrap window. After registration, compose
-     * it into a biome with ConfiguredWorldCarver.custom(key, config).
-     * @param key the registry key to register under
-     * @return the registered carver
-     * @since 3.0.0
+     * Clones and registers this carver using the supplied registry key.
+     * @param key the registry key
+     * @param <T> the inferred registered carver type
+     * @return the registered carver clone
+     * @since 4.0.0
      */
-    @AsOf("3.0.0")
+    @AsOf("4.0.0")
     @SuppressWarnings("unchecked")
     public final <T> T registerAs(ResourceKey key) {
-        CustomCarver<C> cloned = this.clone();
-        cloned.key = key;
-        CustomCarverRegistry.registry().register(key, cloned);
-        return (T) cloned;
+        CustomCarver<C> copy = clone();
+        copy.key = key;
+        CustomCarverRegistry.registry().register(key, copy);
+        return (T) copy;
     }
 
     /**
-     * Convenience method for registering a carver.
-     * @param key the registry key to register under
-     * @param carver the carver to register
-     * @return the registered carver
-     * @param <C> the configuration type
-     * @since 3.0.0
+     * Registers a custom carver using the supplied registry key.
+     * @param key the registry key
+     * @param carver the custom carver to register
+     * @param <C> the custom carver configuration type
+     * @return the registered carver clone
+     * @since 4.0.0
      */
-    @AsOf("3.0.0")
+    @AsOf("4.0.0")
     public static <C> CustomCarver<C> register(ResourceKey key, CustomCarver<C> carver) {
         return carver.registerAs(key);
     }
 
-    /**
-     * Clones this carver.
-     * @return a clone of this carver
-     * @since 3.0.0
-     */
     @Override
-    @AsOf("3.0.0")
-    @SuppressWarnings({"unchecked", "CloneDoesntDeclareCloneNotSupportedException"})
+    @SuppressWarnings("unchecked")
     protected CustomCarver<C> clone() {
         try {
             return (CustomCarver<C>) super.clone();
-        } catch (CloneNotSupportedException e) {
-            throw new AssertionError(e);
+        } catch (CloneNotSupportedException exception) {
+            throw new AssertionError(exception);
         }
     }
 }

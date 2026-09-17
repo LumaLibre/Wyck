@@ -19,7 +19,7 @@ Documentation is still under construction!
 ## About 📃
 
 Wyck is a custom biome, dimensions, and world generation API for PaperMC Servers. This API is a fork of Outspending's BiomesAPI and
-has been updated to support the **modern** Minecraft versions. Currently, we support Minecraft **1.21.11 ↔ 26.2**
+has been updated to support the **modern** Minecraft versions. The current runtime target is Minecraft **26.3**.
 but version support will expand with time.
 
 

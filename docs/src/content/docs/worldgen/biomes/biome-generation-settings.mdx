@@ -27,7 +27,7 @@ import dev.wyck.worldgen.Decoration;
 import dev.wyck.worldgen.HeightmapType;
 import dev.wyck.worldgen.placement.PlacementModifier;
 import dev.wyck.worldgen.carver.Carvers;
-import dev.wyck.worldgen.feature.ConfiguredFeatures;
+import dev.wyck.worldgen.feature.Features;
 import dev.wyck.worldgen.placement.PlacedFeature;
 import dev.wyck.worldgen.placement.PlacedFeatures;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -42,7 +42,7 @@ public class ExamplePlugin extends JavaPlugin {
             .addFeature(Decoration.UNDERGROUND_ORES, PlacedFeatures.ORE_DIAMOND)
             // author a surface flower placement
             .addFeature(Decoration.VEGETAL_DECORATION, PlacedFeature.of(
-                ConfiguredFeatures.FLOWER_DEFAULT,
+                Features.FLOWER_DEFAULT,
                 PlacementModifier.rarityFilter(8),
                 PlacementModifier.inSquare(),
                 PlacementModifier.heightmap(HeightmapType.MOTION_BLOCKING),

@@ -27,11 +27,11 @@ import dev.wyck.biome.BiomeGenerationSettings;
 import dev.wyck.worldgen.blockpredicates.BlockPredicate;
 import dev.wyck.worldgen.Decoration;
 import dev.wyck.worldgen.HeightmapType;
-import dev.wyck.worldgen.carver.ConfiguredWorldCarver;
-import dev.wyck.worldgen.feature.ConfiguredFeature;
+import dev.wyck.worldgen.carver.WorldCarver;
+import dev.wyck.worldgen.feature.Feature;
 import dev.wyck.worldgen.feature.FeatureType;
 import dev.wyck.worldgen.feature.configurations.FeatureConfiguration;
-import dev.wyck.worldgen.feature.configurations.TreeConfiguration;
+import dev.wyck.worldgen.feature.configurations.TreeFeature;
 import dev.wyck.worldgen.feature.featuresize.FeatureSize;
 import dev.wyck.worldgen.feature.foliageplacers.FoliagePlacer;
 import dev.wyck.worldgen.feature.treedecorators.TreeDecorator;
@@ -41,7 +41,6 @@ import dev.wyck.worldgen.placement.PlacementModifier;
 import dev.wyck.worldgen.stateproviders.BlockStateProvider;
 import dev.wyck.worldgen.surface.SurfaceRule;
 import dev.wyck.worldgen.valueproviders.IntProvider;
-import net.minecraft.world.level.chunk.ChunkGenerator;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.World;
@@ -74,7 +73,7 @@ public class TestPlugin extends JavaPlugin implements Listener {
         //DimensionType
         ResourceKey levelKey = ResourceKey.of("test", "wobbleworld5");
 
-        TreeConfiguration treeConfig = FeatureConfiguration.tree()
+        TreeFeature treeConfig = FeatureConfiguration.tree()
             .foliageProvider(BlockStateProvider.simple(Material.OAK_LEAVES))
             .trunkProvider(BlockStateProvider.simple(Material.CHERRY_WOOD))
             .belowTrunkProvider(
@@ -121,7 +120,7 @@ public class TestPlugin extends JavaPlugin implements Listener {
             .generationSettings(
                 BiomeGenerationSettings.builder()
                     .feature(Decoration.VEGETAL_DECORATION, PlacedFeature.builder()
-                        .feature(ConfiguredFeature.of(FeatureType.TREE, treeConfig))
+                        .feature(Feature.of(FeatureType.TREE, treeConfig))
                         .modifier(PlacementModifier.rarityFilter(1))
                         .modifier(PlacementModifier.inSquare())
                         .modifier(PlacementModifier.surfaceWaterDepthFilter(0))
@@ -129,7 +128,7 @@ public class TestPlugin extends JavaPlugin implements Listener {
                         .modifier(PlacementModifier.heightmap(HeightmapType.MOTION_BLOCKING))
                         .modifier(PlacementModifier.biomeFilter())
                         .build())
-                    .carver(ConfiguredWorldCarver.custom(new StarCarver().register(), StarConfig.defaults()))
+                    .carver(WorldCarver.custom(new StarCarver().register(), StarConfig.defaults()))
                     .build()
             )
             .register();

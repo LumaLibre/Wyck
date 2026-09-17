@@ -7,7 +7,7 @@ import dev.wyck.wrapper.Wrapper;
 import org.jspecify.annotations.NullMarked;
 
 /**
- * Wraps Minecraft's FeatureConfiguration.
+ * Common contract for Minecraft 26.3's direct feature implementations.
  *
  * @since 2.3.0
  * @version 3.0.0
@@ -18,438 +18,377 @@ import org.jspecify.annotations.NullMarked;
 public interface FeatureConfiguration extends Wrapper {
 
     @AsOf("3.0.0")
-    NoneFeatureConfiguration NONE = NoneFeatureConfiguration.INSTANCE; // vanilla
+    NoOpFeature NONE = NoOpFeature.INSTANCE; // vanilla
 
     /**
-     * Gets the {@link NoneFeatureConfiguration} instance.
+     * Gets the {@link NoOpFeature} instance.
      * @return the none feature configuration
      * @since 3.1.0
      */
     @AsOf("3.1.0")
-    static NoneFeatureConfiguration none() {
+    static NoOpFeature noOp() {
         return NONE;
     }
 
     /**
-     * Creates a builder for a {@link BlockBlobConfiguration}.
+     * Creates a builder for a {@link BlockBlobFeature}.
      * @return a new block blob configuration builder
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    static BlockBlobConfiguration.Builder blockBlob() {
-        return BlockBlobConfiguration.builder();
+    static BlockBlobFeature.Builder blockBlob() {
+        return BlockBlobFeature.builder();
     }
 
     /**
-     * Creates a builder for a {@link BlockColumnConfiguration}.
+     * Creates a builder for a {@link BlockColumnFeature}.
      * @return a new block column configuration builder
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    static BlockColumnConfiguration.Builder blockColumn() {
-        return BlockColumnConfiguration.builder();
+    static BlockColumnFeature.Builder blockColumn() {
+        return BlockColumnFeature.builder();
     }
 
     /**
-     * Creates a {@link BlockPileConfiguration}.
+     * Creates a {@link BlockPileFeature}.
      * @param stateProvider the block state provider used for the blocks in the pile
      * @return a new block pile configuration
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    static BlockPileConfiguration blockPile(BlockStateProvider stateProvider) {
-        return BlockPileConfiguration.of(stateProvider);
+    static BlockPileFeature blockPile(BlockStateProvider stateProvider) {
+        return BlockPileFeature.of(stateProvider);
     }
 
     /**
-     * Creates a builder for a {@link BlockStateConfiguration}.
+     * Creates a builder for a {@link IcebergFeature}.
      * @return a new block state configuration builder
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    static BlockStateConfiguration.Builder blockState() {
-        return BlockStateConfiguration.builder();
+    static IcebergFeature.Builder iceberg() {
+        return IcebergFeature.builder();
     }
 
     /**
-     * Creates a builder for a {@link ColumnFeatureConfiguration}.
-     * @return a new column feature configuration builder
-     * @since 3.0.0
-     */
-    @AsOf("3.0.0")
-    static ColumnFeatureConfiguration.Builder column() {
-        return ColumnFeatureConfiguration.builder();
-    }
-
-    /**
-     * Creates a builder for a {@link CountConfiguration}.
-     * @return a new count configuration builder
-     * @since 3.0.0
-     */
-    @AsOf("3.0.0")
-    static CountConfiguration.Builder count() {
-        return CountConfiguration.builder();
-    }
-
-    /**
-     * Creates a builder for a {@link DeltaFeatureConfiguration}.
+     * Creates a builder for a {@link DeltaFeature}.
      * @return a new delta feature configuration builder
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    static DeltaFeatureConfiguration.Builder delta() {
-        return DeltaFeatureConfiguration.builder();
+    static DeltaFeature.Builder delta() {
+        return DeltaFeature.builder();
     }
 
     /**
-     * Creates a builder for a {@link DiskConfiguration}.
+     * Creates a builder for a {@link DiskFeature}.
      * @return a new disk configuration builder
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    static DiskConfiguration.Builder disk() {
-        return DiskConfiguration.builder();
+    static DiskFeature.Builder disk() {
+        return DiskFeature.builder();
     }
 
     /**
-     * Creates a builder for a {@link PointedDripstoneConfiguration}.
-     * @apiNote This is {@link SpeleothemConfiguration} in 26.2+.
-     * @return a new pointed dripstone configuration builder
-     * @since 3.1.0
-     */
-    @AsOf("3.1.0")
-    static PointedDripstoneConfiguration.Builder pointedDripstone() {
-        return PointedDripstoneConfiguration.builder();
-    }
-
-    /**
-     * Creates a builder for a {@link DripstoneClusterConfiguration}.
-     * @return a new dripstone cluster configuration builder
-     * @since 3.0.0
-     */
-    @AsOf("3.0.0")
-    static DripstoneClusterConfiguration.Builder dripstoneCluster() {
-        return DripstoneClusterConfiguration.builder();
-    }
-
-    /**
-     * Creates a builder for a {@link SpeleothemConfiguration}.
+     * Creates a builder for a {@link SpeleothemFeature}.
      * @return a new pointed dripstone configuration builder
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    static SpeleothemConfiguration.Builder speleothem() {
-        return SpeleothemConfiguration.builder();
+    static SpeleothemFeature.Builder speleothem() {
+        return SpeleothemFeature.builder();
     }
 
     /**
-     * Creates a builder for a {@link SpeleothemClusterConfiguration}.
+     * Creates a builder for a {@link SpeleothemClusterFeature}.
      * @return a new speleothem cluster configuration builder
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    static SpeleothemClusterConfiguration.Builder speleothemCluster() {
-        return SpeleothemClusterConfiguration.builder();
+    static SpeleothemClusterFeature.Builder speleothemCluster() {
+        return SpeleothemClusterFeature.builder();
     }
 
     /**
-     * Creates a builder for an {@link EndGatewayConfiguration}.
+     * Creates a builder for an {@link EndGatewayFeature}.
      * @return a new end gateway configuration builder
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    static EndGatewayConfiguration.Builder endGateway() {
-        return EndGatewayConfiguration.builder();
+    static EndGatewayFeature.Builder endGateway() {
+        return EndGatewayFeature.builder();
     }
 
     /**
-     * Creates a builder for an {@link EndSpikeConfiguration}.
+     * Creates a builder for an {@link EndSpikeFeature}.
      * @return a new end spike configuration builder
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    static EndSpikeConfiguration.Builder endSpike() {
-        return EndSpikeConfiguration.builder();
+    static EndSpikeFeature.Builder endSpike() {
+        return EndSpikeFeature.builder();
     }
 
     /**
-     * Creates a builder for a {@link FallenTreeConfiguration}.
+     * Creates a builder for a {@link FallenTreeFeature}.
      * @return a new fallen tree configuration builder
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    static FallenTreeConfiguration.Builder fallenTree() {
-        return FallenTreeConfiguration.builder();
+    static FallenTreeFeature.Builder fallenTree() {
+        return FallenTreeFeature.builder();
     }
 
     /**
-     * Creates a builder for a {@link GeodeConfiguration}.
+     * Creates a builder for a {@link GeodeFeature}.
      * @return a new geode configuration builder
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    static GeodeConfiguration.Builder geode() {
-        return GeodeConfiguration.builder();
+    static GeodeFeature.Builder geode() {
+        return GeodeFeature.builder();
     }
 
     /**
-     * Creates a builder for a {@link HugeMushroomFeatureConfiguration}.
+     * Creates a builder for a {@link HugeRedMushroomFeature}.
      * @return a new huge mushroom feature configuration builder
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    static HugeMushroomFeatureConfiguration.Builder hugeMushroom() {
-        return HugeMushroomFeatureConfiguration.builder();
+    static HugeRedMushroomFeature.Builder hugeRedMushroom() {
+        return HugeRedMushroomFeature.builder();
     }
 
     /**
-     * Creates a builder for a {@link LargeDripstoneConfiguration}.
+     * Creates a builder for a {@link LargeDripstoneFeature}.
      * @return a new large dripstone configuration builder
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    static LargeDripstoneConfiguration.Builder largeDripstone() {
-        return LargeDripstoneConfiguration.builder();
+    static LargeDripstoneFeature.Builder largeDripstone() {
+        return LargeDripstoneFeature.builder();
     }
 
     /**
-     * Creates a builder for a {@link LayerConfiguration}.
+     * Creates a builder for a {@link FillLayerFeature}.
      * @return a new layer configuration builder
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    static LayerConfiguration.Builder layer() {
-        return LayerConfiguration.builder();
+    static FillLayerFeature.Builder fillLayer() {
+        return FillLayerFeature.builder();
     }
 
     /**
-     * Creates a builder for a {@link MultifaceGrowthConfiguration}.
+     * Creates a builder for a {@link MultifaceGrowthFeature}.
      * @return a new multiface growth configuration builder
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    static MultifaceGrowthConfiguration.Builder multifaceGrowth() {
-        return MultifaceGrowthConfiguration.builder();
+    static MultifaceGrowthFeature.Builder multifaceGrowth() {
+        return MultifaceGrowthFeature.builder();
     }
 
     /**
-     * Creates a builder for a {@link NetherForestVegetationConfig}.
-     * @return a new nether forest vegetation configuration builder
-     * @since 3.0.0
-     */
-    @AsOf("3.0.0")
-    static NetherForestVegetationConfig.Builder netherForestVegetation() {
-        return NetherForestVegetationConfig.builder();
-    }
-
-    /**
-     * Creates a builder for an {@link OreConfiguration}.
+     * Creates a builder for an {@link OreFeature}.
      * @return a new ore configuration builder
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    static OreConfiguration.Builder ore() {
-        return OreConfiguration.builder();
+    static OreFeature.Builder ore() {
+        return OreFeature.builder();
     }
 
     /**
-     * Creates a builder for a {@link ProbabilityFeatureConfiguration}.
+     * Creates a builder for a {@link BambooFeature}.
      * @return a new probability feature configuration builder
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    static ProbabilityFeatureConfiguration probability(float probability) {
-        return ProbabilityFeatureConfiguration.of(probability);
+    static BambooFeature bamboo(float probability) {
+        return BambooFeature.of(probability);
     }
 
     /**
-     * Creates a builder for a {@link RandomBooleanFeatureConfiguration}.
+     * Creates a builder for a {@link RandomBooleanSelectorFeature}.
      * @return a new random boolean feature configuration builder
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    static RandomBooleanFeatureConfiguration.Builder randomBoolean() {
-        return RandomBooleanFeatureConfiguration.builder();
+    static RandomBooleanSelectorFeature.Builder randomBooleanSelector() {
+        return RandomBooleanSelectorFeature.builder();
     }
 
     /**
-     * Creates a builder for a {@link RandomFeatureConfiguration}.
+     * Creates a builder for a {@link RandomSelectorFeature}.
      * @return a new random feature configuration builder
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    static RandomFeatureConfiguration.Builder random() {
-        return RandomFeatureConfiguration.builder();
+    static RandomSelectorFeature.Builder randomSelector() {
+        return RandomSelectorFeature.builder();
     }
 
     /**
-     * Creates a builder for a {@link ReplaceBlockConfiguration}.
+     * Creates a builder for a {@link ReplaceBlockFeature}.
      * @return a new replace block configuration builder
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    static ReplaceBlockConfiguration.Builder replaceBlock() {
-        return ReplaceBlockConfiguration.builder();
+    static ReplaceBlockFeature.Builder replaceBlock() {
+        return ReplaceBlockFeature.builder();
     }
 
     /**
-     * Creates a builder for a {@link ReplaceSphereConfiguration}.
+     * Creates a builder for a {@link ReplaceBlobsFeature}.
      * @return a new replace sphere configuration builder
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    static ReplaceSphereConfiguration.Builder replaceSphere() {
-        return ReplaceSphereConfiguration.builder();
+    static ReplaceBlobsFeature.Builder replaceBlobs() {
+        return ReplaceBlobsFeature.builder();
     }
 
     /**
-     * Creates a builder for a {@link RootSystemConfiguration}.
+     * Creates a builder for a {@link RootSystemFeature}.
      * @return a new root system configuration builder
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    static RootSystemConfiguration.Builder rootSystem() {
-        return RootSystemConfiguration.builder();
+    static RootSystemFeature.Builder rootSystem() {
+        return RootSystemFeature.builder();
     }
 
     /**
-     * Creates a builder for a {@link SculkPatchConfiguration}.
+     * Creates a builder for a {@link SculkPatchFeature}.
      * @return a new sculk patch configuration builder
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    static SculkPatchConfiguration.Builder sculkPatch() {
-        return SculkPatchConfiguration.builder();
+    static SculkPatchFeature.Builder sculkPatch() {
+        return SculkPatchFeature.builder();
     }
 
     /**
-     * Creates a builder for a {@link SimpleBlockConfiguration}.
+     * Creates a builder for a {@link SimpleBlockFeature}.
      * @return a new simple block configuration builder
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    static SimpleBlockConfiguration.Builder simpleBlock() {
-        return SimpleBlockConfiguration.builder();
+    static SimpleBlockFeature.Builder simpleBlock() {
+        return SimpleBlockFeature.builder();
     }
 
     /**
-     * Creates a builder for a {@link CompositeFeatureConfiguration}.
+     * Creates a builder for a {@link SequenceFeature}.
      * @return a new simple random feature configuration builder
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    static CompositeFeatureConfiguration.Builder composite() {
-        return CompositeFeatureConfiguration.builder();
+    static SequenceFeature.Builder sequence() {
+        return SequenceFeature.builder();
     }
 
     /**
-     * Creates a builder for a {@link SpikeConfiguration}.
+     * Creates a builder for a {@link SpikeFeature}.
      * @return a new spike configuration builder
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    static SpikeConfiguration.Builder spike() {
-        return SpikeConfiguration.builder();
+    static SpikeFeature.Builder spike() {
+        return SpikeFeature.builder();
     }
 
     /**
-     * Creates a builder for a {@link SpringConfiguration}.
+     * Creates a builder for a {@link SpringFeature}.
      * @return a new spring configuration builder
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    static SpringConfiguration.Builder spring() {
-        return SpringConfiguration.builder();
+    static SpringFeature.Builder spring() {
+        return SpringFeature.builder();
     }
 
     /**
-     * Creates a builder for a {@link TreeConfiguration}.
+     * Creates a builder for a {@link TreeFeature}.
      * @return a new tree configuration builder
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    static TreeConfiguration.Builder tree() {
-        return TreeConfiguration.builder();
+    static TreeFeature.Builder tree() {
+        return TreeFeature.builder();
     }
 
     /**
-     * Creates a builder for a {@link TwistingVinesConfig}.
-     * @return a new twisting vines configuration builder
-     * @since 3.0.0
-     */
-    @AsOf("3.0.0")
-    static TwistingVinesConfig.Builder twistingVines() {
-        return TwistingVinesConfig.builder();
-    }
-
-    /**
-     * Creates a builder for a {@link LakeFeatureConfiguration}.
+     * Creates a builder for a {@link LakeFeature}.
      * @return a new lake feature configuration builder
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    static LakeFeatureConfiguration.Builder lake() {
-        return LakeFeatureConfiguration.builder();
+    static LakeFeature.Builder lake() {
+        return LakeFeature.builder();
     }
 
     /**
-     * Creates a builder for a {@link TemplateFeatureConfiguration}.
+     * Creates a builder for a {@link TemplateFeature}.
      * @return a new template feature configuration builder
      * @since 3.0.1
      */
     @AsOf("3.0.1")
-    static TemplateFeatureConfiguration.Builder templateFeature() {
-        return TemplateFeatureConfiguration.builder();
+    static TemplateFeature.Builder template() {
+        return TemplateFeature.builder();
     }
 
     /**
-     * Creates a builder for an {@link UnderwaterMagmaConfiguration}.
+     * Creates a builder for an {@link UnderwaterMagmaFeature}.
      * @return a new underwater magma configuration builder
      * @since 3.0.1
      */
     @AsOf("3.0.1")
-    static UnderwaterMagmaConfiguration.Builder underwaterMagma() {
-        return UnderwaterMagmaConfiguration.builder();
+    static UnderwaterMagmaFeature.Builder underwaterMagma() {
+        return UnderwaterMagmaFeature.builder();
     }
 
     /**
-     * Creates a builder for a {@link VegetationPatchConfiguration}.
+     * Creates a builder for a {@link VegetationPatchFeature}.
      * @return a new vegetation patch configuration builder
      * @since 3.0.1
      */
     @AsOf("3.0.1")
-    static VegetationPatchConfiguration.Builder vegetationPatch() {
-        return VegetationPatchConfiguration.builder();
+    static VegetationPatchFeature.Builder vegetationPatch() {
+        return VegetationPatchFeature.builder();
     }
 
     /**
-     * Creates a builder for a {@link WeightedRandomFeatureConfiguration}.
+     * Creates a builder for a {@link WeightedRandomSelectorFeature}.
      * @return a new weighted random feature configuration builder
      * @since 3.0.1
      */
     @AsOf("3.0.1")
-    static WeightedRandomFeatureConfiguration.Builder weightedRandom() {
-        return WeightedRandomFeatureConfiguration.builder();
+    static WeightedRandomSelectorFeature.Builder weightedRandomSelector() {
+        return WeightedRandomSelectorFeature.builder();
     }
 
     /**
-     * Creates a builder for a {@link HugeFungusConfiguration}.
+     * Creates a builder for a {@link HugeFungusFeature}.
      * @return a new huge fungus configuration builder
      * @since 3.3.0
      */
     @AsOf("3.3.0")
-    static HugeFungusConfiguration.Builder hugeFungus() {
-        return HugeFungusConfiguration.builder();
+    static HugeFungusFeature.Builder hugeFungus() {
+        return HugeFungusFeature.builder();
     }
 
     /**
-     * Creates a builder for a {@link FossilFeatureConfiguration}.
+     * Creates a builder for a {@link FossilFeature}.
      * @return a new fossil feature configuration builder
      * @since 3.3.0
      */
     @AsOf("3.3.0")
-    static FossilFeatureConfiguration.Builder fossil() {
-        return FossilFeatureConfiguration.builder();
+    static FossilFeature.Builder fossil() {
+        return FossilFeature.builder();
     }
 
     /**

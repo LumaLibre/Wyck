@@ -19,7 +19,7 @@ import java.util.List;
 
 @NullMarked
 @ApiStatus.Internal
-public final class RuleSourceDecoders extends DecoderRegistry<RuleSource, net.minecraft.world.level.levelgen.SurfaceRules.RuleSource> {
+public final class RuleSourceDecoders extends DecoderRegistry<RuleSource, net.minecraft.world.level.levelgen.material.rule.MaterialRule> {
 
     public RuleSourceDecoders() {
         register("bandlands", _ -> BandlandsRuleSource.INSTANCE);
@@ -34,12 +34,12 @@ public final class RuleSourceDecoders extends DecoderRegistry<RuleSource, net.mi
     }
 
     @Override
-    protected ResourceKey discriminate(net.minecraft.world.level.levelgen.SurfaceRules.RuleSource source) {
+    protected ResourceKey discriminate(net.minecraft.world.level.levelgen.material.rule.MaterialRule source) {
         return Decoders.registryKey(BuiltInRegistries.MATERIAL_RULE, source.codec());
     }
 
     private static List<RuleSource> sequence(Object source) {
-        List<net.minecraft.world.level.levelgen.SurfaceRules.RuleSource> rules =
+        List<net.minecraft.world.level.levelgen.material.rule.MaterialRule> rules =
             FastReflection.read(source, "sequence");
         return rules.stream().map(RuleSource::decode).toList();
     }

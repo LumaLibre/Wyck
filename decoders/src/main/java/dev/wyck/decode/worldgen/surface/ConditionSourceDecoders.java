@@ -28,7 +28,7 @@ import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 @ApiStatus.Internal
-public final class ConditionSourceDecoders extends DecoderRegistry<ConditionSource, net.minecraft.world.level.levelgen.SurfaceRules.ConditionSource> {
+public final class ConditionSourceDecoders extends DecoderRegistry<ConditionSource, net.minecraft.world.level.levelgen.material.condition.MaterialCondition> {
 
     public ConditionSourceDecoders() {
         register("biome", source -> BiomeConditionSource.of(biomes(source)));
@@ -79,7 +79,7 @@ public final class ConditionSourceDecoders extends DecoderRegistry<ConditionSour
     }
 
     @Override
-    protected ResourceKey discriminate(net.minecraft.world.level.levelgen.SurfaceRules.ConditionSource source) {
+    protected ResourceKey discriminate(net.minecraft.world.level.levelgen.material.condition.MaterialCondition source) {
         return Decoders.registryKey(BuiltInRegistries.MATERIAL_CONDITION, source.codec());
     }
 

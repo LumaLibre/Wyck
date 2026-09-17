@@ -6,7 +6,7 @@ import dev.wyck.factory.WireProvider;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.registry.internal.RegistryId;
 import dev.wyck.registry.internal.WyckRegistry;
-import dev.wyck.worldgen.feature.ConfiguredFeature;
+import dev.wyck.worldgen.feature.Feature;
 import dev.wyck.worldgen.feature.custom.CustomFeature;
 import dev.wyck.wrapper.ContextWrapper;
 import dev.wyck.wrapper.decode.Decoder;
@@ -95,7 +95,7 @@ public sealed interface PlacedFeature extends Wrapper, Keyed permits PlacedFeatu
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static Composed of(ConfiguredFeature feature, List<PlacementModifier> placements) {
+    static Composed of(Feature feature, List<PlacementModifier> placements) {
         return new Composed(feature, placements);
     }
 
@@ -107,7 +107,7 @@ public sealed interface PlacedFeature extends Wrapper, Keyed permits PlacedFeatu
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    static Composed of(ConfiguredFeature feature, PlacementModifier... placements) {
+    static Composed of(Feature feature, PlacementModifier... placements) {
         return new Composed(feature, List.of(placements));
     }
 
@@ -147,7 +147,7 @@ public sealed interface PlacedFeature extends Wrapper, Keyed permits PlacedFeatu
      * @since 2.3.0
      */
     @AsOf("2.3.0")
-    record Composed(ConfiguredFeature feature, List<PlacementModifier> placement) implements PlacedFeature {
+    record Composed(Feature feature, List<PlacementModifier> placement) implements PlacedFeature {
         @Override
         public Key key() {
             return this.feature.key();
@@ -162,18 +162,18 @@ public sealed interface PlacedFeature extends Wrapper, Keyed permits PlacedFeatu
      */
     @AsOf("2.3.0")
     final class Builder {
-        private @Nullable ConfiguredFeature feature;
+        private @Nullable Feature feature;
         private List<PlacementModifier> placements = new ArrayList<>();
 
         public Builder() {}
 
         public Builder(PlacedFeature feature) {
-            if (feature instanceof Composed(ConfiguredFeature feat, List<PlacementModifier> placement)) {
+            if (feature instanceof Composed(Feature feat, List<PlacementModifier> placement)) {
                 this.feature = feat;
                 this.placements = placement;
             } else {
                 Reference reference = (Reference) feature;
-                this.feature = ConfiguredFeature.reference(reference.key());
+                this.feature = Feature.reference(reference.key());
             }
         }
 
@@ -184,7 +184,7 @@ public sealed interface PlacedFeature extends Wrapper, Keyed permits PlacedFeatu
          * @since 2.3.0
          */
         @AsOf("2.3.0")
-        public Builder feature(ConfiguredFeature feature) {
+        public Builder feature(Feature feature) {
             this.feature = feature;
             return this;
         }
@@ -213,7 +213,7 @@ public sealed interface PlacedFeature extends Wrapper, Keyed permits PlacedFeatu
          */
         @AsOf("3.0.0")
         public <C> Builder feature(CustomFeature<C> customFeature, C config) {
-            this.feature = ConfiguredFeature.custom(customFeature, config);
+            this.feature = Feature.custom(customFeature, config);
             return this;
         }
 

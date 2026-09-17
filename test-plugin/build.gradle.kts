@@ -7,7 +7,7 @@ dependencies {
     implementation(project(":bundle")) {
         exclude(group = "org.bukkit")
     }
-    paperweight.paperDevBundle(libs.versions.minecraft.v26.m2)
+    paperweight.paperDevBundle(libs.versions.minecraft.v26.m3)
 }
 
 tasks {
@@ -26,7 +26,7 @@ tasks {
     }
 
     runServer {
-        minecraftVersion("26.2")
+        minecraftVersion("26.3")
         downloadPlugins {
             //modrinth("gBIw3Gvy", "4.2.2")
             //modrinth("gBIw3Gvy", "3.12.4")

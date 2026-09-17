@@ -5,7 +5,7 @@ import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.ConstructWireProvider;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.worldgen.carver.CarverConfiguration;
-import dev.wyck.worldgen.carver.ConfiguredWorldCarver;
+import dev.wyck.worldgen.carver.WorldCarver;
 import dev.wyck.worldgen.carver.WorldCarverType;
 import dev.wyck.wrapper.Registerable;
 import org.jspecify.annotations.NullMarked;
@@ -22,7 +22,7 @@ import java.util.Optional;
  */
 @NullMarked
 @AsOf("3.0.0")
-public interface ComposedCarver extends ConfiguredWorldCarver, Registerable<ComposedCarver> {
+public interface ComposedCarver extends WorldCarver, Registerable<ComposedCarver> {
 
     /**
      * The resource key of the carver.
@@ -68,7 +68,7 @@ public interface ComposedCarver extends ConfiguredWorldCarver, Registerable<Comp
     @AsOf("3.0.0")
     static ComposedCarver of(@Nullable ResourceKey resourceKey, WorldCarverType type, CarverConfiguration config) {
         record Holder() {
-            static final ConstructWireProvider<ComposedCarver> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.carver.types.ComposedCarverImpl");
+            static final ConstructWireProvider<ComposedCarver> WIRE = ConstructWireProvider.create("dev.wyck.*?.worldgen.carver.types.ComposedCarverImpl");
         }
         return Holder.WIRE.construct(Optional.ofNullable(resourceKey), type, config);
     }
@@ -105,16 +105,6 @@ public interface ComposedCarver extends ConfiguredWorldCarver, Registerable<Comp
     @AsOf("3.0.0")
     static Builder cave() {
         return new Builder(WorldCarverType.CAVE);
-    }
-
-    /**
-     * Creates a new builder for a nether cave carver.
-     * @return a new builder for a nether cave carver
-     * @since 3.0.0
-     */
-    @AsOf("3.0.0")
-    static Builder netherCave() {
-        return new Builder(WorldCarverType.NETHER_CAVE);
     }
 
     /**

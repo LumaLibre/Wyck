@@ -443,13 +443,12 @@ public interface DensityFunction extends Wrapper, Keyed {
     /**
      * Samples at the current position using the noise algorithm used for end islands. Its minimum value
      * is {@code -0.84375} and its maximum value is {@code 0.5625}.
-     * @param seed the seed used to generate the end islands noise
      * @return an end islands density function
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    static EndIslands endIslands(long seed) {
-        return EndIslands.of(seed);
+    static EndIslands endIslands() {
+        return EndIslands.of();
     }
 
     /**

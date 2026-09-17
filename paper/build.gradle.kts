@@ -8,24 +8,16 @@ plugins {
     alias(libs.plugins.modrinth.minotaur)
 }
 
-val supported = listOf("26.2", "26.1.2", "1.21.11")
-val minecraft = ":minecraft"
-val minecraftProjects = project(minecraft)
-    .subprojects
-    .map { it.name }
+val supported = listOf("26.3")
 
 group = "dev.wyck.paper"
 
 dependencies {
-    paperweight.paperDevBundle(libs.versions.minecraft.v1.m21.r11)
+    paperweight.paperDevBundle(libs.versions.minecraft.v26.m3)
     compileOnly(libs.spongepowered.configurate.yaml)
     implementation(libs.faststats.metrics)
-    implementation(project(":commons"))
+    implementation(project(":runtime"))
     implementation(project(":decoders"))
-
-    for (project in minecraftProjects) {
-        implementation(project(path = "${minecraft}:${project}"))
-    }
 }
 
 tasks {
@@ -35,11 +27,8 @@ tasks {
 
         minimize {
             exclude(project(":api"))
-            exclude(project(":commons"))
+            exclude(project(":runtime"))
             exclude(project(":decoders"))
-            for (project in minecraftProjects) {
-                exclude(project("${minecraft}:${project}"))
-            }
             exclude("META-INF/maven/**")
             exclude("META-INF/proguard/**")
         }

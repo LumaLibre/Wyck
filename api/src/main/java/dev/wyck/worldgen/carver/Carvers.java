@@ -25,19 +25,19 @@ import org.jspecify.annotations.NullMarked;
 public final class Carvers {
     // From: Carvers
     @AsOf("2.3.0")
-    public static final ConfiguredWorldCarver CAVE = reference("cave");
+    public static final WorldCarver CAVE = reference("cave");
     @AsOf("2.3.0")
-    public static final ConfiguredWorldCarver CAVE_EXTRA_UNDERGROUND = reference("cave_extra_underground");
+    public static final WorldCarver CAVE_EXTRA_UNDERGROUND = reference("cave_extra_underground");
     @AsOf("2.3.0")
-    public static final ConfiguredWorldCarver CANYON = reference("canyon");
+    public static final WorldCarver CANYON = reference("canyon");
     @AsOf("2.3.0")
-    public static final ConfiguredWorldCarver NETHER_CAVE = reference("nether_cave");
+    public static final WorldCarver NETHER_CAVE = reference("nether_cave");
 
     Carvers() {
         throw new UnsupportedOperationException("Not intended for instantiation");
     }
 
-    private static ConfiguredWorldCarver reference(String path) {
-        return ConfiguredWorldCarver.reference(ResourceKey.minecraft(path));
+    private static WorldCarver reference(String path) {
+        return WorldCarver.reference(ResourceKey.minecraft(path));
     }
 }

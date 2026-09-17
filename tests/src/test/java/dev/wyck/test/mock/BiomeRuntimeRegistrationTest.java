@@ -6,9 +6,9 @@ import dev.wyck.biome.BiomeSpecialEffects;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.worldgen.Decoration;
 import dev.wyck.worldgen.HeightmapType;
-import dev.wyck.worldgen.feature.ConfiguredFeature;
+import dev.wyck.worldgen.feature.Feature;
 import dev.wyck.worldgen.feature.FeatureType;
-import dev.wyck.worldgen.feature.configurations.NoneFeatureConfiguration;
+import dev.wyck.worldgen.feature.configurations.NoOpFeature;
 import dev.wyck.worldgen.placement.PlacedFeature;
 import dev.wyck.worldgen.placement.PlacementModifier;
 import net.minecraft.core.RegistryAccess;
@@ -84,7 +84,7 @@ class BiomeRuntimeRegistrationTest {
         builder("test:generated_biome")
                 .generationSettings(BiomeGenerationSettings.builder()
                         .feature(Decoration.VEGETAL_DECORATION, PlacedFeature.builder()
-                                .feature(ConfiguredFeature.of(FeatureType.NO_OP, NoneFeatureConfiguration.INSTANCE))
+                                .feature(Feature.of(FeatureType.NO_OP, NoOpFeature.INSTANCE))
                                 .modifier(PlacementModifier.rarityFilter(1))
                                 .modifier(PlacementModifier.inSquare())
                                 .modifier(PlacementModifier.heightmap(HeightmapType.OCEAN_FLOOR))

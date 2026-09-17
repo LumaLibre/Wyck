@@ -39,6 +39,26 @@ public interface TwoArgumentSimpleFunction extends SimpleFunction, Registerable<
     DensityFunction second();
 
     /**
+     * Alias for {@link #first()}.
+     * @return {@link #first()}
+     * @since 4.0.0
+     */
+    @AsOf("4.0.0")
+    default DensityFunction left() {
+        return first();
+    }
+
+    /**
+     * Alias for {@link #second()}.
+     * @return {@link #second()}
+     * @since 4.0.0
+     */
+    @AsOf("4.0.0")
+    default DensityFunction right() {
+        return second();
+    }
+
+    /**
      * Performs an {@link Operation} on two density functions.
      * @param resourceKey the resource key, or null
      * @param operation the operation to perform
