@@ -11,7 +11,6 @@ import dev.wyck.worldgen.carver.types.ReferencedCarver;
 import dev.wyck.wrapper.Wrapper;
 import dev.wyck.wrapper.decode.Decoder;
 import net.kyori.adventure.key.Keyed;
-import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -44,7 +43,6 @@ public interface WorldCarver extends Wrapper, Keyed {
      * @since 4.0.0
      */
     @AsOf("4.0.0")
-    @ApiStatus.Experimental
     default WorldCarver wrap() {
         ResourceKey key = ResourceKey.of(key().namespace(), key().value());
         Object minecraft = WyckRegistry.of(RegistryId.CARVER).retrieveOrThrow(key);

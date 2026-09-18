@@ -8,7 +8,6 @@ import dev.wyck.worldgen.blockpredicates.BlockPredicate;
 import dev.wyck.worldgen.stateproviders.BlockStateProvider;
 import dev.wyck.worldgen.valueproviders.IntProvider;
 import org.bukkit.block.BlockFace;
-import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
@@ -26,7 +25,6 @@ import java.util.List;
 @AsOf("3.0.0")
 public interface BlockColumnFeature extends FeatureConfiguration {
 
-    @ApiStatus.Experimental // may be moved in the future
     BlockPredicate ONLY_IN_AIR_PREDICATE = BlockPredicate.matchingBlockTag(ResourceKey.minecraft("air"));
 
     /**

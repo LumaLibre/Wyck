@@ -80,7 +80,6 @@ public sealed interface PlacedFeature extends Wrapper, Keyed permits PlacedFeatu
      * @since 3.3.0
      */
     @AsOf("3.3.0")
-    @ApiStatus.Experimental
     default PlacedFeature wrap() {
         ResourceKey key = ResourceKey.of(key().namespace(), key().value());
         Object minecraft = WyckRegistry.of(RegistryId.PLACED_FEATURE).retrieveOrThrow(key);

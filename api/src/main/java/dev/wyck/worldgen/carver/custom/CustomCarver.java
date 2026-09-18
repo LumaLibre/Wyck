@@ -22,7 +22,6 @@ import java.util.function.Supplier;
  */
 @NullMarked
 @AsOf("4.0.0")
-@ApiStatus.Experimental
 public abstract class CustomCarver<C> implements Cloneable, Registerable<CustomCarver<C>> {
     private final Supplier<C> configSupplier;
     private @Nullable ResourceKey key;

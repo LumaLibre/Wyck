@@ -8,7 +8,6 @@ import dev.wyck.registry.internal.RegistryId;
 import dev.wyck.registry.internal.WyckRegistry;
 import dev.wyck.wrapper.Wrapper;
 import net.kyori.adventure.key.Keyed;
-import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Set;
@@ -49,7 +48,6 @@ public interface Timeline extends Wrapper, Keyed {
      * @since 3.3.0
      */
     @AsOf("3.3.0")
-    @ApiStatus.Experimental
     default Timeline wrap() {
         // just check if it exists
         WyckRegistry.of(RegistryId.TIMELINE).retrieveOrThrow(key());

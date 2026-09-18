@@ -7,7 +7,6 @@ import dev.wyck.keys.ResourceKey;
 import dev.wyck.worldgen.structure.pools.PoolElement;
 import dev.wyck.worldgen.structure.pools.TemplatePool;
 import dev.wyck.wrapper.Registerable;
-import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -24,7 +23,6 @@ import java.util.Optional;
  */
 @NullMarked
 @AsOf("3.4.0")
-@ApiStatus.Experimental
 public interface ComposedTemplatePool extends TemplatePool, Registerable<ComposedTemplatePool> {
 
     int MAX_WEIGHT = 150;

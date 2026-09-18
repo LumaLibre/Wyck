@@ -3,7 +3,6 @@ package dev.wyck.worldgen.carver.custom;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.misc.ChunkLocation;
 import dev.wyck.wrapper.Wrapper;
-import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Random;
@@ -19,7 +18,6 @@ import java.util.Random;
  */
 @NullMarked
 @AsOf("4.0.0")
-@ApiStatus.Experimental
 public interface CarvingContext<C> extends Wrapper {
 
     /**

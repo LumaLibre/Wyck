@@ -5,7 +5,6 @@ import dev.wyck.factory.WireProvider;
 import dev.wyck.level.dimension.Dimension;
 import dev.wyck.util.ThrowingRunnable;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
-import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -18,7 +17,6 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("3.0.0")
-@ApiStatus.Experimental
 @SuppressWarnings("UnstableApiUsage")
 public interface BootstrapDimensionRegistry {
 

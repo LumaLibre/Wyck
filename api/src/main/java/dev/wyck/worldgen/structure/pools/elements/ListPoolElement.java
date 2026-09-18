@@ -5,7 +5,6 @@ import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.ConstructWireProvider;
 import dev.wyck.worldgen.structure.pools.PoolElement;
 import dev.wyck.worldgen.structure.pools.Projection;
-import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
@@ -20,7 +19,6 @@ import java.util.List;
  */
 @NullMarked
 @AsOf("3.4.0")
-@ApiStatus.Experimental
 public interface ListPoolElement extends PoolElement {
 
     /**

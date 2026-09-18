@@ -7,7 +7,6 @@ import dev.wyck.worldgen.valueproviders.IntProvider;
 import dev.wyck.wrapper.Wrapper;
 import dev.wyck.wrapper.decode.Decoder;
 import org.bukkit.Material;
-import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
@@ -23,7 +22,6 @@ import java.util.List;
  */
 @NullMarked
 @AsOf("3.4.0")
-@ApiStatus.Experimental
 public interface StructureProcessor extends Wrapper {
 
     /**

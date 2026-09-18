@@ -51,7 +51,6 @@ public interface NoiseParameters extends Wrapper, Keyed {
      * @since 3.3.0
      */
     @AsOf("3.3.0")
-    @ApiStatus.Experimental
     default NoiseParameters wrap() {
         ResourceKey key = resourceKey().orElseThrow(() -> new IllegalStateException("Cannot wrap noise parameters without a resource key"));
         Object minecraft = WyckRegistry.of(RegistryId.NOISE).retrieveOrThrow(key);

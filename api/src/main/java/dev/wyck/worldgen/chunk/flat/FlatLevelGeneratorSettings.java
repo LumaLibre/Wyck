@@ -178,7 +178,6 @@ public interface FlatLevelGeneratorSettings extends Wrapper {
      * @since 3.0.0
      */
     @AsOf("3.0.0")
-    @ApiStatus.Experimental
     Optional<Set<StructureSet>> structures();
 
     /**

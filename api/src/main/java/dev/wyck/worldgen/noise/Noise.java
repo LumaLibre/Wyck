@@ -5,7 +5,6 @@ import dev.wyck.keys.ResourceKey;
 import dev.wyck.registry.internal.RegistryId;
 import dev.wyck.registry.internal.WyckRegistry;
 import dev.wyck.wrapper.decode.Decoder;
-import org.jetbrains.annotations.ApiStatus;
 import dev.wyck.worldgen.chunk.NoiseBasedChunkGenerator;
 import dev.wyck.worldgen.noise.types.NoiseGeneratorSettings;
 import dev.wyck.worldgen.noise.types.ReferencedNoise;
@@ -72,7 +71,6 @@ public interface Noise extends Wrapper {
      * @since 3.3.0
      */
     @AsOf("3.3.0")
-    @ApiStatus.Experimental
     default NoiseGeneratorSettings wrap() {
         ResourceKey key = resourceKey().orElseThrow(() -> new IllegalStateException("Cannot wrap noise settings without a resource key"));
         Object minecraft = WyckRegistry.of(RegistryId.NOISE_SETTINGS).retrieveOrThrow(key);

@@ -21,7 +21,6 @@ import java.util.function.UnaryOperator;
  */
 @NullMarked
 @AsOf("3.4.0")
-@ApiStatus.Experimental
 public interface ComposedStructure extends DefinedStructure, Registerable<ComposedStructure> {
 
     /**

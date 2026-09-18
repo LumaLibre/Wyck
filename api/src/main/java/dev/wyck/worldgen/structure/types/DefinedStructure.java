@@ -4,7 +4,6 @@ import dev.wyck.annotations.AsOf;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.worldgen.structure.Structure;
 import dev.wyck.worldgen.structure.StructureSettings;
-import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Optional;
@@ -19,7 +18,6 @@ import java.util.function.UnaryOperator;
  */
 @NullMarked
 @AsOf("3.4.0")
-@ApiStatus.Experimental
 public interface DefinedStructure extends Structure {
 
     /**

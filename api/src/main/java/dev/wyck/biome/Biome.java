@@ -17,7 +17,6 @@ import dev.wyck.wrapper.decode.Decoder;
 import net.kyori.adventure.key.Keyed;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
-import org.jetbrains.annotations.ApiStatus;
 
 /**
  * Represents an abstract biome in Minecraft.
@@ -194,7 +193,6 @@ public interface Biome extends Keyed, Wrapper {
      * @since 3.3.0
      */
     @AsOf("3.3.0")
-    @ApiStatus.Experimental
     default Biome wrap() {
         Object minecraft = WyckRegistry.of(RegistryId.BIOME).retrieveOrThrow(resourceKey());
         return decode(minecraft);

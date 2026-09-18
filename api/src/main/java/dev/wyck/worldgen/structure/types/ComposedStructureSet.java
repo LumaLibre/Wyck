@@ -8,7 +8,6 @@ import dev.wyck.worldgen.structure.Structure;
 import dev.wyck.worldgen.structure.placement.StructurePlacement;
 import dev.wyck.worldgen.structure.StructureSet;
 import dev.wyck.wrapper.Registerable;
-import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -25,7 +24,6 @@ import java.util.Optional;
  */
 @NullMarked
 @AsOf("3.4.0")
-@ApiStatus.Experimental
 public interface ComposedStructureSet extends StructureSet, Registerable<ComposedStructureSet> {
 
     /**

@@ -95,7 +95,6 @@ public interface Feature extends Wrapper, Keyed {
      * @since 4.0.0
      */
     @AsOf("4.0.0")
-    @ApiStatus.Experimental
     default Feature wrap() {
         ResourceKey key = resourceKey().orElseThrow(() -> new IllegalStateException("Cannot wrap a feature without a resource key"));
         Object minecraft = WyckRegistry.of(RegistryId.FEATURE).retrieveOrThrow(key);

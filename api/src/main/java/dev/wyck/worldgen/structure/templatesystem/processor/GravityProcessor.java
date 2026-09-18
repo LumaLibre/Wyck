@@ -3,7 +3,6 @@ package dev.wyck.worldgen.structure.templatesystem.processor;
 import dev.wyck.worldgen.HeightmapType;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.ConstructWireProvider;
-import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -16,7 +15,6 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("3.4.0")
-@ApiStatus.Experimental
 public interface GravityProcessor extends StructureProcessor {
 
     /**

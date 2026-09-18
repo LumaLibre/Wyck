@@ -3,7 +3,6 @@ package dev.wyck.worldgen.structure.pools.elements;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.WireProvider;
 import dev.wyck.worldgen.structure.pools.PoolElement;
-import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -15,7 +14,6 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("3.4.0")
-@ApiStatus.Experimental
 public interface EmptyPoolElement extends PoolElement {
 
     /**
