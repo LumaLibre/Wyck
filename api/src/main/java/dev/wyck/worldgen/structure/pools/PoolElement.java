@@ -10,7 +10,6 @@ import dev.wyck.worldgen.structure.pools.elements.SinglePoolElement;
 import dev.wyck.worldgen.structure.templatesystem.StructureTemplate;
 import dev.wyck.wrapper.Wrapper;
 import dev.wyck.wrapper.decode.Decoder;
-import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
@@ -25,7 +24,6 @@ import java.util.List;
  */
 @NullMarked
 @AsOf("3.4.0")
-@ApiStatus.Experimental
 public interface PoolElement extends Wrapper {
 
     /**

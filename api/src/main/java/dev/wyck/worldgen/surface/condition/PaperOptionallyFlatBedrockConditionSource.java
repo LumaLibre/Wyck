@@ -5,7 +5,6 @@ import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.ConstructWireProvider;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.worldgen.heightproviders.VerticalAnchor;
-import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -19,7 +18,6 @@ import org.jspecify.annotations.Nullable;
  */
 @NullMarked
 @AsOf("3.3.0")
-@ApiStatus.Experimental
 public interface PaperOptionallyFlatBedrockConditionSource extends ConditionSource {
 
     /**

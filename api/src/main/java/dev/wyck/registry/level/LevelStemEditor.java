@@ -8,7 +8,6 @@ import dev.wyck.registry.bootstrap.BootstrapBiomeRegistry;
 import dev.wyck.worldgen.chunk.ChunkGenerator;
 import dev.wyck.worldgen.climate.ClimatePoint;
 import org.bukkit.World;
-import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -24,7 +23,6 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.3.0")
-@ApiStatus.Experimental
 public interface LevelStemEditor {
 
     /**

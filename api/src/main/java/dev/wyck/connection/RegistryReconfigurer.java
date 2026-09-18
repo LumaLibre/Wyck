@@ -7,7 +7,6 @@ import dev.wyck.factory.ConstructWireProvider;
 import io.papermc.paper.connection.PlayerConfigurationConnection;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 

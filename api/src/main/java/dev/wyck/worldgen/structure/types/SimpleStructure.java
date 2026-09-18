@@ -7,7 +7,6 @@ import dev.wyck.keys.ResourceKey;
 import dev.wyck.worldgen.structure.StructureSettings;
 import dev.wyck.worldgen.structure.StructureType;
 import dev.wyck.wrapper.Registerable;
-import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -24,7 +23,6 @@ import java.util.Set;
  */
 @NullMarked
 @AsOf("3.4.0")
-@ApiStatus.Experimental
 public interface SimpleStructure extends DefinedStructure, Registerable<SimpleStructure> {
 
     Set<StructureType> TYPES = Set.of(

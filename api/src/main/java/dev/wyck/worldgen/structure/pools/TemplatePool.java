@@ -9,7 +9,6 @@ import dev.wyck.worldgen.structure.pools.types.ReferencedTemplatePool;
 import dev.wyck.wrapper.Wrapper;
 import dev.wyck.wrapper.decode.Decoder;
 import net.kyori.adventure.key.Keyed;
-import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -25,7 +24,6 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("3.4.0")
-@ApiStatus.Experimental
 public interface TemplatePool extends Wrapper, Keyed {
 
     TemplatePool EMPTY = reference(ResourceKey.minecraft("empty"));

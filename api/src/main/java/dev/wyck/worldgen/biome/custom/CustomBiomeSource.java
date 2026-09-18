@@ -5,7 +5,6 @@ import dev.wyck.annotations.AsOf;
 import dev.wyck.biome.Biome;
 import dev.wyck.factory.ConstructWireProvider;
 import dev.wyck.worldgen.biome.BiomeSource;
-import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Collections;
@@ -25,7 +24,6 @@ import java.util.Set;
  */
 @NullMarked
 @AsOf("3.3.0")
-@ApiStatus.Experimental
 public abstract class CustomBiomeSource implements BiomeSource /*, TODO: Registerable<CustomBiomeSource> */ {
 
     private final Set<Biome> possibleBiomes;

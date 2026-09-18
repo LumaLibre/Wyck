@@ -4,7 +4,6 @@ import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.WireProvider;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
-import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -17,7 +16,6 @@ import org.jspecify.annotations.NullMarked;
  * @author Jsinco
  */
 @NullMarked
-@ApiStatus.Experimental
 public interface BukkitBootstrapUtil {
 
     /**

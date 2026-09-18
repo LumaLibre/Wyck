@@ -27,7 +27,6 @@ import java.util.Random;
  */
 @NullMarked
 @AsOf("3.0.0")
-@ApiStatus.Experimental
 public interface CarvingContext<C> extends Wrapper {
 
     /**

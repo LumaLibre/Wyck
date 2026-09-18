@@ -8,7 +8,6 @@ import dev.wyck.worldgen.structure.StructureSettings;
 import dev.wyck.wrapper.KeyedEnumTranslator;
 import dev.wyck.wrapper.Registerable;
 import dev.wyck.wrapper.WrappedEnumerator;
-import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -24,7 +23,6 @@ import java.util.Optional;
  */
 @NullMarked
 @AsOf("3.4.0")
-@ApiStatus.Experimental
 public interface OceanRuinStructure extends DefinedStructure, Registerable<OceanRuinStructure> {
 
     /**

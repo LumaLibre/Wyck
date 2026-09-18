@@ -5,7 +5,6 @@ import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.ConstructWireProvider;
 import dev.wyck.worldgen.structure.templatesystem.ProcessorList;
 import dev.wyck.worldgen.structure.templatesystem.StructureTemplate;
-import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -22,7 +21,6 @@ import java.util.List;
  */
 @NullMarked
 @AsOf("3.3.0")
-@ApiStatus.Experimental
 public interface FossilFeatureConfiguration extends FeatureConfiguration {
 
     /**

@@ -14,7 +14,6 @@ import dev.wyck.worldgen.structure.pools.TemplatePool;
 import dev.wyck.worldgen.structure.pools.alias.PoolAliasBinding;
 import dev.wyck.worldgen.structure.templatesystem.LiquidSettings;
 import dev.wyck.wrapper.Registerable;
-import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -35,7 +34,6 @@ import java.util.function.UnaryOperator;
  */
 @NullMarked
 @AsOf("3.4.0")
-@ApiStatus.Experimental
 public interface JigsawStructure extends DefinedStructure, Registerable<JigsawStructure> {
 
     int MAX_SIZE = 20;

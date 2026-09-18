@@ -2,7 +2,6 @@ package dev.wyck.worldgen.structure.templatesystem.processor;
 
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.ConstructWireProvider;
-import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import org.bukkit.Material;
@@ -19,7 +18,6 @@ import java.util.List;
  */
 @NullMarked
 @AsOf("3.4.0")
-@ApiStatus.Experimental
 public interface BlockIgnoreProcessor extends StructureProcessor {
 
     /**

@@ -7,7 +7,6 @@ import dev.wyck.worldgen.structure.pools.Projection;
 import dev.wyck.worldgen.structure.templatesystem.LiquidSettings;
 import dev.wyck.worldgen.structure.templatesystem.ProcessorList;
 import dev.wyck.worldgen.structure.templatesystem.StructureTemplate;
-import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -22,7 +21,6 @@ import java.util.Optional;
  */
 @NullMarked
 @AsOf("3.4.0")
-@ApiStatus.Experimental
 public interface SinglePoolElement extends PoolElement {
 
     /**

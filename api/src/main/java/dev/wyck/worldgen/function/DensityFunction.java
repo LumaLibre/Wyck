@@ -25,7 +25,6 @@ import dev.wyck.worldgen.synth.NoiseParameters;
 import dev.wyck.wrapper.decode.Decoder;
 import dev.wyck.wrapper.Wrapper;
 import net.kyori.adventure.key.Keyed;
-import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Optional;
@@ -527,7 +526,6 @@ public interface DensityFunction extends Wrapper, Keyed {
      * @since 3.3.0
      */
     @AsOf("3.3.0")
-    @ApiStatus.Experimental
     default DensityFunction wrap() {
         ResourceKey key = resourceKey().orElseThrow(() -> new IllegalStateException("Cannot wrap a density function without a resource key"));
         Object minecraft = WyckRegistry.of(RegistryId.DENSITY_FUNCTION).retrieveOrThrow(key);

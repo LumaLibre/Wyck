@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.stream.Stream;
 
 @AsOf("2.4.0")
-@ApiStatus.Experimental
 public enum RegistryId {
     ACTIVITY("activity"),
     BIOME("worldgen/biome"),

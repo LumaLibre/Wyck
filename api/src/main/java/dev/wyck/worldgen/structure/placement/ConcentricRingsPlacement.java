@@ -6,7 +6,6 @@ import dev.wyck.factory.ConstructWireProvider;
 import dev.wyck.tags.TagSet;
 import dev.wyck.worldgen.structure.FrequencyReduction;
 import org.bukkit.util.BlockVector;
-import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -23,7 +22,6 @@ import java.util.Optional;
  */
 @NullMarked
 @AsOf("3.4.0")
-@ApiStatus.Experimental
 public interface ConcentricRingsPlacement extends StructurePlacement {
 
     /**

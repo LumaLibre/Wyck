@@ -4,7 +4,6 @@ import com.google.common.base.Preconditions;
 import dev.wyck.tags.TagSet;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.ConstructWireProvider;
-import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import org.bukkit.Material;
@@ -22,7 +21,6 @@ import java.util.Optional;
  */
 @NullMarked
 @AsOf("3.4.0")
-@ApiStatus.Experimental
 public interface BlockRotProcessor extends StructureProcessor {
 
     /**

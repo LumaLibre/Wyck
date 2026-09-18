@@ -5,7 +5,6 @@ import dev.wyck.factory.ConstructWireProvider;
 import dev.wyck.worldgen.placement.PlacedFeature;
 import dev.wyck.worldgen.structure.pools.PoolElement;
 import dev.wyck.worldgen.structure.pools.Projection;
-import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -17,7 +16,6 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("3.4.0")
-@ApiStatus.Experimental
 public interface FeaturePoolElement extends PoolElement {
 
     /**
