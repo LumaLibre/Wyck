@@ -57,7 +57,7 @@ public interface BlockBlobFeature extends FeatureConfiguration {
     @AsOf("3.0.0")
     static BlockBlobFeature of(BlockData state, BlockPredicate canPlaceOn) {
         record Holder() {
-            static final ConstructWireProvider<BlockBlobFeature> WIRE = ConstructWireProvider.create("dev.wyck.*?.worldgen.feature.configurations.BlockBlobFeatureImpl");
+            static final ConstructWireProvider<BlockBlobFeature> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.feature.configurations.BlockBlobFeatureImpl");
         }
         return Holder.WIRE.construct(state, canPlaceOn);
     }

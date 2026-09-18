@@ -1,6 +1,7 @@
 package dev.wyck.biome.entity.data;
 
 import dev.wyck.annotations.AsOf;
+import dev.wyck.biome.entity.MobSpawnCost;
 import dev.wyck.wrapper.decode.Decoder;
 import org.jspecify.annotations.NullMarked;
 
@@ -8,11 +9,14 @@ import org.jspecify.annotations.NullMarked;
  * Represents the cost of spawning an entity.
  * @param charge the amount of energy required to spawn the entity
  * @param energyBudget the maximum amount of energy that can be used to spawn the entity
+ * @deprecated Use {@link MobSpawnCost}. The replacement
+ *     follows Minecraft's component order of energy budget followed by charge.
  * @since 2.3.0
- * @version 2.3.0
+ * @version 4.0.0
  */
 @NullMarked
 @AsOf("2.3.0")
+@Deprecated(since = "4.0.0")
 public record SpawnCost(double charge, double energyBudget) {
 
     @AsOf("2.3.0")

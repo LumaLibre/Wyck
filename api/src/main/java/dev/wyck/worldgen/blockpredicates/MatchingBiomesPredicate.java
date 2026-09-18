@@ -48,7 +48,7 @@ public interface MatchingBiomesPredicate extends BlockPredicate {
     @AsOf("3.0.0")
     static MatchingBiomesPredicate of(List<Biome> biomes) {
         record Holder() {
-            static final ConstructWireProvider<MatchingBiomesPredicate> WIRE = ConstructWireProvider.create("dev.wyck.*?.worldgen.blockpredicates.MatchingBiomesPredicateImpl");
+            static final ConstructWireProvider<MatchingBiomesPredicate> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.blockpredicates.MatchingBiomesPredicateImpl");
         }
         return Holder.WIRE.construct(biomes);
     }

@@ -2,7 +2,7 @@ package dev.wyck.test.bootstrap.decode;
 
 import dev.wyck.biome.Biome;
 import dev.wyck.biome.BiomeGenerationSettings;
-import dev.wyck.biome.entity.BiomeSpawner;
+import dev.wyck.biome.entity.MobSpawnSettings;
 import dev.wyck.biome.entity.MobCategory;
 import dev.wyck.environment.attribute.EnvironmentAttributeMap;
 import dev.wyck.environment.attribute.EnvironmentAttributes;
@@ -44,9 +44,10 @@ class BiomeDecodeTest {
         assertEquals(minecraft.getWaterColor(), decoded.specialEffects().waterColor());
         assertFalse(decoded.attributes().empty());
 
-        assertEquals(minecraft.getMobSettings().getCreatureProbability(),
-            decoded.biomeSpawner().creatureGenerationProbability());
-        assertFalse(decoded.biomeSpawner().spawners().get(MobCategory.CREATURE).unwrap().isEmpty());
+        assertNotNull(decoded.attributes().get(EnvironmentAttributes.CREATURE_WORLD_GEN_SPAWN_PROBABILITY));
+        MobSpawnSettings spawnSettings = decoded.attributes().get(EnvironmentAttributes.NATURAL_MOB_SPAWNS);
+        assertNotNull(spawnSettings);
+        assertFalse(spawnSettings.getMobsToSpawn(MobCategory.CREATURE).isEmpty());
 
         BiomeGenerationSettings generation = decoded.generationSettings();
         assertFalse(generation.carvers().isEmpty());
@@ -65,10 +66,10 @@ class BiomeDecodeTest {
     void biomeWithSpawnCostsPreservesThem() {
         Biome decoded = Biome.decode(vanilla(Biomes.SOUL_SAND_VALLEY));
 
-        BiomeSpawner spawner = decoded.biomeSpawner();
-        assertNotNull(spawner);
-        assertFalse(spawner.mobSpawnCosts().isEmpty());
-        assertTrue(spawner.mobSpawnCosts().values().stream()
+        MobSpawnSettings spawnSettings = decoded.attributes().get(EnvironmentAttributes.NATURAL_MOB_SPAWNS);
+        assertNotNull(spawnSettings);
+        assertFalse(spawnSettings.allSpawnCosts().isEmpty());
+        assertTrue(spawnSettings.allSpawnCosts().values().stream()
             .allMatch(cost -> cost.charge() > 0 && cost.energyBudget() > 0));
     }
 

@@ -67,7 +67,7 @@ public interface SpikeFeature extends FeatureConfiguration {
     @AsOf("3.0.0")
     static SpikeFeature of(BlockData state, BlockPredicate canPlaceOn, BlockPredicate canReplace) {
         record Holder() {
-            static final ConstructWireProvider<SpikeFeature> WIRE = ConstructWireProvider.create("dev.wyck.*?.worldgen.feature.configurations.SpikeFeatureImpl");
+            static final ConstructWireProvider<SpikeFeature> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.feature.configurations.SpikeFeatureImpl");
         }
         return Holder.WIRE.construct(state, canPlaceOn, canReplace);
     }

@@ -16,7 +16,9 @@ import org.jspecify.annotations.NullMarked;
 
 /**
  * A direct Minecraft world carver or a reference to one already registered.
+ * As the name suggests, carvers "carve" or cut through existing noise-generated terrain.
  *
+ * @see <a href="https://minecraft.wiki/w/World_generation#Carvers">World generation (Carvers)</a>
  * @since 4.0.0
  * @version 4.0.0
  * @author Jsinco

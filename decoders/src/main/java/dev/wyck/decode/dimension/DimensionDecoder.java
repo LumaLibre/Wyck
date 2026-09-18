@@ -1,6 +1,6 @@
 package dev.wyck.decode.dimension;
 
-import dev.wyck.biome.entity.data.MonsterSettings;
+import dev.wyck.level.dimension.entity.MonsterSettings;
 import dev.wyck.decode.Decoders;
 import dev.wyck.environment.attribute.EnvironmentAttributeMap;
 import dev.wyck.keys.ResourceKey;

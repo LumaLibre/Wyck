@@ -134,7 +134,7 @@ public interface LargeDripstoneFeature extends FeatureConfiguration {
     @AsOf("3.0.0")
     static LargeDripstoneFeature of(Set<Material> replaceableBlocks, int floorToCeilingSearchRange, IntProvider columnRadius, FloatProvider heightScale, float maxColumnRadiusToCaveHeightRatio, FloatProvider stalactiteBluntness, FloatProvider stalagmiteBluntness, FloatProvider windSpeed, int minRadiusForWind, float minBluntnessForWind) {
         record Holder() {
-            static final ConstructWireProvider<LargeDripstoneFeature> WIRE = ConstructWireProvider.create("dev.wyck.*?.worldgen.feature.configurations.LargeDripstoneFeatureImpl");
+            static final ConstructWireProvider<LargeDripstoneFeature> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.feature.configurations.LargeDripstoneFeatureImpl");
         }
         return Holder.WIRE.construct(replaceableBlocks, floorToCeilingSearchRange, columnRadius, heightScale, maxColumnRadiusToCaveHeightRatio, stalactiteBluntness, stalagmiteBluntness, windSpeed, minRadiusForWind, minBluntnessForWind);
     }

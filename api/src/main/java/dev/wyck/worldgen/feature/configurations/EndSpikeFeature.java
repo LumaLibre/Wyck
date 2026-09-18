@@ -69,7 +69,7 @@ public interface EndSpikeFeature extends FeatureConfiguration {
     @AsOf("3.0.0")
     static EndSpikeFeature of(boolean crystalInvulnerable, List<EndSpike> spikes, @Nullable BlockVector crystalBeamTarget) {
         record Holder() {
-            static final ConstructWireProvider<EndSpikeFeature> WIRE = ConstructWireProvider.create("dev.wyck.*?.worldgen.feature.configurations.EndSpikeFeatureImpl");
+            static final ConstructWireProvider<EndSpikeFeature> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.feature.configurations.EndSpikeFeatureImpl");
         }
         return Holder.WIRE.construct(crystalInvulnerable, spikes, crystalBeamTarget);
     }

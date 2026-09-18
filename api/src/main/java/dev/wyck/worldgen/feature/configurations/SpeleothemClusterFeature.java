@@ -404,7 +404,7 @@ public interface SpeleothemClusterFeature extends FeatureConfiguration {
             Preconditions.checkArgument(maxDistanceFromCenterAffectingHeightBias >= 1 && maxDistanceFromCenterAffectingHeightBias <= 64, "maxDistanceFromCenterAffectingHeightBias must be between 1 and 64");
 
             record Holder() {
-                static final ConstructWireProvider<SpeleothemClusterFeature> WIRE = ConstructWireProvider.create("dev.wyck.*?.worldgen.feature.configurations.SpeleothemClusterFeatureImpl");
+                static final ConstructWireProvider<SpeleothemClusterFeature> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.feature.configurations.SpeleothemClusterFeatureImpl");
             }
             return Holder.WIRE.construct(
                 baseBlock,

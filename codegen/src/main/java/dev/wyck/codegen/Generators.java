@@ -42,8 +42,6 @@ import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.NoiseRouterData;
 import net.minecraft.world.level.levelgen.Noises;
-import net.minecraft.world.level.levelgen.carver.WorldCarver;
-import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.placement.CaveSurface;
 import net.minecraft.world.level.levelgen.structure.BuiltinStructureSets;
 import net.minecraft.world.level.levelgen.structure.BuiltinStructures;
@@ -57,411 +55,403 @@ import java.util.List;
 public final class Generators {
 
     public static final List<GeneratorSpec> ALL = List.of(
-            configuredFeatures(),
-            placedFeatures(),
-            densityFunctions(),
-            noiseParameters(),
-            biomeKeys(),
-            dimensionKeys(),
-            decorations(),
-            heightmapTypes(),
-            caveSurfaces(),
-            rotations(),
-            tristates(),
-            skyboxes(),
-            cardinalLightTypes(),
-            moonPhases(),
-            grassColorModifiers(),
-            temperatureModifiers(),
-            mobCategories(),
-            fluidTypes(),
-            featureTypes(),
-            worldCarverTypes(),
-            activities(),
-            structureTypes(),
-            structures(),
-            structureSets(),
-            carvers(),
-            environmentAttributeOperationIds(),
-            easingTypes()
+        configuredFeatures(),
+        placedFeatures(),
+        densityFunctions(),
+        noiseParameters(),
+        biomeKeys(),
+        dimensionKeys(),
+        decorations(),
+        heightmapTypes(),
+        caveSurfaces(),
+        rotations(),
+        tristates(),
+        skyboxes(),
+        cardinalLightTypes(),
+        moonPhases(),
+        grassColorModifiers(),
+        temperatureModifiers(),
+        mobCategories(),
+        fluidTypes(),
+        featureTypes(),
+        worldCarverTypes(),
+        activities(),
+        structureTypes(),
+        structures(),
+        structureSets(),
+        carvers(),
+        environmentAttributeOperationIds(),
+        easingTypes()
     );
 
     private static GeneratorSpec configuredFeatures() {
         return new ReferenceSpec(
-                ClassName.get("dev.wyck.worldgen.feature", "Features"),
-                ClassName.get("dev.wyck.worldgen.feature", "ConfiguredFeature"),
-                ResourceKey.class,
-                Generators::keyLocation,
-                List.of(
-                        AquaticFeatures.class,
-                        CaveFeatures.class,
-                        EndFeatures.class,
-                        MiscOverworldFeatures.class,
-                        NetherFeatures.class,
-                        OreFeatures.class,
-                        PileFeatures.class,
-                        TreeFeatures.class,
-                        VegetationFeatures.class
-                ),
-                "Typed references that point to vanilla's configured features.",
-                "2.3.0",
-                "CONFIGURED_FEATURES"
+            ClassName.get("dev.wyck.worldgen.feature", "Features"),
+            ClassName.get("dev.wyck.worldgen.feature", "ConfiguredFeature"),
+            ResourceKey.class,
+            Generators::keyLocation,
+            List.of(
+                AquaticFeatures.class,
+                CaveFeatures.class,
+                EndFeatures.class,
+                MiscOverworldFeatures.class,
+                NetherFeatures.class,
+                OreFeatures.class,
+                PileFeatures.class,
+                TreeFeatures.class,
+                VegetationFeatures.class
+            ),
+            "Typed references that point to vanilla's configured features.",
+            "2.3.0",
+            "CONFIGURED_FEATURES"
         );
     }
 
     private static GeneratorSpec placedFeatures() {
         return new ReferenceSpec(
-                ClassName.get("dev.wyck.worldgen.placement", "PlacedFeatures"),
-                ClassName.get("dev.wyck.worldgen.placement", "PlacedFeature"),
-                ResourceKey.class,
-                Generators::keyLocation,
-                List.of(
-                        AquaticPlacements.class,
-                        CavePlacements.class,
-                        EndPlacements.class,
-                        MiscOverworldPlacements.class,
-                        NetherPlacements.class,
-                        OrePlacements.class,
-                        TreePlacements.class,
-                        VegetationPlacements.class,
-                        VillagePlacements.class
-                ),
-                "Typed references that point to vanilla's placed features.",
-                "2.3.0",
-                "PLACED_FEATURES"
+            ClassName.get("dev.wyck.worldgen.placement", "PlacedFeatures"),
+            ClassName.get("dev.wyck.worldgen.placement", "PlacedFeature"),
+            ResourceKey.class,
+            Generators::keyLocation,
+            List.of(
+                AquaticPlacements.class,
+                CavePlacements.class,
+                EndPlacements.class,
+                MiscOverworldPlacements.class,
+                NetherPlacements.class,
+                OrePlacements.class,
+                TreePlacements.class,
+                VegetationPlacements.class,
+                VillagePlacements.class
+            ),
+            "Typed references that point to vanilla's placed features.",
+            "2.3.0",
+            "PLACED_FEATURES"
         );
     }
 
     private static GeneratorSpec densityFunctions() {
         return new ReferenceSpec(
-                ClassName.get("dev.wyck.worldgen.function", "DensityFunctions"),
-                ClassName.get("dev.wyck.worldgen.function", "DensityFunction"),
-                ResourceKey.class,
-                Generators::keyLocation,
-                List.of(
-                        NoiseRouterData.class
-                ),
-                "Typed references that point to vanilla's density functions.",
-                "2.4.0",
-                "DENSITY_FUNCTIONS"
+            ClassName.get("dev.wyck.worldgen.function", "DensityFunctions"),
+            ClassName.get("dev.wyck.worldgen.function", "DensityFunction"),
+            ResourceKey.class,
+            Generators::keyLocation,
+            List.of(
+                NoiseRouterData.class
+            ),
+            "Typed references that point to vanilla's density functions.",
+            "2.4.0",
+            "DENSITY_FUNCTIONS"
         );
     }
 
     private static GeneratorSpec noiseParameters() {
         return new ReferenceSpec(
-                ClassName.get("dev.wyck.worldgen.synth", "Noises"),
-                ClassName.get("dev.wyck.worldgen.synth", "NoiseParameters"),
-                ResourceKey.class,
-                Generators::keyLocation,
-                List.of(
-                        Noises.class
-                ),
-                "Typed references that point to vanilla's noise parameters.",
-                "2.4.0",
-                "NOISE"
+            ClassName.get("dev.wyck.worldgen.synth", "Noises"),
+            ClassName.get("dev.wyck.worldgen.synth", "NoiseParameters"),
+            ResourceKey.class,
+            Generators::keyLocation,
+            List.of(
+                Noises.class
+            ),
+            "Typed references that point to vanilla's noise parameters.",
+            "2.4.0",
+            "NOISE"
         );
     }
 
     private static GeneratorSpec biomeKeys() {
         return new ReferenceSpec(
-                ClassName.get("dev.wyck.biome", "Biomes"),
-                ClassName.get("dev.wyck.biome", "Biome"),
-                ResourceKey.class,
-                Generators::keyLocation,
-                List.of(
-                        Biomes.class
-                ),
-                "Typed references that point to vanilla's biomes.",
-                "3.0.0",
-                "BIOMES"
+            ClassName.get("dev.wyck.biome", "Biomes"),
+            ClassName.get("dev.wyck.biome", "Biome"),
+            ResourceKey.class,
+            Generators::keyLocation,
+            List.of(
+                Biomes.class
+            ),
+            "Typed references that point to vanilla's biomes.",
+            "3.0.0",
+            "BIOMES"
         );
     }
 
     private static GeneratorSpec dimensionKeys() {
         return new ReferenceSpec(
-                ClassName.get("dev.wyck.level.dimension", "Dimensions"),
-                ClassName.get("dev.wyck.level.dimension", "Dimension"),
-                ResourceKey.class,
-                Generators::keyLocation,
-                List.of(
-                        BuiltinDimensionTypes.class
-                ),
-                "Typed references that point to vanilla's dimensions.",
-                "3.0.0",
-                "DIMENSIONS"
+            ClassName.get("dev.wyck.level.dimension", "Dimensions"),
+            ClassName.get("dev.wyck.level.dimension", "Dimension"),
+            ResourceKey.class,
+            Generators::keyLocation,
+            List.of(
+                BuiltinDimensionTypes.class
+            ),
+            "Typed references that point to vanilla's dimensions.",
+            "3.0.0",
+            "DIMENSIONS"
         );
     }
 
     private static GeneratorSpec decorations() {
         return new EnumSpec(
-                "dev.wyck.worldgen",
-                "Decoration",
-                GenerationStep.Decoration.class,
-                Generators::enumName,
-                "Wraps Minecraft's {@code GenerationStep.Decoration}.",
-                "2.3.0"
+            "dev.wyck.worldgen",
+            "Decoration",
+            GenerationStep.Decoration.class,
+            Generators::enumName,
+            "Wraps Minecraft's {@code GenerationStep.Decoration}.",
+            "2.3.0"
         );
     }
 
     private static GeneratorSpec heightmapTypes() {
         return new EnumSpec(
-                "dev.wyck.worldgen",
-                "HeightmapType",
-                Heightmap.Types.class,
-                Generators::enumName,
-                "Wraps Minecraft's Heightmap.Types.",
-                "3.0.0"
+            "dev.wyck.worldgen",
+            "HeightmapType",
+            Heightmap.Types.class,
+            Generators::enumName,
+            "Wraps Minecraft's Heightmap.Types.",
+            "3.0.0"
         );
     }
 
     private static GeneratorSpec caveSurfaces() {
         return new EnumSpec(
-                "dev.wyck.worldgen.surface.condition",
-                "CaveSurface",
-                CaveSurface.class,
-                List.of(
-                        "Which face of the surface a {@link StoneDepthConditionSource stone-depth} check measures from.",
-                        "{@link #FLOOR}, blocks are placed based on the distance to the surface above; if {@link #CEILING},",
-                        "the distance to the surface below is used instead.",
-                        "",
-                        "@see <a href=\"https://minecraft.wiki/w/Surface_rule#Surface_conditions\">Surface rule (surface conditions)</a>"
-                ),
-                "3.0.0"
+            "dev.wyck.worldgen.surface.condition",
+            "CaveSurface",
+            CaveSurface.class,
+            List.of(
+                "Which face of the surface a {@link StoneDepthConditionSource stone-depth} check measures from.",
+                "{@link #FLOOR}, blocks are placed based on the distance to the surface above; if {@link #CEILING},",
+                "the distance to the surface below is used instead.",
+                "",
+                "@see <a href=\"https://minecraft.wiki/w/Surface_rule#Surface_conditions\">Surface rule (surface conditions)</a>"
+            ),
+            "3.0.0"
         );
     }
 
     private static GeneratorSpec rotations() {
         return new EnumSpec(
-                "dev.wyck.worldgen",
-                "Rotation",
-                Rotation.class,
-                Generators::enumName,
-                List.of(
-                        "A rotation applied to a structure template, in 90-degree steps about the Y axis.",
-                        "",
-                        "@see <a href=\"https://minecraft.wiki/w/Template_pool\">Template pool</a>"
-                ),
-                "3.0.1"
+            "dev.wyck.worldgen",
+            "Rotation",
+            Rotation.class,
+            Generators::enumName,
+            List.of(
+                "A rotation applied to a structure template, in 90-degree steps about the Y axis.",
+                "",
+                "@see <a href=\"https://minecraft.wiki/w/Template_pool\">Template pool</a>"
+            ),
+            "3.0.1"
         );
     }
 
     private static GeneratorSpec tristates() {
         return new EnumSpec(
-                "dev.wyck.environment",
-                "TriState",
-                TriState.class,
-                "Represents a tri-state value, which can be true, false, or default.",
-                "2.4.1"
+            "dev.wyck.environment",
+            "TriState",
+            TriState.class,
+            "Represents a tri-state value, which can be true, false, or default.",
+            "2.4.1"
         );
     }
 
     private static GeneratorSpec skyboxes() {
         return new EnumSpec(
-                "dev.wyck.level.dimension",
-                "Skybox",
-                DimensionType.Skybox.class,
-                Generators::serializedName,
-                "Skybox type, as it appears in Minecraft.",
-                "2.4.0"
+            "dev.wyck.level.dimension",
+            "Skybox",
+            DimensionType.Skybox.class,
+            Generators::serializedName,
+            "Skybox type, as it appears in Minecraft.",
+            "2.4.0"
         );
     }
 
     private static GeneratorSpec cardinalLightTypes() {
         return new EnumSpec(
-                "dev.wyck.level.dimension",
-                "CardinalLightType",
-                CardinalLighting.Type.class,
-                Generators::serializedName,
-                "Cardinal light type, as it appears in Minecraft.",
-                "2.4.0"
+            "dev.wyck.level.dimension",
+            "CardinalLightType",
+            CardinalLighting.Type.class,
+            Generators::serializedName,
+            "Cardinal light type, as it appears in Minecraft.",
+            "2.4.0"
         );
     }
 
     private static GeneratorSpec moonPhases() {
         return new EnumSpec(
-                "dev.wyck.environment",
-                "MoonPhase",
-                MoonPhase.class,
-                Generators::serializedName,
-                List.of(
-                        "This enum represents the phases of the moon in Minecraft.",
-                        "Each enum value carries a vanilla key, retrievable via {@link #getKey()}, which the impl module translates to the underlying NMS MoonPhase value."
-                ),
-                "1.1.0"
+            "dev.wyck.environment",
+            "MoonPhase",
+            MoonPhase.class,
+            Generators::serializedName,
+            List.of(
+                "This enum represents the phases of the moon in Minecraft.",
+                "Each enum value carries a vanilla key, retrievable via {@link #getKey()}, which the impl module translates to the underlying NMS MoonPhase value."
+            ),
+            "1.1.0"
         );
     }
 
     private static GeneratorSpec grassColorModifiers() {
         return new EnumSpec(
-                "dev.wyck.environment",
-                "GrassColorModifier",
-                BiomeSpecialEffects.GrassColorModifier.class,
-                Generators::serializedName,
-                List.of(
-                        "This enum represents the grass color modifier for a biome in Minecraft.",
-                        "It includes three values: NONE, SWAMP, and DARK_FOREST, which correspond to the GrassColorModifier values in the BiomeSpecialEffects class in the Minecraft code.",
-                        "Each enum value carries a vanilla key, retrievable via {@link #getKey()}, which the impl module translates to the underlying NMS value."
-                ),
-                "0.0.24"
+            "dev.wyck.environment",
+            "GrassColorModifier",
+            BiomeSpecialEffects.GrassColorModifier.class,
+            Generators::serializedName,
+            List.of(
+                "This enum represents the grass color modifier for a biome in Minecraft.",
+                "It includes three values: NONE, SWAMP, and DARK_FOREST, which correspond to the GrassColorModifier values in the BiomeSpecialEffects class in the Minecraft code.",
+                "Each enum value carries a vanilla key, retrievable via {@link #getKey()}, which the impl module translates to the underlying NMS value."
+            ),
+            "0.0.24"
         );
     }
 
     private static GeneratorSpec temperatureModifiers() {
         return new EnumSpec(
-                "dev.wyck.biome",
-                "TemperatureModifier",
-                Biome.TemperatureModifier.class,
-                Generators::serializedName,
-                List.of(
-                        "This enum represents the temperature modifier for a biome in Minecraft.",
-                        "It includes two values: NONE and FROZEN, which correspond to the TemperatureModifier values in the Biome class in the Minecraft code.",
-                        "Each enum value carries a vanilla key, retrievable via {@link #getKey()}, which the impl module translates to the underlying NMS value."
-                ),
-                "0.0.1"
+            "dev.wyck.biome",
+            "TemperatureModifier",
+            Biome.TemperatureModifier.class,
+            Generators::serializedName,
+            List.of(
+                "This enum represents the temperature modifier for a biome in Minecraft.",
+                "It includes two values: NONE and FROZEN, which correspond to the TemperatureModifier values in the Biome class in the Minecraft code.",
+                "Each enum value carries a vanilla key, retrievable via {@link #getKey()}, which the impl module translates to the underlying NMS value."
+            ),
+            "0.0.1"
         );
     }
 
     private static GeneratorSpec mobCategories() {
         return new EnumSpec(
-                "dev.wyck.biome.entity",
-                "MobCategory",
-                MobCategory.class,
-                Generators::serializedName,
-                "Represents the category of a mob in Minecraft.",
-                "2.3.0"
+            "dev.wyck.biome.entity",
+            "MobCategory",
+            MobCategory.class,
+            Generators::serializedName,
+            "Represents the category of a mob in Minecraft.",
+            "2.3.0"
         );
     }
 
     private static GeneratorSpec fluidTypes() {
         return new ConstantSpec(
-                "dev.wyck.worldgen.material",
-                "FluidType",
-                Fluid.class,
-                Generators::fluidLocation,
-                List.of(
-                        Fluids.class
-                ),
-                "FLUID",
-                "The vanilla fluids a block predicate can match against.",
-                "2.3.0"
+            "dev.wyck.worldgen.material",
+            "FluidType",
+            Fluid.class,
+            Generators::fluidLocation,
+            List.of(
+                Fluids.class
+            ),
+            "FLUID",
+            "The vanilla fluids a block predicate can match against.",
+            "2.3.0"
         );
     }
 
     private static GeneratorSpec featureTypes() {
-        return new ConstantSpec(
-                "dev.wyck.worldgen.feature",
-                "FeatureType",
-                Feature.class,
-                Generators::featureLocation,
-                List.of(
-                        Feature.class
-                ),
-                "FEATURE",
-                "Typed references to the built-in feature types, the algorithms in the {@code FEATURE} registry.",
-                "2.3.0"
+        return new RegistryConstantSpec(
+            "dev.wyck.worldgen.feature",
+            "FeatureType",
+            BuiltInRegistries.FEATURE_TYPE,
+            "FEATURE_TYPE",
+            "Typed references to the built-in feature algorithms in the {@code FEATURE_TYPE} registry.",
+            "2.3.0"
         );
     }
 
     private static GeneratorSpec worldCarverTypes() {
-        return new ConstantSpec(
-                "dev.wyck.worldgen.carver",
-                "WorldCarverType",
-                WorldCarver.class,
-                Generators::worldCarverLocation,
-                List.of(
-                        WorldCarver.class
-                ),
-                "CARVER",
-                "The vanilla world-carver algorithms that a configured carver can be built on.",
-                "2.3.0"
+        return new RegistryConstantSpec(
+            "dev.wyck.worldgen.carver",
+            "WorldCarverType",
+            BuiltInRegistries.CARVER_TYPE,
+            "CARVER_TYPE",
+            "The vanilla world-carver algorithms in the {@code CARVER_TYPE} registry.",
+            "2.3.0"
         );
     }
 
     private static GeneratorSpec activities() {
         return new ConstantSpec(
-                "dev.wyck.environment",
-                "Activity",
-                Activity.class,
-                Generators::activityLocation,
-                List.of(
-                        Activity.class
-                ),
-                "ACTIVITY",
-                List.of(
-                        "This enum represents the various activities that entities in Minecraft can perform.",
-                        "Each enum value carries a vanilla key which the impl module translates to the underlying NMS Activity value."
-                ),
-                "1.1.0"
+            "dev.wyck.environment",
+            "Activity",
+            Activity.class,
+            Generators::activityLocation,
+            List.of(
+                Activity.class
+            ),
+            "ACTIVITY",
+            List.of(
+                "This enum represents the various activities that entities in Minecraft can perform.",
+                "Each enum value carries a vanilla key which the impl module translates to the underlying NMS Activity value."
+            ),
+            "1.1.0"
         );
     }
 
     private static GeneratorSpec structureTypes() {
         return new ConstantSpec(
-                "dev.wyck.worldgen.structure",
-                "StructureType",
-                StructureType.class,
-                Generators::structureTypeLocation,
-                List.of(
-                        StructureType.class
-                ),
-                "STRUCTURE_TYPE",
-                "Typed references to the built-in structure types, the algorithms in the {@code STRUCTURE_TYPE} registry.",
-                "3.4.0"
+            "dev.wyck.worldgen.structure",
+            "StructureType",
+            StructureType.class,
+            Generators::structureTypeLocation,
+            List.of(
+                StructureType.class
+            ),
+            "STRUCTURE_TYPE",
+            "Typed references to the built-in structure types, the algorithms in the {@code STRUCTURE_TYPE} registry.",
+            "3.4.0"
         );
     }
 
     private static GeneratorSpec structures() {
         return new ReferenceSpec(
-                ClassName.get("dev.wyck.worldgen.structure", "Structures"),
-                ClassName.get("dev.wyck.worldgen.structure", "Structure"),
-                ResourceKey.class,
-                Generators::keyLocation,
-                List.of(
-                        BuiltinStructures.class
-                ),
-                "Typed references that point to vanilla's built-in structures.",
-                "3.4.0"
+            ClassName.get("dev.wyck.worldgen.structure", "Structures"),
+            ClassName.get("dev.wyck.worldgen.structure", "Structure"),
+            ResourceKey.class,
+            Generators::keyLocation,
+            List.of(
+                BuiltinStructures.class
+            ),
+            "Typed references that point to vanilla's built-in structures.",
+            "3.4.0"
         );
     }
 
     private static GeneratorSpec structureSets() {
         return new ReferenceSpec(
-                ClassName.get("dev.wyck.worldgen.structure", "StructureSets"),
-                ClassName.get("dev.wyck.worldgen.structure", "StructureSet"),
-                ResourceKey.class,
-                Generators::keyLocation,
-                List.of(
-                        BuiltinStructureSets.class
-                ),
-                "Typed references that point to vanilla's built-in structure sets.",
-                "3.0.0"
+            ClassName.get("dev.wyck.worldgen.structure", "StructureSets"),
+            ClassName.get("dev.wyck.worldgen.structure", "StructureSet"),
+            ResourceKey.class,
+            Generators::keyLocation,
+            List.of(
+                BuiltinStructureSets.class
+            ),
+            "Typed references that point to vanilla's built-in structure sets.",
+            "3.0.0"
         );
     }
 
     private static GeneratorSpec carvers() {
         return new ReferenceSpec(
-                ClassName.get("dev.wyck.worldgen.carver", "Carvers"),
-                ClassName.get("dev.wyck.worldgen.carver", "WorldCarver"),
-                ResourceKey.class,
-                Generators::keyLocation,
-                List.of(
-                        Carvers.class
-                ),
-                "Typed references to the built-in configured carvers registered by vanilla.",
-                "2.3.0"
+            ClassName.get("dev.wyck.worldgen.carver", "Carvers"),
+            ClassName.get("dev.wyck.worldgen.carver", "WorldCarver"),
+            ResourceKey.class,
+            Generators::keyLocation,
+            List.of(
+                Carvers.class
+            ),
+            "Typed references to the built-in configured carvers registered by vanilla.",
+            "2.3.0"
         );
     }
 
     private static GeneratorSpec easingTypes() {
         return new ReferenceSpec(
-                ClassName.get("dev.wyck.level.dimension.timeline", "EasingType"),
-                ClassName.get("dev.wyck.level.dimension.timeline", "Easing"),
-                EasingType.class,
-                Generators::easingLocation,
-                List.of(EasingType.class),
-                "The easing functions vanilla registers for timeline keyframe tracks.\n"
-                        + "Inherited by {@link dev.wyck.level.dimension.timeline.Easing}, which is where these are used from.",
-                "3.2.0"
+            ClassName.get("dev.wyck.level.dimension.timeline", "EasingType"),
+            ClassName.get("dev.wyck.level.dimension.timeline", "Easing"),
+            EasingType.class,
+            Generators::easingLocation,
+            List.of(EasingType.class),
+            "The easing functions vanilla registers for timeline keyframe tracks.\n"
+                + "Inherited by {@link dev.wyck.level.dimension.timeline.Easing}, which is where these are used from.",
+            "3.2.0"
         ).asConstantsInterface();
     }
 
@@ -471,22 +461,22 @@ public final class Generators {
         }
         // The simple-easing registry keeps its id map private; the codec is the supported way out.
         return EasingType.CODEC.encodeStart(JsonOps.INSTANCE, easing)
-                .result()
-                .filter(json -> json.isJsonPrimitive() && json.getAsJsonPrimitive().isString())
-                .map(json -> Identifier.withDefaultNamespace(json.getAsString()))
-                .orElse(null);
+            .result()
+            .filter(json -> json.isJsonPrimitive() && json.getAsJsonPrimitive().isString())
+            .map(json -> Identifier.withDefaultNamespace(json.getAsString()))
+            .orElse(null);
     }
 
     private static GeneratorSpec environmentAttributeOperationIds() {
         return new EnumSpec(
-                "dev.wyck.environment.attribute.modifier",
-                "AttributeOperation",
-                AttributeModifier.OperationId.class,
-                Generators::serializedName,
-                List.of(
-                        "Operations for environment attribute maps and timelines."
-                ),
-                "3.2.0"
+            "dev.wyck.environment.attribute.modifier",
+            "AttributeOperation",
+            AttributeModifier.OperationId.class,
+            Generators::serializedName,
+            List.of(
+                "Operations for environment attribute maps and timelines."
+            ),
+            "3.2.0"
         );
     }
 
@@ -497,23 +487,9 @@ public final class Generators {
         return null;
     }
 
-    private static @Nullable Identifier featureLocation(Object entry) {
-        if (entry instanceof Feature<?> feature) {
-            return BuiltInRegistries.FEATURE.getKey(feature);
-        }
-        return null;
-    }
-
     private static @Nullable Identifier structureTypeLocation(Object entry) {
         if (entry instanceof StructureType<?> type) {
             return BuiltInRegistries.STRUCTURE_TYPE.getKey(type);
-        }
-        return null;
-    }
-
-    private static @Nullable Identifier worldCarverLocation(Object entry) {
-        if (entry instanceof WorldCarver<?> carver) {
-            return BuiltInRegistries.CARVER.getKey(carver);
         }
         return null;
     }

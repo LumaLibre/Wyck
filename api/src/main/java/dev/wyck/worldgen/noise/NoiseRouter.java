@@ -118,9 +118,7 @@ public interface NoiseRouter extends Wrapper {
         DensityFunction finalDensity
     ) {
         record Holder() {
-            static final ConstructWireProvider<NoiseRouter> WIRE = ConstructWireProvider.create(
-                "dev.wyck.*?.worldgen.noise.NoiseRouterImpl"
-            );
+            static final ConstructWireProvider<NoiseRouter> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.noise.NoiseRouterImpl");
         }
         return Holder.WIRE.construct(
             temperature,

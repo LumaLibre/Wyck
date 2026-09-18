@@ -12,6 +12,7 @@ import dev.wyck.environment.particle.ParticleOptions;
 import dev.wyck.environment.sounds.AmbientSounds;
 import dev.wyck.environment.sounds.BackgroundMusic;
 import dev.wyck.keys.ResourceKey;
+import dev.wyck.biome.entity.MobSpawnSettings;
 import dev.wyck.wrapper.decode.DecoderRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import org.jetbrains.annotations.ApiStatus;
@@ -44,6 +45,7 @@ public final class EnvironmentAttributeDecoders extends DecoderRegistry<Environm
             catalog -> catalog.particles().stream().map(AmbientParticle::toMinecraft).toList());
         this.attribute("background_music", BackgroundMusic::decode, BackgroundMusic::toMinecraft);
         this.attribute("ambient_sounds", AmbientSounds::decode, AmbientSounds::toMinecraft);
+        this.attribute("mob_spawn_settings", MobSpawnSettings::decode, MobSpawnSettings::toMinecraft);
     }
 
     @Override

@@ -74,7 +74,7 @@ public interface HugeRedMushroomFeature extends FeatureConfiguration {
     @AsOf("3.0.0")
     static HugeRedMushroomFeature of(BlockStateProvider capProvider, BlockStateProvider stemProvider, int foliageRadius, BlockPredicate canPlaceOn) {
         record Holder() {
-            static final ConstructWireProvider<HugeRedMushroomFeature> WIRE = ConstructWireProvider.create("dev.wyck.*?.worldgen.feature.configurations.HugeRedMushroomFeatureImpl");
+            static final ConstructWireProvider<HugeRedMushroomFeature> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.feature.configurations.HugeRedMushroomFeatureImpl");
         }
         return Holder.WIRE.construct(capProvider, stemProvider, foliageRadius, canPlaceOn);
     }

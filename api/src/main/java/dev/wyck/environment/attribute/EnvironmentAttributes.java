@@ -12,6 +12,7 @@ import dev.wyck.environment.sounds.AmbientSounds;
 import dev.wyck.environment.sounds.BackgroundMusic;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.wrapper.WrappedConstant;
+import dev.wyck.biome.entity.MobSpawnSettings;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -27,7 +28,7 @@ import java.util.Map;
  * which provide access to the various attributes that can be defined for biomes.
  *
  * @since 1.1.0
- * @version 2.1.0
+ * @version 4.0.0
  * @author Jsinco
  */
 @NullMarked
@@ -253,6 +254,19 @@ public final class EnvironmentAttributes {
     @AsOf("1.1.0")
     public static final EnvironmentAttributeSupplier<TriState> EYEBLOSSOM_OPEN = supplierWith("gameplay/eyeblossom_open", it -> it.toNms("net.minecraft.util.TriState"));
 
+    // TODO: Replace 4.0.0 javadocs with entries from minecraft wiki when they are written.
+
+    /** Controls behavior of interacting with straw beds. */
+    @AsOf("4.0.0")
+    public static final EnvironmentAttributeSupplier<BedRule> STRAW_BED_RULE = supplierWith("gameplay/straw_bed_rule", BedRule::toMinecraft);
+
+    /** Probability of creatures spawning during world generation. */
+    @AsOf("4.0.0")
+    public static final EnvironmentAttributeSupplier<Float> CREATURE_WORLD_GEN_SPAWN_PROBABILITY = supplier("gameplay/creature_world_gen_spawn_probability");
+
+    /** The mobs that may spawn naturally and the spawn cost assigned to each mob. */
+    @AsOf("4.0.0")
+    public static final EnvironmentAttributeSupplier<MobSpawnSettings> NATURAL_MOB_SPAWNS = supplierWith("gameplay/natural_mob_spawns", MobSpawnSettings::toMinecraft);
 
     private static @Nullable Map<String, EnvironmentAttributeSupplier<?>> BY_ID;
     private static volatile @Nullable Map<String, EnvironmentAttributeSupplier<?>> BY_NAME;

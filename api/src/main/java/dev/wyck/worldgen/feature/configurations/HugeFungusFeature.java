@@ -89,7 +89,7 @@ public interface HugeFungusFeature extends FeatureConfiguration {
     @AsOf("3.3.0")
     static HugeFungusFeature of(BlockData validBaseState, BlockData stemState, BlockData hatState, BlockData decorState, BlockPredicate replaceableBlocks, boolean planted) {
         record Holder() {
-            static final ConstructWireProvider<HugeFungusFeature> WIRE = ConstructWireProvider.create("dev.wyck.*?.worldgen.feature.configurations.HugeFungusFeatureImpl");
+            static final ConstructWireProvider<HugeFungusFeature> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.feature.configurations.HugeFungusFeatureImpl");
         }
         return Holder.WIRE.construct(validBaseState, stemState, hatState, decorState, replaceableBlocks, planted);
     }

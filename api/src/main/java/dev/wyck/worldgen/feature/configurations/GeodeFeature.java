@@ -173,7 +173,7 @@ public interface GeodeFeature extends FeatureConfiguration {
         int invalidBlocksThreshold
     ) {
         record Holder() {
-            static final ConstructWireProvider<GeodeFeature> WIRE = ConstructWireProvider.create("dev.wyck.*?.worldgen.feature.configurations.GeodeFeatureImpl");
+            static final ConstructWireProvider<GeodeFeature> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.feature.configurations.GeodeFeatureImpl");
         }
         return Holder.WIRE.construct(geodeBlockSettings, geodeLayerSettings, geodeCrackSettings, usePotentialPlacementsChance, useAlternateLayer0Chance, placementsRequireLayer0Alternate, outerWallDistance, distributionPoints, pointOffset, minGenOffset, maxGenOffset, noiseMultiplier, invalidBlocksThreshold);
     }

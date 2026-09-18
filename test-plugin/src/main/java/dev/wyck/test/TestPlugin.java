@@ -13,6 +13,7 @@ import dev.wyck.environment.attribute.EnvironmentAttributes;
 import dev.wyck.worldgen.biome.BiomeSource;
 import dev.wyck.level.dimension.clock.WorldClock;
 import dev.wyck.level.dimension.Skybox;
+import dev.wyck.worldgen.noise.AquiferSettings;
 import dev.wyck.worldgen.noise.Noise;
 import dev.wyck.worldgen.noise.types.NoiseGeneratorSettings;
 import dev.wyck.worldgen.noise.NoiseRouter;
@@ -41,6 +42,7 @@ import dev.wyck.worldgen.placement.PlacementModifier;
 import dev.wyck.worldgen.stateproviders.BlockStateProvider;
 import dev.wyck.worldgen.surface.SurfaceRule;
 import dev.wyck.worldgen.valueproviders.IntProvider;
+import net.minecraft.core.particles.ParticleTypes;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.World;
@@ -189,6 +191,8 @@ public class TestPlugin extends JavaPlugin implements Listener {
             SurfaceRule.ifTrue(underFloor, subBlocks)
         ));
 
+        ParticleTypes;
+        net.minecraft.world.level.biome.Biomes
         NoiseGeneratorSettings noiseSettings = NoiseGeneratorSettings.builder()
             .noiseSettings(NoiseSettings.OVERWORLD)
             .defaultBlock(Material.STONE)
@@ -196,8 +200,7 @@ public class TestPlugin extends JavaPlugin implements Listener {
             .noiseRouter(router)
             .surfaceRule(surfaceRule)
             .seaLevel(63)
-            .aquifersEnabled(false)
-            .oreVeinsEnabled(false)
+            .aquifers(AquiferSettings)
             .build();
 
         NoiseBasedChunkGenerator generator = NoiseBasedChunkGenerator.of(biomeSource, Noise.overworld());

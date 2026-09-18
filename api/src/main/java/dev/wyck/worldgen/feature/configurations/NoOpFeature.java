@@ -21,7 +21,7 @@ public interface NoOpFeature extends FeatureConfiguration {
 
     private static NoOpFeature of() {
         record Holder() {
-            static final ConstructWireProvider<NoOpFeature> WIRE = ConstructWireProvider.create("dev.wyck.*?.worldgen.feature.configurations.NoOpFeatureImpl");
+            static final ConstructWireProvider<NoOpFeature> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.feature.configurations.NoOpFeatureImpl");
         }
         return Holder.WIRE.construct();
     }

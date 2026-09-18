@@ -136,7 +136,7 @@ public interface GeodeBlockSettings extends Wrapper {
         TagSet<Material> invalidBlocks
     ) {
         record Holder() {
-            static final ConstructWireProvider<GeodeBlockSettings> WIRE = ConstructWireProvider.create("dev.wyck.*?.worldgen.feature.configurations.geode.GeodeBlockSettingsImpl");
+            static final ConstructWireProvider<GeodeBlockSettings> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.feature.configurations.geode.GeodeBlockSettingsImpl");
         }
         return Holder.WIRE.construct(
             fillingProvider,

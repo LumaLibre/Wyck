@@ -70,7 +70,7 @@ public interface CustomComposedCarver<C> extends WorldCarver, Registerable<Custo
     @SuppressWarnings("unchecked")
     static <C> CustomComposedCarver<C> of(CustomCarver<C> carver, C config) {
         record Holder() {
-            static final ConstructWireProvider<CustomComposedCarver<?>> WIRE = ConstructWireProvider.create("dev.wyck.*?.worldgen.carver.types.CustomComposedCarverImpl");
+            static final ConstructWireProvider<CustomComposedCarver<?>> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.carver.types.CustomComposedCarverImpl");
         }
         return (CustomComposedCarver<C>) Holder.WIRE.construct(carver, config);
     }

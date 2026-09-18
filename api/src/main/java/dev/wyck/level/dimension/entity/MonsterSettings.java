@@ -1,4 +1,4 @@
-package dev.wyck.biome.entity.data;
+package dev.wyck.level.dimension.entity;
 
 import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;

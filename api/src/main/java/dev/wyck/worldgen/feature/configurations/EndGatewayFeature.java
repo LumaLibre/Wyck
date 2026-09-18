@@ -70,8 +70,7 @@ public interface EndGatewayFeature extends FeatureConfiguration {
 
     private static EndGatewayFeature create(Optional<BlockVector> exit, boolean exact) {
         record Holder() {
-            static final ConstructWireProvider<EndGatewayFeature> WIRE =
-                ConstructWireProvider.create("dev.wyck.*?.worldgen.feature.configurations.EndGatewayFeatureImpl");
+            static final ConstructWireProvider<EndGatewayFeature> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.feature.configurations.EndGatewayFeatureImpl");
         }
         return Holder.WIRE.construct(exit, exact);
     }

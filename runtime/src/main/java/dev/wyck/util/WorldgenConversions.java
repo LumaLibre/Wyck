@@ -22,10 +22,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 
-/**
- * Internal conversion helpers shared across the worldgen carver factories.
- * @since 2.3.0
- */
 @NullMarked
 @AsOf("2.3.0")
 @ApiStatus.Internal

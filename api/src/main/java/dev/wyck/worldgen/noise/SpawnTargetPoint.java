@@ -37,9 +37,7 @@ public interface SpawnTargetPoint extends Wrapper {
     @AsOf("4.0.0")
     static SpawnTargetPoint of(Map<DensityFunction, ClimateParameter> parameters) {
         record Holder() {
-            static final ConstructWireProvider<SpawnTargetPoint> WIRE = ConstructWireProvider.create(
-                "dev.wyck.*?.worldgen.noise.SpawnTargetPointImpl"
-            );
+            static final ConstructWireProvider<SpawnTargetPoint> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.noise.SpawnTargetPointImpl");
         }
         return Holder.WIRE.construct(Map.copyOf(parameters));
     }

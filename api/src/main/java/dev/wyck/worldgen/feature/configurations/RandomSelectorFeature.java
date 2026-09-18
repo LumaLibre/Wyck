@@ -58,7 +58,7 @@ public interface RandomSelectorFeature extends FeatureConfiguration {
     @AsOf("3.0.0")
     static RandomSelectorFeature of(List<WeightedPlacedFeature> features, PlacedFeature defaultFeature) {
         record Holder() {
-            static final ConstructWireProvider<RandomSelectorFeature> WIRE = ConstructWireProvider.create("dev.wyck.*?.worldgen.feature.configurations.RandomSelectorFeatureImpl");
+            static final ConstructWireProvider<RandomSelectorFeature> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.feature.configurations.RandomSelectorFeatureImpl");
         }
         return Holder.WIRE.construct(features, defaultFeature);
     }

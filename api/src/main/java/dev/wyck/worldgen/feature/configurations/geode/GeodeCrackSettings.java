@@ -65,7 +65,7 @@ public interface GeodeCrackSettings extends Wrapper {
     @AsOf("3.0.0")
     static GeodeCrackSettings of(double generateCrackChance, double baseCrackSize, int crackPointOffset) {
         record Holder() {
-            static final ConstructWireProvider<GeodeCrackSettings> WIRE = ConstructWireProvider.create("dev.wyck.*?.worldgen.feature.configurations.geode.GeodeCrackSettingsImpl");
+            static final ConstructWireProvider<GeodeCrackSettings> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.feature.configurations.geode.GeodeCrackSettingsImpl");
         }
         return Holder.WIRE.construct(generateCrackChance, baseCrackSize, crackPointOffset);
     }

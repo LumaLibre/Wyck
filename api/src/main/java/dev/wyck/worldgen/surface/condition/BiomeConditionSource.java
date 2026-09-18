@@ -48,7 +48,7 @@ public interface BiomeConditionSource extends ConditionSource {
     @AsOf("3.0.0")
     static BiomeConditionSource of(List<Biome> targets) {
         record Holder() {
-            static final ConstructWireProvider<BiomeConditionSource> WIRE = ConstructWireProvider.create("dev.wyck.*?.worldgen.surface.condition.BiomeConditionSourceImpl");
+            static final ConstructWireProvider<BiomeConditionSource> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.surface.condition.BiomeConditionSourceImpl");
         }
         return Holder.WIRE.construct(targets);
     }

@@ -2,9 +2,9 @@ package dev.wyck.worldgen.structure;
 
 import dev.wyck.annotations.AsOf;
 import dev.wyck.biome.entity.MobCategory;
-import dev.wyck.biome.entity.data.NaturalSpawner;
 import dev.wyck.factory.ConstructWireProvider;
 import dev.wyck.util.WeightedList;
+import dev.wyck.biome.entity.SpawnerData;
 import dev.wyck.wrapper.KeyedEnumTranslator;
 import dev.wyck.wrapper.WrappedEnumerator;
 import dev.wyck.wrapper.Wrapper;
@@ -16,7 +16,7 @@ import org.jspecify.annotations.NullMarked;
  * carries at most one override per category.
  *
  * @since 3.4.0
- * @version 3.4.0
+ * @version 4.0.0
  * @author Jsinco
  */
 @NullMarked
@@ -37,7 +37,7 @@ public interface StructureSpawnOverride extends Wrapper {
      * @since 3.4.0
      */
     @AsOf("3.4.0")
-    WeightedList<NaturalSpawner> spawns();
+    WeightedList<SpawnerData> spawns();
 
     /**
      * Creates a new spawn override.
@@ -47,7 +47,7 @@ public interface StructureSpawnOverride extends Wrapper {
      * @since 3.4.0
      */
     @AsOf("3.4.0")
-    static StructureSpawnOverride of(BoundingBoxType boundingBox, WeightedList<NaturalSpawner> spawns) {
+    static StructureSpawnOverride of(BoundingBoxType boundingBox, WeightedList<SpawnerData> spawns) {
         record Holder() {
             static final ConstructWireProvider<StructureSpawnOverride> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.structure.StructureSpawnOverrideImpl");
         }

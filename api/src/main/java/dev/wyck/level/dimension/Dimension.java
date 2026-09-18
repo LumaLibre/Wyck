@@ -2,7 +2,7 @@ package dev.wyck.level.dimension;
 
 import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
-import dev.wyck.biome.entity.data.MonsterSettings;
+import dev.wyck.level.dimension.entity.MonsterSettings;
 import dev.wyck.environment.attribute.EnvironmentAttributeMap;
 import dev.wyck.environment.attribute.EnvironmentAttributeSupplier;
 import dev.wyck.environment.attribute.FriendlyColorSupplier;

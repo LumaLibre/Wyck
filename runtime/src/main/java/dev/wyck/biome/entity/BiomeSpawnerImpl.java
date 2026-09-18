@@ -3,11 +3,9 @@ package dev.wyck.biome.entity;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.biome.entity.data.NaturalSpawner;
 import dev.wyck.biome.entity.data.SpawnCost;
+import dev.wyck.util.MinecraftEntityTypes;
 import dev.wyck.util.WeightedList;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.biome.MobSpawnSettings;
-import org.bukkit.NamespacedKey;
 import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -17,6 +15,7 @@ import java.util.Map;
 @NullMarked
 @AsOf("2.3.0")
 @ApiStatus.Internal
+@Deprecated(since = "4.0.0")
 public class BiomeSpawnerImpl implements BiomeSpawner {
 
     private final Map<MobCategory, WeightedList<NaturalSpawner>> spawners;
@@ -50,7 +49,7 @@ public class BiomeSpawnerImpl implements BiomeSpawner {
             net.minecraft.world.entity.MobCategory nmsCategory = category.toNms(net.minecraft.world.entity.MobCategory.class);
             for (WeightedList.Weighted<NaturalSpawner> entry : list.unwrap()) {
                 NaturalSpawner spawner = entry.value();
-                net.minecraft.world.entity.EntityType<?> nmsType = nmsEntityType(spawner.type());
+                net.minecraft.world.entity.EntityType<?> nmsType = MinecraftEntityTypes.toMinecraft(spawner.type());
                 builder.addSpawn(
                     nmsType,
                     nmsCategory,
@@ -63,24 +62,11 @@ public class BiomeSpawnerImpl implements BiomeSpawner {
         });
 
         this.mobSpawnCosts.forEach((type, cost) -> {
-            net.minecraft.world.entity.EntityType<?> nmsType = nmsEntityType(type);
+            net.minecraft.world.entity.EntityType<?> nmsType = MinecraftEntityTypes.toMinecraft(type);
             builder.addMobSpawnCost(nmsType, cost.charge(), cost.energyBudget());
         });
 
         return builder.build();
     }
 
-    /**
-     * Bukkit entity type -> NMS entity type.
-     * @throws IllegalArgumentException if the Bukkit type has no key (e.g. {@code UNKNOWN}) or is not present in the NMS entity registry
-     */
-    private static net.minecraft.world.entity.EntityType<?> nmsEntityType(org.bukkit.entity.EntityType bukkit) {
-        NamespacedKey key = bukkit.getKey();
-        Identifier location = Identifier.fromNamespaceAndPath(key.getNamespace(), key.getKey());
-
-        if (!BuiltInRegistries.ENTITY_TYPE.containsKey(location)) {
-            throw new IllegalArgumentException("No NMS entity type registered for " + key);
-        }
-        return BuiltInRegistries.ENTITY_TYPE.getValue(location);
-    }
 }

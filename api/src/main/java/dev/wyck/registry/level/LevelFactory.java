@@ -23,7 +23,7 @@ public interface LevelFactory {
     @AsOf("2.4.0")
     static LevelFactory factory() {
         record Holder() {
-            static final WireProvider<LevelFactory> WIRE = WireProvider.create("dev.wyck.*?.registry.level.SimpleLevelFactory");
+            static final WireProvider<LevelFactory> WIRE = WireProvider.create("dev.wyck.registry.level.SimpleLevelFactory");
         }
         return Holder.WIRE.get();
     }

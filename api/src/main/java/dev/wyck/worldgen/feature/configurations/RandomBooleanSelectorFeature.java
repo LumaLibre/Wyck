@@ -55,7 +55,7 @@ public interface RandomBooleanSelectorFeature extends FeatureConfiguration {
     @AsOf("3.0.0")
     static RandomBooleanSelectorFeature of(PlacedFeature featureTrue, PlacedFeature featureFalse) {
         record Holder() {
-            static final ConstructWireProvider<RandomBooleanSelectorFeature> WIRE = ConstructWireProvider.create("dev.wyck.*?.worldgen.feature.configurations.RandomBooleanSelectorFeatureImpl");
+            static final ConstructWireProvider<RandomBooleanSelectorFeature> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.feature.configurations.RandomBooleanSelectorFeatureImpl");
         }
         return Holder.WIRE.construct(featureTrue, featureFalse);
     }

@@ -127,7 +127,7 @@ public interface TreeFeature extends FeatureConfiguration {
     @AsOf("3.0.0")
     static TreeFeature of(BlockStateProvider trunkProvider, TrunkPlacer trunkPlacer, BlockStateProvider foliageProvider, FoliagePlacer foliagePlacer, @Nullable RootPlacer rootPlacer, FeatureSize minimumSize, List<TreeDecorator> decorators, boolean ignoreVines, BlockStateProvider belowTrunkProvider) {
         record Holder() {
-            static final ConstructWireProvider<TreeFeature> WIRE = ConstructWireProvider.create("dev.wyck.*?.worldgen.feature.configurations.TreeFeatureImpl");
+            static final ConstructWireProvider<TreeFeature> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.feature.configurations.TreeFeatureImpl");
         }
         return Holder.WIRE.construct(trunkProvider, trunkPlacer, foliageProvider, foliagePlacer, Optional.ofNullable(rootPlacer), minimumSize, decorators, ignoreVines, belowTrunkProvider);
     }

@@ -70,7 +70,7 @@ public interface OreFeature extends FeatureConfiguration {
     @AsOf("3.0.0")
     static OreFeature of(List<TargetBlockState> targetStates, int size, float discardChanceOnAirExposure) {
         record Holder() {
-            static final ConstructWireProvider<OreFeature> WIRE = ConstructWireProvider.create("dev.wyck.*?.worldgen.feature.configurations.OreFeatureImpl");
+            static final ConstructWireProvider<OreFeature> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.feature.configurations.OreFeatureImpl");
         }
         return Holder.WIRE.construct(targetStates, size, discardChanceOnAirExposure);
     }

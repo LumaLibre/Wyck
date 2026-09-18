@@ -47,7 +47,7 @@ public interface IcebergFeature extends FeatureConfiguration {
     @AsOf("3.0.0")
     static IcebergFeature of(BlockData state) {
         record Holder() {
-            static final ConstructWireProvider<IcebergFeature> WIRE = ConstructWireProvider.create("dev.wyck.*?.worldgen.feature.configurations.IcebergFeatureImpl");
+            static final ConstructWireProvider<IcebergFeature> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.feature.configurations.IcebergFeatureImpl");
         }
         return Holder.WIRE.construct(state);
     }

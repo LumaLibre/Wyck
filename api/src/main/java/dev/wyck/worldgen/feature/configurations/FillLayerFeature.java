@@ -58,7 +58,7 @@ public interface FillLayerFeature extends FeatureConfiguration {
     @AsOf("3.0.0")
     static FillLayerFeature of(int height, BlockData state) {
         record Holder() {
-            static final ConstructWireProvider<FillLayerFeature> WIRE = ConstructWireProvider.create("dev.wyck.*?.worldgen.feature.configurations.FillLayerFeatureImpl");
+            static final ConstructWireProvider<FillLayerFeature> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.feature.configurations.FillLayerFeatureImpl");
         }
         return Holder.WIRE.construct(height, state);
     }

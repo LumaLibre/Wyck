@@ -1,6 +1,7 @@
 package dev.wyck.biome.entity.data;
 
 import dev.wyck.annotations.AsOf;
+import dev.wyck.biome.entity.SpawnerData;
 import dev.wyck.wrapper.decode.Decoder;
 import org.bukkit.entity.EntityType;
 import org.jspecify.annotations.NullMarked;
@@ -10,11 +11,13 @@ import org.jspecify.annotations.NullMarked;
  * @param type the type of entity that spawns
  * @param minCount the minimum number of entities that can spawn
  * @param maxCount the maximum number of entities that can spawn
+ * @deprecated Use {@link SpawnerData}
  * @since 2.3.0
- * @version 2.3.0
+ * @version 4.0.0
  */
 @NullMarked
 @AsOf("2.3.0")
+@Deprecated(since = "4.0.0")
 public record NaturalSpawner(EntityType type, int minCount, int maxCount) {
 
     @AsOf("2.3.0")

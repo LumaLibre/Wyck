@@ -77,9 +77,7 @@ public interface NoiseSettings extends Wrapper {
         Preconditions.checkArgument(minY + height <= 2032, "minY + height must be <= 2032");
         Preconditions.checkArgument(minY % 16 == 0, "minY must be a multiple of 16");
         record Holder() {
-            static final ConstructWireProvider<NoiseSettings> WIRE = ConstructWireProvider.create(
-                "dev.wyck.*?.worldgen.noise.NoiseSettingsImpl"
-            );
+            static final ConstructWireProvider<NoiseSettings> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.noise.NoiseSettingsImpl");
         }
         return Holder.WIRE.construct(minY, height);
     }

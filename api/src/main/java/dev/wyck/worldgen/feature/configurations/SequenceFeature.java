@@ -50,7 +50,7 @@ public interface SequenceFeature extends FeatureConfiguration {
     @AsOf("3.0.0")
     static SequenceFeature of(List<PlacedFeature> features) {
         record Holder() {
-            static final ConstructWireProvider<SequenceFeature> WIRE = ConstructWireProvider.create("dev.wyck.*?.worldgen.feature.configurations.SequenceFeatureImpl");
+            static final ConstructWireProvider<SequenceFeature> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.feature.configurations.SequenceFeatureImpl");
         }
         return Holder.WIRE.construct(features);
     }

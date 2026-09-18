@@ -151,7 +151,7 @@ public interface VegetationPatchFeature extends FeatureConfiguration {
         float extraEdgeColumnChance
     ) {
         record Holder() {
-            static final ConstructWireProvider<VegetationPatchFeature> WIRE = ConstructWireProvider.create("dev.wyck.*?.worldgen.feature.configurations.VegetationPatchFeatureImpl");
+            static final ConstructWireProvider<VegetationPatchFeature> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.feature.configurations.VegetationPatchFeatureImpl");
         }
         return Holder.WIRE.construct(replaceable, groundState, vegetationFeature, surface, depth, extraBottomBlockChance, verticalRange, vegetationChance, xzRadius, extraEdgeColumnChance);
     }

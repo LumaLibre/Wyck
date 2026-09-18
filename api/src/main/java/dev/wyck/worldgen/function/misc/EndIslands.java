@@ -32,9 +32,7 @@ public interface EndIslands extends DensityFunction, Registerable<EndIslands> {
     @AsOf("4.0.0")
     static EndIslands of(@Nullable ResourceKey resourceKey) {
         record Holder() {
-            static final ConstructWireProvider<EndIslands> WIRE = ConstructWireProvider.create(
-                "dev.wyck.*?.worldgen.function.misc.EndIslandsImpl"
-            );
+            static final ConstructWireProvider<EndIslands> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.function.misc.EndIslandsImpl");
         }
         return Holder.WIRE.construct(Optional.ofNullable(resourceKey));
     }

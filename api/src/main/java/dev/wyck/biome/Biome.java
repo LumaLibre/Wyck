@@ -89,17 +89,23 @@ public interface Biome extends Keyed, Wrapper {
     /**
      * Gets the biome spawner associated with this biome.
      * @return the BiomeSpawner of this biome, or null if none is set.
+     * @deprecated Read {@link dev.wyck.environment.attribute.EnvironmentAttributes#NATURAL_MOB_SPAWNS}
+     *     from {@link #attributes()} instead
      * @since 2.3.0
      */
     @AsOf("2.3.0")
+    @Deprecated(since = "4.0.0")
     @Nullable BiomeSpawner biomeSpawner();
 
     /**
      * Sets or removes the BiomeSpawner of this biome.
      * @param biomeSpawner the BiomeSpawner to set for this biome, or null to remove it.
+     * @deprecated Set {@link dev.wyck.environment.attribute.EnvironmentAttributes#NATURAL_MOB_SPAWNS}
+     *     through {@link #attributes(EnvironmentAttributeMap)} instead
      * @since 2.3.0
      */
     @AsOf("2.3.0")
+    @Deprecated(since = "4.0.0")
     void biomeSpawner(@Nullable BiomeSpawner biomeSpawner);
 
     /**
@@ -308,8 +314,10 @@ public interface Biome extends Keyed, Wrapper {
          * Sets the BiomeSpawner of the biome.
          * @param biomeSpawner the BiomeSpawner of the biome, or null to remove it
          * @return this builder
+         * @deprecated Use {@link #attribute(EnvironmentAttributeSupplier, Object)} with {@link dev.wyck.environment.attribute.EnvironmentAttributes#NATURAL_MOB_SPAWNS}
          * @since 2.3.0
          */
+        @Deprecated(since = "4.0.0")
         public Builder biomeSpawner(@Nullable BiomeSpawner biomeSpawner) {
             this.biomeSpawner = biomeSpawner;
             return this;
@@ -340,7 +348,16 @@ public interface Biome extends Keyed, Wrapper {
             return this;
         }
 
+        /**
+         * Sets legacy biome spawn settings.
+         * @param spawner the legacy biome spawn settings
+         * @return this builder
+         * @deprecated Use {@link #attribute(EnvironmentAttributeSupplier, Object)} with
+         *     {@link dev.wyck.environment.attribute.EnvironmentAttributes#NATURAL_MOB_SPAWNS}
+         * @since 3.0.0
+         */
         @AsOf("3.0.0")
+        @Deprecated(since = "4.0.0", forRemoval = true)
         public Builder spawner(BiomeSpawner spawner) {
             this.biomeSpawner = spawner;
             return this;

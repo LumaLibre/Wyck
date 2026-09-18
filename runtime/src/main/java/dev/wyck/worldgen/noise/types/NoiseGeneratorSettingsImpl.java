@@ -54,7 +54,7 @@ public record NoiseGeneratorSettingsImpl(
             disableMobGeneration,
             minecraftAquifers,
             useLegacyRandomSource,
-            DebugFunctions.EMPTY
+            DebugFunctions.EMPTY // TODO: implement
         );
     }
 

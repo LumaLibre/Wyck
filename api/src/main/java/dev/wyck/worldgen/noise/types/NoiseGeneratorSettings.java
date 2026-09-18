@@ -156,9 +156,7 @@ public interface NoiseGeneratorSettings extends Noise, Registerable<NoiseGenerat
         boolean useLegacyRandomSource
     ) {
         record Holder() {
-            static final ConstructWireProvider<NoiseGeneratorSettings> WIRE = ConstructWireProvider.create(
-                "dev.wyck.*?.worldgen.noise.types.NoiseGeneratorSettingsImpl"
-            );
+            static final ConstructWireProvider<NoiseGeneratorSettings> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.noise.types.NoiseGeneratorSettingsImpl");
         }
         return Holder.WIRE.construct(
             Optional.ofNullable(resourceKey),

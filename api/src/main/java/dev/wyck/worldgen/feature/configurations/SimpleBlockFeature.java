@@ -55,7 +55,7 @@ public interface SimpleBlockFeature extends FeatureConfiguration {
     @AsOf("3.0.0")
     static SimpleBlockFeature of(BlockStateProvider toPlace, boolean scheduleTick) {
         record Holder() {
-            static final ConstructWireProvider<SimpleBlockFeature> WIRE = ConstructWireProvider.create("dev.wyck.*?.worldgen.feature.configurations.SimpleBlockFeatureImpl");
+            static final ConstructWireProvider<SimpleBlockFeature> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.feature.configurations.SimpleBlockFeatureImpl");
         }
         return Holder.WIRE.construct(toPlace, scheduleTick);
     }

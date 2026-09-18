@@ -107,7 +107,7 @@ public interface SpeleothemFeature extends FeatureConfiguration {
     @AsOf("3.0.0")
     static SpeleothemFeature of(BlockData baseBlock, BlockData pointedBlock, Set<Material> replaceableBlocks, float chanceOfTallerDripstone, float chanceOfDirectionalSpread, float chanceOfSpreadRadius2, float chanceOfSpreadRadius3) {
         record Holder() {
-            static final ConstructWireProvider<SpeleothemFeature> WIRE = ConstructWireProvider.create("dev.wyck.*?.worldgen.feature.configurations.SpeleothemFeatureImpl");
+            static final ConstructWireProvider<SpeleothemFeature> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.feature.configurations.SpeleothemFeatureImpl");
         }
         return Holder.WIRE.construct(baseBlock, pointedBlock, replaceableBlocks, chanceOfTallerDripstone, chanceOfDirectionalSpread, chanceOfSpreadRadius2, chanceOfSpreadRadius3);
     }

@@ -85,7 +85,7 @@ public interface LakeFeature extends FeatureConfiguration {
     @AsOf("3.0.0")
     static LakeFeature create(BlockStateProvider fluid, BlockStateProvider barrier, BlockPredicate canPlaceOn, BlockPredicate canReplaceWithAirOrFluid, BlockPredicate canReplaceWithBarrier) {
         record Holder() {
-            static final ConstructWireProvider<LakeFeature> WIRE = ConstructWireProvider.create("dev.wyck.*?.worldgen.feature.configurations.LakeFeatureImpl");
+            static final ConstructWireProvider<LakeFeature> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.feature.configurations.LakeFeatureImpl");
         }
         return Holder.WIRE.construct(fluid, barrier, canPlaceOn, canReplaceWithAirOrFluid, canReplaceWithBarrier);
     }

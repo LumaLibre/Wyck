@@ -34,7 +34,7 @@ public interface BambooFeature extends FeatureConfiguration {
     static BambooFeature of(float probability) {
         Preconditions.checkArgument(probability >= 0.0F && probability <= 1.0F, "probability must be between 0.0 and 1.0");
         record Holder() {
-            static final ConstructWireProvider<BambooFeature> WIRE = ConstructWireProvider.create("dev.wyck.*?.worldgen.feature.configurations.BambooFeatureImpl");
+            static final ConstructWireProvider<BambooFeature> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.feature.configurations.BambooFeatureImpl");
         }
         return Holder.WIRE.construct(probability);
     }

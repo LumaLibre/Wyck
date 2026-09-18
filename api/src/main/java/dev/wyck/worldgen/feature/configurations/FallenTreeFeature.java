@@ -79,7 +79,7 @@ public interface FallenTreeFeature extends FeatureConfiguration {
     @AsOf("3.0.0")
     static FallenTreeFeature of(BlockStateProvider trunkProvider, IntProvider logLength, List<TreeDecorator> stumpDecorators, List<TreeDecorator> logDecorators) {
         record Holder() {
-            static final ConstructWireProvider<FallenTreeFeature> WIRE = ConstructWireProvider.create("dev.wyck.*?.worldgen.feature.configurations.FallenTreeFeatureImpl");
+            static final ConstructWireProvider<FallenTreeFeature> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.feature.configurations.FallenTreeFeatureImpl");
         }
         return Holder.WIRE.construct(trunkProvider, logLength, stumpDecorators, logDecorators);
     }

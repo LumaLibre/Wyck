@@ -89,7 +89,7 @@ public interface SpringFeature extends FeatureConfiguration {
     @AsOf("3.0.0")
     static SpringFeature of(FluidState state, boolean requiresBlockBelow, int rockCount, int holeCount, Set<Material> validBlocks) {
         record Holder() {
-            static final ConstructWireProvider<SpringFeature> WIRE = ConstructWireProvider.create("dev.wyck.*?.worldgen.feature.configurations.SpringFeatureImpl");
+            static final ConstructWireProvider<SpringFeature> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.feature.configurations.SpringFeatureImpl");
         }
         return Holder.WIRE.construct(state, requiresBlockBelow, rockCount, holeCount, validBlocks);
     }

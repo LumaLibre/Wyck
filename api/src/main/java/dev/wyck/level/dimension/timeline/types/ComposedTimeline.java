@@ -79,7 +79,7 @@ public interface ComposedTimeline extends Timeline, Registerable<ComposedTimelin
     @AsOf("3.2.0")
     static ComposedTimeline of(ResourceKey key, WorldClock clock, @Nullable Integer periodTicks, List<AttributeTrack<?>> tracks, List<TimeMarker> timeMarkers) {
         record Holder() {
-            static final ConstructWireProvider<ComposedTimeline> WIRE = WireProvider.construct("dev.wyck.*?.level.dimension.timeline.types.ComposedTimelineImpl");
+            static final ConstructWireProvider<ComposedTimeline> WIRE = WireProvider.construct("dev.wyck.level.dimension.timeline.types.ComposedTimelineImpl");
         }
         return Holder.WIRE.construct(key, clock, Optional.ofNullable(periodTicks), List.copyOf(tracks), List.copyOf(timeMarkers));
     }

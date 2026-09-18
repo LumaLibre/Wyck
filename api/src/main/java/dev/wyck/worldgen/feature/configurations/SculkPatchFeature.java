@@ -81,7 +81,7 @@ public interface SculkPatchFeature extends FeatureConfiguration {
     @AsOf("3.0.0")
     static SculkPatchFeature of(int chargeCount, int amountPerCharge, int spreadAttempts, int growthRounds, int spreadRounds) {
         record Holder() {
-            static final ConstructWireProvider<SculkPatchFeature> WIRE = ConstructWireProvider.create("dev.wyck.*?.worldgen.feature.configurations.SculkPatchFeatureImpl");
+            static final ConstructWireProvider<SculkPatchFeature> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.feature.configurations.SculkPatchFeatureImpl");
         }
         return Holder.WIRE.construct(chargeCount, amountPerCharge, spreadAttempts, growthRounds, spreadRounds);
     }

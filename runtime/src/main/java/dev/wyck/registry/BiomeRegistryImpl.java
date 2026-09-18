@@ -56,8 +56,14 @@ public class BiomeRegistryImpl implements BiomeRegistry {
             .temperature(settings.temperature())
             .temperatureAdjustment(settings.temperatureModifier().toNms(net.minecraft.world.level.biome.Biome.TemperatureModifier.class))
             .specialEffects(specialEffects.asHandle())
-            .mobSpawnSettings(spawner != null ? spawner.asHandle() : net.minecraft.world.level.biome.MobSpawnSettings.EMPTY)
             .generationSettings(generationSettings != null ? generationSettings.asHandle() : net.minecraft.world.level.biome.BiomeGenerationSettings.EMPTY);
+
+        if (spawner != null) {
+            biomeBuilder.setAttribute(
+                net.minecraft.world.attribute.EnvironmentAttributes.NATURAL_MOB_SPAWNS,
+                spawner.asHandle()
+            );
+        }
 
         if (!attributes.empty()) {
             EnvironmentAttributesUtil.applyTo(biomeBuilder, attributes);
@@ -108,15 +114,20 @@ public class BiomeRegistryImpl implements BiomeRegistry {
 
             // Rebuild biome components
             net.minecraft.world.attribute.EnvironmentAttributeMap.Builder environmentAttributeMapBuilder = net.minecraft.world.attribute.EnvironmentAttributeMap.builder();
+            BiomeSpawner spawner = abstractBiome.biomeSpawner();
+            if (spawner != null) {
+                environmentAttributeMapBuilder.set(
+                    net.minecraft.world.attribute.EnvironmentAttributes.NATURAL_MOB_SPAWNS,
+                    spawner.asHandle()
+                );
+            }
             EnvironmentAttributesUtil.applyTo(environmentAttributeMapBuilder, abstractBiome.attributes());
 
             net.minecraft.world.level.biome.Biome.ClimateSettings climateSettings = abstractBiome.climateSettings().asHandle();
             net.minecraft.world.level.biome.BiomeSpecialEffects specialEffects = abstractBiome.specialEffects().asHandle();
             net.minecraft.world.attribute.EnvironmentAttributeMap environmentAttributeMap = environmentAttributeMapBuilder.build();
 
-            BiomeSpawner spawner = abstractBiome.biomeSpawner();
             BiomeGenerationSettings gen = abstractBiome.generationSettings();
-            net.minecraft.world.level.biome.MobSpawnSettings mobSpawnSettings = spawner != null ? spawner.asHandle() : net.minecraft.world.level.biome.MobSpawnSettings.EMPTY;
             net.minecraft.world.level.biome.BiomeGenerationSettings generationSettings = gen != null ? gen.asHandle() : net.minecraft.world.level.biome.BiomeGenerationSettings.EMPTY;
 
             // Time to reflect
@@ -125,19 +136,16 @@ public class BiomeRegistryImpl implements BiomeRegistry {
                 Field climateSettingsField = net.minecraft.world.level.biome.Biome.class.getDeclaredField("climateSettings");
                 Field environmentAttributesField = net.minecraft.world.level.biome.Biome.class.getDeclaredField("attributes");
                 Field specialEffectsField = net.minecraft.world.level.biome.Biome.class.getDeclaredField("specialEffects");
-                Field mobSpawnSettingsField = net.minecraft.world.level.biome.Biome.class.getDeclaredField("mobSettings");
                 Field generationSettingsField = net.minecraft.world.level.biome.Biome.class.getDeclaredField("generationSettings");
 
                 climateSettingsField.setAccessible(true);
                 environmentAttributesField.setAccessible(true);
                 specialEffectsField.setAccessible(true);
-                mobSpawnSettingsField.setAccessible(true);
                 generationSettingsField.setAccessible(true);
 
                 climateSettingsField.set(biome, climateSettings);
                 environmentAttributesField.set(biome, environmentAttributeMap);
                 specialEffectsField.set(biome, specialEffects);
-                mobSpawnSettingsField.set(biome, mobSpawnSettings);
                 generationSettingsField.set(biome, generationSettings);
 
             } catch (NoSuchFieldException | IllegalAccessException e) {

@@ -50,7 +50,7 @@ public interface ReplaceBlockFeature extends FeatureConfiguration {
     @AsOf("3.0.0")
     static ReplaceBlockFeature of(List<OreFeature.TargetBlockState> targetStates) {
         record Holder() {
-            static final ConstructWireProvider<ReplaceBlockFeature> WIRE = ConstructWireProvider.create("dev.wyck.*?.worldgen.feature.configurations.ReplaceBlockFeatureImpl");
+            static final ConstructWireProvider<ReplaceBlockFeature> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.feature.configurations.ReplaceBlockFeatureImpl");
         }
         return Holder.WIRE.construct(targetStates);
     }

@@ -68,7 +68,7 @@ public interface ComposedCarver extends WorldCarver, Registerable<ComposedCarver
     @AsOf("3.0.0")
     static ComposedCarver of(@Nullable ResourceKey resourceKey, WorldCarverType type, CarverConfiguration config) {
         record Holder() {
-            static final ConstructWireProvider<ComposedCarver> WIRE = ConstructWireProvider.create("dev.wyck.*?.worldgen.carver.types.ComposedCarverImpl");
+            static final ConstructWireProvider<ComposedCarver> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.carver.types.ComposedCarverImpl");
         }
         return Holder.WIRE.construct(Optional.ofNullable(resourceKey), type, config);
     }

@@ -15,17 +15,22 @@ import org.jspecify.annotations.NullMarked;
 import java.util.Map;
 
 /**
- * Represents the spawning settings for a biome, including the spawners for each mob category, the spawn costs for each mob type, and the creature generation probability.
+ * Represents the spawning settings for a biome, including the spawners for each mob category and
+ * the spawn costs for each mob type.
  * This interface wraps Minecraft's MobSpawnSettings class.
+ *
+ * @deprecated Minecraft 26.3 stores {@link dev.wyck.biome.entity.MobSpawnSettings} in {@link dev.wyck.environment.attribute.EnvironmentAttributes#NATURAL_MOB_SPAWNS}
  * @since 2.3.0
- * @version 2.3.0
+ * @version 4.0.0
  * @author Jsinco
  */
 @NullMarked
 @AsOf("2.3.0")
+@Deprecated(since = "4.0.0")
 public interface BiomeSpawner extends Wrapper {
 
     @ApiStatus.Internal
+    @Deprecated(since = "4.0.0")
     interface Factory {
         BiomeSpawner create(Map<MobCategory, WeightedList.Builder<NaturalSpawner>> spawners, Map<EntityType, SpawnCost> mobSpawnCosts);
     }
@@ -90,11 +95,13 @@ public interface BiomeSpawner extends Wrapper {
 
     /**
      * A builder for creating a BiomeSpawner.
+     * @deprecated Use {@link dev.wyck.biome.MobSpawnSettings.Builder}
      * @since 2.3.0
-     * @version 2.3.0
+     * @version 4.0.0
      * @author Jsinco
      */
     @AsOf("2.3.0")
+    @Deprecated(since = "4.0.0", forRemoval = true)
     final class Builder {
 
         private final Map<MobCategory, WeightedList.Builder<NaturalSpawner>> spawners;

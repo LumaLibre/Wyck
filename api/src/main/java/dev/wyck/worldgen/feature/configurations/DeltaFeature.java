@@ -74,7 +74,7 @@ public interface DeltaFeature extends FeatureConfiguration {
     @AsOf("3.0.0")
     static DeltaFeature of(BlockData contents, BlockData rim, IntProvider size, IntProvider rimSize) {
         record Holder() {
-            static final ConstructWireProvider<DeltaFeature> WIRE = ConstructWireProvider.create("dev.wyck.*?.worldgen.feature.configurations.DeltaFeatureImpl");
+            static final ConstructWireProvider<DeltaFeature> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.feature.configurations.DeltaFeatureImpl");
         }
         return Holder.WIRE.construct(contents, rim, size, rimSize);
     }

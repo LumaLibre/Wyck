@@ -8,14 +8,15 @@ import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 @ApiStatus.Internal
+@Deprecated(since = "4.0.0", forRemoval = true)
 public final class NaturalSpawnerDecoder implements Decodable<NaturalSpawner, net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData> {
 
     @Override
     public NaturalSpawner decode(net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData spawner) {
         return NaturalSpawner.of(
             Decoders.bukkitEntityType(spawner.type()),
-            spawner.minCount(),
-            spawner.maxCount()
+            spawner.count().minInclusive(),
+            spawner.count().maxInclusive()
         );
     }
 }

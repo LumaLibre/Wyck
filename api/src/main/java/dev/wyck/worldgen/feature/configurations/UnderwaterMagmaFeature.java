@@ -65,7 +65,7 @@ public interface UnderwaterMagmaFeature extends FeatureConfiguration {
         Preconditions.checkArgument(placementRadiusAroundFloor >= 0 && placementRadiusAroundFloor <= 64, "placementRadiusAroundFloor must be between 0 and 64");
         Preconditions.checkArgument(placementProbabilityPerValidPosition >= 0.0F && placementProbabilityPerValidPosition <= 1.0F, "placementProbabilityPerValidPosition must be between 0.0 and 1.0");
         record Holder() {
-            static final ConstructWireProvider<UnderwaterMagmaFeature> WIRE = ConstructWireProvider.create("dev.wyck.*?.worldgen.feature.configurations.UnderwaterMagmaFeatureImpl");
+            static final ConstructWireProvider<UnderwaterMagmaFeature> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.feature.configurations.UnderwaterMagmaFeatureImpl");
         }
         return Holder.WIRE.construct(floorSearchRange, placementRadiusAroundFloor, placementProbabilityPerValidPosition);
     }

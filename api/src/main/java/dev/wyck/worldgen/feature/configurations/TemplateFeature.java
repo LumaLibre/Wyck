@@ -50,7 +50,7 @@ public interface TemplateFeature extends FeatureConfiguration {
     @AsOf("3.0.1")
     static TemplateFeature of(WeightedList<TemplateEntry> templates) {
         record Holder() {
-            static final ConstructWireProvider<TemplateFeature> WIRE = ConstructWireProvider.create("dev.wyck.*?.worldgen.feature.configurations.TemplateFeatureImpl");
+            static final ConstructWireProvider<TemplateFeature> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.feature.configurations.TemplateFeatureImpl");
         }
         return Holder.WIRE.construct(templates);
     }

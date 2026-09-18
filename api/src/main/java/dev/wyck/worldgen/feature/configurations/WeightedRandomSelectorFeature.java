@@ -47,7 +47,7 @@ public interface WeightedRandomSelectorFeature extends FeatureConfiguration {
     @AsOf("3.0.1")
     static WeightedRandomSelectorFeature of(WeightedList<PlacedFeature> features) {
         record Holder() {
-            static final ConstructWireProvider<WeightedRandomSelectorFeature> WIRE = ConstructWireProvider.create("dev.wyck.*?.worldgen.feature.configurations.WeightedRandomSelectorFeatureImpl");
+            static final ConstructWireProvider<WeightedRandomSelectorFeature> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.feature.configurations.WeightedRandomSelectorFeatureImpl");
         }
         return Holder.WIRE.construct(features);
     }

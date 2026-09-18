@@ -10,6 +10,19 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 public record ReferenceSpec(
+    ClassName outputClass,
+    ClassName typeClass,
+    Class<?> registryType,
+    Function<Object, Identifier> registryLookup,
+    List<Class<?>> sourceClasses,
+    String javadoc,
+    String since,
+    @Nullable String keyChain,
+    @Nullable Predicate<Field> fieldFilter,
+    boolean asInterface
+) implements GeneratorSpec {
+
+    public ReferenceSpec(
         ClassName outputClass,
         ClassName typeClass,
         Class<?> registryType,
@@ -18,45 +31,32 @@ public record ReferenceSpec(
         String javadoc,
         String since,
         @Nullable String keyChain,
-        @Nullable Predicate<Field> fieldFilter,
-        boolean asInterface
-) implements GeneratorSpec {
-
-    public ReferenceSpec(
-            ClassName outputClass,
-            ClassName typeClass,
-            Class<?> registryType,
-            Function<Object, Identifier> registryLookup,
-            List<Class<?>> sourceClasses,
-            String javadoc,
-            String since,
-            @Nullable String keyChain,
-            @Nullable Predicate<Field> fieldFilter
+        @Nullable Predicate<Field> fieldFilter
     ) {
         this(outputClass, typeClass, registryType, registryLookup, sourceClasses, javadoc, since, keyChain, fieldFilter, false);
     }
 
     public ReferenceSpec(
-            ClassName outputClass,
-            ClassName typeClass,
-            Class<?> registryType,
-            Function<Object, Identifier> registryLookup,
-            List<Class<?>> sourceClasses,
-            String javadoc,
-            String since,
-            @Nullable String keyChain
+        ClassName outputClass,
+        ClassName typeClass,
+        Class<?> registryType,
+        Function<Object, Identifier> registryLookup,
+        List<Class<?>> sourceClasses,
+        String javadoc,
+        String since,
+        @Nullable String keyChain
     ) {
         this(outputClass, typeClass, registryType, registryLookup, sourceClasses, javadoc, since, keyChain, null, false);
     }
 
     public ReferenceSpec(
-            ClassName outputClass,
-            ClassName typeClass,
-            Class<?> registryType,
-            Function<Object, Identifier> registryLookup,
-            List<Class<?>> sourceClasses,
-            String javadoc,
-            String since
+        ClassName outputClass,
+        ClassName typeClass,
+        Class<?> registryType,
+        Function<Object, Identifier> registryLookup,
+        List<Class<?>> sourceClasses,
+        String javadoc,
+        String since
     ) {
         this(outputClass, typeClass, registryType, registryLookup, sourceClasses, javadoc, since, null, null, false);
     }

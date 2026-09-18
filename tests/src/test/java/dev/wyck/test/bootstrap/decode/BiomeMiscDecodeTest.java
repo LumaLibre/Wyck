@@ -2,20 +2,19 @@ package dev.wyck.test.bootstrap.decode;
 
 import dev.wyck.biome.BiomeSpecialEffects;
 import dev.wyck.biome.ClimateSettings;
+import dev.wyck.biome.entity.MobSpawnCost;
+import dev.wyck.biome.entity.MobSpawnSettings;
+import dev.wyck.biome.entity.SpawnerData;
 import dev.wyck.biome.TemperatureModifier;
-import dev.wyck.biome.entity.BiomeSpawner;
 import dev.wyck.biome.entity.MobCategory;
-import dev.wyck.biome.entity.data.NaturalSpawner;
-import dev.wyck.biome.entity.data.SpawnCost;
 import dev.wyck.environment.GrassColorModifier;
 import dev.wyck.test.bootstrap.MinecraftBootstrap;
 import dev.wyck.util.WeightedList;
-import net.minecraft.world.level.biome.MobSpawnSettings;
+import dev.wyck.worldgen.valueproviders.IntProvider;
 import org.bukkit.entity.EntityType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -61,35 +60,39 @@ class BiomeMiscDecodeTest {
 
     @Test
     void spawnLeafRecordsDecodeTheirOwnMinecraftTypes() {
-        NaturalSpawner spawner = NaturalSpawner.decode(new MobSpawnSettings.SpawnerData(
-            net.minecraft.world.entity.EntityTypes.ZOMBIE, 2, 5));
+        SpawnerData spawner = SpawnerData.decode(
+            new net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData(
+                net.minecraft.world.entity.EntityTypes.ZOMBIE,
+                net.minecraft.util.valueproviders.UniformInt.of(2, 5)
+            ));
         assertEquals(EntityType.ZOMBIE, spawner.type());
-        assertEquals(2, spawner.minCount());
-        assertEquals(5, spawner.maxCount());
+        assertEquals(2, spawner.count().minInclusive());
+        assertEquals(5, spawner.count().maxInclusive());
 
-        SpawnCost cost = SpawnCost.decode(new MobSpawnSettings.MobSpawnCost(9.5, 1.25));
+        MobSpawnCost cost = MobSpawnCost.decode(
+            new net.minecraft.world.level.biome.MobSpawnSettings.MobSpawnCost(9.5, 1.25));
         assertEquals(1.25, cost.charge());
         assertEquals(9.5, cost.energyBudget());
     }
 
     @Test
-    void biomeSpawnerStacksLeafDecodersAndPreservesWeights() {
-        BiomeSpawner original = BiomeSpawner.builder()
-            .creatureGenerationProbability(0.35f)
-            .spawner(MobCategory.MONSTER, 7, EntityType.ZOMBIE, 2, 5)
-            .spawner(MobCategory.MONSTER, 3, EntityType.SKELETON, 1, 4)
-            .spawnCost(EntityType.ZOMBIE, 1.25, 9.5)
+    void mobSpawnSettingsStackLeafDecodersAndPreserveWeights() {
+        MobSpawnSettings original = MobSpawnSettings.builder()
+            .addSpawn(EntityType.ZOMBIE, 7, IntProvider.uniform(2, 5))
+            .addSpawn(EntityType.SKELETON, 3, IntProvider.uniform(1, 4))
+            .addMobSpawnCost(EntityType.ZOMBIE, 1.25, 9.5)
             .build();
 
-        BiomeSpawner decoded = BiomeSpawner.decode(original.toMinecraft());
+        MobSpawnSettings decoded = MobSpawnSettings.decode(original.toMinecraft());
 
-        assertEquals(0.35f, decoded.creatureGenerationProbability());
-        WeightedList<NaturalSpawner> monsters = decoded.spawners().get(MobCategory.MONSTER);
+        WeightedList<SpawnerData> monsters = decoded.getMobsToSpawn(MobCategory.MONSTER);
         assertEquals(2, monsters.unwrap().size());
         assertEquals(EntityType.ZOMBIE, monsters.unwrap().getFirst().value().type());
         assertEquals(7, monsters.unwrap().getFirst().weight());
         assertEquals(EntityType.SKELETON, monsters.unwrap().getLast().value().type());
         assertEquals(3, monsters.unwrap().getLast().weight());
-        assertEquals(Map.of(EntityType.ZOMBIE, new SpawnCost(1.25, 9.5)), decoded.mobSpawnCosts());
+        MobSpawnCost zombieCost = decoded.allSpawnCosts().get(EntityType.ZOMBIE);
+        assertEquals(9.5, zombieCost.energyBudget());
+        assertEquals(1.25, zombieCost.charge());
     }
 }

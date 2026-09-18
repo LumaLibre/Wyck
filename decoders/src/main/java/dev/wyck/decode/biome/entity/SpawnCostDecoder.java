@@ -7,6 +7,7 @@ import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 @ApiStatus.Internal
+@Deprecated(since = "4.0.0", forRemoval = true)
 public final class SpawnCostDecoder implements Decodable<SpawnCost, net.minecraft.world.level.biome.MobSpawnSettings.MobSpawnCost> {
 
     @Override

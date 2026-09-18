@@ -75,7 +75,7 @@ public interface GeodeLayerSettings extends Wrapper {
     @AsOf("3.0.0")
     static GeodeLayerSettings of(double filling, double innerLayer, double middleLayer, double outerLayer) {
         record Holder() {
-            static final ConstructWireProvider<GeodeLayerSettings> WIRE = ConstructWireProvider.create("dev.wyck.*?.worldgen.feature.configurations.geode.GeodeLayerSettingsImpl");
+            static final ConstructWireProvider<GeodeLayerSettings> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.feature.configurations.geode.GeodeLayerSettingsImpl");
         }
         return Holder.WIRE.construct(filling, innerLayer, middleLayer, outerLayer);
     }

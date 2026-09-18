@@ -84,7 +84,7 @@ public interface BlockColumnFeature extends FeatureConfiguration {
     @AsOf("3.0.0")
     static BlockColumnFeature of(List<Layer> layers, BlockFace direction, BlockPredicate allowedPlacement, boolean prioritizeTip) {
         record Holder() {
-            static final ConstructWireProvider<BlockColumnFeature> WIRE = ConstructWireProvider.create("dev.wyck.*?.worldgen.feature.configurations.BlockColumnFeatureImpl");
+            static final ConstructWireProvider<BlockColumnFeature> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.feature.configurations.BlockColumnFeatureImpl");
         }
         return Holder.WIRE.construct(layers, direction, allowedPlacement, prioritizeTip);
     }

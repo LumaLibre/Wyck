@@ -66,7 +66,7 @@ public interface ReplaceBlobsFeature extends FeatureConfiguration {
     @AsOf("3.0.0")
     static ReplaceBlobsFeature of(BlockData targetState, BlockData replaceState, IntProvider radius) {
         record Holder() {
-            static final ConstructWireProvider<ReplaceBlobsFeature> WIRE = ConstructWireProvider.create("dev.wyck.*?.worldgen.feature.configurations.ReplaceBlobsFeatureImpl");
+            static final ConstructWireProvider<ReplaceBlobsFeature> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.feature.configurations.ReplaceBlobsFeatureImpl");
         }
         return Holder.WIRE.construct(targetState, replaceState, radius);
     }

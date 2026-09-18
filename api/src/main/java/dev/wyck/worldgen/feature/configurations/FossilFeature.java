@@ -88,7 +88,7 @@ public interface FossilFeature extends FeatureConfiguration {
     @AsOf("3.3.0")
     static FossilFeature of(List<StructureTemplate> fossilStructures, List<StructureTemplate> overlayStructures, ProcessorList fossilProcessors, ProcessorList overlayProcessors, int maxEmptyCornersAllowed) {
         record Holder() {
-            static final ConstructWireProvider<FossilFeature> WIRE = ConstructWireProvider.create("dev.wyck.*?.worldgen.feature.configurations.FossilFeatureImpl");
+            static final ConstructWireProvider<FossilFeature> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.feature.configurations.FossilFeatureImpl");
         }
         return Holder.WIRE.construct(List.copyOf(fossilStructures), List.copyOf(overlayStructures), fossilProcessors, overlayProcessors, maxEmptyCornersAllowed);
     }

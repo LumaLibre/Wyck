@@ -28,7 +28,7 @@ public interface ReferencedCarver extends WorldCarver {
     @AsOf("3.0.0")
     static ReferencedCarver of(ResourceKey key) {
         record Holder() {
-            static final ConstructWireProvider<ReferencedCarver> WIRE = ConstructWireProvider.create("dev.wyck.*?.worldgen.carver.types.ReferencedCarverImpl");
+            static final ConstructWireProvider<ReferencedCarver> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.carver.types.ReferencedCarverImpl");
         }
         return Holder.WIRE.construct(key);
     }

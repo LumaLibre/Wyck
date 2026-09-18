@@ -199,7 +199,7 @@ public interface RootSystemFeature extends FeatureConfiguration {
         BlockPredicate allowedTreePosition
     ) {
         record Holder() {
-            static final ConstructWireProvider<RootSystemFeature> WIRE = ConstructWireProvider.create("dev.wyck.*?.worldgen.feature.configurations.RootSystemFeatureImpl");
+            static final ConstructWireProvider<RootSystemFeature> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.feature.configurations.RootSystemFeatureImpl");
         }
         return Holder.WIRE.construct(treeFeature, requiredVerticalSpaceForTree, levelTestDistance, maxLevelDeviation, rootRadius, rootReplaceable, rootStateProvider, rootPlacementAttempts, rootColumnMaxHeight, hangingRootRadius, hangingRootsVerticalSpan, hangingRootStateProvider, hangingRootPlacementAttempts, allowedVerticalWaterForTree, allowedTreePosition);
     }

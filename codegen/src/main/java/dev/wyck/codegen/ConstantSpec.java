@@ -26,26 +26,26 @@ import java.util.function.Predicate;
  *                       {@code "FLUID"}
  */
 public record ConstantSpec(
+    String outputPackage,
+    String outputSimpleClassName,
+    Class<?> registryType,
+    Function<Object, Identifier> registryLookup,
+    List<Class<?>> sourceClasses,
+    String registryId,
+    String javadoc,
+    String since,
+    @Nullable Predicate<Field> fieldFilter
+) implements GeneratorSpec {
+
+    public ConstantSpec(
         String outputPackage,
-        String outputSimpleClassName,
+        String outputClass,
         Class<?> registryType,
         Function<Object, Identifier> registryLookup,
         List<Class<?>> sourceClasses,
         String registryId,
         String javadoc,
-        String since,
-        @Nullable Predicate<Field> fieldFilter
-) implements GeneratorSpec {
-
-    public ConstantSpec(
-            String outputPackage,
-            String outputClass,
-            Class<?> registryType,
-            Function<Object, Identifier> registryLookup,
-            List<Class<?>> sourceClasses,
-            String registryId,
-            String javadoc,
-            String since
+        String since
     ) {
         this(outputPackage, outputClass, registryType, registryLookup, sourceClasses, registryId, javadoc, since, null);
     }
@@ -56,14 +56,14 @@ public record ConstantSpec(
      * after the closing {@code </p>}.
      */
     public ConstantSpec(
-            String outputPackage,
-            String outputClass,
-            Class<?> registryType,
-            Function<Object, Identifier> registryLookup,
-            List<Class<?>> sourceClasses,
-            String registryId,
-            List<String> javadocLines,
-            String since
+        String outputPackage,
+        String outputClass,
+        Class<?> registryType,
+        Function<Object, Identifier> registryLookup,
+        List<Class<?>> sourceClasses,
+        String registryId,
+        List<String> javadocLines,
+        String since
     ) {
         this(outputPackage, outputClass, registryType, registryLookup, sourceClasses, registryId, String.join("\n", javadocLines), since, null);
     }

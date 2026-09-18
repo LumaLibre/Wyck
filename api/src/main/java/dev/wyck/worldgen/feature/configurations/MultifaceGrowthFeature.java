@@ -103,7 +103,7 @@ public interface MultifaceGrowthFeature extends FeatureConfiguration {
     @AsOf("3.0.0")
     static MultifaceGrowthFeature of(Material placeBlock, int searchRange, boolean canPlaceOnFloor, boolean canPlaceOnCeiling, boolean canPlaceOnWall, float chanceOfSpreading, Set<Material> canBePlacedOn) {
         record Holder() {
-            static final ConstructWireProvider<MultifaceGrowthFeature> WIRE = ConstructWireProvider.create("dev.wyck.*?.worldgen.feature.configurations.MultifaceGrowthFeatureImpl");
+            static final ConstructWireProvider<MultifaceGrowthFeature> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.feature.configurations.MultifaceGrowthFeatureImpl");
         }
         return Holder.WIRE.construct(placeBlock, searchRange, canPlaceOnFloor, canPlaceOnCeiling, canPlaceOnWall, chanceOfSpreading, canBePlacedOn);
     }

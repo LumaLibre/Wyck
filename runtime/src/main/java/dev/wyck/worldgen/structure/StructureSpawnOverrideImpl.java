@@ -1,13 +1,7 @@
 package dev.wyck.worldgen.structure;
 
-import dev.wyck.biome.entity.data.NaturalSpawner;
 import dev.wyck.util.WeightedList;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.Identifier;
-import net.minecraft.util.valueproviders.ConstantInt;
-import net.minecraft.util.valueproviders.UniformInt;
-import net.minecraft.world.level.biome.MobSpawnSettings;
-import org.bukkit.NamespacedKey;
+import dev.wyck.biome.entity.SpawnerData;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
@@ -18,22 +12,17 @@ import java.util.List;
 @ApiStatus.Internal
 public record StructureSpawnOverrideImpl(
     @Override BoundingBoxType boundingBox,
-    @Override WeightedList<NaturalSpawner> spawns
+    @Override WeightedList<SpawnerData> spawns
 ) implements StructureSpawnOverride {
 
     @Override
     public net.minecraft.world.level.levelgen.structure.StructureSpawnOverride toMinecraft() {
-        List<net.minecraft.util.random.Weighted<MobSpawnSettings.SpawnerData>> entries =
+        List<net.minecraft.util.random.Weighted<net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData>> entries =
             new ArrayList<>(this.spawns.unwrap().size());
-        for (WeightedList.Weighted<NaturalSpawner> entry : this.spawns.unwrap()) {
-            NaturalSpawner spawner = entry.value();
+        for (WeightedList.Weighted<SpawnerData> entry : this.spawns.unwrap()) {
+            SpawnerData spawner = entry.value();
             entries.add(new net.minecraft.util.random.Weighted<>(
-                new MobSpawnSettings.SpawnerData(
-                    nmsEntityType(spawner.type()),
-                    spawner.minCount() == spawner.maxCount()
-                        ? ConstantInt.of(spawner.minCount())
-                        : UniformInt.of(spawner.minCount(), spawner.maxCount())
-                ),
+                spawner.asHandle(),
                 entry.weight()
             ));
         }
@@ -44,13 +33,4 @@ public record StructureSpawnOverrideImpl(
         );
     }
 
-    private static net.minecraft.world.entity.EntityType<?> nmsEntityType(org.bukkit.entity.EntityType bukkit) {
-        NamespacedKey key = bukkit.getKey();
-        Identifier location = Identifier.fromNamespaceAndPath(key.getNamespace(), key.getKey());
-
-        if (!BuiltInRegistries.ENTITY_TYPE.containsKey(location)) {
-            throw new IllegalArgumentException("No NMS entity type registered for " + key);
-        }
-        return BuiltInRegistries.ENTITY_TYPE.getValue(location);
-    }
 }

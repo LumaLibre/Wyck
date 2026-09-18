@@ -75,7 +75,7 @@ public interface DiskFeature extends FeatureConfiguration {
     @AsOf("3.0.0")
     static DiskFeature of(BlockStateProvider stateProvider, BlockPredicate target, IntProvider radius, int halfHeight) {
         record Holder() {
-            static final ConstructWireProvider<DiskFeature> WIRE = ConstructWireProvider.create("dev.wyck.*?.worldgen.feature.configurations.DiskFeatureImpl");
+            static final ConstructWireProvider<DiskFeature> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.feature.configurations.DiskFeatureImpl");
         }
         return Holder.WIRE.construct(stateProvider, target, radius, halfHeight);
     }

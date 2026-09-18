@@ -17,6 +17,7 @@ import java.util.Map;
 @WireFactory
 @AsOf("2.3.0")
 @ApiStatus.Internal
+@Deprecated(since = "4.0.0")
 public class BiomeSpawnerFactoryImpl implements BiomeSpawner.Factory {
     @Override
     public BiomeSpawner create(Map<MobCategory, WeightedList.Builder<NaturalSpawner>> spawners, Map<EntityType, SpawnCost> mobSpawnCosts) {

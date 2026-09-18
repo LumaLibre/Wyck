@@ -314,6 +314,8 @@ public interface CustomBiome extends Biome {
         private List<BlockReplacement> blockReplacements = new ArrayList<>();
         private ParticleCatalog.@Nullable Builder particleCatalog;
 
+        // TODO: Friendly builder methods for MobSpawnSettings
+
         @AsOf("3.0.0")
         public Builder() {}
 
@@ -379,8 +381,10 @@ public interface CustomBiome extends Biome {
          * Sets the BiomeSpawner of the custom biome.
          * @param biomeSpawner the BiomeSpawner of the custom biome, or null to remove it
          * @return this builder
+         * @deprecated Use {@link #attribute(EnvironmentAttributeSupplier, Object)} with {@link dev.wyck.environment.attribute.EnvironmentAttributes#NATURAL_MOB_SPAWNS}
          * @since 2.3.0
          */
+        @Deprecated(since = "4.0.0")
         public Builder biomeSpawner(@Nullable BiomeSpawner biomeSpawner) {
             this.biomeSpawner = biomeSpawner;
             return this;

@@ -1,7 +1,7 @@
 package dev.wyck.level.dimension;
 
 import dev.wyck.annotations.AsOf;
-import dev.wyck.biome.entity.data.MonsterSettings;
+import dev.wyck.level.dimension.entity.MonsterSettings;
 import dev.wyck.environment.attribute.EnvironmentAttributeMap;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.level.dimension.clock.WorldClock;

@@ -34,7 +34,7 @@ public interface BlockPileFeature extends FeatureConfiguration {
     @AsOf("3.0.0")
     static BlockPileFeature of(BlockStateProvider stateProvider) {
         record Holder() {
-            static final ConstructWireProvider<BlockPileFeature> WIRE = ConstructWireProvider.create("dev.wyck.*?.worldgen.feature.configurations.BlockPileFeatureImpl");
+            static final ConstructWireProvider<BlockPileFeature> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.feature.configurations.BlockPileFeatureImpl");
         }
         return Holder.WIRE.construct(stateProvider);
     }

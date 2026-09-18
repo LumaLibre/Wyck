@@ -64,14 +64,9 @@ public interface CanyonWorldCarver extends CarverConfiguration {
         FloatProvider verticalRotation,
         Shape shape
     ) {
-        Preconditions.checkArgument(
-            probability >= 0.0F && probability <= 1.0F,
-            "probability must be between 0 and 1"
-        );
+        Preconditions.checkArgument(probability >= 0.0F && probability <= 1.0F, "probability must be between 0 and 1");
         record Holder() {
-            static final ConstructWireProvider<CanyonWorldCarver> WIRE = ConstructWireProvider.create(
-                "dev.wyck.*?.worldgen.carver.CanyonWorldCarverImpl"
-            );
+            static final ConstructWireProvider<CanyonWorldCarver> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.carver.CanyonWorldCarverImpl");
         }
         return Holder.WIRE.construct(probability, y, verticalRotation, shape);
     }
@@ -281,7 +276,7 @@ public interface CanyonWorldCarver extends CarverConfiguration {
             Preconditions.checkArgument(widthSmoothness > 0, "widthSmoothness must be positive");
             record Holder() {
                 static final ConstructWireProvider<Shape> WIRE = ConstructWireProvider.create(
-                    "dev.wyck.*?.worldgen.carver.CanyonWorldCarverImpl$ShapeImpl"
+                    "dev.wyck.worldgen.carver.CanyonWorldCarverImpl$ShapeImpl"
                 );
             }
             return Holder.WIRE.construct(

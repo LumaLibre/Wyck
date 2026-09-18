@@ -44,7 +44,7 @@ public interface TrapezoidInt extends IntProvider {
     @AsOf("3.0.0")
     static TrapezoidInt of(int min, int max, int plateau) {
         record Holder() {
-            static final ConstructWireProvider<TrapezoidInt> WIRE = ConstructWireProvider.create("dev.wyck.*?.worldgen.valueproviders.TrapezoidIntImpl");
+            static final ConstructWireProvider<TrapezoidInt> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.valueproviders.TrapezoidIntImpl");
         }
         return Holder.WIRE.construct(min, max, plateau);
     }

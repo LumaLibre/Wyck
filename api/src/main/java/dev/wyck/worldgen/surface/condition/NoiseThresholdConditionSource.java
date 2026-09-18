@@ -87,7 +87,7 @@ public interface NoiseThresholdConditionSource extends ConditionSource {
     @AsOf("3.3.0")
     static NoiseThresholdConditionSource of(ResourceKey noise, double minThreshold, double maxThreshold, boolean is3d) {
         record Holder() {
-            static final ConstructWireProvider<NoiseThresholdConditionSource> WIRE = ConstructWireProvider.create("dev.wyck.*?.worldgen.surface.condition.NoiseThresholdConditionSourceImpl");
+            static final ConstructWireProvider<NoiseThresholdConditionSource> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.surface.condition.NoiseThresholdConditionSourceImpl");
         }
         return Holder.WIRE.construct(noise, minThreshold, maxThreshold, is3d);
     }
