@@ -29,7 +29,9 @@ public record TwoArgumentSimpleFunctionImpl(
 
         return switch (operation) {
             case ADD -> net.minecraft.world.level.levelgen.densityfunction.DensityFunctions.add(f1, f2);
+            case SUB -> net.minecraft.world.level.levelgen.densityfunction.DensityFunctions.sub(f1, f2);
             case MUL -> net.minecraft.world.level.levelgen.densityfunction.DensityFunctions.mul(f1, f2);
+            case DIV -> net.minecraft.world.level.levelgen.densityfunction.DensityFunctions.div(f1, f2);
             case MIN -> net.minecraft.world.level.levelgen.densityfunction.DensityFunctions.min(f1, f2);
             case MAX -> net.minecraft.world.level.levelgen.densityfunction.DensityFunctions.max(f1, f2);
         };

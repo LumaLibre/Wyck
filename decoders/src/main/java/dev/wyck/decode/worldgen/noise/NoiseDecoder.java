@@ -2,10 +2,11 @@ package dev.wyck.decode.worldgen.noise;
 
 import dev.wyck.decode.Decoders;
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.worldgen.climate.ClimatePoint;
+import dev.wyck.worldgen.noise.AquiferSettings;
 import dev.wyck.worldgen.noise.Noise;
 import dev.wyck.worldgen.noise.NoiseRouter;
 import dev.wyck.worldgen.noise.NoiseSettings;
+import dev.wyck.worldgen.noise.SpawnTargetPoint;
 import dev.wyck.worldgen.noise.types.NoiseGeneratorSettings;
 import dev.wyck.worldgen.surface.rule.RuleSource;
 import dev.wyck.wrapper.decode.Decodable;
@@ -31,12 +32,11 @@ public final class NoiseDecoder implements Decodable<NoiseGeneratorSettings, Obj
             Decoders.blockData(settings.defaultBlock()),
             Decoders.blockData(settings.defaultFluid()),
             NoiseRouter.decode(settings.noiseRouter()),
-            RuleSource.decode(settings.surfaceRule()),
-            settings.spawnTarget().stream().map(ClimatePoint::decode).toList(),
+            RuleSource.decode(settings.materialRule()),
+            settings.spawnTarget().stream().map(SpawnTargetPoint::decode).toList(),
             settings.seaLevel(),
             settings.disableMobGeneration(),
-            settings.isAquifersEnabled(),
-            settings.oreVeinsEnabled(),
+            settings.aquifers().map(AquiferSettings::decode).orElse(null),
             settings.useLegacyRandomSource()
         );
     }

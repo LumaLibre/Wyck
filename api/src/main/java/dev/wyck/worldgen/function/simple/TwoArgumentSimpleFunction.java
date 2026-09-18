@@ -101,6 +101,18 @@ public interface TwoArgumentSimpleFunction extends SimpleFunction, Registerable<
     }
 
     /**
+     * Subtracts the second density function from the first.
+     * @param first the left density function
+     * @param second the right density function
+     * @return the difference of the two density functions
+     * @since 4.0.0
+     */
+    @AsOf("4.0.0")
+    static TwoArgumentSimpleFunction sub(DensityFunction first, DensityFunction second) {
+        return of(Operation.SUB, first, second);
+    }
+
+    /**
      * Multiplies two density functions together.
      * @param first the first density function
      * @param second the second density function
@@ -109,6 +121,18 @@ public interface TwoArgumentSimpleFunction extends SimpleFunction, Registerable<
      */
     static TwoArgumentSimpleFunction mul(DensityFunction first, DensityFunction second) {
         return of(Operation.MUL, first, second);
+    }
+
+    /**
+     * Divides the first density function by the second.
+     * @param first the dividend density function
+     * @param second the divisor density function
+     * @return the quotient of the two density functions
+     * @since 4.0.0
+     */
+    @AsOf("4.0.0")
+    static TwoArgumentSimpleFunction div(DensityFunction first, DensityFunction second) {
+        return of(Operation.DIV, first, second);
     }
 
     /**
@@ -141,7 +165,9 @@ public interface TwoArgumentSimpleFunction extends SimpleFunction, Registerable<
     @AsOf("3.0.0")
     enum Operation {
         ADD,
+        SUB,
         MUL,
+        DIV,
         MIN,
         MAX
     }

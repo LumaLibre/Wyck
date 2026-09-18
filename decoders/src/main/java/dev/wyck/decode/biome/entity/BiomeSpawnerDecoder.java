@@ -12,7 +12,7 @@ import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 @ApiStatus.Internal
-@Deprecated(since = "4.0.0", forRemoval = true)
+@Deprecated(since = "4.0.0")
 public final class BiomeSpawnerDecoder implements Decodable<BiomeSpawner, MobSpawnSettings> {
 
     @Override

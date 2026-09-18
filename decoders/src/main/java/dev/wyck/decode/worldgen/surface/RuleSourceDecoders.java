@@ -35,7 +35,7 @@ public final class RuleSourceDecoders extends DecoderRegistry<RuleSource, net.mi
 
     @Override
     protected ResourceKey discriminate(net.minecraft.world.level.levelgen.material.rule.MaterialRule source) {
-        return Decoders.registryKey(BuiltInRegistries.MATERIAL_RULE, source.codec());
+        return Decoders.registryKey(BuiltInRegistries.MATERIAL_RULE_TYPE, source.codec());
     }
 
     private static List<RuleSource> sequence(Object source) {

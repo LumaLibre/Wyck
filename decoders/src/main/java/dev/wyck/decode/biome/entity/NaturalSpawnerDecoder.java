@@ -8,7 +8,7 @@ import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 @ApiStatus.Internal
-@Deprecated(since = "4.0.0", forRemoval = true)
+@Deprecated(since = "4.0.0")
 public final class NaturalSpawnerDecoder implements Decodable<NaturalSpawner, net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData> {
 
     @Override

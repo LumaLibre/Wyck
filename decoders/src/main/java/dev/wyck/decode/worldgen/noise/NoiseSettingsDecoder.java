@@ -10,6 +10,6 @@ import org.jspecify.annotations.NullMarked;
 public final class NoiseSettingsDecoder implements Decodable<NoiseSettings, net.minecraft.world.level.levelgen.NoiseSettings> {
     @Override
     public NoiseSettings decode(net.minecraft.world.level.levelgen.NoiseSettings settings) {
-        return NoiseSettings.of(settings.minY(), settings.height(), settings.noiseSizeHorizontal(), settings.noiseSizeVertical());
+        return NoiseSettings.of(settings.minY(), settings.height());
     }
 }

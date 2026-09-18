@@ -21,7 +21,6 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProviderType;
 import org.bukkit.craftbukkit.block.CraftBlockType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -87,8 +86,7 @@ public final class BlockStateProviderDecoders extends DecoderRegistry<BlockState
 
     @Override
     protected ResourceKey discriminate(net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider minecraftObject) {
-        BlockStateProviderType<?> type = FastReflection.call(minecraftObject, "type");
-        return Decoders.registryKey(BuiltInRegistries.BLOCKSTATE_PROVIDER_TYPE, type);
+        return Decoders.registryKey(BuiltInRegistries.BLOCK_STATE_PROVIDER_TYPE, minecraftObject.codec());
     }
 
     private static long seed(Object provider) {

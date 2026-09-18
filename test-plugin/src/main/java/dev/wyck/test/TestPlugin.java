@@ -151,24 +151,6 @@ public class TestPlugin extends JavaPlugin implements Listener {
         DensityFunction base = DensityFunction.yClampedGradient(0, 256, 1.2, -1.2);
         DensityFunction finalDensity = base.add(wobble).clamp(-1.0, 1.0);
 
-        NoiseRouter router = NoiseRouter.builder()
-            .barrier(DensityFunction.constant(0.0))
-            .fluidLevelFloodedness(DensityFunction.constant(0.0))
-            .fluidLevelSpread(DensityFunction.constant(0.0))
-            .lava(DensityFunction.constant(0.0))
-            .temperature(DensityFunction.noise(Noises.TEMPERATURE, 0.25, 0.0))
-            .vegetation(DensityFunction.noise(Noises.VEGETATION, 0.25, 0.0))
-            .continents(DensityFunction.constant(0.0))
-            .erosion(DensityFunction.constant(0.0))
-            .depth(DensityFunction.constant(0.0))
-            .ridges(DensityFunction.constant(0.0))
-            .preliminarySurfaceLevel(DensityFunction.constant(0.0))
-            .finalDensity(finalDensity)
-            .veinToggle(DensityFunction.constant(-1.0))
-            .veinRidged(DensityFunction.constant(0.0))
-            .veinGap(DensityFunction.constant(0.0))
-            .build();
-
         ConditionSource onFloor = SurfaceRule.stoneDepth(0, false, CaveSurface.FLOOR);
         ConditionSource underFloor = SurfaceRule.stoneDepth(0, true, CaveSurface.FLOOR);
 
@@ -191,16 +173,13 @@ public class TestPlugin extends JavaPlugin implements Listener {
             SurfaceRule.ifTrue(underFloor, subBlocks)
         ));
 
-        ParticleTypes;
-        net.minecraft.world.level.biome.Biomes
         NoiseGeneratorSettings noiseSettings = NoiseGeneratorSettings.builder()
             .noiseSettings(NoiseSettings.OVERWORLD)
             .defaultBlock(Material.STONE)
             .defaultFluid(Material.WATER)
-            .noiseRouter(router)
             .surfaceRule(surfaceRule)
             .seaLevel(63)
-            .aquifers(AquiferSettings)
+            //.aquifers(AquiferSettings)
             .build();
 
         NoiseBasedChunkGenerator generator = NoiseBasedChunkGenerator.of(biomeSource, Noise.overworld());

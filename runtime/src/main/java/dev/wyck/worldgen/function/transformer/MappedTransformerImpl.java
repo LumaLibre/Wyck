@@ -31,10 +31,14 @@ public final class MappedTransformerImpl extends PureTransformerImpl implements 
             case ABS -> unwrapped.abs();
             case SQUARE -> unwrapped.square();
             case CUBE -> unwrapped.cube();
+            case SQRT -> unwrapped.sqrt();
             case HALF_NEGATIVE -> unwrapped.halfNegative();
             case QUARTER_NEGATIVE -> unwrapped.quarterNegative();
-            case INVERT -> unwrapped.reciprocal();
+            case RECIPROCAL -> unwrapped.reciprocal();
+            case NEGATE -> unwrapped.negate();
             case SQUEEZE -> unwrapped.squeeze();
+            case LOG -> unwrapped.log();
+            case SIGN -> unwrapped.sign();
         };
     }
 

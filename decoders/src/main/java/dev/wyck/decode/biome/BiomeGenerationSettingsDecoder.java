@@ -22,7 +22,7 @@ public final class BiomeGenerationSettingsDecoder implements Decodable<BiomeGene
     @Override
     public BiomeGenerationSettings decode(net.minecraft.world.level.biome.BiomeGenerationSettings settings) {
         List<WorldCarver> carvers = new ArrayList<>();
-        for (Holder<net.minecraft.world.level.levelgen.carver.WorldCarver<?>> carver : settings.getCarvers()) {
+        for (Holder<net.minecraft.world.level.levelgen.carver.WorldCarver> carver : settings.getCarvers()) {
             carvers.add(WorldCarver.decode(carver));
         }
 

@@ -28,6 +28,10 @@ public final class CustomFeatureBridge<C> implements Feature {
         return this.delegate;
     }
 
+    public C config() {
+        return this.config;
+    }
+
     @Override
     public MapCodec<CustomFeatureBridge<C>> codec() {
         return this.codec;

@@ -5,6 +5,7 @@ import dev.wyck.factory.ConstructWireProvider;
 import dev.wyck.worldgen.climate.ClimateParameter;
 import dev.wyck.worldgen.function.DensityFunction;
 import dev.wyck.wrapper.Wrapper;
+import dev.wyck.wrapper.decode.Decoder;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Map;
@@ -40,5 +41,19 @@ public interface SpawnTargetPoint extends Wrapper {
             static final ConstructWireProvider<SpawnTargetPoint> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.noise.SpawnTargetPointImpl");
         }
         return Holder.WIRE.construct(Map.copyOf(parameters));
+    }
+
+    /**
+     * Reads a Minecraft player-spawn target point.
+     * @param minecraftSpawnTargetPoint the Minecraft spawn target point to read
+     * @return the decoded spawn target point
+     * @since 4.0.0
+     */
+    @AsOf("4.0.0")
+    static SpawnTargetPoint decode(Object minecraftSpawnTargetPoint) {
+        record Holder() {
+            static final Decoder<SpawnTargetPoint> DECODER = Decoder.create("dev.wyck.decode.worldgen.noise.SpawnTargetPointDecoder");
+        }
+        return Holder.DECODER.decode(minecraftSpawnTargetPoint);
     }
 }

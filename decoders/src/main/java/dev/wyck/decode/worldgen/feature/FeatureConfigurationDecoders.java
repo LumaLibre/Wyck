@@ -1,6 +1,7 @@
 package dev.wyck.decode.worldgen.feature;
 
 import dev.wyck.decode.Decoders;
+import dev.wyck.decode.FastReflection;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.worldgen.blockpredicates.BlockPredicate;
 import dev.wyck.worldgen.feature.configurations.BlockPileFeature;
@@ -114,14 +115,14 @@ public final class FeatureConfigurationDecoders extends DecoderRegistry<FeatureC
         });
         register("fill_layer", configured -> {
             var config = (net.minecraft.world.level.levelgen.feature.FillLayerFeature) configured;
-            return FillLayerFeature.of(config.height, Decoders.blockData(config.state));
+            return FillLayerFeature.of(config.height(), Decoders.blockData(config.state()));
         });
         register("underwater_magma", configured -> {
             var config = (net.minecraft.world.level.levelgen.feature.UnderwaterMagmaFeature) configured;
             return UnderwaterMagmaFeature.of(
-                config.floorSearchRange,
-                config.placementRadiusAroundFloor,
-                config.placementProbabilityPerValidPosition
+                config.floorSearchRange(),
+                config.placementRadiusAroundFloor(),
+                config.placementProbabilityPerValidPosition()
             );
         });
         register("delta_feature", configured -> {
@@ -134,7 +135,7 @@ public final class FeatureConfigurationDecoders extends DecoderRegistry<FeatureC
         register("netherrack_replace_blobs", configured -> {
             var config = (net.minecraft.world.level.levelgen.feature.ReplaceBlobsFeature) configured;
             return ReplaceBlobsFeature.of(
-                Decoders.blockData(config.targetState), Decoders.blockData(config.replaceState),
+                Decoders.blockData(config.targetState()), Decoders.blockData(config.replaceState()),
                 IntProvider.decode(config.radius())
             );
         });
@@ -156,7 +157,7 @@ public final class FeatureConfigurationDecoders extends DecoderRegistry<FeatureC
             );
         });
         register("lake", configured -> {
-            var config = (net.minecraft.world.level.levelgen.feature.LakeFeature.Configuration) configured;
+            var config = (net.minecraft.world.level.levelgen.feature.LakeFeature) configured;
             return LakeFeature.create(
                 BlockStateProvider.decode(config.fluid()),
                 BlockStateProvider.decode(config.barrier()),
@@ -169,23 +170,22 @@ public final class FeatureConfigurationDecoders extends DecoderRegistry<FeatureC
             var config = (net.minecraft.world.level.levelgen.feature.SculkPatchFeature) configured;
             return SculkPatchFeature.of(
                 config.chargeCount(), config.amountPerCharge(), config.spreadAttempts(),
-                config.growthRounds(), config.spreadRounds(),
-                IntProvider.decode(config.extraRareGrowths()), config.catalystChance()
+                config.growthRounds(), config.spreadRounds()
             );
         });
         register("spring_feature", configured -> {
             var config = (net.minecraft.world.level.levelgen.feature.SpringFeature) configured;
             return SpringFeature.of(
-                FluidState.decode(config.state), config.requiresBlockBelow,
-                config.rockCount, config.holeCount, Decoders.materials(config.validBlocks)
+                FluidState.decode(config.state()), config.requiresBlockBelow(),
+                config.rockCount(), config.holeCount(), Decoders.materials(config.validBlocks())
             );
         });
         register("multiface_growth", configured -> {
             var config = (net.minecraft.world.level.levelgen.feature.MultifaceGrowthFeature) configured;
             return MultifaceGrowthFeature.of(
-                CraftBlockType.minecraftToBukkit(config.placeBlock), config.searchRange,
-                config.canPlaceOnFloor, config.canPlaceOnCeiling, config.canPlaceOnWall,
-                config.chanceOfSpreading, Decoders.materials(config.canBePlacedOn)
+                CraftBlockType.minecraftToBukkit(config.placeBlock()), config.searchRange(),
+                config.canPlaceOnFloor(), config.canPlaceOnCeiling(), config.canPlaceOnWall(),
+                config.chanceOfSpreading(), Decoders.materials(config.canBePlacedOn())
             );
         });
         register("random_selector", configured -> {
@@ -208,23 +208,23 @@ public final class FeatureConfigurationDecoders extends DecoderRegistry<FeatureC
         register("random_boolean_selector", configured -> {
             var config = (net.minecraft.world.level.levelgen.feature.RandomBooleanSelectorFeature) configured;
             return RandomBooleanSelectorFeature.of(
-                PlacedFeature.decode(config.featureTrue),
-                PlacedFeature.decode(config.featureFalse)
+                PlacedFeature.decode(config.featureTrue()),
+                PlacedFeature.decode(config.featureFalse())
             );
         });
         register("end_gateway", configured -> {
             var config = (net.minecraft.world.level.levelgen.feature.EndGatewayFeature) configured;
-            return config.getExit()
-                .map(exit -> EndGatewayFeature.knownExit(vector(exit), config.isExitExact()))
+            return config.exit()
+                .map(exit -> EndGatewayFeature.knownExit(vector(exit), config.exact()))
                 .orElseGet(EndGatewayFeature::delayedExitSearch);
         });
         register("end_spike", configured -> {
             var config = (net.minecraft.world.level.levelgen.feature.EndSpikeFeature) configured;
-            var target = config.getCrystalBeamTarget();
+            var target = config.crystalBeamTarget();
             return EndSpikeFeature.of(
-                config.isCrystalInvulnerable(),
-                config.getSpikes().stream().map(EndSpike::decode).toList(),
-                target == null ? null : vector(target)
+                config.crystalInvulnerable(),
+                config.spikes().stream().map(EndSpike::decode).toList(),
+                target.map(FeatureConfigurationDecoders::vector).orElse(null)
             );
         });
         register("speleothem", configured -> {
@@ -238,12 +238,12 @@ public final class FeatureConfigurationDecoders extends DecoderRegistry<FeatureC
         register("large_dripstone", configured -> {
             var config = (net.minecraft.world.level.levelgen.feature.LargeDripstoneFeature) configured;
             return LargeDripstoneFeature.of(
-                Decoders.materials(config.replaceableBlocks), config.floorToCeilingSearchRange,
-                IntProvider.decode(config.columnRadius), FloatProvider.decode(config.heightScale),
-                config.maxColumnRadiusToCaveHeightRatio,
-                FloatProvider.decode(config.stalactiteBluntness),
-                FloatProvider.decode(config.stalagmiteBluntness),
-                FloatProvider.decode(config.windSpeed), config.minRadiusForWind, config.minBluntnessForWind
+                Decoders.materials(config.replaceableBlocks()), config.floorToCeilingSearchRange(),
+                IntProvider.decode(config.columnRadius()), FloatProvider.decode(config.heightScale()),
+                config.maxColumnRadiusToCaveHeightRatio(),
+                FloatProvider.decode(config.stalactiteBluntness()),
+                FloatProvider.decode(config.stalagmiteBluntness()),
+                FloatProvider.decode(config.windSpeed()), config.minRadiusForWind(), config.minBluntnessForWind()
             );
         });
         register("speleothem_cluster", configured -> {
@@ -287,7 +287,7 @@ public final class FeatureConfigurationDecoders extends DecoderRegistry<FeatureC
         register("replace_single_block", configured -> {
             var config = (net.minecraft.world.level.levelgen.feature.ReplaceBlockFeature)
                 configured;
-            return ReplaceBlockFeature.of(targets(config.targetStates()));
+            return ReplaceBlockFeature.of(targets(config.replacements()));
         });
         register("vegetation_patch", this::vegetationPatch);
         register("waterlogged_vegetation_patch", this::vegetationPatch);
@@ -295,23 +295,23 @@ public final class FeatureConfigurationDecoders extends DecoderRegistry<FeatureC
             var config = (net.minecraft.world.level.levelgen.feature.TreeFeature)
                 configured;
             return TreeFeature.of(
-                BlockStateProvider.decode(config.trunkProvider),
-                TrunkPlacer.decode(config.trunkPlacer),
-                BlockStateProvider.decode(config.foliageProvider),
-                FoliagePlacer.decode(config.foliagePlacer),
-                config.rootPlacer.map(RootPlacer::decode).orElse(null),
-                FeatureSize.decode(config.minimumSize),
-                config.decorators.stream().map(TreeDecorator::decode).toList(),
-                config.ignoreVines, BlockStateProvider.decode(config.belowTrunkProvider)
+                BlockStateProvider.decode(config.trunkProvider()),
+                TrunkPlacer.decode(config.trunkPlacer()),
+                BlockStateProvider.decode(config.foliageProvider()),
+                FoliagePlacer.decode(config.foliagePlacer()),
+                config.rootPlacer().map(RootPlacer::decode).orElse(null),
+                FeatureSize.decode(config.minimumSize()),
+                config.decorators().stream().map(TreeDecorator::decode).toList(),
+                config.ignoreVines(), BlockStateProvider.decode(config.belowTrunkProvider())
             );
         });
         register("fallen_tree", configured -> {
             var config = (net.minecraft.world.level.levelgen.feature.FallenTreeFeature)
                 configured;
             return FallenTreeFeature.of(
-                BlockStateProvider.decode(config.trunkProvider), IntProvider.decode(config.logLength),
-                config.stumpDecorators.stream().map(TreeDecorator::decode).toList(),
-                config.logDecorators.stream().map(TreeDecorator::decode).toList()
+                BlockStateProvider.decode(config.trunkProvider()), IntProvider.decode(config.logLength()),
+                config.stumpDecorators().stream().map(TreeDecorator::decode).toList(),
+                config.logDecorators().stream().map(TreeDecorator::decode).toList()
             );
         });
         register("root_system", configured -> {
@@ -342,9 +342,9 @@ public final class FeatureConfigurationDecoders extends DecoderRegistry<FeatureC
             var config = (net.minecraft.world.level.levelgen.feature.GeodeFeature)
                 configured;
             return GeodeFeature.of(
-                GeodeBlockSettings.decode(config.geodeBlockSettings()),
-                GeodeLayerSettings.decode(config.geodeLayerSettings()),
-                GeodeCrackSettings.decode(config.geodeCrackSettings()),
+                GeodeBlockSettings.decode(config.blockSettings()),
+                GeodeLayerSettings.decode(config.layerSettings()),
+                GeodeCrackSettings.decode(config.crackSettings()),
                 config.usePotentialPlacementsChance(), config.useAlternateLayer0Chance(),
                 config.placementsRequireLayer0Alternate(), IntProvider.decode(config.outerWallDistance()),
                 IntProvider.decode(config.distributionPoints()), IntProvider.decode(config.pointOffset()),
@@ -355,20 +355,20 @@ public final class FeatureConfigurationDecoders extends DecoderRegistry<FeatureC
             var config = (net.minecraft.world.level.levelgen.feature.HugeFungusFeature)
                 configured;
             return HugeFungusFeature.of(
-                Decoders.blockData(config.validBaseState), Decoders.blockData(config.stemState),
-                Decoders.blockData(config.hatState), Decoders.blockData(config.decorState),
-                BlockPredicate.decode(config.replaceableBlocks), config.planted
+                Decoders.blockData(config.validBaseState()), Decoders.blockData(config.stemState()),
+                Decoders.blockData(config.hatState()), Decoders.blockData(config.decorState()),
+                BlockPredicate.decode(config.replaceableBlocks()), config.planted()
             );
         });
         register("fossil", configured -> {
             var config = (net.minecraft.world.level.levelgen.feature.FossilFeature)
                 configured;
             return FossilFeature.of(
-                config.fossilStructures.stream().map(Decoders::key).map(StructureTemplate::of).toList(),
-                config.overlayStructures.stream().map(Decoders::key).map(StructureTemplate::of).toList(),
-                ProcessorList.decode(config.fossilProcessors),
-                ProcessorList.decode(config.overlayProcessors),
-                config.maxEmptyCornersAllowed
+                config.fossilStructures().stream().map(Decoders::key).map(StructureTemplate::of).toList(),
+                config.overlayStructures().stream().map(Decoders::key).map(StructureTemplate::of).toList(),
+                ProcessorList.decode(config.fossilProcessors()),
+                ProcessorList.decode(config.overlayProcessors()),
+                config.maxEmptyCornersAllowed()
             );
         });
     }
@@ -415,13 +415,13 @@ public final class FeatureConfigurationDecoders extends DecoderRegistry<FeatureC
         var config = (net.minecraft.world.level.levelgen.feature.VegetationPatchFeature)
             configured;
         return VegetationPatchFeature.of(
-            TagSet.decodeBlocks(config.replaceable()),
-            BlockStateProvider.decode(config.groundState()),
-            PlacedFeature.decode(config.vegetationFeature()),
-            CaveSurface.TRANSLATOR.fromNms(config.surface()),
-            IntProvider.decode(config.depth()), config.extraBottomBlockChance(),
-            config.verticalRange(), config.vegetationChance(),
-            IntProvider.decode(config.xzRadius()), config.extraEdgeColumnChance()
+            TagSet.decodeBlocks(FastReflection.read(config, "replaceable")),
+            BlockStateProvider.decode(FastReflection.read(config, "groundState")),
+            PlacedFeature.decode(FastReflection.read(config, "vegetationFeature")),
+            CaveSurface.TRANSLATOR.fromNms(FastReflection.read(config, "surface")),
+            IntProvider.decode(FastReflection.read(config, "depth")), FastReflection.read(config, "extraBottomBlockChance"),
+            FastReflection.read(config, "verticalRange"), FastReflection.read(config, "vegetationChance"),
+            IntProvider.decode(FastReflection.read(config, "xzRadius")), FastReflection.read(config, "extraEdgeColumnChance")
         );
     }
 

@@ -23,10 +23,20 @@ import dev.wyck.wrapper.decode.DecoderRegistry;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.levelgen.densityfunction.DensityFunctions;
+import net.minecraft.world.level.levelgen.densityfunction.generator.ConstantFunction;
+import net.minecraft.world.level.levelgen.densityfunction.generator.EndIslandFunction;
+import net.minecraft.world.level.levelgen.densityfunction.generator.GradientFunction;
+import net.minecraft.world.level.levelgen.densityfunction.generator.ShiftNoiseFunction;
+import net.minecraft.world.level.levelgen.densityfunction.op.BinaryFunction;
+import net.minecraft.world.level.levelgen.densityfunction.op.BlendDensityFunction;
+import net.minecraft.world.level.levelgen.densityfunction.op.CacheFunction;
+import net.minecraft.world.level.levelgen.densityfunction.op.ClampFunction;
+import net.minecraft.world.level.levelgen.densityfunction.op.FindTopSurfaceFunction;
+import net.minecraft.world.level.levelgen.densityfunction.op.InterpolatedFunction;
+import net.minecraft.world.level.levelgen.densityfunction.op.RangeChoiceFunction;
+import net.minecraft.world.level.levelgen.densityfunction.op.UnaryFunction;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
-
-import java.util.Locale;
 
 @NullMarked
 @ApiStatus.Internal
@@ -36,74 +46,77 @@ public final class DensityFunctionDecoders extends DecoderRegistry<DensityFuncti
 
     public DensityFunctionDecoders() {
         register(REFERENCE, this::reference);
-        register("constant", function -> ConstantSimpleFunction.of(
-            function.minValue()
-        ));
+        register("constant", function -> ConstantSimpleFunction.of(((ConstantFunction) function).value()));
         register("blend_alpha", _ -> BlendAlpha.INSTANCE);
         register("blend_offset", _ -> BlendOffset.INSTANCE);
         register("clamp", function -> {
-            DensityFunctionNodes.Node node = node(function);
+            ClampFunction clamp = (ClampFunction) function;
             return ClampedTransformer.of(
-                DensityFunction.decode(node.child(0)), node.asDouble("min"), node.asDouble("max")
+                DensityFunction.decode(clamp.input()), clamp.min(), clamp.max()
             );
         });
         register("noise", function -> {
-            DensityFunctionNodes.Node node = node(function);
-            return NoiseFunction.of(
-                NoiseParameters.decode(node.noise(0)),
-                node.asDouble("xz_scale"), node.asDouble("y_scale")
-            );
+            net.minecraft.world.level.levelgen.densityfunction.generator.NoiseFunction noise =
+                (net.minecraft.world.level.levelgen.densityfunction.generator.NoiseFunction) function;
+            return noise(noise);
         });
-        register("shifted_noise", this::shiftedNoise);
         register("range_choice", function -> {
-            DensityFunctionNodes.Node node = node(function);
+            RangeChoiceFunction range = (RangeChoiceFunction) function;
             return RangeChoice.of(
-                DensityFunction.decode(node.child(0)),
-                node.asDouble("min_inclusive"), node.asDouble("max_exclusive"),
-                DensityFunction.decode(node.child(1)), DensityFunction.decode(node.child(2))
+                DensityFunction.decode(range.input()),
+                range.minInclusive(), range.maxExclusive(),
+                DensityFunction.decode(range.whenInRange()), DensityFunction.decode(range.whenOutOfRange())
             );
         });
-        register("y_clamped_gradient", function -> {
-            DensityFunctionNodes.Node node = node(function);
+        register("gradient", function -> {
+            GradientFunction gradient = (GradientFunction) function;
+            if (gradient.axis() != net.minecraft.core.Direction.Axis.Y
+                || gradient.tiling() != net.minecraft.world.level.levelgen.densityfunction.TilingMode.CLAMP_TO_EDGE) {
+                throw new IllegalArgumentException("Wyck only wraps clamped Y-axis gradients: " + gradient);
+            }
             return YClampedGradient.of(
-                node.asInt("from_y"), node.asInt("to_y"),
-                node.asDouble("from_value"), node.asDouble("to_value")
+                gradient.fromCoordinate(), gradient.toCoordinate(),
+                gradient.fromValue(), gradient.toValue()
             );
         });
         register("find_top_surface", function -> {
-            DensityFunctionNodes.Node node = node(function);
+            FindTopSurfaceFunction find = (FindTopSurfaceFunction) function;
             return FindTopSurface.of(
-                DensityFunction.decode(node.child(0)), DensityFunction.decode(node.child(1)),
-                node.asInt("lower_bound"), node.asInt("cell_height")
+                DensityFunction.decode(find.density()), DensityFunction.decode(find.upperBound()),
+                find.lowerBound(), find.cellHeight()
             );
         });
-        register("end_islands", _ -> EndIslands.of(0L));
+        register("end_outer_islands", _ -> EndIslands.of());
+        register("cache", function -> Marker.of(
+            Marker.Type.CACHE, DensityFunction.decode(((CacheFunction) function).input())
+        ));
+        register("blend_density", function -> Marker.of(
+            Marker.Type.BLEND_DENSITY, DensityFunction.decode(((BlendDensityFunction) function).input())
+        ));
+        register("interpolated", function -> {
+            InterpolatedFunction interpolated = (InterpolatedFunction) function;
+            return Marker.of(
+                null, Marker.Type.INTERPOLATED, DensityFunction.decode(interpolated.input()),
+                interpolated.cellSizeXz(), interpolated.cellSizeY()
+            );
+        });
 
-        for (Marker.Type type : Marker.Type.values()) {
-            register(key(type), function -> Marker.of(
-                type, DensityFunction.decode(((DensityFunctions.MarkerOrMarked) function).wrapped())
-            ));
-        }
         for (MappedTransformer.Transform transform : MappedTransformer.Transform.values()) {
-            register(key(transform), function -> MappedTransformer.of(
-                DensityFunction.decode(node(function).child(0)), transform
+            register(unaryKey(transform), function -> MappedTransformer.of(
+                DensityFunction.decode(((UnaryFunction) function).input()), transform
             ));
         }
         for (TwoArgumentSimpleFunction.Operation operation : TwoArgumentSimpleFunction.Operation.values()) {
-            register(key(operation), function -> {
-                DensityFunctions.TwoArgumentSimpleFunction binary =
-                    (DensityFunctions.TwoArgumentSimpleFunction) function;
+            register(operation.name().toLowerCase(java.util.Locale.ROOT), function -> {
+                BinaryFunction binary = (BinaryFunction) function;
                 return TwoArgumentSimpleFunction.of(
-                    operation, DensityFunction.decode(binary.argument1()),
-                    DensityFunction.decode(binary.argument2())
+                    operation, DensityFunction.decode(binary.left()), DensityFunction.decode(binary.right())
                 );
             });
         }
-        for (ShiftedFunction.Kind kind : ShiftedFunction.Kind.values()) {
-            register(key(kind), function -> ShiftedFunction.of(
-                NoiseParameters.decode(node(function).noise(0)), kind
-            ));
-        }
+        register("shift", function -> shifted((ShiftNoiseFunction) function, ShiftedFunction.Kind.SHIFT));
+        register("shift_a", function -> shifted((ShiftNoiseFunction) function, ShiftedFunction.Kind.SHIFT_A));
+        register("shift_b", function -> shifted((ShiftNoiseFunction) function, ShiftedFunction.Kind.SHIFT_B));
     }
 
     @Override
@@ -121,7 +134,7 @@ public final class DensityFunctionDecoders extends DecoderRegistry<DensityFuncti
             return REFERENCE;
         }
         return Decoders.registryKey(
-            BuiltInRegistries.DENSITY_FUNCTION_TYPE, minecraftObject.codec().codec()
+            BuiltInRegistries.DENSITY_FUNCTION_TYPE, minecraftObject.codec()
         );
     }
 
@@ -133,31 +146,36 @@ public final class DensityFunctionDecoders extends DecoderRegistry<DensityFuncti
         ));
     }
 
-    private DensityFunction shiftedNoise(net.minecraft.world.level.levelgen.densityfunction.DensityFunction minecraftObject) {
-        DensityFunctionNodes.Node node = node(minecraftObject);
-        net.minecraft.world.level.levelgen.densityfunction.DensityFunction shiftY = node.child(1);
-        boolean flat = node.asDouble("y_scale") == 0.0
-            && shiftY.minValue() == 0.0 && shiftY.maxValue() == 0.0;
+    private DensityFunction noise(net.minecraft.world.level.levelgen.densityfunction.generator.NoiseFunction noise) {
+        net.minecraft.world.level.levelgen.densityfunction.DensityFunction shiftY = noise.shiftY();
+        boolean flat = noise.yScale() == 0.0
+            && shiftY.range().min() == 0.0F && shiftY.range().max() == 0.0F;
+        boolean unshifted = flat
+            && noise.shiftX().range().min() == 0.0F && noise.shiftX().range().max() == 0.0F
+            && noise.shiftZ().range().min() == 0.0F && noise.shiftZ().range().max() == 0.0F;
+        if (unshifted) {
+            return dev.wyck.worldgen.function.noise.NoiseFunction.of(
+                NoiseParameters.decode(noise.noise()), noise.xzScale(), noise.yScale()
+            );
+        }
         if (!flat) {
             throw new IllegalArgumentException(
-                "Cannot decode a shifted noise that shifts on Y: y_scale=" + node.asDouble("y_scale")
+                "Cannot decode a shifted noise that shifts on Y: y_scale=" + noise.yScale()
                     + ", shift_y=" + shiftY + ". Wyck only wraps the two-dimensional form."
             );
         }
         return ShiftedNoise2dFunction.of(
-            NoiseParameters.decode(node.noise(0)),
-            DensityFunction.decode(node.child(0)), DensityFunction.decode(node.child(2)),
-            node.asDouble("xz_scale")
+            NoiseParameters.decode(noise.noise()),
+            DensityFunction.decode(noise.shiftX()), DensityFunction.decode(noise.shiftZ()),
+            noise.xzScale()
         );
     }
 
-    private static DensityFunctionNodes.Node node(
-        net.minecraft.world.level.levelgen.densityfunction.DensityFunction minecraftObject
-    ) {
-        return DensityFunctionNodes.read(minecraftObject);
+    private DensityFunction shifted(ShiftNoiseFunction function, ShiftedFunction.Kind kind) {
+        return ShiftedFunction.of(NoiseParameters.decode(function.offsetNoise()), kind);
     }
 
-    private static String key(Enum<?> type) {
-        return type.name().toLowerCase(Locale.ROOT);
+    private static String unaryKey(MappedTransformer.Transform transform) {
+        return transform.name().toLowerCase(java.util.Locale.ROOT);
     }
 }

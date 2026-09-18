@@ -95,13 +95,13 @@ public interface BiomeSpawner extends Wrapper {
 
     /**
      * A builder for creating a BiomeSpawner.
-     * @deprecated Use {@link dev.wyck.biome.MobSpawnSettings.Builder}
+     * @deprecated Use {@link dev.wyck.biome.entity.MobSpawnSettings.Builder}
      * @since 2.3.0
      * @version 4.0.0
      * @author Jsinco
      */
     @AsOf("2.3.0")
-    @Deprecated(since = "4.0.0", forRemoval = true)
+    @Deprecated(since = "4.0.0")
     final class Builder {
 
         private final Map<MobCategory, WeightedList.Builder<NaturalSpawner>> spawners;

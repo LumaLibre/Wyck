@@ -95,7 +95,7 @@ public final class PlacementModifierDecoders extends DecoderRegistry<PlacementMo
 
     @Override
     protected ResourceKey discriminate(net.minecraft.world.level.levelgen.placement.PlacementModifier modifier) {
-        return Decoders.registryKey(BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, modifier.type());
+        return Decoders.registryKey(BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, modifier.codec());
     }
 
     private static HeightmapType heightmap(Object modifier) {

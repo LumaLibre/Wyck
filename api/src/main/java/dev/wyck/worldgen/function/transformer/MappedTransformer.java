@@ -117,14 +117,36 @@ public interface MappedTransformer extends PureTransformer {
     }
 
     /**
-     * Maps the input through {@link Transform#INVERT}, negating it.
+     * Maps the input through {@link Transform#RECIPROCAL}, producing its reciprocal.
      * @param input the input density function
      * @return a mapped density function producing {@code -input}
      * @since 3.0.0
      */
     @AsOf("3.0.0")
     static MappedTransformer invert(DensityFunction input) {
-        return of(Transform.INVERT, input);
+        return reciprocal(input);
+    }
+
+    /**
+     * Maps the input through {@link Transform#RECIPROCAL}, producing its reciprocal.
+     * @param input the input density function
+     * @return a mapped density function producing {@code 1 / input}
+     * @since 4.0.0
+     */
+    @AsOf("4.0.0")
+    static MappedTransformer reciprocal(DensityFunction input) {
+        return of(Transform.RECIPROCAL, input);
+    }
+
+    /**
+     * Maps the input through {@link Transform#NEGATE}, negating its value.
+     * @param input the input density function
+     * @return a mapped density function producing {@code -input}
+     * @since 4.0.0
+     */
+    @AsOf("4.0.0")
+    static MappedTransformer negate(DensityFunction input) {
+        return of(Transform.NEGATE, input);
     }
 
     /**
@@ -147,9 +169,13 @@ public interface MappedTransformer extends PureTransformer {
         ABS,
         SQUARE,
         CUBE,
+        SQRT,
         HALF_NEGATIVE,
         QUARTER_NEGATIVE,
-        INVERT,
-        SQUEEZE
+        RECIPROCAL,
+        NEGATE,
+        SQUEEZE,
+        LOG,
+        SIGN
     }
 }

@@ -21,7 +21,8 @@ public final class BedRuleDecoder implements Decodable<BedRule, net.minecraft.wo
         return BedRule.of(
             BedRule.Rule.TRANSLATOR.fromNms(rule.canSleep()),
             BedRule.Rule.TRANSLATOR.fromNms(rule.canSetSpawn()),
-            rule.explodes(),
+            rule.destroyOnUse(),
+            rule.destroyOnLeave(),
             rule.errorMessage().map(BedRuleDecoder::component).orElse(null)
         );
     }

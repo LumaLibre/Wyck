@@ -5,6 +5,7 @@ import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.ConstructWireProvider;
 import dev.wyck.worldgen.function.DensityFunction;
 import dev.wyck.wrapper.Wrapper;
+import dev.wyck.wrapper.decode.Decoder;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -111,6 +112,22 @@ public interface AquiferSettings extends Wrapper {
     @AsOf("4.0.0")
     static Builder builder() {
         return new Builder();
+    }
+
+    /**
+     * Reads Minecraft aquifer settings.
+     * @param minecraftAquiferSettings the Minecraft aquifer settings to read
+     * @return the decoded aquifer settings
+     * @since 4.0.0
+     */
+    @AsOf("4.0.0")
+    static AquiferSettings decode(Object minecraftAquiferSettings) {
+        record Holder() {
+            static final Decoder<AquiferSettings> DECODER = Decoder.create(
+                "dev.wyck.decode.worldgen.noise.AquiferSettingsDecoder"
+            );
+        }
+        return Holder.DECODER.decode(minecraftAquiferSettings);
     }
 
     /**

@@ -14,6 +14,7 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.levelgen.structure.placement.ConcentricRingsStructurePlacement;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
+import net.minecraft.world.level.levelgen.structure.placement.AbstractSpreadingStructurePlacement;
 import org.bukkit.util.BlockVector;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -55,7 +56,7 @@ public final class StructurePlacementDecoders extends DecoderRegistry<StructureP
 
     @Override
     protected ResourceKey discriminate(net.minecraft.world.level.levelgen.structure.placement.StructurePlacement minecraftObject) {
-        return Decoders.registryKey(BuiltInRegistries.STRUCTURE_PLACEMENT, minecraftObject.type());
+        return Decoders.registryKey(BuiltInRegistries.STRUCTURE_PLACEMENT, minecraftObject.codec());
     }
 
     private static BlockVector offset(Vec3i offset) {
@@ -63,7 +64,7 @@ public final class StructurePlacementDecoders extends DecoderRegistry<StructureP
     }
 
     private static StructurePlacement.@Nullable ExclusionZone exclusionZone(net.minecraft.world.level.levelgen.structure.placement.StructurePlacement placement) {
-        return placement.exclusionZone
+        return ((AbstractSpreadingStructurePlacement) placement).exclusionZone
             .map(zone -> StructurePlacement.ExclusionZone.of(StructureSet.decode(zone.otherSet()), zone.chunkCount()))
             .orElse(null);
     }
