@@ -20,12 +20,12 @@ import org.jspecify.annotations.NullMarked;
  *
  *
  * @since 1.1.0
- * @version 3.4.0
+ * @version 4.0.0
  * @author Wyck codegen
  */
 @NullMarked
 @AsOf("1.1.0")
-@Generated("2026-09-13T05:38:38.765601Z")
+@Generated("2026-09-18T20:37:08.738371Z")
 public enum Activity implements WrappedConstant<Activity> {
     CORE("core"),
     IDLE("idle"),

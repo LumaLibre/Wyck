@@ -16,12 +16,12 @@ import org.jspecify.annotations.NullMarked;
  *
  *
  * @since 3.0.0
- * @version 3.4.0
+ * @version 4.0.0
  * @author Wyck codegen
  */
 @NullMarked
 @AsOf("3.0.0")
-@Generated("2026-09-13T05:38:38.768808Z")
+@Generated("2026-09-18T20:37:08.743504Z")
 public final class StructureSets {
     // From: BuiltinStructureSets
     @AsOf("3.0.0")
@@ -64,6 +64,8 @@ public final class StructureSets {
     public static final StructureSet TRAIL_RUINS = reference("trail_ruins");
     @AsOf("3.0.0")
     public static final StructureSet TRIAL_CHAMBERS = reference("trial_chambers");
+    @AsOf("3.0.0")
+    public static final StructureSet ABANDONED_CAMP = reference("abandoned_camp");
 
     StructureSets() {
         throw new UnsupportedOperationException("Not intended for instantiation");

@@ -17,12 +17,12 @@ import org.jspecify.annotations.NullMarked;
  *
  *
  * @since 2.4.0
- * @version 3.4.0
+ * @version 4.0.0
  * @author Wyck codegen
  */
 @NullMarked
 @AsOf("2.4.0")
-@Generated("2026-09-13T05:38:38.755845Z")
+@Generated("2026-09-18T20:37:08.729249Z")
 public enum CardinalLightType implements WrappedEnumerator<CardinalLightType> {
     DEFAULT("default"),
     NETHER("nether");

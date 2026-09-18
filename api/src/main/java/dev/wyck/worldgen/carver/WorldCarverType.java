@@ -19,17 +19,17 @@ import org.jspecify.annotations.NullMarked;
  *
  *
  * @since 2.3.0
- * @version 3.4.0
+ * @version 4.0.0
  * @author Wyck codegen
  */
 @NullMarked
 @AsOf("2.3.0")
-@Generated("2026-09-13T05:38:38.764684Z")
+@Generated("2026-09-18T20:37:08.737296Z")
 public enum WorldCarverType implements WrappedConstant<WorldCarverType> {
-    CAVE("cave"),
-    CANYON("canyon");
+    CANYON("canyon"),
+    CAVE("cave");
 
-    public static final RegisteredConstantTranslator<WorldCarverType> TRANSLATOR = RegisteredConstantTranslator.of(RegistryId.CARVER, WorldCarverType::resourceKey, WorldCarverType.values());
+    public static final RegisteredConstantTranslator<WorldCarverType> TRANSLATOR = RegisteredConstantTranslator.of(RegistryId.CARVER_TYPE, WorldCarverType::resourceKey, WorldCarverType.values());
 
     private final String key;
 

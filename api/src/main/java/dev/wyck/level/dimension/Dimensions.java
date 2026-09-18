@@ -17,12 +17,12 @@ import org.jspecify.annotations.NullMarked;
  *
  *
  * @since 3.0.0
- * @version 3.4.0
+ * @version 4.0.0
  * @author Wyck codegen
  */
 @NullMarked
 @AsOf("3.0.0")
-@Generated("2026-09-13T05:38:38.749036Z")
+@Generated("2026-09-18T20:37:08.722868Z")
 public final class Dimensions {
     // From: BuiltinDimensionTypes
     @AsOf("3.0.0")

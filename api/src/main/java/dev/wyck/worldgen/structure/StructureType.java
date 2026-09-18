@@ -19,12 +19,12 @@ import org.jspecify.annotations.NullMarked;
  *
  *
  * @since 3.4.0
- * @version 3.4.0
+ * @version 4.0.0
  * @author Wyck codegen
  */
 @NullMarked
 @AsOf("3.4.0")
-@Generated("2026-09-13T05:38:38.766445Z")
+@Generated("2026-09-18T20:37:08.739711Z")
 public enum StructureType implements WrappedConstant<StructureType> {
     BURIED_TREASURE("buried_treasure"),
     DESERT_PYRAMID("desert_pyramid"),

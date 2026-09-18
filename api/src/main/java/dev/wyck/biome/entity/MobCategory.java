@@ -17,12 +17,12 @@ import org.jspecify.annotations.NullMarked;
  *
  *
  * @since 2.3.0
- * @version 3.4.0
+ * @version 4.0.0
  * @author Wyck codegen
  */
 @NullMarked
 @AsOf("2.3.0")
-@Generated("2026-09-13T05:38:38.759131Z")
+@Generated("2026-09-18T20:37:08.732728Z")
 public enum MobCategory implements WrappedEnumerator<MobCategory> {
     MONSTER("monster"),
     CREATURE("creature"),

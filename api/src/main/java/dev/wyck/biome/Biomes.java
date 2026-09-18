@@ -17,12 +17,12 @@ import org.jspecify.annotations.NullMarked;
  *
  *
  * @since 3.0.0
- * @version 3.4.0
+ * @version 4.0.0
  * @author Wyck codegen
  */
 @NullMarked
 @AsOf("3.0.0")
-@Generated("2026-09-13T05:38:38.746528Z")
+@Generated("2026-09-18T20:37:08.720507Z")
 public final class Biomes {
     // From: Biomes
     @AsOf("3.0.0")
@@ -47,6 +47,8 @@ public final class Biomes {
     public static final Biome FLOWER_FOREST = reference("flower_forest");
     @AsOf("3.0.0")
     public static final Biome BIRCH_FOREST = reference("birch_forest");
+    @AsOf("3.0.0")
+    public static final Biome DAPPLED_FOREST = reference("dappled_forest");
     @AsOf("3.0.0")
     public static final Biome DARK_FOREST = reference("dark_forest");
     @AsOf("3.0.0")
