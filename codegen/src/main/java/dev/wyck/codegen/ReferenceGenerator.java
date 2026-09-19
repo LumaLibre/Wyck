@@ -373,7 +373,7 @@ public final class ReferenceGenerator {
         typeSpec.addJavadoc(header);
         typeSpec.addAnnotation(AnnotationSpec.builder(NullMarked.class).build());
         typeSpec.addAnnotation(AnnotationSpec.builder(ClassName.get("dev.wyck.annotations", "AsOf"))
-            .addMember("value", "$S", version)
+            .addMember("value", "$S", generatorSpec.since())
             .build()
         );
         typeSpec.addAnnotation(AnnotationSpec.builder(ClassName.get("dev.wyck.annotations", "Generated"))

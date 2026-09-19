@@ -60,7 +60,7 @@ public class NoiseFunctionImpl extends NoiseParameterFunctionImpl implements Noi
     }
 
     @Override
-    public net.minecraft.world.level.levelgen.densityfunction.generator.NoiseFunction toMinecraft() {
+    public Object toMinecraft() {
         return new net.minecraft.world.level.levelgen.densityfunction.generator.NoiseFunction(
             this.noiseData(),
             this.xzScale,
