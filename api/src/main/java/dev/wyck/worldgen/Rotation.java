@@ -17,12 +17,12 @@ import org.jspecify.annotations.NullMarked;
  *
  * @see <a href="https://minecraft.wiki/w/Template_pool">Template pool</a>
  * @since 3.0.1
- * @version 3.4.0
+ * @version 4.0.0
  * @author Wyck codegen
  */
 @NullMarked
-@AsOf("3.0.1")
-@Generated("2026-09-13T05:38:38.752888Z")
+@AsOf("4.0.0")
+@Generated("2026-09-19T08:14:54.233388Z")
 public enum Rotation implements WrappedEnumerator<Rotation> {
     NONE("NONE"),
     CLOCKWISE_90("CLOCKWISE_90"),

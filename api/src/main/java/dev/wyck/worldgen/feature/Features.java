@@ -17,12 +17,12 @@ import org.jspecify.annotations.NullMarked;
  *
  *
  * @since 2.3.0
- * @version 3.4.0
+ * @version 4.0.0
  * @author Wyck codegen
  */
 @NullMarked
-@AsOf("2.3.0")
-@Generated("2026-09-13T05:38:38.703943Z")
+@AsOf("4.0.0")
+@Generated("2026-09-19T08:14:54.188362Z")
 public final class Features {
     // From: AquaticFeatures
     @AsOf("2.3.0")
@@ -37,6 +37,18 @@ public final class Features {
     public static final Feature SEA_PICKLE = reference("sea_pickle");
     @AsOf("2.3.0")
     public static final Feature KELP = reference("kelp");
+    @AsOf("4.0.0")
+    public static final Feature CORAL_BLOCK_DECORATION = reference("coral/block_decoration");
+    @AsOf("4.0.0")
+    public static final Feature TUBE_CORAL_BLOCK = reference("coral/tube_block");
+    @AsOf("4.0.0")
+    public static final Feature BRAIN_CORAL_BLOCK = reference("coral/brain_block");
+    @AsOf("4.0.0")
+    public static final Feature BUBBLE_CORAL_BLOCK = reference("coral/bubble_block");
+    @AsOf("4.0.0")
+    public static final Feature FIRE_CORAL_BLOCK = reference("coral/fire_block");
+    @AsOf("4.0.0")
+    public static final Feature HORN_CORAL_BLOCK = reference("coral/horn_block");
     @AsOf("2.3.0")
     public static final Feature WARM_OCEAN_VEGETATION = reference("warm_ocean_vegetation");
 
@@ -99,6 +111,10 @@ public final class Features {
     // From: EndFeatures
     @AsOf("2.3.0")
     public static final Feature END_PLATFORM = reference("end_platform");
+    @AsOf("4.0.0")
+    public static final Feature END_PODIUM_ACTIVE = reference("end_podium_active");
+    @AsOf("4.0.0")
+    public static final Feature END_PODIUM_INACTIVE = reference("end_podium_inactive");
     @AsOf("2.3.0")
     public static final Feature END_SPIKE = reference("end_spike");
     @AsOf("2.3.0")
@@ -165,22 +181,16 @@ public final class Features {
     public static final Feature BLACKSTONE_BLOBS = reference("blackstone_blobs");
     @AsOf("2.3.0")
     public static final Feature GLOWSTONE_EXTRA = reference("glowstone_extra");
+    @AsOf("4.0.0")
+    public static final Feature NYLIUM_BONEMEAL = reference("nylium_bonemeal");
     @AsOf("2.3.0")
     public static final Feature CRIMSON_FOREST_VEGETATION = reference("crimson_forest_vegetation");
     @AsOf("2.3.0")
-    public static final Feature CRIMSON_FOREST_VEGETATION_BONEMEAL = reference("crimson_forest_vegetation_bonemeal");
-    @AsOf("2.3.0")
     public static final Feature WARPED_FOREST_VEGETION = reference("warped_forest_vegetation");
-    @AsOf("2.3.0")
-    public static final Feature WARPED_FOREST_VEGETATION_BONEMEAL = reference("warped_forest_vegetation_bonemeal");
     @AsOf("2.3.0")
     public static final Feature NETHER_SPROUTS = reference("nether_sprouts");
     @AsOf("2.3.0")
-    public static final Feature NETHER_SPROUTS_BONEMEAL = reference("nether_sprouts_bonemeal");
-    @AsOf("2.3.0")
     public static final Feature TWISTING_VINES = reference("twisting_vines");
-    @AsOf("2.3.0")
-    public static final Feature TWISTING_VINES_BONEMEAL = reference("twisting_vines_bonemeal");
     @AsOf("2.3.0")
     public static final Feature WEEPING_VINES = reference("weeping_vines");
     @AsOf("2.3.0")
@@ -367,6 +377,18 @@ public final class Features {
     public static final Feature BIRCH_LEAF_LITTER = reference("birch_leaf_litter");
     @AsOf("2.3.0")
     public static final Feature FANCY_OAK_LEAF_LITTER = reference("fancy_oak_leaf_litter");
+    @AsOf("4.0.0")
+    public static final Feature RED_POPLAR = reference("red_poplar");
+    @AsOf("4.0.0")
+    public static final Feature ORANGE_POPLAR = reference("orange_poplar");
+    @AsOf("4.0.0")
+    public static final Feature YELLOW_POPLAR = reference("yellow_poplar");
+    @AsOf("4.0.0")
+    public static final Feature RED_POPLAR_LEAF_LITTER = reference("red_poplar_leaf_litter");
+    @AsOf("4.0.0")
+    public static final Feature ORANGE_POPLAR_LEAF_LITTER = reference("orange_poplar_leaf_litter");
+    @AsOf("4.0.0")
+    public static final Feature YELLOW_POPLAR_LEAF_LITTER = reference("yellow_poplar_leaf_litter");
     @AsOf("2.3.0")
     public static final Feature FALLEN_OAK_TREE = reference("fallen_oak_tree");
     @AsOf("2.3.0")
@@ -377,6 +399,8 @@ public final class Features {
     public static final Feature FALLEN_BIRCH_TREE = reference("fallen_birch_tree");
     @AsOf("2.3.0")
     public static final Feature FALLEN_SUPER_BIRCH_TREE = reference("fallen_super_birch_tree");
+    @AsOf("4.0.0")
+    public static final Feature FALLEN_POPLAR_TREE = reference("fallen_poplar_tree");
 
     // From: VegetationFeatures
     @AsOf("2.3.0")
@@ -415,6 +439,8 @@ public final class Features {
     public static final Feature LARGE_FERN = reference("large_fern");
     @AsOf("2.3.0")
     public static final Feature BUSH = reference("bush");
+    @AsOf("4.0.0")
+    public static final Feature RED_SHRUB = reference("red_shrub");
     @AsOf("2.3.0")
     public static final Feature LEAF_LITTER = reference("leaf_litter");
     @AsOf("2.3.0")
@@ -487,6 +513,8 @@ public final class Features {
     public static final Feature TREES_OLD_GROWTH_PINE_TAIGA = reference("trees_old_growth_pine_taiga");
     @AsOf("2.3.0")
     public static final Feature TREES_JUNGLE = reference("trees_jungle");
+    @AsOf("4.0.0")
+    public static final Feature TREES_DAPPLED_FOREST = reference("trees_dappled_forest");
     @AsOf("2.3.0")
     public static final Feature BAMBOO_VEGETATION = reference("bamboo_vegetation");
     @AsOf("2.3.0")

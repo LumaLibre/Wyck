@@ -17,12 +17,12 @@ import org.jspecify.annotations.NullMarked;
  *
  *
  * @since 2.4.0
- * @version 3.4.0
+ * @version 4.0.0
  * @author Wyck codegen
  */
 @NullMarked
-@AsOf("2.4.0")
-@Generated("2026-09-13T05:38:38.754511Z")
+@AsOf("4.0.0")
+@Generated("2026-09-19T08:14:54.234759Z")
 public enum Skybox implements WrappedEnumerator<Skybox> {
     NONE("none"),
     OVERWORLD("overworld"),

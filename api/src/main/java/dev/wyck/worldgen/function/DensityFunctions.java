@@ -17,12 +17,12 @@ import org.jspecify.annotations.NullMarked;
  *
  *
  * @since 2.4.0
- * @version 3.4.0
+ * @version 4.0.0
  * @author Wyck codegen
  */
 @NullMarked
-@AsOf("2.4.0")
-@Generated("2026-09-13T05:38:38.741304Z")
+@AsOf("4.0.0")
+@Generated("2026-09-19T08:14:54.223203Z")
 public final class DensityFunctions {
     // From: NoiseRouterData
     @AsOf("2.4.0")
@@ -40,47 +40,11 @@ public final class DensityFunctions {
     @AsOf("2.4.0")
     public static final DensityFunction BASE_3D_NOISE_END = reference("end/base_3d_noise");
     @AsOf("2.4.0")
-    public static final DensityFunction CONTINENTS = reference("overworld/continents");
-    @AsOf("2.4.0")
-    public static final DensityFunction EROSION = reference("overworld/erosion");
-    @AsOf("2.4.0")
     public static final DensityFunction RIDGES = reference("overworld/ridges");
     @AsOf("2.4.0")
     public static final DensityFunction RIDGES_FOLDED = reference("overworld/ridges_folded");
-    @AsOf("2.4.0")
-    public static final DensityFunction OFFSET = reference("overworld/offset");
-    @AsOf("2.4.0")
-    public static final DensityFunction FACTOR = reference("overworld/factor");
-    @AsOf("2.4.0")
-    public static final DensityFunction JAGGEDNESS = reference("overworld/jaggedness");
-    @AsOf("2.4.0")
-    public static final DensityFunction DEPTH = reference("overworld/depth");
-    @AsOf("2.4.0")
-    public static final DensityFunction SLOPED_CHEESE = reference("overworld/sloped_cheese");
-    @AsOf("2.4.0")
-    public static final DensityFunction CONTINENTS_LARGE = reference("overworld_large_biomes/continents");
-    @AsOf("2.4.0")
-    public static final DensityFunction EROSION_LARGE = reference("overworld_large_biomes/erosion");
-    @AsOf("2.4.0")
-    public static final DensityFunction OFFSET_LARGE = reference("overworld_large_biomes/offset");
-    @AsOf("2.4.0")
-    public static final DensityFunction FACTOR_LARGE = reference("overworld_large_biomes/factor");
-    @AsOf("2.4.0")
-    public static final DensityFunction JAGGEDNESS_LARGE = reference("overworld_large_biomes/jaggedness");
-    @AsOf("2.4.0")
-    public static final DensityFunction DEPTH_LARGE = reference("overworld_large_biomes/depth");
-    @AsOf("2.4.0")
-    public static final DensityFunction SLOPED_CHEESE_LARGE = reference("overworld_large_biomes/sloped_cheese");
-    @AsOf("2.4.0")
-    public static final DensityFunction OFFSET_AMPLIFIED = reference("overworld_amplified/offset");
-    @AsOf("2.4.0")
-    public static final DensityFunction FACTOR_AMPLIFIED = reference("overworld_amplified/factor");
-    @AsOf("2.4.0")
-    public static final DensityFunction JAGGEDNESS_AMPLIFIED = reference("overworld_amplified/jaggedness");
-    @AsOf("2.4.0")
-    public static final DensityFunction DEPTH_AMPLIFIED = reference("overworld_amplified/depth");
-    @AsOf("2.4.0")
-    public static final DensityFunction SLOPED_CHEESE_AMPLIFIED = reference("overworld_amplified/sloped_cheese");
+    @AsOf("4.0.0")
+    public static final DensityFunction END_ISLANDS = reference("end/islands");
     @AsOf("2.4.0")
     public static final DensityFunction SLOPED_CHEESE_END = reference("end/sloped_cheese");
     @AsOf("2.4.0")
@@ -95,6 +59,18 @@ public final class DensityFunctions {
     public static final DensityFunction SPAGHETTI_2D_THICKNESS_MODULATOR = reference("overworld/caves/spaghetti_2d_thickness_modulator");
     @AsOf("2.4.0")
     public static final DensityFunction SPAGHETTI_2D = reference("overworld/caves/spaghetti_2d");
+    @AsOf("4.0.0")
+    public static final DensityFunction ORE_VEIN_MASK = reference("overworld/ore_vein/mask");
+    @AsOf("4.0.0")
+    public static final DensityFunction ORE_VEIN_TOGGLE = reference("overworld/ore_vein/toggle");
+    @AsOf("4.0.0")
+    public static final DensityFunction ORE_VEIN_RICHNESS = reference("overworld/ore_vein/richness");
+    @AsOf("4.0.0")
+    public static final DensityFunction ORE_VEIN_COPPER_DENSITY = reference("overworld/ore_vein/copper_density");
+    @AsOf("4.0.0")
+    public static final DensityFunction ORE_VEIN_IRON_DENSITY = reference("overworld/ore_vein/iron_density");
+    @AsOf("4.0.0")
+    public static final DensityFunction ORE_VEIN_GAP = reference("overworld/ore_vein/gap");
 
     DensityFunctions() {
         throw new UnsupportedOperationException("Not intended for instantiation");

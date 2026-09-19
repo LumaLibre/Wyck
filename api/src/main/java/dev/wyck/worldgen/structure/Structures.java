@@ -16,12 +16,12 @@ import org.jspecify.annotations.NullMarked;
  *
  *
  * @since 3.4.0
- * @version 3.4.0
+ * @version 4.0.0
  * @author Wyck codegen
  */
 @NullMarked
-@AsOf("3.4.0")
-@Generated("2026-09-13T05:38:38.767398Z")
+@AsOf("4.0.0")
+@Generated("2026-09-19T08:14:54.245352Z")
 public final class Structures {
     // From: BuiltinStructures
     @AsOf("3.4.0")
@@ -92,6 +92,42 @@ public final class Structures {
     public static final Structure TRAIL_RUINS = reference("trail_ruins");
     @AsOf("3.4.0")
     public static final Structure TRIAL_CHAMBERS = reference("trial_chambers");
+    @AsOf("4.0.0")
+    public static final Structure ABANDONED_CAMP_BAMBOO_JUNGLE = reference("abandoned_camp_bamboo_jungle");
+    @AsOf("4.0.0")
+    public static final Structure ABANDONED_CAMP_BIRCH_FOREST = reference("abandoned_camp_birch_forest");
+    @AsOf("4.0.0")
+    public static final Structure ABANDONED_CAMP_CHERRY_GROVE = reference("abandoned_camp_cherry_grove");
+    @AsOf("4.0.0")
+    public static final Structure ABANDONED_CAMP_DAPPLED_FOREST = reference("abandoned_camp_dappled_forest");
+    @AsOf("4.0.0")
+    public static final Structure ABANDONED_CAMP_FLOWER_FOREST = reference("abandoned_camp_flower_forest");
+    @AsOf("4.0.0")
+    public static final Structure ABANDONED_CAMP_FOREST = reference("abandoned_camp_forest");
+    @AsOf("4.0.0")
+    public static final Structure ABANDONED_CAMP_MEADOW = reference("abandoned_camp_meadow");
+    @AsOf("4.0.0")
+    public static final Structure ABANDONED_CAMP_OLD_GROWTH_BIRCH_FOREST = reference("abandoned_camp_old_growth_birch_forest");
+    @AsOf("4.0.0")
+    public static final Structure ABANDONED_CAMP_OLD_GROWTH_PINE_TAIGA = reference("abandoned_camp_old_growth_pine_taiga");
+    @AsOf("4.0.0")
+    public static final Structure ABANDONED_CAMP_OLD_GROWTH_SPRUCE_TAIGA = reference("abandoned_camp_old_growth_spruce_taiga");
+    @AsOf("4.0.0")
+    public static final Structure ABANDONED_CAMP_PALE_GARDEN = reference("abandoned_camp_pale_garden");
+    @AsOf("4.0.0")
+    public static final Structure ABANDONED_CAMP_SAVANNA = reference("abandoned_camp_savanna");
+    @AsOf("4.0.0")
+    public static final Structure ABANDONED_CAMP_SNOWY_TAIGA = reference("abandoned_camp_snowy_taiga");
+    @AsOf("4.0.0")
+    public static final Structure ABANDONED_CAMP_SPARSE_JUNGLE = reference("abandoned_camp_sparse_jungle");
+    @AsOf("4.0.0")
+    public static final Structure ABANDONED_CAMP_SWAMP = reference("abandoned_camp_swamp");
+    @AsOf("4.0.0")
+    public static final Structure ABANDONED_CAMP_TAIGA = reference("abandoned_camp_taiga");
+    @AsOf("4.0.0")
+    public static final Structure ABANDONED_CAMP_WINDSWEPT_FOREST = reference("abandoned_camp_windswept_forest");
+    @AsOf("4.0.0")
+    public static final Structure ABANDONED_CAMP_WOODED_BADLANDS = reference("abandoned_camp_wooded_badlands");
 
     Structures() {
         throw new UnsupportedOperationException("Not intended for instantiation");

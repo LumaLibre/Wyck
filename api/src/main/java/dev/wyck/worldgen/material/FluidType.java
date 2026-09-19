@@ -19,12 +19,12 @@ import org.jspecify.annotations.NullMarked;
  *
  *
  * @since 2.3.0
- * @version 3.4.0
+ * @version 4.0.0
  * @author Wyck codegen
  */
 @NullMarked
-@AsOf("2.3.0")
-@Generated("2026-09-13T05:38:38.759740Z")
+@AsOf("4.0.0")
+@Generated("2026-09-19T08:14:54.239500Z")
 public enum FluidType implements WrappedConstant<FluidType> {
     EMPTY("empty"),
     FLOWING_WATER("flowing_water"),
