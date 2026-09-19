@@ -68,7 +68,7 @@ public final class ReferenceGenerator {
         "(?m)^([ \\t]*)/\\*\\*\\n[ \\t]*\\* (From: [^\\n]+)\\n[ \\t]*\\*/"
     );
 
-    static void main(String[] args) throws Exception {
+    static void main(String[] args) {
         String outputRoot = args[0];
         String version = args[1];
         try {
@@ -373,7 +373,7 @@ public final class ReferenceGenerator {
         typeSpec.addJavadoc(header);
         typeSpec.addAnnotation(AnnotationSpec.builder(NullMarked.class).build());
         typeSpec.addAnnotation(AnnotationSpec.builder(ClassName.get("dev.wyck.annotations", "AsOf"))
-            .addMember("value", "$S", generatorSpec.since())
+            .addMember("value", "$S", version)
             .build()
         );
         typeSpec.addAnnotation(AnnotationSpec.builder(ClassName.get("dev.wyck.annotations", "Generated"))
@@ -391,7 +391,7 @@ public final class ReferenceGenerator {
                 existingConstantNames
             );
             case EnumSpec enumSpec -> appendEnumFields(enumSpec, typeSpec, preservedConstants, existingVersions);
-            case ReferenceSpec referenceSpec -> appendReferenceFields(referenceSpec, typeSpec, existingVersions);
+            case ReferenceSpec referenceSpec -> appendReferenceFields(referenceSpec, typeSpec, existingVersions, version);
         }
         return typeSpec.build();
     }
@@ -647,7 +647,7 @@ public final class ReferenceGenerator {
         appendEnumConstructor(typeSpec, enumSpec, existingVersions);
     }
 
-    private static void appendReferenceFields(ReferenceSpec referenceSpec, TypeSpec.Builder typeSpec, Map<String, String> existingVersions) throws IllegalAccessException {
+    private static void appendReferenceFields(ReferenceSpec referenceSpec, TypeSpec.Builder typeSpec, Map<String, String> existingVersions, String currentVersion) throws IllegalAccessException {
         // guards against duplicate field names across source classes
         Set<String> emittedNames = new HashSet<>();
         for (Class<?> sourceClass : referenceSpec.sourceClasses()) {
@@ -681,7 +681,7 @@ public final class ReferenceGenerator {
                 }
 
                 // existing fields keep their original @AsOf; new fields get the current version
-                String fieldVersion = existingVersions.getOrDefault(field.getName(), referenceSpec.since());
+                String fieldVersion = existingVersions.getOrDefault(field.getName(), currentVersion);
                 FieldSpec.Builder fieldSpec = FieldSpec.builder(referenceSpec.typeClass(), field.getName())
                     .addAnnotation(AnnotationSpec.builder(ClassName.get("dev.wyck.annotations", "AsOf"))
                         .addMember("value", "$S", fieldVersion)
