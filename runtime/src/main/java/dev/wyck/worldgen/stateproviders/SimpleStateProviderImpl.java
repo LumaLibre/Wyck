@@ -11,7 +11,7 @@ public record SimpleStateProviderImpl(@Override BlockData state) implements Simp
     @Override
     public Object toMinecraft() {
         CraftBlockData data = (CraftBlockData) state;
-        return net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider.of(
+        return net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider.holderOf(
             data.getState()
         );
     }

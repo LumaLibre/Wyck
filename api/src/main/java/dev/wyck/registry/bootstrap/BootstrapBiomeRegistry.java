@@ -9,6 +9,7 @@ import dev.wyck.util.ThrowingRunnable;
 import dev.wyck.worldgen.chunk.ChunkGenerator;
 import dev.wyck.worldgen.climate.ClimatePoint;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -22,6 +23,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @AsOf("2.3.0")
+@ApiStatus.Experimental
 @SuppressWarnings("UnstableApiUsage")
 public interface BootstrapBiomeRegistry {
 

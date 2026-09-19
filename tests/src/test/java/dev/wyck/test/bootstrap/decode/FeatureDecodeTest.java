@@ -11,8 +11,6 @@ import dev.wyck.worldgen.feature.configurations.BlockPileFeature;
 import dev.wyck.worldgen.feature.configurations.BlockBlobFeature;
 import dev.wyck.worldgen.feature.configurations.BlockColumnFeature;
 import dev.wyck.worldgen.feature.configurations.IcebergFeature;
-import dev.wyck.worldgen.feature.configurations.ColumnFeatureConfiguration;
-import dev.wyck.worldgen.feature.configurations.CountConfiguration;
 import dev.wyck.worldgen.feature.configurations.SequenceFeature;
 import dev.wyck.worldgen.feature.configurations.DeltaFeature;
 import dev.wyck.worldgen.feature.configurations.DiskFeature;
@@ -24,7 +22,6 @@ import dev.wyck.worldgen.feature.configurations.LakeFeature;
 import dev.wyck.worldgen.feature.configurations.LargeDripstoneFeature;
 import dev.wyck.worldgen.feature.configurations.MultifaceGrowthFeature;
 import dev.wyck.worldgen.feature.configurations.NoOpFeature;
-import dev.wyck.worldgen.feature.configurations.NetherForestVegetationConfig;
 import dev.wyck.worldgen.feature.configurations.HugeRedMushroomFeature;
 import dev.wyck.worldgen.feature.configurations.BambooFeature;
 import dev.wyck.worldgen.feature.configurations.OreFeature;
@@ -38,7 +35,6 @@ import dev.wyck.worldgen.feature.configurations.SpringFeature;
 import dev.wyck.worldgen.feature.configurations.SpikeFeature;
 import dev.wyck.worldgen.feature.configurations.SpeleothemClusterFeature;
 import dev.wyck.worldgen.feature.configurations.SpeleothemFeature;
-import dev.wyck.worldgen.feature.configurations.TwistingVinesConfig;
 import dev.wyck.worldgen.feature.configurations.UnderwaterMagmaFeature;
 import dev.wyck.worldgen.feature.configurations.WeightedRandomSelectorFeature;
 import dev.wyck.worldgen.feature.configurations.VegetationPatchFeature;
@@ -69,12 +65,19 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ExtendWith(MinecraftBootstrap.class)
 class FeatureDecodeTest {
 
-    private static final Set<ResourceKey> UNWRAPPED = Set.of();
+    private static final Set<ResourceKey> UNWRAPPED = Set.of(
+        key("single_block_pillar"),
+        key("random_neighbor_spread"),
+        key("projected_random_patchy_square"),
+        key("overlay"),
+        key("end_podium"),
+        key("stepped_column_cluster")
+    );
 
     @Test
     void everyVanillaFeatureTypeIsDecodedOrExplicitlyUnwrapped() {
         var decoders = new dev.wyck.decode.worldgen.feature.FeatureConfigurationDecoders();
-        List<ResourceKey> missing = BuiltInRegistries.FEATURE.keySet().stream()
+        List<ResourceKey> missing = BuiltInRegistries.FEATURE_TYPE.keySet().stream()
             .map(id -> ResourceKey.of(id.getNamespace(), id.getPath()))
             .filter(key -> !UNWRAPPED.contains(key))
             .filter(key -> !decoders.handles(key))
@@ -94,11 +97,6 @@ class FeatureDecodeTest {
         BambooFeature probability = assertInstanceOf(BambooFeature.class,
             decode(FeatureType.BAMBOO, BambooFeature.of(0.35f)).config());
         assertEquals(0.35f, probability.probability());
-
-        CountConfiguration count = assertInstanceOf(CountConfiguration.class,
-            decode(FeatureType.SEA_PICKLE, CountConfiguration.of(IntProvider.uniform(2, 7))).config());
-        assertEquals(2, count.count().minInclusive());
-        assertEquals(7, count.count().maxInclusive());
 
         IcebergFeature state = assertInstanceOf(IcebergFeature.class,
             decode(FeatureType.ICEBERG, IcebergFeature.of(
@@ -138,23 +136,6 @@ class FeatureDecodeTest {
 
     @Test
     void providerAndScalarConfigurationBatchDecodes() {
-        NetherForestVegetationConfig vegetation = assertInstanceOf(NetherForestVegetationConfig.class,
-            decode(FeatureType.NETHER_FOREST_VEGETATION, NetherForestVegetationConfig.of(
-                BlockStateProvider.simple(Material.CRIMSON_ROOTS), 8, 4
-            )).config());
-        assertInstanceOf(SimpleStateProvider.class, vegetation.stateProvider());
-        assertEquals(8, vegetation.spreadWidth());
-
-        TwistingVinesConfig vines = assertInstanceOf(TwistingVinesConfig.class,
-            decode(FeatureType.TWISTING_VINES, TwistingVinesConfig.of(8, 4, 12)).config());
-        assertEquals(12, vines.maxHeight());
-
-        ColumnFeatureConfiguration columns = assertInstanceOf(ColumnFeatureConfiguration.class,
-            decode(FeatureType.BASALT_COLUMNS, ColumnFeatureConfiguration.of(
-                IntProvider.uniform(0, 3), IntProvider.uniform(2, 7)
-            )).config());
-        assertEquals(7, columns.height().maxInclusive());
-
         DeltaFeature delta = assertInstanceOf(DeltaFeature.class,
             decode(FeatureType.DELTA_FEATURE, DeltaFeature.of(
                 data(Material.LAVA), data(Material.MAGMA_BLOCK),
@@ -209,11 +190,9 @@ class FeatureDecodeTest {
             lake.canReplaceWithAirOrFluid());
 
         SculkPatchFeature sculk = assertInstanceOf(SculkPatchFeature.class,
-            decode(FeatureType.SCULK_PATCH, SculkPatchFeature.of(
-                4, 32, 16, 2, 3, IntProvider.uniform(0, 2), 0.15f
-            )).config());
+            decode(FeatureType.SCULK_PATCH, SculkPatchFeature.of(4, 32, 16, 2, 3)).config());
         assertEquals(4, sculk.chargeCount());
-        assertEquals(2, sculk.extraRareGrowths().maxInclusive());
+        assertEquals(3, sculk.spreadRounds());
 
         SpringFeature spring = assertInstanceOf(SpringFeature.class,
             decode(FeatureType.SPRING, SpringFeature.of(

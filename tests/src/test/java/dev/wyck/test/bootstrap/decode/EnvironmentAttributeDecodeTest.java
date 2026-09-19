@@ -20,6 +20,7 @@ import dev.wyck.test.bootstrap.MinecraftBootstrap;
 import dev.wyck.util.BootstrapSafeMinecraftRegistries;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.util.ARGB;
 import net.minecraft.world.attribute.modifier.ColorModifier;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -62,7 +63,7 @@ class EnvironmentAttributeDecodeTest {
     @Test
     void valuesMinecraftStoresAsThemselvesComeBackUnchanged() {
         EnvironmentAttributeMap decoded = EnvironmentAttributeMap.decode(minecraftMap()
-            .set(net.minecraft.world.attribute.EnvironmentAttributes.FOG_COLOR, 0x112233)
+            .set(net.minecraft.world.attribute.EnvironmentAttributes.FOG_COLOR, ARGB.vector3fFromRGB24(0x112233))
             .set(net.minecraft.world.attribute.EnvironmentAttributes.SKY_LIGHT_FACTOR, 0.75f)
             .set(net.minecraft.world.attribute.EnvironmentAttributes.CAN_START_RAID, false)
             .build());
@@ -87,7 +88,7 @@ class EnvironmentAttributeDecodeTest {
 
     @Test
     void wrappedValuesDecodeThroughTheirOwnWrappers() {
-        net.minecraft.world.attribute.BedRule bedRule = net.minecraft.world.attribute.BedRule.EXPLODES;
+        net.minecraft.world.attribute.BedRule bedRule = net.minecraft.world.attribute.BedRule.DESTROY_ON_USE;
         net.minecraft.world.attribute.AmbientSounds sounds = net.minecraft.world.attribute.AmbientSounds.LEGACY_CAVE_SETTINGS;
 
         EnvironmentAttributeMap decoded = EnvironmentAttributeMap.decode(minecraftMap()
@@ -101,7 +102,7 @@ class EnvironmentAttributeDecodeTest {
 
         BedRule decodedBedRule = assertInstanceOf(BedRule.class, decoded.get(EnvironmentAttributes.BED_RULE));
         assertEquals(BedRule.Rule.NEVER, decodedBedRule.canSleep());
-        assertTrue(decodedBedRule.explodes());
+        assertTrue(decodedBedRule.destroyOnUse());
 
         AmbientSounds decodedSounds = assertInstanceOf(AmbientSounds.class, decoded.get(EnvironmentAttributes.AMBIENT_SOUNDS));
         assertEquals(6000, decodedSounds.mood().orElseThrow().tickDelay());
@@ -126,9 +127,9 @@ class EnvironmentAttributeDecodeTest {
     @Test
     void aDecodedMapEncodesBackToTheSameMinecraftMap() {
         net.minecraft.world.attribute.EnvironmentAttributeMap original = minecraftMap()
-            .set(net.minecraft.world.attribute.EnvironmentAttributes.SKY_COLOR, 0x8899AA)
+            .set(net.minecraft.world.attribute.EnvironmentAttributes.SKY_COLOR, ARGB.vector3fFromRGB24(0x8899AA))
             .set(net.minecraft.world.attribute.EnvironmentAttributes.MOON_PHASE, net.minecraft.world.level.MoonPhase.NEW_MOON)
-            .set(net.minecraft.world.attribute.EnvironmentAttributes.BED_RULE, net.minecraft.world.attribute.BedRule.EXPLODES)
+            .set(net.minecraft.world.attribute.EnvironmentAttributes.BED_RULE, net.minecraft.world.attribute.BedRule.DESTROY_ON_USE)
             .set(net.minecraft.world.attribute.EnvironmentAttributes.MONSTERS_BURN, true)
             .set(net.minecraft.world.attribute.EnvironmentAttributes.VILLAGER_ACTIVITY, net.minecraft.world.entity.schedule.Activity.REST)
             .set(net.minecraft.world.attribute.EnvironmentAttributes.DEFAULT_DRIPSTONE_PARTICLE, net.minecraft.core.particles.ParticleTypes.DRIPPING_LAVA)
@@ -210,7 +211,7 @@ class EnvironmentAttributeDecodeTest {
                 net.minecraft.world.attribute.modifier.FloatModifier.ALPHA_BLEND,
                 new net.minecraft.world.attribute.modifier.FloatWithAlpha(0.75F, 0.25F))
             .modify(net.minecraft.world.attribute.EnvironmentAttributes.FOG_COLOR,
-                ColorModifier.BLEND_TO_GRAY,
+                ColorModifier.BLEND_TO_GRAY_RGB,
                 new ColorModifier.BlendToGray(0.4F, 0.6F))
             .build();
 

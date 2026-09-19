@@ -31,6 +31,10 @@ public final class IntProviderDecoders extends DecoderRegistry<IntProvider, net.
             var biased = (net.minecraft.util.valueproviders.BiasedToBottomInt) nms;
             return BiasedToBottomInt.of(biased.minInclusive(), biased.maxInclusive());
         });
+        register("very_biased_to_bottom", nms -> {
+            var biased = (net.minecraft.util.valueproviders.VeryBiasedToBottomInt) nms;
+            return BiasedToBottomInt.of(biased.minInclusive(), biased.maxInclusive());
+        });
         register("clamped", nms -> {
             var clamped = (net.minecraft.util.valueproviders.ClampedInt) nms;
             return ClampedInt.of(IntProvider.decode(clamped.source()), clamped.minInclusive(), clamped.maxInclusive());

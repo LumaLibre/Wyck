@@ -26,8 +26,8 @@ class SurfaceRuleDecodeTest {
     void everySurfaceConditionAndRuleTypeIsCovered() {
         var conditionDecoders = new dev.wyck.decode.worldgen.surface.ConditionSourceDecoders();
         var ruleDecoders = new dev.wyck.decode.worldgen.surface.RuleSourceDecoders();
-        var conditions = BuiltInRegistries.MATERIAL_CONDITION.keySet().stream().toList();
-        var rules = BuiltInRegistries.MATERIAL_RULE.keySet().stream().toList();
+        var conditions = BuiltInRegistries.MATERIAL_CONDITION_TYPE.keySet().stream().toList();
+        var rules = BuiltInRegistries.MATERIAL_RULE_TYPE.keySet().stream().toList();
         conditions.forEach(key -> assertTrue(
             conditionDecoders.handles(Decoders.key(key)), () -> "Missing condition decoder for " + key
         ));
@@ -41,13 +41,13 @@ class SurfaceRuleDecodeTest {
     @Test
     void everyVanillaNoiseSettingsSurfaceRuleDecodesRecursively() {
         var settings = BootstrapSafeMinecraftRegistries.mappedRegistry(Registries.NOISE_SETTINGS);
-        settings.entrySet().forEach(entry -> assertNotNull(RuleSource.decode(entry.getValue().surfaceRule()),
+        settings.entrySet().forEach(entry -> assertNotNull(RuleSource.decode(entry.getValue().materialRule().value()),
             () -> "Failed to decode surface rules for " + entry.getKey().identifier()));
     }
 
     @Test
     void paperFlatBedrockConditionPreservesEveryValue() {
-        var minecraftCondition = new io.papermc.paper.world.worldgen.OptionallyFlatBedrockConditionSource(
+        var minecraftCondition = new io.papermc.paper.world.worldgen.OptionallyFlatBedrockCondition(
             Identifier.parse("minecraft:bedrock_roof"),
             VerticalAnchor.belowTop(5),
             VerticalAnchor.belowTop(0),
@@ -71,7 +71,7 @@ class SurfaceRuleDecodeTest {
         assertTrue(decoded.roof());
 
         var reencoded = assertInstanceOf(
-            io.papermc.paper.world.worldgen.OptionallyFlatBedrockConditionSource.class,
+            io.papermc.paper.world.worldgen.OptionallyFlatBedrockCondition.class,
             decoded.asHandle()
         );
         assertEquals(minecraftCondition, reencoded);

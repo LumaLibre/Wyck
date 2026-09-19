@@ -29,12 +29,8 @@ public record LakeFeatureImpl(
         // aquifers in 1.18. I'm guessing it's deprecated internally because of bad pipelining,
         // but it's still used for lava lakes, so im exposing w/o deprecation
         return new net.minecraft.world.level.levelgen.feature.LakeFeature(
-            net.minecraft.core.Holder.direct(
-                fluid.<net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider>asHandle()
-            ),
-            net.minecraft.core.Holder.direct(
-                barrier.<net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider>asHandle()
-            ),
+            fluid.asHandle(),
+            barrier.asHandle(),
             canPlaceFeature.asHandle(),
             canReplaceWithAirOrFluid.asHandle(),
             canReplaceWithBarrier.asHandle()

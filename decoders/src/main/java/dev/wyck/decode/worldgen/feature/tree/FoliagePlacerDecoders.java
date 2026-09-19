@@ -13,6 +13,7 @@ import dev.wyck.worldgen.feature.foliageplacers.FoliagePlacer;
 import dev.wyck.worldgen.feature.foliageplacers.MegaJungleFoliagePlacer;
 import dev.wyck.worldgen.feature.foliageplacers.MegaPineFoliagePlacer;
 import dev.wyck.worldgen.feature.foliageplacers.PineFoliagePlacer;
+import dev.wyck.worldgen.feature.foliageplacers.PoplarFoliagePlacer;
 import dev.wyck.worldgen.feature.foliageplacers.RandomSpreadFoliagePlacer;
 import dev.wyck.worldgen.feature.foliageplacers.SpruceFoliagePlacer;
 import dev.wyck.worldgen.valueproviders.IntProvider;
@@ -52,6 +53,12 @@ public final class FoliagePlacerDecoders extends DecoderRegistry<FoliagePlacer, 
             FastReflection.read(placer, "cornerHoleChance"),
             FastReflection.read(placer, "hangingLeavesChance"),
             FastReflection.read(placer, "hangingLeavesExtensionChance")
+        ));
+        register("poplar_foliage_placer", placer -> PoplarFoliagePlacer.of(
+            radius(placer),
+            offset(placer),
+            provider(placer, "height"),
+            FastReflection.read(placer, "sideHoleChance")
         ));
     }
 

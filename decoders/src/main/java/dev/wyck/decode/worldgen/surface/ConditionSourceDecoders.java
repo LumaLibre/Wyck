@@ -12,6 +12,7 @@ import dev.wyck.worldgen.surface.condition.ConditionSource;
 import dev.wyck.worldgen.surface.condition.HoleConditionSource;
 import dev.wyck.worldgen.surface.condition.NoiseThresholdConditionSource;
 import dev.wyck.worldgen.surface.condition.NotConditionSource;
+import dev.wyck.worldgen.surface.condition.PaperOptionallyFlatBedrockConditionSource;
 import dev.wyck.worldgen.surface.condition.SteepConditionSource;
 import dev.wyck.worldgen.surface.condition.StoneDepthConditionSource;
 import dev.wyck.worldgen.surface.condition.TemperatureConditionSource;
@@ -27,7 +28,7 @@ import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 @ApiStatus.Internal
-public final class ConditionSourceDecoders extends DecoderRegistry<ConditionSource, net.minecraft.world.level.levelgen.material.condition.MaterialCondition> {
+public final class ConditionSourceDecoders extends DecoderRegistry<ConditionSource, Object> {
 
     public ConditionSourceDecoders() {
         register("biome", source -> BiomeConditionSource.of(biomes(source)));
@@ -65,11 +66,32 @@ public final class ConditionSourceDecoders extends DecoderRegistry<ConditionSour
             FastReflection.read(source, "secondaryDepthRange"),
             CaveSurface.TRANSLATOR.fromNms(FastReflection.read(source, "surfaceType"))
         ));
+        register(ResourceKey.of("paper", "optionally_flat_bedrock_material_condition"), source -> {
+            io.papermc.paper.world.worldgen.OptionallyFlatBedrockCondition condition =
+                (io.papermc.paper.world.worldgen.OptionallyFlatBedrockCondition) source;
+            return PaperOptionallyFlatBedrockConditionSource.of(
+                Decoders.key(condition.randomName()),
+                VerticalAnchor.decode(condition.trueAtAndBelow()),
+                VerticalAnchor.decode(condition.falseAtAndAbove()),
+                condition.isRoof()
+            );
+        });
     }
 
     @Override
-    protected ResourceKey discriminate(net.minecraft.world.level.levelgen.material.condition.MaterialCondition source) {
-        return Decoders.registryKey(BuiltInRegistries.MATERIAL_CONDITION_TYPE, source.codec());
+    protected Object normalize(Object minecraftObject) {
+        Object current = Decoders.value(minecraftObject);
+        while (current instanceof net.minecraft.world.level.levelgen.material.condition.MaterialCondition.HolderHolder holder) {
+            current = holder.holder().value();
+        }
+        return current;
+    }
+
+    @Override
+    protected ResourceKey discriminate(Object source) {
+        net.minecraft.world.level.levelgen.material.condition.MaterialCondition condition =
+            (net.minecraft.world.level.levelgen.material.condition.MaterialCondition) source;
+        return Decoders.registryKey(BuiltInRegistries.MATERIAL_CONDITION_TYPE, condition.codec());
     }
 
     private static java.util.List<Biome> biomes(Object source) {

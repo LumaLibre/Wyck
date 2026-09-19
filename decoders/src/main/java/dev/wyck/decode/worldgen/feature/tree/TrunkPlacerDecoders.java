@@ -10,6 +10,7 @@ import dev.wyck.worldgen.feature.trunkplacers.FancyTrunkPlacer;
 import dev.wyck.worldgen.feature.trunkplacers.ForkingTrunkPlacer;
 import dev.wyck.worldgen.feature.trunkplacers.GiantTrunkPlacer;
 import dev.wyck.worldgen.feature.trunkplacers.MegaJungleTrunkPlacer;
+import dev.wyck.worldgen.feature.trunkplacers.PoplarTrunkPlacer;
 import dev.wyck.worldgen.feature.trunkplacers.StraightTrunkPlacer;
 import dev.wyck.worldgen.feature.trunkplacers.TrunkPlacer;
 import dev.wyck.worldgen.feature.trunkplacers.UpwardsBranchingTrunkPlacer;
@@ -49,6 +50,11 @@ public final class TrunkPlacerDecoders extends DecoderRegistry<TrunkPlacer, net.
             IntProvider.decode(FastReflection.read(placer, "branchHorizontalLength")),
             (UniformInt) IntProvider.decode(FastReflection.read(placer, "branchStartOffsetFromTop")),
             IntProvider.decode(FastReflection.read(placer, "branchEndOffsetFromTop"))
+        ));
+        register("poplar_trunk_placer", placer -> PoplarTrunkPlacer.of(
+            base(placer), randA(placer), randB(placer),
+            IntProvider.decode(FastReflection.read(placer, "trunkHeightAboveBranches")),
+            IntProvider.decode(FastReflection.read(placer, "branchAmount"))
         ));
     }
 

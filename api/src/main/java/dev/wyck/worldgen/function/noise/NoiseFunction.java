@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import dev.wyck.annotations.AsOf;
 import dev.wyck.factory.ConstructWireProvider;
 import dev.wyck.keys.ResourceKey;
+import dev.wyck.worldgen.function.DensityFunction;
 import dev.wyck.worldgen.synth.NoiseParameters;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -11,10 +12,10 @@ import org.jspecify.annotations.Nullable;
 import java.util.Optional;
 
 /**
- * Samples a noise.
+ * Samples noise after optionally shifting each input coordinate.
  *
  * @since 3.0.0
- * @version 3.0.0
+ * @version 4.0.0
  * @author Jsinco
  */
 @NullMarked
@@ -38,6 +39,30 @@ public interface NoiseFunction extends NoiseParameterFunction {
     double yScale();
 
     /**
+     * The density function added to the X coordinate before sampling.
+     * @return the X-coordinate shift
+     * @since 4.0.0
+     */
+    @AsOf("4.0.0")
+    DensityFunction shiftX();
+
+    /**
+     * The density function added to the Y coordinate before sampling.
+     * @return the Y-coordinate shift
+     * @since 4.0.0
+     */
+    @AsOf("4.0.0")
+    DensityFunction shiftY();
+
+    /**
+     * The density function added to the Z coordinate before sampling.
+     * @return the Z-coordinate shift
+     * @since 4.0.0
+     */
+    @AsOf("4.0.0")
+    DensityFunction shiftZ();
+
+    /**
      * Converts this object back to a builder.
      * @return a builder with the same values as this object
      * @since 3.0.0
@@ -58,10 +83,41 @@ public interface NoiseFunction extends NoiseParameterFunction {
      */
     @AsOf("3.0.0")
     static NoiseFunction of(@Nullable ResourceKey resourceKey, NoiseParameters noiseParameters, double xzScale, double yScale) {
+        return of(
+            resourceKey, noiseParameters, xzScale, yScale,
+            DensityFunction.zero(), DensityFunction.zero(), DensityFunction.zero()
+        );
+    }
+
+    /**
+     * Creates a new noise function with coordinate shifts.
+     * @param resourceKey the resource key, or null
+     * @param noiseParameters the parameters of the noise
+     * @param xzScale the X and Z scale
+     * @param yScale the Y scale
+     * @param shiftX the X-coordinate shift
+     * @param shiftY the Y-coordinate shift
+     * @param shiftZ the Z-coordinate shift
+     * @return a new noise function
+     * @since 4.0.0
+     */
+    @AsOf("4.0.0")
+    static NoiseFunction of(
+        @Nullable ResourceKey resourceKey,
+        NoiseParameters noiseParameters,
+        double xzScale,
+        double yScale,
+        DensityFunction shiftX,
+        DensityFunction shiftY,
+        DensityFunction shiftZ
+    ) {
         record Holder() {
             static final ConstructWireProvider<NoiseFunction> WIRE = ConstructWireProvider.create("dev.wyck.worldgen.function.noise.NoiseFunctionImpl");
         }
-        return Holder.WIRE.construct(Optional.ofNullable(resourceKey), noiseParameters, xzScale, yScale);
+        return Holder.WIRE.construct(
+            Optional.ofNullable(resourceKey), noiseParameters, xzScale, yScale,
+            shiftX, shiftY, shiftZ
+        );
     }
 
     /**
@@ -100,6 +156,9 @@ public interface NoiseFunction extends NoiseParameterFunction {
         protected @Nullable NoiseParameters noiseParameters;
         protected double xzScale = 1.0;
         protected double yScale = 1.0;
+        protected DensityFunction shiftX = DensityFunction.zero();
+        protected DensityFunction shiftY = DensityFunction.zero();
+        protected DensityFunction shiftZ = DensityFunction.zero();
 
         protected AbstractBuilder() {}
 
@@ -108,6 +167,9 @@ public interface NoiseFunction extends NoiseParameterFunction {
             this.noiseParameters = function.noiseParameters();
             this.xzScale = function.xzScale();
             this.yScale = function.yScale();
+            this.shiftX = function.shiftX();
+            this.shiftY = function.shiftY();
+            this.shiftZ = function.shiftZ();
         }
 
         @SuppressWarnings("unchecked")
@@ -164,6 +226,42 @@ public interface NoiseFunction extends NoiseParameterFunction {
         }
 
         /**
+         * Sets the X-coordinate shift.
+         * @param shiftX the X-coordinate shift
+         * @return this builder
+         * @since 4.0.0
+         */
+        @AsOf("4.0.0")
+        public B shiftX(DensityFunction shiftX) {
+            this.shiftX = shiftX;
+            return self();
+        }
+
+        /**
+         * Sets the Y-coordinate shift.
+         * @param shiftY the Y-coordinate shift
+         * @return this builder
+         * @since 4.0.0
+         */
+        @AsOf("4.0.0")
+        public B shiftY(DensityFunction shiftY) {
+            this.shiftY = shiftY;
+            return self();
+        }
+
+        /**
+         * Sets the Z-coordinate shift.
+         * @param shiftZ the Z-coordinate shift
+         * @return this builder
+         * @since 4.0.0
+         */
+        @AsOf("4.0.0")
+        public B shiftZ(DensityFunction shiftZ) {
+            this.shiftZ = shiftZ;
+            return self();
+        }
+
+        /**
          * Builds the noise function.
          * @return the noise function
          * @since 3.0.0
@@ -191,7 +289,7 @@ public interface NoiseFunction extends NoiseParameterFunction {
         @AsOf("3.0.0")
         public NoiseFunction build() {
             Preconditions.checkNotNull(noiseParameters, "noiseParameters must be set");
-            return of(resourceKey, noiseParameters, xzScale, yScale);
+            return of(resourceKey, noiseParameters, xzScale, yScale, shiftX, shiftY, shiftZ);
         }
     }
 }

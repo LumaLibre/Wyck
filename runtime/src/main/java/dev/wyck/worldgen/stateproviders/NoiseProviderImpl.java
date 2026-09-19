@@ -25,12 +25,12 @@ public final class NoiseProviderImpl extends NoiseBasedProviderImpl implements N
     }
 
     @Override
-    public Object toMinecraft() {
-        return new net.minecraft.world.level.levelgen.feature.stateproviders.NoiseProvider(
+    public net.minecraft.core.Holder<net.minecraft.world.level.levelgen.feature.stateproviders.NoiseProvider> toMinecraft() {
+        return net.minecraft.core.Holder.direct(new net.minecraft.world.level.levelgen.feature.stateproviders.NoiseProvider(
             this.seed,
             this.noise.asHandle(),
             this.scale,
             this.states.stream().map(it -> ((CraftBlockData) it).getState()).toList()
-        );
+        ));
     }
 }

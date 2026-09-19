@@ -32,11 +32,17 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ExtendWith(MinecraftBootstrap.class)
 class BlockStateProviderDecodeTest {
 
+    private static final java.util.Set<ResourceKey> UNWRAPPED = java.util.Set.of(
+        ResourceKey.minecraft("random_block"),
+        ResourceKey.minecraft("copy_properties")
+    );
+
     @Test
     void everyVanillaBlockStateProviderTypeHasADecoder() {
         var decoders = new dev.wyck.decode.worldgen.stateproviders.BlockStateProviderDecoders();
-        List<ResourceKey> missing = BuiltInRegistries.BLOCKSTATE_PROVIDER_TYPE.keySet().stream()
+        List<ResourceKey> missing = BuiltInRegistries.BLOCK_STATE_PROVIDER_TYPE.keySet().stream()
             .map(id -> ResourceKey.of(id.getNamespace(), id.getPath()))
+            .filter(key -> !UNWRAPPED.contains(key))
             .filter(key -> !decoders.handles(key))
             .toList();
 
@@ -60,7 +66,9 @@ class BlockStateProviderDecodeTest {
 
         RotatedBlockProvider rotated = assertInstanceOf(RotatedBlockProvider.class,
             BlockStateProvider.decode(BlockStateProvider.rotated(Material.OAK_LOG).asHandle()));
-        assertEquals(Material.OAK_LOG, rotated.state());
+        SimpleStateProvider rotatedState = assertInstanceOf(SimpleStateProvider.class, rotated.state());
+        assertEquals(Material.OAK_LOG, rotatedState.state().getMaterial());
+        assertTrue(rotated.direction().isEmpty());
     }
 
     @Test

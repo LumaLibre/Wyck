@@ -19,9 +19,8 @@ import dev.wyck.worldgen.valueproviders.IntProvider;
 import dev.wyck.wrapper.decode.DecoderRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.util.random.WeightedList;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import org.bukkit.craftbukkit.block.CraftBlockType;
+import org.bukkit.craftbukkit.block.CraftBlock;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
@@ -29,17 +28,17 @@ import java.util.List;
 
 @NullMarked
 @ApiStatus.Internal
-public final class BlockStateProviderDecoders extends DecoderRegistry<BlockStateProvider, net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider> {
+public final class BlockStateProviderDecoders extends DecoderRegistry<BlockStateProvider, Object> {
 
     public BlockStateProviderDecoders() {
-        register("simple_state_provider", provider -> SimpleStateProvider.of(Decoders.blockData(
+        register("simple", provider -> SimpleStateProvider.of(Decoders.blockData(
             FastReflection.read(provider, "state")
         )));
-        register("weighted_state_provider", provider -> {
+        register("weighted", provider -> {
             WeightedList<BlockState> entries = FastReflection.read(provider, "weightedList");
             return WeightedStateProvider.of(Decoders.weighted(entries, Decoders::blockData));
         });
-        register("noise_threshold_provider", provider -> NoiseThresholdProvider.of(
+        register("noise_threshold", provider -> NoiseThresholdProvider.of(
             seed(provider), noise(provider), scale(provider),
             FastReflection.read(provider, "threshold"),
             FastReflection.read(provider, "highChance"),
@@ -47,10 +46,10 @@ public final class BlockStateProviderDecoders extends DecoderRegistry<BlockState
             states(provider, "lowStates"),
             states(provider, "highStates")
         ));
-        register("noise_provider", provider -> NoiseProvider.of(
+        register("noise", provider -> NoiseProvider.of(
             seed(provider), noise(provider), scale(provider), states(provider, "states")
         ));
-        register("dual_noise_provider", provider -> {
+        register("dual_noise", provider -> {
             net.minecraft.util.InclusiveRange<Integer> variety = FastReflection.read(provider, "variety");
             return DualNoiseProvider.of(
                 seed(provider), noise(provider), scale(provider),
@@ -60,17 +59,21 @@ public final class BlockStateProviderDecoders extends DecoderRegistry<BlockState
                 states(provider, "states")
             );
         });
-        register("rotated_block_provider", provider -> {
-            Block block = FastReflection.read(provider, "block");
-            return RotatedBlockProvider.of(CraftBlockType.minecraftToBukkit(block));
+        register("rotated", provider -> {
+            net.minecraft.world.level.levelgen.feature.stateproviders.RotatedBlockProvider rotated =
+                (net.minecraft.world.level.levelgen.feature.stateproviders.RotatedBlockProvider) provider;
+            return RotatedBlockProvider.of(
+                BlockStateProvider.decode(rotated.state()),
+                rotated.direction().map(CraftBlock::notchToBlockFace)
+            );
         });
-        register("randomized_int_state_provider", provider -> RandomizedIntStateProvider.of(
+        register("randomized_int", provider -> RandomizedIntStateProvider.of(
             BlockStateProvider.decode(FastReflection.read(provider, "source")),
             FastReflection.read(provider, "propertyName"),
             IntProvider.decode(FastReflection.read(provider, "values"))
         ));
-        register("rule_based_state_provider", provider -> {
-            net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider fallback =
+        register("rule_based", provider -> {
+            Object fallback =
                 FastReflection.read(provider, "fallback");
             List<net.minecraft.world.level.levelgen.feature.stateproviders.RuleBasedStateProvider.Rule> rules =
                 FastReflection.read(provider, "rules");
@@ -85,8 +88,15 @@ public final class BlockStateProviderDecoders extends DecoderRegistry<BlockState
     }
 
     @Override
-    protected ResourceKey discriminate(net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider minecraftObject) {
-        return Decoders.registryKey(BuiltInRegistries.BLOCK_STATE_PROVIDER_TYPE, minecraftObject.codec());
+    protected Object normalize(Object minecraftObject) {
+        return Decoders.value(minecraftObject);
+    }
+
+    @Override
+    protected ResourceKey discriminate(Object minecraftObject) {
+        net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider provider =
+            (net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider) minecraftObject;
+        return Decoders.registryKey(BuiltInRegistries.BLOCK_STATE_PROVIDER_TYPE, provider.codec());
     }
 
     private static long seed(Object provider) {

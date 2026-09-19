@@ -22,7 +22,7 @@ public interface ParticleOptionsFactory {
 
     static ParticleOptionsFactory instance() {
         record Holder() {
-            static final WireProvider<ParticleOptionsFactory> WIRE = WireProvider.create("dev.wyck.*.environment.particle.ParticleOptionsFactoryImpl");
+            static final WireProvider<ParticleOptionsFactory> WIRE = WireProvider.create("dev.wyck.environment.particle.ParticleOptionsFactoryImpl");
         }
         return Holder.WIRE.get();
     }

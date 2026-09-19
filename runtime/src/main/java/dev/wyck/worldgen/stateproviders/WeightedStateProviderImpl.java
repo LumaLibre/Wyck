@@ -18,6 +18,8 @@ public record WeightedStateProviderImpl(@Override WeightedList<BlockData> entrie
             CraftBlockData data = (CraftBlockData) entry.value();
             builder.add(data.getState(), entry.weight());
         }
-        return new net.minecraft.world.level.levelgen.feature.stateproviders.WeightedStateProvider(builder.build());
+        return net.minecraft.core.Holder.direct(
+            new net.minecraft.world.level.levelgen.feature.stateproviders.WeightedStateProvider(builder.build())
+        );
     }
 }

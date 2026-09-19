@@ -24,7 +24,7 @@ public interface DimensionRegistry {
     @AsOf("2.4.0")
     static DimensionRegistry registry() {
         record Holder() {
-            static final WireProvider<DimensionRegistry> WIRE = WireProvider.create("dev.wyck.*.registry.level.dimension.DimensionTypeRegistry");
+            static final WireProvider<DimensionRegistry> WIRE = WireProvider.create("dev.wyck.registry.level.dimension.DimensionTypeRegistry");
         }
         return Holder.WIRE.get();
     }

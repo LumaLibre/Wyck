@@ -14,20 +14,17 @@ public record RuleBasedStateProviderImpl(
 ) implements RuleBasedStateProvider {
     @Override
     public Object toMinecraft() {
-        return new net.minecraft.world.level.levelgen.feature.stateproviders.RuleBasedStateProvider(
-            fallback.map(BlockStateProvider::<net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider>asHandle)
-                .map(net.minecraft.core.Holder::direct)
+        return net.minecraft.core.Holder.direct(new net.minecraft.world.level.levelgen.feature.stateproviders.RuleBasedStateProvider(
+            fallback.map(BlockStateProvider::<net.minecraft.core.Holder<net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider>>asHandle)
                 .orElse(null),
             rules.stream().map(RuleBasedStateProviderImpl::asHandle).toList()
-        );
+        ));
     }
 
     private static net.minecraft.world.level.levelgen.feature.stateproviders.RuleBasedStateProvider.Rule asHandle(RuleBasedStateProvider.Rule rule) {
         return new net.minecraft.world.level.levelgen.feature.stateproviders.RuleBasedStateProvider.Rule(
             rule.ifTrue().asHandle(),
-            net.minecraft.core.Holder.direct(
-                rule.then().<net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider>asHandle()
-            )
+            rule.then().asHandle()
         );
     }
 }

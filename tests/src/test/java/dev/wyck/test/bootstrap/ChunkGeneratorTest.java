@@ -32,9 +32,7 @@ class ChunkGeneratorTest {
 
     private static RandomState randomState() {
         return RandomState.create(
-                BootstrapSafeMinecraftRegistries.vanilla(),
-                net.minecraft.world.level.levelgen.NoiseGeneratorSettings.OVERWORLD,
-                0L);
+                BootstrapSafeMinecraftRegistries.getter(net.minecraft.core.registries.Registries.NOISE), 0L, BootstrapSafeMinecraftRegistries.mappedRegistry(net.minecraft.core.registries.Registries.NOISE_SETTINGS).getOrThrow(net.minecraft.world.level.levelgen.NoiseGeneratorSettings.OVERWORLD).value());
     }
 
     private static net.minecraft.world.level.chunk.ChunkGenerator classicFlat() {

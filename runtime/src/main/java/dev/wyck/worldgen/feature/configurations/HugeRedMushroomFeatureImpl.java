@@ -16,12 +16,8 @@ public record HugeRedMushroomFeatureImpl(
     @Override
     public Object toMinecraft() {
         return new net.minecraft.world.level.levelgen.feature.HugeRedMushroomFeature(
-            net.minecraft.core.Holder.direct(
-                capProvider.<net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider>asHandle()
-            ),
-            net.minecraft.core.Holder.direct(
-                stemProvider.<net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider>asHandle()
-            ),
+            capProvider.asHandle(),
+            stemProvider.asHandle(),
             foliageRadius,
             canPlaceOn.asHandle()
         );

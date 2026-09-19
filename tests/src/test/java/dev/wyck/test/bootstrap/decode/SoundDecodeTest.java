@@ -84,7 +84,7 @@ class SoundDecodeTest {
 
         assertEquals(BedRule.Rule.WHEN_DARK, decoded.canSleep());
         assertEquals(BedRule.Rule.ALWAYS, decoded.canSetSpawn());
-        assertFalse(decoded.explodes());
+        assertFalse(decoded.destroyOnUse());
 
         Component message = decoded.errorMessage().orElseThrow();
         assertEquals("block.minecraft.bed.no_sleep", assertInstanceOf(TranslatableComponent.class, message).key());

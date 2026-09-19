@@ -4,7 +4,7 @@ import dev.wyck.keys.ResourceKey;
 import dev.wyck.test.bootstrap.MinecraftBootstrap;
 import dev.wyck.util.BootstrapSafeMinecraftRegistries;
 import dev.wyck.worldgen.function.DensityFunction;
-import dev.wyck.worldgen.function.noise.ShiftedNoise2dFunction;
+import dev.wyck.worldgen.function.noise.NoiseFunction;
 import dev.wyck.worldgen.function.simple.TwoArgumentSimpleFunction;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
@@ -25,9 +25,11 @@ class DensityFunctionDecodeExampleTest {
                 Registries.NOISE_SETTINGS, ResourceKey.minecraft("overworld").identifier()))
             .value();
 
-        DensityFunction temperature = DensityFunction.decode(overworld.noiseRouter().temperature());
+        DensityFunction temperatureReference = DensityFunction.decode(overworld.noiseRouter().temperature());
+        assertEquals(ResourceKey.minecraft("overworld/temperature"), temperatureReference.resourceKey().orElseThrow());
+        DensityFunction temperature = temperatureReference.wrap();
 
-        ShiftedNoise2dFunction noise = assertInstanceOf(ShiftedNoise2dFunction.class, temperature);
+        NoiseFunction noise = assertInstanceOf(NoiseFunction.class, temperature);
         assertEquals(0.25, noise.xzScale());
 
         assertEquals(ResourceKey.minecraft("temperature"), noise.noiseParameters().resourceKey().orElseThrow());

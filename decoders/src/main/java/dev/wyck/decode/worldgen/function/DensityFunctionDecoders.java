@@ -11,7 +11,6 @@ import dev.wyck.worldgen.function.misc.ReferencedDensityFunction;
 import dev.wyck.worldgen.function.misc.YClampedGradient;
 import dev.wyck.worldgen.function.noise.NoiseFunction;
 import dev.wyck.worldgen.function.noise.ShiftedFunction;
-import dev.wyck.worldgen.function.noise.ShiftedNoise2dFunction;
 import dev.wyck.worldgen.function.simple.BlendAlpha;
 import dev.wyck.worldgen.function.simple.BlendOffset;
 import dev.wyck.worldgen.function.simple.ConstantSimpleFunction;
@@ -40,7 +39,7 @@ import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 @ApiStatus.Internal
-public final class DensityFunctionDecoders extends DecoderRegistry<DensityFunction, net.minecraft.world.level.levelgen.densityfunction.DensityFunction> {
+public final class DensityFunctionDecoders extends DecoderRegistry<DensityFunction, Object> {
 
     public static final ResourceKey REFERENCE = ResourceKey.wyck("reference");
 
@@ -120,8 +119,17 @@ public final class DensityFunctionDecoders extends DecoderRegistry<DensityFuncti
     }
 
     @Override
-    protected net.minecraft.world.level.levelgen.densityfunction.DensityFunction normalize(net.minecraft.world.level.levelgen.densityfunction.DensityFunction minecraftObject) {
-        net.minecraft.world.level.levelgen.densityfunction.DensityFunction current = minecraftObject;
+    @SuppressWarnings("unchecked")
+    protected Object normalize(Object minecraftObject) {
+        Object current = minecraftObject;
+        if (current instanceof Holder<?> holder) {
+            if (holder instanceof Holder.Reference<?>) {
+                return new DensityFunctions.HolderHolder(
+                    (Holder<net.minecraft.world.level.levelgen.densityfunction.DensityFunction>) holder
+                );
+            }
+            current = holder.value();
+        }
         while (current instanceof DensityFunctions.HolderHolder(Holder<net.minecraft.world.level.levelgen.densityfunction.DensityFunction> function) && !(function instanceof Holder.Reference<?>)) {
             current = function.value();
         }
@@ -129,16 +137,18 @@ public final class DensityFunctionDecoders extends DecoderRegistry<DensityFuncti
     }
 
     @Override
-    protected ResourceKey discriminate(net.minecraft.world.level.levelgen.densityfunction.DensityFunction minecraftObject) {
+    protected ResourceKey discriminate(Object minecraftObject) {
         if (minecraftObject instanceof DensityFunctions.HolderHolder) {
             return REFERENCE;
         }
+        net.minecraft.world.level.levelgen.densityfunction.DensityFunction function =
+            (net.minecraft.world.level.levelgen.densityfunction.DensityFunction) minecraftObject;
         return Decoders.registryKey(
-            BuiltInRegistries.DENSITY_FUNCTION_TYPE, minecraftObject.codec()
+            BuiltInRegistries.DENSITY_FUNCTION_TYPE, function.codec()
         );
     }
 
-    private DensityFunction reference(net.minecraft.world.level.levelgen.densityfunction.DensityFunction minecraftObject) {
+    private DensityFunction reference(Object minecraftObject) {
         Holder<net.minecraft.world.level.levelgen.densityfunction.DensityFunction> holder =
             ((DensityFunctions.HolderHolder) minecraftObject).function();
         return ReferencedDensityFunction.of(Decoders.key(
@@ -147,27 +157,13 @@ public final class DensityFunctionDecoders extends DecoderRegistry<DensityFuncti
     }
 
     private DensityFunction noise(net.minecraft.world.level.levelgen.densityfunction.generator.NoiseFunction noise) {
-        net.minecraft.world.level.levelgen.densityfunction.DensityFunction shiftY = noise.shiftY();
-        boolean flat = noise.yScale() == 0.0
-            && shiftY.range().min() == 0.0F && shiftY.range().max() == 0.0F;
-        boolean unshifted = flat
-            && noise.shiftX().range().min() == 0.0F && noise.shiftX().range().max() == 0.0F
-            && noise.shiftZ().range().min() == 0.0F && noise.shiftZ().range().max() == 0.0F;
-        if (unshifted) {
-            return dev.wyck.worldgen.function.noise.NoiseFunction.of(
-                NoiseParameters.decode(noise.noise()), noise.xzScale(), noise.yScale()
-            );
-        }
-        if (!flat) {
-            throw new IllegalArgumentException(
-                "Cannot decode a shifted noise that shifts on Y: y_scale=" + noise.yScale()
-                    + ", shift_y=" + shiftY + ". Wyck only wraps the two-dimensional form."
-            );
-        }
-        return ShiftedNoise2dFunction.of(
+        return dev.wyck.worldgen.function.noise.NoiseFunction.of(
+            null,
             NoiseParameters.decode(noise.noise()),
-            DensityFunction.decode(noise.shiftX()), DensityFunction.decode(noise.shiftZ()),
-            noise.xzScale()
+            noise.xzScale(), noise.yScale(),
+            DensityFunction.decode(noise.shiftX()),
+            DensityFunction.decode(noise.shiftY()),
+            DensityFunction.decode(noise.shiftZ())
         );
     }
 

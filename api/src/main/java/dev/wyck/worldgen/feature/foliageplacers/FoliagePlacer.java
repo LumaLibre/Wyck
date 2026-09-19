@@ -148,6 +148,16 @@ public interface FoliagePlacer extends Wrapper {
         return CherryFoliagePlacer.builder();
     }
 
+    /**
+     * A new builder for a {@link PoplarFoliagePlacer}.
+     * @return a new builder
+     * @since 4.0.0
+     */
+    @AsOf("4.0.0")
+    static PoplarFoliagePlacer.Builder poplar() {
+        return PoplarFoliagePlacer.builder();
+    }
+
     @ApiStatus.Internal
     static FoliagePlacer decode(Object minecraftFoliagePlacer) {
         record Holder() {

@@ -23,7 +23,7 @@ public interface NativeChunkPacketHandler {
 
     static NativeChunkPacketHandler instance() {
         record Holder() {
-            static final WireProvider<NativeChunkPacketHandler> WIRE = WireProvider.create("dev.wyck.*.renderer.packet.handlers.NmsNativeChunkPacketHandler");
+            static final WireProvider<NativeChunkPacketHandler> WIRE = WireProvider.create("dev.wyck.*?.renderer.packet.handlers.NativeChunkPacketHandlerImpl");
         }
         return Holder.WIRE.get();
     }

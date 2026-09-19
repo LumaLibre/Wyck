@@ -12,11 +12,11 @@ public record RandomizedIntStateProviderImpl(
     @Override IntProvider values
 ) implements RandomizedIntStateProvider {
     @Override
-    public Object toMinecraft() {
-        return new net.minecraft.world.level.levelgen.feature.stateproviders.RandomizedIntStateProvider(
+    public net.minecraft.core.Holder<net.minecraft.world.level.levelgen.feature.stateproviders.RandomizedIntStateProvider> toMinecraft() {
+        return net.minecraft.core.Holder.direct(new net.minecraft.world.level.levelgen.feature.stateproviders.RandomizedIntStateProvider(
             source.asHandle(),
             property,
             values.asHandle()
-        );
+        ));
     }
 }

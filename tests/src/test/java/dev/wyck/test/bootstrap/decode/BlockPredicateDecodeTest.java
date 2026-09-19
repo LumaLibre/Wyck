@@ -39,7 +39,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ExtendWith(MinecraftBootstrap.class)
 class BlockPredicateDecodeTest {
 
-    private static final Set<ResourceKey> UNWRAPPED = Set.of(ResourceKey.minecraft("unobstructed"));
+    private static final Set<ResourceKey> UNWRAPPED = Set.of(
+        ResourceKey.minecraft("unobstructed"),
+        ResourceKey.minecraft("height_range"),
+        ResourceKey.minecraft("volume_match")
+    );
 
     private static dev.wyck.decode.worldgen.blockpredicates.BlockPredicateDecoders decoders() {
         record Holder() {

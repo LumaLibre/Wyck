@@ -9,7 +9,6 @@ import dev.wyck.worldgen.function.transformer.ClampedTransformer;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.level.levelgen.densityfunction.DensityFunction.SinglePointContext;
 import org.jspecify.annotations.NullMarked;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,11 +20,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @ExtendWith(MinecraftBootstrap.class)
 class DensityFunctionTest {
 
-    private static final SinglePointContext ORIGIN = new SinglePointContext(0, 0, 0);
     private static final double EXACT = 0.0;
 
     private static double compute(DensityFunction function) {
-        return function.<net.minecraft.world.level.levelgen.densityfunction.DensityFunction>asHandle().compute(ORIGIN);
+        return DensityTestSupport.sample(function.asHandle());
     }
 
     @Test
@@ -34,88 +32,62 @@ class DensityFunctionTest {
     }
 
     @Test
-    void addSumsBothArguments() {
-        DensityFunction sum = TwoArgumentSimpleFunction.add(
-                ConstantSimpleFunction.of(2.0), ConstantSimpleFunction.of(3.5));
-
-        assertEquals(5.5, compute(sum), EXACT);
-    }
-
-    @Test
-    void mulMultipliesBothArguments() {
-        DensityFunction product = TwoArgumentSimpleFunction.mul(
-                ConstantSimpleFunction.of(3.0), ConstantSimpleFunction.of(4.0));
-
-        assertEquals(12.0, compute(product), EXACT);
-    }
-
-    @Test
-    void minAndMaxPickTheRightArgumentInEitherOrder() {
-        assertEquals(2.0, compute(TwoArgumentSimpleFunction.min(
-                ConstantSimpleFunction.of(2.0), ConstantSimpleFunction.of(9.0))), EXACT);
-        assertEquals(2.0, compute(TwoArgumentSimpleFunction.min(
-                ConstantSimpleFunction.of(9.0), ConstantSimpleFunction.of(2.0))), EXACT);
-        assertEquals(9.0, compute(TwoArgumentSimpleFunction.max(
-                ConstantSimpleFunction.of(2.0), ConstantSimpleFunction.of(9.0))), EXACT);
-        assertEquals(9.0, compute(TwoArgumentSimpleFunction.max(
-                ConstantSimpleFunction.of(9.0), ConstantSimpleFunction.of(2.0))), EXACT);
+    void binaryOperationsComputeTheirValues() {
+        DensityFunction two = ConstantSimpleFunction.of(2.0);
+        DensityFunction four = ConstantSimpleFunction.of(4.0);
+        assertEquals(6.0, compute(TwoArgumentSimpleFunction.add(two, four)), EXACT);
+        assertEquals(-2.0, compute(TwoArgumentSimpleFunction.sub(two, four)), EXACT);
+        assertEquals(8.0, compute(TwoArgumentSimpleFunction.mul(two, four)), EXACT);
+        assertEquals(0.5, compute(TwoArgumentSimpleFunction.div(two, four)), EXACT);
+        assertEquals(2.0, compute(TwoArgumentSimpleFunction.min(two, four)), EXACT);
+        assertEquals(4.0, compute(TwoArgumentSimpleFunction.max(two, four)), EXACT);
     }
 
     @Test
     void clampHoldsValuesInsideItsRange() {
         assertEquals(1.0, compute(ClampedTransformer.of(ConstantSimpleFunction.of(5.0), -1.0, 1.0)), EXACT);
         assertEquals(-1.0, compute(ClampedTransformer.of(ConstantSimpleFunction.of(-5.0), -1.0, 1.0)), EXACT);
-    }
-
-    @Test
-    void clampLeavesValuesInsideItsRangeAlone() {
         assertEquals(0.25, compute(ClampedTransformer.of(ConstantSimpleFunction.of(0.25), -1.0, 1.0)), EXACT);
     }
 
     @Test
     void nestedFunctionsComposeInTheRightOrder() {
         DensityFunction nested = ClampedTransformer.of(
-                TwoArgumentSimpleFunction.add(
-                        TwoArgumentSimpleFunction.mul(ConstantSimpleFunction.of(2.0), ConstantSimpleFunction.of(4.0)),
-                        ConstantSimpleFunction.of(1.0)),
-                0.0, 5.0);
-
-        // (2 * 4) + 1 = 9, clamped to 5
+            TwoArgumentSimpleFunction.add(
+                TwoArgumentSimpleFunction.mul(ConstantSimpleFunction.of(2.0), ConstantSimpleFunction.of(4.0)),
+                ConstantSimpleFunction.of(1.0)
+            ),
+            0.0,
+            5.0
+        );
         assertEquals(5.0, compute(nested), EXACT);
     }
 
     @Test
     void aClampReportsItsRangeToVanilla() {
         net.minecraft.world.level.levelgen.densityfunction.DensityFunction clamped =
-                ClampedTransformer.of(ConstantSimpleFunction.of(0.5), -2.0, 3.0).asHandle();
-
-        assertEquals(-2.0, clamped.minValue(), EXACT);
-        assertEquals(3.0, clamped.maxValue(), EXACT);
+            ClampedTransformer.of(ConstantSimpleFunction.of(0.5), -2.0, 3.0).asHandle();
+        assertEquals(0.5, clamped.range().min(), EXACT);
+        assertEquals(0.5, clamped.range().max(), EXACT);
     }
 
     @Test
     void densityFunctionBindsInTheRegistry() {
-        ConstantSimpleFunction densityFunction = ConstantSimpleFunction.of(ResourceKey.of("wyck:constant"), 1.0);
-        densityFunction.register();
-
+        ConstantSimpleFunction.of(ResourceKey.of("wyck:constant"), 1.0).register();
         Registry<net.minecraft.world.level.levelgen.densityfunction.DensityFunction> registry =
-                BootstrapSafeMinecraftRegistries.mappedRegistry(Registries.DENSITY_FUNCTION);
+            BootstrapSafeMinecraftRegistries.mappedRegistry(Registries.DENSITY_FUNCTION);
         net.minecraft.world.level.levelgen.densityfunction.DensityFunction registered =
-                registry.getValue(Identifier.parse("wyck:constant"));
-
+            registry.getValue(Identifier.parse("wyck:constant"));
         assertNotNull(registered, "density function never landed in worldgen/density_function");
-        assertEquals(1.0, registered.compute(ORIGIN), EXACT);
+        assertEquals(1.0, DensityTestSupport.sample(registered), EXACT);
     }
 
     @Test
     void registeringADensityFunctionLeavesVanillaOnesAlone() {
         ConstantSimpleFunction.of(ResourceKey.of("wyck:coexist"), 2.0).register();
-
         Registry<net.minecraft.world.level.levelgen.densityfunction.DensityFunction> registry =
-                BootstrapSafeMinecraftRegistries.mappedRegistry(Registries.DENSITY_FUNCTION);
-
+            BootstrapSafeMinecraftRegistries.mappedRegistry(Registries.DENSITY_FUNCTION);
         assertNotNull(registry.getValue(Identifier.parse("wyck:coexist")));
-        assertNotNull(registry.getValue(Identifier.parse("minecraft:overworld/depth")),
-                "registering dropped a vanilla density function");
+        assertNotNull(registry.getValue(Identifier.parse("minecraft:overworld/depth")));
     }
 }

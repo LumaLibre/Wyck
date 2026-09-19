@@ -81,10 +81,14 @@ public final class PlacementModifierDecoders extends DecoderRegistry<PlacementMo
             FastReflection.read(modifier, "height")
         )));
         register("in_square", _ -> InSquarePlacement.INSTANCE);
-        register("random_offset", modifier -> RandomOffsetPlacement.of(
-            IntProvider.decode(FastReflection.read(modifier, "xzSpread")),
-            IntProvider.decode(FastReflection.read(modifier, "ySpread"))
-        ));
+        register("offset", modifier -> {
+            net.minecraft.world.level.levelgen.placement.OffsetPlacement offset =
+                (net.minecraft.world.level.levelgen.placement.OffsetPlacement) modifier;
+            if (!offset.x().equals(offset.z())) {
+                throw new IllegalArgumentException("Wyck's offset placement requires matching x and z providers");
+            }
+            return RandomOffsetPlacement.of(IntProvider.decode(offset.x()), IntProvider.decode(offset.y()));
+        });
         register("fixed_placement", modifier -> {
             List<BlockPos> positions = FastReflection.read(modifier, "positions");
             return FixedPlacement.of(positions.stream()

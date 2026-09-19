@@ -12,6 +12,7 @@ import dev.wyck.worldgen.feature.treedecorators.CreakingHeartDecorator;
 import dev.wyck.worldgen.feature.treedecorators.LeaveVineDecorator;
 import dev.wyck.worldgen.feature.treedecorators.PaleMossDecorator;
 import dev.wyck.worldgen.feature.treedecorators.PlaceOnGroundDecorator;
+import dev.wyck.worldgen.feature.treedecorators.ShelfMushroomDecorator;
 import dev.wyck.worldgen.feature.treedecorators.TreeDecorator;
 import dev.wyck.worldgen.feature.treedecorators.TrunkVineDecorator;
 import dev.wyck.worldgen.stateproviders.BlockStateProvider;
@@ -63,6 +64,9 @@ public final class TreeDecoratorDecoders extends DecoderRegistry<TreeDecorator, 
             probability(decorator),
             BlockStateProvider.decode(FastReflection.read(decorator, "blockProvider")),
             directions(decorator)
+        ));
+        register("shelf_mushroom", decorator -> ShelfMushroomDecorator.of(
+            FastReflection.read(decorator, "placementProbability")
         ));
     }
 

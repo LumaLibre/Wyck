@@ -15,6 +15,7 @@ import dev.wyck.keys.ResourceKey;
 import dev.wyck.biome.entity.MobSpawnSettings;
 import dev.wyck.wrapper.decode.DecoderRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.util.ARGB;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
@@ -30,8 +31,10 @@ public final class EnvironmentAttributeDecoders extends DecoderRegistry<Environm
         identity("boolean");
         identity("float");
         identity("angle_degrees");
-        identity("rgb_color");
-        identity("argb_color");
+        this.<Integer, org.joml.Vector3fc>attribute(
+            "rgb_color", value -> ARGB.colorFromVector3f(value) & 0xFFFFFF, ARGB::vector3fFromRGB24
+        );
+        this.attribute("argb_color", ARGB::colorFromVector4f, ARGB::vector4fFromARGB32);
         identity("integer");
         this.<TriState, net.minecraft.util.TriState>attribute("tri_state",
             TriState.TRANSLATOR::fromNms, value -> value.toNms(net.minecraft.util.TriState.class));

@@ -119,6 +119,17 @@ public interface TreeDecorator extends Wrapper {
     }
 
     /**
+     * Places shelf mushrooms on standing trees and fallen logs.
+     * @param probability the placement probability, between 0 and 1
+     * @return a new shelf mushroom decorator
+     * @since 4.0.0
+     */
+    @AsOf("4.0.0")
+    static ShelfMushroomDecorator shelfMushroom(float probability) {
+        return ShelfMushroomDecorator.of(probability);
+    }
+
+    /**
      * Adds vines to each side of each trunk block with a probability of 75% each.
      * @return The trunk vine decorator.
      * @since 3.0.0

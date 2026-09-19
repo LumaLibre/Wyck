@@ -8,7 +8,7 @@ import dev.wyck.level.dimension.InfiniburnImpl;
 import dev.wyck.test.bootstrap.MinecraftBootstrap;
 import dev.wyck.util.BootstrapSafeMinecraftRegistries;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.RegistryCodecs;
+import net.minecraft.core.registries.codec.RegistryCodecs;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.RegistryOps;
@@ -38,7 +38,7 @@ class InfiniburnEncodeTest {
         RegistryOps<JsonElement> ops = BootstrapSafeMinecraftRegistries.serialization()
             .createSerializationContext(JsonOps.INSTANCE);
 
-        DataResult<JsonElement> result = RegistryCodecs.homogeneousList(Registries.BLOCK)
+        DataResult<JsonElement> result = RegistryCodecs.holderSet(Registries.BLOCK)
             .encodeStart(ops, holderSet);
 
         assertTrue(result.error().isEmpty(), () -> "encode failed: " + result.error().orElseThrow().message());

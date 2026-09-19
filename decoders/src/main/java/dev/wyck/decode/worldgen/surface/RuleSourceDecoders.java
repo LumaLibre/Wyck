@@ -7,6 +7,7 @@ import dev.wyck.worldgen.surface.condition.ConditionSource;
 import dev.wyck.worldgen.surface.rule.BandlandsRuleSource;
 import dev.wyck.worldgen.surface.rule.BlockRuleSource;
 import dev.wyck.worldgen.surface.rule.ConditionRuleSource;
+import dev.wyck.worldgen.surface.rule.CarriedRuleSource;
 import dev.wyck.worldgen.surface.rule.RuleSource;
 import dev.wyck.worldgen.surface.rule.SequenceRuleSource;
 import dev.wyck.wrapper.decode.DecoderRegistry;
@@ -19,7 +20,7 @@ import java.util.List;
 
 @NullMarked
 @ApiStatus.Internal
-public final class RuleSourceDecoders extends DecoderRegistry<RuleSource, net.minecraft.world.level.levelgen.material.rule.MaterialRule> {
+public final class RuleSourceDecoders extends DecoderRegistry<RuleSource, Object> {
 
     public RuleSourceDecoders() {
         register("bandlands", _ -> BandlandsRuleSource.INSTANCE);
@@ -31,11 +32,23 @@ public final class RuleSourceDecoders extends DecoderRegistry<RuleSource, net.mi
             ConditionSource.decode(FastReflection.read(source, "ifTrue")),
             RuleSource.decode(FastReflection.read(source, "thenRun"))
         ));
+        register("ore_vein", CarriedRuleSource::new);
     }
 
     @Override
-    protected ResourceKey discriminate(net.minecraft.world.level.levelgen.material.rule.MaterialRule source) {
-        return Decoders.registryKey(BuiltInRegistries.MATERIAL_RULE_TYPE, source.codec());
+    protected Object normalize(Object minecraftObject) {
+        Object current = Decoders.value(minecraftObject);
+        while (current instanceof net.minecraft.world.level.levelgen.material.rule.MaterialRule.HolderHolder holder) {
+            current = holder.holder().value();
+        }
+        return current;
+    }
+
+    @Override
+    protected ResourceKey discriminate(Object source) {
+        net.minecraft.world.level.levelgen.material.rule.MaterialRule rule =
+            (net.minecraft.world.level.levelgen.material.rule.MaterialRule) source;
+        return Decoders.registryKey(BuiltInRegistries.MATERIAL_RULE_TYPE, rule.codec());
     }
 
     private static List<RuleSource> sequence(Object source) {

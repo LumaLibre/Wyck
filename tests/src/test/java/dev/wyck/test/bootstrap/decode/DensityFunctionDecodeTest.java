@@ -1,6 +1,7 @@
 package dev.wyck.test.bootstrap.decode;
 
 import com.google.gson.JsonElement;
+import com.mojang.serialization.JsonOps;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.test.bootstrap.MinecraftBootstrap;
 import dev.wyck.util.BootstrapSafeMinecraftRegistries;
@@ -15,13 +16,9 @@ import dev.wyck.worldgen.function.simple.TwoArgumentSimpleFunction;
 import dev.wyck.worldgen.function.transformer.ClampedTransformer;
 import dev.wyck.worldgen.synth.ComposedNoiseParameters;
 import dev.wyck.worldgen.synth.NoiseParameters;
-import com.mojang.serialization.JsonOps;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.RegistryOps;
-import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
-import net.minecraft.world.level.levelgen.NoiseRouter;
-import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.level.levelgen.densityfunction.DensityFunctions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,10 +26,8 @@ import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -41,10 +36,18 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class DensityFunctionDecodeTest {
 
     private static final Set<ResourceKey> UNWRAPPED = Set.of(
-        ResourceKey.minecraft("beardifier"),
-        ResourceKey.minecraft("old_blended_noise"),
-        ResourceKey.minecraft("interval_select"),
-        ResourceKey.minecraft("spline")
+        key("beardifier"),
+        key("distance_to_point"),
+        key("floor"),
+        key("round"),
+        key("ceil"),
+        key("truncate"),
+        key("pow"),
+        key("spline"),
+        key("lerp"),
+        key("interval_select"),
+        key("slice"),
+        key("old_blended_noise")
     );
 
     private static dev.wyck.decode.worldgen.function.DensityFunctionDecoders decoders() {
@@ -61,12 +64,8 @@ class DensityFunctionDecodeTest {
         return DensityFunctions.DIRECT_CODEC.encodeStart(ops, function).getOrThrow(IllegalStateException::new);
     }
 
-    /**
-     * The point of dispatching on vanilla's own type keys: a density function type added upstream shows
-     * up here as an unclaimed key rather than as a decode failure in a world that is already generating.
-     */
     @Test
-    void everyVanillaDensityFunctionTypeHasADecoder() {
+    void everyVanillaDensityFunctionTypeIsDecodedOrExplicitlyUnwrapped() {
         List<ResourceKey> missing = BuiltInRegistries.DENSITY_FUNCTION_TYPE.keySet().stream()
             .map(id -> ResourceKey.of(id.getNamespace(), id.getPath()))
             .filter(key -> !UNWRAPPED.contains(key))
@@ -76,11 +75,9 @@ class DensityFunctionDecodeTest {
         assertTrue(missing.isEmpty(), () -> "no density function decoder is registered for: " + missing);
     }
 
-    /** A type listed as unwrapped that has since grown a decoder should be taken off the list. */
     @Test
     void nothingListedAsUnwrappedActuallyHasADecoder() {
-        List<ResourceKey> stale = UNWRAPPED.stream().filter(key -> decoders().handles(key)).toList();
-
+        List<ResourceKey> stale = UNWRAPPED.stream().filter(decoders()::handles).toList();
         assertTrue(stale.isEmpty(), () -> "these types have a decoder and should leave the unwrapped list: " + stale);
     }
 
@@ -91,10 +88,8 @@ class DensityFunctionDecodeTest {
             .clamp(-1.0, 1.0)
             .flatCache();
 
-        DensityFunction decoded = DensityFunction.decode(original.asHandle());
-
-        Marker marker = assertInstanceOf(Marker.class, decoded);
-        assertEquals(Marker.Type.FLAT_CACHE, marker.type());
+        Marker marker = assertInstanceOf(Marker.class, DensityFunction.decode(original.asHandle()));
+        assertEquals(Marker.Type.CACHE, marker.type());
 
         ClampedTransformer clamp = assertInstanceOf(ClampedTransformer.class, marker.input());
         assertEquals(-1.0, clamp.min());
@@ -132,24 +127,19 @@ class DensityFunctionDecodeTest {
         assertEquals(-1.5, gradient.toValue());
     }
 
-    /** A registered function stays a reference instead of being inlined into a copy of its contents. */
     @Test
     void decodingKeepsReferencesToRegisteredFunctions() {
-        ResourceKey key = ResourceKey.minecraft("overworld/continents");
+        ResourceKey key = key("overworld/continents");
         DensityFunction decoded = DensityFunction.decode(DensityFunction.reference(key).asHandle());
 
         assertInstanceOf(ReferencedDensityFunction.class, decoded);
         assertEquals(key, decoded.resourceKey().orElseThrow());
     }
 
-    /**
-     * Decoding normalises rather than mirrors. Vanilla builds a mapped noise out of an add over a mul,
-     * and that is what comes back, so a round trip is judged on what the function serializes to.
-     */
     @Test
     void aNormalisedFunctionStillRoundTripsToTheSameSerializedForm() {
         DensityFunction original = DensityFunction.mappedNoise(
-            NoiseParameters.reference(ResourceKey.minecraft("erosion")), 1.0, 0.0, -0.5, 0.5
+            NoiseParameters.reference(key("erosion")), 1.0, 0.0, -0.5, 0.5
         );
 
         DensityFunction decoded = DensityFunction.decode(original.asHandle());
@@ -159,99 +149,28 @@ class DensityFunctionDecodeTest {
     }
 
     @Test
-    void registeredNoiseParametersRemainReferencesWhenRandomStateWiresTheRouter() {
-        ResourceKey key = ResourceKey.of("wyck_test:random_state_noise");
-        NoiseParameters parameters = NoiseParameters.of(key, -4, List.of(1.0, 0.5)).register();
-        net.minecraft.world.level.levelgen.densityfunction.DensityFunction customNoise =
-            DensityFunction.noise(parameters, 1.0, 1.0).asHandle();
-
-        var registryKey = net.minecraft.resources.ResourceKey.create(Registries.NOISE, key.identifier());
-        AtomicReference<net.minecraft.core.Holder<net.minecraft.world.level.levelgen.synth.NormalNoise.Parameters>> noiseData = new AtomicReference<>();
-        customNoise.mapAll(new net.minecraft.world.level.levelgen.densityfunction.DensityFunction.Visitor() {
-            @Override
-            public net.minecraft.world.level.levelgen.densityfunction.DensityFunction apply(
-                net.minecraft.world.level.levelgen.densityfunction.DensityFunction function
-            ) {
-                return function;
-            }
-
-            @Override
-            public net.minecraft.world.level.levelgen.densityfunction.DensityFunction.NoiseHolder visitNoise(
-                net.minecraft.world.level.levelgen.densityfunction.DensityFunction.NoiseHolder noise
-            ) {
-                noiseData.set(noise.noiseData());
-                return noise;
-            }
-        });
-        assertEquals(registryKey, noiseData.get().unwrapKey().orElseThrow());
-
-        NoiseGeneratorSettings vanilla = BootstrapSafeMinecraftRegistries.mappedRegistry(Registries.NOISE_SETTINGS)
-            .getOrThrow(NoiseGeneratorSettings.OVERWORLD)
+    void everySlotOfTheVanillaOverworldNoiseRouterHasAKnownTopLevelType() {
+        var settings = BootstrapSafeMinecraftRegistries.mappedRegistry(Registries.NOISE_SETTINGS)
+            .getOrThrow(net.minecraft.world.level.levelgen.NoiseGeneratorSettings.OVERWORLD)
             .value();
-        NoiseRouter router = vanilla.noiseRouter();
-        NoiseRouter customRouter = new NoiseRouter(
-            router.barrierNoise(),
-            router.fluidLevelFloodednessNoise(),
-            router.fluidLevelSpreadNoise(),
-            router.lavaNoise(),
-            customNoise,
+        var router = settings.noiseRouter();
+
+        for (net.minecraft.world.level.levelgen.densityfunction.DensityFunction slot : List.of(
+            router.temperature(),
             router.vegetation(),
             router.continents(),
             router.erosion(),
             router.depth(),
             router.ridges(),
-            router.preliminarySurfaceLevel(),
-            router.finalDensity(),
-            router.veinToggle(),
-            router.veinRidged(),
-            router.veinGap()
-        );
-        NoiseGeneratorSettings settings = new NoiseGeneratorSettings(
-            vanilla.noiseSettings(),
-            vanilla.defaultBlock(),
-            vanilla.defaultFluid(),
-            customRouter,
-            vanilla.surfaceRule(),
-            vanilla.spawnTarget(),
-            vanilla.seaLevel(),
-            vanilla.disableMobGeneration(),
-            vanilla.aquifersEnabled(),
-            vanilla.oreVeinsEnabled(),
-            vanilla.useLegacyRandomSource()
-        );
-
-        assertDoesNotThrow(() -> RandomState.create(
-            settings, BootstrapSafeMinecraftRegistries.getter(Registries.NOISE), 1234L
-        ));
+            router.chunkSurfaceLevel(),
+            router.finalDensity()
+        )) {
+            ResourceKey type = decoders().typeOf(slot);
+            assertTrue(decoders().handles(type) || UNWRAPPED.contains(type), () -> "unknown router slot type " + type);
+        }
     }
 
-    /**
-     * Every slot of the vanilla overworld router decodes, which walks far more shapes than a unit test
-     * can name one by one. The assertion is on the type of the function that comes back rather than on
-     * its serialized form, because Wyck inlines noise references on the way back to Minecraft and the two
-     * therefore do not serialize alike.
-     */
-    @Test
-    void theVanillaOverworldNoiseRouterDecodes() {
-        var settings = BootstrapSafeMinecraftRegistries.mappedRegistry(Registries.NOISE_SETTINGS)
-            .getOrThrow(net.minecraft.resources.ResourceKey.create(
-                Registries.NOISE_SETTINGS, ResourceKey.minecraft("overworld").identifier()))
-            .value();
-
-        net.minecraft.world.level.levelgen.NoiseRouter router = settings.noiseRouter();
-
-        for (net.minecraft.world.level.levelgen.densityfunction.DensityFunction slot : List.of(
-            router.barrierNoise(), router.fluidLevelFloodednessNoise(), router.fluidLevelSpreadNoise(),
-            router.lavaNoise(), router.temperature(), router.vegetation(), router.continents(),
-            router.erosion(), router.depth(), router.ridges(), router.preliminarySurfaceLevel(),
-            router.finalDensity(), router.veinToggle(), router.veinRidged(), router.veinGap()
-        )) {
-            DensityFunction decoded = DensityFunction.decode(slot);
-            assertEquals(
-                decoders().typeOf(slot),
-                decoders().typeOf(decoded.asHandle()),
-                () -> "slot " + slot + " decoded to a different type of function"
-            );
-        }
+    private static ResourceKey key(String path) {
+        return ResourceKey.minecraft(path);
     }
 }

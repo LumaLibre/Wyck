@@ -53,8 +53,8 @@ public final class NoiseThresholdProviderImpl extends NoiseBasedProviderImpl imp
     }
 
     @Override
-    public Object toMinecraft() {
-        return new net.minecraft.world.level.levelgen.feature.stateproviders.NoiseThresholdProvider(
+    public net.minecraft.core.Holder<net.minecraft.world.level.levelgen.feature.stateproviders.NoiseThresholdProvider> toMinecraft() {
+        return net.minecraft.core.Holder.direct(new net.minecraft.world.level.levelgen.feature.stateproviders.NoiseThresholdProvider(
             this.seed,
             this.noise.asHandle(),
             this.scale,
@@ -63,6 +63,6 @@ public final class NoiseThresholdProviderImpl extends NoiseBasedProviderImpl imp
             ((CraftBlockData) this.defaultState).getState(),
             this.lowStates.stream().map(it -> ((CraftBlockData) it).getState()).toList(),
             this.highStates.stream().map(it -> ((CraftBlockData) it).getState()).toList()
-        );
+        ));
     }
 }

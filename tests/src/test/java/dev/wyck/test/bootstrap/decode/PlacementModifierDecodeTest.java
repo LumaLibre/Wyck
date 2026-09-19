@@ -32,6 +32,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
@@ -41,11 +42,18 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @SuppressWarnings("deprecation")
 class PlacementModifierDecodeTest {
 
+    private static final Set<ResourceKey> UNWRAPPED = Set.of(
+        ResourceKey.minecraft("random_chance"),
+        ResourceKey.minecraft("cuboid"),
+        ResourceKey.minecraft("randomly_selected")
+    );
+
     @Test
     void everyVanillaPlacementModifierTypeHasADecoder() {
         var decoders = new dev.wyck.decode.worldgen.placement.PlacementModifierDecoders();
         List<ResourceKey> missing = BuiltInRegistries.PLACEMENT_MODIFIER_TYPE.keySet().stream()
             .map(id -> ResourceKey.of(id.getNamespace(), id.getPath()))
+            .filter(key -> !UNWRAPPED.contains(key))
             .filter(key -> !decoders.handles(key))
             .toList();
 

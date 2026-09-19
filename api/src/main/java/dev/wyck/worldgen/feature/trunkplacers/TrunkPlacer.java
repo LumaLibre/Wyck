@@ -119,6 +119,16 @@ public interface TrunkPlacer extends Wrapper {
     }
 
     /**
+     * A new builder for a {@link PoplarTrunkPlacer}.
+     * @return a new builder
+     * @since 4.0.0
+     */
+    @AsOf("4.0.0")
+    static PoplarTrunkPlacer.Builder poplar() {
+        return PoplarTrunkPlacer.builder();
+    }
+
+    /**
      * A new builder for a {@link StraightTrunkPlacer}.
      * @return a new builder
      * @since 3.0.0

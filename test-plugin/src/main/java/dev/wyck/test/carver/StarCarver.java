@@ -4,36 +4,12 @@ import dev.wyck.keys.ResourceKey;
 import dev.wyck.misc.ChunkLocation;
 import dev.wyck.worldgen.carver.custom.CarvingContext;
 import dev.wyck.worldgen.carver.custom.CustomCarver;
-import dev.wyck.worldgen.heightproviders.VerticalAnchor;
-import org.bukkit.Material;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Random;
-import java.util.Set;
 
 @NullMarked
 public final class StarCarver extends CustomCarver<StarConfig> {
-
-    private static final Set<Material> REPLACEABLE = Set.of(
-        Material.GRASS_BLOCK,
-        Material.DIRT,
-        Material.COARSE_DIRT,
-        Material.ROOTED_DIRT,
-        Material.PODZOL,
-        Material.MYCELIUM,
-        Material.STONE,
-        Material.DEEPSLATE,
-        Material.ANDESITE,
-        Material.DIORITE,
-        Material.GRANITE,
-        Material.TUFF,
-        Material.GRAVEL,
-        Material.SAND,
-        Material.SANDSTONE,
-        Material.CLAY,
-        Material.SNOW_BLOCK,
-        Material.POWDER_SNOW
-    );
 
     public StarCarver() {
         super(StarConfig::defaults, ResourceKey.of("example", "star"));
@@ -42,16 +18,6 @@ public final class StarCarver extends CustomCarver<StarConfig> {
     @Override
     public float probability() {
         return 1.0F;
-    }
-
-    @Override
-    public VerticalAnchor lavaLevel() {
-        return VerticalAnchor.bottom();
-    }
-
-    @Override
-    public Set<Material> replaceable() {
-        return REPLACEABLE;
     }
 
     @Override
@@ -67,7 +33,7 @@ public final class StarCarver extends CustomCarver<StarConfig> {
         double centerX = (source.x() << 4) + 8.0D;
         double centerZ = (source.z() << 4) + 8.0D;
 
-        int topY = Math.min(config.topY(), context.minGenY() + context.genDepth() - 10);
+        int topY = Math.min(config.topY(), context.maxGenY() - 9);
         int bottomY = Math.max(config.bottomY(), context.minGenY() + 2);
         boolean carved = false;
 

@@ -21,6 +21,8 @@ import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -48,18 +50,18 @@ public final class MockServer {
     public static RegistryAccess.Frozen install() {
         MinecraftBootstrap.boot();
 
-        Set<ResourceKey<? extends Registry<?>>> worldgenKeys = RegistryDataLoader.WORLDGEN_REGISTRIES.stream()
+        Set<ResourceKey<? extends Registry<?>>> worldgenKeys = RegistryDataLoader.WORLD_REGISTRIES.stream()
                 .map(RegistryDataLoader.RegistryData::key)
                 .collect(Collectors.toSet());
 
-        HolderLookup.Provider vanilla = VanillaRegistries.createLookup();
+        HolderLookup.Provider vanilla = VanillaRegistries.createWorldLookup();
         List<Registry<?>> worldgen = new ArrayList<>();
         vanilla.listRegistries()
                 .filter(lookup -> worldgenKeys.contains(lookup.key()))
                 .forEach(lookup -> worldgen.add(freezeIntoRegistry(lookup)));
 
         RegistryAccess.Frozen access = RegistryLayer.createRegistryAccess()
-                .replaceFrom(RegistryLayer.WORLDGEN, new RegistryAccess.ImmutableRegistryAccess(worldgen).freeze())
+                .replaceFrom(RegistryLayer.WORLD, new RegistryAccess.ImmutableRegistryAccess(worldgen).freeze())
                 .compositeAccess();
 
         DedicatedServer nms = mock(DedicatedServer.class);
@@ -80,7 +82,10 @@ public final class MockServer {
         @SuppressWarnings("unchecked")
         MappedRegistry<T> mapped = new MappedRegistry<>(
                 (ResourceKey<? extends @NonNull Registry<T>>) lookup.key(), Lifecycle.stable());
-        lookup.listElements().forEach(ref -> mapped.register(ref.key(), ref.value(), RegistrationInfo.BUILT_IN));
+        Set<T> registeredValues = Collections.newSetFromMap(new IdentityHashMap<>());
+        lookup.listElements()
+            .filter(ref -> registeredValues.add(ref.value()))
+            .forEach(ref -> mapped.register(ref.key(), ref.value(), RegistrationInfo.BUILT_IN));
         mapped.freeze();
         return mapped;
     }

@@ -48,7 +48,7 @@ public final class DualNoiseProviderImpl extends NoiseBasedProviderImpl implemen
 
     @Override
     public Object toMinecraft() {
-        return new net.minecraft.world.level.levelgen.feature.stateproviders.DualNoiseProvider(
+        return net.minecraft.core.Holder.direct(new net.minecraft.world.level.levelgen.feature.stateproviders.DualNoiseProvider(
             variety.asHandle(),
             slowNoise.asHandle(),
             slowScale,
@@ -56,6 +56,6 @@ public final class DualNoiseProviderImpl extends NoiseBasedProviderImpl implemen
             noise.asHandle(),
             scale,
             states.stream().map(it -> ((CraftBlockData) it).getState()).toList()
-        );
+        ));
     }
 }

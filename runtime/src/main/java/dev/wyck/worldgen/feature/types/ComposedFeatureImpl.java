@@ -44,8 +44,8 @@ public record ComposedFeatureImpl(
         if (config instanceof dev.wyck.worldgen.feature.configurations.HugeRedMushroomFeature mushroom
             && type == FeatureType.HUGE_BROWN_MUSHROOM) {
             return new net.minecraft.world.level.levelgen.feature.HugeBrownMushroomFeature(
-                net.minecraft.core.Holder.direct(mushroom.capProvider().asHandle()),
-                net.minecraft.core.Holder.direct(mushroom.stemProvider().asHandle()),
+                mushroom.capProvider().asHandle(),
+                mushroom.stemProvider().asHandle(),
                 mushroom.foliageRadius(),
                 mushroom.canPlaceOn().asHandle()
             );

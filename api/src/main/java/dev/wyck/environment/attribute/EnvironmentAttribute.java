@@ -188,7 +188,11 @@ public interface EnvironmentAttribute<V> extends Wrapper, Keyed {
      */
     @AsOf("3.0.0")
     static FriendlyColorSupplier ofFriendlyColorSupplier(ResourceKey key) {
-        return new FriendlyColorSupplier(of(key));
+        record Holder() {
+            static final ConstructWireProvider<Converter<Integer, Object>> WIRE =
+                ConstructWireProvider.create("dev.wyck.environment.attribute.FriendlyColorConverter");
+        }
+        return new FriendlyColorSupplier(of(key, Holder.WIRE.construct(key)));
     }
 
     /**
