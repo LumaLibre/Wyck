@@ -18,12 +18,12 @@ import org.jspecify.annotations.NullMarked;
  *
  *
  * @since 1.1.0
- * @version 4.0.0
+ * @version 3.4.0
  * @author Wyck codegen
  */
 @NullMarked
 @AsOf("1.1.0")
-@Generated("2026-09-18T20:37:08.730105Z")
+@Generated("2026-09-13T05:38:38.757053Z")
 public enum MoonPhase implements WrappedEnumerator<MoonPhase> {
     FULL_MOON("full_moon"),
     WANING_GIBBOUS("waning_gibbous"),

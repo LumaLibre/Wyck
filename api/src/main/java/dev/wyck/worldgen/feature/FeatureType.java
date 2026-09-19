@@ -14,78 +14,78 @@ import org.jspecify.annotations.NullMarked;
  * Auto-generated. Do not modify!
  * Run ./gradlew generateSources to regenerate.
  * <p>
- * Typed references to the built-in feature algorithms in the {@code FEATURE_TYPE} registry.
+ * Typed references to the built-in feature types, the algorithms in the {@code FEATURE} registry.
  * </p>
  *
  *
  * @since 2.3.0
- * @version 4.0.0
+ * @version 3.4.0
  * @author Wyck codegen
  */
 @NullMarked
 @AsOf("2.3.0")
-@Generated("2026-09-18T20:37:08.734858Z")
+@Generated("2026-09-13T05:38:38.760743Z")
 public enum FeatureType implements WrappedConstant<FeatureType> {
-    BAMBOO("bamboo"),
-    BLOCK_BLOB("block_blob"),
-    BLOCK_COLUMN("block_column"),
-    BLOCK_PILE("block_pile"),
-    BLUE_ICE("blue_ice"),
-    BONUS_CHEST("bonus_chest"),
-    CHORUS_PLANT("chorus_plant"),
-    CORAL_CLAW("coral_claw"),
-    CORAL_TREE("coral_tree"),
-    DELTA_FEATURE("delta_feature"),
-    DISK("disk"),
-    END_GATEWAY("end_gateway"),
-    END_ISLAND("end_island"),
-    END_PLATFORM("end_platform"),
-    END_PODIUM("end_podium"),
-    END_SPIKE("end_spike"),
-    FALLEN_TREE("fallen_tree"),
-    FILL_LAYER("fill_layer"),
-    FOSSIL("fossil"),
-    FREEZE_TOP_LAYER("freeze_top_layer"),
-    GEODE("geode"),
-    HUGE_BROWN_MUSHROOM("huge_brown_mushroom"),
-    HUGE_FUNGUS("huge_fungus"),
-    HUGE_RED_MUSHROOM("huge_red_mushroom"),
-    ICEBERG("iceberg"),
-    LAKE("lake"),
-    LARGE_DRIPSTONE("large_dripstone"),
-    MONSTER_ROOM("monster_room"),
-    MULTIFACE_GROWTH("multiface_growth"),
-    REPLACE_BLOBS("netherrack_replace_blobs"),
     NO_OP("no_op"),
+    TREE("tree"),
+    FALLEN_TREE("fallen_tree"),
+    BLOCK_PILE("block_pile"),
+    SPRING("spring_feature"),
+    CHORUS_PLANT("chorus_plant"),
+    REPLACE_SINGLE_BLOCK("replace_single_block"),
+    VOID_START_PLATFORM("void_start_platform"),
+    FOSSIL("fossil"),
+    HUGE_RED_MUSHROOM("huge_red_mushroom"),
+    HUGE_BROWN_MUSHROOM("huge_brown_mushroom"),
+    SPIKE("spike"),
+    FREEZE_TOP_LAYER("freeze_top_layer"),
+    VINES("vines"),
+    BLOCK_COLUMN("block_column"),
+    VEGETATION_PATCH("vegetation_patch"),
+    WATERLOGGED_VEGETATION_PATCH("waterlogged_vegetation_patch"),
+    ROOT_SYSTEM("root_system"),
+    MULTIFACE_GROWTH("multiface_growth"),
+    UNDERWATER_MAGMA("underwater_magma"),
+    MONSTER_ROOM("monster_room"),
+    BLUE_ICE("blue_ice"),
+    ICEBERG("iceberg"),
+    BLOCK_BLOB("block_blob"),
+    DISK("disk"),
+    LAKE("lake"),
     ORE("ore"),
+    END_PLATFORM("end_platform"),
+    END_SPIKE("end_spike"),
+    END_ISLAND("end_island"),
+    END_GATEWAY("end_gateway"),
+    CORAL_TREE("coral_tree"),
+    CORAL_CLAW("coral_claw"),
+    SIMPLE_BLOCK("simple_block"),
+    BAMBOO("bamboo"),
+    HUGE_FUNGUS("huge_fungus"),
+    DELTA_FEATURE("delta_feature"),
+    REPLACE_BLOBS("netherrack_replace_blobs"),
+    FILL_LAYER("fill_layer"),
+    BONUS_CHEST("bonus_chest"),
+    SCATTERED_ORE("scattered_ore"),
+    RANDOM_SELECTOR("random_selector"),
+    WEIGHTED_RANDOM_SELECTOR("weighted_random_selector"),
+    SIMPLE_RANDOM_SELECTOR("simple_random_selector"),
+    RANDOM_BOOLEAN_SELECTOR("random_boolean_selector"),
+    SEQUENCE("sequence"),
+    TEMPLATE("template"),
+    GEODE("geode"),
+    SPELEOTHEM_CLUSTER("speleothem_cluster"),
+    LARGE_DRIPSTONE("large_dripstone"),
+    SPELEOTHEM("speleothem"),
+    SCULK_PATCH("sculk_patch"),
+    END_PODIUM("end_podium"),
     OVERLAY("overlay"),
     PROJECTED_RANDOM_PATCHY_SQUARE("projected_random_patchy_square"),
-    RANDOM_BOOLEAN_SELECTOR("random_boolean_selector"),
     RANDOM_NEIGHBOR_SPREAD("random_neighbor_spread"),
-    RANDOM_SELECTOR("random_selector"),
-    REPLACE_SINGLE_BLOCK("replace_single_block"),
-    ROOT_SYSTEM("root_system"),
-    SCATTERED_ORE("scattered_ore"),
-    SCULK_PATCH("sculk_patch"),
-    SEQUENCE("sequence"),
-    SIMPLE_BLOCK("simple_block"),
-    SIMPLE_RANDOM_SELECTOR("simple_random_selector"),
     SINGLE_BLOCK_PILLAR("single_block_pillar"),
-    SPELEOTHEM("speleothem"),
-    SPELEOTHEM_CLUSTER("speleothem_cluster"),
-    SPIKE("spike"),
-    SPRING("spring_feature"),
-    STEPPED_COLUMN_CLUSTER("stepped_column_cluster"),
-    TEMPLATE("template"),
-    TREE("tree"),
-    UNDERWATER_MAGMA("underwater_magma"),
-    VEGETATION_PATCH("vegetation_patch"),
-    VINES("vines"),
-    VOID_START_PLATFORM("void_start_platform"),
-    WATERLOGGED_VEGETATION_PATCH("waterlogged_vegetation_patch"),
-    WEIGHTED_RANDOM_SELECTOR("weighted_random_selector");
+    STEPPED_COLUMN_CLUSTER("stepped_column_cluster");
 
-    public static final RegisteredConstantTranslator<FeatureType> TRANSLATOR = RegisteredConstantTranslator.of(RegistryId.FEATURE_TYPE, FeatureType::resourceKey, FeatureType.values());
+    public static final RegisteredConstantTranslator<FeatureType> TRANSLATOR = RegisteredConstantTranslator.of(RegistryId.FEATURE, FeatureType::resourceKey, FeatureType.values());
 
     private final String key;
 

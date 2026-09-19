@@ -55,7 +55,7 @@ import java.util.List;
 public final class Generators {
 
     public static final List<GeneratorSpec> ALL = List.of(
-        features(),
+        configuredFeatures(),
         placedFeatures(),
         densityFunctions(),
         noiseParameters(),
@@ -84,10 +84,10 @@ public final class Generators {
         easingTypes()
     );
 
-    private static GeneratorSpec features() {
+    private static GeneratorSpec configuredFeatures() {
         return new ReferenceSpec(
             ClassName.get("dev.wyck.worldgen.feature", "Features"),
-            ClassName.get("dev.wyck.worldgen.feature", "Feature"),
+            ClassName.get("dev.wyck.worldgen.feature", "ConfiguredFeature"),
             ResourceKey.class,
             Generators::keyLocation,
             List.of(
@@ -362,7 +362,7 @@ public final class Generators {
             "WorldCarverType",
             BuiltInRegistries.CARVER_TYPE,
             "CARVER_TYPE",
-            "The vanilla world-carver algorithms that a configured carver can be built on.",
+            "The vanilla world-carver algorithms in the {@code CARVER_TYPE} registry.",
             "2.3.0"
         );
     }

@@ -19,12 +19,12 @@ import org.jspecify.annotations.NullMarked;
  *
  *
  * @since 0.0.1
- * @version 4.0.0
+ * @version 3.4.0
  * @author Wyck codegen
  */
 @NullMarked
 @AsOf("0.0.1")
-@Generated("2026-09-18T20:37:08.731858Z")
+@Generated("2026-09-13T05:38:38.758433Z")
 public enum TemperatureModifier implements WrappedEnumerator<TemperatureModifier> {
     NONE("none"),
     FROZEN("frozen");
