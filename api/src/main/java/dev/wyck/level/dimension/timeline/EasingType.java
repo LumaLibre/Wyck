@@ -17,13 +17,13 @@ import org.jspecify.annotations.NullMarked;
  *
  *
  * @since 3.2.0
- * @version 3.4.0
+ * @version 4.0.0
  * @author Wyck codegen
  */
 @ApiStatus.NonExtendable
 @NullMarked
 @AsOf("3.2.0")
-@Generated("2026-09-13T05:38:38.771964Z")
+@Generated("2026-09-19T08:19:43.875871Z")
 public interface EasingType {
     // From: EasingType
     @AsOf("3.2.0")

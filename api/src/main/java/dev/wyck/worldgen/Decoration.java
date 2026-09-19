@@ -17,12 +17,12 @@ import org.jspecify.annotations.NullMarked;
  *
  *
  * @since 2.3.0
- * @version 3.4.0
+ * @version 4.0.0
  * @author Wyck codegen
  */
 @NullMarked
 @AsOf("2.3.0")
-@Generated("2026-09-13T05:38:38.750274Z")
+@Generated("2026-09-19T08:19:43.856624Z")
 public enum Decoration implements WrappedEnumerator<Decoration> {
     RAW_GENERATION("RAW_GENERATION"),
     LAKES("LAKES"),

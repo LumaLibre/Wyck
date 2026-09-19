@@ -17,12 +17,12 @@ import org.jspecify.annotations.NullMarked;
  *
  *
  * @since 2.4.0
- * @version 3.4.0
+ * @version 4.0.0
  * @author Wyck codegen
  */
 @NullMarked
 @AsOf("2.4.0")
-@Generated("2026-09-13T05:38:38.743719Z")
+@Generated("2026-09-19T08:19:43.850556Z")
 public final class Noises {
     // From: Noises
     @AsOf("2.4.0")
@@ -145,6 +145,8 @@ public final class Noises {
     public static final NoiseParameters GRAVEL_LAYER = reference("gravel_layer");
     @AsOf("2.4.0")
     public static final NoiseParameters PATCH = reference("patch");
+    @AsOf("4.0.0")
+    public static final NoiseParameters SMALL_PATCH = reference("small_patch");
     @AsOf("2.4.0")
     public static final NoiseParameters NETHERRACK = reference("netherrack");
     @AsOf("2.4.0")

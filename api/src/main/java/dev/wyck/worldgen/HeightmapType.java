@@ -17,12 +17,12 @@ import org.jspecify.annotations.NullMarked;
  *
  *
  * @since 3.0.0
- * @version 3.4.0
+ * @version 4.0.0
  * @author Wyck codegen
  */
 @NullMarked
 @AsOf("3.0.0")
-@Generated("2026-09-13T05:38:38.751280Z")
+@Generated("2026-09-19T08:19:43.857779Z")
 public enum HeightmapType implements WrappedEnumerator<HeightmapType> {
     WORLD_SURFACE_WG("WORLD_SURFACE_WG"),
     WORLD_SURFACE("WORLD_SURFACE"),

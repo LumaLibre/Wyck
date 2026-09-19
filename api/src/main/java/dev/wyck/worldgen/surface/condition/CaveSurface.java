@@ -19,12 +19,12 @@ import org.jspecify.annotations.NullMarked;
  *
  * @see <a href="https://minecraft.wiki/w/Surface_rule#Surface_conditions">Surface rule (surface conditions)</a>
  * @since 3.0.0
- * @version 3.4.0
+ * @version 4.0.0
  * @author Wyck codegen
  */
 @NullMarked
 @AsOf("3.0.0")
-@Generated("2026-09-13T05:38:38.751992Z")
+@Generated("2026-09-19T08:19:43.858528Z")
 public enum CaveSurface implements WrappedEnumerator<CaveSurface> {
     CEILING("CEILING"),
     FLOOR("FLOOR");
