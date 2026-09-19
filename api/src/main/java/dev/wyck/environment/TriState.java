@@ -17,12 +17,12 @@ import org.jspecify.annotations.NullMarked;
  *
  *
  * @since 2.4.1
- * @version 4.0.0
+ * @version 3.4.0
  * @author Wyck codegen
  */
 @NullMarked
-@AsOf("4.0.0")
-@Generated("2026-09-19T08:14:54.234097Z")
+@AsOf("2.4.1")
+@Generated("2026-09-13T05:38:38.753694Z")
 public enum TriState implements WrappedEnumerator<TriState> {
     TRUE("TRUE"),
     FALSE("FALSE"),

@@ -17,12 +17,12 @@ import org.jspecify.annotations.NullMarked;
  *
  *
  * @since 2.3.0
- * @version 4.0.0
+ * @version 3.4.0
  * @author Wyck codegen
  */
 @NullMarked
-@AsOf("4.0.0")
-@Generated("2026-09-19T08:14:54.213775Z")
+@AsOf("2.3.0")
+@Generated("2026-09-13T05:38:38.726873Z")
 public final class PlacedFeatures {
     // From: AquaticPlacements
     @AsOf("2.3.0")
@@ -347,18 +347,6 @@ public final class PlacedFeatures {
     public static final PlacedFeature BIRCH_LEAF_LITTER = reference("birch_leaf_litter");
     @AsOf("2.3.0")
     public static final PlacedFeature FANCY_OAK_LEAF_LITTER = reference("fancy_oak_leaf_litter");
-    @AsOf("4.0.0")
-    public static final PlacedFeature RED_POPLAR = reference("red_poplar");
-    @AsOf("4.0.0")
-    public static final PlacedFeature ORANGE_POPLAR = reference("orange_poplar");
-    @AsOf("4.0.0")
-    public static final PlacedFeature YELLOW_POPLAR = reference("yellow_poplar");
-    @AsOf("4.0.0")
-    public static final PlacedFeature RED_POPLAR_LEAF_LITTER = reference("red_poplar_leaf_litter");
-    @AsOf("4.0.0")
-    public static final PlacedFeature ORANGE_POPLAR_LEAF_LITTER = reference("orange_poplar_leaf_litter");
-    @AsOf("4.0.0")
-    public static final PlacedFeature YELLOW_POPLAR_LEAF_LITTER = reference("yellow_poplar_leaf_litter");
     @AsOf("2.3.0")
     public static final PlacedFeature FALLEN_OAK_TREE = reference("fallen_oak_tree");
     @AsOf("2.3.0")
@@ -369,16 +357,12 @@ public final class PlacedFeatures {
     public static final PlacedFeature FALLEN_SPRUCE_TREE = reference("fallen_spruce_tree");
     @AsOf("2.3.0")
     public static final PlacedFeature FALLEN_JUNGLE_TREE = reference("fallen_jungle_tree");
-    @AsOf("4.0.0")
-    public static final PlacedFeature FALLEN_POPLAR_TREE = reference("fallen_poplar_tree");
 
     // From: VegetationPlacements
     @AsOf("2.3.0")
     public static final PlacedFeature BAMBOO_LIGHT = reference("bamboo_light");
     @AsOf("2.3.0")
     public static final PlacedFeature BAMBOO = reference("bamboo");
-    @AsOf("4.0.0")
-    public static final PlacedFeature BAMBOO_IN_STRUCTURE = reference("bamboo_in_structure");
     @AsOf("2.3.0")
     public static final PlacedFeature VINES = reference("vines");
     @AsOf("2.3.0")
@@ -433,8 +417,6 @@ public final class PlacedFeatures {
     public static final PlacedFeature PATCH_LARGE_FERN = reference("patch_large_fern");
     @AsOf("2.3.0")
     public static final PlacedFeature PATCH_BUSH = reference("patch_bush");
-    @AsOf("4.0.0")
-    public static final PlacedFeature PATCH_RED_SHRUB = reference("patch_red_shrub");
     @AsOf("2.3.0")
     public static final PlacedFeature PATCH_LEAF_LITTER = reference("patch_leaf_litter");
     @AsOf("2.3.0")
@@ -475,8 +457,6 @@ public final class PlacedFeatures {
     public static final PlacedFeature BROWN_MUSHROOM_SWAMP = reference("brown_mushroom_swamp");
     @AsOf("2.3.0")
     public static final PlacedFeature RED_MUSHROOM_SWAMP = reference("red_mushroom_swamp");
-    @AsOf("4.0.0")
-    public static final PlacedFeature BROWN_MUSHROOM_DAPPLED_FOREST = reference("brown_mushroom_dappled_forest");
     @AsOf("2.3.0")
     public static final PlacedFeature FLOWER_WARM = reference("flower_warm");
     @AsOf("2.3.0")
@@ -551,8 +531,6 @@ public final class PlacedFeatures {
     public static final PlacedFeature TREES_OLD_GROWTH_PINE_TAIGA = reference("trees_old_growth_pine_taiga");
     @AsOf("2.3.0")
     public static final PlacedFeature TREES_JUNGLE = reference("trees_jungle");
-    @AsOf("4.0.0")
-    public static final PlacedFeature TREES_DAPPLED_FOREST = reference("trees_dappled_forest");
     @AsOf("2.3.0")
     public static final PlacedFeature BAMBOO_VEGETATION = reference("bamboo_vegetation");
     @AsOf("2.3.0")

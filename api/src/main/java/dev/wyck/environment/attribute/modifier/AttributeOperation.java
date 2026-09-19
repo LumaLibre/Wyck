@@ -17,12 +17,12 @@ import org.jspecify.annotations.NullMarked;
  *
  *
  * @since 3.2.0
- * @version 4.0.0
+ * @version 3.4.0
  * @author Wyck codegen
  */
 @NullMarked
-@AsOf("4.0.0")
-@Generated("2026-09-19T08:14:54.248449Z")
+@AsOf("3.2.0")
+@Generated("2026-09-13T05:38:38.770215Z")
 public enum AttributeOperation implements WrappedEnumerator<AttributeOperation> {
     OVERRIDE("override"),
     ALPHA_BLEND("alpha_blend"),
@@ -37,9 +37,7 @@ public enum AttributeOperation implements WrappedEnumerator<AttributeOperation> 
     OR("or"),
     NOR("nor"),
     XOR("xor"),
-    XNOR("xnor"),
-    APPEND("append"),
-    OVERLAY("overlay");
+    XNOR("xnor");
 
     public static final KeyedEnumTranslator<AttributeOperation> TRANSLATOR = KeyedEnumTranslator.byKey(AttributeOperation::getKey, AttributeOperation.values());
 

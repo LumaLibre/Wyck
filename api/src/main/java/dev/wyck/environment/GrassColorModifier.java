@@ -19,12 +19,12 @@ import org.jspecify.annotations.NullMarked;
  *
  *
  * @since 0.0.24
- * @version 4.0.0
+ * @version 3.4.0
  * @author Wyck codegen
  */
 @NullMarked
-@AsOf("4.0.0")
-@Generated("2026-09-19T08:14:54.237445Z")
+@AsOf("0.0.24")
+@Generated("2026-09-13T05:38:38.757824Z")
 public enum GrassColorModifier implements WrappedEnumerator<GrassColorModifier> {
     NONE("none"),
     DARK_FOREST("dark_forest"),
