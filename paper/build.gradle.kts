@@ -51,7 +51,7 @@ paper {
     bootstrapper = "dev.wyck.paper.WyckPluginBootstrap"
     version = project.version.toString()
     authors = listOf("Jsinco", "Outspending")
-    apiVersion = "1.21"
+    apiVersion = "26.3"
     description = "Standalone Wyck plugin for Paper servers."
     website = "https://wyck.dev"
     hasOpenClassloader = true
