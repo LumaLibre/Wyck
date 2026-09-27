@@ -206,7 +206,7 @@ public interface FloatProvider extends ValueProvider {
     @AsOf("3.3.0")
     static FloatProvider decode(Object minecraftFloatProvider) {
         record Holder() {
-            static final Decoder<FloatProvider> DECODER = Decoder.create("dev.wyck.decode.worldgen.valueproviders.FloatProviderDecoders");
+            static final Decoder<FloatProvider> DECODER = Decoder.create("dev.wyck.*?.decode.worldgen.valueproviders.FloatProviderDecoders");
         }
         return Holder.DECODER.decode(minecraftFloatProvider);
     }

@@ -106,7 +106,7 @@ public interface EndSpike extends Wrapper {
     @ApiStatus.Internal
     static EndSpike decode(Object minecraftObject) {
         record Holder() {
-            static final Decoder<EndSpike> DECODER = Decoder.create("dev.wyck.decode.worldgen.feature.EndSpikeDecoder");
+            static final Decoder<EndSpike> DECODER = Decoder.create("dev.wyck.*?.decode.worldgen.feature.EndSpikeDecoder");
         }
         return Holder.DECODER.decode(minecraftObject);
     }

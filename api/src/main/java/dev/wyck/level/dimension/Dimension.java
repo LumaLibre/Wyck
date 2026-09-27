@@ -270,7 +270,7 @@ public interface Dimension extends Keyed, Wrapper {
     @AsOf("3.3.0")
     static Dimension decode(Object minecraftDimension) {
         record Holder() {
-            static final Decoder<Dimension> DECODER = Decoder.create("dev.wyck.decode.dimension.DimensionDecoder");
+            static final Decoder<Dimension> DECODER = Decoder.create("dev.wyck.*?.decode.dimension.DimensionDecoder");
         }
         return Holder.DECODER.decode(minecraftDimension);
     }

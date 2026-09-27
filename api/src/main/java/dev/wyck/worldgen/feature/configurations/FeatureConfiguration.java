@@ -461,7 +461,7 @@ public interface FeatureConfiguration extends Wrapper {
     @AsOf("3.3.0")
     static FeatureConfiguration decode(Object minecraftConfiguredFeature) {
         record Holder() {
-            static final Decoder<FeatureConfiguration> DECODER = Decoder.create("dev.wyck.decode.worldgen.feature.FeatureConfigurationDecoders");
+            static final Decoder<FeatureConfiguration> DECODER = Decoder.create("dev.wyck.*?.decode.worldgen.feature.FeatureConfigurationDecoders");
         }
         return Holder.DECODER.decode(minecraftConfiguredFeature);
     }

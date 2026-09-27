@@ -163,7 +163,7 @@ public interface GeodeBlockSettings extends Wrapper {
     @ApiStatus.Internal
     static GeodeBlockSettings decode(Object minecraftSettings) {
         record Holder() {
-            static final Decoder<GeodeBlockSettings> DECODER = Decoder.create("dev.wyck.decode.worldgen.feature.geode.GeodeBlockSettingsDecoder");
+            static final Decoder<GeodeBlockSettings> DECODER = Decoder.create("dev.wyck.*?.decode.worldgen.feature.geode.GeodeBlockSettingsDecoder");
         }
         return Holder.DECODER.decode(minecraftSettings);
     }

@@ -306,7 +306,7 @@ public interface IntProvider extends ValueProvider {
     @AsOf("3.3.0")
     static IntProvider decode(Object minecraftIntProvider) {
         record Holder() {
-            static final Decoder<IntProvider> DECODER = Decoder.create("dev.wyck.decode.worldgen.valueproviders.IntProviderDecoders");
+            static final Decoder<IntProvider> DECODER = Decoder.create("dev.wyck.*?.decode.worldgen.valueproviders.IntProviderDecoders");
         }
         return Holder.DECODER.decode(minecraftIntProvider);
     }

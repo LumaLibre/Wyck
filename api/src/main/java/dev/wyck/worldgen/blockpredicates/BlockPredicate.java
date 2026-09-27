@@ -216,7 +216,7 @@ public interface BlockPredicate extends Wrapper {
     @AsOf("3.3.0")
     static BlockPredicate decode(Object minecraftPredicate) {
         record Holder() {
-            static final Decoder<BlockPredicate> DECODER = Decoder.create("dev.wyck.decode.worldgen.blockpredicates.BlockPredicateDecoders");
+            static final Decoder<BlockPredicate> DECODER = Decoder.create("dev.wyck.*?.decode.worldgen.blockpredicates.BlockPredicateDecoders");
         }
         return Holder.DECODER.decode(minecraftPredicate);
     }

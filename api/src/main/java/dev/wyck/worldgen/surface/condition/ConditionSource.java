@@ -50,7 +50,7 @@ public interface ConditionSource extends SurfaceRule {
     @AsOf("3.3.0")
     static ConditionSource decode(Object minecraftCondition) {
         record Holder() {
-            static final Decoder<ConditionSource> DECODER = Decoder.create("dev.wyck.decode.worldgen.surface.ConditionSourceDecoders");
+            static final Decoder<ConditionSource> DECODER = Decoder.create("dev.wyck.*?.decode.worldgen.surface.ConditionSourceDecoders");
         }
         return Holder.DECODER.decode(minecraftCondition);
     }

@@ -119,7 +119,7 @@ public interface AmbientParticle extends Wrapper {
     @AsOf("3.3.0")
     static AmbientParticle decode(Object minecraftAmbientParticle) {
         record Holder() {
-            static final Decoder<AmbientParticle> DECODER = Decoder.create("dev.wyck.decode.environment.particle.AmbientParticleDecoders");
+            static final Decoder<AmbientParticle> DECODER = Decoder.create("dev.wyck.*?.decode.environment.particle.AmbientParticleDecoders");
         }
         return Holder.DECODER.decode(minecraftAmbientParticle);
     }
