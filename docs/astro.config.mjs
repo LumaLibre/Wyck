@@ -2,6 +2,7 @@
 import {defineConfig} from 'astro/config';
 import starlight from '@astrojs/starlight';
 import starlightThemeVintage from 'starlight-theme-vintage';
+import starlightVersions from 'starlight-versions';
 import {fileURLToPath} from 'node:url';
 import yaml from '@rollup/plugin-yaml';
 
@@ -10,6 +11,7 @@ export default defineConfig({
   site: "https://wyck.dev/",
   redirects: {
     '/jd': '/javadoc/index.html',
+    '/3.x/jd': '/javadoc/3.x/index.html',
     '/discord': 'https://discord.gg/CCZGFg85jM'
   },
   vite: {
@@ -25,8 +27,15 @@ export default defineConfig({
       favicon: '/favicon.png',
       components: {
         Sidebar: './src/components/Sidebar.astro',
+        ThemeSelect: './src/components/ThemeSelect.astro',
       },
-      plugins: [starlightThemeVintage()],
+      plugins: [
+        starlightThemeVintage(),
+        starlightVersions({
+          current: { label: '4.x' },
+          versions: [{ slug: '3.x', label: '3.x' }],
+        }),
+      ],
       title: 'Wyck (BiomesAPI)',
       logo: {
         src: './src/assets/wyck.png',

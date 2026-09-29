@@ -1,0 +1,63 @@
+---
+title: Biome Generation Settings
+description: Learn how to attach carvers and features to a custom biome with
+  Wyck's generation settings.
+slug: 3.x/worldgen/biomes/biome-generation-settings
+---
+
+import CodeBlock from "@/components/CodeBlock.astro";
+import SourceLink from "@/components/SourceLink.astro";
+import CodeTabs from "@/components/CodeTabs.astro";
+
+<SourceLink path="biome/BiomeGenerationSettings.java">BiomeGenerationSettings</SourceLink> is what binds
+[`carvers`](/3.x/worldgen/carvers) and [`placed features`](/3.x/worldgen/placed-features) to a biome.
+
+## Generation Steps
+
+Placed features are added under a <SourceLink path="worldgen/Decoration.java">Decoration</SourceLink>,
+which controls the order things generate in. Carvers are not stepped as they run in the carving phase of world generation.
+
+## Example Usage
+
+<CodeBlock
+  lang="java"
+  filename="ExamplePlugin.java"
+  code={`import dev.wyck.biome.CustomBiome;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.biome.BiomeGenerationSettings;
+import dev.wyck.worldgen.Decoration;
+import dev.wyck.worldgen.HeightmapType;
+import dev.wyck.worldgen.placement.PlacementModifier;
+import dev.wyck.worldgen.carver.Carvers;
+import dev.wyck.worldgen.feature.ConfiguredFeatures;
+import dev.wyck.worldgen.placement.PlacedFeature;
+import dev.wyck.worldgen.placement.PlacedFeatures;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class ExamplePlugin extends JavaPlugin {
+  @Override
+  public void onEnable() {
+      BiomeGenerationSettings generation = BiomeGenerationSettings.builder()
+          // carve caves using vanilla's cave carver
+          .addCarver(Carvers.CAVE)
+          // reference a vanilla placed ore feature
+          .addFeature(Decoration.UNDERGROUND_ORES, PlacedFeatures.ORE_DIAMOND)
+          // author a surface flower placement
+          .addFeature(Decoration.VEGETAL_DECORATION, PlacedFeature.of(
+              ConfiguredFeatures.FLOWER_DEFAULT,
+              PlacementModifier.rarityFilter(8),
+              PlacementModifier.inSquare(),
+              PlacementModifier.heightmap(HeightmapType.MOTION_BLOCKING),
+              PlacementModifier.biomeFilter()))
+          .build();
+
+      CustomBiome.builder()
+          .resourceKey(ResourceKey.of("test", "custombiome"))
+          .waterColor("#F5F2EB")
+          .grassColor("#DBE9EC")
+          .generationSettings(generation)
+          .build()
+          .register();
+  }
+}`}
+/>

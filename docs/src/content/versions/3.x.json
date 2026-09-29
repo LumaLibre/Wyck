@@ -1,0 +1,50 @@
+{
+  "sidebar": [
+    {
+      "label": "Getting Started",
+      "link": "/setup/"
+    },
+    {
+      "label": "Biomes",
+      "autogenerate": {
+        "directory": "biomes"
+      }
+    },
+    {
+      "label": "Dimensions",
+      "autogenerate": {
+        "directory": "dimensions"
+      }
+    },
+    {
+      "label": "Renderers",
+      "autogenerate": {
+        "directory": "renderers"
+      }
+    },
+    {
+      "label": "World Generation",
+      "autogenerate": {
+        "directory": "worldgen"
+      }
+    },
+    {
+      "label": "Registries",
+      "autogenerate": {
+        "directory": "registries"
+      }
+    },
+    {
+      "label": "Components",
+      "autogenerate": {
+        "directory": "components"
+      }
+    },
+    {
+      "label": "Miscellaneous",
+      "autogenerate": {
+        "directory": "misc"
+      }
+    }
+  ]
+}

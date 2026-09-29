@@ -1,0 +1,107 @@
+---
+title: Jigsaw Structures
+description: Learn how to build jigsaw structures.
+slug: 3.x/worldgen/structures/jigsaw-structures
+---
+
+import CodeBlock from "@/components/CodeBlock.astro";
+import SourceLink from "@/components/SourceLink.astro";
+
+A <SourceLink path="worldgen/structure/types/JigsawStructure.java">JigsawStructure</SourceLink> is assembled from pieces.
+It places a first piece from its **start pool**, then attaches a new piece at every jigsaw block in the placed pieces, until
+it is `size` steps from the start.
+
+## Structure Templates
+
+<CodeBlock
+  lang="java"
+  filename="ExamplePlugin.java"
+  code={`import dev.wyck.keys.ResourceKey;
+import dev.wyck.worldgen.structure.templatesystem.StructureTemplate;
+
+@Override
+public void onLoad() {
+  // From the plugin's data folder
+  StructureTemplate tower = StructureTemplate.of(ResourceKey.of("wyck", "tower"), getDataPath().resolve("tower.nbt"))
+      .register();
+
+  // From inside the plugin jar
+  StructureTemplate ruin = StructureTemplate.of(ResourceKey.of("wyck", "ruin"), getClass().getResource("/ruin.nbt"))
+      .register();
+}`}
+/>
+
+## Template Pools
+
+A <SourceLink path="worldgen/structure/pools/TemplatePool.java">TemplatePool</SourceLink> is a weighted list of pool
+elements with a **fallback** pool, used when a piece from this pool does not fit. The fallback defaults to `TemplatePool.EMPTY`.
+
+<CodeBlock
+  lang="java"
+  filename="ExamplePlugin.java"
+  code={`import dev.wyck.keys.ResourceKey;
+import dev.wyck.worldgen.structure.pools.PoolElement;
+import dev.wyck.worldgen.structure.pools.TemplatePool;
+import dev.wyck.worldgen.structure.pools.types.ComposedTemplatePool;
+
+ComposedTemplatePool start = TemplatePool.builder()
+  .resourceKey(ResourceKey.of("wyck", "tower/start"))
+  .element(PoolElement.single(tower), 3) // weight from 1 to 150
+  .element(PoolElement.single(ruin), 1)
+  .build()
+  .register();`}
+/>
+
+## Building the Structure
+
+<CodeBlock
+  lang="java"
+  filename="ExamplePlugin.java"
+  code={`import dev.wyck.keys.ResourceKey;
+import dev.wyck.worldgen.HeightmapType;
+import dev.wyck.worldgen.structure.Structure;
+import dev.wyck.worldgen.structure.types.JigsawStructure;
+
+JigsawStructure structure = Structure.jigsaw(settings, start)
+  .resourceKey(ResourceKey.of("wyck", "tower"))
+  .size(6)
+  .projectStartToHeightmap(HeightmapType.WORLD_SURFACE_WG)
+  .maxDistanceFromCenter(JigsawStructure.MaxDistance.of(80))
+  .build()
+  .register();`}
+/>
+
+Add the structure to a [structure set](/3.x/worldgen/structures/structure-sets/) so it generates.
+
+## Pool Aliases
+
+A <SourceLink path="worldgen/structure/pools/alias/PoolAliasBinding.java">PoolAliasBinding</SourceLink> replaces a pool
+for one structure.
+
+<CodeBlock
+  lang="java"
+  filename="ExamplePlugin.java"
+  code={`import dev.wyck.keys.ResourceKey;
+import dev.wyck.worldgen.structure.Structures;
+import dev.wyck.worldgen.structure.pools.PoolElement;
+import dev.wyck.worldgen.structure.pools.TemplatePool;
+import dev.wyck.worldgen.structure.pools.alias.PoolAliasBinding;
+import dev.wyck.worldgen.structure.pools.types.ComposedTemplatePool;
+import dev.wyck.worldgen.structure.types.JigsawStructure;
+
+TemplatePool vanillaHouses = TemplatePool.reference(ResourceKey.minecraft("village/plains/houses"));
+
+// Vanilla's houses plus your own, under a new key
+ComposedTemplatePool houses = ((ComposedTemplatePool) vanillaHouses.wrap()).toBuilder()
+  .resourceKey(ResourceKey.of("wyck", "village/plains/houses"))
+  .element(PoolElement.single(myHouse), 4)
+  .build()
+  .register();
+
+JigsawStructure village = (JigsawStructure) Structures.VILLAGE_PLAINS.wrap();
+village.toBuilder()
+  .resourceKey(ResourceKey.of("wyck", "village_plains"))
+  .poolAlias(PoolAliasBinding.direct(vanillaHouses, houses))
+  .build()
+  .register();`}
+/>

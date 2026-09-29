@@ -1,0 +1,64 @@
+---
+title: Structures in Custom Biomes
+description: Learn how to make vanilla or custom structures generate in your own biomes.
+slug: 3.x/worldgen/structures/structures-in-custom-biomes
+---
+
+import CodeBlock from "@/components/CodeBlock.astro";
+import SourceLink from "@/components/SourceLink.astro";
+
+A structure generates wherever the biome is in its biome list.
+
+## Adding Your Biome to a Vanilla Biome Tag
+
+Vanilla structures list their biomes through tags. The plains village, for example, uses
+`#minecraft:has_structure/village_plains`. Adding your biome to that tag with
+<SourceLink path="tags/TagSet.java">append()</SourceLink> is enough to get the job done:
+
+<CodeBlock
+  lang="java"
+  filename="ExamplePlugin.java"
+  code={`import dev.wyck.biome.Biome;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.tags.TagSet;
+
+@Override
+public void onLoad() {
+  TagSet.ofBiomes(
+      ResourceKey.of("minecraft", "has_structure/village_desert"),
+      Biome.reference(ResourceKey.of("wyck", "ancient_meadow"))
+  ).append();
+}`}
+/>
+
+## Copying the Structure
+
+You can copy a structure with your biomes inserted instead when you want your own placement, for a structure that generates only in your biome:
+
+<CodeBlock
+  lang="java"
+  filename="ExamplePlugin.java"
+  code={`import dev.wyck.biome.Biome;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.tags.TagSet;
+import dev.wyck.worldgen.structure.StructureSet;
+import dev.wyck.worldgen.structure.Structures;
+import dev.wyck.worldgen.structure.placement.RandomSpreadPlacement;
+import dev.wyck.worldgen.structure.types.DefinedStructure;
+
+@Override
+public void onLoad() {
+  DefinedStructure village = ((DefinedStructure) Structures.VILLAGE_DESERT.wrap())
+      .withSettings(settings -> settings.toBuilder()
+          .biomes(TagSet.ofBiomes(Biome.reference(ResourceKey.of("wyck", "ancient_meadow"))))
+          .build())
+      .withResourceKey(ResourceKey.of("wyck", "meadow_village"));
+  village.register();
+
+  StructureSet.of(village, RandomSpreadPlacement.of(24, 6, 739104582))
+      .toBuilder()
+      .resourceKey(ResourceKey.of("wyck", "meadow_villages"))
+      .build()
+      .register();
+}`}
+/>

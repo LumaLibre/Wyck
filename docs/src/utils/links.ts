@@ -4,6 +4,19 @@ const SRC_ROOT = "api/src/main/java/dev/wyck";
 const JAVADOC_BASE = "https://wyck.dev/javadoc";
 const PACKAGE_ROOT = "dev/wyck";
 
+export interface DocsVersion {
+    javadoc: string;
+    release: string;
+}
+
+const ARCHIVED_VERSIONS: Record<string, DocsVersion> = {
+    "3.x": { javadoc: `${JAVADOC_BASE}/3.x`, release: "3." },
+};
+
+export function archivedVersion(pathname: string): DocsVersion | undefined {
+    return ARCHIVED_VERSIONS[pathname.split("/")[1] ?? ""];
+}
+
 export interface RepoFileOptions {
     ref?: string;
     line?: number;
@@ -23,14 +36,15 @@ export function repoFile(path: string, options: RepoFileOptions = {}): string {
 export interface JavadocLinkOptions {
     member?: string;
     root?: boolean;
+    version?: DocsVersion;
 }
 
 export function javadocLink(path: string, options: JavadocLinkOptions = {}): string {
-    const { member, root = true } = options;
+    const { member, root = true, version } = options;
 
     const cleaned = path.replace(/^\/+/, "").replace(/\.java$/, "");
     const classPath = root ? `${PACKAGE_ROOT}/${cleaned}` : cleaned;
-    const url = `${JAVADOC_BASE}/${classPath}.html`;
+    const url = `${version?.javadoc ?? JAVADOC_BASE}/${classPath}.html`;
 
     if (!member) return url;
     const anchor = member.startsWith("#") ? member.slice(1) : member;

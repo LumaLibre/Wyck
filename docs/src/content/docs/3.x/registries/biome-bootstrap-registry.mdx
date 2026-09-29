@@ -1,0 +1,130 @@
+---
+title: Biome Bootstrap Registry
+description: Learn how to register biomes during the bootstrap phase of the
+  Minecraft server lifecycle, allowing you to add biomes before the server fully
+  initializes.
+sidebar:
+  order: 2
+slug: 3.x/registries/biome-bootstrap-registry
+---
+
+import CodeBlock from "@/components/CodeBlock.astro";
+import SourceLink from "@/components/SourceLink.astro";
+
+:::note
+The <SourceLink path="registry/bootstrap/BootstrapBiomeRegistry.java">BootstrapBiomeRegistry</SourceLink> leverages the
+Bootstrap API from [Paper Plugins](https://docs.papermc.io/paper/dev/getting-started/paper-plugins/). Your plugin must use a
+`paper-plugin.yml` for this API to be accessible to your project!
+:::
+
+The <SourceLink path="registry/bootstrap/BootstrapBiomeRegistry.java">BootstrapBiomeRegistry</SourceLink> allows you to register biomes during the bootstrap phase of the Minecraft server lifecycle, which occurs before the server fully initializes.
+This can be useful for adding biomes that need to be available early in the server's startup process, ensuring that your biomes are always registered and loaded before any code executes that may reference them.
+
+## Choosing a Composer
+
+When registering <SourceLink path="biome/Biome.java">Biome</SourceLink>s through the <SourceLink path="registry/bootstrap/BootstrapBiomeRegistry.java">BootstrapBiomeRegistry</SourceLink> API,
+you must choose a <SourceLink path="registry/bootstrap/Composer.java">Composer</SourceLink> to determine how the server will recognize your biomes.
+
+* <SourceLink path="registry/bootstrap/Composer.java">INJECTOR</SourceLink>: Injects biomes directly into the live Minecraft biome registry by patching Paper's registry bootstrap process.
+* <SourceLink path="registry/bootstrap/Composer.java">DATAPACK</SourceLink>: Biomes registered with this composer will be added to the server as if they were registered through a datapack.
+
+### Example Usage
+
+<CodeBlock
+  lang="java"
+  filename="ExampleBootstrapper.java"
+  code={`import io.papermc.paper.plugin.bootstrap.BootstrapContext;
+import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
+import dev.wyck.biome.CustomBiome;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.registry.bootstrap.BootstrapBiomeRegistry;
+import dev.wyck.registry.bootstrap.Composer;
+import dev.wyck.biome.entity.BiomeSpawner;
+import dev.wyck.biome.entity.MobCategory;
+import dev.wyck.biome.entity.data.NaturalSpawner;
+import org.bukkit.entity.EntityType;
+
+public class ExampleBootstrapper implements PluginBootstrap {
+  @Override
+  public void bootstrap(BootstrapContext context) {
+      // Registering 2 custom biomes during the bootstrap phase as if they were in a datapack.
+      BootstrapBiomeRegistry registry = BootstrapBiomeRegistry.compose(context, Composer.DATAPACK);
+
+      BiomeSpawner spawner = BiomeSpawner.builder()
+          .creatureGenerationProbability(0.1f)
+          .spawner(MobCategory.CREATURE, 100, NaturalSpawner.of(EntityType.PIG, 4, 12))
+          .build();
+
+      // #queue(CustomBiome) queues this biome for registration.
+      registry.queue(CustomBiome.builder()
+          .resourceKey(ResourceKey.of("test", "a"))
+          .fogColor("#FFFFFF")
+          .skyColor("#B99DFC")
+          .waterColor("#F5F2EB")
+          .grassColor("#DBE9EC")
+          .biomeSpawner(spawner)
+          .build()
+      );
+
+      registry.queue(CustomBiome.builder()
+          .resourceKey(ResourceKey.of("test", "b"))
+          .fogColor("#DB00FD")
+          .skyColor("#2F46FF")
+          .waterColor("#000000")
+          .grassColor("#D1D13A")
+          .biomeSpawner(spawner)
+          .build()
+      );
+
+      context.getLogger().info("Finished registering biomes.");
+  }
+}`}
+/>
+
+## Adding Biomes to Existing Dimensions
+
+:::note
+These operations require the `DATAPACK` composer. Because changes are written into Wyck's generated transient
+datapack, a world edited this way expects your biome to be present. If the plugin is removed, that world will fail to
+load. For non-persistent edits at runtime, see the [Level Stem Editor](/3.x/dimensions/level-stem-editor/) instead.
+:::
+
+<CodeBlock
+  lang="java"
+  filename="ExampleBootstrapper.java"
+  code={`import io.papermc.paper.plugin.bootstrap.BootstrapContext;
+import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
+import dev.wyck.biome.Biome;
+import dev.wyck.biome.CustomBiome;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.level.dimension.Dimension;
+import dev.wyck.registry.bootstrap.BootstrapBiomeRegistry;
+import dev.wyck.registry.bootstrap.Composer;
+import dev.wyck.worldgen.climate.ClimatePoint;
+
+public class ExampleBootstrapper implements PluginBootstrap {
+  @Override
+  public void bootstrap(BootstrapContext context) {
+      // Dimension editing requires the DATAPACK composer.
+      BootstrapBiomeRegistry registry = BootstrapBiomeRegistry.compose(context, Composer.DATAPACK);
+
+      CustomBiome myBiome = CustomBiome.builder(ResourceKey.of("example", "my_biome"))
+          .fogColor("#DB00FD")
+          .skyColor("#2F46FF")
+          .waterColor("#00FFD0")
+          .grassColor("#D1D13A")
+          .foliageColor("#FF6A00")
+          .build();
+      registry.queue(myBiome);
+
+      Dimension overworld = Dimension.reference(ResourceKey.of("minecraft", "overworld"));
+
+      // Add the biome to the overworld at a hot, humid climate point.
+      registry.addToDimension(overworld, myBiome, ClimatePoint.of(1.8f, 1.2f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f));
+
+      // ...or replace every plains biome in the overworld with it.
+      Biome plains = Biome.reference(ResourceKey.of("minecraft", "plains"));
+      registry.replaceInDimension(overworld, plains, myBiome);
+  }
+}`}
+/>

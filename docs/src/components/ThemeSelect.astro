@@ -1,0 +1,23 @@
+---
+import VersionSelect from 'starlight-versions/components/VersionSelect.astro';
+import VintageThemeSelect from 'starlight-theme-vintage/overrides/ThemeSelect.astro';
+---
+<VersionSelect />
+<VintageThemeSelect />
+
+<style is:global>
+    starlight-version-select select[autocomplete] {
+        width: calc(2.75rem + 2em);
+    }
+
+    starlight-version-select select[data-pointer-focus] {
+        outline: none;
+    }
+</style>
+
+<script>
+    for (const select of document.querySelectorAll<HTMLSelectElement>('starlight-version-select select')) {
+        select.addEventListener('pointerdown', () => (select.dataset.pointerFocus = ''));
+        select.addEventListener('blur', () => delete select.dataset.pointerFocus);
+    }
+</script>

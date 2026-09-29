@@ -1,0 +1,156 @@
+---
+title: Sending Biomes via Packets
+description: Setting Biomes to players using the PacketHandler
+sidebar:
+  order: 2
+slug: 3.x/renderers/packet-handler
+---
+
+import CodeBlock from "@/components/CodeBlock.astro";
+import SourceLink from "@/components/SourceLink.astro";
+
+### Constructing a Virtual Biome
+
+A <SourceLink path="renderer/packet/data/VirtualBiome.java">VirtualBiome</SourceLink>
+is a wrapper for <SourceLink path="biome/Biome.java">Biome</SourceLink>s that is required for using the <SourceLink path="renderer/packet/PacketHandler.java">PacketHandler</SourceLink> interface.
+
+### Example Usage
+
+<CodeBlock
+  lang="java"
+  filename="ExamplePlugin.java"
+  code={`import dev.wyck.biome.CustomBiome;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.renderer.packet.PacketHandler;
+import dev.wyck.renderer.packet.data.VirtualBiome;
+import org.bukkit.Material;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class ExamplePlugin extends JavaPlugin {
+  @Override
+  public void onEnable() {
+      CustomBiome customBiome = CustomBiome.builder()
+          .resourceKey(ResourceKey.of("test", "custombiome"))
+          .fogColor("#FFFFFF")
+          .foliageColor("#F5F2EB")
+          .skyColor("#B99DFC")
+          .waterColor("#F5F2EB")
+          .waterFogColor("#000000")
+          // Render all grass blocks as diamond blocks
+          .replace(Material.GRASS_BLOCK, Material.DIAMOND_BLOCK)
+          .register();
+
+          VirtualBiome virtualBiome = VirtualBiome.builder()
+              .biome(customBiome)
+              .conditional(((player, chunkLocation) -> {
+                  // Only show this biome to Jsinco
+                  return player.getName().equals("Jsinco");
+              }))
+              // Set the priority of this phony biome, defaults to NORMAL
+              .priority(PacketHandler.Priority.NORMAL)
+              .build();
+  }
+}
+`}
+/>
+
+## Using the PacketHandler
+
+:::tip
+The <SourceLink path="renderer/packet/PacketHandler.java">PacketHandler</SourceLink>
+supports block replacements, which means that you can use it to show fake blocks in your custom biomes.
+:::
+
+The <SourceLink path="renderer/packet/PacketHandler.java">PacketHandler</SourceLink>
+is a biome renderer that injects biome data directly into packets sent to players.
+This means that the biome change is purely visual and does not affect gameplay elements such as mob spawns and is purely visual.
+
+Minecraft sends one biome value for each 4-by-4-by-4 block cell. Wyck exposes this as a
+<SourceLink path="misc/BiomePosition.java">BiomePosition</SourceLink>, with both quart coordinates and the minimum block coordinates represented
+by the cell. Block-coordinate conditions are therefore rounded to this quart-resolution grid.
+
+#### When to use the PacketHandler
+
+* You want to show different biomes to different players in the same area.
+* You want to use block replacements in your custom biomes.
+
+#### Choosing an Injector
+
+<SourceLink path="renderer/packet/PacketHandler.java">PacketHandler</SourceLink>s require and injector in order to inject biome data into packets.
+Wyck supports three different injectors:
+
+* **Netty**: Wyck's built-in standalone injector that does not require any external dependencies. Works similarly to ProtocolLib.
+* **ProtocolLib**: Injects block replacements and custom biomes into packets using ProtocolLib injectors.
+* **PacketEvents**: Injects block replacements and custom biomes into packets using PacketEvents wrappers and injectors.
+
+### Example Usage
+
+<CodeBlock
+  lang="java"
+  filename="ExamplePlugin.java"
+  code={`import dev.wyck.biome.CustomBiome;
+import dev.wyck.renderer.packet.PacketHandler;
+import dev.wyck.renderer.packet.data.VirtualBiome;
+import net.kyori.adventure.key.Key;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class ExamplePlugin extends JavaPlugin {
+
+  private PacketHandler packetHandler;
+
+  @Override
+  public void onEnable() {
+      CustomBiome customBiome = ...;
+      Key plains = Key.key("minecraft:plains");
+
+      VirtualBiome virtualBiome = VirtualBiome.builder()
+          .biome(customBiome)
+          .biomeCondition(((player, snapshot) -> {
+              // Replace all 'plains' biomes with this custom biome
+              return snapshot.centerBiome().key().equals(plains);
+          }))
+          .build();
+
+      this.packetHandler = PacketHandler.of(this) // Defaults to NETTY injector
+          .appendBiome(virtualBiome)
+          .register();
+  }
+
+  @Override
+  public void onDisable() {
+      this.packetHandler.unregister();
+  }
+}`}
+/>
+
+### Rendering individual biome cells
+
+Use `positionCondition` when a virtual biome should cover only part of a chunk. Chunk and
+biome-aware conditions are evaluated first; the position condition is then evaluated for each
+biome cell.
+
+<CodeBlock
+  lang="java"
+  filename="ExamplePlugin.java"
+  code={`VirtualBiome underground = VirtualBiome.builder()
+  .biome(customBiome)
+  .conditional((player, chunk) -> player.getWorld().getName().equals("realm"))
+  .positionCondition((player, position) -> {
+      // blockY() is the bottom of this 4x4x4 biome cell.
+      return position.blockY() < 32;
+  })
+  .build();
+
+PacketHandler.of(this)
+  .appendBiome(underground)
+  .register();`}
+/>
+
+The handler also provides a convenience overload when the condition is kept separately:
+
+```java
+packetHandler.appendBiome(
+    virtualBiome,
+    (player, position) -> position.quartX() == targetQuartX
+);
+```

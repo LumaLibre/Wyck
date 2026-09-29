@@ -1,0 +1,79 @@
+---
+title: Biome Registry
+description: Learn how to register and modify biomes in the Minecraft registry
+  using the BiomeRegistry API.
+sidebar:
+  order: 1
+slug: 3.x/registries/biome-registry
+---
+
+import SourceLink from "@/components/SourceLink.astro";
+import CodeTabs from "@/components/CodeTabs.astro";
+
+:::note
+Biomes cannot be removed from the Minecraft registry once they have been added.
+You may <SourceLink path="registry/BiomeRegistry.java">modify(CustomBiome)</SourceLink> existing biomes to reduce memory footprint.
+:::
+
+The <SourceLink path="registry/BiomeRegistry.java">BiomeRegistry</SourceLink> is the main API for registering and modifying biomes in the Minecraft registry.
+It provides methods for adding new biomes as well as modifying existing ones.
+Biomes can be registered with this interface at any point, except the bootstrap phase.
+
+Generally, biomes are registered and modified using the shorthand methods on the <SourceLink path="biome/Biome.java">CustomBiome</SourceLink> class,
+but you can also use the <SourceLink path="registry/BiomeRegistry.java">BiomeRegistry</SourceLink> directly if you need more control over the registration process.
+
+### Example Usage
+
+<CodeTabs
+  examples={[
+      {
+          label: "Shorthand",
+          filename: "ExamplePlugin.java",
+          lang: "java",
+          code:
+`import dev.wyck.biome.CustomBiome;
+import dev.wyck.keys.ResourceKey;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class ExamplePlugin extends JavaPlugin {
+  @Override
+  public void onEnable() {
+      CustomBiome customBiome = CustomBiome.builder()
+          .resourceKey(ResourceKey.of("test", "custombiome"))
+          .waterColor("#F5F2EB")
+          .register(); // Shorthand — builds and registers the biome
+  }
+}`,
+      },
+      {
+          label: "Explicit",
+          filename: "ExamplePlugin.java",
+          lang: "java",
+          code:
+`import dev.wyck.biome.CustomBiome;
+import dev.wyck.registry.BiomeRegistry;
+import dev.wyck.keys.ResourceKey;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class ExamplePlugin extends JavaPlugin {
+  @Override
+  public void onEnable() {
+      CustomBiome customBiome = CustomBiome.builder()
+          .resourceKey(ResourceKey.of("test", "custombiome"))
+          .waterColor("#F5F2EB")
+          .build();
+
+      BiomeRegistry registry = BiomeRegistry.registry();
+      registry.register(customBiome);
+  }
+}`,
+      },
+  ]}
+/>
+
+## Modifying Biomes
+
+Wyck supports modifying existing biomes after they've been registered.
+This means that you can change the visuals and gameplay elements of your biome on the fly.
+
+* See documentation on this [here](/3.x/biomes/custom-biome#modifying-biomes).

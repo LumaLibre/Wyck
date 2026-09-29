@@ -1,0 +1,32 @@
+---
+title: Introduction
+description: An introduction to world generation using Wyck, covering the basics
+  of biome generation.
+sidebar:
+  order: 1
+slug: 3.x/worldgen/intro
+---
+
+:::note
+[`BiomeGenerationSettings`](/3.x/worldgen/biomes/biome-generation-settings/) and subsequently all worldgen api from Wyck is not compatible
+with [`PacketHandler`](/3.x/renderers/packet-handler)s, you have to physically set your biomes in the world for them to modify world generation!
+:::
+
+Wyck exposes Minecraft's underlying world generation system.
+World generation takes place between biomes and dimensions where dimensions are responsible for the overall shape of the world and biomes are responsible for the details of how the world looks in a particular area.
+
+When we say `worldgen`, we are referring to how Minecraft blocks are placed in the world and how the game looks in a particular biome.
+This includes things like the terrain, vegetation, and structures that are generated in a biome.
+
+Unlike Bukkit's [`ChunkGenerator`](https://jd.papermc.io/paper/1.13.2/index.html?org/bukkit/generator/ChunkGenerator.html),
+terrain generation is inherently tied to biomes themselves, although you may reuse the same biome generation logic across multiple biomes.
+
+## Puzzle Pieces
+
+A biome's generation is described by three kinds of components, which Wyck wraps separately:
+
+* [**Carvers**](/3.x/worldgen/biomes/carvers/) cut caves, canyons, and ravines into already-generated terrain.
+* [**Configured features**](/3.x/worldgen/biomes/configured-features/) describe *what* to generate, such as an ore vein or a tree, by pairing a feature with its configuration.
+* [**Placed features**](/3.x/worldgen/biomes/placed-features/) wrap a configured feature with placement rules that decide *where* and *how often* it generates.
+
+These come together in [**biome generation settings**](/3.x/worldgen/biomes/biome-generation-settings/), which is attached to a custom biome.

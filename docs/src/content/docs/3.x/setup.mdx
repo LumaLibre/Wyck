@@ -1,0 +1,154 @@
+---
+title: Getting Started
+description: A guide to getting started with Wyck, including installation
+  instructions and a quick overview of the API.
+slug: 3.x/setup
+---
+
+import Versions from "@/components/Versions.astro";
+import {getLatestRelease} from "@/utils/versions.ts";
+import CodeTabs from "@/components/CodeTabs.astro";
+
+export const latestRelease = await getLatestRelease("3.");
+
+Wyck is a custom biome, dimension, and world generation API for [Paper](https://papermc.io/software/paper) servers without the use of datapacks.
+
+## Compatibility
+
+Wyck is compatible with **Minecraft 1.21.11, 26.1.2, 26.2** and requires a [Paper](https://papermc.io/software/paper) server running on **Java 25** or later.
+Wyck is also compatible with [Folia](https://papermc.io/software/folia), but it is up to you to ensure that the rest of your plugin is compatible with Folia if you choose to support it.
+
+## Installation
+
+Installation depends on your build system and whether you choose to use Wyck as a shaded dependency or external plugin dependency.
+This guide will assume you are using **Gradle (Kotlin DSL)** and will cover both shaded and external dependency methods.
+
+The latest stable release is [<Versions />](https://github.com/LumaLibre/Wyck/releases) and the latest snapshot is [<Versions channel="snapshot" />](https://repo.wyck.dev/#/snapshots/dev/wyck/Wyck).
+
+<CodeTabs
+  examples={[
+      {
+          label: "Plugin Loader",
+          filename: "ExampleLoader.java",
+          lang: "java",
+          code:
+`package dev.wyck.example;
+
+import io.papermc.paper.plugin.loader.PluginClasspathBuilder;
+import io.papermc.paper.plugin.loader.PluginLoader;
+import io.papermc.paper.plugin.loader.library.impl.MavenLibraryResolver;
+import org.eclipse.aether.artifact.DefaultArtifact;
+import org.eclipse.aether.graph.Dependency;
+import org.eclipse.aether.repository.RemoteRepository;
+
+public class ExampleLoader implements PluginLoader {
+  @Override
+  public void classloader(PluginClasspathBuilder classpathBuilder) {
+      MavenLibraryResolver resolver = new MavenLibraryResolver();
+      resolver.addDependency(new Dependency(new DefaultArtifact("dev.wyck:wyck:${latestRelease}"), null));
+      resolver.addRepository(new RemoteRepository.Builder("wyck", "default", "https://repo.wyck.dev/public/").build());
+      classpathBuilder.addLibrary(resolver);
+  }
+}`,
+      },
+      {
+          label: "Shaded",
+          filename: "build.gradle.kts",
+          lang: "kotlin",
+          code:
+`plugins {
+  id("com.gradleup.shadow") version "9.4.2"
+}
+
+repositories {
+  maven("https://repo.wyck.dev/public/")
+}
+
+dependencies {
+  implementation("dev.wyck:wyck:${latestRelease}")
+}
+
+tasks {
+  shadowJar {
+      val pack = "dev.wyck.example"
+      relocate("dev.wyck", "\$pack.wyck")
+      archiveClassifier.set("") // Remove the -all suffix
+  }
+
+  jar {
+      enabled = false // Disable the default jar task
+  }
+
+  build {
+      dependsOn(shadowJar) // Ensure the shadowJar task is run before the build
+  }
+}`,
+      },
+      {
+          label: "External",
+          filename: "build.gradle.kts",
+          lang: "kotlin",
+          code:
+`repositories {
+  maven("https://repo.wyck.dev/public/")
+}
+
+dependencies {
+  compileOnly("dev.wyck:wyck:${latestRelease}")
+}`,
+      },
+  ]}
+/>
+
+**If you are using Wyck in a plugin loader or as an external dependency** you will need to add Wyck as a plugin dependency in your `plugin.yml`, or `paper-plugin.yml`.
+
+<CodeTabs
+  examples={[
+      {
+          label: "Bukkit Plugin",
+          filename: "plugin.yml",
+          lang: "yaml",
+          code:
+`name: ExamplePlugin
+main: dev.wyck.example.ExamplePlugin
+version: 1.0-SNAPSHOT
+api-version: 1.21
+paper-plugin-loader: dev.wyck.example.ExampleLoader # Add this line if you're using Wyck in a plugin loader
+depend: [Wyck] # Or, add this line if you're using Wyck as an external dependency`,
+      },
+      {
+          label: "Paper Plugin",
+          filename: "paper-plugin.yml",
+          lang: "yaml",
+          code:
+`name: ExamplePlugin
+main: dev.wyck.example.ExamplePlugin
+bootstrapper: dev.wyck.example.ExampleBootstrapper
+version: 1.0-SNAPSHOT
+api-version: 1.21
+loader: dev.wyck.example.ExampleLoader # Add this line if you're using Wyck in a plugin loader
+# Or, add these lines if you're using Wyck as an external dependency:
+dependencies:
+  bootstrap:
+    Wyck:
+      load: BEFORE
+      required: true
+      join-classpath: true
+  server:
+    Wyck:
+      load: BEFORE
+      required: true
+      join-classpath: true`,
+      },
+  ]}
+/>
+
+Wyck external dependency plugin can be found on our GitHub releases or [Modrinth](https://modrinth.com/plugin/biomesapi).
+
+### Modules
+
+Want to reduce the size of your final `jar`? See our docs about our [modules](/3.x/misc/modules/)!
+
+## Leave a Star, Please!
+
+If you find Wyck useful, please consider leaving a star on our [GitHub repository](https://github.com/LumaLibre/Wyck).

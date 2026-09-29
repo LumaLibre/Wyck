@@ -1,0 +1,57 @@
+---
+title: Structure Types
+description: Learn about the vanilla structure types Wyck wraps and how to create each one.
+slug: 3.x/worldgen/structures/structure-types
+---
+
+import CodeBlock from "@/components/CodeBlock.astro";
+import SourceLink from "@/components/SourceLink.astro";
+
+:::note
+Jigsaw structures have [their own page](/3.x/worldgen/structures/jigsaw-structures/).
+:::
+
+Minecraft has sixteen structure types, listed in <SourceLink path="worldgen/structure/StructureType.java">StructureType</SourceLink>.
+Each has a wrapper, a <SourceLink path="worldgen/structure/types/DefinedStructure.java">DefinedStructure</SourceLink>
+with the [shared settings](/3.x/worldgen/structures/structures/#structure-settings).
+
+## Simple Structures
+
+Simple structures are structures that do not have a configuration in Vanilla Minecraft.
+
+<CodeBlock
+  lang="java"
+  filename="ExamplePlugin.java"
+  code={`import dev.wyck.keys.ResourceKey;
+import dev.wyck.worldgen.structure.Structure;
+import dev.wyck.worldgen.structure.StructureType;
+import dev.wyck.worldgen.structure.types.SimpleStructure;
+
+// Using the builder method on Structure
+Structure.swampHut(settings)
+  .resourceKey(ResourceKey.of("wyck", "witch_hut"))
+  .build()
+  .register();
+
+// Or by type
+SimpleStructure.of(ResourceKey.of("wyck", "sand_temple"), StructureType.DESERT_PYRAMID, settings)
+  .register();`}
+/>
+
+## Structures w/ Configurations
+
+An example of a structure with a configuration
+
+<CodeBlock
+  lang="java"
+  filename="ExamplePlugin.java"
+  code={`import dev.wyck.worldgen.structure.Structure;
+import dev.wyck.worldgen.structure.types.RuinedPortalStructure;
+import dev.wyck.worldgen.structure.types.RuinedPortalStructure.Placement;
+import dev.wyck.worldgen.structure.types.RuinedPortalStructure.Setup;
+
+RuinedPortalStructure portal = Structure.ruinedPortal(settings)
+  .setup(new Setup(Placement.UNDERGROUND, 1.0F, 0.2F, false, false, true, false, 0.5F))
+  .setup(new Setup(Placement.ON_LAND_SURFACE, 0.5F, 0.2F, false, false, true, false, 0.5F))
+  .build();`}
+/>

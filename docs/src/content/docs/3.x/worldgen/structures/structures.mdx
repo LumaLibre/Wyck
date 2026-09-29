@@ -1,0 +1,107 @@
+---
+title: Structures
+description: Structures in Wyck.
+slug: 3.x/worldgen/structures/structures
+---
+
+import CodeBlock from "@/components/CodeBlock.astro";
+import SourceLink from "@/components/SourceLink.astro";
+
+A <SourceLink path="worldgen/structure/Structure.java">Structure</SourceLink> is a naturally generated formation in Minecraft. Villages,
+desert pyramids, and ruined portals are all examples of structures. Wyck lets you reference vanilla's structures, read (decode) and edit them, and author your own,
+including full jigsaw structures built from `.nbt` files.
+
+Getting a structure into a world takes `3 steps`:
+
+* A **structure**, which says *what* generates and *which biomes* it may generate in.
+* A [**structure set**](/3.x/worldgen/structures/structure-sets/), which says *how often* and *how far apart* it generates.
+* A biome from the structure's biome list that the dimension actually generates.
+
+## References and Defined Structures
+
+A structure is either a **reference** to one already in the registry, or a **defined** structure whose contents are present.
+
+The <SourceLink path="worldgen/structure/Structures.java">Structures</SourceLink> catalog holds a reference to every vanilla
+structure.
+
+<CodeBlock
+  lang="java"
+  filename="ExamplePlugin.java"
+  code={`import dev.wyck.worldgen.structure.Structure;
+import dev.wyck.worldgen.structure.Structures;
+import dev.wyck.worldgen.structure.types.DefinedStructure;
+import dev.wyck.worldgen.structure.types.JigsawStructure;
+
+// A reference, pointing at minecraft:village_plains
+Structure reference = Structures.VILLAGE_PLAINS;
+
+// The registered structure, read into Wyck objects. Villages are jigsaw structures.
+JigsawStructure village = (JigsawStructure) Structures.VILLAGE_PLAINS.wrap();
+
+// Every decoded or authored structure is a DefinedStructure, whatever its type
+DefinedStructure igloo = (DefinedStructure) Structures.IGLOO.wrap();`}
+/>
+
+Every vanilla structure type has its own wrapper, covered in [Structure Types](/3.x/worldgen/structures/structure-types/) and
+[Jigsaw Structures](/3.x/worldgen/structures/jigsaw-structures/). A structure type added by a datapack or another plugin decodes
+into a <SourceLink path="worldgen/structure/types/ComposedStructure.java">ComposedStructure</SourceLink>, which exposes its
+settings and carries the rest of the structure.
+
+## Structure Settings
+
+<CodeBlock
+  lang="java"
+  filename="ExamplePlugin.java"
+  code={`import dev.wyck.biome.Biome;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.tags.TagSet;
+import dev.wyck.worldgen.Decoration;
+import dev.wyck.worldgen.structure.StructureSettings;
+import dev.wyck.worldgen.structure.TerrainAdaptation;
+
+StructureSettings settings = StructureSettings.builder(TagSet.ofBiomes(Biome.reference(ResourceKey.of("wyck", "ancient_meadow"))))
+  .step(Decoration.SURFACE_STRUCTURES)
+  .terrainAdaptation(TerrainAdaptation.BEARD_THIN)
+  .build();`}
+/>
+
+## Editing a Structure
+
+Defined structures are immutable. `withSettings(...)` and `withResourceKey(...)` return edited copies, so a vanilla
+structure can be copied into your own biome without knowing its type.
+
+<CodeBlock
+  lang="java"
+  filename="ExamplePlugin.java"
+  code={`import dev.wyck.biome.Biome;
+import dev.wyck.keys.ResourceKey;
+import dev.wyck.tags.TagSet;
+import dev.wyck.worldgen.structure.Structures;
+import dev.wyck.worldgen.structure.types.DefinedStructure;
+
+DefinedStructure temple = ((DefinedStructure) Structures.DESERT_PYRAMID.wrap())
+  .withSettings(settings -> settings.toBuilder()
+      .biomes(TagSet.ofBiomes(Biome.reference(ResourceKey.of("wyck", "ancient_meadow"))))
+      .build())
+  .withResourceKey(ResourceKey.of("wyck", "meadow_temple"));
+
+temple.register();`}
+/>
+
+## Creating a Structure
+
+<SourceLink path="worldgen/structure/Structure.java">Structure</SourceLink> has a builder method for every vanilla structure type:
+
+<CodeBlock
+  lang="java"
+  filename="ExamplePlugin.java"
+  code={`import dev.wyck.keys.ResourceKey;
+import dev.wyck.worldgen.structure.Structure;
+
+Structure.igloo(settings)
+  .resourceKey(ResourceKey.of("wyck", "meadow_igloo"))
+  .build()
+  .register();`}
+/>
+
+Test a registered structure with `/place structure <key>` and find generated ones with `/locate structure <key>`.

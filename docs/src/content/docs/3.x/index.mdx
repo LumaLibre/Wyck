@@ -1,0 +1,48 @@
+---
+title: Wyck Docs
+description: Documentation for Wyck, a Minecraft plugin API for creating custom
+  biomes, worldgen, and dimensions without datapacks.
+head:
+  - tag: title
+    content: Wyck Docs
+  - tag: style
+    content: |
+      .hero-html {
+        --size: 12rem;
+        font-size: var(--size);
+        justify-content: center;
+        line-height: var(--size);
+      }
+template: splash
+editUrl: false
+lastUpdated: false
+hero:
+  tagline: Wyck is a custom biome, dimension, and worldgen API for Paper servers
+    without the use of datapacks.
+  image:
+    file: ../../../assets/3.x/wyck_head.png
+  actions:
+    - text: Getting Started
+      link: /3.x/setup/
+      icon: rocket
+    - text: Github
+      link: https://github.com/LumaLibre/Wyck
+      icon: right-arrow
+      variant: minimal
+slug: 3.x
+---
+
+import {Card, CardGrid} from '@astrojs/starlight/components'
+
+## Guides
+
+<CardGrid>
+  <Card title="Getting Started" icon="puzzle">
+    Check the [getting started guide](/3.x/setup/) for installation
+    instructions.
+  </Card>
+
+  <Card title="Modrinth" icon="rocket">
+    Wyck's external dependency plugin is available on [Modrinth](https://modrinth.com/plugin/biomesapi).
+  </Card>
+</CardGrid>

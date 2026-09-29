@@ -1,12 +1,14 @@
 ---
 import { getLatestRelease, getLatestSnapshot } from "@/utils/versions.ts";
+import { archivedVersion } from "@/utils/links.ts";
 
 interface Props {
     channel?: "release" | "snapshot";
 }
 
 const { channel = "release" } = Astro.props;
+const prefix = archivedVersion(Astro.url.pathname)?.release;
 const version =
-    channel === "snapshot" ? await getLatestSnapshot() : await getLatestRelease();
+    channel === "snapshot" ? await getLatestSnapshot(prefix) : await getLatestRelease(prefix);
 ---
 <code>{version}</code>

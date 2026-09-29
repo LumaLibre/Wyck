@@ -1,0 +1,60 @@
+---
+title: Level Spawners
+description: A basic tutorial on LevelSpawners in Wyck.
+slug: 3.x/worldgen/levels/level-spawner
+---
+
+import CodeBlock from "@/components/CodeBlock.astro";
+import SourceLink from "@/components/SourceLink.astro";
+
+<SourceLink path="level/entity/LevelSpawner.java">LevelSpawner</SourceLink>s are used to control
+the spawning of entities around players or specific areas in a world. These are completely separate from [`BiomeSpawner`](/3.x/wrapper/biome-spawner)s
+and are tied directly to the world itself. By default, <SourceLink path="level/LevelCreator.java">LevelCreator</SourceLink> will not have
+any spawners attached to it.
+
+In Wyck, you can reference existing built-in <SourceLink path="level/entity/LevelSpawner.java">LevelSpawner</SourceLink>s
+or author your own.
+
+## SpawnTick (For Custom Spawners)
+
+A <SourceLink path="level/entity/SpawnTick.java">SpawnTick</SourceLink> is a single tick of spawning for a given
+world. It contains the world itself and a boolean indicating whether or not to spawn hostile mobs.
+
+### Example Usage
+
+<CodeBlock
+  lang="java"
+  filename="ExamplePlugin.java"
+  code={
+`import dev.wyck.keys.ResourceKey;
+import dev.wyck.level.LevelCreator;
+import dev.wyck.level.entity.LevelSpawner;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class ExamplePlugin extends JavaPlugin {
+  @Override
+  public void onEnable() {
+      // Referencing an existing LevelSpawner
+      LevelSpawner phantomSpawner = LevelSpawner.phantom();
+
+      // Creating a custom LevelSpawner
+      LevelSpawner customSpawner = LevelSpawner.custom((world, spawnEnemies) -> {
+          for (Player player : world.getPlayers()) {
+              player.getScheduler().run(this, _ -> {
+                  EntityType type = spawnEnemies ? EntityType.ZOMBIE : EntityType.PIG;
+                  world.spawnEntity(player.getLocation(), type);
+              }, null);
+          }
+      });
+
+      // Adding the spawners to a LevelCreator
+      LevelCreator level = LevelCreator.builder()
+          .levelKey(ResourceKey.of("test", "example"))
+          .addSpawner(phantomSpawner)
+          .addSpawner(customSpawner)
+          .build();
+  }
+}`}
+/>

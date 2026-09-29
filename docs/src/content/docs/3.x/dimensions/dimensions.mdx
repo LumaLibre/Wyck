@@ -1,0 +1,115 @@
+---
+title: Creating Dimensions
+description: Learn how to define custom dimensions with Wyck
+sidebar:
+  order: 1
+slug: 3.x/dimensions/dimensions
+---
+
+import CodeBlock from "@/components/CodeBlock.astro";
+import SourceLink from "@/components/SourceLink.astro";
+
+In Wyck, `dimension_type`s are represented as <SourceLink path="level/dimension/Dimension.java">Dimension</SourceLink>s.
+These are used to define the properties of a dimension, such as its environment attributes, whether it has skylight, and its coordinate scale.
+
+## What is a Dimension?
+
+To be clear, a <SourceLink path="level/dimension/Dimension.java">Dimension</SourceLink> in Wyck is not a world.
+A dimension type is a set of properties that define how a world behaves, and can be used to create multiple worlds with the same properties,
+kind of like a blueprint! Vanilla refers to these as `dimension_type`s.
+
+### Creating a Dimension
+
+<CodeBlock
+  lang="java"
+  filename="ExamplePlugin.java"
+  code={
+`import dev.wyck.keys.ResourceKey;
+import dev.wyck.level.dimension.Dimension;
+import dev.wyck.environment.BedRule;
+import dev.wyck.environment.attribute.EnvironmentAttributes;
+import dev.wyck.level.dimension.WorldClock;
+import dev.wyck.level.dimension.CardinalLightType;
+import dev.wyck.level.dimension.Infiniburn;
+import dev.wyck.level.dimension.Skybox;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.Tag;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class ExamplePlugin extends JavaPlugin {
+  @Override
+  public void onEnable() {
+      Dimension.builder()
+          .resourceKey(ResourceKey.of("test:dimension"))
+          .ambientLight(0.1f) // 10% ambient light
+          .hasSkyLight(true)
+          .defaultClock(WorldClock.OVERWORLD)
+          .hasCeiling(false)
+          .hasFixedTime(false)
+          .hasEnderDragonFight(false)
+          .skybox(Skybox.END)
+          .infiniburn(Infiniburn.of(Tag.SAND)) // Make sand burn infinitely
+          .minY(-64)
+          .height(800)
+          .logicalHeight(800)
+          .cardinalLightType(CardinalLightType.DEFAULT)
+          .attribute(EnvironmentAttributes.FOG_COLOR, "#FFAA00")
+          .attribute(EnvironmentAttributes.SKY_COLOR, "#0000FF")
+          .attribute(EnvironmentAttributes.BED_RULE, BedRule.builder()
+              .setErrorMessage(Component.text("No sleeping!").color(NamedTextColor.RED))
+              .setCanSleep(BedRule.Rule.NEVER)
+              .setCanSetSpawn(BedRule.Rule.WHEN_DARK)
+              .build()
+          )
+          .attribute(EnvironmentAttributes.STAR_BRIGHTNESS, 0.9f) // 90% star brightness
+          .register(); // Build and register the dimension
+  }
+}`}
+/>
+
+## World Clocks & Timelines
+
+A dimension controls how time behaves through three related properties:
+
+* **`hasFixedTime(boolean)`**: when `true`, the sun and moon freeze in place (like the End or Nether). Set the actual
+  frozen time-of-day on the worlds created from this dimension.
+* **`defaultClock(WorldClock)`**: a <SourceLink path="level/dimension/WorldClock.java">WorldClock</SourceLink>
+  drives the day/night cycle. Use the built-ins `WorldClock.OVERWORLD` (a normal cycle) or `WorldClock.THE_END`
+  (fixed), or `WorldClock.of("namespace:key")` to reference a custom one.
+* **`timelines(TimelineSet)`**: a <SourceLink path="level/dimension/TimelineSet.java">TimelineSet</SourceLink> lists
+  the scheduled "timelines" (day, moon phases, villager schedules, ...) that run in the dimension.
+
+<CodeBlock
+  lang="java"
+  filename="ExamplePlugin.java"
+  code={
+`import dev.wyck.level.dimension.Dimension;
+import dev.wyck.level.dimension.TimelineSet;
+import dev.wyck.level.dimension.WorldClock;
+
+// A dimension that runs the normal overworld day/night cycle and schedules.
+Dimension.builder()
+  .hasFixedTime(false)
+  .defaultClock(WorldClock.OVERWORLD)
+  .timelines(TimelineSet.OVERWORLD) // day + moon + villager_schedule
+  // ...other properties
+  .register();
+
+// A timeless dimension: frozen sky, no scheduled timelines.
+Dimension.builder()
+  .hasFixedTime(true)
+  .defaultClock(WorldClock.THE_END)
+  .timelines(TimelineSet.EMPTY)
+  // ...other properties
+  .register();
+
+// A custom set of timelines by key.
+TimelineSet custom = TimelineSet.of(TimelineSet.OVERWORLD_DAY, TimelineSet.MOON);`}
+/>
+
+## Using Dimensions
+
+Once you've created your dimension, you can use it to create worlds with the properties you've defined.
+Learn more about <SourceLink path="level/LevelCreator.java">LevelCreator</SourceLink> and how to use them
+[here](/3.x/dimensions/level-creators).

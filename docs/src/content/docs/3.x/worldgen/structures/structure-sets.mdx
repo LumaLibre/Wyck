@@ -1,0 +1,83 @@
+---
+title: Structure Sets
+description: Learn how structure sets are used.
+slug: 3.x/worldgen/structures/structure-sets
+---
+
+import CodeBlock from "@/components/CodeBlock.astro";
+import SourceLink from "@/components/SourceLink.astro";
+
+A <SourceLink path="worldgen/structure/StructureSet.java">StructureSet</SourceLink>
+groups one or more weighted structures with a `placement`, which decides which chunks the set tries to generate in.
+
+The <SourceLink path="worldgen/structure/StructureSets.java">StructureSets</SourceLink> catalog holds a typed reference to every
+vanilla set, such as `StructureSets.VILLAGES`.
+
+## Creating a Structure Set
+
+<CodeBlock
+  lang="java"
+  filename="ExamplePlugin.java"
+  code={`import dev.wyck.keys.ResourceKey;
+import dev.wyck.worldgen.structure.StructureSet;
+import dev.wyck.worldgen.structure.placement.RandomSpreadPlacement;
+import dev.wyck.worldgen.structure.types.ComposedStructureSet;
+
+// One structure
+StructureSet.of(temple, RandomSpreadPlacement.of(32, 8, 184729301))
+  .toBuilder()
+  .resourceKey(ResourceKey.of("wyck", "temples"))
+  .build()
+  .register();
+
+// Several structures, chosen by weight wherever the set generates
+ComposedStructureSet.builder()
+  .resourceKey(ResourceKey.of("wyck", "ruins"))
+  .structure(smallRuin, 3)
+  .structure(largeRuin, 1)
+  .placement(RandomSpreadPlacement.of(24, 6, 55120933))
+  .build()
+  .register();`}
+/>
+
+## Random Spread Placement
+
+<SourceLink path="worldgen/structure/placement/RandomSpreadPlacement.java">RandomSpreadPlacement</SourceLink> is the
+placement most vanilla structures use.
+
+<CodeBlock
+  lang="java"
+  filename="ExamplePlugin.java"
+  code={`import dev.wyck.worldgen.structure.RandomSpreadType;
+import dev.wyck.worldgen.structure.StructureSets;
+import dev.wyck.worldgen.structure.placement.RandomSpreadPlacement;
+import dev.wyck.worldgen.structure.placement.StructurePlacement;
+
+RandomSpreadPlacement placement = RandomSpreadPlacement.builder()
+  .spacing(40)
+  .separation(12)
+  .salt(912830471)
+  .spreadType(RandomSpreadType.TRIANGULAR)
+  .frequency(0.5F)
+  .exclusionZone(StructurePlacement.ExclusionZone.of(StructureSets.VILLAGES, 8))
+  .build();`}
+/>
+
+## Concentric Rings Placement
+
+<SourceLink path="worldgen/structure/placement/ConcentricRingsPlacement.java">ConcentricRingsPlacement</SourceLink> is
+what strongholds use.
+
+<CodeBlock
+  lang="java"
+  filename="ExamplePlugin.java"
+  code={`import dev.wyck.keys.ResourceKey;
+import dev.wyck.tags.TagSet;
+import dev.wyck.worldgen.structure.placement.ConcentricRingsPlacement;
+
+// distance to the first ring, spread within a ring, total count, preferred biomes
+ConcentricRingsPlacement rings = ConcentricRingsPlacement.of(
+  32, 3, 128,
+  TagSet.ofBiomeTag(ResourceKey.minecraft("stronghold_biased_to"))
+);`}
+/>

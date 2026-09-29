@@ -4,6 +4,7 @@ on:
   workflow_run:
     workflows: ["Publish Snapshot", "Publish"]
     types: [completed]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -13,12 +14,12 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: Checkout repository using git
         uses: actions/checkout@v6
         with:
-          ref: ${{ github.event.workflow_run.head_sha }}
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
 
       - name: Set up JDK
         uses: actions/setup-java@v4
@@ -37,6 +38,21 @@ jobs:
           rm -rf docs/public/javadoc
           mkdir -p docs/public/javadoc
           cp -r api/build/docs/javadoc/. docs/public/javadoc/
+
+      - name: Checkout 3.x
+        uses: actions/checkout@v6
+        with:
+          ref: ver/3.x
+          path: v3
+
+      - name: Generate 3.x API javadoc
+        working-directory: v3
+        run: "./gradlew :api:javadoc"
+
+      - name: Copy 3.x javadoc into Astro public dir
+        run: |
+          mkdir -p docs/public/javadoc/3.x
+          cp -r v3/api/build/docs/javadoc/. docs/public/javadoc/3.x/
 
       - name: Install, build, and upload your site
         uses: withastro/action@v6
