@@ -27,3 +27,7 @@ jobs:
           REPO_USERNAME: ${{ secrets.WYCK_USERNAME }}
           REPO_PASSWORD: ${{ secrets.WYCK_PASSWORD }}
 
+      - name: Publish to Modrinth
+        run: "./gradlew :paper:modrinth"
+        env:
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
