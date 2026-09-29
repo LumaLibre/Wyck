@@ -6,10 +6,10 @@ slug: 3.x/setup
 ---
 
 import Versions from "@/components/Versions.astro";
-import {getLatestRelease} from "@/utils/versions.ts";
+import {getLatestInstallable} from "@/utils/versions.ts";
 import CodeTabs from "@/components/CodeTabs.astro";
 
-export const latestRelease = await getLatestRelease("3.");
+export const latestRelease = await getLatestInstallable("3.");
 
 Wyck is a custom biome, dimension, and world generation API for [Paper](https://papermc.io/software/paper) servers without the use of datapacks.
 

@@ -3,6 +3,7 @@ const DEFAULT_REF = "main";
 const SRC_ROOT = "api/src/main/java/dev/wyck";
 const JAVADOC_BASE = "https://wyck.dev/javadoc";
 const PACKAGE_ROOT = "dev/wyck";
+const CURRENT_RELEASE = "4.";
 
 export interface DocsVersion {
     javadoc: string;
@@ -15,6 +16,10 @@ const ARCHIVED_VERSIONS: Record<string, DocsVersion> = {
 
 export function archivedVersion(pathname: string): DocsVersion | undefined {
     return ARCHIVED_VERSIONS[pathname.split("/")[1] ?? ""];
+}
+
+export function releasePrefix(pathname: string): string {
+    return archivedVersion(pathname)?.release ?? CURRENT_RELEASE;
 }
 
 export interface RepoFileOptions {

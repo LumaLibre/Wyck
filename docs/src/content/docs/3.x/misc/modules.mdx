@@ -4,9 +4,9 @@ description: Only including what you need from Wyck for your project.
 slug: 3.x/misc/modules
 ---
 
-import {getLatestRelease} from "@/utils/versions.ts";
+import {getLatestInstallable} from "@/utils/versions.ts";
 
-export const latestSnapshot = await getLatestRelease("3.");
+export const latestSnapshot = await getLatestInstallable("3.");
 
 Wyck includes a few publications allowing you to pick and choose what modules you need from Wyck and leaving out
 any unnecessary bloat. For example, if you have a plugin that only targets **Minecraft 26.2** and doesn't require Wyck's

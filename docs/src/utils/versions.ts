@@ -31,6 +31,11 @@ export async function getLatestRelease(prefix?: string): Promise<string> {
     }
 }
 
+export async function getLatestInstallable(prefix: string): Promise<string> {
+    const release = await getLatestRelease(prefix);
+    return release === FALLBACK ? getLatestSnapshot(prefix) : release;
+}
+
 /**
  * Latest dev build: newest version deployed to the Reposilite repo.
  * @param prefix only consider versions starting with this prefix. ex: "3 "

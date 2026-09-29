@@ -3,9 +3,9 @@ title: Wyck Modules
 description: Only including what you need from Wyck for your project.
 ---
 
-import {getLatestRelease} from "@/utils/versions.ts";
+import {getLatestInstallable} from "@/utils/versions.ts";
 
-export const latestSnapshot = await getLatestRelease();
+export const latestSnapshot = await getLatestInstallable("4.");
 
 Wyck includes a few publications allowing you to pick only the modules your plugin needs. The current runtime targets
 **Minecraft 26.3**. If your plugin does not decode existing Minecraft values, it can use `wyck-api` and `wyck-runtime`
