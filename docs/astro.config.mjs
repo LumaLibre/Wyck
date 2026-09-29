@@ -28,6 +28,7 @@ export default defineConfig({
       components: {
         Sidebar: './src/components/Sidebar.astro',
         ThemeSelect: './src/components/ThemeSelect.astro',
+        SocialIcons: './src/components/SocialIcons.astro',
       },
       plugins: [
         starlightThemeVintage(),

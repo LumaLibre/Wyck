@@ -33,6 +33,10 @@ export function repoFile(path: string, options: RepoFileOptions = {}): string {
     return typeof line === "number" ? `${url}#L${line}` : url;
 }
 
+export function javadocIndex(version?: DocsVersion): string {
+    return `${version?.javadoc ?? JAVADOC_BASE}/index.html`;
+}
+
 export interface JavadocLinkOptions {
     member?: string;
     root?: boolean;
