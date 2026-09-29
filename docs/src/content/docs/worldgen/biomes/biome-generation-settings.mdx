@@ -8,7 +8,7 @@ import SourceLink from "@/components/SourceLink.astro";
 import CodeTabs from "@/components/CodeTabs.astro";
 
 <SourceLink path="biome/BiomeGenerationSettings.java">BiomeGenerationSettings</SourceLink> is what binds
-[`carvers`](/worldgen/carvers) and [`placed features`](/worldgen/placed-features) to a biome.
+[`carvers`](/worldgen/biomes/carvers/) and [`placed features`](/worldgen/biomes/placed-features/) to a biome.
 
 ## Generation Steps
 
@@ -37,11 +37,11 @@ public class ExamplePlugin extends JavaPlugin {
     public void onEnable() {
         BiomeGenerationSettings generation = BiomeGenerationSettings.builder()
             // carve caves using vanilla's cave carver
-            .addCarver(Carvers.CAVE)
+            .carver(Carvers.CAVE)
             // reference a vanilla placed ore feature
-            .addFeature(Decoration.UNDERGROUND_ORES, PlacedFeatures.ORE_DIAMOND)
+            .feature(Decoration.UNDERGROUND_ORES, PlacedFeatures.ORE_DIAMOND)
             // author a surface flower placement
-            .addFeature(Decoration.VEGETAL_DECORATION, PlacedFeature.of(
+            .feature(Decoration.VEGETAL_DECORATION, PlacedFeature.of(
                 Features.FLOWER_DEFAULT,
                 PlacementModifier.rarityFilter(8),
                 PlacementModifier.inSquare(),

@@ -113,8 +113,8 @@ BlockPredicate onSand = BlockPredicate.matchingBlocks()
     .build();
 
 PlacedFeature placed = PlacedFeature.builder()
-    .feature(configuredFeature) // your ConfiguredFeature
-    .modifier(PlacementModifier.count(4))
+    .feature(configuredFeature) // your Feature
+    .modifier(PlacementModifier.count(IntProvider.constant(4)))
     .modifier(PlacementModifier.inSquare())
     .modifier(PlacementModifier.blockPredicateFilter(onSand)) // only over sand
     .modifier(PlacementModifier.biomeFilter())

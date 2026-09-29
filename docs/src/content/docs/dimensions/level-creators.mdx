@@ -21,6 +21,7 @@ import dev.wyck.level.dimension.Dimension;
 import dev.wyck.worldgen.biome.BiomeSource;
 import dev.wyck.worldgen.noise.Noise;
 import dev.wyck.worldgen.chunk.ChunkGenerator;
+import dev.wyck.worldgen.chunk.NoiseBasedChunkGenerator;
 import dev.wyck.level.entity.LevelSpawner;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -31,7 +32,7 @@ public class ExamplePlugin extends JavaPlugin {
         Dimension dimension = Dimension.reference(ResourceKey.minecraft("the_end"));
 
         // A quick example of a chunk generator with the biomes of the nether and noise generation of the overworld.
-        ChunkGenerator chunkGenerator = ChunkGenerator.of(
+        ChunkGenerator chunkGenerator = NoiseBasedChunkGenerator.of(
             BiomeSource.nether(),
             Noise.overworld()
         );

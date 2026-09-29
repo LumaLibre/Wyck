@@ -11,13 +11,13 @@ import CodeTabs from "@/components/CodeTabs.astro";
 
 :::note
 
-<SourceLink path="biome/entity/BiomeSpawner.java">BiomeSpawner</SourceLink>s modify server-sided behavior and must be physically set in the world.
+<SourceLink path="biome/entity/MobSpawnSettings.java">MobSpawnSettings</SourceLink> modify server-sided behavior and must be physically set in the world.
 This means that this API is not compatible with [`PacketHandlers`](/renderers/packet-handler/).
 
 :::
 
-Wyck provides a built-in system for customizing mob spawns inside custom biomes. <SourceLink path="biome/entity/BiomeSpawner.java">BiomeSpawner</SourceLink>s
-inform the server what mobs to spawn, how many, how likely, and how many concurrently can spawn.
+Wyck provides a built-in system for customizing mob spawns inside custom biomes. <SourceLink path="biome/entity/MobSpawnSettings.java">MobSpawnSettings</SourceLink>, set through the
+`NATURAL_MOB_SPAWNS` [environment attribute](/components/environment-attributes/), inform the server what mobs to spawn, how many, how likely, and how many concurrently can spawn.
 
 ### Example Usage
 <CodeTabs
@@ -29,9 +29,8 @@ inform the server what mobs to spawn, how many, how likely, and how many concurr
             code:
 `import dev.wyck.biome.CustomBiome;
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.biome.entity.BiomeSpawner;
-import dev.wyck.biome.entity.MobCategory;
-import dev.wyck.biome.entity.data.NaturalSpawner;
+import dev.wyck.biome.entity.MobSpawnSettings;
+import dev.wyck.environment.attribute.EnvironmentAttributes;
 import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -39,16 +38,15 @@ public class ExamplePlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         // A biome that will only ever spawn large quantities of pigs.
-        BiomeSpawner spawner = BiomeSpawner.builder()
-            .creatureGenerationProbability(0.1f)
-            .spawner(MobCategory.CREATURE, 100, NaturalSpawner.of(EntityType.PIG, 4, 12))
+        MobSpawnSettings spawner = MobSpawnSettings.builder()
+            .addSpawn(EntityType.PIG, 100, 4, 12)
             .build();
 
         CustomBiome.builder()
             .resourceKey(ResourceKey.of("test", "custombiome"))
             .waterColor("#F5F2EB")
             .grassColor("#DBE9EC")
-            .biomeSpawner(spawner)
+            .attribute(EnvironmentAttributes.NATURAL_MOB_SPAWNS, spawner)
             .register();
     }
 }`,
@@ -60,9 +58,8 @@ public class ExamplePlugin extends JavaPlugin {
             code:
 `import dev.wyck.biome.CustomBiome;
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.biome.entity.BiomeSpawner;
-import dev.wyck.biome.entity.MobCategory;
-import dev.wyck.biome.entity.data.NaturalSpawner;
+import dev.wyck.biome.entity.MobSpawnSettings;
+import dev.wyck.environment.attribute.EnvironmentAttributes;
 import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -70,13 +67,13 @@ public class ExamplePlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         // A biome that will spawn no mobs.
-        BiomeSpawner spawner = BiomeSpawner.empty();
+        MobSpawnSettings spawner = MobSpawnSettings.NO_SPAWNS;
 
         CustomBiome.builder()
             .resourceKey(ResourceKey.of("test", "custombiome"))
             .waterColor("#F5F2EB")
             .grassColor("#DBE9EC")
-            .biomeSpawner(spawner)
+            .attribute(EnvironmentAttributes.NATURAL_MOB_SPAWNS, spawner)
             .register();
     }
 }`,
@@ -86,7 +83,7 @@ public class ExamplePlugin extends JavaPlugin {
 
 ## Mob Spawn Costs
 
-Setting <SourceLink path="biome/entity/data/SpawnCost.java" line={13}>charge</SourceLink> **lower** and <SourceLink path="biome/entity/data/SpawnCost.java" line={13}>energyBudget</SourceLink> **higher** allows more of a specific mob to spawn concurrently.
+Setting <SourceLink path="biome/entity/MobSpawnCost.java">charge</SourceLink> **lower** and <SourceLink path="biome/entity/MobSpawnCost.java">energyBudget</SourceLink> **higher** allows more of a specific mob to spawn concurrently.
 
 ### Example Usage
 <CodeBlock
@@ -94,29 +91,26 @@ Setting <SourceLink path="biome/entity/data/SpawnCost.java" line={13}>charge</So
     filename="ExamplePlugin.java"
     code={`import dev.wyck.biome.CustomBiome;
 import dev.wyck.keys.ResourceKey;
-import dev.wyck.biome.entity.BiomeSpawner;
-import dev.wyck.biome.entity.MobCategory;
-import dev.wyck.biome.entity.data.NaturalSpawner;
-import dev.wyck.biome.entity.data.SpawnCost;
+import dev.wyck.biome.entity.MobSpawnSettings;
+import dev.wyck.environment.attribute.EnvironmentAttributes;
 import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ExamplePlugin extends JavaPlugin {
     @Override
     public void onEnable() {
-        BiomeSpawner spawner = BiomeSpawner.builder()
-            .creatureGenerationProbability(0.1f)
-            .spawner(MobCategory.CREATURE, 100, NaturalSpawner.of(EntityType.PIG, 4, 12))
-            .spawner(MobCategory.CREATURE, 100, NaturalSpawner.of(EntityType.COW, 4, 12))
+        MobSpawnSettings spawner = MobSpawnSettings.builder()
+            .addSpawn(EntityType.PIG, 100, 4, 12)
+            .addSpawn(EntityType.COW, 100, 4, 12)
             // Allows cows to spawn faster in this biome.
-            .spawnCost(EntityType.COW, SpawnCost.of(25, 100))
+            .addMobSpawnCost(EntityType.COW, 25, 100)
             .build();
 
         CustomBiome.builder()
             .resourceKey(ResourceKey.of("test", "custombiome"))
             .waterColor("#F5F2EB")
             .grassColor("#DBE9EC")
-            .biomeSpawner(spawner)
+            .attribute(EnvironmentAttributes.NATURAL_MOB_SPAWNS, spawner)
             .register();
     }
 }`}

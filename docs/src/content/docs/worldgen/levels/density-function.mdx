@@ -16,7 +16,7 @@ the <SourceLink path="worldgen/function/DensityFunction.java">DensityFunction</S
 :::tip
 
 All built-in density functions are available in the <SourceLink path="worldgen/function/DensityFunctions.java">DensityFunctions</SourceLink> class,
-and any function registered from a datapack or external source can be referenced using <SourceLink path="level/noise/function/DensityFunction.java#reference">DensityFunction.reference(ResourceKey)</SourceLink>.
+and any function registered from a datapack or external source can be referenced using <SourceLink path="worldgen/function/DensityFunction.java" member="reference(dev.wyck.keys.ResourceKey)">DensityFunction.reference(ResourceKey)</SourceLink>.
 
 :::
 
@@ -35,21 +35,19 @@ public class ExamplePlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         // Referencing existing density functions
-        DensityFunction overworldContinents = DensityFunctions.CONTINENTS;
-        DensityFunction overworldErosion = DensityFunction.reference(ResourceKey.of("minecraft:overworld/erosion")); // or do it this way!
+        DensityFunction overworldRidges = DensityFunctions.RIDGES;
+        DensityFunction datapackErosion = DensityFunction.reference(ResourceKey.of("test:my_erosion")); // or do it this way!
 
         // Authoring custom density functions
-        DensityFunction customRidges = DensityFunction.add(
-                DensityFunction.yClampedGradient(0, 128, 1.0, -1.0),
-                DensityFunction.constant(0.05)
-            )
+        DensityFunction customContinents = DensityFunction.yClampedGradient(0, 128, 1.0, -1.0)
+            .add(DensityFunction.constant(0.05))
             .clamp(-1.0, 1.0);
 
         // Using the values in a noise router
         NoiseRouter router = NoiseRouter.builder()
-            .continents(overworldContinents)
-            .erosion(overworldErosion)
-            .ridges(customRidges)
+            .continents(customContinents)
+            .erosion(datapackErosion)
+            .ridges(overworldRidges)
             .build();
     }
 }`}

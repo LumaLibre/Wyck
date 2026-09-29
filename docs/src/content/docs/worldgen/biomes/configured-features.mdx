@@ -7,14 +7,14 @@ import CodeBlock from "@/components/CodeBlock.astro";
 import SourceLink from "@/components/SourceLink.astro";
 import CodeTabs from "@/components/CodeTabs.astro";
 
-A <SourceLink path="worldgen/feature/ConfiguredFeature.java">ConfiguredFeature</SourceLink> is a feature paired
+A <SourceLink path="worldgen/feature/Feature.java">Feature</SourceLink> is a feature type paired
 with a configuration. The *feature* is the algorithm (an ore vein, a tree, a geode) and the *configuration* would be its
 parameters such as which ore, how big, etc.
 
 Configured features are not placed in the world on their own. A configured feature describes what to generate and a
-[placed feature](/worldgen/placed-features) formally wraps it with the placement rules that decide **where** and/or **how often** it should appear.
+[placed feature](/worldgen/biomes/placed-features/) formally wraps it with the placement rules that decide **where** and/or **how often** it should appear.
 
-To use a configured feature in a biome, wrap it in a [placed feature](/worldgen/placed-features).
+To use a configured feature in a biome, wrap it in a [placed feature](/worldgen/biomes/placed-features/).
 
 ## Referencing Built-in Configured Features
 
@@ -29,10 +29,10 @@ typed references to every configured feature vanilla registrar.
 import dev.wyck.worldgen.feature.Features;
 
 // a reference straight from the catalog
-ConfiguredFeature largeDiamonds = Features.ORE_DIAMOND_LARGE;
+Feature largeDiamonds = Features.ORE_DIAMOND_LARGE;
 
 // or by key
-ConfiguredFeature byKey = ConfiguredFeature.reference(ResourceKey.minecraft("ore_diamond_large"));`}
+Feature byKey = Feature.reference(ResourceKey.minecraft("ore_diamond_large"));`}
 />
 
 ## Configuring Built-in Configured Features
@@ -110,8 +110,8 @@ public class ExamplePlugin extends JavaPlugin {
             .resourceKey(ResourceKey.of("test:biome"))
             .generationSettings(
                 BiomeGenerationSettings.builder()
-                    .addFeature(Decoration.VEGETAL_DECORATION, PlacedFeature.builder()
-                        .feature(ConfiguredFeature.of(FeatureType.TREE, treeConfig))
+                    .feature(Decoration.VEGETAL_DECORATION, PlacedFeature.builder()
+                        .feature(Feature.of(FeatureType.TREE, treeConfig))
                         .modifier(PlacementModifier.rarityFilter(1))
                         .modifier(PlacementModifier.inSquare())
                         .modifier(PlacementModifier.surfaceWaterDepthFilter(0))
@@ -146,14 +146,14 @@ import org.jspecify.annotations.NonNull;
 
 import java.util.Random;
 
-public class PillarFeature extends CustomFeature<@NotNull PillarFeature.PillarConfig> {
+public class PillarFeature extends CustomFeature<@NonNull PillarFeature.PillarConfig> {
 
     public PillarFeature() {
         super(PillarConfig::defaults);
     }
 
     @Override
-    public boolean place(PlacementContext<@NotNull PillarConfig> context) {
+    public boolean place(PlacementContext<@NonNull PillarConfig> context) {
         PillarConfig config = context.config();
         Random random = context.random();
         BlockVector origin = context.origin();
@@ -207,12 +207,12 @@ public class ExamplePlugin extends JavaPlugin {
         ResourceKey pillarKey = ResourceKey.of("example", "pillar");
 
         CustomFeature<PillarFeature.PillarConfig> pillar = CustomFeature.register(pillarKey, new PillarFeature());
-        ConfiguredFeature tallFeature  = ConfiguredFeature.custom(pillar, new PillarFeature.PillarConfig(Material.OBSIDIAN, Material.GLOWSTONE, 10, 15));
-        ConfiguredFeature shortFeature = ConfiguredFeature.custom(pillar, new PillarFeature.PillarConfig(Material.BLACKSTONE, Material.SHROOMLIGHT, 3, 5));
+        Feature tallFeature  = Feature.custom(pillar, new PillarFeature.PillarConfig(Material.OBSIDIAN, Material.GLOWSTONE, 10, 15));
+        Feature shortFeature = Feature.custom(pillar, new PillarFeature.PillarConfig(Material.BLACKSTONE, Material.SHROOMLIGHT, 3, 5));
 
         PlacedFeature tallPlaced = PlacedFeature.builder()
             .feature(tallFeature)
-            .modifier(PlacementModifier.count(2))
+            .modifier(PlacementModifier.count(IntProvider.constant(2)))
             .modifier(PlacementModifier.inSquare())
             .modifier(PlacementModifier.heightmap(HeightmapType.WORLD_SURFACE))
             .modifier(PlacementModifier.biomeFilter())
@@ -220,7 +220,7 @@ public class ExamplePlugin extends JavaPlugin {
 
         PlacedFeature shortPlaced = PlacedFeature.builder()
             .feature(shortFeature)
-            .modifier(PlacementModifier.count(4))
+            .modifier(PlacementModifier.count(IntProvider.constant(4)))
             .modifier(PlacementModifier.inSquare())
             .modifier(PlacementModifier.heightmap(HeightmapType.WORLD_SURFACE))
             .modifier(PlacementModifier.biomeFilter())
@@ -228,10 +228,10 @@ public class ExamplePlugin extends JavaPlugin {
 
 
         BiomeGenerationSettings generation = BiomeGenerationSettings.builder()
-            .addFeature(Decoration.VEGETAL_DECORATION, PlacedFeatures.TREES_PLAINS)
-            .addFeature(Decoration.VEGETAL_DECORATION, PlacedFeatures.FALLEN_OAK_TREE)
-            .addFeature(Decoration.VEGETAL_DECORATION, tallPlaced)
-            .addFeature(Decoration.VEGETAL_DECORATION, shortPlaced)
+            .feature(Decoration.VEGETAL_DECORATION, PlacedFeatures.TREES_PLAINS)
+            .feature(Decoration.VEGETAL_DECORATION, PlacedFeatures.FALLEN_OAK_TREE)
+            .feature(Decoration.VEGETAL_DECORATION, tallPlaced)
+            .feature(Decoration.VEGETAL_DECORATION, shortPlaced)
             .build();
         ResourceKey myBiomeKey = ResourceKey.of("example", "my_biome");
         CustomBiome.builder(myBiomeKey)

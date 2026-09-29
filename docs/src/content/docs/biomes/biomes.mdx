@@ -26,9 +26,7 @@ import dev.wyck.example.PillarFeature;
 import dev.wyck.biome.BiomeSpecialEffects;
 import dev.wyck.biome.ClimateSettings;
 import dev.wyck.biome.TemperatureModifier;
-import dev.wyck.biome.entity.BiomeSpawner;
-import dev.wyck.biome.entity.MobCategory;
-import dev.wyck.biome.entity.data.NaturalSpawner;
+import dev.wyck.biome.entity.MobSpawnSettings;
 import dev.wyck.environment.attribute.EnvironmentAttributes;
 import dev.wyck.environment.particle.ParticleCatalog;
 import dev.wyck.environment.particle.ParticleOptions;
@@ -53,8 +51,6 @@ import dev.wyck.worldgen.heightproviders.VerticalAnchor;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.util.List;
 
 public class ExamplePlugin extends JavaPlugin {
     @Override
@@ -85,19 +81,16 @@ public class ExamplePlugin extends JavaPlugin {
             )
             .attribute(EnvironmentAttributes.DEFAULT_DRIPSTONE_PARTICLE, ParticleOptions.of(ParticleTypes.DRIPPING_HONEY))
             // Mob spawn settings
-            .spawner(BiomeSpawner.builder()
-                .spawner(MobCategory.MONSTER, NaturalSpawner.of(EntityType.ZOMBIE, 5, 15))
+            .attribute(EnvironmentAttributes.NATURAL_MOB_SPAWNS, MobSpawnSettings.builder()
+                .addSpawn(EntityType.ZOMBIE, 1, 5, 15)
                 .build()
             )
             // Worldgen
             .generationSettings(
                 BiomeGenerationSettings.builder()
-                    .addCarver(WorldCarver.canyon(CanyonWorldCarver.builder()
+                    .carver(WorldCarver.canyon().config(CanyonWorldCarver.builder()
                         .probability(0.9f)
                         .y(HeightProvider.biasedToBottom(VerticalAnchor.bottom(), VerticalAnchor.bottom(), 20))
-                        .yScale(FloatProvider.constant(1.0f))
-                        .lavaLevel(VerticalAnchor.absolute(63))
-                        .replaceable(List.of(Material.STONE, Material.DIRT, Material.GRASS_BLOCK))
                         .verticalRotation(FloatProvider.constant(0.0f))
                         .shape(Shape.builder()
                             .distanceFactor(FloatProvider.constant(5f))
@@ -106,21 +99,23 @@ public class ExamplePlugin extends JavaPlugin {
                             .horizontalRadiusFactor(FloatProvider.constant(1.0f))
                             .verticalRadiusCenterFactor(0.3f)
                             .verticalRadiusDefaultFactor(0.3f)
+                            .yScale(FloatProvider.constant(1.0f))
                             .build())
                         .build())
+                        .build()
                     )
-                    .addFeature(Decoration.VEGETAL_DECORATION, PlacedFeature.builder()
-                        .feature(new PillarFeature().register(), Pillarfeature.configurations.defaults()) // Declared in another class from my plugin
-                        .modifier(PlacementModifier.count(1))
+                    .feature(Decoration.VEGETAL_DECORATION, PlacedFeature.builder()
+                        .feature(new PillarFeature().register(), PillarFeature.PillarConfig.defaults()) // Declared in another class from my plugin
+                        .modifier(PlacementModifier.count(IntProvider.constant(1)))
                         .build())
-                    .addFeature(Decoration.TOP_LAYER_MODIFICATION, PlacedFeature.builder()
+                    .feature(Decoration.TOP_LAYER_MODIFICATION, PlacedFeature.builder()
                         .feature(Features.PILE_SNOW) // Or use one that's already registered
-                        .modifier(PlacementModifier.count(1))
+                        .modifier(PlacementModifier.count(IntProvider.constant(1)))
                         .build())
-                    .addFeature(Decoration.UNDERGROUND_ORES, PlacedFeatures.ORE_IRON_SMALL)
-                    .addFeature(Decoration.RAW_GENERATION, PlacedFeature.builder()
-                        .feature(ConfiguredFeature.vanilla(FeatureType.VEGETATION_PATCH, FeatureConfiguration.count(IntProvider.constant(3))))
-                        .modifier(PlacementModifier.count(1))
+                    .feature(Decoration.UNDERGROUND_ORES, PlacedFeatures.ORE_IRON_SMALL)
+                    .feature(Decoration.RAW_GENERATION, PlacedFeature.builder()
+                        .feature(Feature.of(FeatureType.BAMBOO, FeatureConfiguration.bamboo(0.2f)))
+                        .modifier(PlacementModifier.count(IntProvider.constant(1)))
                         .build())
                     .build()
             )

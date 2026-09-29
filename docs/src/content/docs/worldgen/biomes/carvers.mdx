@@ -11,7 +11,7 @@ Carvers are responsible for 'carving' out areas of a world to create caves, cany
 
 A <SourceLink path="worldgen/carver/WorldCarver.java">WorldCarver</SourceLink> is either a
 **reference** to a carver already in the game, or a **custom** carver you may author from a
-carver type and a configuration. Both are added to a biome through its [generation settings](/worldgen/biome-generation-settings).
+carver type and a configuration. Both are added to a biome through its [generation settings](/worldgen/biomes/biome-generation-settings/).
 
 ## Referencing Built-in Carvers
 
@@ -25,8 +25,8 @@ vanilla carver.
 import dev.wyck.worldgen.carver.Carvers;
 
 BiomeGenerationSettings generation = BiomeGenerationSettings.builder()
-    .addCarver(Carvers.CAVE)
-    .addCarver(Carvers.CANYON)
+    .carver(Carvers.CAVE)
+    .carver(Carvers.CANYON)
     .build();`}
 />
 
@@ -45,20 +45,16 @@ import dev.wyck.worldgen.carver.WorldCarver;
 import dev.wyck.worldgen.valueproviders.FloatProvider;
 import dev.wyck.worldgen.heightproviders.HeightProvider;
 import dev.wyck.worldgen.heightproviders.VerticalAnchor;
-import org.bukkit.Material;
 
-WorldCarver cave = WorldCarver.cave(
+WorldCarver cave = WorldCarver.cave().config(
     CaveWorldCarver.builder()
         .probability(0.15f)
         .y(HeightProvider.uniform(VerticalAnchor.aboveBottom(8), VerticalAnchor.absolute(180)))
-        .yScale(FloatProvider.uniform(0.1f, 0.9f))
-        .lavaLevel(VerticalAnchor.aboveBottom(8))
-        .replaceable(Material.STONE, Material.DEEPSLATE)
         .horizontalRadiusMultiplier(FloatProvider.uniform(0.7f, 1.4f))
         .verticalRadiusMultiplier(FloatProvider.uniform(0.8f, 1.3f))
         .floorLevel(FloatProvider.uniform(-1.0f, -0.4f))
         .build()
-);`,
+).build();`,
         },
         {
             label: "Canyon",
@@ -70,15 +66,11 @@ import dev.wyck.worldgen.carver.WorldCarver;
 import dev.wyck.worldgen.valueproviders.FloatProvider;
 import dev.wyck.worldgen.heightproviders.HeightProvider;
 import dev.wyck.worldgen.heightproviders.VerticalAnchor;
-import org.bukkit.Material;
 
-WorldCarver canyon = WorldCarver.canyon(
+WorldCarver canyon = WorldCarver.canyon().config(
     CanyonWorldCarver.builder()
         .probability(0.02f)
         .y(HeightProvider.uniform(VerticalAnchor.absolute(10), VerticalAnchor.absolute(67)))
-        .yScale(FloatProvider.constant(3.0f))
-        .lavaLevel(VerticalAnchor.aboveBottom(8))
-        .replaceable(Material.STONE, Material.DEEPSLATE)
         .verticalRotation(FloatProvider.uniform(-0.125f, 0.125f))
         .shape(Shape.builder()
             .distanceFactor(FloatProvider.uniform(0.75f, 1.0f))
@@ -87,9 +79,10 @@ WorldCarver canyon = WorldCarver.canyon(
             .horizontalRadiusFactor(FloatProvider.uniform(0.75f, 1.0f))
             .verticalRadiusDefaultFactor(1.0f)
             .verticalRadiusCenterFactor(0.0f)
+            .yScale(FloatProvider.constant(3.0f))
             .build())
         .build()
-);`,
+).build();`,
         },
     ]}
 />

@@ -8,7 +8,7 @@ import SourceLink from "@/components/SourceLink.astro";
 import CodeTabs from "@/components/CodeTabs.astro";
 
 A <SourceLink path="worldgen/placement/PlacedFeature.java" line={24}>PlacedFeature</SourceLink> is a
-[configured feature](/wrappers/worldgen/configured-features) together with a list of **placement modifiers** that decide where,
+[configured feature](/worldgen/biomes/configured-features/) together with a list of **placement modifiers** that decide where,
 how often, and under what conditions it should generate.
 
 A placed feature is either a **reference** to one already registered or a custom **authored** one.
@@ -29,7 +29,7 @@ PlacedFeature diamonds = PlacedFeatures.ORE_DIAMOND;`}
 
 ## Authoring a Placed Feature
 
-To author one, pass a [configured feature](/wrappers/worldgen/configured-features) and the placement modifiers that position it.
+To author one, pass a [configured feature](/worldgen/biomes/configured-features/) and the placement modifiers that position it.
 
 <CodeBlock
     lang="java"

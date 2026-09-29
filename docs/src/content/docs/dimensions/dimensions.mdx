@@ -26,7 +26,7 @@ kind of like a blueprint! Vanilla refers to these as `dimension_type`s.
 import dev.wyck.level.dimension.Dimension;
 import dev.wyck.environment.BedRule;
 import dev.wyck.environment.attribute.EnvironmentAttributes;
-import dev.wyck.level.dimension.WorldClock;
+import dev.wyck.level.dimension.clock.WorldClock;
 import dev.wyck.level.dimension.CardinalLightType;
 import dev.wyck.level.dimension.Infiniburn;
 import dev.wyck.level.dimension.Skybox;
@@ -55,9 +55,9 @@ public class ExamplePlugin extends JavaPlugin {
             .attribute(EnvironmentAttributes.FOG_COLOR, "#FFAA00")
             .attribute(EnvironmentAttributes.SKY_COLOR, "#0000FF")
             .attribute(EnvironmentAttributes.BED_RULE, BedRule.builder()
-                .setErrorMessage(Component.text("No sleeping!").color(NamedTextColor.RED))
-                .setCanSleep(BedRule.Rule.NEVER)
-                .setCanSetSpawn(BedRule.Rule.WHEN_DARK)
+                .errorMessage(Component.text("No sleeping!").color(NamedTextColor.RED))
+                .canSleep(BedRule.Rule.NEVER)
+                .canSetSpawn(BedRule.Rule.WHEN_DARK)
                 .build()
             )
             .attribute(EnvironmentAttributes.STAR_BRIGHTNESS, 0.9f) // 90% star brightness
@@ -72,10 +72,10 @@ A dimension controls how time behaves through three related properties:
 
 - **`hasFixedTime(boolean)`**: when `true`, the sun and moon freeze in place (like the End or Nether). Set the actual
 frozen time-of-day on the worlds created from this dimension.
-- **`defaultClock(WorldClock)`**: a <SourceLink path="level/dimension/WorldClock.java">WorldClock</SourceLink>
+- **`defaultClock(WorldClock)`**: a <SourceLink path="level/dimension/clock/WorldClock.java">WorldClock</SourceLink>
 drives the day/night cycle. Use the built-ins `WorldClock.OVERWORLD` (a normal cycle) or `WorldClock.THE_END`
 (fixed), or `WorldClock.of("namespace:key")` to reference a custom one.
-- **`timelines(TimelineSet)`**: a <SourceLink path="level/dimension/TimelineSet.java">TimelineSet</SourceLink> lists
+- **`timelines(Set<Timeline>)`**: a set of <SourceLink path="level/dimension/timeline/Timeline.java">Timeline</SourceLink>s lists
 the scheduled "timelines" (day, moon phases, villager schedules, ...) that run in the dimension.
 
 <CodeBlock
@@ -83,14 +83,16 @@ the scheduled "timelines" (day, moon phases, villager schedules, ...) that run i
     filename="ExamplePlugin.java"
     code={
 `import dev.wyck.level.dimension.Dimension;
-import dev.wyck.level.dimension.TimelineSet;
-import dev.wyck.level.dimension.WorldClock;
+import dev.wyck.level.dimension.timeline.Timeline;
+import dev.wyck.level.dimension.clock.WorldClock;
+
+import java.util.Set;
 
 // A dimension that runs the normal overworld day/night cycle and schedules.
 Dimension.builder()
     .hasFixedTime(false)
     .defaultClock(WorldClock.OVERWORLD)
-    .timelines(TimelineSet.OVERWORLD) // day + moon + villager_schedule
+    .timelines(Timeline.OVERWORLD) // day + moon + villager_schedule
     // ...other properties
     .register();
 
@@ -98,12 +100,12 @@ Dimension.builder()
 Dimension.builder()
     .hasFixedTime(true)
     .defaultClock(WorldClock.THE_END)
-    .timelines(TimelineSet.EMPTY)
+    .timelines(Set.of())
     // ...other properties
     .register();
 
 // A custom set of timelines by key.
-TimelineSet custom = TimelineSet.of(TimelineSet.OVERWORLD_DAY, TimelineSet.MOON);`}
+Set<Timeline> custom = Set.of(Timeline.OVERWORLD_DAY, Timeline.MOON);`}
 />
 
 ## Using Dimensions

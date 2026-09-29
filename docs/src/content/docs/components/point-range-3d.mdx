@@ -8,7 +8,7 @@ import SourceLink from "@/components/SourceLink.astro";
 
 An immutable record describing a 3D rectangular range in a world, defined by
 minimum and maximum X, Y, and Z coordinates. Unlike
-[`PointRange2D`](/misc/point-range-2d), it bounds the Y axis too, so it
+[`PointRange2D`](/components/point-range-2d/), it bounds the Y axis too, so it
 represents a full box rather than a vertical column.
 
 * <SourceLink path="misc/PointRange3D.java" line={29}>of(Location, Location)</SourceLink>: Creates a `PointRange3D` spanning two locations, sorting their X, Y, and Z block coordinates into the correct min/max bounds automatically.

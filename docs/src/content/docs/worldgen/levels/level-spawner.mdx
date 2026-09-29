@@ -7,7 +7,7 @@ import CodeBlock from "@/components/CodeBlock.astro";
 import SourceLink from "@/components/SourceLink.astro";
 
 <SourceLink path="level/entity/LevelSpawner.java">LevelSpawner</SourceLink>s are used to control
-the spawning of entities around players or specific areas in a world. These are completely separate from [`BiomeSpawner`](/wrapper/biome-spawner)s
+the spawning of entities around players or specific areas in a world. These are completely separate from [`MobSpawnSettings`](/biomes/spawners/)
 and are tied directly to the world itself. By default, <SourceLink path="level/LevelCreator.java">LevelCreator</SourceLink> will not have
 any spawners attached to it.
 
@@ -50,8 +50,8 @@ public class ExamplePlugin extends JavaPlugin {
         // Adding the spawners to a LevelCreator
         LevelCreator level = LevelCreator.builder()
             .levelKey(ResourceKey.of("test", "example"))
-            .addSpawner(phantomSpawner)
-            .addSpawner(customSpawner)
+            .spawner(phantomSpawner)
+            .spawner(customSpawner)
             .build();
     }
 }`}

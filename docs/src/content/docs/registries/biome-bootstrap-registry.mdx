@@ -38,9 +38,8 @@ import dev.wyck.biome.CustomBiome;
 import dev.wyck.keys.ResourceKey;
 import dev.wyck.registry.bootstrap.BootstrapBiomeRegistry;
 import dev.wyck.registry.bootstrap.Composer;
-import dev.wyck.biome.entity.BiomeSpawner;
-import dev.wyck.biome.entity.MobCategory;
-import dev.wyck.biome.entity.data.NaturalSpawner;
+import dev.wyck.biome.entity.MobSpawnSettings;
+import dev.wyck.environment.attribute.EnvironmentAttributes;
 import org.bukkit.entity.EntityType;
 
 public class ExampleBootstrapper implements PluginBootstrap {
@@ -49,9 +48,8 @@ public class ExampleBootstrapper implements PluginBootstrap {
         // Registering 2 custom biomes during the bootstrap phase as if they were in a datapack.
         BootstrapBiomeRegistry registry = BootstrapBiomeRegistry.compose(context, Composer.DATAPACK);
 
-        BiomeSpawner spawner = BiomeSpawner.builder()
-            .creatureGenerationProbability(0.1f)
-            .spawner(MobCategory.CREATURE, 100, NaturalSpawner.of(EntityType.PIG, 4, 12))
+        MobSpawnSettings spawner = MobSpawnSettings.builder()
+            .addSpawn(EntityType.PIG, 100, 4, 12)
             .build();
 
         // #queue(CustomBiome) queues this biome for registration.
@@ -61,7 +59,7 @@ public class ExampleBootstrapper implements PluginBootstrap {
             .skyColor("#B99DFC")
             .waterColor("#F5F2EB")
             .grassColor("#DBE9EC")
-            .biomeSpawner(spawner)
+            .attribute(EnvironmentAttributes.NATURAL_MOB_SPAWNS, spawner)
             .build()
         );
 
@@ -71,7 +69,7 @@ public class ExampleBootstrapper implements PluginBootstrap {
             .skyColor("#2F46FF")
             .waterColor("#000000")
             .grassColor("#D1D13A")
-            .biomeSpawner(spawner)
+            .attribute(EnvironmentAttributes.NATURAL_MOB_SPAWNS, spawner)
             .build()
         );
 
