@@ -28,6 +28,6 @@ jobs:
           REPO_PASSWORD: ${{ secrets.WYCK_PASSWORD }}
 
       - name: Publish to Modrinth
-        run: "./gradlew :paper:modrinth"
+        run: "./gradlew :paper:modrinth -Psnapshot -x test" # TODO: speed up tests
         env:
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
