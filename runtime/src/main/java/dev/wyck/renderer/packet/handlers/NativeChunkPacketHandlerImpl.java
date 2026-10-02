@@ -39,7 +39,6 @@ public final class NativeChunkPacketHandlerImpl implements NativeChunkPacketHand
     private static final int BIOME_CELLS_PER_SECTION = CHUNK_SECTIONS * CHUNK_SECTIONS * CHUNK_SECTIONS;
 
     private static final Field CHUNK_BUFFER_FIELD = resolveChunkBufferField();
-    private static final Field CHUNK_DATA_FIELD = InternalReflectUtil.field(ClientboundLevelChunkWithLightPacket.class, "chunkData");
 
     private static volatile @Nullable PaletteCache paletteCache;
 
@@ -67,9 +66,7 @@ public final class NativeChunkPacketHandlerImpl implements NativeChunkPacketHand
         ClientboundLevelChunkPacketData chunkData = InternalReflectUtil.shallowCopy(packet.chunkData());
         writeChunkBuffer(chunkData, rewritten);
 
-        ClientboundLevelChunkWithLightPacket copy = InternalReflectUtil.shallowCopy(packet);
-        InternalReflectUtil.set(CHUNK_DATA_FIELD, copy, chunkData);
-        return copy;
+        return new ClientboundLevelChunkWithLightPacket(packet.x(), packet.z(), chunkData, packet.lightData());
     }
 
     private static byte @Nullable [] rewriteSections(ClientboundLevelChunkPacketData chunkData, ChunkLocation chunkLocation, VirtualBiomeResolver resolver, int sectionCount) {
